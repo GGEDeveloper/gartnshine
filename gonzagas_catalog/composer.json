@@ -1,0 +1,14 @@
+{
+    "name": "gonzagas/art-shine-catalog",
+    "description": "Catalog system for Gonzaga's Art & Shine jewelry",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "phpoffice/phpspreadsheet": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gonzagas\\": "includes/"
+        }
+    }
+}

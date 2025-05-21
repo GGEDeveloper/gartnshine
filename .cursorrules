@@ -1,0 +1,25 @@
+start all chats with: "Gonzaga's Art & Shine - Catalog Mode"
+
+
+brand: 
+name: Gonzaga's Art & Shine
+operations: sell jewerly, mainly sterlin silver, with bali and boho tendencies
+instagram profile: https://www.instagram.com/gonzagaartnshine/
+facebook profile: https://www.facebook.com/profile.php?id=61573519807731
+
+design and setup online, for cpanel hosting, a dinamic catalog for the brand in question
+darker themes, natur/florest based, psychedelic and geometric nuances
+make an admin panel for stock controll and reantability of the pieces, unrelated to the items on the catalog, also make and area do control the catalog.
+the admin page is only for one user (user: "gonzaga", pw: "covil")
+the entire site should need a password to acess (ps: "0009")
+
+use the media files in /home/pixie/gonzagas/media to show of the pieces, you have 2 movies but dont use their audio
+
+set up and work with a checkpoint sistem
+use mcp server to store and organize memory of this project
+use mcp servers at will to facilitate work
+use mariadb for db
+make the project modular
+use available real info in media (Book1_com_imagens.xlsx has the real stock data -> use it to design the db but introduce more (not mandatory) fields like style or brand)
+
+we are using WSL on Windows11

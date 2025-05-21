@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= siteTitle %></title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Theme CSS -->
+  <link rel="stylesheet" href="/css/theme.css">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+  <!-- Catalog CSS -->
+  <link rel="stylesheet" href="/css/catalog.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  
+  <main>
+    <!-- Hero Section with Video Background -->
+    <section class="hero">
+      <div class="video-background">
+        <% const videoFile = mediaFiles.find(file => file.type === 'video'); %>
+        <% if (videoFile) { %>
+          <video autoplay muted loop playsinline>
+            <source src="<%= videoFile.path %>" type="video/mp4">
+          </video>
+        <% } %>
+      </div>
+      <div class="hero-content">
+        <h1><%= siteTitle %></h1>
+        <p><%= siteDescription %></p>
+      </div>
+    </section>
+    
+    <!-- Media Gallery -->
+    <section class="gallery">
+      <h2>Our Collection</h2>
+      <div class="gallery-grid">
+        <% mediaFiles.filter(file => file.type === 'image').forEach(file => { %>
+          <div class="gallery-item">
+            <img src="<%= file.path %>" alt="Jewelry piece" loading="lazy">
+          </div>
+        <% }); %>
+      </div>
+    </section>
+    
+    <!-- Featured Products -->
+    <section class="featured-products">
+      <h2>Featured Pieces</h2>
+      <div class="product-grid">
+        <% featured.forEach(product => { %>
+          <div class="product-card">
+            <div class="product-image">
+              <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>">
+            </div>
+            <div class="product-info">
+              <h3><%= product.name %></h3>
+              <p class="price"><% if (typeof product.sale_price === 'number') { %>$<%= product.sale_price.toFixed(2) %><% } else { %>Price not available<% } %></p>
+              <a href="/product/<%= product.id %>" class="btn">View Details</a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+    
+    <!-- Product Families -->
+    <section class="product-families">
+      <h2>Collections</h2>
+      <div class="family-grid">
+        <% families.forEach(family => { %>
+          <a href="/collection/<%= family.id %>" class="family-card">
+            <h3><%= family.name %></h3>
+            <p><%= family.description %></p>
+          </a>
+        <% }); %>
+      </div>
+    </section>
+  </main>
+  
+  <%- include('partials/footer') %>
+  
+  <!-- Main JavaScript -->
+  <script src="/js/main.js"></script>
+</body>
+</html> 

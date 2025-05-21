@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= siteTitle %> Admin</title>
+  
+  <!-- Critical CSS -->
+  <style>
+    /* Hide content until loaded */
+    html { height: 100%; }
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Poppins', sans-serif;
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    body.loaded { opacity: 1; }
+    
+    /* Preloader */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: #d4a76a;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Theme variables */
+    :root {
+      --color-primary: <%= theme.colorPrimary || '#1e1e1e' %>;
+      --color-secondary: <%= theme.colorSecondary || '#4a3c2d' %>;
+      --color-accent: <%= theme.colorAccent || '#6a8c69' %>;
+      --color-text: <%= theme.colorText || '#333333' %>;
+      --color-highlight: <%= theme.colorHighlight || '#d4a76a' %>;
+      --color-admin-bg: #1a1a1a;
+      --color-admin-sidebar: #242424;
+      --color-admin-text: #f5f5f5;
+      --color-admin-border: #333;
+      --color-admin-highlight: var(--color-highlight);
+      --color-success: #4caf50;
+      --color-warning: #ff9800;
+      --color-danger: #f44336;
+      --color-info: #2196f3;
+    }
+  </style>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/css/admin.css" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  
+  <!-- Non-critical CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/admin.css" media="print" onload="this.media='all'">
+  <% if (typeof customCss !== 'undefined' && customCss) { %>
+    <link rel="stylesheet" href="/css/<%= customCss %>.css" media="print" onload="this.media='all'">
+  <% } %>
+</head>
+<body class="admin-body">
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="admin-logo">
+          <a href="/admin" class="d-flex align-items-center">
+            <i class="fas fa-gem me-2" style="font-size: 1.5rem;"></i>
+            <span class="logo-text"><%= siteTitle %></span>
+          </a>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <% 
+              // Define currentPath com valor padrão vazio
+              const currentPathValue = typeof currentPath !== 'undefined' ? currentPath : 
+                (typeof renderOptions !== 'undefined' && renderOptions.currentPath ? 
+                  renderOptions.currentPath : '');
+              const isDashboardActive = currentPathValue === '/dashboard' || currentPathValue === '/';
+            %>
+            <a href="/admin/dashboard" class="nav-link <%- isDashboardActive ? 'active' : '' %>">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <% const isProductsActive = currentPathValue.startsWith('/products') || currentPathValue.startsWith('/admin/products'); %>
+            <a href="/admin/products" class="nav-link <%= isProductsActive ? 'active' : '' %>">
+              <i class="fas fa-boxes"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <% const isCategoriesActive = currentPathValue.startsWith('/categories') || currentPathValue.startsWith('/admin/categories'); %>
+            <a href="/admin/categories" class="nav-link <%= isCategoriesActive ? 'active' : '' %>">
+              <i class="fas fa-tags"></i>
+              <span>Categories</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <% const isOrdersActive = currentPathValue.startsWith('/orders') || currentPathValue.startsWith('/admin/orders'); %>
+            <a href="/admin/orders" class="nav-link <%= isOrdersActive ? 'active' : '' %>">
+              <i class="fas fa-shopping-cart"></i>
+              <span>Orders</span>
+              <span class="badge bg-danger rounded-pill ms-auto">3</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <% const isCustomersActive = currentPathValue.startsWith('/customers') || currentPathValue.startsWith('/admin/customers'); %>
+            <a href="/admin/customers" class="nav-link <%= isCustomersActive ? 'active' : '' %>">
+              <i class="fas fa-users"></i>
+              <span>Customers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <% const isSettingsActive = currentPathValue.startsWith('/settings') || currentPathValue.startsWith('/admin/settings'); %>
+            <a href="/admin/settings" class="nav-link <%= isSettingsActive ? 'active' : '' %>">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-panel">
+          <div class="user-info">
+            <span class="user-name"><%= user ? user.name : 'Admin' %></span>
+            <span class="user-role">Administrator</span>
+          </div>
+          <a href="/admin/logout" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+    
+    <main class="admin-content">
+      <header class="admin-header">
+        <div class="page-title">
+          <h1><%= title %></h1>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <input type="text" class="form-control" placeholder="Search...">
+            <i class="fas fa-search"></i>
+          </div>
+        </div>
+      </header>
+      
+      <% if (typeof error_msg !== 'undefined' && error_msg) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <i class="fas fa-exclamation-circle me-2"></i>
+          <%= error_msg %>
+        </div>
+      <% } %>
+      
+      <!-- Page content -->
+      <div class="page-content">
+        <% if (typeof content === 'string' && content) { %>
+          <%- include(`../${content}`, {}) %>
+        <% } else { %>
+          <p>No content to display</p>
+        <% } %>
+      </div>
+    </main>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Make customJs available to load-scripts.js
+    window.customJs = '<%= typeof customJs !== "undefined" ? customJs : "" %>';
+    
+    // Ensure currentPath is available
+    window.currentPath = '<%= currentPathValue || "" %>';
+  </script>
+  <script src="/js/load-scripts.js"></script>
+</body>
+</html>

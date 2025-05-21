@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= siteTitle %></title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+  <% if (typeof customCss !== 'undefined' && customCss) { %>
+    <link rel="stylesheet" href="/css/<%= customCss %>.css">
+  <% } %>
+  
+  <!-- Custom inline styles with theme colors -->
+  <style>
+    :root {
+      --color-primary: <%= theme.colorPrimary %>;
+      --color-secondary: <%= theme.colorSecondary %>;
+      --color-accent: <%= theme.colorAccent %>;
+      --color-text: <%= theme.colorText %>;
+      --color-highlight: <%= theme.colorHighlight %>;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <%- include('partials/header') %>
+  
+  <!-- Flash Messages -->
+  <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+    <div class="alert alert-success">
+      <%= success_msg %>
+    </div>
+  <% } %>
+  
+  <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+    <div class="alert alert-danger">
+      <%= error_msg %>
+    </div>
+  <% } %>
+  
+  <!-- Main Content -->
+  <main class="container">
+    <%- body %>
+  </main>
+  
+  <!-- Footer -->
+  <%- include('partials/footer') %>
+  
+  <!-- JavaScript -->
+  <script src="/js/main.js"></script>
+  <% if (typeof customJs !== 'undefined' && customJs) { %>
+    <script src="/js/<%= customJs %>.js"></script>
+  <% } %>
+</body>
+</html> 

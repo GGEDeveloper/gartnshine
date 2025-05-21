@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Gonzaga's Art & Shine</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-primary: #1e1e1e;
+      --color-secondary: #4a3c2d;
+      --color-accent: #6a8c69;
+      --color-text: #f0f0f0;
+      --color-highlight: #b19cd9;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .error-container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .error-content {
+      padding: 20px;
+    }
+    
+    h1 {
+      color: var(--color-primary);
+      margin-top: 0;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--color-accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    
+    .error-details {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #f8f8f8;
+      border-left: 4px solid var(--color-accent);
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-content">
+      <h1><%= title %></h1>
+      <p><%= message %></p>
+      
+      <% if (typeof error !== 'undefined' && Object.keys(error).length > 0) { %>
+        <div class="error-details">
+          <p><strong>Error Details:</strong></p>
+          <p><%= error.message %></p>
+          <% if (error.stack) { %>
+            <pre><%= error.stack %></pre>
+          <% } %>
+        </div>
+      <% } %>
+      
+      <a href="/" class="btn">Return to Home</a>
+      <a href="/admin/dashboard" class="btn" style="margin-left: 10px;">Back to Dashboard</a>
+    </div>
+  </div>
+</body>
+</html> 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= siteTitle %> Admin</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/admin.css">
+  <% if (typeof customCss !== 'undefined' && customCss) { %>
+    <link rel="stylesheet" href="/css/<%= customCss %>.css">
+  <% } %>
+  
+  <!-- Custom inline styles with theme colors -->
+  <style>
+    :root {
+      --color-primary: <%= theme.colorPrimary %>;
+      --color-secondary: <%= theme.colorSecondary %>;
+      --color-accent: <%= theme.colorAccent %>;
+      --color-text: <%= theme.colorText %>;
+      --color-highlight: <%= theme.colorHighlight %>;
+      
+      --color-admin-bg: #1a1a1a;
+      --color-admin-sidebar: #242424;
+      --color-admin-text: #f5f5f5;
+      --color-admin-border: #333;
+      --color-admin-highlight: var(--color-highlight);
+      --color-success: #4caf50;
+      --color-warning: #ff9800;
+      --color-danger: #f44336;
+      --color-info: #2196f3;
+    }
+  </style>
+</head>
+<body class="admin-body">
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="admin-logo">
+          <h1><%= siteTitle %></h1>
+          <span class="admin-badge">Admin Panel</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="<%= title === 'Admin Dashboard' ? 'active' : '' %>">
+            <a href="/admin/dashboard">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M13 21V11h8v10h-8zM3 13V3h8v10H3zm0 8v-6h8v6H3zM13 9V3h8v6h-8z"/>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li class="<%= title.includes('Products') ? 'active' : '' %>">
+            <a href="/admin/products">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M5.559 19h12.883a1.5 1.5 0 0 0 1.489-1.666l-.996-6.963A1.5 1.5 0 0 0 17.447 9H6.553a1.5 1.5 0 0 0-1.488 1.371l-.996 6.963A1.5 1.5 0 0 0 5.559 19zM12 3a4 4 0 0 1 4 4h4a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2h4a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2h4a2 2 0 0 0-2-2z"/>
+              </svg>
+              Products
+            </a>
+          </li>
+          <li class="<%= title.includes('Families') ? 'active' : '' %>">
+            <a href="/admin/families">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M8 4h13v2H8V4zM4.5 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 6.9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM8 11h13v2H8v-2zm0 7h13v2H8v-2z"/>
+              </svg>
+              Categories
+            </a>
+          </li>
+          <li class="<%= title.includes('Inventory') ? 'active' : '' %>">
+            <a href="/admin/inventory">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M21 11.646V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.354A3.985 3.985 0 0 1 2 9V3a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v6a3.985 3.985 0 0 1-1 2.646zm-2 1.228a4.01 4.01 0 0 1-4-1.228A3.985 3.985 0 0 1 12 13a3.985 3.985 0 0 1-3-1.354A3.98 3.98 0 0 1 5 13v6h14v-6zM5 10a2 2 0 1 0 4 0V5H5v5zm10 0a2 2 0 1 0 4 0V5h-4v5zm-5-5v5a2 2 0 1 0 4 0V5h-4z"/>
+              </svg>
+              Inventory
+            </a>
+          </li>
+          <li class="<%= title.includes('Checkpoint') ? 'active' : '' %>">
+            <a href="/admin/checkpoints">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M19 8h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2V7a6 6 0 1 1 12 0v1zm-2 0V7a4 4 0 1 0-8 0v1h8zm-9 3v2h2v-2H8zm0 3v2h2v-2H8zm0 3v2h2v-2H8zm6-6v2h2v-2h-2zm0 3v2h2v-2h-2zm0 3v2h2v-2h-2z"/>
+              </svg>
+              Checkpoints
+            </a>
+          </li>
+          <li>
+            <a href="/" target="_blank">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/>
+              </svg>
+              View Site
+            </a>
+          </li>
+          <li>
+            <a href="/admin/logout">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M5 11h8v2H5v3l-5-4 5-4v3zm-1 7h2.708a8 8 0 1 0 0-12H4a9.985 9.985 0 0 1 8-4c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.985 9.985 0 0 1-8-4z"/>
+              </svg>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Main content -->
+    <main class="admin-content">
+      <header class="admin-header">
+        <div class="page-title">
+          <h1><%= title %></h1>
+        </div>
+        
+        <div class="user-profile">
+          <span class="user-name"><%= user.username %></span>
+        </div>
+      </header>
+      
+      <!-- Flash Messages -->
+      <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+        <div class="alert alert-success">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11v6h2v-6h-2zm0-4v2h2V7h-2z"/>
+          </svg>
+          <%= success_msg %>
+        </div>
+      <% } %>
+      
+      <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+        <div class="alert alert-danger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/>
+          </svg>
+          <%= error_msg %>
+        </div>
+      <% } %>
+      
+      <!-- Page content -->
+      <div class="page-content">
+        <%- body %>
+      </div>
+    </main>
+  </div>
+  
+  <!-- JavaScript -->
+  <script src="/js/admin.js"></script>
+  <% if (typeof customJs !== 'undefined' && customJs) { %>
+    <script src="/js/<%= customJs %>.js"></script>
+  <% } %>
+</body>
+</html> 

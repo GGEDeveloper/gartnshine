@@ -1,0 +1,72 @@
+<header class="main-header">
+  <div class="header-container">
+    <div class="logo-container">
+      <a href="/" class="logo">
+        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
+      </a>
+    </div>
+    
+    <nav class="main-nav">
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <ul class="nav-menu">
+        <li><a href="/" class="<%= typeof title !== 'undefined' && title === 'Home' ? 'active' : '' %>">Home</a></li>
+        
+        <!-- Collection links - will be populated from database -->
+        <% if (typeof families !== 'undefined' && families && families.length > 0) { %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Collections</a>
+            <ul class="dropdown-menu">
+              <% families.forEach(family => { %>
+                <li>
+                  <a href="/collection/<%= family.id %>" class="<%= (typeof title !== 'undefined' && title === family.name) ? 'active' : '' %>">
+                    <%= family.name %>
+                  </a>
+                </li>
+              <% }); %>
+            </ul>
+          </li>
+        <% } %>
+        
+        <li><a href="/about" class="<%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">About</a></li>
+        
+        <% if (typeof user !== 'undefined' && user) { %>
+          <li class="dropdown admin-menu">
+            <a href="#" class="dropdown-toggle">Admin</a>
+            <ul class="dropdown-menu">
+              <li><a href="/admin/dashboard">Dashboard</a></li>
+              <li><a href="/admin/products">Products</a></li>
+              <li><a href="/admin/families">Categories</a></li>
+              <li><a href="/admin/inventory">Inventory</a></li>
+              <li><a href="/admin/checkpoints">Checkpoints</a></li>
+              <li><a href="/admin/logout">Logout</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <!-- Hidden admin link that only shows on hover, providing subtle access -->
+          <li class="admin-link"><a href="/admin/login">Admin</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Toggle mobile menu
+  document.querySelector('.menu-toggle').addEventListener('click', function() {
+    document.querySelector('.nav-menu').classList.toggle('active');
+    this.classList.toggle('active');
+  });
+  
+  // Handle dropdowns
+  document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.parentNode.classList.toggle('open');
+    });
+  });
+</script> 

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= siteTitle %></title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-primary: <%= theme.colorPrimary %>;
+      --color-secondary: <%= theme.colorSecondary %>;
+      --color-accent: <%= theme.colorAccent %>;
+      --color-text: <%= theme.colorText %>;
+      --color-highlight: <%= theme.colorHighlight %>;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--color-primary);
+      color: var(--color-text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    }
+    
+    .login-container {
+      max-width: 400px;
+      width: 90%;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    
+    .logo {
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+    
+    .admin-badge {
+      display: inline-block;
+      background-color: var(--color-highlight);
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--color-text);
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    
+    input:focus {
+      outline: 2px solid var(--color-highlight);
+    }
+    
+    button {
+      padding: 0.8rem 1rem;
+      background-color: var(--color-accent);
+      color: var(--color-text);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    button:hover {
+      background-color: var(--color-highlight);
+    }
+    
+    .error-message {
+      background-color: rgba(255, 107, 107, 0.2);
+      border-left: 3px solid #ff6b6b;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    .back-to-site {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    .back-to-site a {
+      color: var(--color-highlight);
+      text-decoration: none;
+    }
+    
+    .back-to-site a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <h1><%= siteTitle %></h1>
+      <div class="admin-badge">Admin Panel</div>
+    </div>
+    
+    <% if(typeof error !== 'undefined' && error.length > 0) { %>
+      <div class="error-message">
+        <%= error %>
+      </div>
+    <% } %>
+    
+    <form action="/admin/login" method="POST" id="loginForm">
+      <div class="form-group">
+        <label for="username">Nome de Usuário</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          value="<%= typeof username !== 'undefined' ? username : '' %>" 
+          required 
+          autofocus
+          autocomplete="username"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+      
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message">
+          <%= error %>
+        </div>
+      <% } %>
+      
+      <button type="submit" id="loginButton">
+        <span class="button-text">Entrar</span>
+        <span class="button-spinner" style="display: none;">Aguarde...</span>
+      </button>
+    </form>
+    
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const button = document.getElementById('loginButton');
+        const buttonText = button.querySelector('.button-text');
+        const spinner = button.querySelector('.button-spinner');
+        
+        // Mostrar loading
+        button.disabled = true;
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline';
+        
+        // Se houver um erro, remover a mensagem de erro após alguns segundos
+        const errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+          setTimeout(() => {
+            errorMessage.style.display = 'none';
+          }, 5000);
+        }
+      });
+    </script>
+    
+    <div class="back-to-site">
+      <a href="/">Back to Website</a>
+    </div>
+  </div>
+</body>
+</html> 

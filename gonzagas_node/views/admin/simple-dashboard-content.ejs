@@ -1,0 +1,243 @@
+<div class="dashboard-container">
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-content">
+      <h1>Bem-vindo de volta, <%= user ? user.name : 'Admin' %>!</h1>
+      <p>Gerencie seu inventário e acompanhe as atividades recentes.</p>
+    </div>
+    <div class="welcome-actions">
+      <a href="/admin/products/add" class="btn">
+        <i class="fas fa-plus"></i> Adicionar Produto
+      </a>
+    </div>
+  </div>
+  
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <!-- Total Products -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Total Products</h3>
+        <div class="stat-number"><%= stats.products || 0 %></div>
+      </div>
+      <a href="/admin/products" class="stat-link">View All</a>
+    </div>
+    
+    <!-- Categories -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-tags"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Categories</h3>
+        <div class="stat-number"><%= stats.families || 0 %></div>
+      </div>
+      <a href="/admin/families" class="stat-link">View All</a>
+    </div>
+    
+    <!-- Low Stock -->
+    <div class="stat-card warning">
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Low Stock</h3>
+        <div class="stat-number"><%= stats.lowStock || 0 %></div>
+      </div>
+      <a href="/admin/inventory" class="stat-link">Manage</a>
+    </div>
+    
+    <!-- Out of Stock -->
+    <div class="stat-card danger">
+      <div class="stat-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Out of Stock</h3>
+        <div class="stat-number"><%= stats.outOfStock || 0 %></div>
+      </div>
+      <a href="/admin/inventory?filter=out_of_stock" class="stat-link">Review</a>
+    </div>
+  </div>
+  
+  <!-- Recent Activity -->
+  <div class="dashboard-section">
+    <div class="section-header">
+      <h2>Recent Activity</h2>
+      <a href="/admin/activity" class="btn btn-link">View All</a>
+    </div>
+    
+    <div class="activity-feed">
+      <!-- Recent Products -->
+      <div class="activity-card">
+        <div class="activity-header">
+          <h3>Recent Products</h3>
+          <a href="/admin/products/add" class="btn btn-sm btn-primary">
+            <i class="fas fa-plus"></i> Add New
+          </a>
+        </div>
+        <% if (recentProducts && recentProducts.length > 0) { %>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentProducts.forEach(product => { %>
+                  <tr>
+                    <td><%= product.reference || 'N/A' %></td>
+                    <td><%= product.name || 'Unnamed Product' %></td>
+                    <td><%= (parseFloat(product.sale_price) || 0).toFixed(2) %> €</td>
+                    <td><%= product.current_stock || 0 %></td>
+                    <td>
+                      <span class="badge <%= product.is_active ? 'success' : 'danger' %>">
+                        <%= product.is_active ? 'Active' : 'Inactive' %>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="/admin/products/edit/<%= product.id %>" class="btn btn-sm btn-icon" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>No products found</p>
+            <a href="/admin/products/add" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Add Your First Product
+            </a>
+          </div>
+        <% } %>
+      </div>
+      
+      <!-- Recent Transactions -->
+      <div class="activity-card">
+        <div class="activity-header">
+          <h3>Recent Transactions</h3>
+          <a href="/admin/transactions/new" class="btn btn-sm btn-primary">
+            <i class="fas fa-plus"></i> New Transaction
+          </a>
+        </div>
+        <% if (recentTransactions && recentTransactions.length > 0) { %>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Product</th>
+                  <th>Type</th>
+                  <th>Qty</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentTransactions.forEach(transaction => { %>
+                  <tr>
+                    <td><%= transaction.created_at ? new Date(transaction.created_at).toLocaleDateString() : 'N/A' %></td>
+                    <td><%= transaction.product_name || 'N/A' %></td>
+                    <td>
+                      <% 
+                        const typeClasses = {
+                          'purchase': 'success',
+                          'sale': 'danger',
+                          'adjustment': 'warning'
+                        };
+                        const typeLabels = {
+                          'purchase': 'Purchase',
+                          'sale': 'Sale',
+                          'adjustment': 'Adjustment'
+                        };
+                      %>
+                      <span class="badge <%= typeClasses[transaction.transaction_type] || 'secondary' %>">
+                        <%= typeLabels[transaction.transaction_type] || transaction.transaction_type %>
+                      </span>
+                    </td>
+                    <td><%= transaction.quantity || 0 %></td>
+                    <td><%= (parseFloat(transaction.total_amount) || 0).toFixed(2) %> €</td>
+                    <td>
+                      <a href="/admin/transactions/<%= transaction.id %>" class="btn btn-sm btn-icon" title="View">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="fas fa-exchange-alt"></i>
+            <p>No transactions found</p>
+            <a href="/admin/transactions/new" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Create Your First Transaction
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Quick Actions -->
+  <div class="dashboard-section">
+    <div class="section-header">
+      <h2>Quick Actions</h2>
+    </div>
+    <div class="quick-actions">
+      <a href="/admin/products/add" class="quick-action">
+        <div class="quick-action-icon">
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="quick-action-content">
+          <h3>Add New Product</h3>
+          <p>Create a new product in your catalog</p>
+        </div>
+      </a>
+      
+      <a href="/admin/inventory/adjust" class="quick-action">
+        <div class="quick-action-icon">
+          <i class="fas fa-sliders-h"></i>
+        </div>
+        <div class="quick-action-content">
+          <h3>Adjust Inventory</h3>
+          <p>Update stock levels for multiple products</p>
+        </div>
+      </a>
+      
+      <a href="/admin/transactions/new" class="quick-action">
+        <div class="quick-action-icon">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        <div class="quick-action-content">
+          <h3>New Transaction</h3>
+          <p>Record a new sale or purchase</p>
+        </div>
+      </a>
+      
+      <a href="/admin/reports" class="quick-action">
+        <div class="quick-action-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="quick-action-content">
+          <h3>View Reports</h3>
+          <p>Analyze your sales and inventory data</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

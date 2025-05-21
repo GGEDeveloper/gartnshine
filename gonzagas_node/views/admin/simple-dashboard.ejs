@@ -1,0 +1,17 @@
+<%- include('../layouts/main-layout', { 
+  title: 'Dashboard',
+  customCss: 'dashboard',
+  content: 'admin/simple-dashboard-content',
+  siteTitle: 'Gonzaga\'s Art & Shine',
+  user: user,
+  theme: {
+    colorPrimary: '#1e1e1e',
+    colorSecondary: '#4a3c2d',
+    colorAccent: '#6a8c69',
+    colorText: '#333333',
+    colorHighlight: '#d4a76a'
+  },
+  stats: stats || { products: 0, families: 0, lowStock: 0, outOfStock: 0 },
+  recentProducts: recentProducts || [],
+  recentTransactions: recentTransactions || []
+}) %>

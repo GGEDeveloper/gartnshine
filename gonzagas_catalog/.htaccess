@@ -1,0 +1,27 @@
+RewriteEngine On
+RewriteBase /gonzagas_catalog/
+
+# Protect against directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^(composer\.json|composer\.lock|\.gitignore|\.env|config\.php|database\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Redirect to public directory
+RewriteRule ^$ public/ [L]
+RewriteRule (.*) public/$1 [L]
+
+# Protect against script execution in upload directories
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Allow PHP files in specific directories
+<Files "*.php">
+    Order Allow,Deny
+    Allow from all
+</Files> 
