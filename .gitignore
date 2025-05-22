@@ -130,7 +130,7 @@ config/local.js
 /checkpoints/
 
 # Media files (they are large and should be managed separately)
-/media/
+# /media/ - Removed to track media files in the repository
 
 # Node modules (will be installed via npm install)
 /node_modules/
