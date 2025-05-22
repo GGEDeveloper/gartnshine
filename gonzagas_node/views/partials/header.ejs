@@ -16,21 +16,8 @@
       <ul class="nav-menu">
         <li><a href="/" class="<%= typeof title !== 'undefined' && title === 'Home' ? 'active' : '' %>">Home</a></li>
         
-        <!-- Collection links - will be populated from database -->
-        <% if (typeof families !== 'undefined' && families && families.length > 0) { %>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Collections</a>
-            <ul class="dropdown-menu">
-              <% families.forEach(family => { %>
-                <li>
-                  <a href="/collection/<%= family.id %>" class="<%= (typeof title !== 'undefined' && title === family.name) ? 'active' : '' %>">
-                    <%= family.name %>
-                  </a>
-                </li>
-              <% }); %>
-            </ul>
-          </li>
-        <% } %>
+        <!-- Collections link -->
+        <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Collections</a></li>
         
         <li><a href="/about" class="<%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">About</a></li>
         

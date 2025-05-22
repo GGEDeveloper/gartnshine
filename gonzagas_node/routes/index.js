@@ -83,6 +83,38 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Collections page - Show all media images
+router.get('/collections', async (req, res) => {
+  try {
+    const mediaPath = path.join(__dirname, '../public/media');
+    const files = await fs.readdir(mediaPath);
+    
+    // Filter only image files
+    const imageFiles = files.filter(file => {
+      const ext = path.extname(file).toLowerCase();
+      return ['.jpg', '.jpeg', '.png', '.gif'].includes(ext);
+    }).map(file => ({
+      filename: file,
+      path: `/media/${file}`,
+      url: `/media/${file}`
+    }));
+    
+    res.render('collections', {
+      title: 'Gallery',
+      images: imageFiles,
+      user: req.user || null,
+      success_msg: req.flash('success_msg'),
+      error_msg: req.flash('error_msg')
+    });
+  } catch (error) {
+    console.error('Error loading media files:', error);
+    res.status(500).render('error', {
+      title: 'Error',
+      message: 'Failed to load media files.'
+    });
+  }
+});
+
 // Collection page - Show products by family
 router.get('/collection/:familyId', async (req, res) => {
   try {

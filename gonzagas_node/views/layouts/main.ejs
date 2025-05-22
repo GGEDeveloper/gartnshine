@@ -13,26 +13,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
-  <!-- Custom CSS -->
+  <!-- Theme CSS -->
+  <link rel="stylesheet" href="/css/theme.css">
+  <!-- Main CSS -->
   <link rel="stylesheet" href="/css/main.css">
-  <% if (typeof customCss !== 'undefined' && customCss) { %>
-    <link rel="stylesheet" href="/css/<%= customCss %>.css">
-  <% } %>
+  <!-- Catalog CSS -->
+  <link rel="stylesheet" href="/css/catalog.css">
   
-  <!-- Custom inline styles with theme colors -->
   <style>
     :root {
-      --color-primary: <%= theme.colorPrimary %>;
-      --color-secondary: <%= theme.colorSecondary %>;
-      --color-accent: <%= theme.colorAccent %>;
-      --color-text: <%= theme.colorText %>;
-      --color-highlight: <%= theme.colorHighlight %>;
+      --color-primary: <%= theme.colorPrimary || '#1a1a1a' %>;
+      --color-secondary: <%= theme.colorSecondary || '#2d2d2d' %>;
+      --color-accent: <%= theme.colorAccent || '#c0a080' %>;
+      --color-text: <%= theme.colorText || '#ffffff' %>;
+      --color-highlight: <%= theme.colorHighlight || '#d4b190' %>;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <%- include('partials/header') %>
+  <%- include('../partials/header') %>
   
   <!-- Flash Messages -->
   <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
@@ -48,21 +47,11 @@
   <% } %>
   
   <!-- Main Content -->
-  <main class="container">
-    <%- body %>
-  </main>
+  <%- body %>
   
-  <!-- Footer -->
-  <%- include('partials/footer') %>
+  <%- include('../partials/footer') %>
   
   <!-- Main JavaScript -->
   <script src="/js/main.js"></script>
-  
-  <!-- Carousel JavaScript -->
-  <script src="/js/carousel.js"></script>
-  
-  <% if (typeof customJs !== 'undefined' && customJs) { %>
-    <script src="/js/<%= customJs %>.js"></script>
-  <% } %>
 </body>
 </html>

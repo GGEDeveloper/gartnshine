@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
+const expressLayouts = require('express-ejs-layouts');
 
 const config = require('./config/config');
 const db = require('./config/database');
@@ -13,9 +14,11 @@ const db = require('./config/database');
 // Initialize the app
 const app = express();
 
-// Set view engine
-app.set('view engine', 'ejs');
+// Set view engine and layouts
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('layout', 'layouts/main');
+app.use(expressLayouts);
 
 // Middleware
 app.use(express.json());
@@ -28,6 +31,19 @@ app.use(flash());
 app.use(morgan('dev'));
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
+// Make families data available to all views
+app.use(async (req, res, next) => {
+  try {
+    const ProductFamily = require('./models/ProductFamily');
+    const families = await ProductFamily.getAll();
+    res.locals.families = families || [];
+  } catch (error) {
+    console.error('Error loading families for navigation:', error);
+    res.locals.families = [];
+  }
   next();
 });
 

@@ -1,29 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | <%= siteTitle %></title>
-  
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <!-- Theme CSS -->
-  <link rel="stylesheet" href="/css/theme.css">
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="/css/main.css">
-  <!-- Catalog CSS -->
-  <link rel="stylesheet" href="/css/catalog.css">
-</head>
-<body>
-  <%- include('partials/header') %>
-  
-  <main>
+<%- contentFor('content') %>
+<main>
     <!-- Hero Section with Video Background -->
     <section class="hero">
       <div class="video-background">
@@ -40,54 +16,65 @@
       </div>
     </section>
     
-    <!-- Media Gallery -->
-    <section class="gallery">
-      <h2>Our Collection</h2>
-      <div class="gallery-grid">
-        <% mediaFiles.filter(file => file.type === 'image').forEach(file => { %>
-          <div class="gallery-item">
-            <img src="<%= file.path %>" alt="Jewelry piece" loading="lazy">
-          </div>
-        <% }); %>
-      </div>
-    </section>
-    
     <!-- Featured Products -->
-    <section class="featured-products">
-      <h2>Featured Pieces</h2>
+    <section class="featured-section">
+      <div class="section-header">
+        <h2>Featured Pieces</h2>
+        <div class="geometric-divider">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
       <div class="product-grid">
-        <% featured.forEach(product => { %>
+        <% featured.slice(0, 4).forEach(product => { %>
           <div class="product-card">
             <div class="product-image">
-              <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>">
+              <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>" loading="lazy">
+              <div class="product-overlay">
+                <a href="/product/<%= product.id %>" class="btn">View Details</a>
+              </div>
             </div>
             <div class="product-info">
               <h3><%= product.name %></h3>
-              <p class="price"><% if (typeof product.sale_price === 'number') { %>$<%= product.sale_price.toFixed(2) %><% } else { %>Price not available<% } %></p>
-              <a href="/product/<%= product.id %>" class="btn">View Details</a>
+              <p class="product-category"><%= product.category %></p>
+              <p class="price">
+                <% if (product.sale_price) { %>
+                  <span class="sale-price">$<%= Number(product.sale_price).toFixed(2) %></span>
+                  <span class="original-price">$<%= Number(product.price).toFixed(2) %></span>
+                <% } else { %>
+                  $<%= Number(product.price).toFixed(2) %>
+                <% } %>
+              </p>
             </div>
           </div>
         <% }); %>
       </div>
     </section>
     
-    <!-- Product Families -->
-    <section class="product-families">
-      <h2>Collections</h2>
-      <div class="family-grid">
+    <!-- All Collections -->
+    <section class="all-collections">
+      <div class="section-header">
+        <h2>Explore Our Collections</h2>
+        <div class="geometric-divider">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="collections-grid">
         <% families.forEach(family => { %>
-          <a href="/collection/<%= family.id %>" class="family-card">
-            <h3><%= family.name %></h3>
-            <p><%= family.description %></p>
+          <a href="/collection/<%= family.id %>" class="collection-card">
+            <div class="collection-image">
+              <img src="/media/<%= family.image_filename || 'default-collection.jpg' %>" alt="<%= family.name %>" loading="lazy">
+            </div>
+            <div class="collection-info">
+              <h3><%= family.name %></h3>
+              <p><%= family.description %></p>
+            </div>
           </a>
         <% }); %>
       </div>
     </section>
-  </main>
-  
-  <%- include('partials/footer') %>
-  
-  <!-- Main JavaScript -->
-  <script src="/js/main.js"></script>
-</body>
-</html> 
+</main>
+<% }); %>
