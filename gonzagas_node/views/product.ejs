@@ -1,4 +1,4 @@
-<%- include('layout', {body: `
+
 <div class="product-detail">
   <div class="product-container">
     <!-- Product image gallery -->
@@ -101,69 +101,61 @@
   const thumbnails = document.querySelectorAll('.thumbnail');
   
   thumbnails.forEach(thumbnail => {
-    thumbnail.addEventListener('click', () => {
-      // Update active class
-      thumbnails.forEach(t => t.classList.remove('active'));
-      thumbnail.classList.add('active');
-      
-      // Update main image
-      const imageSrc = thumbnail.getAttribute('data-image');
-      mainImage.src = imageSrc;
     });
-  });
-  
-  // Fetch related products
-  async function fetchRelatedProducts() {
-    try {
-      const response = await fetch('/api/products/family/<%= product.family_id %>');
-      const data = await response.json();
-      
-      if (data.success && data.data.length > 0) {
-        // Filter out current product and get max 4 products
-        const relatedProducts = data.data
-          .filter(p => p.id !== <%= product.id %>)
-          .slice(0, 4);
+    
+    // Fetch related products
+    async function fetchRelatedProducts() {
+      try {
+        const response = await fetch(`/api/related-products/<%= product.family_id %>`);
+        const data = await response.json();
         
-        if (relatedProducts.length > 0) {
-          const productsGrid = document.querySelector('.products-grid');
-          productsGrid.innerHTML = ''; // Clear loading state
+        if (data.success && data.data.length > 0) {
+          // Filter out current product and get max 4 products
+          const relatedProducts = data.data
+            .filter(p => p.id !== <%- product.id %>)
+            .slice(0, 4);
           
-          relatedProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
+          if (relatedProducts.length > 0) {
+            const productsGrid = document.querySelector('.products-grid');
+            productsGrid.innerHTML = ''; // Clear loading state
             
-            productCard.innerHTML = \`
-              <div class="product-image">
-                <a href="/product/\${product.id}">
-                  <img src="/media_processed/\${product.image_filename}" alt="\${product.name}" loading="lazy">
-                </a>
-              </div>
-              <div class="product-info">
-                <h3>\${product.name}</h3>
-                <p class="product-category">\${product.family_name}</p>
-              </div>
-            \`;
-            
-            productsGrid.appendChild(productCard);
-          });
+            relatedProducts.forEach(product => {
+              const productCard = document.createElement('div');
+              productCard.className = 'product-card';
+              
+              productCard.innerHTML = `
+                <div class="product-image">
+                  <a href="/product/${product.id}">
+                    <img src="/media_processed/${product.image_filename}" alt="${product.name}" loading="lazy">
+                  </a>
+                </div>
+                <div class="product-info">
+                  <h3>${product.name}</h3>
+                  <p class="product-category">${product.family_name}</p>
+                </div>
+              `;
+              
+              productsGrid.appendChild(productCard);
+            });
+          } else {
+            hideRelatedProductsSection();
+          }
         } else {
           hideRelatedProductsSection();
         }
-      } else {
+      } catch (error) {
+        console.error('Error fetching related products:', error);
         hideRelatedProductsSection();
       }
-    } catch (error) {
-      console.error('Error fetching related products:', error);
-      hideRelatedProductsSection();
     }
-  }
-  
-  function hideRelatedProductsSection() {
-    const relatedSection = document.querySelector('.related-products');
-    relatedSection.style.display = 'none';
-  }
-  
-  // Load related products on page load
-  document.addEventListener('DOMContentLoaded', fetchRelatedProducts);
-</script>
-`}) %> 
+    
+    function hideRelatedProductsSection() {
+      const relatedSection = document.querySelector('.related-products');
+      if (relatedSection) {
+        relatedSection.style.display = 'none';
+      }
+    }
+    
+    // Load related products on page load
+    document.addEventListener('DOMContentLoaded', fetchRelatedProducts);
+  </script>
