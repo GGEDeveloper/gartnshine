@@ -1,0 +1,40 @@
+<% if (typeof breadcrumbs !== 'undefined' && breadcrumbs.length > 0) { %>
+  <nav class="flex mb-6" aria-label="Breadcrumb">
+    <ol role="list" class="flex items-center space-x-2 text-sm">
+      <li>
+        <div class="flex items-center">
+          <a href="/admin" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
+            <i class="fas fa-home"></i>
+            <span class="sr-only">Página Inicial</span>
+          </a>
+        </div>
+      </li>
+      
+      <% breadcrumbs.forEach((item, index) => { %>
+        <li>
+          <div class="flex items-center">
+            <i class="fas fa-chevron-right text-xs text-gray-400 mx-2"></i>
+            <% if (index === breadcrumbs.length - 1) { %>
+              <span class="text-primary-600 dark:text-primary-400 font-medium"><%= item.title %></span>
+            <% } else { %>
+              <a href="<%= item.url %>" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
+                <%= item.title %>
+              </a>
+            <% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ol>
+  </nav>
+<% } %>
+
+<!-- Exemplo de como usar este componente no seu controlador:
+res.render('admin/pagina', {
+  title: 'Título da Página',
+  breadcrumbs: [
+    { title: 'Seção', url: '/admin/secao' },
+    { title: 'Subseção', url: '/admin/secao/subsecao' },
+    { title: 'Página Atual' }
+  ]
+});
+-->

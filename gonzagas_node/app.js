@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -7,34 +8,65 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
+const { initialize: initializeDatabase } = require('./config/database');
+const { initializeModules } = require('./config/modules');
 
+// Carrega as configurações
 const config = require('./config/config');
-const db = require('./config/database');
 
-// Initialize the app
+// Inicializa o aplicativo Express
 const app = express();
 
-// Set view engine and layouts
+// Configuração global de variáveis
+app.set('env', process.env.NODE_ENV || 'development');
+app.set('port', process.env.PORT || 3000);
+
+// Configurações de view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main');
 app.use(expressLayouts);
 
-// Middleware
+// Middleware básico
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session(config.session));
 app.use(flash());
 
-// Logging middleware
-app.use(morgan('dev'));
+// Logging
+if (app.get('env') === 'development') {
+  app.use(morgan('dev'));
+} else {
+  app.use(morgan('combined'));
+}
+
+// Middleware de log personalizado
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
 });
 
-// Make families data available to all views
+// Variáveis globais para as views
+app.use((req, res, next) => {
+  // Dados comuns a todas as views
+  res.locals.app = {
+    name: 'Gonzaga\'s Art & Shine',
+    version: process.env.APP_VERSION || '1.0.0',
+    environment: app.get('env'),
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  };
+  
+  // Flash messages
+  res.locals.messages = require('express-messages')(req, res);
+  
+  // Usuário autenticado
+  res.locals.user = req.user || null;
+  
+  next();
+});
+
+// Carrega dados de famílias para o menu de navegação
 app.use(async (req, res, next) => {
   try {
     const ProductFamily = require('./models/ProductFamily');
@@ -163,19 +195,49 @@ app.use((req, res, next) => {
   }
 });
 
-// Removed site-wide password middleware
+// Inicializa os módulos
+async function initializeApp() {
+  try {
+    // Inicializa o banco de dados
+    await initializeDatabase();
+    
+    // Inicializa os módulos do sistema
+    await initializeModules(app);
+    
+    // Rotas principais
+    const indexRouter = require('./routes/index');
+    const productsRouter = require('./routes/products');
+    const adminRouter = require('./routes/admin');
+    
+    // Usa as rotas
+    app.use('/', indexRouter);
+    app.use('/products', productsRouter);
+    app.use('/admin', adminRouter);
+    
+    // Inicia o servidor
+    const server = app.listen(app.get('port'), () => {
+      console.log(`\n${'='.repeat(50)}`);
+      console.log(`${' '.repeat(15)}Gonzaga's Art & Shine`);
+      console.log(`${' '.repeat(10)}Ambiente: ${app.get('env')}`);
+      console.log(`${' '.repeat(10)}Servidor rodando em http://localhost:${app.get('port')}`);
+      console.log(`${'='.repeat(50)}\n`);
+    });
+    
+    return server;
+  } catch (error) {
+    console.error('Falha ao inicializar o aplicativo:', error);
+    process.exit(1);
+  }
+}
+
+// Inicializa o aplicativo
+initializeApp().catch(console.error);
 
 // Error logging middleware
 app.use((err, req, res, next) => {
   console.error(`${new Date().toISOString()} - Error:`, err);
   next(err);
 });
-
-// Routes
-app.use(require('./routes/static')); // Rotas estáticas (favicon.ico, etc.)
-app.use('/', require('./routes/index'));
-app.use('/admin', require('./routes/admin'));
-app.use('/api', require('./routes/api'));
 
 // Error handling middleware
 app.use((req, res, next) => {
@@ -210,12 +272,43 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
-const PORT = config.port;
-app.listen(PORT, '0.0.0.0', async () => {
-  console.log(`Server running on port ${PORT}`);
-  // Test database connection
-  await db.testConnection();
+// Tratamento de erros 404
+app.use((req, res, next) => {
+  res.status(404).render('error/404', {
+    title: 'Página não encontrada',
+    message: 'A página que você está procurando não existe ou foi movida.'
+  });
 });
 
-module.exports = app; 
+// Tratamento de erros global
+app.use((err, req, res, next) => {
+  console.error('Erro não tratado:', err);
+  
+  // Define as variáveis de resposta
+  const statusCode = err.status || 500;
+  const message = app.get('env') === 'development' ? err.message : 'Ocorreu um erro no servidor';
+  const stack = app.get('env') === 'development' ? err.stack : null;
+  
+  // Log do erro
+  console.error(`[${new Date().toISOString()}] Erro: ${message}`);
+  console.error(stack || 'No stack trace available');
+  
+  // Resposta para requisições de API
+  if (req.originalUrl.startsWith('/api/')) {
+    return res.status(statusCode).json({
+      success: false,
+      error: message,
+      ...(app.get('env') === 'development' && { stack })
+    });
+  }
+  
+  // Renderiza a página de erro
+  res.status(statusCode).render('error/500', {
+    title: 'Erro no servidor',
+    message,
+    stack: app.get('env') === 'development' ? err.stack : null
+  });
+});
+
+// Exporta o app para testes
+module.exports = app;

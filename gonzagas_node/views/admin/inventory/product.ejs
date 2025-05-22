@@ -1,0 +1,210 @@
+<%- include('../../partials/header', { title: 'Histórico de Estoque - ' + product.name }) %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Informações do Produto</h5>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-3">
+            <% if (product.images && product.images.length > 0) { %>
+              <img src="<%= product.images[0].image_path %>" alt="<%= product.name %>" 
+                   class="img-fluid rounded" style="max-height: 200px;">
+            <% } else { %>
+              <div class="bg-light d-flex align-items-center justify-content-center" 
+                   style="height: 200px; width: 100%;">
+                <i class="fas fa-box-open fa-4x text-muted"></i>
+              </div>
+            <% } %>
+          </div>
+          <h4><%= product.name %></h4>
+          <p class="text-muted"><%= product.reference %></p>
+          <hr>
+          <div class="row">
+            <div class="col-6">
+              <p class="mb-1"><strong>Família:</strong></p>
+              <p class="mb-1"><strong>Estoque Atual:</strong></p>
+              <p class="mb-1"><strong>Preço de Venda:</strong></p>
+              <p class="mb-1"><strong>Valor em Estoque:</strong></p>
+            </div>
+            <div class="col-6 text-end">
+              <p class="mb-1"><%= product.family_name || 'N/A' %></p>
+              <p class="mb-1 <%= product.current_stock <= 0 ? 'text-danger fw-bold' : '' %>">
+                <%= product.current_stock || 0 %>
+              </p>
+              <p class="mb-1"><%= (product.sale_price || 0).toFixed(2) %> €</p>
+              <p class="mb-1"><%= ((product.sale_price || 0) * (product.current_stock || 0)).toFixed(2) %> €</p>
+            </div>
+          </div>
+          <div class="d-grid gap-2 mt-3">
+            <button type="button" class="btn btn-primary" 
+                    data-bs-toggle="modal" data-bs-target="#adjustStockModal"
+                    data-product-id="<%= product.id %>"
+                    data-product-name="<%= product.name %>"
+                    data-current-stock="<%= product.current_stock || 0 %>">
+              <i class="fas fa-edit me-1"></i> Ajustar Estoque
+            </button>
+            <a href="/admin/products/<%= product.id %>/edit" class="btn btn-outline-secondary">
+              <i class="fas fa-pencil-alt me-1"></i> Editar Produto
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Histórico de Transações</h5>
+          <a href="/admin/inventory/transactions?product_id=<%= product.id %>" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-exchange-alt me-1"></i> Ver Todas
+          </a>
+        </div>
+        <div class="card-body">
+          <% if (transactions && transactions.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Preço Unit.</th>
+                    <th>Total</th>
+                    <th>Responsável</th>
+                    <th>Notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% transactions.forEach(trans => { %>
+                    <tr>
+                      <td><%= new Date(trans.created_at).toLocaleString() %></td>
+                      <td>
+                        <% if (trans.transaction_type === 'in') { %>
+                          <span class="badge bg-success">Entrada</span>
+                        <% } else if (trans.transaction_type === 'out') { %>
+                          <span class="badge bg-danger">Saída</span>
+                        <% } else { %>
+                          <span class="badge bg-warning">Ajuste</span>
+                        <% } %>
+                      </td>
+                      <td class="<%= trans.transaction_type === 'out' ? 'text-danger' : 'text-success' %>">
+                        <%= trans.transaction_type === 'out' ? '-' : '+' %><%= trans.quantity %>
+                      </td>
+                      <td><%= (trans.unit_price || 0).toFixed(2) %> €</td>
+                      <td><%= (trans.total_amount || 0).toFixed(2) %> €</td>
+                      <td><%= trans.created_by || 'Sistema' %></td>
+                      <td><%= trans.notes || '-' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+              <p class="text-muted">Nenhuma transação encontrada para este produto.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Ajuste de Estoque -->
+<div class="modal fade" id="adjustStockModal" tabindex="-1" aria-labelledby="adjustStockModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="adjustStockModalLabel">Ajustar Estoque</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="adjustStockForm" action="/admin/inventory/adjust" method="POST">
+        <div class="modal-body">
+          <input type="hidden" name="product_id" id="adjustProductId">
+          <div class="mb-3">
+            <label for="productName" class="form-label">Produto</label>
+            <input type="text" class="form-control" id="productName" readonly>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="currentStock" class="form-label">Estoque Atual</label>
+                <input type="number" class="form-control" id="currentStock" readonly>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="adjustmentType" class="form-label">Tipo de Ajuste</label>
+                <select class="form-select" id="adjustmentType" name="transaction_type" required>
+                  <option value="in">Entrada (Adicionar ao Estoque)</option>
+                  <option value="out">Saída (Remover do Estoque)</option>
+                  <option value="adjustment">Ajuste (Definir Quantidade)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantidade</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+          </div>
+          <div class="mb-3">
+            <label for="unit_price" class="form-label">Preço Unitário (€)</label>
+            <input type="number" step="0.01" class="form-control" id="unit_price" name="unit_price" required>
+          </div>
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notas</label>
+            <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Ajuste</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Configurar modal de ajuste de estoque
+  var adjustStockModal = document.getElementById('adjustStockModal');
+  if (adjustStockModal) {
+    adjustStockModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      var productId = button.getAttribute('data-product-id');
+      var productName = button.getAttribute('data-product-name');
+      var currentStock = button.getAttribute('data-current-stock');
+      
+      document.getElementById('adjustProductId').value = productId;
+      document.getElementById('productName').value = productName;
+      document.getElementById('currentStock').value = currentStock;
+      
+      // Preencher preço unitário com o preço atual do produto
+      document.getElementById('unit_price').value = '<%= (product.sale_price || 0).toFixed(2) %>';
+      
+      // Resetar o formulário
+      document.getElementById('quantity').value = 1;
+      document.getElementById('notes').value = '';
+    });
+
+    // Atualizar tipo de quantidade com base no tipo de ajuste
+    document.getElementById('adjustmentType').addEventListener('change', function() {
+      var quantityInput = document.getElementById('quantity');
+      if (this.value === 'adjustment') {
+        quantityInput.min = 0;
+        quantityInput.placeholder = 'Nova quantidade em estoque';
+      } else {
+        quantityInput.min = 1;
+        quantityInput.placeholder = '';
+      }
+    });
+  }
+});
+</script>
+
+<%- include('../../partials/footer') %>

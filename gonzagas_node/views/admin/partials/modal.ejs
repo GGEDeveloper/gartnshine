@@ -1,0 +1,251 @@
+<div x-data="{
+  isOpen: false,
+  title: '',
+  content: '',
+  size: 'md',
+  closeOnBackdrop: true,
+  closeOnEsc: true,
+  showCloseButton: true,
+  showFooter: true,
+  confirmText: 'Confirmar',
+  cancelText: 'Cancelar',
+  onConfirm: null,
+  onCancel: null,
+  loading: false,
+  
+  init() {
+    // Fechar ao pressionar ESC
+    if (this.closeOnEsc) {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close();
+        }
+      });
+    }
+    
+    // Eventos globais para abrir/fechar o modal
+    this.$watch('isOpen', (isOpen) => {
+      if (isOpen) {
+        document.body.classList.add('overflow-hidden');
+      } else {
+        document.body.classList.remove('overflow-hidden');
+      }
+    });
+    
+    // Expor métodos globais
+    window.openModal = this.open.bind(this);
+    window.closeModal = this.close.bind(this);
+  },
+  
+  open(options = {}) {
+    this.title = options.title || '';
+    this.content = options.content || '';
+    this.size = options.size || 'md';
+    this.closeOnBackdrop = options.closeOnBackdrop !== false;
+    this.closeOnEsc = options.closeOnEsc !== false;
+    this.showCloseButton = options.showCloseButton !== false;
+    this.showFooter = options.showFooter !== false;
+    this.confirmText = options.confirmText || 'Confirmar';
+    this.cancelText = options.cancelText || 'Cancelar';
+    this.onConfirm = typeof options.onConfirm === 'function' ? options.onConfirm : null;
+    this.onCancel = typeof options.onCancel === 'function' ? options.onCancel : null;
+    this.loading = false;
+    
+    // Se o conteúdo for um seletor, buscar o HTML
+    if (typeof this.content === 'string' && this.content.startsWith('#')) {
+      const contentEl = document.querySelector(this.content);
+      if (contentEl) {
+        this.content = contentEl.innerHTML;
+      }
+    }
+    
+    this.isOpen = true;
+    
+    // Disparar evento personalizado
+    const event = new CustomEvent('modal:opened', { detail: { modal: this } });
+    document.dispatchEvent(event);
+  },
+  
+  close() {
+    if (this.loading) return;
+    
+    this.isOpen = false;
+    
+    // Disparar evento personalizado
+    const event = new CustomEvent('modal:closed', { detail: { modal: this } });
+    document.dispatchEvent(event);
+  },
+  
+  async confirm() {
+    if (this.onConfirm) {
+      try {
+        this.loading = true;
+        await this.onConfirm();
+        this.close();
+      } catch (error) {
+        console.error('Erro ao confirmar:', error);
+      } finally {
+        this.loading = false;
+      }
+    } else {
+      this.close();
+    }
+  },
+  
+  cancel() {
+    if (this.onCancel) {
+      this.onCancel();
+    }
+    this.close();
+  }
+}" 
+     @modal:open.window="open($event.detail)"
+     @modal:close.window="close()"
+     x-show="isOpen"
+     x-cloak
+     x-transition:enter="ease-out duration-200"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="ease-in duration-100"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     class="fixed inset-0 z-50 overflow-y-auto" 
+     aria-labelledby="modal-title" 
+     role="dialog" 
+     aria-modal="true">
+  
+  <!-- Fundo escuro -->
+  <div class="fixed inset-0 bg-black/50 transition-opacity" 
+       x-show="isOpen"
+       x-transition:enter="ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="ease-in duration-100"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       @click="closeOnBackdrop && close()"
+       aria-hidden="true">
+  </div>
+  
+  <!-- Conteúdo do modal -->
+  <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+    <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all w-full 
+                <%= 
+                  size === 'sm' ? 'max-w-sm' : 
+                  size === 'md' ? 'max-w-md' : 
+                  size === 'lg' ? 'max-w-2xl' : 
+                  size === 'xl' ? 'max-w-4xl' : 
+                  size === '2xl' ? 'max-w-6xl' : 
+                  'max-w-md' 
+                %>"
+         x-show="isOpen"
+         x-transition:enter="ease-out duration-200"
+         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+         x-transition:leave="ease-in duration-100"
+         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+         @click.self="closeOnBackdrop && close()">
+      
+      <!-- Cabeçalho -->
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modal-title" x-text="title"></h3>
+        
+        <button type="button" 
+                x-show="showCloseButton"
+                @click="close()"
+                class="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none">
+          <span class="sr-only">Fechar</span>
+          <i class="fas fa-times h-5 w-5"></i>
+        </button>
+      </div>
+      
+      <!-- Conteúdo -->
+      <div class="px-6 py-4 max-h-[70vh] overflow-y-auto">
+        <template x-if="typeof content === 'string'">
+          <div x-html="content"></div>
+        </template>
+        <template x-if="typeof content !== 'string'">
+          <div x-text="content"></div>
+        </template>
+      </div>
+      
+      <!-- Rodapé -->
+      <div x-show="showFooter" 
+           class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
+        <button type="button" 
+                @click="cancel()"
+                :disabled="loading"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span x-text="cancelText"></span>
+        </button>
+        
+        <button type="button" 
+                @click="confirm()"
+                :disabled="loading"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          <template x-if="loading">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </template>
+          <span x-text="confirmText"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Exemplo de como usar este componente:
+
+1. Abrir um modal simples:
+<button @click="window.openModal({
+  title: 'Título do Modal',
+  content: '<p>Conteúdo do modal aqui.</p>',
+  size: 'md' // sm, md, lg, xl, 2xl
+})">Abrir Modal</button>
+
+2. Abrir um modal com confirmação:
+<button @click="window.openModal({
+  title: 'Confirmar exclusão',
+  content: 'Tem certeza que deseja excluir este item?',
+  confirmText: 'Sim, excluir',
+  cancelText: 'Cancelar',
+  onConfirm: async () => {
+    // Lógica para excluir o item
+    console.log('Item excluído!');
+  }
+})">Excluir Item</button>
+
+
+3. Abrir um modal com conteúdo de um elemento HTML existente:
+<div id="form-content" class="hidden">
+  <form>
+    <div class="mb-4">
+      <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Nome</label>
+      <input type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+    </div>
+    <!-- Mais campos do formulário -->
+  </form>
+</div>
+
+<button @click="window.openModal({
+  title: 'Formulário de Exemplo',
+  content: '#form-content',
+  size: 'lg',
+  showFooter: false
+})">Abrir Formulário</button>
+
+4. Fechar o modal programaticamente:
+<button @click="window.closeModal()">Fechar Modal</button>
+
+5. Usando eventos personalizados:
+document.addEventListener('modal:opened', (event) => {
+  console.log('Modal aberto:', event.detail.modal);
+});
+
+document.addEventListener('modal:closed', (event) => {
+  console.log('Modal fechado:', event.detail.modal);
+});
+-->

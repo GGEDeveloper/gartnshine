@@ -1,0 +1,30 @@
+<% 
+  // Default breadcrumbs if not provided
+  const defaultBreadcrumbs = [
+    { label: 'Dashboard', url: '/admin' }
+  ];
+  
+  const breadcrumbs = typeof breadcrumbs !== 'undefined' && breadcrumbs.length > 0 
+    ? [...defaultBreadcrumbs, ...breadcrumbs]
+    : defaultBreadcrumbs;
+%>
+
+<nav class="breadcrumb" aria-label="Navegação">
+  <ol class="flex items-center text-sm">
+    <% breadcrumbs.forEach((item, index) => { %>
+      <li class="flex items-center">
+        <% if (index > 0) { %>
+          <i class="fas fa-chevron-right mx-2 text-xs text-muted"></i>
+        <% } %>
+        
+        <% if (index === breadcrumbs.length - 1) { %>
+          <span class="text-primary font-medium"><%= item.label %></span>
+        <% } else { %>
+          <a href="<%= item.url %>" class="text-muted hover:text-primary transition-colors">
+            <%= item.label %>
+          </a>
+        <% } %>
+      </li>
+    <% }); %>
+  </ol>
+</nav>

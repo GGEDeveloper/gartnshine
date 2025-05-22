@@ -1,0 +1,240 @@
+<%# data-table.ejs - Componente de tabela de dados %>
+<%# 
+  Parâmetros esperados:
+  - id: ID opcional para a tabela
+  - title: Título da tabela (opcional)
+  - headers: Array de objetos { key, label, width, align, sortable, render }
+  - data: Array de objetos com os dados
+  - emptyMessage: Mensagem quando não há dados (opcional)
+  - pagination: Objeto com { currentPage, totalPages, totalItems, perPage } (opcional)
+  - actions: Array de ações { label, icon, action, variant } (opcional)
+  - selectable: Se verdadeiro, adiciona checkboxes para seleção (opcional)
+  - loading: Estado de carregamento (opcional)
+%>
+
+<div class="card overflow-hidden">
+  <% if (title) { %>
+    <div class="card-header flex items-center justify-between">
+      <h3 class="text-lg font-medium"><%= title %></h3>
+      
+      <% if (actions && actions.length > 0) { %>
+        <div class="flex items-center space-x-2">
+          <% actions.forEach(action => { %>
+            <button 
+              type="button" 
+              class="btn btn-<%= action.variant || 'outline' %> btn-sm"
+              onclick="<%= action.action %>"
+            >
+              <% if (action.icon) { %>
+                <i class="<%= action.icon %> mr-1"></i>
+              <% } %>
+              <%= action.label %>
+            </button>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+  
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200" <%= id ? `id="${id}"` : '' %>>
+      <thead class="bg-gray-50">
+        <tr>
+          <% if (selectable) { %>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">
+              <input type="checkbox" class="form-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+            </th>
+          <% } %>
+          
+          <% headers.forEach(header => { %>
+            <th 
+              scope="col" 
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              <% if (header.width) { %> style="width: <%= header.width %>;" <% } %>
+              <% if (header.align) { %> style="text-align: <%= header.align %>;" <% } %>
+            >
+              <div class="flex items-center">
+                <%= header.label %>
+                <% if (header.sortable) { %>
+                  <button type="button" class="ml-1 text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-sort"></i>
+                  </button>
+                <% } %>
+              </div>
+            </th>
+          <% }); %>
+          
+          <% if (actions && actions.length > 0) { %>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Ações
+            </th>
+          <% } %>
+        </tr>
+      </thead>
+      
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% if (loading) { %>
+          <tr>
+            <td colspan="<%= headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0) %>" class="px-6 py-4 text-center">
+              <div class="flex justify-center py-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
+              </div>
+            </td>
+          </tr>
+        <% } else if (!data || data.length === 0) { %>
+          <tr>
+            <td colspan="<%= headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0) %>" class="px-6 py-12 text-center text-gray-500">
+              <div class="flex flex-col items-center justify-center">
+                <i class="far fa-inbox text-4xl text-gray-300 mb-2"></i>
+                <p class="text-gray-500"><%= emptyMessage || 'Nenhum registro encontrado' %></p>
+              </div>
+            </td>
+          </tr>
+        <% } else { %>
+          <% data.forEach((item, index) => { %>
+            <tr class="hover:bg-gray-50">
+              <% if (selectable) { %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <input 
+                    type="checkbox" 
+                    class="form-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    value="<%= item.id || index %>"
+                  >
+                </td>
+              <% } %>
+              
+              <% headers.forEach(header => { %>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <% if (header.render && typeof header.render === 'function') { %>
+                    <%- header.render(item) %>
+                  <% } else { %>
+                    <%= item[header.key] || '-' %>
+                  <% } %>
+                </td>
+              <% }); %>
+              
+              <% if (actions && actions.length > 0) { %>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end space-x-2">
+                    <% actions.forEach(action => { %>
+                      <button 
+                        type="button" 
+                        class="text-<%= action.variant || 'primary' %>-600 hover:text-<%= action.variant || 'primary' %>-900"
+                        onclick="<%= action.action %>(<%= JSON.stringify(item).replace(/"/g, '&quot;') %>)"
+                        title="<%= action.label %>"
+                      >
+                        <i class="<%= action.icon || 'fas fa-ellipsis-h' %>"></i>
+                      </button>
+                    <% }); %>
+                  </div>
+                </td>
+              <% } %>
+            </tr>
+          <% }); %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  
+  <% if (pagination && (pagination.totalPages > 1 || pagination.totalItems > 0)) { %>
+    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+      <div class="flex-1 flex justify-between sm:hidden">
+        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+          Anterior
+        </a>
+        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+          Próximo
+        </a>
+      </div>
+      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm text-gray-700">
+            Mostrando <span class="font-medium"><%= (pagination.currentPage - 1) * pagination.perPage + 1 %></span>
+            a <span class="font-medium"><%= Math.min(pagination.currentPage * pagination.perPage, pagination.totalItems) %></span>
+            de <span class="font-medium"><%= pagination.totalItems %></span> resultados
+          </p>
+        </div>
+        <div>
+          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <a 
+              href="#" 
+              class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              <%= pagination.currentPage === 1 ? 'disabled' : '' %>
+            >
+              <span class="sr-only">Anterior</span>
+              <i class="fas fa-chevron-left h-5 w-5"></i>
+            </a>
+            
+            <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+              <a 
+                href="#" 
+                class="relative inline-flex items-center px-4 py-2 border text-sm font-medium <%= i === pagination.currentPage ? 'z-10 bg-primary-50 border-primary-500 text-primary-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50' %>"
+              >
+                <%= i %>
+              </a>
+            <% } %>
+            
+            <a 
+              href="#" 
+              class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              <%= pagination.currentPage === pagination.totalPages ? 'disabled' : '' %>
+            >
+              <span class="sr-only">Próximo</span>
+              <i class="fas fa-chevron-right h-5 w-5"></i>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%# Estilos específicos para a tabela %>
+<style>
+  /* Estilos para linhas com status */
+  tr[data-status="active"] {
+    @apply bg-green-50;
+  }
+  
+  tr[data-status="inactive"] {
+    @apply bg-gray-50 text-gray-400;
+  }
+  
+  tr[data-status="warning"] {
+    @apply bg-yellow-50;
+  }
+  
+  tr[data-status="danger"] {
+    @apply bg-red-50;
+  }
+  
+  /* Estilos para células com status */
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .status-active {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .status-inactive {
+    @apply bg-gray-100 text-gray-800;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .status-cancelled {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  /* Estilos para ações */
+  .action-btn {
+    @apply inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .action-btn-sm {
+    @apply p-1 rounded-md;
+  }
+</style>

@@ -1,0 +1,80 @@
+<footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <!-- Informações de direitos autorais -->
+      <div class="text-center md:text-left mb-4 md:mb-0">
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          &copy; <%= new Date().getFullYear() %> Gonzaga's Art & Shine. Todos os direitos reservados.
+        </p>
+      </div>
+      
+      <!-- Links do rodapé -->
+      <div class="flex flex-wrap justify-center space-x-4">
+        <a href="/politica-de-privacidade" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200">
+          Política de Privacidade
+        </a>
+        <span class="text-gray-400 dark:text-gray-600">•</span>
+        <a href="/termos-de-uso" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200">
+          Termos de Uso
+        </a>
+        <span class="text-gray-400 dark:text-gray-600">•</span>
+        <a href="/contato" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200">
+          Contato
+        </a>
+        <span class="text-gray-400 dark:text-gray-600">•</span>
+        <a href="/suporte" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200">
+          Suporte
+        </a>
+      </div>
+      
+      <!-- Versão e status do sistema -->
+      <div class="mt-4 md:mt-0 flex items-center space-x-4">
+        <div class="flex items-center">
+          <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+          <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Sistema Online</span>
+        </div>
+        <span class="text-xs text-gray-500 dark:text-gray-400">v1.0.0</span>
+      </div>
+    </div>
+    
+    <!-- Mensagem de desenvolvimento -->
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-center">
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Desenvolvido com <i class="fas fa-heart text-red-500 mx-1"></i> pela equipe Gonzaga's Art & Shine
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Botão de voltar ao topo -->
+<button id="back-to-top" class="fixed bottom-6 right-6 bg-primary-600 text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-all duration-200 opacity-0 invisible transform translate-y-4"
+        aria-label="Voltar ao topo">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+  // Botão de voltar ao topo
+  document.addEventListener('DOMContentLoaded', function() {
+    const backToTopButton = document.getElementById('back-to-top');
+    
+    // Mostrar/ocultar o botão ao rolar a página
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+        backToTopButton.classList.add('opacity-100', 'visible', 'translate-y-0');
+      } else {
+        backToTopButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
+        backToTopButton.classList.remove('opacity-100', 'visible', 'translate-y-0');
+      }
+    });
+    
+    // Rolar suavemente para o topo ao clicar no botão
+    backToTopButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Painel Administrativo' %> | Gonzaga's Art & Shine</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Admin Theme CSS -->
+  <link rel="stylesheet" href="/css/admin-theme.css">
+  
+  <!-- Custom CSS -->
+  <% if (typeof customCss !== 'undefined' && customCss) { %>
+    <link rel="stylesheet" href="/css/<%= customCss %>.css">
+  <% } %>
+  
+  <style>
+    :root {
+      --color-primary: <%= theme?.colorPrimary || '#6a8c69' %>;
+      --color-primary-dark: <%= theme?.colorPrimaryDark || '#5a7c59' %>;
+      --color-primary-light: <%= theme?.colorPrimaryLight || '#7a9c79' %>;
+      --color-accent: <%= theme?.colorAccent || '#b19cd9' %>;
+      --color-accent-dark: <%= theme?.colorAccentDark || '#a18cc9' %>;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
+    
+    <!-- Page Content -->
+    <main class="container">
+      <!-- Flash Messages -->
+      <% if (typeof success_msg !== 'undefined' && success_msg) { %>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle me-2"></i>
+          <%= success_msg %>
+          <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        </div>
+      <% } %>
+      
+      <% if (typeof error_msg !== 'undefined' && error_msg) { %>
+        <div class="alert alert-error">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          <%= error_msg %>
+          <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        </div>
+      <% } %>
+      
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          <%= typeof error === 'string' ? error : error.message || 'Ocorreu um erro inesperado.' %>
+          <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        </div>
+      <% } %>
+      
+      <!-- Page Header -->
+      <div class="page-header flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold"><%= title || 'Dashboard' %></h1>
+        <%- include('partials/breadcrumb') %>
+      </div>
+      
+      <!-- Page Content -->
+      <%- body %>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script>
+    // Toggle sidebar on mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+        });
+      }
+      
+      // Close alerts
+      const closeButtons = document.querySelectorAll('.close');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          this.closest('.alert').style.display = 'none';
+        });
+      });
+      
+      // Active navigation
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+      
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+  
+  <% if (typeof scripts !== 'undefined') { %>
+    <% scripts.forEach(script => { %>
+      <script src="<%= script %>"></script>
+    <% }); %>
+  <% } %>
+</body>
+</html>

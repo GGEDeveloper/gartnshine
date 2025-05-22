@@ -40,8 +40,10 @@ router.use(adminMiddleware);
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const Checkpoint = require('../models/Checkpoint');
+const Inventory = require('../models/Inventory');
 const { isAuthenticated, authenticateUser } = require('../middleware/auth');
 const config = require('../config/config');
+const InventoryController = require('../controllers/InventoryController');
 
 // Setup multer for file uploads
 const storage = multer.diskStorage({
@@ -399,68 +401,11 @@ router.post('/families/delete/:id', async (req, res) => {
 });
 
 // Inventory management routes
-router.get('/inventory', async (req, res) => {
-  try {
-    const products = await Product.getAll();
-    
-    res.render('admin/inventory', {
-      title: 'Inventory Management',
-      products
-    });
-  } catch (error) {
-    console.error('Error loading inventory:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load inventory.'
-    });
-  }
-});
-
-router.get('/inventory/:productId', async (req, res) => {
-  try {
-    const productId = parseInt(req.params.productId);
-    const product = await Product.getById(productId);
-    
-    if (!product) {
-      req.flash('error_msg', 'Product not found');
-      return res.redirect('/admin/inventory');
-    }
-    
-    const transactions = await Product.getInventoryTransactions(productId);
-    
-    res.render('admin/inventory-detail', {
-      title: `Inventory - ${product.name}`,
-      product,
-      transactions
-    });
-  } catch (error) {
-    console.error('Error loading inventory details:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load inventory details.'
-    });
-  }
-});
-
-router.post('/inventory/add-transaction', async (req, res) => {
-  try {
-    const transaction = req.body;
-    transaction.product_id = parseInt(transaction.product_id);
-    transaction.quantity = parseInt(transaction.quantity);
-    transaction.unit_price = parseFloat(transaction.unit_price);
-    transaction.total_amount = transaction.quantity * transaction.unit_price;
-    transaction.created_by = req.session.user.username;
-    
-    await Product.addInventoryTransaction(transaction);
-    
-    req.flash('success_msg', 'Inventory transaction added successfully');
-    res.redirect(`/admin/inventory/${transaction.product_id}`);
-  } catch (error) {
-    console.error('Error adding inventory transaction:', error);
-    req.flash('error_msg', 'Failed to add inventory transaction');
-    res.redirect('/admin/inventory');
-  }
-});
+// Rotas de gerenciamento de inventário
+router.get('/inventory', isAuthenticated, InventoryController.index.bind(InventoryController));
+router.get('/inventory/transactions', isAuthenticated, InventoryController.listTransactions.bind(InventoryController));
+router.get('/inventory/:productId', isAuthenticated, InventoryController.showProductHistory.bind(InventoryController));
+router.post('/inventory/adjust', isAuthenticated, InventoryController.processAdjustment.bind(InventoryController));
 
 // Checkpoint management routes
 router.get('/checkpoints', async (req, res) => {

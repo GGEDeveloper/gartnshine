@@ -1,0 +1,153 @@
+<%# line-chart.ejs - Componente de gráfico de linha %>
+<%# 
+  Parâmetros esperados:
+  - id: ID único para o canvas do gráfico
+  - title: Título do gráfico
+  - labels: Array de rótulos para o eixo X
+  - datasets: Array de conjuntos de dados
+      - label: Nome da série
+      - data: Array de valores
+      - color: Cor da linha (opcional)
+  - height: Altura do gráfico (opcional, padrão: 300)
+  - stacked: Se verdadeiro, empilha os dados (opcional, padrão: false)
+%>
+
+<% 
+  // Gerar cores aleatórias se não fornecidas
+  const defaultColors = [
+    '#3B82F6', // blue-500
+    '#10B981', // emerald-500
+    '#F59E0B', // amber-500
+    '#8B5CF6', // violet-500
+    '#EC4899', // pink-500
+    '#14B8A6', // teal-500
+    '#F97316', // orange-500
+    '#6366F1'  // indigo-500
+  ];
+  
+  const datasetsWithColors = (datasets || []).map((dataset, index) => ({
+    ...dataset,
+    borderColor: dataset.color || defaultColors[index % defaultColors.length],
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    tension: 0.3,
+    fill: false,
+    borderWidth: 2,
+    pointBackgroundColor: '#fff',
+    pointBorderColor: dataset.color || defaultColors[index % defaultColors.length],
+    pointBorderWidth: 2,
+    pointRadius: 3,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: dataset.color || defaultColors[index % defaultColors.length],
+    pointHoverBorderWidth: 2,
+    pointHitRadius: 10,
+    pointStyle: 'circle'
+  }));
+  
+  const height = typeof height !== 'undefined' ? height : 300;
+  const stacked = typeof stacked !== 'undefined' ? stacked : false;
+%>
+
+<div class="card">
+  <% if (title) { %>
+    <div class="card-header">
+      <h3 class="text-lg font-medium"><%= title %></h3>
+    </div>
+  <% } %>
+  
+  <div class="card-body p-4">
+    <div class="relative" style="height: <%= height %>px;">
+      <canvas id="<%= id %>"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('<%= id %>').getContext('2d');
+  
+  // Verificar se o Chart já está disponível
+  if (typeof Chart === 'undefined') {
+    console.error('Chart.js não foi carregado');
+    return;
+  }
+  
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: <%- JSON.stringify(labels) %>,
+      datasets: <%- JSON.stringify(datasetsWithColors) %>
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            color: '#6B7280' // gray-500
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: '#F3F4F6', // gray-100
+            drawBorder: false
+          },
+          ticks: {
+            color: '#6B7280', // gray-500
+            callback: function(value) {
+              // Formatar valores no eixo Y (ex: 1k, 1.5k, etc.)
+              if (value >= 1000) {
+                return (value / 1000).toFixed(value % 1000 === 0 ? 0 : 1) + 'k';
+              }
+              return value;
+            }
+          },
+          stacked: stacked
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            color: '#374151', // gray-700
+            padding: 20,
+            usePointStyle: true,
+            pointStyle: 'circle'
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleFont: { size: 12, weight: 'normal' },
+          bodyFont: { size: 14, weight: 'bold' },
+          padding: 10,
+          usePointStyle: true,
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed.y !== null) {
+                label += new Intl.NumberFormat('pt-BR', { 
+                  style: 'currency', 
+                  currency: 'BRL' 
+                }).format(context.parsed.y);
+              }
+              return label;
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>

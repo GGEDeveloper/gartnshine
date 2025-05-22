@@ -1,0 +1,166 @@
+<% 
+  // Valores padrão
+  const defaultOptions = {
+    title: '',
+    subtitle: '',
+    icon: null,
+    iconColor: 'primary',
+    headerBorder: true,
+    footerBorder: true,
+    padding: 'p-6',
+    headerPadding: 'px-6 py-4',
+    footerPadding: 'px-6 py-4',
+    bodyPadding: 'p-6',
+    hoverEffect: false,
+    rounded: 'rounded-lg',
+    shadow: 'shadow',
+    className: '',
+    headerClass: '',
+    bodyClass: '',
+    footerClass: ''
+  };
+  
+  // Mesclar opções fornecidas com os valores padrão
+  const options = { ...defaultOptions, ...(typeof locals === 'object' ? locals : {}) };
+  
+  // Classes dinâmicas
+  const cardClasses = [
+    'bg-white dark:bg-gray-800',
+    options.rounded,
+    options.shadow,
+    options.hoverEffect ? 'transition-all duration-200 hover:shadow-md' : '',
+    options.className
+  ].filter(Boolean).join(' ');
+  
+  const headerClasses = [
+    options.headerBorder ? 'border-b border-gray-200 dark:border-gray-700' : '',
+    options.headerPadding,
+    options.headerClass
+  ].filter(Boolean).join(' ');
+  
+  const bodyClasses = [
+    options.bodyPadding,
+    options.bodyClass
+  ].filter(Boolean).join(' ');
+  
+  const footerClasses = [
+    options.footerBorder ? 'border-t border-gray-200 dark:border-gray-700' : '',
+    options.footerPadding,
+    'bg-gray-50 dark:bg-gray-700/30',
+    options.footerClass
+  ].filter(Boolean).join(' ');
+  
+  // Cores de ícone
+  const iconColors = {
+    primary: 'text-primary-600 bg-primary-100 dark:text-primary-400 dark:bg-primary-900/30',
+    secondary: 'text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-700',
+    success: 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30',
+    danger: 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30',
+    warning: 'text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30',
+    info: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30',
+    dark: 'text-gray-800 bg-gray-200 dark:text-gray-200 dark:bg-gray-700',
+    light: 'text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-600'
+  };
+  
+  const iconColorClass = iconColors[options.iconColor] || iconColors.primary;
+%>
+
+<div class="<%= cardClasses %>">
+  <!-- Cabeçalho do Card -->
+  <% if (options.title || options.subtitle || options.icon) { %>
+    <div class="<%= headerClasses %>">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <% if (options.icon) { %>
+            <div class="flex-shrink-0">
+              <span class="inline-flex items-center justify-center h-10 w-10 rounded-full <%= iconColorClass %>">
+                <i class="<%= options.icon %> text-lg"></i>
+              </span>
+            </div>
+          <% } %>
+          
+          <div class="<%= options.icon ? 'ml-3' : '' %>">
+            <% if (options.title) { %>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white"><%= options.title %></h3>
+            <% } %>
+            <% if (options.subtitle) { %>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= options.subtitle %></p>
+            <% } %>
+          </div>
+        </div>
+        
+        <!-- Slot para ações do cabeçalho -->
+        <div class="flex-shrink-0">
+          <%- typeof headerActions !== 'undefined' ? headerActions : '' %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  
+  <!-- Corpo do Card -->
+  <div class="<%= bodyClasses %>">
+    <%- typeof body !== 'undefined' ? body : '' %>
+  </div>
+  
+  <!-- Rodapé do Card (opcional) -->
+  <% if (typeof footer !== 'undefined' && footer) { %>
+    <div class="<%= footerClasses %>">
+      <%- footer %>
+    </div>
+  <% } %>
+</div>
+
+<!-- 
+  Exemplos de uso:
+  
+  1. Card simples com título e conteúdo:
+  <%- include('components/card', {
+    title: 'Título do Card',
+    body: '<p>Conteúdo do card aqui.</p>'
+  }) %>
+  
+  2. Card com ícone e subtítulo:
+  <%- include('components/card', {
+    title: 'Card com Ícone',
+    subtitle: 'Subtítulo opcional',
+    icon: 'fas fa-chart-line',
+    iconColor: 'success',
+    body: '<p>Conteúdo do card aqui.</p>'
+  }) %>
+  
+  3. Card com ações no cabeçalho:
+  <%- include('components/card', {
+    title: 'Card com Ações',
+    headerActions: `
+      <div class="flex space-x-2">
+        <button class="p-1 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <button class="p-1 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+    `,
+    body: '<p>Conteúdo do card aqui.</p>',
+    footer: `
+      <div class="flex justify-end">
+        <button class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700">
+          Salvar
+        </button>
+      </div>
+    `
+  }) %>
+  
+  4. Card sem padding personalizado:
+  <%- include('components/card', {
+    title: 'Card sem Padding',
+    bodyPadding: 'p-0',
+    body: `
+      <div class="overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <!-- Conteúdo da tabela -->
+        </table>
+      </div>
+    `
+  }) %>
+-->

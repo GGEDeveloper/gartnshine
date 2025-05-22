@@ -1,0 +1,229 @@
+<header class="bg-white dark:bg-gray-800 shadow-sm z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <!-- Botão de menu móvel -->
+      <div class="flex items-center lg:hidden">
+        <button type="button" 
+                class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+                @click="isSidebarOpen = !isSidebarOpen"
+                aria-expanded="false">
+          <span class="sr-only">Abrir menu</span>
+          <i class="fas fa-bars h-6 w-6" x-show="!isSidebarOpen"></i>
+          <i class="fas fa-times h-6 w-6" x-show="isSidebarOpen"></i>
+        </button>
+      </div>
+      
+      <!-- Logo e título -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/admin" class="flex items-center">
+          <img class="h-8 w-auto" src="/images/logo.png" alt="Logo Gonzaga's Art & Shine">
+          <span class="ml-3 text-xl font-bold text-gray-900 dark:text-white hidden md:block">Gonzaga's</span>
+        </a>
+      </div>
+      
+      <!-- Menu superior direito -->
+      <div class="flex items-center">
+        <!-- Botão de busca (desktop) -->
+        <div class="hidden md:block relative mx-4">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input id="search" name="search" type="search" 
+                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" 
+                   placeholder="Pesquisar...">
+          </div>
+        </div>
+        
+        <!-- Botão de notificações -->
+        <div class="ml-4 relative" x-data="{ open: false }">
+          <button type="button" 
+                  class="p-1 rounded-full text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  @click="open = !open"
+                  aria-expanded="false">
+            <span class="sr-only">Ver notificações</span>
+            <div class="relative">
+              <i class="far fa-bell text-xl"></i>
+              <span class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+            </div>
+          </button>
+          
+          <!-- Dropdown de notificações -->
+          <div x-show="open" 
+               @click.away="open = false"
+               x-transition:enter="transition ease-out duration-100"
+               x-transition:enter-start="transform opacity-0 scale-95"
+               x-transition:enter-end="transform opacity-100 scale-100"
+               x-transition:leave="transition ease-in duration-75"
+               x-transition:leave-start="transform opacity-100 scale-100"
+               x-transition:leave-end="transform opacity-0 scale-95"
+               class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50" 
+               style="display: none;">
+            <div class="py-1">
+              <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                <p class="text-sm font-medium text-gray-900 dark:text-white">Notificações</p>
+              </div>
+              <div class="max-h-96 overflow-y-auto">
+                <a href="#" class="block px-4 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-shopping-cart text-blue-500"></i>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white">Novo pedido recebido</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Há 5 minutos</p>
+                    </div>
+                  </div>
+                </a>
+                <a href="#" class="block px-4 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-user-plus text-green-500"></i>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white">Novo cliente cadastrado</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Há 1 hora</p>
+                    </div>
+                  </div>
+                </a>
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white">Estoque baixo</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">5 itens com estoque crítico</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="px-4 py-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-center">
+                <a href="/admin/notificacoes" class="text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                  Ver todas as notificações
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Botão de tema -->
+        <div class="ml-4">
+          <button type="button" 
+                  id="theme-toggle"
+                  class="p-1 rounded-full text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+            <span class="sr-only">Alternar tema</span>
+            <i id="theme-icon" class="fas fa-moon text-xl"></i>
+          </button>
+        </div>
+        
+        <!-- Perfil do usuário -->
+        <div class="ml-4 relative" x-data="{ open: false }">
+          <button type="button" 
+                  class="flex items-center max-w-xs rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" 
+                  id="user-menu" 
+                  aria-expanded="false" 
+                  aria-haspopup="true"
+                  @click="open = !open">
+            <span class="sr-only">Abrir menu do usuário</span>
+            <div class="h-8 w-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-300 font-medium">
+              <%- user.name.split(' ').map(n => n[0]).join('').toUpperCase() %>
+            </div>
+            <span class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-200 hidden md:inline-block">
+              <%- user.name.split(' ')[0] %>
+            </span>
+            <i class="fas fa-chevron-down ml-1 text-gray-400 text-xs hidden md:inline-block" :class="{'transform rotate-180': open}"></i>
+          </button>
+          
+          <!-- Dropdown do usuário -->
+          <div x-show="open" 
+               @click.away="open = false"
+               x-transition:enter="transition ease-out duration-100"
+               x-transition:enter-start="transform opacity-0 scale-95"
+               x-transition:enter-end="transform opacity-100 scale-100"
+               x-transition:leave="transition ease-in duration-75"
+               x-transition:leave-start="transform opacity-100 scale-100"
+               x-transition:leave-end="transform opacity-0 scale-95"
+               class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50" 
+               role="menu" 
+               aria-orientation="vertical" 
+               aria-labelledby="user-menu"
+               style="display: none;">
+            <div class="py-1">
+              <a href="/admin/perfil" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" role="menuitem">
+                <i class="far fa-user mr-2"></i> Meu perfil
+              </a>
+              <a href="/admin/configuracoes" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" role="menuitem">
+                <i class="fas fa-cog mr-2"></i> Configurações
+              </a>
+              <div class="border-t border-gray-100 dark:border-gray-700"></div>
+              <a href="/admin/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700" role="menuitem">
+                <i class="fas fa-sign-out-alt mr-2"></i> Sair
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Menu móvel -->
+  <div class="lg:hidden" x-show="isSidebarOpen" @click.away="isSidebarOpen = false">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <a href="/admin" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary-600">Dashboard</a>
+      <a href="/admin/produtos" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Produtos</a>
+      <a href="/admin/pedidos" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Pedidos</a>
+      <a href="/admin/clientes" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Clientes</a>
+      <a href="/admin/relatorios" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Relatórios</a>
+      <a href="/admin/configuracoes" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">Configurações</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Inicializar o estado do menu móvel
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('sidebar', {
+      isOpen: window.innerWidth >= 1024,
+      
+      toggle() {
+        this.isOpen = !this.isOpen;
+      },
+      
+      close() {
+        this.isOpen = false;
+      },
+      
+      isDesktop() {
+        return window.innerWidth >= 1024;
+      }
+    });
+  });
+  
+  // Alternar tema
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateThemeIcon();
+    });
+  }
+  
+  function updateThemeIcon() {
+    if (document.documentElement.classList.contains('dark')) {
+      themeIcon.className = 'fas fa-sun text-xl';
+    } else {
+      themeIcon.className = 'fas fa-moon text-xl';
+    }
+  }
+  
+  // Verificar tema salvo
+  if (localStorage.getItem('theme') === 'dark' || 
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+  updateThemeIcon();
+</script>

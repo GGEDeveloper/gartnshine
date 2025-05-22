@@ -1,0 +1,182 @@
+<%# dashboard/index.ejs - Página principal do painel administrativo %>
+<%- include('../../layouts/admin', { 
+  title: 'Dashboard',
+  currentPath: '/admin',
+  user: user || { name: 'Administrador', email: 'admin@gonzagas.com' },
+  breadcrumbs: [],
+  scripts: [
+    'https://cdn.jsdelivr.net/npm/chart.js',
+    '/js/admin/dashboard.js'
+  ]
+}) %>
+
+<!-- Grid de Estatísticas -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+  <!-- Total de Vendas -->
+  <%- include('../components/cards/summary-card', {
+    title: 'Vendas Hoje',
+    value: 'R$ 12.345,90',
+    icon: 'fas fa-shopping-cart',
+    change: { value: 12.5, label: 'em relação ao mês passado' },
+    link: { url: '/admin/relatorios/vendas', text: 'Ver relatório' },
+    color: 'primary'
+  }) %>
+  
+  <!-- Total de Pedidos -->
+  <%- include('../components/cards/summary-card', {
+    title: 'Pedidos Hoje',
+    value: '27',
+    icon: 'fas fa-shopping-bag',
+    change: { value: 8, label: 'em relação a ontem' },
+    link: { url: '/admin/pedidos', text: 'Ver pedidos' },
+    color: 'success'
+  }) %>
+  
+  <!-- Total de Clientes -->
+  <%- include('../components/cards/summary-card', {
+    title: 'Clientes',
+    value: '1.245',
+    icon: 'fas fa-users',
+    change: { value: 5.2, label: 'novos este mês' },
+    link: { url: '/admin/clientes', text: 'Ver clientes' },
+    color: 'purple'
+  }) %>
+  
+  <!-- Produtos em Estoque -->
+  <%- include('../components/cards/summary-card', {
+    title: 'Estoque Crítico',
+    value: '24',
+    icon: 'fas fa-exclamation-triangle',
+    change: { value: -3, label: 'desde ontem' },
+    link: { url: '/admin/estoque?filter=critical', text: 'Ver itens' },
+    color: 'danger'
+  }) %>
+</div>
+
+<!-- Gráficos e Tabelas -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <!-- Gráfico de Vendas -->
+  <div class="lg:col-span-2">
+    <%- include('../components/charts/line-chart', {
+      id: 'salesChart',
+      title: 'Vendas dos Últimos 30 Dias',
+      labels: ['1', '5', '10', '15', '20', '25', '30'],
+      datasets: [
+        { 
+          label: 'Vendas (R$)',
+          data: [1200, 1900, 3000, 5000, 2000, 3000, 4500],
+          color: '#3B82F6'
+        }
+      ]
+    }) %>
+  </div>
+  
+  <!-- Produtos Mais Vendidos -->
+  <div class="card">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="text-lg font-medium">Produtos Mais Vendidos</h3>
+      <a href="/admin/relatorios/produtos" class="text-sm text-primary hover:underline">Ver todos</a>
+    </div>
+    <div class="divide-y divide-gray-200">
+      <% const topProducts = [
+        { id: 1, name: 'Café Especial 250g', sales: 245, revenue: 3675 },
+        { id: 2, name: 'Café Tradicional 500g', sales: 198, revenue: 2970 },
+        { id: 3, name: 'Café Descafeinado', sales: 156, revenue: 2340 },
+        { id: 4, name: 'Café em Cápsula', sales: 132, revenue: 1980 },
+        { id: 5, name: 'Kit Presente', sales: 98, revenue: 1470 }
+      ] %>
+      
+      <% topProducts.forEach((product, index) => { %>
+        <div class="p-4 hover:bg-gray-50 transition-colors">
+          <div class="flex items-center">
+            <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 text-xs font-medium mr-3">
+              <%= index + 1 %>
+            </span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate"><%= product.name %></p>
+              <p class="text-xs text-gray-500"><%= product.sales %> vendidos</p>
+            </div>
+            <div class="ml-2">
+              <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                R$ <%= product.revenue.toLocaleString('pt-BR') %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- Últimos Pedidos -->
+<div class="card mb-6">
+  <div class="card-header flex items-center justify-between">
+    <h3 class="text-lg font-medium">Últimos Pedidos</h3>
+    <a href="/admin/pedidos" class="text-sm text-primary hover:underline">Ver todos</a>
+  </div>
+  
+  <%- include('../components/tables/data-table', {
+    headers: [
+      { key: 'id', label: 'Nº Pedido', width: '10%' },
+      { key: 'customer', label: 'Cliente', width: '25%' },
+      { key: 'date', label: 'Data', width: '15%' },
+      { key: 'total', label: 'Total', width: '15%' },
+      { 
+        key: 'status', 
+        label: 'Status', 
+        width: '15%',
+        render: (item) => {
+          const statusClasses = {
+            'Pendente': 'bg-yellow-100 text-yellow-800',
+            'Pago': 'bg-blue-100 text-blue-800',
+            'Enviado': 'bg-indigo-100 text-indigo-800',
+            'Entregue': 'bg-green-100 text-green-800',
+            'Cancelado': 'bg-red-100 text-red-800'
+          };
+          return `<span class="px-2 py-1 text-xs rounded-full ${statusClasses[item.status] || 'bg-gray-100 text-gray-800'}">${item.status}</span>`;
+        }
+      }
+    ],
+    data: [
+      { id: '#1001', customer: 'João Silva', date: '22/05/2023', total: 149.90, status: 'Entregue' },
+      { id: '#1000', customer: 'Maria Oliveira', date: '22/05/2023', total: 89.90, status: 'Enviado' },
+      { id: '#999', customer: 'Carlos Pereira', date: '21/05/2023', total: 199.90, status: 'Pago' },
+      { id: '#998', customer: 'Ana Santos', date: '21/05/2023', total: 59.90, status: 'Pendente' },
+      { id: '#997', customer: 'Pedro Costa', date: '20/05/2023', total: 129.90, status: 'Cancelado' }
+    ],
+    emptyMessage: 'Nenhum pedido encontrado',
+    actions: [
+      {
+        label: 'Ver Detalhes',
+        icon: 'fas fa-eye',
+        action: 'viewOrder',
+        variant: 'primary'
+      },
+      {
+        label: 'Editar',
+        icon: 'fas fa-edit',
+        action: 'editOrder',
+        variant: 'secondary'
+      }
+    ]
+  }) %>
+</div>
+
+<!-- Script para inicialização dos gráficos -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicialização dos gráficos e interações
+  console.log('Dashboard inicializado');
+  
+  // Funções de exemplo para ações dos botões
+  window.viewOrder = function(order) {
+    console.log('Visualizar pedido:', order.id);
+    // Implementar lógica para visualizar pedido
+  };
+  
+  window.editOrder = function(order) {
+    console.log('Editar pedido:', order.id);
+    // Implementar lógica para editar pedido
+  };
+});
+</script>

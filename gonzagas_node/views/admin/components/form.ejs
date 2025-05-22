@@ -1,0 +1,235 @@
+<% 
+  // Valores padrão
+  const defaultOptions = {
+    method: 'POST',
+    action: '',
+    id: '',
+    enctype: 'multipart/form-data',
+    novalidate: false,
+    className: '',
+    formClass: 'space-y-6',
+    loading: false,
+    submitText: 'Salvar',
+    cancelText: 'Cancelar',
+    showCancel: false,
+    cancelHref: 'javascript:history.back()',
+    submitButtonClass: 'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+    cancelButtonClass: 'bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+    footerClass: 'pt-5 border-t border-gray-200 dark:border-gray-700 mt-8',
+    footerAlign: 'right', // left, center, right, between
+    onCancel: null,
+    onSubmit: null,
+    // Validação
+    validateOnSubmit: true,
+    validateOnBlur: true,
+    validationMessages: {
+      required: 'Este campo é obrigatório',
+      email: 'Por favor, insira um e-mail válido',
+      minLength: 'Este campo deve ter pelo menos {min} caracteres',
+      maxLength: 'Este campo deve ter no máximo {max} caracteres',
+      pattern: 'O valor inserido não é válido',
+      number: 'Por favor, insira um número válido',
+      min: 'O valor deve ser maior ou igual a {min}',
+      max: 'O valor deve ser menor ou igual a {max}',
+      match: 'Os valores não conferem',
+      url: 'Por favor, insira uma URL válida',
+      date: 'Por favor, insira uma data válida',
+      time: 'Por favor, insira um horário válido',
+      datetime: 'Por favor, insira uma data e hora válidas'
+    }
+  };
+  
+  // Mesclar opções fornecidas com os valores padrão
+  const options = { ...defaultOptions, ...(typeof locals === 'object' ? locals : {}) };
+  
+  // Classes do formulário
+  const formClasses = [
+    'space-y-6',
+    options.formClass
+  ].filter(Boolean).join(' ');
+  
+  // Classes do rodapé
+  const footerClasses = [
+    'pt-5 mt-8',
+    options.footerAlign === 'left' ? 'text-left' :
+    options.footerAlign === 'center' ? 'text-center' :
+    options.footerAlign === 'between' ? 'flex justify-between' : 'text-right',
+    options.footerClass
+  ].filter(Boolean).join(' ');
+%>
+
+<form 
+  method="<%= options.method %>" 
+  action="<%= options.action %>" 
+  <% if (options.id) { %>id="<%= options.id %>"<% } %>
+  <% if (options.enctype) { %>enctype="<%= options.enctype %>"<% } %>
+  <% if (options.novalidate) { %>novalidate<% } %>
+  class="<%= formClasses %>"
+  <% if (options.onSubmit) { %>@submit.prevent="<%= options.onSubmit %>"<% } %>
+  <% if (options.validateOnSubmit) { %>data-validate-on-submit<% } %> 
+  <% if (options.validateOnBlur) { %>data-validate-on-blur<% } %>
+  data-validate-messages='<%= JSON.stringify(options.validationMessages) %>'
+>
+  <!-- Campos do formulário serão inseridos aqui -->
+  <%- typeof body !== 'undefined' ? body : '' %>
+  
+  <!-- Rodapé do formulário -->
+  <div class="<%= footerClasses %>">
+    <div class="space-x-3">
+      <% if (options.showCancel) { %>
+        <a 
+          href="<%= options.cancelHref %>" 
+          class="<%= options.cancelButtonClass %>"
+          <% if (options.onCancel) { %>@click.prevent="<%= options.onCancel %>"<% } %>
+        >
+          <%= options.cancelText %>
+        </a>
+      <% } %>
+      
+      <button 
+        type="submit" 
+        class="<%= options.submitButtonClass %>"
+        <% if (options.loading) { %>disabled<% } %>
+      >
+        <% if (options.loading) { %>
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Processando...
+        <% } else { %>
+          <%= options.submitText %>
+        <% } %>
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- 
+  Exemplos de uso:
+  
+  1. Formulário básico:
+  <%- include('components/form', {
+    action: '/admin/produtos',
+    method: 'POST',
+    body: `
+      <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+        <div class="sm:col-span-3">
+          <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
+          <div class="mt-1">
+            <input type="text" name="name" id="name" class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" required>
+          </div>
+        </div>
+        
+        <div class="sm:col-span-3">
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">E-mail</label>
+          <div class="mt-1">
+            <input type="email" name="email" id="email" class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" required>
+          </div>
+        </div>
+        
+        <div class="sm:col-span-6">
+          <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mensagem</label>
+          <div class="mt-1">
+            <textarea id="message" name="message" rows="3" class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" required></textarea>
+          </div>
+        </div>
+      </div>
+    `,
+    submitText: 'Enviar Mensagem',
+    showCancel: true,
+    cancelText: 'Voltar',
+    footerAlign: 'right',
+    onSubmit: 'submitForm()'
+  }) %>
+  
+  2. Formulário com upload de arquivo:
+  <%- include('components/form', {
+    action: '/admin/produtos/upload',
+    method: 'POST',
+    enctype: 'multipart/form-data',
+    body: `
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Imagem de capa</label>
+          <div class="mt-1 flex items-center">
+            <input type="file" name="image" id="image" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" required>
+          </div>
+        </div>
+      </div>
+    `,
+    submitText: 'Enviar Imagem',
+    showCancel: true
+  }) %>
+  
+  3. Formulário com validação personalizada:
+  <%- include('components/form', {
+    id: 'signup-form',
+    action: '/auth/signup',
+    method: 'POST',
+    validateOnBlur: true,
+    validateOnSubmit: true,
+    validationMessages: {
+      required: 'Campo obrigatório',
+      email: 'Por favor, insira um e-mail válido',
+      password: 'A senha deve ter pelo menos 8 caracteres',
+      confirmPassword: 'As senhas não conferem'
+    },
+    body: `
+      <div class="space-y-6">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">E-mail</label>
+          <div class="mt-1">
+            <input type="email" name="email" id="email" 
+                   class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" 
+                   required
+                   data-validate="email">
+          </div>
+          <p class="mt-1 text-sm text-red-600 hidden" data-error="email"></p>
+        </div>
+        
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Senha</label>
+          <div class="mt-1">
+            <input type="password" name="password" id="password" 
+                   class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" 
+                   required
+                   minlength="8"
+                   data-validate="password">
+          </div>
+          <p class="mt-1 text-sm text-red-600 hidden" data-error="password"></p>
+        </div>
+        
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirmar Senha</label>
+          <div class="mt-1">
+            <input type="password" name="confirmPassword" id="confirmPassword" 
+                   class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" 
+                   required
+                   data-validate="confirmPassword"
+                   data-match="password">
+          </div>
+          <p class="mt-1 text-sm text-red-600 hidden" data-error="confirmPassword"></p>
+        </div>
+      </div>
+    `,
+    submitText: 'Cadastrar',
+    showCancel: true,
+    onSubmit: 'validateAndSubmit()'
+  }) %>
+  
+  // JavaScript para validação personalizada
+  <script>
+    function validateAndSubmit() {
+      const form = document.getElementById('signup-form');
+      if (form.checkValidity()) {
+        // Lógica de envio do formulário
+        form.submit();
+      } else {
+        // Disparar validação nativa
+        const event = new Event('submit', { cancelable: true });
+        form.dispatchEvent(event);
+      }
+    }
+  </script>
+-->

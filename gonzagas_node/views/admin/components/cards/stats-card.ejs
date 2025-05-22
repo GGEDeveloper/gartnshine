@@ -1,0 +1,71 @@
+<%# stats-card.ejs - Componente de cartão de estatísticas %>
+<%# 
+  Parâmetros esperados:
+  - title: Título do card
+  - value: Valor principal
+  - icon: Classe do ícone (ex: 'fas fa-box')
+  - change: Objeto com { value, label }
+  - link: Objeto com { url, text }
+  - color: Cor do tema (primary, success, warning, danger, info)
+%>
+
+<% 
+  // Valores padrão
+  const color = typeof color !== 'undefined' ? color : 'primary';
+  const icon = typeof icon !== 'undefined' ? icon : 'fas fa-info-circle';
+  
+  // Mapeamento de cores para classes do Tailwind
+  const colorClasses = {
+    primary: { bg: 'bg-blue-50', text: 'text-blue-600', icon: 'bg-blue-100 text-blue-600' },
+    success: { bg: 'bg-green-50', text: 'text-green-600', icon: 'bg-green-100 text-green-600' },
+    warning: { bg: 'bg-yellow-50', text: 'text-yellow-600', icon: 'bg-yellow-100 text-yellow-600' },
+    danger: { bg: 'bg-red-50', text: 'text-red-600', icon: 'bg-red-100 text-red-600' },
+    info: { bg: 'bg-cyan-50', text: 'text-cyan-600', icon: 'bg-cyan-100 text-cyan-600' },
+    purple: { bg: 'bg-purple-50', text: 'text-purple-600', icon: 'bg-purple-100 text-purple-600' }
+  };
+  
+  const colors = colorClasses[color] || colorClasses.primary;
+%>
+
+<div class="card h-full">
+  <div class="card-body">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider"><%= title %></h3>
+      <div class="p-2 rounded-lg <%= colors.icon %>">
+        <i class="<%= icon %>"></i>
+      </div>
+    </div>
+    <div class="text-2xl font-bold mb-1 <%= colors.text %>"><%= value %></div>
+    
+    <% if (change) { %>
+      <p class="text-sm text-gray-500">
+        <% if (change.value > 0) { %>
+          <span class="text-green-500">
+            <i class="fas fa-arrow-up mr-1"></i>
+            <%= change.value %>%
+          </span>
+        <% } else if (change.value < 0) { %>
+          <span class="text-red-500">
+            <i class="fas fa-arrow-down mr-1"></i>
+            <%= Math.abs(change.value) %>%
+          </span>
+        <% } else { %>
+          <span class="text-gray-500">
+            <i class="fas fa-minus mr-1"></i>
+            0%
+          </span>
+        <% } %>
+        <span class="text-gray-400 ml-1"><%= change.label %></span>
+      </p>
+    <% } %>
+  </div>
+  
+  <% if (link) { %>
+    <div class="card-footer bg-gray-50 px-4 py-3">
+      <a href="<%= link.url %>" class="text-sm font-medium <%= colors.text %> hover:underline">
+        <%= link.text %>
+        <i class="fas fa-arrow-right ml-1"></i>
+      </a>
+    </div>
+  <% } %>
+</div>

@@ -1,0 +1,373 @@
+<aside x-data="{ 
+  isOpen: window.innerWidth >= 1024,
+  activeSubmenu: '',
+  
+  init() {
+    // Fechar menu em telas pequenas ao carregar
+    if (window.innerWidth < 1024) {
+      this.isOpen = false;
+    }
+    
+    // Atualizar estado ao redimensionar a tela
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        this.isOpen = true;
+      } else {
+        this.isOpen = false;
+      }
+    });
+    
+    // Verificar rota ativa
+    this.setActiveMenu();
+  },
+  
+  setActiveMenu() {
+    const currentPath = window.location.pathname;
+    
+    // Mapear rotas para submenus
+    const routeMap = {
+      '/admin/produtos': 'cadastros',
+      '/admin/categorias': 'cadastros',
+      '/admin/clientes': 'cadastros',
+      '/admin/fornecedores': 'cadastros',
+      '/admin/estoque': 'operacoes',
+      '/admin/vendas': 'operacoes',
+      '/admin/compras': 'operacoes',
+      '/admin/relatorios': 'relatorios',
+      '/admin/ajustes': 'configuracoes',
+      '/admin/usuarios': 'configuracoes'
+    };
+    
+    // Encontrar o submenu ativo
+    for (const [path, menu] of Object.entries(routeMap)) {
+      if (currentPath.startsWith(path)) {
+        this.activeSubmenu = menu;
+        break;
+      }
+    }
+  },
+  
+  toggleSubmenu(menu) {
+    this.activeSubmenu = this.activeSubmenu === menu ? '' : menu;
+  },
+  
+  isActive(menu) {
+    return this.activeSubmenu === menu;
+  },
+  
+  isRouteActive(path) {
+    return window.location.pathname.startsWith(path);
+  },
+  
+  toggleSidebar() {
+    this.isOpen = !this.isOpen;
+  }
+}" 
+     :class="{'translate-x-0': isOpen, '-translate-x-full': !isOpen}"
+     class="fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-200 ease-in-out flex flex-col h-screen">
+  
+  <!-- Cabeçalho da Sidebar -->
+  <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center">
+      <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white mr-3">
+        <i class="fas fa-gem"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white">Gonzaga's</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Painel Administrativo</p>
+      </div>
+    </div>
+    <button @click="toggleSidebar" class="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <!-- Conteúdo da Sidebar -->
+  <div class="flex-1 overflow-y-auto py-4">
+    <nav class="px-2 space-y-1">
+      <!-- Dashboard -->
+      <a href="/admin" 
+         :class="{'bg-primary-50 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin')}"
+         class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+        <i class="fas fa-tachometer-alt mr-3 text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300"></i>
+        <span>Dashboard</span>
+      </a>
+      
+      <!-- Menu Cadastros -->
+      <div>
+        <button @click="toggleSubmenu('cadastros')" 
+                class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-left rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+          <div class="flex items-center">
+            <i class="fas fa-database mr-3 text-gray-400"></i>
+            <span>Cadastros</span>
+          </div>
+          <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200" 
+             :class="{'transform rotate-180': isActive('cadastros')}"></i>
+        </button>
+        
+        <div x-show="isActive('cadastros')" class="mt-1 space-y-1 pl-11">
+          <a href="/admin/produtos" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/produtos')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-box mr-2 text-gray-400"></i>
+            <span>Produtos</span>
+          </a>
+          
+          <a href="/admin/categorias" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/categorias')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-tags mr-2 text-gray-400"></i>
+            <span>Categorias</span>
+          </a>
+          
+          <a href="/admin/clientes" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/clientes')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-users mr-2 text-gray-400"></i>
+            <span>Clientes</span>
+          </a>
+          
+          <a href="/admin/fornecedores" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/fornecedores')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-truck mr-2 text-gray-400"></i>
+            <span>Fornecedores</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Menu Operações -->
+      <div>
+        <button @click="toggleSubmenu('operacoes')" 
+                class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-left rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+          <div class="flex items-center">
+            <i class="fas fa-cogs mr-3 text-gray-400"></i>
+            <span>Operações</span>
+          </div>
+          <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200" 
+             :class="{'transform rotate-180': isActive('operacoes')}"></i>
+        </button>
+        
+        <div x-show="isActive('operacoes')" class="mt-1 space-y-1 pl-11">
+          <a href="/admin/estoque" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/estoque')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-warehouse mr-2 text-gray-400"></i>
+            <span>Estoque</span>
+          </a>
+          
+          <a href="/admin/vendas" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/vendas')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-shopping-cart mr-2 text-gray-400"></i>
+            <span>Vendas</span>
+          </a>
+          
+          <a href="/admin/compras" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/compras')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-shopping-bag mr-2 text-gray-400"></i>
+            <span>Compras</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Menu Relatórios -->
+      <div>
+        <button @click="toggleSubmenu('relatorios')" 
+                class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-left rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+          <div class="flex items-center">
+            <i class="fas fa-chart-bar mr-3 text-gray-400"></i>
+            <span>Relatórios</span>
+          </div>
+          <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200" 
+             :class="{'transform rotate-180': isActive('relatorios')}"></i>
+        </button>
+        
+        <div x-show="isActive('relatorios')" class="mt-1 space-y-1 pl-11">
+          <a href="/admin/relatorios/vendas" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/relatorios/vendas')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-chart-line mr-2 text-gray-400"></i>
+            <span>Vendas</span>
+          </a>
+          
+          <a href="/admin/relatorios/estoque" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/relatorios/estoque')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-boxes mr-2 text-gray-400"></i>
+            <span>Estoque</span>
+          </a>
+          
+          <a href="/admin/relatorios/financeiro" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/relatorios/financeiro')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-money-bill-wave mr-2 text-gray-400"></i>
+            <span>Financeiro</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Menu Configurações -->
+      <div>
+        <button @click="toggleSubmenu('configuracoes')" 
+                class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-left rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+          <div class="flex items-center">
+            <i class="fas fa-cog mr-3 text-gray-400"></i>
+            <span>Configurações</span>
+          </div>
+          <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200" 
+             :class="{'transform rotate-180': isActive('configuracoes')}"></i>
+        </button>
+        
+        <div x-show="isActive('configuracoes')" class="mt-1 space-y-1 pl-11">
+          <a href="/admin/ajustes" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/ajustes')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-sliders-h mr-2 text-gray-400"></i>
+            <span>Ajustes Gerais</span>
+          </a>
+          
+          <a href="/admin/usuarios" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/usuarios')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-user-shield mr-2 text-gray-400"></i>
+            <span>Usuários</span>
+          </a>
+          
+          <a href="/admin/backup" 
+             :class="{'bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-primary-400': isRouteActive('/admin/backup')}"
+             class="group flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+            <i class="fas fa-database mr-2 text-gray-400"></i>
+            <span>Backup</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- Rodapé da Sidebar -->
+  <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex items-center">
+      <div class="flex-shrink-0">
+        <img class="h-10 w-10 rounded-full" 
+             src="<%= user.avatar || '/images/avatar-placeholder.png' %>" 
+             alt="<%= user.name %>">
+      </div>
+      <div class="ml-3">
+        <p class="text-sm font-medium text-gray-700 dark:text-gray-200"><%= user.name %></p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400"><%= user.role || 'Administrador' %></p>
+      </div>
+    </div>
+    <div class="mt-3">
+      <a href="/admin/perfil" class="text-xs text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300">
+        Ver perfil
+      </a>
+      <span class="mx-2 text-gray-300 dark:text-gray-600">|</span>
+      <a href="/admin/logout" class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
+        Sair
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Overlay para mobile -->
+<div x-show="isOpen" @click="toggleSidebar" 
+     class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden" 
+     x-transition:enter="transition-opacity ease-linear duration-200"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition-opacity ease-linear duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     style="display: none;">
+</div>
+
+<!-- Script para fechar a sidebar ao clicar em um link no mobile -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebarLinks = document.querySelectorAll('#sidebar a');
+    
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth < 1024) {
+          const sidebar = document.querySelector('#sidebar');
+          if (sidebar) {
+            sidebar._x_dataStack[0].isOpen = false;
+          }
+        }
+      });
+    });
+    
+    // Fechar sidebar ao pressionar ESC
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const sidebar = document.querySelector('#sidebar');
+        if (sidebar && window.innerWidth < 1024) {
+          sidebar._x_dataStack[0].isOpen = false;
+        }
+      }
+    });
+  });
+</script>
+      </a>
+      
+      <a href="/admin/vendas" class="sidebar-link <%= currentPath.startsWith('/admin/vendas') ? 'active' : '' %>">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Vendas</span>
+      </a>
+      
+      <a href="/admin/compras" class="sidebar-link <%= currentPath.startsWith('/admin/compras') ? 'active' : '' %>">
+        <i class="fas fa-cart-plus"></i>
+        <span>Compras</span>
+      </a>
+    </div>
+    
+    <div class="sidebar-menu">
+      <div class="sidebar-menu-header">
+        <span>Relatórios</span>
+      </div>
+      
+      <a href="/admin/relatorios/vendas" class="sidebar-link <%= currentPath.startsWith('/admin/relatorios/vendas') ? 'active' : '' %>">
+        <i class="fas fa-chart-line"></i>
+        <span>Vendas</span>
+      </a>
+      
+      <a href="/admin/relatorios/estoque" class="sidebar-link <%= currentPath.startsWith('/admin/relatorios/estoque') ? 'active' : '' %>">
+        <i class="fas fa-boxes"></i>
+        <span>Estoque</span>
+      </a>
+      
+      <a href="/admin/relatorios/financeiro" class="sidebar-link <%= currentPath.startsWith('/admin/relatorios/financeiro') ? 'active' : '' %>">
+        <i class="fas fa-dollar-sign"></i>
+        <span>Financeiro</span>
+      </a>
+    </div>
+    
+    <div class="mt-auto">
+      <a href="/admin/configuracoes" class="sidebar-link <%= currentPath.startsWith('/admin/configuracoes') ? 'active' : '' %>">
+        <i class="fas fa-cog"></i>
+        <span>Configurações</span>
+      </a>
+      
+      <a href="/admin/ajuda" class="sidebar-link">
+        <i class="fas fa-question-circle"></i>
+        <span>Ajuda</span>
+      </a>
+      
+      <form action="/admin/logout" method="POST" class="sidebar-link">
+        <button type="submit" class="flex items-center w-full text-left">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </form>
+    </div>
+  </nav>
+  
+  <div class="sidebar-footer">
+    <div class="text-xs text-muted text-center">
+      <p>v1.0.0</p>
+      <p>&copy; 2025 Gonzaga's Art & Shine</p>
+    </div>
+  </div>
+</aside>

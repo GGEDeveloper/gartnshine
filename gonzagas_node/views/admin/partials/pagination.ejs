@@ -1,0 +1,181 @@
+<% 
+  // Valores padrão
+  const defaultOptions = {
+    currentPage: 1,
+    totalPages: 1,
+    perPage: 10,
+    total: 0,
+    showTotal: true,
+    showPageSize: true,
+    pageSizeOptions: [10, 25, 50, 100],
+    onPageChange: null,
+    onPageSizeChange: null,
+    className: '',
+    infoClass: 'text-sm text-gray-700 dark:text-gray-300',
+    controlsClass: 'flex-1 flex items-center justify-between sm:justify-end',
+    pageSizeClass: 'flex items-center text-sm text-gray-700 dark:text-gray-300',
+    pageSizeSelectClass: 'ml-2 block w-20 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-1 pl-2 pr-8 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500',
+    buttonClass: 'relative inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+    activeButtonClass: 'z-10 bg-primary-50 dark:bg-primary-900/30 border-primary-500 text-primary-600 dark:text-primary-300',
+    disabledButtonClass: 'opacity-50 cursor-not-allowed',
+    ellipsisClass: 'relative inline-flex items-center px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400'
+  };
+  
+  // Mesclar opções fornecidas com os valores padrão
+  const pagination = { ...defaultOptions, ...(typeof locals.pagination === 'object' ? locals.pagination : {}) };
+  
+  // Função para gerar os números das páginas com elipses
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const delta = 2; // Número de páginas antes e depois da página atual
+    const left = Math.max(2, pagination.currentPage - delta);
+    const right = Math.min(pagination.totalPages - 1, pagination.currentPage + delta);
+    
+    // Sempre incluir a primeira página
+    pageNumbers.push(1);
+    
+    // Adicionar elipse se necessário antes da página atual
+    if (left > 2) {
+      pageNumbers.push('...');
+    }
+    
+    // Adicionar páginas ao redor da página atual
+    for (let i = left; i <= right; i++) {
+      if (i > 1 && i < pagination.totalPages) {
+        pageNumbers.push(i);
+      }
+    }
+    
+    // Adicionar elipse se necessário após a página atual
+    if (right < pagination.totalPages - 1) {
+      pageNumbers.push('...');
+    }
+    
+    // Sempre incluir a última página se houver mais de uma página
+    if (pagination.totalPages > 1) {
+      pageNumbers.push(pagination.totalPages);
+    }
+    
+    return pageNumbers;
+  };
+  
+  const pageNumbers = getPageNumbers();
+  
+  // Calcular itens sendo mostrados
+  const startItem = pagination.total > 0 ? (pagination.currentPage - 1) * pagination.perPage + 1 : 0;
+  const endItem = Math.min(pagination.currentPage * pagination.perPage, pagination.total);
+%>
+
+<div class="flex flex-col sm:flex-row items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 sm:px-6 rounded-b-md <%= pagination.className %>">
+  <!-- Informações de exibição -->
+  <% if (pagination.showTotal && pagination.total > 0) { %>
+    <div class="<%= pagination.infoClass %> mb-3 sm:mb-0">
+      Mostrando <span class="font-medium"><%= startItem %></span> a 
+      <span class="font-medium"><%= endItem %></span> de 
+      <span class="font-medium"><%= pagination.total %></span> resultados
+    </div>
+  <% } else if (pagination.showTotal) { %>
+    <div class="<%= pagination.infoClass %> mb-3 sm:mb-0">
+      Nenhum resultado encontrado
+    </div>
+  <% } %>
+  
+  <div class="<%= pagination.controlsClass %>">
+    <!-- Seletor de itens por página -->
+    <% if (pagination.showPageSize && pagination.pageSizeOptions && pagination.pageSizeOptions.length > 0) { %>
+      <div class="<%= pagination.pageSizeClass %> mr-4">
+        <label for="pageSize" class="mr-2">Itens por página:</label>
+        <select 
+          id="pageSize" 
+          class="<%= pagination.pageSizeSelectClass %>"
+          onchange="<%= pagination.onPageSizeChange ? `window.dispatchEvent(new CustomEvent('page-size-change', { detail: { value: this.value } }))` : '' %>"
+        >
+          <% pagination.pageSizeOptions.forEach(option => { %>
+            <option value="<%= option %>" <%= option === pagination.perPage ? 'selected' : '' %>><%= option %></option>
+          <% }) %>
+        </select>
+      </div>
+    <% } %>
+    
+    <!-- Navegação -->
+    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+      <!-- Botão Anterior -->
+      <button
+        type="button"
+        class="<%= pagination.buttonClass %> rounded-l-md <%= pagination.currentPage === 1 ? pagination.disabledButtonClass : '' %>"
+        <%= pagination.currentPage === 1 ? 'disabled' : '' %>
+        onclick="<%= pagination.onPageChange ? `window.dispatchEvent(new CustomEvent('page-change', { detail: { page: ${pagination.currentPage - 1} } }))` : '' %>"
+      >
+        <span class="sr-only">Anterior</span>
+        <i class="fas fa-chevron-left h-4 w-4"></i>
+      </button>
+      
+      <!-- Números das páginas -->
+      <% pageNumbers.forEach((page, index) => { 
+        if (page === '...') { %>
+          <span class="<%= pagination.ellipsisClass %>">
+            <%= page %>
+          </span>
+        <% } else { %>
+          <button
+            type="button"
+            class="<%= pagination.buttonClass %> <%= page === pagination.currentPage ? pagination.activeButtonClass : '' %>"
+            <%= page === pagination.currentPage ? 'aria-current="page"' : '' %>
+            onclick="<%= pagination.onPageChange ? `window.dispatchEvent(new CustomEvent('page-change', { detail: { page: ${page} } }))` : '' %>"
+          >
+            <%= page %>
+          </button>
+        <% } 
+      }) %>
+      
+      <!-- Botão Próximo -->
+      <button
+        type="button"
+        class="<%= pagination.buttonClass %> rounded-r-md <%= pagination.currentPage === pagination.totalPages ? pagination.disabledButtonClass : '' %>"
+        <%= pagination.currentPage === pagination.totalPages ? 'disabled' : '' %>
+        onclick="<%= pagination.onPageChange ? `window.dispatchEvent(new CustomEvent('page-change', { detail: { page: ${pagination.currentPage + 1} } }))` : '' %>"
+      >
+        <span class="sr-only">Próximo</span>
+        <i class="fas fa-chevron-right h-4 w-4"></i>
+      </button>
+    </nav>
+  </div>
+</div>
+
+<!-- 
+  Exemplo de uso:
+  
+  <%- include('partials/pagination', {
+    pagination: {
+      currentPage: 1,
+      totalPages: 10,
+      perPage: 10,
+      total: 100,
+      showTotal: true,
+      showPageSize: true,
+      pageSizeOptions: [10, 25, 50, 100],
+      onPageChange: (page) => {
+        console.log('Mudar para a página:', page);
+        // Implementar lógica para carregar a página selecionada
+      },
+      onPageSizeChange: (size) => {
+        console.log('Mudar itens por página para:', size);
+        // Implementar lógica para alterar o número de itens por página
+      }
+    }
+  }) %>
+  
+  // No seu JavaScript:
+  document.addEventListener('page-change', (e) => {
+    const { page } = e.detail;
+    // Carregar dados da página
+    loadData(page, currentPageSize);
+  });
+  
+  document.addEventListener('page-size-change', (e) => {
+    const { value } = e.detail;
+    // Atualizar o número de itens por página
+    currentPageSize = parseInt(value, 10);
+    loadData(1, currentPageSize);
+  });
+-->

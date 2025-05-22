@@ -1,8 +1,17 @@
 const { pool } = require('../config/database');
+const BaseModel = require('./BaseModel');
 
-class Product {
+class Product extends BaseModel {
+  constructor() {
+    super();
+    this.tableName = 'products';
+    this.primaryKey = 'id';
+  }
+  
   // Adicionando o pool como propriedade estática da classe
-  static pool = pool;
+  static get pool() {
+    return pool;
+  }
   // Get all products with family information
   static async getAll() {
     try {
@@ -294,6 +303,162 @@ class Product {
     } catch (error) {
       console.error('Error getting inventory transactions:', error);
       throw error;
+    }
+  }
+
+  // Obter produto por ID com detalhes adicionais
+  static async getByIdWithDetails(id) {
+    try {
+      const [rows] = await pool.query(`
+        SELECT p.*, f.name as family_name,
+               (SELECT COUNT(*) FROM product_images WHERE product_id = p.id) as image_count
+        FROM products p
+        LEFT JOIN product_families f ON p.family_id = f.id
+        WHERE p.id = ?
+      `, [id]);
+      
+      if (rows.length === 0) return null;
+      
+      const product = rows[0];
+      
+      // Carregar imagens do produto
+      const [images] = await pool.query(
+        'SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, id', 
+        [id]
+      );
+      
+      // Carregar transações de estoque
+      const [transactions] = await pool.query(
+        `SELECT it.*, p.name as product_name 
+         FROM inventory_transactions it
+         JOIN products p ON it.product_id = p.id
+         WHERE it.product_id = ?
+         ORDER BY it.created_at DESC
+         LIMIT 50`,
+        [id]
+      );
+      
+      return {
+        ...product,
+        images,
+        transactions
+      };
+    } catch (error) {
+      console.error('Error getting product with details:', error);
+      throw error;
+    }
+  }
+
+  // Obter todos os produtos com informações de estoque
+  static async getAllWithStock() {
+    try {
+      const [rows] = await pool.query(`
+        SELECT 
+          p.*, 
+          f.name as family_name,
+          (SELECT COUNT(*) FROM product_images WHERE product_id = p.id) as image_count,
+          COALESCE(
+            (SELECT SUM(quantity) 
+             FROM inventory_transactions 
+             WHERE product_id = p.id 
+             AND transaction_type = 'in'), 0
+          ) - COALESCE(
+            (SELECT SUM(quantity) 
+             FROM inventory_transactions 
+             WHERE product_id = p.id 
+             AND transaction_type = 'out'), 0
+          ) as current_stock
+        FROM products p
+        LEFT JOIN product_families f ON p.family_id = f.id
+        ORDER BY p.reference
+      `);
+      
+      // Converter valores numéricos
+      return rows.map(row => ({
+        ...row,
+        current_stock: parseFloat(row.current_stock) || 0,
+        sale_price: parseFloat(row.sale_price) || 0,
+        purchase_price: parseFloat(row.purchase_price) || 0,
+        weight: parseFloat(row.weight) || 0
+      }));
+    } catch (error) {
+      console.error('Error getting products with stock:', error);
+      throw error;
+    }
+  }
+
+  // Atualizar o estoque de um produto
+  static async updateStock(productId, quantityChange, unitPrice = null) {
+    const connection = await pool.getConnection();
+    
+    try {
+      await connection.beginTransaction();
+      
+      // Atualizar o preço de compra se fornecido
+      if (unitPrice !== null) {
+        await connection.query(
+          'UPDATE products SET purchase_price = ? WHERE id = ?',
+          [unitPrice, productId]
+        );
+        
+        // Registrar histórico de preço
+        await this.recordPriceHistory(connection, productId, unitPrice);
+      }
+      
+      // Atualizar o estoque
+      await connection.query(
+        'UPDATE products SET current_stock = current_stock + ? WHERE id = ?',
+        [quantityChange, productId]
+      );
+      
+      await connection.commit();
+      return true;
+    } catch (error) {
+      await connection.rollback();
+      console.error('Error updating product stock:', error);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
+  
+  // Registrar histórico de preço
+  static async recordPriceHistory(connection, productId, price) {
+    try {
+      // Verificar se já existe um registro de preço recente (últimos 7 dias)
+      const [existing] = await connection.query(
+        'SELECT id FROM product_price_history WHERE product_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) ORDER BY created_at DESC LIMIT 1',
+        [productId]
+      );
+      
+      // Se não houver registro recente ou o preço for diferente, registrar
+      if (existing.length === 0 || 
+          (existing[0].price !== price && existing[0].price !== parseFloat(price))) {
+        await connection.query(
+          'INSERT INTO product_price_history (product_id, price) VALUES (?, ?)',
+          [productId, price]
+        );
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error recording price history:', error);
+      // Não interromper o fluxo principal em caso de falha no histórico
+      return false;
+    }
+  }
+  
+  // Obter histórico de preços de um produto
+  static async getPriceHistory(productId, limit = 30) {
+    try {
+      const [rows] = await pool.query(
+        'SELECT * FROM product_price_history WHERE product_id = ? ORDER BY created_at DESC LIMIT ?',
+        [productId, limit]
+      );
+      return rows;
+    } catch (error) {
+      console.error('Error getting price history:', error);
+      return [];
     }
   }
 }
