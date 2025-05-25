@@ -1,0 +1,27 @@
+<% if (messages && (typeof messages === 'object')) { %>
+  <% Object.keys(messages).forEach(type => { %>
+    <% if (Array.isArray(messages[type])) { %>
+      <% messages[type].forEach(message => { %>
+        <div class="alert alert-<%= type === 'error' ? 'danger' : type %> alert-dismissible fade show" role="alert">
+          <%= message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% }) %>
+    <% } %>
+  <% }) %>
+<% } %>
+
+<!-- Suporte para flash messages antigas -->
+<% if (success && success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>

@@ -1,0 +1,295 @@
+<%- include('../layouts/main', { title: 'Dashboard' }) %>
+
+<main class="main">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container-fluid">
+      <h2 class="h5 no-margin-bottom">Dashboard</h2>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="container-fluid py-4">
+    <div class="row g-4">
+      <!-- Total Products -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-2">Produtos</h6>
+                <h3 class="mb-0"><%= stats.products %></h3>
+              </div>
+              <div class="stat-icon bg-primary">
+                <i class="fas fa-box-open"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <a href="/admin/products" class="btn btn-sm btn-outline-primary">Ver Produtos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Customers -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-2">Clientes</h6>
+                <h3 class="mb-0"><%= stats.customers %></h3>
+              </div>
+              <div class="stat-icon bg-success">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <a href="#" class="btn btn-sm btn-outline-success">Ver Clientes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Orders -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-2">Pedidos</h6>
+                <h3 class="mb-0"><%= stats.orders %></h3>
+              </div>
+              <div class="stat-icon bg-warning">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <a href="/admin/orders" class="btn btn-sm btn-outline-warning">Ver Pedidos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Revenue -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-2">Receita Total</h6>
+                <h3 class="mb-0">R$ <%- stats.revenue %></h3>
+              </div>
+              <div class="stat-icon bg-danger">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <a href="#" class="btn btn-sm btn-outline-danger">Ver Relatórios</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <!-- Recent Products -->
+      <div class="col-12 col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Produtos Recentes</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Referência</th>
+                    <th>Estoque</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (recentProducts && recentProducts.length > 0) { %>
+                    <% recentProducts.forEach(product => { %>
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <% if (product.image_url) { %>
+                              <img src="<%= product.image_url %>" alt="<%= product.name %>" class="me-2" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                            <% } %>
+                            <div>
+                              <h6 class="mb-0"><%= product.name %></h6>
+                              <small class="text-muted"><%= product.family_name || 'Sem família' %></small>
+                            </div>
+                          </div>
+                        </td>
+                        <td><%= product.reference %></td>
+                        <td><%= product.stock_quantity %></td>
+                        <td>
+                          <% if (product.stock_quantity <= 0) { %>
+                            <span class="badge bg-danger">Esgotado</span>
+                          <% } else if (product.stock_quantity <= 5) { %>
+                            <span class="badge bg-warning text-dark">Baixo Estoque</span>
+                          <% } else { %>
+                            <span class="badge bg-success">Em Estoque</span>
+                          <% } %>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="4" class="text-center py-4">
+                        <div class="text-muted">Nenhum produto encontrado</div>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer text-end">
+            <a href="/admin/products" class="btn btn-sm btn-outline-primary">Ver Todos os Produtos</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="col-12 col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Transações Recentes</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (recentTransactions && recentTransactions.length > 0) { %>
+                    <% recentTransactions.forEach(transaction => { %>
+                      <tr>
+                        <td>#<%= transaction.id %></td>
+                        <td><%= transaction.customer_name || 'Cliente não identificado' %></td>
+                        <td><%= new Date(transaction.created_at).toLocaleDateString('pt-BR') %></td>
+                        <td>R$ <%- parseFloat(transaction.total_amount).toFixed(2).replace('.', ',') %></td>
+                        <td>
+                          <% const statusClass = {
+                            'completed': 'success',
+                            'pending': 'warning',
+                            'cancelled': 'danger',
+                            'processing': 'info'
+                          }[transaction.status] || 'secondary'; %>
+                          <span class="badge bg-<%= statusClass %>">
+                            <%= transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1) %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="5" class="text-center py-4">
+                        <div class="text-muted">Nenhuma transação recente</div>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer text-end">
+            <a href="/admin/orders" class="btn btn-sm btn-outline-primary">Ver Todos os Pedidos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<% block('styles', () => { %>
+  <style>
+    .stat-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      transition: transform 0.2s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+    
+    .bg-primary { background-color: #4e73df !important; }
+    .bg-success { background-color: #1cc88a !important; }
+    .bg-warning { background-color: #f6c23e !important; }
+    .bg-danger { background-color: #e74a3b !important; }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    }
+    
+    .card-header {
+      background-color: #f8f9fc;
+      border-bottom: 1px solid #e3e6f0;
+      padding: 1rem 1.25rem;
+    }
+    
+    .card-title {
+      font-weight: 600;
+      color: #4e73df;
+      margin-bottom: 0;
+    }
+    
+    .table th {
+      border-top: none;
+      font-weight: 600;
+      color: #5a5c69;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .table td {
+      vertical-align: middle;
+    }
+    
+    .badge {
+      font-weight: 500;
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+    }
+  </style>
+<% }) %>
+
+<% block('scripts', () => { %>
+  <script>
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    });
+  </script>
+<% }) %>
