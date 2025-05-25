@@ -1,0 +1,184 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title"><%= customer ? 'Editar' : 'Novo' %> Cliente</h3>
+        </div>
+        
+        <form id="customerForm" method="POST" action="<%= customer ? `/admin/customers/${customer.id}?_method=PUT` : '/admin/customers' %>">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h5>Informações Pessoais</h5>
+                <hr>
+                
+                <div class="form-group">
+                  <label for="name">Nome Completo *</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nome completo" value="<%= customer ? customer.name : '' %>" required>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="cpf">CPF *</label>
+                      <input type="text" class="form-control cpf-mask" id="cpf" name="cpf" placeholder="000.000.000-00" value="<%= customer ? customer.cpf : '' %>" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="birthDate">Data de Nascimento</label>
+                      <input type="date" class="form-control" id="birthDate" name="birthDate" value="<%= customer && customer.birthDate ? customer.birthDate.toISOString().split('T')[0] : '' %>">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="email">E-mail *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="email@exemplo.com" value="<%= customer ? customer.email : '' %>" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone">Telefone</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    </div>
+                    <input type="tel" class="form-control phone-mask" id="phone" name="phone" placeholder="(00) 00000-0000" value="<%= customer ? customer.phone : '' %>">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h5>Endereço</h5>
+                <hr>
+                
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label for="street">Logradouro *</label>
+                      <input type="text" class="form-control" id="street" name="address[street]" placeholder="Rua, Avenida, etc." value="<%= customer && customer.address ? customer.address.street : '' %>" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="number">Número *</label>
+                      <input type="text" class="form-control" id="number" name="address[number]" placeholder="Nº" value="<%= customer && customer.address ? customer.address.number : '' %>" required>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="complement">Complemento</label>
+                  <input type="text" class="form-control" id="complement" name="address[complement]" placeholder="Apto, Bloco, etc." value="<%= customer && customer.address ? customer.address.complement : '' %>">
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="neighborhood">Bairro *</label>
+                      <input type="text" class="form-control" id="neighborhood" name="address[neighborhood]" placeholder="Bairro" value="<%= customer && customer.address ? customer.address.neighborhood : '' %>" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="city">Cidade *</label>
+                      <input type="text" class="form-control" id="city" name="address[city]" placeholder="Cidade" value="<%= customer && customer.address ? customer.address.city : '' %>" required>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="state">Estado *</label>
+                      <select class="form-control" id="state" name="address[state]" required>
+                        <option value="">Selecione um estado</option>
+                        <option value="AC" <%= customer && customer.address && customer.address.state === 'AC' ? 'selected' : '' %>>Acre</option>
+                        <option value="AL" <%= customer && customer.address && customer.address.state === 'AL' ? 'selected' : '' %>>Alagoas</option>
+                        <!-- Outros estados... -->
+                        <option value="SP" <%= customer && customer.address && customer.address.state === 'SP' ? 'selected' : '' %>>São Paulo</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="zipCode">CEP *</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control cep-mask" id="zipCode" name="address[zipCode]" placeholder="00000-000" value="<%= customer && customer.address ? customer.address.zipCode : '' %>" required>
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" id="searchCep">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="status" name="status" <%= !customer || customer.status !== 'Inativo' ? 'checked' : '' %>>
+                    <label class="custom-control-label" for="status">Cliente ativo</label>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="notes">Observações</label>
+                  <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Alguma observação sobre o cliente"><%= customer ? customer.notes : '' %></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save mr-1"></i> Salvar
+            </button>
+            <a href="/admin/customers" class="btn btn-default">
+              <i class="fas fa-times mr-1"></i> Cancelar
+            </a>
+            <% if (customer) { %>
+              <button type="button" class="btn btn-danger float-right" id="deleteCustomer" data-customer-id="<%= customer.id %>">
+                <i class="fas fa-trash mr-1"></i> Excluir
+              </button>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmação de exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <form id="deleteForm" method="POST" style="display: inline;">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="btn btn-danger">Excluir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<%- include('../../layouts/admin-layout', { 
+  title: 'Novo Produto',
+  currentPath: '/admin/products/new',
+  customCss: 'admin-product-form',
+  customJs: 'admin-product-form',
+  scripts: [
+    '/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js',
+    '/adminlte/plugins/summernote/summernote-bs4.min.js',
+    '/adminlte/plugins/inputmask/jquery.inputmask.min.js'
+  ],
+  body: `
+    <div class="alerts-container"></div>
+    
+    <div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="page-title">Novo Produto</h1>
+              <div>
+                <a href="/admin/products" class="btn btn-default">
+                  <i class="fas fa-arrow-left mr-1"></i> Voltar
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <%- include('_form') %>
+    </div>
+  `
+}) %>

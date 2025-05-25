@@ -1,0 +1,47 @@
+<%- include('../../layouts/main-layout', {
+  siteTitle: 'Gonzaga\'s Art & Shine',
+  body: `
+    <!-- Admin Wrapper -->
+    <div class="admin-wrapper">
+      <!-- Sidebar -->
+      <%- include('../partials/sidebar') %>
+      
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Top Navbar -->
+        <%- include('../partials/header') %>
+        
+        <!-- Page Content -->
+        <main class="content-wrapper">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <h1 class="page-title"><%= title %></h1>
+                  <%- include('../partials/breadcrumb', { items: breadcrumb || [] }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Main Content -->
+          <div class="container-fluid">
+            <%- body %>
+          </div>
+        </main>
+        
+        <!-- Footer -->
+        <%- include('../partials/footer') %>
+      </div>
+    </div>
+  `,
+  scripts: [
+    '/adminlte/plugins/jquery/jquery.min.js',
+    '/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js',
+    '/adminlte/plugins/datatables/jquery.dataTables.min.js',
+    '/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js',
+    '/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js',
+    '/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js'
+  ].concat(scripts || [])
+}) %>

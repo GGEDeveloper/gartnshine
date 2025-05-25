@@ -36,12 +36,67 @@ const adminMiddleware = (req, res, next) => {
 // Aplica o middleware a todas as rotas do admin
 router.use(adminMiddleware);
 
+// Redireciona /admin para dashboard ou login
+router.get('/', (req, res) => {
+  if (req.session && req.session.user && req.session.user.role === 'admin') {
+    return res.redirect('/admin/dashboard');
+  }
+  return res.redirect('/admin/login');
+});
+
 // Outras importações e configurações
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const Checkpoint = require('../models/Checkpoint');
 const Inventory = require('../models/Inventory');
-const { isAuthenticated, authenticateUser } = require('../middleware/auth');
+const adminSessionRequired = require('../middleware/adminAuth');
+const { authenticateUser } = require('../middleware/auth');
+
+// Função para autenticar por email OU nome
+async function authenticateByUsernameOrEmail(username, password) {
+  try {
+    const User = require('../models/User');
+    console.log('[AUTH] Tentando autenticar:', username);
+    // Procurar por email
+    let user = await User.findByEmail(username);
+    if (user) {
+      console.log('[AUTH] Encontrado por email:', user.email, 'role:', user.role);
+    }
+    if (!user) {
+      // Procurar por nome
+      const [rows] = await require('../config/database').pool.query(
+        'SELECT * FROM users WHERE name = ? LIMIT 1',
+        [username]
+      );
+      user = rows[0];
+      if (user) {
+        console.log('[AUTH] Encontrado por nome:', user.name, 'role:', user.role);
+      }
+    }
+    if (!user) {
+      console.log('[AUTH] Usuário não encontrado:', username);
+      return null;
+    }
+    const bcrypt = require('bcryptjs');
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      console.log('[AUTH] Senha inválida para usuário:', username, 'hash no banco:', user.password);
+      return null;
+    }
+    // Não filtrar por role!
+    console.log('[AUTH] Autenticação bem-sucedida:', user.email, 'role:', user.role);
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
+    };
+  } catch (err) {
+    console.error('Erro na autenticação:', err);
+    return null;
+  }
+}
+
 const config = require('../config/config');
 const InventoryController = require('../controllers/InventoryController');
 
@@ -73,6 +128,31 @@ const upload = multer({
   }
 });
 
+// Rota para a página de pedidos
+router.get('/orders', async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/admin/login');
+    }
+
+    // Aqui você pode adicionar a lógica para buscar os pedidos do banco de dados
+    const orders = []; // Substitua por sua lógica de busca de pedidos
+
+    res.render('admin/orders', {
+      title: 'Pedidos',
+      user: req.session.user,
+      orders: orders,
+      currentPath: '/orders'
+    });
+  } catch (error) {
+    console.error('Erro ao carregar a página de pedidos:', error);
+    res.status(500).render('error', {
+      message: 'Ocorreu um erro ao carregar a página de pedidos.',
+      error: {}
+    });
+  }
+});
+
 // Rota GET para a página de login
 router.get('/login', (req, res) => {
   // Se o usuário já estiver autenticado, redirecionar para o dashboard
@@ -87,22 +167,18 @@ router.get('/login', (req, res) => {
 });
 
 // Rota POST para processar o login
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
+  console.log('[LOGIN] Body recebido:', req.body);
   const { username, password } = req.body;
-  
-  // Validar entrada
+
   if (!username || !password) {
-    req.flash('error', 'Por favor, forneça nome de usuário e senha');
+    req.flash('error', 'Por favor, forneça email/nome de usuário e senha');
     return res.redirect('/admin/login');
   }
-  
-  const user = authenticateUser(username, password);
-  
+
+  const user = await authenticateByUsernameOrEmail(username, password);
   if (user) {
-    // Salvar informações do usuário na sessão
     req.session.user = user;
-    
-    // Redirecionar para o dashboard
     return res.redirect('/admin/dashboard');
   } else {
     req.flash('error', 'Nome de usuário ou senha inválidos');
@@ -124,11 +200,11 @@ router.use((req, res, next) => {
   }
   
   // Aplicar o middleware de autenticação para todas as outras rotas
-  isAuthenticated(req, res, next);
+  adminSessionRequired(req, res, next);
 });
 
 // Admin dashboard
-router.get('/dashboard', isAuthenticated, async (req, res) => {
+router.get('/dashboard', adminSessionRequired, async (req, res) => {
   try {
     // Buscar dados do dashboard em paralelo
     const [
@@ -178,7 +254,7 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
     };
 
     // Renderizar o template com todos os dados
-    res.render('admin/simple-dashboard', {
+    res.render('admin/pages/simple-dashboard', {
       title: 'Dashboard',
       siteTitle: 'Gonzaga\'s Art & Shine',
       stats,
@@ -214,19 +290,73 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
 // Product management routes
 router.get('/products', async (req, res) => {
   try {
-    const products = await Product.getAll();
-    const families = await ProductFamily.getAll();
+    console.log('Iniciando busca de produtos...');
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
     
-    res.render('admin/products', {
-      title: 'Manage Products',
-      products,
-      families
+    // Buscar produtos e contar o total
+    const [products, totalProducts] = await Promise.all([
+      Product.getAll(limit, offset),
+      Product.count()
+    ]);
+    
+    console.log('Produtos encontrados:', products.length);
+    if (products.length > 0) {
+      console.log('Primeiro produto (se existir):', {
+        id: products[0].id,
+        name: products[0].name,
+        price: products[0].price,
+        stock_quantity: products[0].stock_quantity,
+        is_active: products[0].is_active,
+        family_name: products[0].family_name
+      });
+    }
+    
+    const totalPages = Math.ceil(totalProducts / limit);
+    
+    // Formatar os produtos para a view
+    const formattedProducts = products.map(product => ({
+      id: product.id,
+      name: product.name || 'Sem nome',
+      reference: product.reference || 'N/A',
+      price: parseFloat(product.price) || 0,
+      stock_quantity: parseInt(product.stock_quantity) || 0,
+      is_active: product.is_active === 1 || product.is_active === true,
+      family_name: product.family_name || 'Sem família',
+      image_url: product.image_url || null
+    }));
+    
+    res.render('admin/products/simple-index', {
+      title: 'Gerenciar Produtos',
+      products: formattedProducts,
+      pagination: {
+        currentPage: page,
+        totalPages: totalPages,
+        totalItems: totalProducts,
+        startItem: offset + 1,
+        endItem: Math.min(offset + limit, totalProducts)
+      },
+      currentPath: '/admin/products',
+      user: req.session.user || { name: 'Admin' },
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      theme: {
+        colorPrimary: '#1e1e1e',
+        colorSecondary: '#4a3c2d',
+        colorAccent: '#6a8c69',
+        colorText: '#333333',
+        colorHighlight: '#d4a76a'
+      },
+      breadcrumb: [
+        { title: 'Dashboard', url: '/admin' },
+        { title: 'Produtos', active: true }
+      ]
     });
   } catch (error) {
     console.error('Error loading products:', error);
     res.status(500).render('error', {
       title: 'Error',
-      message: 'Failed to load products.'
+      message: 'Falha ao carregar os produtos. Por favor, tente novamente.'
     });
   }
 });
@@ -402,10 +532,10 @@ router.post('/families/delete/:id', async (req, res) => {
 
 // Inventory management routes
 // Rotas de gerenciamento de inventário
-router.get('/inventory', isAuthenticated, InventoryController.index.bind(InventoryController));
-router.get('/inventory/transactions', isAuthenticated, InventoryController.listTransactions.bind(InventoryController));
-router.get('/inventory/:productId', isAuthenticated, InventoryController.showProductHistory.bind(InventoryController));
-router.post('/inventory/adjust', isAuthenticated, InventoryController.processAdjustment.bind(InventoryController));
+router.get('/inventory', adminSessionRequired, InventoryController.index.bind(InventoryController));
+router.get('/inventory/transactions', adminSessionRequired, InventoryController.listTransactions.bind(InventoryController));
+router.get('/inventory/:productId', adminSessionRequired, InventoryController.showProductHistory.bind(InventoryController));
+router.post('/inventory/adjust', adminSessionRequired, InventoryController.processAdjustment.bind(InventoryController));
 
 // Checkpoint management routes
 router.get('/checkpoints', async (req, res) => {

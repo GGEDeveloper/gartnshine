@@ -8,8 +8,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
-const { initialize: initializeDatabase } = require('./config/database');
-const { initializeModules } = require('./config/modules');
+const { pool } = require('./config/database');
 
 // Carrega as configurações
 const config = require('./config/config');
@@ -31,7 +30,14 @@ app.use(expressLayouts);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session(config.session));
+// Corrige domínio do cookie de sessão para ambiente local
+const sessionConfig = { ...config.session };
+if (process.env.NODE_ENV === 'development' || process.env.BASE_URL?.includes('127.0.0.1') || process.env.BASE_URL?.includes('localhost')) {
+  if (sessionConfig.cookie) {
+    sessionConfig.cookie.domain = undefined; // Não força domínio para localhost
+  }
+}
+app.use(session(sessionConfig));
 app.use(flash());
 
 // Logging
@@ -83,25 +89,26 @@ app.use(async (req, res, next) => {
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "http://localhost:3000", "http://127.0.0.1:3000", "http://172.30.46.39:3000"],
+      defaultSrc: ["'self'"],
       scriptSrc: [
-        "'self'", 
-        "'unsafe-inline'", 
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000"
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'"
       ],
-      scriptSrcAttr: ["'self'"],
+      scriptSrcAttr: [
+        "'self'",
+        "'unsafe-inline'"
+      ],
       styleSrc: [
-        "'self'", 
-        "'unsafe-inline'", 
-        "https://fonts.googleapis.com", 
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
         "https://cdnjs.cloudflare.com"
       ],
       styleSrcElem: [
-        "'self'", 
-        "'unsafe-inline'", 
-        "https://fonts.googleapis.com", 
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
         "https://cdnjs.cloudflare.com"
       ],
       fontSrc: [
@@ -153,6 +160,8 @@ app.use(cors({
 // Static files - serve before any route handling
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/media', express.static(path.join(__dirname, '../../media')));
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Set up view engine
@@ -195,57 +204,29 @@ app.use((req, res, next) => {
   }
 });
 
-// Inicializa os módulos
-async function initializeApp() {
-  try {
-    // Inicializa o banco de dados
-    await initializeDatabase();
-    
-    // Inicializa os módulos do sistema
-    await initializeModules(app);
-    
-    // Rotas principais
-    const indexRouter = require('./routes/index');
-    const productsRouter = require('./routes/products');
-    const adminRouter = require('./routes/admin');
-    
-    // Usa as rotas
-    app.use('/', indexRouter);
-    app.use('/products', productsRouter);
-    app.use('/admin', adminRouter);
-    
-    // Inicia o servidor
-    const server = app.listen(app.get('port'), () => {
-      console.log(`\n${'='.repeat(50)}`);
-      console.log(`${' '.repeat(15)}Gonzaga's Art & Shine`);
-      console.log(`${' '.repeat(10)}Ambiente: ${app.get('env')}`);
-      console.log(`${' '.repeat(10)}Servidor rodando em http://localhost:${app.get('port')}`);
-      console.log(`${'='.repeat(50)}\n`);
-    });
-    
-    return server;
-  } catch (error) {
-    console.error('Falha ao inicializar o aplicativo:', error);
-    process.exit(1);
-  }
-}
-
-// Inicializa o aplicativo
-initializeApp().catch(console.error);
-
-// Error logging middleware
-app.use((err, req, res, next) => {
-  console.error(`${new Date().toISOString()} - Error:`, err);
-  next(err);
+// Inicialização direta do servidor Express
+const server = app.listen(app.get('port'), () => {
+  console.log(`\n${'='.repeat(50)}`);
+  console.log(`${' '.repeat(15)}Gonzaga's Art & Shine`);
+  console.log(`${' '.repeat(10)}Ambiente: ${app.get('env')}`);
+  console.log(`${' '.repeat(10)}Servidor rodando em http://localhost:${app.get('port')}`);
+  console.log(`${'='.repeat(50)}\n`);
 });
 
-// Error handling middleware
+// Routers principais - registrados apenas uma vez, fora de qualquer função
+const staticRouter = require('./routes/static');
+app.use(staticRouter);
+const indexRouter = require('./routes/index');
+app.use('/', indexRouter);
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
+
+// Tratamento de erros 404 (deve ficar APÓS todos os routers)
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - 404 Not Found: ${req.url}`);
   res.status(404).render('error', {
-    title: '404 - Not Found',
-    message: 'The page you are looking for does not exist.',
-    error: {}
+    title: 'Página não encontrada',
+    message: 'A página que você está procurando não existe ou foi movida.'
   });
 });
 
@@ -274,10 +255,17 @@ app.use((err, req, res, next) => {
 
 // Tratamento de erros 404
 app.use((req, res, next) => {
-  res.status(404).render('error/404', {
+  console.log(`${new Date().toISOString()} - 404 Not Found: ${req.url}`);
+  res.status(404).render('error', {
     title: 'Página não encontrada',
     message: 'A página que você está procurando não existe ou foi movida.'
   });
+});
+
+// Error logging middleware
+app.use((err, req, res, next) => {
+  console.error(`${new Date().toISOString()} - Error:`, err);
+  next(err);
 });
 
 // Tratamento de erros global

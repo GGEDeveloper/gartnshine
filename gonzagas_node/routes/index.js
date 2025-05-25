@@ -89,10 +89,12 @@ router.get('/collections', async (req, res) => {
     const mediaPath = path.join(__dirname, '../public/media');
     const files = await fs.readdir(mediaPath);
     
-    // Filter only image files
+    // Filter only image files and exclude banner-about.jpg
     const imageFiles = files.filter(file => {
       const ext = path.extname(file).toLowerCase();
-      return ['.jpg', '.jpeg', '.png', '.gif'].includes(ext);
+      const isImage = ['.jpg', '.jpeg', '.png', '.gif'].includes(ext);
+      const isNotBanner = file !== 'banner-about.jpg';
+      return isImage && isNotBanner;
     }).map(file => ({
       filename: file,
       path: `/media/${file}`,

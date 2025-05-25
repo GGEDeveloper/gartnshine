@@ -65,24 +65,23 @@ async function createAdminUser() {
     // Sincroniza o modelo com o banco de dados (cria a tabela se não existir)
     await User.sync();
     
-    // Verifica se já existe um usuário administrador
-    const adminExists = await User.findOne({ where: { email: 'admin@gonzagas.com' } });
+    // Verifica se já existe o usuário admin desejado
+    const adminExists = await User.findOne({ where: { email: 'g.art.shine@gmail.com' } });
     
     if (adminExists) {
       console.log('Usuário administrador já existe.');
-      console.log('Email: admin@gonzagas.com');
-      console.log('Para redefinir a senha, use a opção "Esqueci minha senha" na página de login.');
+      console.log('Email: g.art.shine@gmail.com');
       process.exit(0);
     }
     
     // Cria o hash da senha
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin123', salt);
+    const hashedPassword = await bcrypt.hash('covil', salt);
     
     // Cria o usuário administrador
     await User.create({
-      name: 'Administrador',
-      email: 'admin@gonzagas.com',
+      name: 'Gonzaga',
+      email: 'g.art.shine@gmail.com',
       password: hashedPassword,
       role: 'admin',
       created_at: new Date(),
@@ -90,8 +89,8 @@ async function createAdminUser() {
     });
     
     console.log('Usuário administrador criado com sucesso!');
-    console.log('Email: admin@gonzagas.com');
-    console.log('Senha: admin123');
+    console.log('Email: g.art.shine@gmail.com');
+    console.log('Senha: covil');
     console.log('Por favor, altere a senha após o primeiro login.');
     
   } catch (error) {

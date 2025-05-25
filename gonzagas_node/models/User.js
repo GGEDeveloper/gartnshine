@@ -5,10 +5,11 @@ class User {
   // Encontra um usuário pelo email
   static async findByEmail(email) {
     try {
-      const [rows] = await pool.query(
+      const result = await pool.query(
         'SELECT * FROM users WHERE email = ?',
         [email]
       );
+      const rows = result && result[0] ? result[0] : [];
       return rows[0] || null;
     } catch (error) {
       console.error('Erro ao buscar usuário por email:', error);

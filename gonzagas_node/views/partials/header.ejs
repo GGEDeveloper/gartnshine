@@ -19,11 +19,14 @@
         <!-- Collections link -->
         <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Collections</a></li>
         
+        <!-- Catalog link -->
+        <li><a href="/catalog" class="<%= typeof title !== 'undefined' && title === 'Catalog' ? 'active' : '' %>">Catalog</a></li>
+        
         <li><a href="/about" class="<%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">About</a></li>
         
         <% if (typeof user !== 'undefined' && user) { %>
           <li class="dropdown admin-menu">
-            <a href="#" class="dropdown-toggle">Admin</a>
+            <a href="/admin" class="dropdown-toggle">Admin</a>
             <ul class="dropdown-menu">
               <li><a href="/admin/dashboard">Dashboard</a></li>
               <li><a href="/admin/products">Products</a></li>

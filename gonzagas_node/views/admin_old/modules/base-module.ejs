@@ -1,0 +1,49 @@
+<%- include('../../layouts/admin-layout', { 
+  title: moduleConfig.name + (pageTitle ? ' - ' + pageTitle : ''),
+  currentPath: currentPath,
+  customCss: moduleConfig.name.toLowerCase() + (customCss ? ' ' + customCss : ''),
+  customJs: moduleConfig.name.toLowerCase() + (customJs ? ' ' + customJs : ''),
+  body: `
+    <div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="page-title">
+                <i class="fas fa-${moduleConfig.icon} mr-2"></i>
+                ${moduleConfig.name}
+                ${pageTitle ? '<small class="text-muted">' + pageTitle + '</small>' : ''}
+              </h1>
+              <div>
+                ${backButton ? `
+                  <a href="${backButton.url}" class="btn btn-default">
+                    <i class="fas fa-arrow-left mr-1"></i> ${backButton.text || 'Voltar'}
+                  </a>
+                ` : ''}
+                ${moduleConfig.actions ? moduleConfig.actions.map(action => `
+                  <a href="${action.url}" class="btn btn-${action.variant || 'primary'} ml-2">
+                    <i class="fas fa-${action.icon} mr-1"></i> ${action.text}
+                  </a>
+                `).join('') : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conteúdo do Módulo -->
+      <div class="row">
+        <div class="col-12">
+          <%- include(componentPath, { 
+            data: data || {},
+            config: config || {},
+            moduleConfig: moduleConfig,
+            currentPath: currentPath,
+            user: user || {},
+            query: query || {}
+          }) %>
+        </div>
+      </div>
+    </div>
+  `
+}) %>

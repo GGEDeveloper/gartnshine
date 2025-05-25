@@ -1,6 +1,7 @@
 # Documentação do Banco de Dados e Importação de Dados
 
 ## Índice
+
 1. [Estrutura do Banco de Dados](#1-estrutura-do-banco-de-dados)
    - [1.1 Tabelas Principais](#11-tabelas-principais)
    - [1.2 Diagrama do Esquema](#12-diagrama-do-esquema)
@@ -21,10 +22,12 @@
 ### 1.1 Tabelas Principais
 
 #### `product_families`
+
 - Armazena as famílias/categorias de produtos
 - **Campos importantes**: `id`, `code`, `name`, `description`
 
 #### `products`
+
 - Armazena os produtos da loja
 - **Campos importantes**:
   - `reference`: Código de referência único
@@ -36,14 +39,17 @@
   - `weight`, `material`, `style`: Detalhes do produto
 
 #### `product_images`
+
 - Armazena as imagens dos produtos
 - **Relação**: Muitas imagens para um produto
 
 #### `inventory_transactions`
+
 - Registra todas as movimentações de estoque
 - **Tipos de transação**: 'purchase', 'sale', 'adjustment'
 
 #### `users`
+
 - Usuários do sistema
 - Inclui um usuário admin padrão (admin/admin123)
 
@@ -183,6 +189,7 @@ echo "Importação concluída com sucesso!"
 ```
 
 **Uso:**
+
 ```bash
 chmod +x scripts/import_products.sh
 ./scripts/import_products.sh caminho/para/produtos.csv
@@ -251,23 +258,28 @@ echo "Migrações concluídas"
 ## 6. Considerações Finais
 
 ### Segurança
+
 - 🔒 Nunca armazene senhas em arquivos de script
 - 🔑 Use variáveis de ambiente para credenciais
 - 📁 Restrinja as permissões dos arquivos de backup
 
 ### Desempenho
+
 - ⚡ Para grandes volumes de dados, use `--disable-keys` no mysqldump
 - 🔄 Desative índices durante a importação e reative após
 
 ### Monitoramento
+
 - 📝 Verifique os logs de erro do MySQL após importações
 - 💾 Monitore o espaço em disco durante operações de backup/restore
 
 ### Versionamento
+
 - 🔄 Mantenha os scripts SQL versionados
 - 📝 Documente todas as alterações no esquema
 
 ### Dicas para Desenvolvimento
+
 1. Sempre teste os scripts em um ambiente de desenvolvimento primeiro
 2. Faça backup antes de executar operações de migração
 3. Documente quaisquer alterações manuais feitas no banco de dados

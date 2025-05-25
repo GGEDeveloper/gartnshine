@@ -12,24 +12,37 @@ class Product extends BaseModel {
   static get pool() {
     return pool;
   }
-  // Get all products with family information
-  static async getAll() {
+  // Get all products with family information and pagination support
+  static async getAll(limit = 10, offset = 0) {
     try {
       const [rows] = await pool.query(`
         SELECT p.*, f.name as family_name 
         FROM products p
-        JOIN product_families f ON p.family_id = f.id
+        LEFT JOIN product_families f ON p.family_id = f.id
         ORDER BY p.reference
-      `);
+        LIMIT ? OFFSET ?
+      `, [limit, offset]);
+      console.log('Query executada com sucesso. Produtos encontrados:', rows.length);
       return rows;
     } catch (error) {
-      console.error('Error getting products:', error);
+      console.error('Erro ao buscar produtos:', error);
+      throw error;
+    }
+  }
+  
+  // Count total number of products
+  static async count() {
+    try {
+      const [rows] = await pool.query('SELECT COUNT(*) as total FROM products');
+      return rows[0].total;
+    } catch (error) {
+      console.error('Erro ao contar produtos:', error);
       throw error;
     }
   }
 
-  // Get active products for the catalog
-  static async getActive() {
+  // Get active products for the catalog with pagination
+  static async getActive(limit = 10, offset = 0) {
     try {
       const [rows] = await pool.query(`
         SELECT p.*, f.name as family_name 
@@ -37,10 +50,22 @@ class Product extends BaseModel {
         JOIN product_families f ON p.family_id = f.id
         WHERE p.is_active = 1
         ORDER BY p.featured DESC, p.reference
-      `);
+        LIMIT ? OFFSET ?
+      `, [limit, offset]);
       return rows;
     } catch (error) {
       console.error('Error getting active products:', error);
+      throw error;
+    }
+  }
+  
+  // Count active products
+  static async countActive() {
+    try {
+      const [rows] = await pool.query('SELECT COUNT(*) as total FROM products WHERE is_active = 1');
+      return rows[0].total;
+    } catch (error) {
+      console.error('Error counting active products:', error);
       throw error;
     }
   }

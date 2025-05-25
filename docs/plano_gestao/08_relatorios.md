@@ -9,6 +9,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
 ### 1. Relatórios de Vendas
 
 #### 1.1. Vendas por Período
+
 - **Objetivo**: Analisar o desempenho das vendas ao longo do tempo
 - **Filtros**:
   - Data inicial/final
@@ -27,6 +28,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Comparativo por período
 
 #### 1.2. Produtos Mais Vendidos
+
 - **Objetivo**: Identificar os produtos com melhor desempenho
 - **Filtros**:
   - Data inicial/final
@@ -43,6 +45,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Evolução temporal
 
 #### 1.3. Vendas por Vendedor
+
 - **Objetivo**: Avaliar desempenho da equipe comercial
 - **Filtros**:
   - Data inicial/final
@@ -61,6 +64,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
 ### 2. Relatórios de Estoque
 
 #### 2.1. Posição de Estoque
+
 - **Objetivo**: Visualizar a situação atual do estoque
 - **Filtros**:
   - Categoria
@@ -78,6 +82,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Alertas de estoque baixo
 
 #### 2.2. Movimentações de Estoque
+
 - **Objetivo**: Acompanhar entradas, saídas e ajustes
 - **Filtros**:
   - Data inicial/final
@@ -94,6 +99,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Gráfico de barras comparativo
 
 #### 2.3. Produtos em Falta
+
 - **Objetivo**: Identificar itens que necessitam de reposição
 - **Filtros**:
   - Categoria
@@ -112,6 +118,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
 ### 3. Relatórios Financeiros
 
 #### 3.1. Contas a Receber
+
 - **Objetivo**: Acompanhar o fluxo de recebimentos
 - **Filtros**:
   - Data de vencimento
@@ -129,6 +136,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Análise de inadimplência
 
 #### 3.2. Fluxo de Caixa
+
 - **Objetivo**: Visualizar entradas e saídas de recursos
 - **Filtros**:
   - Data inicial/final
@@ -145,6 +153,7 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
   - Comparativo com períodos anteriores
 
 #### 3.3. Margem de Contribuição
+
 - **Objetivo**: Analisar a rentabilidade dos produtos
 - **Filtros**:
   - Data inicial/final
@@ -163,16 +172,19 @@ O módulo de relatórios fornece ferramentas para análise e tomada de decisão 
 ## Funcionalidades Avançadas
 
 ### 1. Agendamento de Relatórios
+
 - **Recorrentes**: Configurar envio automático por e-mail
 - **Personalizados**: Salvar configurações de filtros
 - **Lembretes**: Alertas para relatórios importantes
 
 ### 2. Exportação e Compartilhamento
+
 - **Formatos**: PDF, Excel, CSV, PNG
 - **Destinos**: E-mail, Google Drive, OneDrive
 - **Agendamento**: Envio automático periódico
 
 ### 3. Painéis Personalizáveis
+
 - **Widgets**: Arrastar e soltar
 - **Layouts**: Múltiplos painéis temáticos
 - **Compartilhamento**: Compartilhar com outros usuários
@@ -223,6 +235,7 @@ GET /api/reports/sales/summary
 ```
 
 **Parâmetros de Consulta:**
+
 - `start_date`: Data inicial (obrigatório)
 - `end_date`: Data final (obrigatório)
 - `group_by`: Agrupamento (day/week/month)
@@ -264,6 +277,7 @@ POST /api/reports/schedule
 ```
 
 **Corpo da Requisição (JSON):**
+
 ```json
 {
   "name": "Relatório Semanal de Vendas",
@@ -282,7 +296,7 @@ POST /api/reports/schedule
 ```
 
 **Resposta de Sucesso (201 Created):**
-```json
+
 {
   "id": 1,
   "name": "Relatório Semanal de Vendas",

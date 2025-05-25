@@ -51,28 +51,5 @@
       </div>
     </section>
     
-    <!-- All Collections -->
-    <section class="all-collections">
-      <div class="section-header">
-        <h2>Explore Our Collections</h2>
-        <div class="geometric-divider">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <div class="collections-grid">
-        <% families.forEach(family => { %>
-          <a href="/collection/<%= family.id %>" class="collection-card">
-            <div class="collection-image">
-              <img src="/media/<%= family.image_filename || 'default-collection.jpg' %>" alt="<%= family.name %>" loading="lazy">
-            </div>
-            <div class="collection-info">
-              <h3><%= family.name %></h3>
-              <p><%= family.description %></p>
-            </div>
-          </a>
-        <% }); %>
-      </div>
-    </section>
+
 </main>

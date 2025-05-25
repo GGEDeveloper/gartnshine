@@ -1,3 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | Gonzaga's Art & Shine</title>
+  <style>
+    /* Lightbox Styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      width: 90%;
+      max-width: 1200px;
+      height: 90%;
+      margin: 2% auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .lightbox-img.loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      transform: translateY(-50%);
+      z-index: 1001;
+    }
+
+    .lightbox-btn {
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .lightbox-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
 <main class="collection-page">
   <div class="container">
     <div class="collection-header">
@@ -13,7 +116,7 @@
     
     <% if (images && images.length > 0) { %>
       <div class="gallery-grid">
-        <% images.forEach(image => { %>
+        <% images.forEach((image, index) => { %>
           <div class="gallery-item">
             <div class="gallery-image-container">
               <img 
@@ -21,6 +124,10 @@
                 alt="<%= image.filename.replace(/\.[^/.]+$/, '') %>"
                 loading="lazy"
                 class="gallery-image"
+                data-src="<%= image.url %>"
+                data-index="<%= index %>"
+                data-filename="<%= image.filename.replace(/\.[^/.]+$/, '') %>"
+                onclick="openLightbox(this)"
               >
             </div>
           </div>
@@ -33,6 +140,125 @@
     <% } %>
   </div>
 </main>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <div class="lightbox-content">
+    <img id="lightbox-img" class="lightbox-img" src="" alt="">
+    <div class="lightbox-nav">
+      <button class="lightbox-btn" onclick="changeImage(-1)">❮</button>
+      <button class="lightbox-btn" onclick="changeImage(1)">❯</button>
+    </div>
+    <!-- Removida a legenda do lightbox conforme solicitado -->
+  </div>
+</div>
+
+<script>
+  let currentImageIndex = 0;
+  let images = [];
+  
+  // Initialize lightbox with all images
+  document.addEventListener('DOMContentLoaded', () => {
+    const galleryImages = document.querySelectorAll('.gallery-image');
+    images = Array.from(galleryImages).map(img => ({
+      src: img.dataset.src,
+      alt: img.alt
+    }));
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('lightbox').style.display === 'block') {
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if (e.key === 'ArrowLeft') {
+          changeImage(-1);
+        } else if (e.key === 'ArrowRight') {
+          changeImage(1);
+        }
+      }
+    });
+  });
+
+  function openLightbox(element) {
+    const index = parseInt(element.dataset.index);
+    const src = element.dataset.src;
+    const alt = element.dataset.filename || '';
+    
+    currentImageIndex = index;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const caption = document.getElementById('lightbox-caption');
+    
+    lightbox.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Preload image
+    const img = new Image();
+    img.onload = function() {
+      lightboxImg.src = this.src;
+      lightboxImg.alt = ''; // Removido o texto alternativo
+      // Removida a exibição da legenda
+      
+      // Add loaded class after a small delay to trigger the transition
+      setTimeout(() => {
+        lightboxImg.classList.add('loaded');
+      }, 50);
+    };
+    img.src = src;
+  }
+
+  function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    
+    lightboxImg.classList.remove('loaded');
+    
+    // Wait for the transition to complete before hiding
+    setTimeout(() => {
+      lightbox.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }, 300);
+  }
+
+  function changeImage(direction) {
+    currentImageIndex += direction;
+    
+    // Loop through images
+    if (currentImageIndex >= images.length) {
+      currentImageIndex = 0;
+    } else if (currentImageIndex < 0) {
+      currentImageIndex = images.length - 1;
+    }
+    
+    const lightboxImg = document.getElementById('lightbox-img');
+    
+    // Remove loaded class for transition effect
+    lightboxImg.classList.remove('loaded');
+    
+    // Preload next/previous image
+    const img = new Image();
+    img.onload = function() {
+      lightboxImg.src = this.src;
+      lightboxImg.alt = '';
+      
+      // Add loaded class after a small delay
+      setTimeout(() => {
+        lightboxImg.classList.add('loaded');
+      }, 50);
+    };
+    img.src = images[currentImageIndex].src;
+  }
+
+  // Close lightbox when clicking outside the image
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('lightbox')) {
+      closeLightbox();
+    }
+  });
+</script>
+</body>
+</html>
 <style>
 /* Gallery Page */
 .collection-page {
