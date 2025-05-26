@@ -160,9 +160,20 @@ router.get('/login', (req, res) => {
     return res.redirect('/admin/dashboard');
   }
   
+  // Usar o layout principal do site para a página de login
   res.render('admin/login', {
-    title: 'Admin Login',
-    error: req.flash('error')
+    title: 'Acesso Restrito',
+    error: req.flash('error'),
+    layout: '../layout',  // Usa o layout principal do site
+    siteTitle: 'Gonzaga\'s Art & Shine',
+    theme: {
+      colorPrimary: '#6c5ce7',
+      colorSecondary: '#a29bfe',
+      colorAccent: '#fd79a8',
+      colorText: '#2d3436',
+      colorHighlight: '#dfe6e9',
+      primaryRgb: '108, 92, 231'
+    }
   });
 });
 

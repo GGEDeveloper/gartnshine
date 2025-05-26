@@ -21,28 +21,33 @@ Sistema de gestão para a loja Gonzaga's Art & Shine, especializada em artigos d
 ## Instalação
 
 1. Clone o repositório:
+
    ```bash
    git clone https://github.com/seu-usuario/gonzagas-art-shine.git
    cd gonzagas-art-shine
    ```
 
 2. Instale as dependências:
+
    ```bash
    npm install
    ```
 
 3. Configure as variáveis de ambiente:
+
    ```bash
    cp .env.example .env
    ```
    Edite o arquivo `.env` com suas configurações de banco de dados e outras variáveis.
 
 4. Inicialize o banco de dados:
+
    ```bash
    node scripts/init-db.js
    ```
 
 5. Inicie o servidor:
+
    ```bash
    npm start
    ```

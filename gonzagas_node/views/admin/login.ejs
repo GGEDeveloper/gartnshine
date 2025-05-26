@@ -1,0 +1,180 @@
+<style>
+  .login-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+    background-color: #f8f9fa;
+  }
+  .login-container {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .login-logo {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .login-logo h2 {
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-family: 'Playfair Display', serif;
+  }
+  .login-logo p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  .form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb, '108, 92, 231'), 0.15);
+  }
+  .btn-login {
+    background-color: var(--color-primary, #6c5ce7);
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+  .btn-login:hover {
+    background-color: var(--color-secondary, #5a4bcf);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+  }
+  .input-group-text {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  .forgot-password {
+    font-size: 0.85rem;
+    color: #6c757d;
+    transition: color 0.2s;
+  }
+  .forgot-password:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .back-to-site {
+    color: #6c757d;
+    transition: color 0.2s;
+  }
+  .back-to-site:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #6c757d;
+  }
+  .divider::before,
+  .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background-color: #e9ecef;
+  }
+  .divider::before {
+    left: 0;
+  }
+  .divider::after {
+    right: 0;
+  }
+</style>
+
+<div class="login-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="login-container">
+          <div class="login-logo">
+            <h2>Gonzaga's Art & Shine</h2>
+            <p>Painel Administrativo</p>
+          </div>
+          
+          <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              <%= error %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <% } %>
+          
+          <form action="/admin/login" method="POST" class="needs-validation" novalidate>
+            <div class="mb-4">
+              <label for="username" class="form-label fw-medium">Email ou Nome de Usuário</label>
+              <div class="input-group mb-2">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control form-control-lg" id="username" name="username" required>
+                <div class="invalid-feedback">
+                  Por favor, insira seu email ou nome de usuário.
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label for="password" class="form-label fw-medium mb-0">Senha</label>
+                <a href="/esqueci-senha" class="forgot-password">Esqueceu sua senha?</a>
+              </div>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                <div class="invalid-feedback">
+                  Por favor, insira sua senha.
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-primary btn-login btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i> Acessar Painel
+              </button>
+            </div>
+          </form>
+          
+          <div class="text-center mt-4 pt-3 border-top">
+            <a href="/" class="back-to-site">
+              <i class="fas fa-arrow-left me-1"></i> Voltar para o site
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Form validation
+(function () {
+  'use strict'
+  
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+  
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
