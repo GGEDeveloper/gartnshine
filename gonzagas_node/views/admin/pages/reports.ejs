@@ -1,0 +1,345 @@
+<%- include('../../partials/header') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box">
+        <h4 class="page-title">Relatórios</h4>
+        <div class="page-title-right">
+          <%- include('../../partials/breadcrumb', { items: [
+            { title: 'Dashboard', url: '/admin' },
+            { title: 'Relatórios', active: true }
+          ]}) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-8">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4">Vendas Mensais</h4>
+          <div class="mt-3">
+            <canvas id="sales-chart" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4">Resumo</h4>
+          <div class="row">
+            <div class="col-6">
+              <div class="p-2 border rounded mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm me-3">
+                    <span class="avatar-title bg-soft-primary text-primary rounded">
+                      <i class="fas fa-shopping-cart font-18"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5 class="mb-1 font-16">R$ 12,450</h5>
+                    <p class="text-muted mb-0">Vendas do Mês</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-2 border rounded mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm me-3">
+                    <span class="avatar-title bg-soft-success text-success rounded">
+                      <i class="fas fa-users font-18"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5 class="mb-1 font-16">1,254</h5>
+                    <p class="text-muted mb-0">Novos Clientes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="p-2 border rounded">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm me-3">
+                    <span class="avatar-title bg-soft-info text-info rounded">
+                      <i class="fas fa-shopping-bag font-18"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5 class="mb-1 font-16">2,541</h5>
+                    <p class="text-muted mb-0">Pedidos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-2 border rounded">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-sm me-3">
+                    <span class="avatar-title bg-soft-warning text-warning rounded">
+                      <i class="fas fa-dollar-sign font-18"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5 class="mb-1 font-16">R$ 6,217</h5>
+                    <p class="text-muted mb-0">Ticket Médio</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4">Produtos Mais Vendidos</h4>
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Vendas</th>
+                  <th>Receita</th>
+                  <th>Estoque</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% topProducts.forEach(product => { %>
+                  <tr>
+                    <td><%= product.name %></td>
+                    <td><%= product.sales %></td>
+                    <td>R$ <%= (product.sales * 50).toFixed(2).replace('.', ',') %></td>
+                    <td>
+                      <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-success" style="width: 60%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4">Distribuição de Vendas por Categoria</h4>
+          <div class="text-center">
+            <div class="row">
+              <div class="col-sm-6">
+                <div>
+                  <canvas id="category-chart" height="200"></canvas>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="mt-4 mt-sm-0">
+                  <ul class="list-unstyled">
+                    <li class="py-1">
+                      <p class="mb-1"><i class="mdi mdi-circle text-primary me-1"></i> Eletrônicos</p>
+                      <h5 class="font-14">45%</h5>
+                    </li>
+                    <li class="py-1">
+                      <p class="mb-1"><i class="mdi mdi-circle text-success me-1"></i> Roupas</p>
+                      <h5 class="font-14">30%</h5>
+                    </li>
+                    <li class="py-1">
+                      <p class="mb-1"><i class="mdi mdi-circle text-warning me-1"></i> Acessórios</p>
+                      <h5 class="font-14">15%</h5>
+                    </li>
+                    <li class="py-1">
+                      <p class="mb-1"><i class="mdi mdi-circle text-info me-1"></i> Outros</p>
+                      <h5 class="font-14">10%</h5>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="header-title mb-0">Relatório de Vendas</h4>
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Exportar <i class="mdi mdi-chevron-down ms-1"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Excel</a></li>
+                <li><a class="dropdown-item" href="#">PDF</a></li>
+                <li><a class="dropdown-item" href="#">Imagem</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Cliente</th>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#3210</td>
+                  <td>26/05/2023</td>
+                  <td>João Silva</td>
+                  <td>Smartphone XYZ</td>
+                  <td>1</td>
+                  <td>R$ 2.499,00</td>
+                  <td><span class="badge bg-success">Pago</span></td>
+                </tr>
+                <tr>
+                  <td>#3209</td>
+                  <td>25/05/2023</td>
+                  <td>Maria Souza</td>
+                  <td>Notebook ABC</td>
+                  <td>1</td>
+                  <td>R$ 4.299,00</td>
+                  <td><span class="badge bg-warning">Pendente</span></td>
+                </tr>
+                <tr>
+                  <td>#3208</td>
+                  <td>24/05/2023</td>
+                  <td>Carlos Oliveira</td>
+                  <td>Fone de Ouvido</td>
+                  <td>2</td>
+                  <td>R$ 199,98</td>
+                  <td><span class="badge bg-success">Pago</span></td>
+                </tr>
+                <tr>
+                  <td>#3207</td>
+                  <td>23/05/2023</td>
+                  <td>Ana Santos</td>
+                  <td>Smartwatch</td>
+                  <td>1</td>
+                  <td>R$ 899,00</td>
+                  <td><span class="badge bg-danger">Cancelado</span></td>
+                </tr>
+                <tr>
+                  <td>#3206</td>
+                  <td>22/05/2023</td>
+                  <td>Pedro Alves</td>
+                  <td>Tablet Pro</td>
+                  <td>1</td>
+                  <td>R$ 1.799,00</td>
+                  <td><span class="badge bg-success">Pago</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center mt-3">
+            <a href="#" class="btn btn-primary">Ver mais</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>
+
+<%- block('scripts') %>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Custom Scripts for Reports -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sales Chart
+    const salesCtx = document.getElementById('sales-chart');
+    if (salesCtx) {
+      new Chart(salesCtx.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+          datasets: [{
+            label: 'Vendas',
+            data: [65, 59, 80, 81, 56, 55, 40, 45, 55, 70, 90, 100],
+            borderColor: '#34c38f',
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return 'R$ ' + value.toLocaleString('pt-BR');
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+
+    // Category Chart
+    const categoryEl = document.getElementById('category-chart');
+    if (categoryEl) {
+      const categoryCtx = categoryEl.getContext('2d');
+      new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Eletrônicos', 'Roupas', 'Acessórios', 'Outros'],
+          datasets: [{
+            data: [45, 30, 15, 10],
+            backgroundColor: ['#556ee6', '#34c38f', '#f1b44c', '#50a5f1'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+  });
+</script>
+<%- endblock %>

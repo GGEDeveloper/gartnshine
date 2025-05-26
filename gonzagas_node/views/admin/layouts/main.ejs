@@ -26,6 +26,7 @@
   <!-- ApexCharts -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css">
   
+  <%- typeof styles !== 'undefined' ? styles : '' %>
   <%- block('styles') %>
 </head>
 <body>
@@ -81,5 +82,6 @@
   <script src="/js/admin.js"></script>
   
   <%- block('scripts') %>
+  <%- typeof scripts !== 'undefined' ? scripts : '' %>
 </body>
 </html>

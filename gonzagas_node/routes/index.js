@@ -86,14 +86,43 @@ router.get('/', async (req, res) => {
 // Collections page - Show all media images
 router.get('/collections', async (req, res) => {
   try {
-    const mediaPath = path.join(__dirname, '../public/media');
-    const files = await fs.readdir(mediaPath);
+    // Try multiple possible media paths
+    const possiblePaths = [
+      path.join(__dirname, '../../media'),
+      path.join(__dirname, '../public/media'),
+      path.join(__dirname, '../media')
+    ];
+    
+    let files = [];
+    let mediaPath = '';
+    
+    // Find the first valid path
+    for (const possiblePath of possiblePaths) {
+      try {
+        await fs.access(possiblePath);
+        files = await fs.readdir(possiblePath);
+        mediaPath = possiblePath;
+        console.log(`Using media path: ${mediaPath}`);
+        break;
+      } catch (err) {
+        console.log(`Path not found: ${possiblePath}`);
+        continue;
+      }
+    }
+    
+    if (files.length === 0) {
+      console.error('No valid media directory found');
+      return res.status(500).render('error', {
+        title: 'Error',
+        message: 'Media directory not found.'
+      });
+    }
     
     // Filter only image files and exclude banner-about.jpg
     const imageFiles = files.filter(file => {
       const ext = path.extname(file).toLowerCase();
-      const isImage = ['.jpg', '.jpeg', '.png', '.gif'].includes(ext);
-      const isNotBanner = file !== 'banner-about.jpg';
+      const isImage = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext);
+      const isNotBanner = !file.toLowerCase().includes('banner-about');
       return isImage && isNotBanner;
     }).map(file => ({
       filename: file,

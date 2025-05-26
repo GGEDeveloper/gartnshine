@@ -20,11 +20,31 @@ const app = express();
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 3000);
 
+// Carrega as configurações de visualização
+const viewConfig = require('./config/view');
+
 // Configurações de view engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.set('layout', 'layouts/main');
+app.set('views', path.join(__dirname, viewConfig.views.directory));
+app.set('view engine', viewConfig.views.extension);
+app.set('layout', viewConfig.layouts.public.default);
+app.set('view cache', viewConfig.views.cache);
+
+// Configura o express-ejs-layouts
 app.use(expressLayouts);
+app.set('layout extractScripts', true);
+app.set('layout extractStyles', true);
+app.set('layout extractMetas', true);
+
+// Middleware para definir o layout padrão com base na rota
+app.use((req, res, next) => {
+  // Se a rota começar com /admin, usa o layout do admin
+  if (req.path.startsWith('/admin')) {
+    res.locals.layout = viewConfig.layouts.admin.default;
+  } else {
+    res.locals.layout = viewConfig.layouts.public.default;
+  }
+  next();
+});
 
 // Middleware básico
 app.use(express.json());
