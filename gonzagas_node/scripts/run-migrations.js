@@ -309,7 +309,7 @@ Exemplos:
   # Executar todas as migrações
   node scripts/run-migrations.js
 
-  # Executar apenas as migrações do módulo de estoque
+  # Executar apenas as migrações do módulo de stock
   node scripts/run-migrations.js --module=inventory
 
   # Executar em modo de simulação

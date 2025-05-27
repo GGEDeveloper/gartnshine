@@ -60,7 +60,7 @@ const adminModules = {
       { name: 'Vendas', path: '/admin/reports/sales' },
       { name: 'Produtos', path: '/admin/reports/products' },
       { name: 'Clientes', path: '/admin/reports/customers' },
-      { name: 'Estoque', path: '/admin/reports/inventory' },
+      { name: 'stock', path: '/admin/reports/inventory' },
       { name: 'Financeiro', path: '/admin/reports/financial' }
     ]
   },

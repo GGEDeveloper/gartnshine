@@ -10,7 +10,7 @@
   <nav class="sidebar-nav">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link <%= currentPath === '/admin' ? 'active' : '' %>" href="/admin">
+        <a class="nav-link <%= currentPath === '/admin' || currentPath === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -19,43 +19,35 @@
       <li class="nav-item">
         <a class="nav-link <%= currentPath.startsWith('/admin/products') ? 'active' : '' %>" href="/admin/products">
           <i class="fas fa-fw fa-box"></i>
-          <span>Produtos</span>
+          <span>Products</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/categories') ? 'active' : '' %>" href="/admin/categories">
+        <a class="nav-link <%= currentPath.startsWith('/admin/product-families') ? 'active' : '' %>" href="/admin/product-families">
           <i class="fas fa-fw fa-tags"></i>
-          <span>Categorias</span>
+          <span>Product Families</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/orders') ? 'active' : '' %>" href="/admin/orders">
-          <i class="fas fa-fw fa-shopping-cart"></i>
-          <span>Pedidos</span>
-          <span class="badge bg-success rounded-pill ms-auto">3</span>
+        <a class="nav-link <%= currentPath.startsWith('/admin/inventory') ? 'active' : '' %>" href="/admin/inventory">
+          <i class="fas fa-fw fa-warehouse"></i>
+          <span>Inventory</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/customers') ? 'active' : '' %>" href="/admin/customers">
-          <i class="fas fa-fw fa-users"></i>
-          <span>Clientes</span>
+        <a class="nav-link <%= currentPath.startsWith('/admin/checkpoints') ? 'active' : '' %>" href="/admin/checkpoints">
+          <i class="fas fa-fw fa-clipboard-check"></i>
+          <span>Checkpoints</span>
         </a>
       </li>
       
-      <li class="nav-item mt-4">
-        <a class="nav-link <%= currentPath.startsWith('/admin/reports') ? 'active' : '' %>" href="/admin/reports">
-          <i class="fas fa-fw fa-chart-bar"></i>
-          <span>Relatórios</span>
-        </a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>" href="/admin/settings">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Configurações</span>
+      <li class="nav-item mt-auto">
+        <a class="nav-link text-danger" href="/admin/logout">
+          <i class="fas fa-fw fa-sign-out-alt"></i>
+          <span>Logout</span>
         </a>
       </li>
     </ul>

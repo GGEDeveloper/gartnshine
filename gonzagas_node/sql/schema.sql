@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `product_images` (
   CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabela de transações de estoque
+-- Tabela de transações de stock
 CREATE TABLE IF NOT EXISTS `inventory_transactions` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL,

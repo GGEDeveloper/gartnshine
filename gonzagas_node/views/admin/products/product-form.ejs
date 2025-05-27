@@ -1,0 +1,248 @@
+<%
+  // Define page-specific styles and scripts for the main layout
+  // The 'title' is already passed by the controller.
+  locals.styles = `
+    <link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="/adminlte/plugins/summernote/summernote-bs4.min.css">
+  `;
+  locals.scripts = `
+    <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/adminlte/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="/js/admin-product-form.js"></script>
+  `;
+%>
+
+<div class="alerts-container"></div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <%= (typeof product !== 'undefined' && product.id) ? 'Editar Produto' : 'Adicionar Novo Produto' %>
+          </h3>
+          <div class="card-tools">
+            <a href="/admin/products" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+          </div>
+        </div>
+        <form id="productForm" action="<%= (typeof product !== 'undefined' && product.id) ? '/admin/products/edit/' + product.id : '/admin/products/add' %>" method="POST" enctype="multipart/form-data">
+          
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="form-group mb-3">
+                  <label for="name" class="form-label">Nome do Produto <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="name" name="name" 
+                         value="<%= (typeof product !== 'undefined' && product.name) ? product.name : '' %>" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                  <label for="description" class="form-label">Descrição</label>
+                  <textarea class="form-control summernote" id="description" name="description" 
+                            rows="3"><%= (typeof product !== 'undefined' && product.description) ? product.description : '' %></textarea>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group mb-3">
+                      <label for="family_id" class="form-label">Família <span class="text-danger">*</span></label>
+                      <select class="form-control select2" id="family_id" name="family_id" required>
+                        <option value="">Selecione uma família</option>
+                        <% if (typeof families !== 'undefined' && families.length > 0) { %>
+                          <% families.forEach(family => { %>
+                            <option value="<%= family.id %>" <%= (typeof product !== 'undefined' && product.family_id == family.id) ? 'selected' : '' %>>
+                              <%= family.name %>
+                            </option>
+                          <% }); %>
+                        <% } %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group mb-3">
+                      <label for="reference" class="form-label">Referência <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="reference" name="reference" 
+                             value="<%= (typeof product !== 'undefined' && product.reference) ? product.reference : '' %>" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="purchase_price" class="form-label">Preço de Compra</label>
+                      <div class="input-group">
+                        <span class="input-group-text">€</span>
+                        <input type="number" class="form-control" id="purchase_price" name="purchase_price" 
+                               value="<%= (typeof product !== 'undefined' && product.purchase_price) ? product.purchase_price : '' %>" step="0.01">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="sale_price" class="form-label">Preço de Venda <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text">€</span>
+                        <input type="number" class="form-control" id="sale_price" name="sale_price" 
+                               value="<%= (typeof product !== 'undefined' && product.sale_price) ? product.sale_price : '' %>" step="0.01" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="tax_rate" class="form-label">Taxa de Imposto (%)</label>
+                      <input type="number" class="form-control" id="tax_rate" name="tax_rate" 
+                             value="<%= (typeof product !== 'undefined' && product.tax_rate) ? product.tax_rate : '23.00' %>" step="0.01">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="current_stock" class="form-label">Stock Atual</label>
+                      <input type="number" class="form-control" id="current_stock" name="current_stock" 
+                             value="<%= (typeof product !== 'undefined' && product.current_stock) ? product.current_stock : '0' %>">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="min_stock" class="form-label">Stock Mínimo</label>
+                      <input type="number" class="form-control" id="min_stock" name="min_stock" 
+                             value="<%= (typeof product !== 'undefined' && product.min_stock) ? product.min_stock : '0' %>">
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group mb-3">
+                      <label for="max_stock" class="form-label">Stock Máximo</label>
+                      <input type="number" class="form-control" id="max_stock" name="max_stock" 
+                             value="<%= (typeof product !== 'undefined' && product.max_stock) ? product.max_stock : '' %>">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group mb-3">
+                  <label for="tags" class="form-label">Tags</label>
+                  <input type="text" class="form-control" id="tags" name="tags" 
+                         value="<%= (typeof product !== 'undefined' && product.tags) ? product.tags : '' %>" placeholder="e.g., anel, prata, artesanal">
+                  <small class="form-text text-muted">Separar tags por vírgula.</small>
+                </div>
+
+              </div>
+              <div class="col-md-4">
+                <div class="form-group mb-3">
+                  <label for="image" class="form-label">Imagem do Produto</label>
+                  <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                  <% if (typeof product !== 'undefined' && product.image_filename) { %>
+                    <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>" class="img-thumbnail mt-2" style="max-height: 150px;">
+                  <% } else if (typeof product !== 'undefined' && product.reference) { %>
+                     <img src="/media/<%= product.reference %>.jpg" alt="<%= (typeof product !== 'undefined' && product.name) ? product.name : 'Product Image' %>" 
+                          class="img-thumbnail mt-2" style="max-height: 150px;"
+                          onerror="this.onerror=null;this.src='/img/placeholder-product.png';">
+                  <% } else { %>
+                    <img src="/img/placeholder-product.png" alt="Placeholder" class="img-thumbnail mt-2" style="max-height: 150px;">
+                  <% } %>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="is_active" class="form-label">Status</label>
+                  <select class="form-select" id="is_active" name="is_active">
+                    <option value="1" <%= (typeof product === 'undefined' || (typeof product !== 'undefined' && product.is_active == 1)) ? 'selected' : '' %>>Ativo</option>
+                    <option value="0" <%= (typeof product !== 'undefined' && product.is_active == 0) ? 'selected' : '' %>>Inativo</option>
+                  </select>
+                </div>
+                
+                <div class="form-group mb-3">
+                  <label for="weight" class="form-label">Peso (g)</label>
+                  <input type="number" class="form-control" id="weight" name="weight" 
+                         value="<%= (typeof product !== 'undefined' && product.weight) ? product.weight : '' %>" step="0.01">
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="dimensions" class="form-label">Dimensões (CxLxA cm)</label>
+                  <input type="text" class="form-control" id="dimensions" name="dimensions" 
+                         value="<%= (typeof product !== 'undefined' && product.dimensions) ? product.dimensions : '' %>" placeholder="e.g., 10x5x2">
+                </div>
+
+                <div class="card card-outline card-info mt-3">
+                  <div class="card-header">
+                    <h3 class="card-title">Atributos Adicionais</h3>
+                  </div>
+                  <div class="card-body">
+                    <div id="attributesContainer">
+                      <% if (typeof product !== 'undefined' && product.attributes && Array.isArray(product.attributes) && product.attributes.length > 0) { %>
+                        <% product.attributes.forEach(attr => { %>
+                          <div class="row mb-2 attribute-row">
+                            <div class="col-md-5">
+                              <input type="text" class="form-control" name="attributeNames[]" placeholder="Nome do atributo" value="<%= attr.name %>">
+                            </div>
+                            <div class="col-md-6">
+                              <input type="text" class="form-control" name="attributeValues[]" placeholder="Valor" value="<%= attr.value %>">
+                            </div>
+                            <div class="col-md-1">
+                              <button type="button" class="btn btn-danger btn-sm remove-attribute"><i class="fas fa-times"></i></button>
+                            </div>
+                          </div>
+                        <% }); %>
+                      <% } else { %>
+                        <div class="row mb-2 attribute-row">
+                          <div class="col-md-5">
+                            <input type="text" class="form-control" name="attributeNames[]" placeholder="Nome do atributo">
+                          </div>
+                          <div class="col-md-6">
+                            <input type="text" class="form-control" name="attributeValues[]" placeholder="Valor">
+                          </div>
+                          <div class="col-md-1">
+                            <button type="button" class="btn btn-danger btn-sm remove-attribute" style="display:none;"><i class="fas fa-times"></i></button>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <button type="button" id="addAttribute" class="btn btn-sm btn-outline-secondary mt-2">
+                      <i class="fas fa-plus"></i> Adicionar atributo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer text-end">
+            <% if (typeof product !== 'undefined' && product.id) { %>
+              <button type="button" class="btn btn-danger me-auto" id="deleteProductBtn" 
+                      data-product-id="<%= product.id %>"
+                      data-product-name="<%= product.name %>">
+                <i class="fas fa-trash"></i> Excluir
+              </button>
+            <% } %>
+            <a href="/admin/products" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary ms-2">
+              <i class="fas fa-save"></i> Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="attributeTemplate">
+  <div class="row mb-2 attribute-row">
+    <div class="col-md-5">
+      <input type="text" class="form-control" name="attributeNames[]" placeholder="Nome do atributo">
+    </div>
+    <div class="col-md-6">
+      <input type="text" class="form-control" name="attributeValues[]" placeholder="Valor">
+    </div>
+    <div class="col-md-1">
+      <button type="button" class="btn btn-danger btn-sm remove-attribute">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+</template>

@@ -181,8 +181,8 @@ const productValidation = [
     .optional({ checkFalsy: true })
     .isFloat({ min: 0 }).withMessage('O custo por item deve ser um número positivo'),
   check('stock')
-    .notEmpty().withMessage('O estoque é obrigatório')
-    .isInt({ min: 0 }).withMessage('O estoque deve ser um número inteiro não negativo'),
+    .notEmpty().withMessage('O stock é obrigatório')
+    .isInt({ min: 0 }).withMessage('O stock deve ser um número inteiro não negativo'),
   check('barcode')
     .optional({ checkFalsy: true })
     .isLength({ max: 100 }).withMessage('O código de barras não pode ter mais de 100 caracteres'),

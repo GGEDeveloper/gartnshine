@@ -352,7 +352,7 @@ class Product extends BaseModel {
         [id]
       );
       
-      // Carregar transações de estoque
+      // Carregar transações de stock
       const [transactions] = await pool.query(
         `SELECT it.*, p.name as product_name 
          FROM inventory_transactions it
@@ -374,7 +374,7 @@ class Product extends BaseModel {
     }
   }
 
-  // Obter todos os produtos com informações de estoque
+  // Obter todos os produtos com informações de stock
   static async getAllWithStock() {
     try {
       const [rows] = await pool.query(`
@@ -412,7 +412,7 @@ class Product extends BaseModel {
     }
   }
 
-  // Atualizar o estoque de um produto
+  // Atualizar o stock de um produto
   static async updateStock(productId, quantityChange, unitPrice = null) {
     const connection = await pool.getConnection();
     
@@ -430,7 +430,7 @@ class Product extends BaseModel {
         await this.recordPriceHistory(connection, productId, unitPrice);
       }
       
-      // Atualizar o estoque
+      // Atualizar o stock
       await connection.query(
         'UPDATE products SET current_stock = current_stock + ? WHERE id = ?',
         [quantityChange, productId]

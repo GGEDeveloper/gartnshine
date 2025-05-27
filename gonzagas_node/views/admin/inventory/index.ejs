@@ -89,58 +89,82 @@
     .filter-group label {
       display: block;
       margin-bottom: 0.25rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      white-space: nowrap;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #333;
     }
     
-    .filter-group input,
-    .filter-group select {
-      width: 100%;
-      padding: 0.35rem 0.5rem;
-      font-size: 0.85rem;
-      border: 1px solid #000000;
+    .filter-group .form-control,
+    .filter-group .form-select {
+      border: 1px solid #ced4da;
       border-radius: 0.25rem;
-      background-color: #ffffff;
-      color: #000000;
-      height: 36px;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
     }
     
-    .filter-actions {
-      display: flex;
-      gap: 0.5rem;
+    .filter-group .btn {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
     }
     
-    .filter-actions .btn {
-      padding: 0.35rem 0.75rem;
-      font-size: 0.85rem;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
+    /* Estilos para o modal de colunas */
+    .column-modal .modal-content {
+      border-radius: 0.5rem;
+      border: none;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .column-modal .modal-header {
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+    
+    .column-modal .modal-title {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .column-modal .modal-body .form-check {
+      margin-bottom: 0.5rem;
+    }
+    
+    .column-modal .modal-footer {
+      border-top: 1px solid #dee2e6;
+    }
+
+    /* Estilos para badges de stock */
+    .badge-stock-in-stock {
+        background-color: #28a745 !important; /* Green */
+        color: white !important;
+    }
+    .badge-stock-low-stock {
+        background-color: #ffc107 !important; /* Yellow */
+        color: black !important; /* Changed to black for better visibility */
+    }
+    .badge-stock-out-of-stock {
+        background-color: #dc3545 !important; /* Red */
+        color: white !important;
+    }
+    .badge-product-active {
+        background-color: #28a745 !important; /* Green */
+        color: white !important;
+    }
+    .badge-product-inactive {
+        background-color: #6c757d !important; /* Gray */
+        color: white !important;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
     }
   </style>
-  <div class="row">
-    <div class="col-12">
-      <div class="page-title-box">
-        <h4 class="page-title"><%= title %></h4>
-        <div class="page-title-right">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adjustInventoryModal">
-            <i class="fas fa-plus me-1"></i> Ajustar Estoque
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="row">
     <div class="col-12">
-      <div class="card" style="background-color: #ffffff !important; color: #000000 !important; border: 1px solid #000000 !important;">
-        <div class="card-header" style="background-color: #f8f9fa !important; border-bottom: 1px solid #000000 !important;">
-          <h5 class="card-title mb-0">Filtros</h5>
-        </div>
-        <div class="card-body" style="background-color: #ffffff !important; color: #000000 !important;">
-          <!-- Filtros -->
+      <div class="card">
+        <div class="card-body">
           <div class="table-filters">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h6 class="mb-0">Filtros</h6>
@@ -152,195 +176,103 @@
             </div>
             <div class="filter-row">
               <div class="filter-group">
-                <label for="filter-product">Produto</label>
-                <input type="text" id="filter-product" class="form-control" placeholder="Nome do produto">
-              </div>
-              
-              <div class="filter-group compact">
-                <label for="filter-reference">Ref.</label>
-                <input type="text" id="filter-reference" class="form-control" placeholder="Código">
-              </div>
-              
-              <div class="filter-group compact">
-                <label for="filter-status">Status</label>
-                <select id="filter-status" class="form-select">
-                  <option value="">Todos</option>
-                  <option value="Em Estoque">Em Estoque</option>
-                  <option value="Estoque Baixo">Estoque Baixo</option>
-                  <option value="Fora de Estoque">Fora de Estoque</option>
-                </select>
+                <label for="filter-reference">Referência</label>
+                <input type="text" id="filter-reference" class="form-control" placeholder="Código de Referência">
               </div>
               
               <div class="filter-group">
                 <label for="filter-category">Categoria</label>
                 <select id="filter-category" class="form-select">
                   <option value="">Todas</option>
-                  <% const categories = [...new Set(products.map(p => p.category).filter(Boolean))]; %>
-                  <% categories.forEach(category => { %>
-                    <option value="<%= category %>"><%= category %></option>
+                  <% productFamilies.forEach(family => { %>
+                    <option value="<%= family.name %>"><%= family.name %></option>
                   <% }); %>
                 </select>
               </div>
               
+              <div class="filter-group">
+                <label for="filter-status">Status do Produto</label>
+                <select id="filter-status" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="active">Ativo</option>
+                  <option value="inactive">Inativo</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-stock">Status do Stock</label>
+                <select id="filter-stock" class="form-select">
+                  <option value="">Todos</option>
+                  <option value="in_stock">Em Stock</option>
+                  <option value="low_stock">Stock Baixo</option>
+                  <option value="out_of_stock">Fora de Stock</option>
+                </select>
+              </div>
+              
               <div class="filter-group actions">
-                <button id="reset-filters" class="btn btn-outline-secondary btn-sm" title="Limpar filtros">
-                  <i class="fas fa-undo"></i>
-                </button>
-                <button id="apply-filters" class="btn btn-primary btn-sm" title="Aplicar filtros">
-                  <i class="fas fa-filter"></i>
-                </button>
+                <button type="button" class="btn btn-primary" id="apply-filters-btn">Aplicar Filtros</button>
+                <button type="button" class="btn btn-outline-secondary" id="reset-filters-btn">Limpar Filtros</button>
               </div>
             </div>
           </div>
-          <!-- Tabela -->
-          <div class="table-responsive" style="background-color: #ffffff !important; color: #000000 !important;">
-            <style>
-              /* Reset completo da tabela */
-              .table-inventory {
-                border: 1px solid #000000 !important;
-                border-collapse: collapse !important;
-                border-spacing: 0;
-                width: 100%;
-                table-layout: fixed;
-                background-color: #ffffff;
-              }
-              
-              /* Estilização de células e cabeçalhos */
-              /* Células e cabeçalhos */
-              .table-inventory th,
-              .table-inventory td {
-                border: 1px solid #000000 !important;
-                padding: 0.5rem 0.75rem !important;
-                vertical-align: middle !important;
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                position: relative;
-              }
-              
-              /* Cabeçalho da tabela */
-              .table-inventory thead th {
-                background-color: #f8f9fa !important;
-                font-weight: 600 !important;
-                border-bottom: 2px solid #000000 !important;
-                text-transform: uppercase;
-                font-size: 0.75rem;
-              }
-              
-              /* Linhas alternadas */
-              .table-inventory tbody tr:nth-child(even) {
-                background-color: #f8f9fa !important;
-              }
-              
-              /* Efeito hover */
-              .table-inventory tbody tr:hover {
-                background-color: rgba(0, 0, 0, 0.05) !important;
-              }
-              
-              .table-inventory tbody tr:hover {
-                background-color: rgba(0, 0, 0, 0.03) !important;
-              }
-              
-              /* Garantir que as bordas sejam visíveis */
-              .table-inventory {
-                border-spacing: 0;
-              }
-              
-              .table-inventory th,
-              .table-inventory td {
-                border-style: solid !important;
-                border-width: 1px !important;
-                border-color: #000000 !important;
-              }
-            </style>
-            <table class="table-inventory align-middle mb-0">
+          
+          <div class="table-responsive">
+            <table class="table table-hover mb-0" id="product-table">
               <thead>
                 <tr>
-                  <th style="width: 40px;">#</th>
-                  <th>Produto</th>
-                  <th>Referência</th>
-                  <th class="text-center">Estoque Atual</th>
-                  <th class="text-center">Estoque Mínimo</th>
-                  <th class="text-center">Status</th>
-                  <th class="text-end">Ações</th>
+                  <th data-column-name="id">ID</th>
+                  <th data-column-name="image">Imagem</th>
+                  <th data-column-name="reference">Referência</th>
+                  <th data-column-name="name">Nome</th>
+                  <th data-column-name="category">Categoria</th>
+                  <th data-column-name="stock">Stock Atual</th>
+                  <th data-column-name="status">Status</th>
+                  <th data-column-name="actions">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                <% if (products && products.length > 0) { %>
-                  <% products.forEach((product, index) => { %>
-                    <tr>
-                      <td class="text-muted"><%= index + 1 %></td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="position-relative me-3" style="width: 50px; height: 50px; overflow: hidden; border-radius: 8px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
-                            <% if (product.image_url) { %>
-                              <img 
-                                src="<%= product.image_url %>" 
-                                alt="<%= product.name %>" 
-                                style="width: 100%; height: 100%; object-fit: cover;"
-                                onerror="this.onerror=null; this.src='/img/placeholder-product.png'"
-                                class="img-thumbnail border-0 p-0"
-                              >
-                            <% } else { %>
-                              <i class="fas fa-box text-muted" style="font-size: 1.25rem;"></i>
-                            <% } %>
-                          </div>
-                          <div>
-                            <h6 class="mb-0 text-primary fw-semibold"><%= product.name %></h6>
-                            <small class="text-muted"><%= product.family_name || 'Sem família' %></small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span class="badge bg-light text-dark border"><%= product.reference || 'N/A' %></span>
-                      </td>
-                      <td class="text-center fw-bold"><%= product.current_stock %></td>
-                      <td class="text-center"><%= product.min_stock || 0 %></td>
-                      <td class="text-center">
-                        <% if (product.current_stock <= 0) { %>
-                          <span class="badge bg-danger bg-opacity-10 text-danger">Esgotado</span>
-                        <% } else if (product.current_stock <= (product.min_stock || 0)) { %>
-                          <span class="badge bg-warning bg-opacity-10 text-warning">Estoque Baixo</span>
-                        <% } else { %>
-                          <span class="badge bg-success bg-opacity-10 text-success">Em Estoque</span>
-                        <% } %>
-                      </td>
-                      <td class="text-end">
-                        <div class="btn-group" role="group">
-                          <button 
-                            class="btn btn-sm btn-outline-primary" 
-                            data-product-id="<%= product.id %>"
-                            data-product-name="<%= product.name.replace(/"/g, '&quot;') %>"
-                            onclick="showProductHistory(this.getAttribute('data-product-id'), this.getAttribute('data-product-name'));"
-                            data-bs-toggle="tooltip" 
-                            title="Ver histórico"
-                          >
-                            <i class="fas fa-history"></i>
-                          </button>
-                          <button 
-                            class="btn btn-sm btn-outline-secondary" 
-                            data-product-id="<%= product.id %>"
-                            data-product-name="<%= product.name.replace(/"/g, '&quot;') %>"
-                            onclick="adjustStock(this.getAttribute('data-product-id'), this.getAttribute('data-product-name'));"
-                            data-bs-toggle="tooltip" 
-                            title="Ajustar estoque"
-                          >
-                            <i class="fas fa-edit"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  <% }); %>
-                <% } else { %>
-                  <tr>
-                    <td colspan="7" class="text-center py-5">
-                      <div class="py-4">
-                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">Nenhum produto encontrado</h5>
-                        <p class="text-muted mb-0">Adicione produtos para começar a gerenciar seu estoque</p>
-                      </div>
+                <% products.forEach(product => { %>
+                  <tr data-reference="<%= product.reference %>" data-family-name="<%= product.family_name %>" data-is-active="<%= product.is_active ? 'active' : 'inactive' %>" data-stock-quantity="<%= product.current_stock %>">
+                    <td><%= product.id %></td>
+                    <td>
+                      <% if (product.image && product.image !== 'noimage.jpg') { %>
+                        <img src="/media/<%= product.image %>" alt="<%= product.name %>" class="img-thumbnail" width="50">
+                      <% } else { %>
+                        <img src="/img/placeholder-product.png" alt="No Image" class="img-thumbnail" width="50">
+                      <% } %>
+                    </td>
+                    <td><%= product.reference %></td>
+                    <td><%= product.name %></td>
+                    <td><%= product.family_name %></td>
+                    <td>
+                      <% if (product.current_stock > 10) { %>
+                        <span class="badge badge-stock-in-stock">Em Stock (<%= product.current_stock %>)</span>
+                      <% } else if (product.current_stock > 0 && product.current_stock <= 10) { %>
+                        <span class="badge badge-stock-low-stock">Stock Baixo (<%= product.current_stock %>)</span>
+                      <% } else { %>
+                        <span class="badge badge-stock-out-of-stock">Fora de Stock (<%= product.current_stock %>)</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (product.is_active) { %>
+                        <span class="badge badge-product-active">Ativo</span>
+                      <% } else { %>
+                        <span class="badge badge-product-inactive">Inativo</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/admin/inventory/<%= product.id %>" class="btn btn-info btn-sm me-1" title="Ver Histórico">
+                        <i class="fas fa-history"></i>
+                      </a>
+                      <a href="/admin/products/edit/<%= product.id %>" class="btn btn-primary btn-sm me-1" title="Editar Produto">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button type="button" class="btn btn-danger btn-sm delete-product-btn" data-id="<%= product.id %>" title="Eliminar Produto">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
                     </td>
                   </tr>
-                <% } %>
+                <% }); %>
               </tbody>
             </table>
           </div>
@@ -350,268 +282,230 @@
   </div>
 </div>
 
-<!-- Painel de Seleção de Colunas -->
-<div id="columnsPanel" style="display: none; position: absolute; right: 20px; top: 50px; background: white; border: 1px solid #ddd; padding: 15px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-  <div style="margin-bottom: 10px; font-weight: bold;">Mostrar Colunas:</div>
-  <div style="display: flex; flex-direction: column; gap: 5px;">
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="#" checked>
-      <span>#</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="Produto" checked>
-      <span>Produto</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="Referência" checked>
-      <span>Referência</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="Estoque Atual" checked>
-      <span>Estoque Atual</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="Estoque Mínimo" checked>
-      <span>Estoque Mínimo</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-      <input type="checkbox" class="column-toggle" value="Status" checked>
-      <span>Status</span>
-    </label>
-  </div>
-  <div style="margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
-    <button type="button" class="btn btn-sm btn-outline-secondary" id="close-columns-panel">Fechar</button>
-    <button type="button" class="btn btn-sm btn-primary" id="apply-columns">Aplicar</button>
-  </div>
-</div>
-
-      try {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-      } catch (e) {
-        console.error('Erro ao inicializar tooltip:', e);
-      }
-    });
-  } catch (e) {
-    console.error('Erro ao inicializar tooltips:', e);
-  }
-}
-
-
-
-// Função para mostrar o histórico do produto
-function showProductHistory(productId, productName) {
-  // Implementar a lógica para mostrar o histórico
-  console.log('Mostrar histórico do produto:', productId, productName);
-}
-
-// Função para ajustar o estoque
-function adjustStock(productId, productName) {
-  // Implementar a lógica para ajustar o estoque
-  console.log('Ajustar estoque do produto:', productId, productName);
-}
-</script>
-
-<!-- Modal de Ajuste de Estoque -->
-<div class="modal fade" id="adjustInventoryModal" tabindex="-1" aria-labelledby="adjustInventoryModalLabel" aria-hidden="true">
+<!-- Modal de Seleção de Colunas -->
+<div class="modal fade column-modal" id="columnsModal" tabindex="-1" aria-labelledby="columnsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="adjustInventoryModalLabel">Ajustar Estoque</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <form id="adjustInventoryForm" action="/admin/inventory/adjust" method="POST">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="productId" class="form-label">Produto</label>
-            <select class="form-select" id="productId" name="productId" required>
-              <option value="" selected disabled>Selecione um produto</option>
-              <% if (products && products.length > 0) { %>
-                <% products.forEach(product => { %>
-                  <option value="<%= product.id %>">
-                    <%= product.name %> (Estoque: <%= product.current_stock %>)
-                  </option>
-                <% }); %>
-              <% } %>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="adjustmentType" class="form-label">Tipo de Ajuste</label>
-            <select class="form-select" id="adjustmentType" name="adjustmentType" required>
-              <option value="addition">Adicionar ao Estoque</option>
-              <option value="subtraction">Remover do Estoque</option>
-              <option value="set">Definir Valor Exato</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="quantity" class="form-label">Quantidade</label>
-            <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
-          </div>
-          <div class="mb-3">
-            <label for="reason" class="form-label">Motivo do Ajuste</label>
-            <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Salvar Ajuste</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Modal de Histórico de Produto -->
-<div class="modal fade" id="productHistoryModal" tabindex="-1" aria-labelledby="productHistoryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="productHistoryModalLabel">Histórico de Estoque</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        <h5 class="modal-title" id="columnsModalLabel">Selecionar Colunas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="productHistoryContent">
-          <!-- O conteúdo será carregado via AJAX -->
-          <div class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Carregando...</span>
-            </div>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="id" id="toggleId" checked>
+          <label class="form-check-label" for="toggleId">ID</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="image" id="toggleImage" checked>
+          <label class="form-check-label" for="toggleImage">Imagem</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="reference" id="toggleReference" checked>
+          <label class="form-check-label" for="toggleReference">Referência</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="name" id="toggleName" checked>
+          <label class="form-check-label" for="toggleName">Nome</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="category" id="toggleCategory" checked>
+          <label class="form-check-label" for="toggleCategory">Categoria</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="stock" id="toggleStock" checked>
+          <label class="form-check-label" for="toggleStock">Stock Atual</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="status" id="toggleStatus" checked>
+          <label class="form-check-label" for="toggleStatus">Status</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input column-toggle" type="checkbox" value="actions" id="toggleActions" checked>
+          <label class="form-check-label" for="toggleActions">Ações</label>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" id="apply-columns-btn">Aplicar</button>
       </div>
     </div>
   </div>
-}
+</div>
 
-// Função para obter o índice da coluna com base no texto do cabeçalho
-function getColumnIndex(headerText) {
-  const headers = document.querySelectorAll('.table-inventory th');
-  for (let i = 0; i < headers.length; i++) {
-    if (headers[i].textContent.trim() === headerText) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-// Função para mostrar/esconder coluna
-function toggleColumn(columnIndex, show) {
-  const table = document.querySelector('.table-inventory');
-  if (!table) return;
-  
-  // Esconder/mostrar cabeçalho
-  const header = table.querySelector(`th:nth-child(${columnIndex + 1})`);
-  if (header) header.style.display = show ? '' : 'none';
-  
-  // Esconder/mostrar células da coluna
-  const cells = table.querySelectorAll(`td:nth-child(${columnIndex + 1})`);
-  cells.forEach(cell => {
-    cell.style.display = show ? '' : 'none';
-  });
-}
-
-// Função para salvar as preferências de colunas
-function saveColumnPreferences() {
-  const checkboxes = document.querySelectorAll('.column-toggle');
-  const preferences = {};
-  
-  checkboxes.forEach(checkbox => {
-    preferences[checkbox.value] = checkbox.checked;
-  });
-  
-  localStorage.setItem('columnPreferences', JSON.stringify(preferences));
-}
-
-// Função para carregar as preferências de colunas
-function loadColumnPreferences() {
-  const saved = localStorage.getItem('columnPreferences');
-  if (!saved) return null;
-  
-  try {
-    return JSON.parse(saved);
-  } catch (e) {
-    console.error('Erro ao carregar preferências:', e);
-    return null;
-  }
-}
-
-// Inicializar a aplicação quando o DOM estiver pronto
+<% contentFor('scripts') %>
+<script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM carregado, inicializando aplicação...');
+  console.log('DOM Content Loaded - Inventory Page Script with Apply Button');
+  const productTable = document.getElementById('product-table');
+  const productRows = productTable ? Array.from(productTable.querySelectorAll('tbody tr')) : [];
+
+  const referenceFilter = document.getElementById('filter-reference');
+  const categoryFilter = document.getElementById('filter-category');
+  const statusFilter = document.getElementById('filter-status');
+  const stockFilter = document.getElementById('filter-stock');
   
-  // Referências aos elementos
-  const columnsBtn = document.getElementById('toggle-columns-btn');
-  const columnsPanel = document.getElementById('columnsPanel');
-  const applyBtn = document.getElementById('apply-columns');
-  const closeBtn = document.getElementById('close-columns-panel');
-  
-  if (!columnsBtn || !columnsPanel || !applyBtn || !closeBtn) {
-    console.error('Elementos necessários não encontrados');
-    return;
-  }
-  
-  // Carregar preferências salvas
-  const savedPrefs = loadColumnPreferences();
-  if (savedPrefs) {
-    Object.entries(savedPrefs).forEach(([colName, isVisible]) => {
-      const checkbox = document.querySelector(`.column-toggle[value="${colName}"]`);
-      if (checkbox) {
-        checkbox.checked = isVisible;
-        
-        // Aplicar visibilidade inicial
-        const colIndex = getColumnIndex(colName);
-        if (colIndex !== -1) {
-          toggleColumn(colIndex, isVisible);
+  const applyFiltersBtn = document.getElementById('apply-filters-btn'); // New button
+  const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+  function applyFilters() {
+    console.log('Applying filters...');
+    const referenceValue = referenceFilter ? referenceFilter.value.toLowerCase() : '';
+    const categoryValue = categoryFilter ? categoryFilter.value : '';
+    const statusValue = statusFilter ? statusFilter.value : '';
+    const stockValue = stockFilter ? stockFilter.value : '';
+
+    console.log('Filter values:', { referenceValue, categoryValue, statusValue, stockValue });
+
+    productRows.forEach(row => {
+      const rowReference = (row.dataset.reference || '').toLowerCase();
+      const rowFamilyName = (row.dataset.familyName || '').toLowerCase(); // Ensure this matches your data-attribute
+      const rowIsActive = row.dataset.isActive;
+      const rowStockQuantity = parseInt(row.dataset.stockQuantity);
+
+      // console.log('Processing row:', row.dataset); // Optional: for detailed row debugging
+
+      let matchesReference = true;
+      let matchesCategory = true;
+      let matchesStatus = true;
+      let matchesStock = true;
+
+      if (referenceValue) {
+        matchesReference = rowReference.includes(referenceValue);
+      }
+
+      if (categoryValue) {
+        matchesCategory = rowFamilyName === categoryValue.toLowerCase();
+      }
+
+      if (statusValue) {
+        matchesStatus = rowIsActive === statusValue;
+      }
+
+      if (stockValue) {
+        if (stockValue === 'in_stock') {
+          matchesStock = rowStockQuantity > 10;
+        } else if (stockValue === 'low_stock') {
+          matchesStock = rowStockQuantity > 0 && rowStockQuantity <= 10;
+        } else if (stockValue === 'out_of_stock') {
+          matchesStock = rowStockQuantity <= 0;
         }
       }
+
+      // console.log('Matches for this row:', { matchesReference, matchesCategory, matchesStatus, matchesStock }); // Optional
+
+      if (matchesReference && matchesCategory && matchesStatus && matchesStock) {
+        row.style.display = ''; // Show row
+      } else {
+        row.style.display = 'none'; // Hide row
+      }
+      // console.log('Row display after filter:', row.style.display); // Optional
     });
   }
-  
-  // Mostrar/ocultar painel ao clicar no botão de colunas
-  columnsBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    columnsPanel.style.display = columnsPanel.style.display === 'none' ? 'block' : 'none';
-  });
-  
-  // Fechar painel ao clicar fora
-  document.addEventListener('click', function(e) {
-    if (!columnsPanel.contains(e.target) && e.target !== columnsBtn) {
-      columnsPanel.style.display = 'none';
-    }
-  });
-  
-  // Fechar painel ao clicar no botão Fechar
-  closeBtn.addEventListener('click', function() {
-    columnsPanel.style.display = 'none';
-  });
-  
-  // Aplicar seleção de colunas
-  applyBtn.addEventListener('click', function() {
-    console.log('Aplicando seleção de colunas...');
-    
-    // Obter todas as checkboxes
-    const checkboxes = document.querySelectorAll('.column-toggle');
-    
-    // Atualizar visibilidade das colunas
-    checkboxes.forEach(checkbox => {
-      const colIndex = getColumnIndex(checkbox.value);
-      if (colIndex !== -1) {
-        toggleColumn(colIndex, checkbox.checked);
-      }
+
+  // Apply filters only when the 'Apply Filters' button is clicked
+  if (applyFiltersBtn) {
+    applyFiltersBtn.addEventListener('click', applyFilters);
+  }
+
+  if (resetFiltersBtn) {
+    resetFiltersBtn.addEventListener('click', function() {
+      if (referenceFilter) referenceFilter.value = '';
+      if (categoryFilter) categoryFilter.value = '';
+      if (statusFilter) statusFilter.value = '';
+      if (stockFilter) stockFilter.value = '';
+      applyFilters(); // Apply empty filters to show all
     });
-    
-    // Salvar preferências
-    saveColumnPreferences();
-    
-    // Fechar o painel
-    columnsPanel.style.display = 'none';
-    
-    console.log('Seleção de colunas aplicada com sucesso');
-  });
+  }
+
+  // Initial filter application on page load to show all items
+  applyFilters();
+
+  // --- Existing Column visibility logic --- 
+  const columnsBtn = document.getElementById('toggle-columns-btn');
+  const columnsPanel = document.getElementById('columnsModal'); // Assuming this is the ID of your modal
+  const applyColumnsBtn = document.getElementById('apply-columns-btn');
+  const closeColumnsBtn = columnsPanel ? columnsPanel.querySelector('.btn-close') : null; // Or specific close button ID
+
+  function getColumnIndex(columnName) {
+    const headers = productTable ? productTable.querySelectorAll('th[data-column-name]') : [];
+    for (let i = 0; i < headers.length; i++) {
+      if (headers[i].dataset.columnName === columnName) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  function toggleColumn(colIndex, isVisible) {
+    if (productTable && colIndex !== -1) {
+      productTable.querySelectorAll('tr').forEach(row => {
+        if (row.children[colIndex]) {
+          row.children[colIndex].style.display = isVisible ? '' : 'none';
+        }
+      });
+    }
+  }
+
+  function saveColumnPreferences() {
+    const prefs = {};
+    document.querySelectorAll('.column-toggle').forEach(checkbox => {
+      prefs[checkbox.value] = checkbox.checked;
+    });
+    localStorage.setItem('inventoryColumnPrefs', JSON.stringify(prefs));
+  }
+
+  function loadColumnPreferences() {
+    const prefs = localStorage.getItem('inventoryColumnPrefs');
+    return prefs ? JSON.parse(prefs) : null;
+  }
+
+  if (columnsBtn && columnsPanel && applyColumnsBtn) {
+    const savedPrefs = loadColumnPreferences();
+    if (savedPrefs) {
+      Object.entries(savedPrefs).forEach(([colName, isVisible]) => {
+        const checkbox = document.querySelector(`.column-toggle[value="${colName}"]`);
+        if (checkbox) {
+          checkbox.checked = isVisible;
+          const colIndex = getColumnIndex(colName);
+          if (colIndex !== -1) {
+            toggleColumn(colIndex, isVisible);
+          }
+        }
+      });
+    }
+
+    columnsBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Using Bootstrap's modal methods if available, otherwise direct style change
+      const modalInstance = bootstrap.Modal.getInstance(columnsPanel) || new bootstrap.Modal(columnsPanel);
+      modalInstance.toggle();
+    });
+
+    if (closeColumnsBtn) {
+        closeColumnsBtn.addEventListener('click', function() {
+            const modalInstance = bootstrap.Modal.getInstance(columnsPanel);
+            if (modalInstance) modalInstance.hide();
+        });
+    }
+
+    applyColumnsBtn.addEventListener('click', function() {
+      document.querySelectorAll('.column-toggle').forEach(checkbox => {
+        const colIndex = getColumnIndex(checkbox.value);
+        if (colIndex !== -1) {
+          toggleColumn(colIndex, checkbox.checked);
+        }
+      });
+      saveColumnPreferences();
+      const modalInstance = bootstrap.Modal.getInstance(columnsPanel);
+      if (modalInstance) modalInstance.hide();
+      console.log('Seleção de colunas aplicada com sucesso');
+    });
+  } else {
+    console.error('Elementos necessários para o modal de colunas não encontrados. Verifique os IDs: toggle-columns-btn, columnsModal, apply-columns-btn.');
+  }
   
-  console.log('Aplicação inicializada com sucesso');
+  console.log('Inventory page script initialized successfully.');
 });
 </script>
+<% /contentFor %>

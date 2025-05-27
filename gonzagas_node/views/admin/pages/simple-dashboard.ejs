@@ -1,77 +1,8 @@
-<style>
-    .stat-card {
-      border: none;
-      border-radius: 10px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-    }
-    .stat-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: white;
-    }
-    .bg-primary { background-color: #6c5ce7 !important; }
-    .bg-success { background-color: #00b894 !important; }
-    .bg-warning { background-color: #fdcb6e !important; }
-    .bg-danger { background-color: #ff7675 !important; }
-    .card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    }
-    .card-header {
-      background-color: #fff;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      padding: 1rem 1.25rem;
-    }
-    .card-title {
-      font-weight: 600;
-      margin-bottom: 0;
-    }
-    .table th, .table td {
-      padding: 0.75rem 1.25rem;
-    }
-    .badge {
-      font-weight: 500;
-      padding: 0.35em 0.65em;
-    }
-  </style>
-
-<script>
-  // Inicialização do DataTables
-  document.addEventListener('DOMContentLoaded', function() {
-    if ($.fn.DataTable.isDataTable('#recentProductsTable')) {
-      $('#recentProductsTable').DataTable().destroy();
-    }
-    if ($.fn.DataTable.isDataTable('#recentTransactionsTable')) {
-      $('#recentTransactionsTable').DataTable().destroy();
-    }
-    
-    $('#recentProductsTable, #recentTransactionsTable').DataTable({
-      responsive: true,
-      pageLength: 5,
-      lengthChange: false,
-      searching: false,
-      order: [[0, 'desc']]
-    });
-  });
-</script>
-
-<div class="main">
-  <!-- Page Header -->
-  <div class="page-header">
-    <div class="container-fluid">
-      <h2 class="h5 no-margin-bottom">Dashboard</h2>
-    </div>
+<div class="page-header">
+  <div class="container-fluid">
+    <h2 class="h5 no-margin-bottom">Dashboard</h2>
   </div>
+</div>
 
   <!-- Stats Cards -->
   <div class="container-fluid py-4">
@@ -171,7 +102,7 @@
                   <tr>
                     <th>Produto</th>
                     <th>Referência</th>
-                    <th>Estoque</th>
+                    <th>stock</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -196,9 +127,9 @@
                           <% if (product.stock_quantity <= 0) { %>
                             <span class="badge bg-danger">Esgotado</span>
                           <% } else if (product.stock_quantity <= 5) { %>
-                            <span class="badge bg-warning text-dark">Baixo Estoque</span>
+                            <span class="badge bg-warning text-dark">Baixo stock</span>
                           <% } else { %>
-                            <span class="badge bg-success">Em Estoque</span>
+                            <span class="badge bg-success">Em stock</span>
                           <% } %>
                         </td>
                       </tr>
@@ -252,12 +183,9 @@
                             'pending': 'warning',
                             'cancelled': 'danger',
                             'processing': 'info'
-                          }[transaction.status] || 'secondary'; 
-                          const statusText = transaction.status ? 
-                            (transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)) : 'Indefinido'; 
-                          %>
+                          }[transaction.status] || 'secondary'; %>
                           <span class="badge bg-<%= statusClass %>">
-                            <%= statusText %>
+                            <%= transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1) %>
                           </span>
                         </td>
                       </tr>
@@ -280,4 +208,95 @@
       </div>
     </div>
   </div>
-</div>
+  </main>
+`;
+
+// Adicionando estilos inline
+content += `
+  <style>
+    .stat-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      transition: transform 0.2s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+    
+    .bg-primary { background-color: #4e73df !important; }
+    .bg-success { background-color: #1cc88a !important; }
+    .bg-warning { background-color: #f6c23e !important; }
+    .bg-danger { background-color: #e74a3b !important; }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    }
+    
+    .card-header {
+      background-color: #f8f9fc;
+      border-bottom: 1px solid #e3e6f0;
+      padding: 1rem 1.25rem;
+    }
+    
+    .card-title {
+      font-weight: 600;
+      color: #4e73df;
+      margin-bottom: 0;
+    }
+    
+    .table th {
+      border-top: none;
+      font-weight: 600;
+      color: #5a5c69;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .table td {
+      vertical-align: middle;
+    }
+    
+    .badge {
+      font-weight: 500;
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializa os tooltips do Bootstrap
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+</script>
+
+<% block('scripts', () => { %>
+  <script>
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    });
+  </script>
+<% }) %>

@@ -1,16 +1,18 @@
 const BaseController = require('./BaseController');
 const { body, validationResult } = require('express-validator');
 const Product = require('../models/Product');
+const ProductFamily = require('../models/ProductFamily');
 const Inventory = require('../models/Inventory');
 
 class InventoryController extends BaseController {
   constructor() {
     super({});
     this.Product = Product;
+    this.ProductFamily = ProductFamily;
     this.Inventory = Inventory;
   }
 
-  // Validação para movimentações de estoque
+  // Validação para movimentações de stock
   static validateMovement() {
     return [
       body('product_id').isInt().withMessage('Product ID must be an integer'),
@@ -23,7 +25,7 @@ class InventoryController extends BaseController {
     ];
   }
 
-  // Registrar entrada de estoque
+  // Registrar entrada de stock
   async stockIn(req, res) {
     try {
       // Validação
@@ -41,7 +43,7 @@ class InventoryController extends BaseController {
       // Registrar movimento
       const result = await this.model.createMovement(movement);
       
-      // Atualizar estoque atual
+      // Atualizar stock atual
       await this.model.updateStock(
         movement.product_id, 
         movement.quantity, 
@@ -56,18 +58,33 @@ class InventoryController extends BaseController {
     }
   }
 
-  // Listar produtos com estoque
+  // Listar produtos com stock
   async index(req, res) {
     try {
       const products = await this.Product.getAllWithStock();
+      const productFamilies = await this.ProductFamily.getAll();
       
       res.render('admin/inventory/index', {
-        title: 'Gerenciamento de Estoque',
-        products
+        title: 'Gerenciamento de stock',
+        products,
+        productFamilies,
+        user: req.session.user || { name: 'Admin' },
+        siteTitle: 'Gonzaga\'s Art & Shine',
+        theme: {
+          colorPrimary: '#1e1e1e',
+          colorSecondary: '#4a3c2d',
+          colorAccent: '#6a8c69',
+          colorText: '#333333',
+          colorHighlight: '#d4a76a'
+        },
+        breadcrumb: [
+          { title: 'Dashboard', url: '/admin' },
+          { title: 'stock', active: true }
+        ]
       });
     } catch (error) {
       console.error('Error loading inventory:', error);
-      req.flash('error_msg', 'Erro ao carregar o estoque');
+      req.flash('error_msg', 'Erro ao carregar o stock');
       res.redirect('/admin/dashboard');
     }
   }
@@ -123,7 +140,7 @@ class InventoryController extends BaseController {
     }
   }
 
-  // Processar ajuste de estoque
+  // Processar ajuste de stock
   async processAdjustment(req, res) {
     try {
       const { product_id, transaction_type, quantity, unit_price, notes } = req.body;
@@ -168,15 +185,15 @@ class InventoryController extends BaseController {
           // Entrada
           transactionData.transaction_type = 'in';
           transactionData.quantity = adjustment;
-          transactionData.notes = `Ajuste de estoque (definir para ${quantity}): ${notes || ''}`.trim();
+          transactionData.notes = `Ajuste de stock (definir para ${quantity}): ${notes || ''}`.trim();
         } else if (adjustment < 0) {
           // Saída
           transactionData.transaction_type = 'out';
           transactionData.quantity = Math.abs(adjustment);
-          transactionData.notes = `Ajuste de estoque (definir para ${quantity}): ${notes || ''}`.trim();
+          transactionData.notes = `Ajuste de stock (definir para ${quantity}): ${notes || ''}`.trim();
         } else {
           // Sem alteração na quantidade, apenas registro
-          req.flash('info_msg', 'Nenhuma alteração no estoque necessária');
+          req.flash('info_msg', 'Nenhuma alteração no stock necessária');
           return res.redirect(`/admin/inventory/${product_id}`);
         }
       }
@@ -184,7 +201,7 @@ class InventoryController extends BaseController {
       // Registrar transação
       await this.Inventory.create(transactionData);
       
-      // Atualizar estoque do produto
+      // Atualizar stock do produto
       const stockChange = transactionData.transaction_type === 'in' 
         ? transactionData.quantity 
         : -transactionData.quantity;
@@ -195,17 +212,17 @@ class InventoryController extends BaseController {
         transactionData.unit_price
       );
       
-      req.flash('success_msg', 'Estoque atualizado com sucesso');
+      req.flash('success_msg', 'stock atualizado com sucesso');
       res.redirect(`/admin/inventory/${product_id}`);
       
     } catch (error) {
       console.error('Error processing inventory adjustment:', error);
-      req.flash('error_msg', 'Erro ao processar o ajuste de estoque');
+      req.flash('error_msg', 'Erro ao processar o ajuste de stock');
       res.redirect('back');
     }
   }
 
-  // Ajuste de estoque
+  // Ajuste de stock
   async adjustStock(req, res) {
     try {
       const { product_id, new_quantity, reason } = req.body;
@@ -215,7 +232,7 @@ class InventoryController extends BaseController {
         return this.error(res, 'Product ID and new quantity are required', 400);
       }
 
-      // Obter estoque atual
+      // Obter stock atual
       const currentStock = await this.model.getCurrentStock(product_id);
       const difference = new_quantity - currentStock;
 
@@ -236,7 +253,7 @@ class InventoryController extends BaseController {
       // Registrar movimento
       await this.model.createMovement(movement);
       
-      // Atualizar estoque
+      // Atualizar stock
       await this.model.updateStock(
         product_id, 
         Math.abs(difference), 
@@ -286,7 +303,7 @@ class InventoryController extends BaseController {
     }
   }
 
-  // Obter relatório de estoque atual
+  // Obter relatório de stock atual
   async getCurrentStock(req, res) {
     try {
       const { low_stock_threshold = 10, category_id, supplier_id } = req.query;
@@ -306,7 +323,7 @@ class InventoryController extends BaseController {
     }
   }
 
-  // Obter produtos com estoque baixo
+  // Obter produtos com stock baixo
   async getLowStockProducts(req, res) {
     try {
       const { threshold = 10 } = req.query;
@@ -318,7 +335,7 @@ class InventoryController extends BaseController {
     }
   }
 
-  // Obter valor total do estoque
+  // Obter valor total do stock
   async getInventoryValue(req, res) {
     try {
       const value = await this.model.calculateInventoryValue();

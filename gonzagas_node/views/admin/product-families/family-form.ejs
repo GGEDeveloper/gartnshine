@@ -1,0 +1,49 @@
+<!-- /home/mike/Documents/gonzagas/gonzagas_node/views/admin/product-families/family-form.ejs -->
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title"><%= title %></h3>
+    <div class="card-tools">
+      <a href="/admin/product-families" class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+      </a>
+    </div>
+  </div>
+  <form action="<%= isNew ? '/admin/product-families/add' : '/admin/product-families/edit/' + family.id %>" method="POST">
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="name" class="form-label">Family Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" 
+               value="<%= (typeof family !== 'undefined' && family.name) ? family.name : '' %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="code" class="form-label">Family Code <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="code" name="code" 
+               value="<%= (typeof family !== 'undefined' && family.code) ? family.code : '' %>" required>
+      </div>
+      
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" 
+                  rows="3"><%= (typeof family !== 'undefined' && family.description) ? family.description : '' %></textarea>
+      </div>
+      
+      <!-- Add other fields here if your ProductFamily model has more attributes -->
+      <!-- For example, if you had a 'slug' or 'image_url':
+      <div class="mb-3">
+        <label for="slug" class="form-label">Slug</label>
+        <input type="text" class="form-control" id="slug" name="slug" 
+               value="<%= (typeof family !== 'undefined' && family.slug) ? family.slug : '' %>">
+      </div>
+      -->
+
+    </div>
+    <div class="card-footer text-end">
+      <a href="/admin/product-families" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary ms-2">
+        <i class="fas fa-save"></i> <%= isNew ? 'Create Family' : 'Save Changes' %>
+      </button>
+    </div>
+  </form>
+</div>

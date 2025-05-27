@@ -1,13 +1,13 @@
 /**
  * Controlador de Inventário
  * 
- * Gerencia as operações de movimentação de estoque: entradas, saídas, ajustes e consulta de saldo.
+ * Gerencia as operações de movimentação de stock: entradas, saídas, ajustes e consulta de saldo.
  */
 
 const Inventory = require('../../../models/Inventory');
 
 const InventoryController = {
-  // Listar movimentações de estoque
+  // Listar movimentações de stock
   async listMovements(req, res) {
     try {
       const movements = await Inventory.getAllMovements(req.query);
@@ -18,7 +18,7 @@ const InventoryController = {
     }
   },
 
-  // Registrar entrada de estoque
+  // Registrar entrada de stock
   async registerEntry(req, res) {
     try {
       const entry = await Inventory.registerEntry(req.body);
@@ -29,7 +29,7 @@ const InventoryController = {
     }
   },
 
-  // Registrar saída de estoque
+  // Registrar saída de stock
   async registerOut(req, res) {
     try {
       const out = await Inventory.registerOut(req.body);
@@ -40,14 +40,14 @@ const InventoryController = {
     }
   },
 
-  // Ajustar estoque
+  // Ajustar stock
   async adjustStock(req, res) {
     try {
       const adjustment = await Inventory.adjustStock(req.body);
       res.status(201).json({ success: true, message: 'Ajuste realizado com sucesso', data: adjustment });
     } catch (error) {
-      console.error('Erro ao ajustar estoque:', error);
-      res.status(500).json({ success: false, message: 'Erro ao ajustar estoque', error: error.message });
+      console.error('Erro ao ajustar stock:', error);
+      res.status(500).json({ success: false, message: 'Erro ao ajustar stock', error: error.message });
     }
   },
 

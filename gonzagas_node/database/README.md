@@ -10,7 +10,7 @@ database/
 │   ├── core/               # Tabelas principais do sistema
 │   │   └── 001_create_admin_users.sql
 │   │
-│   ├── inventory/         # Módulo de inventário e estoque
+│   ├── inventory/         # Módulo de inventário e stock
 │   │   ├── 001_create_products.sql
 │   │   └── 002_create_inventory.sql
 │   │
@@ -34,18 +34,18 @@ Tabelas fundamentais do sistema:
 
 ### Inventory
 
-Gestão de produtos e estoque:
+Gestão de produtos e stock:
 
 - `product_families`: Categorias de produtos
 - `products`: Cadastro de produtos
 - `product_images`: Imagens dos produtos
 - `product_price_history`: Histórico de preços
 - `warehouses`: Armazéns
-- `stock_locations`: Localizações de estoque (prateleiras, corredores, etc.)
+- `stock_locations`: Localizações de stock (prateleiras, corredores, etc.)
 - `stock_lots`: Lotes de produtos
-- `stock_quant`: Quantidades em estoque por localização
-- `stock_moves`: Movimentações de estoque
-- `stock_operations`: Operações de estoque
+- `stock_quant`: Quantidades em stock por localização
+- `stock_moves`: Movimentações de stock
+- `stock_operations`: Operações de stock
 - `stock_replenishment_rules`: Regras de reabastecimento
 - `stock_inventory`: Contagens de inventário
 

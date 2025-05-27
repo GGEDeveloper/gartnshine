@@ -1,0 +1,59 @@
+<!-- /home/mike/Documents/gonzagas/gonzagas_node/views/admin/product-families/index.ejs -->
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title"><%= title %></h3>
+    <div class="card-tools">
+      <a href="/admin/product-families/add" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Add New Family
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <% if (typeof families !== 'undefined' && families.length > 0) { %>
+      <table class="table table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th style="width: 150px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% families.forEach(family => { %>
+            <tr>
+              <td><%= family.id %></td>
+              <td><%= family.name %></td>
+              <td><%= family.description || 'N/A' %></td>
+              <td>
+                <a href="/admin/product-families/edit/<%= family.id %>" class="btn btn-info btn-sm">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="/admin/product-families/delete/<%= family.id %>" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this product family?');">
+                  <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No product families found. <a href="/admin/product-families/add">Add a new one?</a></p>
+    <% } %>
+  </div>
+</div>
+
+<% 
+  // For DataTables initialization if not already globally handled
+  // If you have a global admin.js that initializes all DataTables, this might not be needed.
+  locals.scripts = (locals.scripts || '') + `
+  <script>
+    $(document).ready(function() {
+      $('.dataTable').DataTable();
+    });
+  </script>
+  `;
+%>

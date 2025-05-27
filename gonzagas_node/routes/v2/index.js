@@ -186,7 +186,7 @@ router.delete('/admin/customers/:id',
   CustomerController.delete
 );
 
-// Rotas de estoque
+// Rotas de stock
 router.post('/inventory/stock-in', 
   InventoryController.validateMovement(),
   validate,

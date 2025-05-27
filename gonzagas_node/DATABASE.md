@@ -28,7 +28,7 @@ Armazena os produtos da loja.
 | description | TEXT | Descrição detalhada |
 | sale_price | DECIMAL(10,2) | Preço de venda |
 | purchase_price | DECIMAL(10,2) | Preço de custo |
-| current_stock | INT | Quantidade em estoque |
+| current_stock | INT | Quantidade em stock |
 | style | VARCHAR(100) | Estilo do produto |
 | material | VARCHAR(100) | Material principal |
 | weight | VARCHAR(50) | Peso do produto |
@@ -52,7 +52,7 @@ Armazena as imagens dos produtos.
 | updated_at | TIMESTAMP | Data de atualização |
 
 ### 4. `inventory_transactions`
-Registra as transações de estoque.
+Registra as transações de stock.
 
 | Campo | Tipo | Descrição |
 |-------|------|-----------|

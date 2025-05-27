@@ -20,7 +20,7 @@
                 <th>Nome</th>
                 <th style="min-width: 150px;">Família</th>
                 <th style="width: 120px;">Preço</th>
-                <th style="width: 100px;">Estoque</th>
+                <th style="width: 100px;">stock</th>
                 <th style="width: 120px;">Ações</th>
               </tr>
             </thead>
@@ -52,9 +52,9 @@
                   </td>
                   <td class="stock">
                     <% if (product.current_stock > 0) { %>
-                      <span class="badge badge-success"><%= product.current_stock %> em estoque</span>
+                      <span class="badge badge-success"><%= product.current_stock %> em stock</span>
                     <% } else { %>
-                      <span class="badge badge-danger">Sem estoque</span>
+                      <span class="badge badge-danger">Sem stock</span>
                     <% } %>
                   </td>
                   <td class="actions">

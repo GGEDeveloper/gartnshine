@@ -1,6 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const crypto = require('crypto');
+const fs = require('fs');
 
 // Gera um segredo JWT aleatório se não estiver definido no .env
 const generateJwtSecret = () => {
@@ -23,6 +24,15 @@ const config = {
     isProduction: process.env.NODE_ENV === 'production',
     isDevelopment: process.env.NODE_ENV === 'development',
     isTest: process.env.NODE_ENV === 'test',
+    trustProxy: process.env.TRUST_PROXY || 'loopback',
+    enableCompression: true,
+    enableHelmet: true,
+    enableCsurf: process.env.NODE_ENV === 'production',
+    enableHttps: process.env.ENABLE_HTTPS === 'true',
+    httpsOptions: {
+      key: process.env.HTTPS_KEY_PATH ? fs.readFileSync(path.resolve(process.env.HTTPS_KEY_PATH)) : null,
+      cert: process.env.HTTPS_CERT_PATH ? fs.readFileSync(path.resolve(process.env.HTTPS_CERT_PATH)) : null,
+    },
   },
   
   // Configurações do site
@@ -279,21 +289,6 @@ const config = {
     retentionDays: 30, // Manter backups por 30 dias
   },
   
-  // Configurações do servidor
-  server: {
-    port: process.env.PORT || 3000,
-    host: process.env.HOST || '0.0.0.0',
-    trustProxy: process.env.TRUST_PROXY || 'loopback',
-    enableCompression: true,
-    enableHelmet: true,
-    enableCsurf: process.env.NODE_ENV === 'production',
-    enableHttps: process.env.ENABLE_HTTPS === 'true',
-    httpsOptions: {
-      key: process.env.HTTPS_KEY_PATH ? fs.readFileSync(process.env.HTTPS_KEY_PATH) : null,
-      cert: process.env.HTTPS_CERT_PATH ? fs.readFileSync(process.env.HTTPS_CERT_PATH) : null,
-    },
-  },
-  
   // Configurações de integração com serviços externos
   services: {
     // Configurações do serviço de armazenamento (S3, Google Cloud Storage, etc.)
@@ -346,4 +341,4 @@ const config = {
 };
 
 // Exporta a configuração
-module.exports = config; 
+module.exports = config;

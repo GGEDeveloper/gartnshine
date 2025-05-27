@@ -1,4 +1,4 @@
-<%- include('../../partials/header', { title: 'Histórico de Estoque - ' + product.name }) %>
+<%- include('../../partials/header', { title: 'Histórico de stock - ' + product.name }) %>
 
 <div class="container-fluid">
   <div class="row">
@@ -25,9 +25,9 @@
           <div class="row">
             <div class="col-6">
               <p class="mb-1"><strong>Família:</strong></p>
-              <p class="mb-1"><strong>Estoque Atual:</strong></p>
+              <p class="mb-1"><strong>stock Atual:</strong></p>
               <p class="mb-1"><strong>Preço de Venda:</strong></p>
-              <p class="mb-1"><strong>Valor em Estoque:</strong></p>
+              <p class="mb-1"><strong>Valor em stock:</strong></p>
             </div>
             <div class="col-6 text-end">
               <p class="mb-1"><%= product.family_name || 'N/A' %></p>
@@ -44,7 +44,7 @@
                     data-product-id="<%= product.id %>"
                     data-product-name="<%= product.name %>"
                     data-current-stock="<%= product.current_stock || 0 %>">
-              <i class="fas fa-edit me-1"></i> Ajustar Estoque
+              <i class="fas fa-edit me-1"></i> Ajustar stock
             </button>
             <a href="/admin/products/<%= product.id %>/edit" class="btn btn-outline-secondary">
               <i class="fas fa-pencil-alt me-1"></i> Editar Produto
@@ -114,12 +114,12 @@
   </div>
 </div>
 
-<!-- Modal de Ajuste de Estoque -->
+<!-- Modal de Ajuste de stock -->
 <div class="modal fade" id="adjustStockModal" tabindex="-1" aria-labelledby="adjustStockModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="adjustStockModalLabel">Ajustar Estoque</h5>
+        <h5 class="modal-title" id="adjustStockModalLabel">Ajustar stock</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="adjustStockForm" action="/admin/inventory/adjust" method="POST">
@@ -132,7 +132,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="currentStock" class="form-label">Estoque Atual</label>
+                <label for="currentStock" class="form-label">stock Atual</label>
                 <input type="number" class="form-control" id="currentStock" readonly>
               </div>
             </div>
@@ -140,8 +140,8 @@
               <div class="mb-3">
                 <label for="adjustmentType" class="form-label">Tipo de Ajuste</label>
                 <select class="form-select" id="adjustmentType" name="transaction_type" required>
-                  <option value="in">Entrada (Adicionar ao Estoque)</option>
-                  <option value="out">Saída (Remover do Estoque)</option>
+                  <option value="in">Entrada (Adicionar ao stock)</option>
+                  <option value="out">Saída (Remover do stock)</option>
                   <option value="adjustment">Ajuste (Definir Quantidade)</option>
                 </select>
               </div>
@@ -171,7 +171,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Configurar modal de ajuste de estoque
+  // Configurar modal de ajuste de stock
   var adjustStockModal = document.getElementById('adjustStockModal');
   if (adjustStockModal) {
     adjustStockModal.addEventListener('show.bs.modal', function (event) {
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var quantityInput = document.getElementById('quantity');
       if (this.value === 'adjustment') {
         quantityInput.min = 0;
-        quantityInput.placeholder = 'Nova quantidade em estoque';
+        quantityInput.placeholder = 'Nova quantidade em stock';
       } else {
         quantityInput.min = 1;
         quantityInput.placeholder = '';

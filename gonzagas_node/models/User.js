@@ -4,15 +4,33 @@ const bcrypt = require('bcryptjs');
 class User {
   // Encontra um usuário pelo email
   static async findByEmail(email) {
+    console.log('[USER MODEL] Buscando usuário por email:', email);
     try {
+      console.log('[USER MODEL] Executando query SQL...');
       const result = await pool.query(
         'SELECT * FROM users WHERE email = ?',
         [email]
       );
+      
+      console.log('[USER MODEL] Resultado da query:', JSON.stringify(result, null, 2));
+      
       const rows = result && result[0] ? result[0] : [];
+      console.log('[USER MODEL] Linhas retornadas:', rows.length);
+      
+      if (rows.length > 0) {
+        console.log('[USER MODEL] Usuário encontrado:', {
+          id: rows[0].id,
+          email: rows[0].email,
+          name: rows[0].name,
+          role: rows[0].role
+        });
+      } else {
+        console.log('[USER MODEL] Nenhum usuário encontrado para o email:', email);
+      }
+      
       return rows[0] || null;
     } catch (error) {
-      console.error('Erro ao buscar usuário por email:', error);
+      console.error('[USER MODEL] Erro ao buscar usuário por email:', error);
       throw error;
     }
   }

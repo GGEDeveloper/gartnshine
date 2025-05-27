@@ -42,13 +42,13 @@
     color: 'purple'
   }) %>
   
-  <!-- Produtos em Estoque -->
+  <!-- Produtos em stock -->
   <%- include('../components/cards/summary-card', {
-    title: 'Estoque Crítico',
+    title: 'stock Crítico',
     value: '24',
     icon: 'fas fa-exclamation-triangle',
     change: { value: -3, label: 'desde ontem' },
-    link: { url: '/admin/estoque?filter=critical', text: 'Ver itens' },
+    link: { url: '/admin/stock?filter=critical', text: 'Ver itens' },
     color: 'danger'
   }) %>
 </div>

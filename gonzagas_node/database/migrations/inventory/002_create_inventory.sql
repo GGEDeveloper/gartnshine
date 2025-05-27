@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `warehouses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- Tabela de localizações de estoque
+-- Tabela de localizações de stock
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS `stock_locations` (
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `stock_locations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- Tabela de lotes de estoque
+-- Tabela de lotes de stock
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS `stock_lots` (
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `stock_lots` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- Tabela de estoque por localização
+-- Tabela de stock por localização
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS `stock_quant` (
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `stock_quant` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- Tabela de transações de estoque
+-- Tabela de transações de stock
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS `stock_moves` (
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `stock_moves` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
--- Tabela de operações de estoque
+-- Tabela de operações de stock
 -- =============================================
 
 CREATE TABLE IF NOT EXISTS `stock_operations` (

@@ -37,7 +37,7 @@ FROM products p
 LEFT JOIN product_price_history pph ON p.id = pph.product_id
 WHERE pph.id IS NULL;
 
--- Inserir algumas transações de estoque de exemplo
+-- Inserir algumas transações de stock de exemplo
 INSERT INTO inventory_transactions (
     product_id, 
     transaction_type, 
@@ -54,13 +54,13 @@ SELECT
     current_stock, 
     purchase_price, 
     (current_stock * purchase_price) as total,
-    'Estoque inicial',
+    'stock inicial',
     (SELECT id FROM users WHERE email = 'admin@gonzagas.com' LIMIT 1),
     NOW()
 FROM products
 WHERE id NOT IN (SELECT DISTINCT product_id FROM inventory_transactions);
 
--- Atualizar o estoque atual com base nas transações
+-- Atualizar o stock atual com base nas transações
 UPDATE products p
 SET current_stock = (
     SELECT 

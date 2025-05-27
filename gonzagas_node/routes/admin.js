@@ -3,16 +3,16 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs').promises;
 const multer = require('multer');
-const adminSessionRequired = require('../middleware/adminAuth');
+const ProductFamilyController = require('../controllers/ProductFamilyController');
 
-// Middleware para adicionar currentPath a todas as rotas do admin
+// Middleware para adicionar currentPath e breadcrumb a todas as rotas do admin
 const adminMiddleware = (req, res, next) => {
   try {
     // Garante que res.locals exista
     res.locals = res.locals || {};
     
     // Extrai o caminho base
-    const fullPath = req.originalUrl || req.path;
+    const fullPath = req.originalUrl.split('?')[0]; // Remove query strings
     let currentPath = fullPath.replace(/^\/admin/, '') || '/';
     
     // Garante que o caminho comece com /
@@ -23,9 +23,41 @@ const adminMiddleware = (req, res, next) => {
     // Define currentPath para uso nos templates
     res.locals.currentPath = currentPath;
     
+    // Define um breadcrumb padrão baseado na rota atual
+    let breadcrumb = [];
+    const pathParts = currentPath.split('/').filter(part => part);
+    
+    // Se não for a página inicial, adiciona a home como primeiro item
+    if (currentPath !== '/') {
+      breadcrumb.push({ label: 'Home', url: '/admin' });
+    }
+    
+    // Adiciona cada parte do caminho ao breadcrumb
+    let currentUrl = '';
+    pathParts.forEach((part, index) => {
+      currentUrl += `/${part}`;
+      const isLast = index === pathParts.length - 1;
+      
+      // Formata o nome para exibição (remove hífens e capitaliza)
+      const formattedLabel = part
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      breadcrumb.push({
+        label: formattedLabel,
+        url: isLast ? null : `/admin${currentUrl}`, // Não cria link para a página atual
+        active: isLast
+      });
+    });
+    
+    // Adiciona ao res.locals para disponibilizar em todas as views
+    res.locals.breadcrumb = breadcrumb;
+    
     // Adiciona ao objeto de renderização
     res.locals.renderOptions = res.locals.renderOptions || {};
     res.locals.renderOptions.currentPath = currentPath;
+    res.locals.renderOptions.breadcrumb = breadcrumb;
     
     next();
   } catch (error) {
@@ -50,49 +82,77 @@ const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const Checkpoint = require('../models/Checkpoint');
 const Inventory = require('../models/Inventory');
+const adminSessionRequired = require('../middleware/adminAuth');
 const { authenticateUser } = require('../middleware/auth');
 
 // Função para autenticar por email OU nome
 async function authenticateByUsernameOrEmail(username, password) {
   try {
+    console.log('[AUTH] Iniciando autenticação para:', username);
     const User = require('../models/User');
     console.log('[AUTH] Tentando autenticar:', username);
+    
     // Procurar por email
+    console.log('[AUTH] Buscando por email...');
     let user = await User.findByEmail(username);
+    
     if (user) {
-      console.log('[AUTH] Encontrado por email:', user.email, 'role:', user.role);
-    }
-    if (!user) {
+      console.log('[AUTH] Encontrado por email:', user.email, 'ID:', user.id, 'Role:', user.role);
+    } else {
+      console.log('[AUTH] Nenhum usuário encontrado com o email:', username);
+      
       // Procurar por nome
-      const [rows] = await require('../config/database').pool.query(
-        'SELECT * FROM users WHERE name = ? LIMIT 1',
-        [username]
-      );
-      user = rows[0];
-      if (user) {
-        console.log('[AUTH] Encontrado por nome:', user.name, 'role:', user.role);
+      console.log('[AUTH] Buscando por nome de usuário...');
+      try {
+        const [rows] = await require('../config/database').pool.query(
+          'SELECT * FROM users WHERE name = ? LIMIT 1',
+          [username]
+        );
+        user = rows[0];
+        
+        if (user) {
+          console.log('[AUTH] Encontrado por nome:', user.name, 'ID:', user.id, 'Role:', user.role);
+        } else {
+          console.log('[AUTH] Nenhum usuário encontrado com o nome:', username);
+        }
+      } catch (dbErr) {
+        console.error('[AUTH] Erro ao buscar usuário por nome:', dbErr);
+        return null;
       }
     }
+    
     if (!user) {
-      console.log('[AUTH] Usuário não encontrado:', username);
+      console.log('[AUTH] Usuário não encontrado no sistema:', username);
       return null;
     }
+    
+    console.log('[AUTH] Validando senha para o usuário:', user.email);
     const bcrypt = require('bcryptjs');
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
-      console.log('[AUTH] Senha inválida para usuário:', username, 'hash no banco:', user.password);
+    
+    try {
+      const valid = await bcrypt.compare(password, user.password);
+      
+      if (!valid) {
+        console.log('[AUTH] Senha inválida para o usuário:', user.email);
+        return null;
+      }
+      
+      console.log('[AUTH] Autenticação bem-sucedida para:', user.email, 'Role:', user.role);
+      
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      };
+      
+    } catch (hashErr) {
+      console.error('[AUTH] Erro ao comparar hashes de senha:', hashErr);
       return null;
     }
-    // Não filtrar por role!
-    console.log('[AUTH] Autenticação bem-sucedida:', user.email, 'role:', user.role);
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role
-    };
+    
   } catch (err) {
-    console.error('Erro na autenticação:', err);
+    console.error('[AUTH] Erro no processo de autenticação:', err);
     return null;
   }
 }
@@ -129,18 +189,27 @@ const upload = multer({
 });
 
 // Rota para a página de pedidos
-router.get('/orders', adminSessionRequired, async (req, res) => {
+router.get('/orders', async (req, res) => {
   try {
-    const orders = []; // Aqui você buscaria os pedidos do banco de dados
-    
-    res.render('admin/orders', { 
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/admin/login');
+    }
+
+    // Aqui você pode adicionar a lógica para buscar os pedidos do banco de dados
+    const orders = []; // Substitua por sua lógica de busca de pedidos
+
+    res.render('admin/orders', {
       title: 'Pedidos',
-      orders,
-      user: req.session.user 
+      user: req.session.user,
+      orders: orders,
+      currentPath: '/orders'
     });
   } catch (error) {
-    console.error('Erro ao carregar pedidos:', error);
-    res.status(500).send('Erro ao carregar a página de pedidos');
+    console.error('Erro ao carregar a página de pedidos:', error);
+    res.status(500).render('error', {
+      message: 'Ocorreu um erro ao carregar a página de pedidos.',
+      error: {}
+    });
   }
 });
 
@@ -155,8 +224,8 @@ router.get('/login', (req, res) => {
   res.render('admin/login', {
     title: 'Acesso Restrito',
     error: req.flash('error'),
-    layout: '../layout',  // Usa o layout principal do site
-    siteTitle: 'Gonzaga\'s Art & Shine',
+    layout: 'admin/layouts/auth',  // Usa o layout de autenticação do admin
+    siteTitle: config.site.name, 
     theme: {
       colorPrimary: '#6c5ce7',
       colorSecondary: '#a29bfe',
@@ -208,15 +277,18 @@ router.use((req, res, next) => {
 // Admin dashboard
 router.get('/dashboard', adminSessionRequired, async (req, res) => {
   try {
+    // Define o breadcrumb específico para o dashboard
+    res.locals.breadcrumb = [
+      { label: 'Home', url: '/admin' },
+      { label: 'Dashboard', active: true }
+    ];
+    
     // Buscar dados do dashboard em paralelo
     const [
       [productsCount],
       [familiesCount],
       [lowStock],
       [outOfStock],
-      [customersCount],
-      [ordersCount],
-      [revenue],
       [recentProducts],
       [recentTransactions]
     ] = await Promise.all([
@@ -224,69 +296,56 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
       Product.pool.query('SELECT COUNT(*) as count FROM products'),
       // Contagem de famílias
       Product.pool.query('SELECT COUNT(*) as count FROM product_families'),
-      // Produtos com baixo estoque
+      // Produtos com baixo stock
       Product.pool.query("SELECT COUNT(*) as count FROM products WHERE current_stock > 0 AND current_stock < 5"),
-      // Produtos sem estoque
+      // Produtos sem stock
       Product.pool.query("SELECT COUNT(*) as count FROM products WHERE current_stock <= 0"),
-      // Contagem de clientes
-      Product.pool.query("SELECT COUNT(*) as count FROM users WHERE role = 'customer'"),
-      // Contagem de pedidos
-      Product.pool.query("SELECT COUNT(*) as count FROM orders"),
-      // Receita total
-      Product.pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status = 'completed'"),
       // Produtos recentes
       Product.pool.query(`
-        SELECT p.id, p.reference, p.name, p.sale_price, p.current_stock as stock_quantity, p.is_active,
+        SELECT p.id, p.reference, p.name, p.sale_price, p.current_stock, p.is_active,
                (SELECT CONCAT('/media/', image_filename) 
                 FROM product_images 
                 WHERE product_id = p.id 
                 ORDER BY is_primary DESC, sort_order ASC, id ASC 
-                LIMIT 1) as image_url,
-               pf.name as family_name
+                LIMIT 1) as image_url
         FROM products p
-        LEFT JOIN product_families pf ON p.family_id = pf.id
         ORDER BY p.created_at DESC 
         LIMIT 5
       `),
-      // Transações recentes (pedidos)
+      // Transações recentes
       Product.pool.query(`
-        SELECT o.id, o.customer_name, o.created_at, o.total_amount, o.status
-        FROM orders o
-        ORDER BY o.created_at DESC 
+        SELECT t.*, p.name as product_name 
+        FROM inventory_transactions t
+        LEFT JOIN products p ON t.product_id = p.id
+        ORDER BY t.created_at DESC 
         LIMIT 5
       `)
     ]);
 
-
-    // Formatando a receita para o formato brasileiro
-    const formatCurrency = (value) => {
-      return parseFloat(value || 0).toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    };
-
     // Preparar os dados para o template
     const stats = {
-      products: productsCount[0].count || 0,
-      customers: customersCount[0].count || 0,
-      orders: ordersCount[0].count || 0,
-      revenue: formatCurrency(revenue[0].total || 0),
-      families: familiesCount[0].count || 0,
-      lowStock: lowStock[0].count || 0,
-      outOfStock: outOfStock[0].count || 0
+      products: productsCount[0].count,
+      families: familiesCount[0].count,
+      lowStock: lowStock[0].count,
+      outOfStock: outOfStock[0].count
     };
 
-    // Definir o layout para o painel administrativo
-    res.locals.layout = 'admin/layouts/main';
-    
     // Renderizar o template com todos os dados
-    res.render('admin/pages/simple-dashboard', {
+    res.render('admin/dashboard', {
       title: 'Dashboard',
-      siteTitle: 'Gonzaga\'s Art & Shine',
-      stats,
-      recentProducts: recentProducts || [],
-      recentTransactions: recentTransactions || [],
+      siteTitle: config.site.name, 
+      breadcrumb: [
+        { label: 'Home', url: '/admin' },
+        { label: 'Dashboard', active: true }
+      ],
+      stats: {
+        products: productsCount[0].count,
+        families: familiesCount[0].count,
+        lowStock: lowStock[0].count,
+        outOfStock: outOfStock[0].count,
+        recentProducts: recentProducts || [],
+        recentTransactions: recentTransactions || []
+      },
       theme: {
         colorPrimary: '#1e1e1e',
         colorSecondary: '#4a3c2d',
@@ -296,17 +355,29 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
         colorSuccess: '#4caf50',
         colorWarning: '#ff9800',
         colorDanger: '#f44336',
-        colorInfo: '#2196f3',
-        colorSuccessRgb: '76, 175, 80',
-        colorWarningRgb: '255, 152, 0',
-        colorDangerRgb: '244, 67, 54',
-        colorPrimaryRgb: '30, 30, 30'
+        colorInfo: '#2196f3'
       },
+      styles: `
+        <style>
+          :root {
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+          }
+        </style>
+      `,
+      colorSuccessRgb: '76, 175, 80',
+      colorWarningRgb: '255, 152, 0',
+      colorDangerRgb: '244, 67, 54',
+      colorPrimaryRgb: '30, 30, 30',
       user: req.session.user,
       success: req.flash('success'),
       error: req.flash('error')
     });
-    
   } catch (error) {
     console.error('ERRO NO DASHBOARD:', error);
     req.flash('error', 'Erro ao carregar o painel de controle');
@@ -315,31 +386,20 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
 });
 
 // Product management routes
-router.get('/products', adminSessionRequired, async (req, res) => {
+router.get('/products', async (req, res) => {
   try {
     console.log('Iniciando busca de produtos...');
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || config.pagination.defaultLimitAdmin || 10; 
     const offset = (page - 1) * limit;
     
     // Buscar produtos e contar o total
-    const [products, totalProducts] = await Promise.all([
+    const [products, totalProducts, productFamilies] = await Promise.all([
       Product.getAll(limit, offset),
-      Product.count()
+      Product.count(),
+      ProductFamily.getAll() // Fetch all product families
     ]);
-    
-    console.log('Produtos encontrados:', products.length);
-    if (products.length > 0) {
-      console.log('Primeiro produto (se existir):', {
-        id: products[0].id,
-        name: products[0].name,
-        price: products[0].price,
-        stock_quantity: products[0].stock_quantity,
-        is_active: products[0].is_active,
-        family_name: products[0].family_name
-      });
-    }
-    
+
     const totalPages = Math.ceil(totalProducts / limit);
     
     // Formatar os produtos para a view
@@ -347,11 +407,11 @@ router.get('/products', adminSessionRequired, async (req, res) => {
       id: product.id,
       name: product.name || 'Sem nome',
       reference: product.reference || 'N/A',
-      price: parseFloat(product.price) || 0,
-      stock_quantity: parseInt(product.stock_quantity) || 0,
+      price: parseFloat(product.sale_price) || 0,
+      stock_quantity: parseInt(product.current_stock) || 0,
       is_active: product.is_active === 1 || product.is_active === true,
       family_name: product.family_name || 'Sem família',
-      image_url: product.image_url || null
+      image_url: product.image_filename || (product.reference ? `${product.reference}.jpg` : null)
     }));
     
     res.render('admin/products/simple-index', {
@@ -364,9 +424,11 @@ router.get('/products', adminSessionRequired, async (req, res) => {
         startItem: offset + 1,
         endItem: Math.min(offset + limit, totalProducts)
       },
+      productFamilies: productFamilies, // Pass product families to the view
+      limit: limit,
       currentPath: '/admin/products',
       user: req.session.user || { name: 'Admin' },
-      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteTitle: config.site.name, 
       theme: {
         colorPrimary: '#1e1e1e',
         colorSecondary: '#4a3c2d',
@@ -388,11 +450,11 @@ router.get('/products', adminSessionRequired, async (req, res) => {
   }
 });
 
-router.get('/products/add', adminSessionRequired, async (req, res) => {
+router.get('/products/add', async (req, res) => {
   try {
     const families = await ProductFamily.getAll();
     
-    res.render('admin/product-form', {
+    res.render('admin/products/product-form', {
       title: 'Add Product',
       product: {},
       families,
@@ -407,7 +469,7 @@ router.get('/products/add', adminSessionRequired, async (req, res) => {
   }
 });
 
-router.post('/products/add', adminSessionRequired, upload.single('image'), async (req, res) => {
+router.post('/products/add', upload.single('image'), async (req, res) => {
   try {
     const product = req.body;
     
@@ -431,7 +493,7 @@ router.post('/products/add', adminSessionRequired, upload.single('image'), async
   }
 });
 
-router.get('/products/edit/:id', adminSessionRequired, async (req, res) => {
+router.get('/products/edit/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
     const product = await Product.getById(productId);
@@ -443,7 +505,7 @@ router.get('/products/edit/:id', adminSessionRequired, async (req, res) => {
     
     const families = await ProductFamily.getAll();
     
-    res.render('admin/product-form', {
+    res.render('admin/products/product-form', {
       title: 'Edit Product',
       product,
       families,
@@ -456,7 +518,7 @@ router.get('/products/edit/:id', adminSessionRequired, async (req, res) => {
   }
 });
 
-router.post('/products/update/:id', adminSessionRequired, upload.single('image'), async (req, res) => {
+router.post('/products/edit/:id', upload.single('image'), async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
     const product = req.body;
@@ -481,7 +543,7 @@ router.post('/products/update/:id', adminSessionRequired, upload.single('image')
   }
 });
 
-router.post('/products/delete/:id', adminSessionRequired, async (req, res) => {
+router.post('/products/delete/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
     await Product.delete(productId);
@@ -495,67 +557,13 @@ router.post('/products/delete/:id', adminSessionRequired, async (req, res) => {
   }
 });
 
-// Product family management routes
-router.get('/categories', adminSessionRequired, async (req, res) => {
-  try {
-    const families = await ProductFamily.getAllWithProductCount();
-    
-    res.render('admin/families', {
-      title: 'Manage Product Families',
-      families
-    });
-  } catch (error) {
-    console.error('Error loading product families:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load product families.'
-    });
-  }
-});
-
-router.post('/categories/add', adminSessionRequired, async (req, res) => {
-  try {
-    const family = req.body;
-    await ProductFamily.create(family);
-    
-    req.flash('success_msg', 'Product family added successfully');
-    res.redirect('/admin/categories');
-  } catch (error) {
-    console.error('Error adding product family:', error);
-    req.flash('error_msg', 'Failed to add product family');
-    res.redirect('/admin/categories');
-  }
-});
-
-router.post('/categories/edit/:id', adminSessionRequired, async (req, res) => {
-  try {
-    const familyId = parseInt(req.params.id);
-    const family = req.body;
-    
-    await ProductFamily.update(familyId, family);
-    
-    req.flash('success_msg', 'Product family updated successfully');
-    res.redirect('/admin/categories');
-  } catch (error) {
-    console.error('Error updating product family:', error);
-    req.flash('error_msg', 'Failed to update product family');
-    res.redirect('/admin/categories');
-  }
-});
-
-router.post('/categories/delete/:id', adminSessionRequired, async (req, res) => {
-  try {
-    const familyId = parseInt(req.params.id);
-    await ProductFamily.delete(familyId);
-    
-    req.flash('success_msg', 'Product family deleted successfully');
-    res.redirect('/admin/categories');
-  } catch (error) {
-    console.error('Error deleting product family:', error);
-    req.flash('error_msg', error.message || 'Failed to delete product family');
-    res.redirect('/admin/families');
-  }
-});
+// Product Family Routes
+router.get('/product-families', adminMiddleware, ProductFamilyController.listFamilies);
+router.get('/product-families/add', adminMiddleware, ProductFamilyController.showAddForm);
+router.post('/product-families/add', adminMiddleware, ProductFamilyController.createFamily);
+router.get('/product-families/edit/:id', adminMiddleware, ProductFamilyController.showEditForm);
+router.post('/product-families/edit/:id', adminMiddleware, ProductFamilyController.updateFamily);
+router.post('/product-families/delete/:id', adminMiddleware, ProductFamilyController.deleteFamily);
 
 // Inventory management routes
 // Rotas de gerenciamento de inventário
@@ -565,7 +573,7 @@ router.get('/inventory/:productId', adminSessionRequired, InventoryController.sh
 router.post('/inventory/adjust', adminSessionRequired, InventoryController.processAdjustment.bind(InventoryController));
 
 // Checkpoint management routes
-router.get('/checkpoints', adminSessionRequired, async (req, res) => {
+router.get('/checkpoints', async (req, res) => {
   try {
     const checkpoints = await Checkpoint.getAll();
     
@@ -582,7 +590,7 @@ router.get('/checkpoints', adminSessionRequired, async (req, res) => {
   }
 });
 
-router.post('/checkpoints/create', adminSessionRequired, async (req, res) => {
+router.post('/checkpoints/create', async (req, res) => {
   try {
     const checkpoint = req.body;
     checkpoint.created_by = req.session.user.username;
@@ -598,7 +606,7 @@ router.post('/checkpoints/create', adminSessionRequired, async (req, res) => {
   }
 });
 
-router.post('/checkpoints/restore/:id', adminSessionRequired, async (req, res) => {
+router.post('/checkpoints/restore/:id', async (req, res) => {
   try {
     const checkpointId = parseInt(req.params.id);
     await Checkpoint.restore(checkpointId);
@@ -612,7 +620,7 @@ router.post('/checkpoints/restore/:id', adminSessionRequired, async (req, res) =
   }
 });
 
-router.post('/checkpoints/delete/:id', adminSessionRequired, async (req, res) => {
+router.post('/checkpoints/delete/:id', async (req, res) => {
   try {
     const checkpointId = parseInt(req.params.id);
     await Checkpoint.delete(checkpointId);
@@ -623,103 +631,6 @@ router.post('/checkpoints/delete/:id', adminSessionRequired, async (req, res) =>
     console.error('Error deleting checkpoint:', error);
     req.flash('error_msg', 'Failed to delete checkpoint');
     res.redirect('/admin/checkpoints');
-  }
-});
-
-// Reports route
-router.get('/reports', adminSessionRequired, async (req, res) => {
-  try {
-    // Dados de exemplo para os gráficos
-    const salesData = {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      datasets: [
-        {
-          label: 'Vendas',
-          backgroundColor: 'rgba(52, 195, 143, 0.2)',
-          borderColor: '#34c38f',
-          borderWidth: 1,
-          data: [65, 59, 80, 81, 56, 55, 40, 45, 55, 70, 90, 100]
-        }
-      ]
-    };
-
-    const topProducts = [
-      { name: 'Produto A', sales: 120 },
-      { name: 'Produto B', sales: 98 },
-      { name: 'Produto C', sales: 85 },
-      { name: 'Produto D', sales: 72 },
-      { name: 'Produto E', sales: 60 }
-    ];
-
-    res.render('admin/reports', {
-      title: 'Relatórios',
-      currentPath: '/reports',
-      user: req.session.user,
-      salesData: JSON.stringify(salesData),
-      topProducts: topProducts
-    });
-  } catch (error) {
-    console.error('Error loading reports:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load reports page.'
-    });
-  }
-});
-
-// Customers route
-router.get('/customers', adminSessionRequired, async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = (page - 1) * limit;
-    
-    // Buscar clientes e contar o total
-    const [customers, totalCustomers] = await Promise.all([
-      // Buscar clientes com paginação
-      Product.pool.query('SELECT * FROM users WHERE role = ? LIMIT ? OFFSET ?', ['customer', limit, offset]),
-      // Contar total de clientes
-      Product.pool.query('SELECT COUNT(*) as count FROM users WHERE role = ?', ['customer'])
-    ]);
-    
-    const totalPages = Math.ceil(totalCustomers[0].count / limit);
-    
-    res.render('admin/customers', {
-      title: 'Clientes',
-      customers: customers[0] || [],
-      pagination: {
-        currentPage: page,
-        totalPages: totalPages,
-        totalItems: totalCustomers[0].count,
-        startItem: offset + 1,
-        endItem: Math.min(offset + limit, totalCustomers[0].count)
-      },
-      currentPath: '/customers',
-      user: req.session.user
-    });
-  } catch (error) {
-    console.error('Error loading customers:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load customers page.'
-    });
-  }
-});
-
-// Settings route
-router.get('/settings', adminSessionRequired, async (req, res) => {
-  try {
-    res.render('admin/settings', {
-      title: 'Configurações',
-      user: req.session.user,
-      currentPath: '/settings'
-    });
-  } catch (error) {
-    console.error('Error loading settings:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load settings page.'
-    });
   }
 });
 

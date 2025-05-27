@@ -50,13 +50,33 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 // Corrige domínio do cookie de sessão para ambiente local
-const sessionConfig = { ...config.session };
-if (process.env.NODE_ENV === 'development' || process.env.BASE_URL?.includes('127.0.0.1') || process.env.BASE_URL?.includes('localhost')) {
-  if (sessionConfig.cookie) {
-    sessionConfig.cookie.domain = undefined; // Não força domínio para localhost
-  }
+const sessionConfig = { ...config.session }; 
+
+// Override para desenvolvimento local OU simulação local de produção
+if (process.env.NODE_ENV === 'development') {
+    // Para desenvolvimento, sempre permitir cookies inseguros e domínio indefinido para localhost
+    if (sessionConfig.cookie) {
+        sessionConfig.cookie.domain = undefined;
+        sessionConfig.cookie.secure = false;
+    }
+} else if (process.env.NODE_ENV === 'production') {
+    // Para produção, verificar se estamos rodando localmente inspecionando config.server.publicUrl
+    // config.server.publicUrl tem como padrão http://localhost:PORT se a variável de ambiente PUBLIC_URL não estiver definida
+    
+    const publicUrlIsLocal = config.server.publicUrl.startsWith('http://localhost') || 
+                             config.server.publicUrl.startsWith('http://127.0.0.1');
+    
+    if (publicUrlIsLocal) {
+        // Se for modo de produção mas parecer um servidor local, permitir cookies inseguros
+        if (sessionConfig.cookie) {
+            sessionConfig.cookie.domain = undefined; 
+            sessionConfig.cookie.secure = false;     
+        }
+    }
 }
+
 app.use(session(sessionConfig));
 app.use(flash());
 
@@ -179,10 +199,7 @@ app.use(cors({
 
 // Static files - serve before any route handling
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/media', express.static(path.join(__dirname, '../../media')));
-
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'products')));
 
 // Set up view engine
 app.set('view engine', 'ejs');

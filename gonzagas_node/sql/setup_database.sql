@@ -87,12 +87,12 @@ ON DUPLICATE KEY UPDATE
     current_stock = VALUES(current_stock),
     weight = VALUES(weight);
 
--- Inserir algumas transações de estoque de exemplo
+-- Inserir algumas transações de stock de exemplo
 INSERT INTO inventory_transactions (product_id, transaction_type, quantity, unit_price, total_amount, notes) VALUES
-(1, 'in', 10, 25.90, 259.00, 'Estoque inicial'),
-(2, 'in', 5, 35.50, 177.50, 'Estoque inicial'),
-(3, 'in', 8, 45.75, 366.00, 'Estoque inicial'),
-(4, 'in', 15, 30.25, 453.75, 'Estoque inicial'),
+(1, 'in', 10, 25.90, 259.00, 'stock inicial'),
+(2, 'in', 5, 35.50, 177.50, 'stock inicial'),
+(3, 'in', 8, 45.75, 366.00, 'stock inicial'),
+(4, 'in', 15, 30.25, 453.75, 'stock inicial'),
 (1, 'out', 2, 49.90, 99.80, 'Venda para cliente');
 
 -- Inserir histórico de preços

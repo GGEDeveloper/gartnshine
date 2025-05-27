@@ -1,7 +1,7 @@
 -- Selecionar o banco de dados
 USE gonzagas_db;
 
--- Inserir transações de inventário iniciais para produtos com estoque
+-- Inserir transações de inventário iniciais para produtos com stock
 INSERT INTO inventory_transactions (
     product_id, 
     transaction_type, 
@@ -18,7 +18,7 @@ SELECT
     p.current_stock,
     p.purchase_price,
     (p.current_stock * p.purchase_price) as total_amount,
-    'Estoque inicial após importação',
+    'stock inicial após importação',
     (SELECT id FROM users WHERE email = 'admin@gonzagas.com' LIMIT 1),
     NOW()
 FROM 
@@ -46,7 +46,7 @@ WHERE
         WHERE pph.product_id = p.id
     );
 
--- Atualizar o estoque atual com base nas transações
+-- Atualizar o stock atual com base nas transações
 UPDATE products p
 SET current_stock = COALESCE(
     (

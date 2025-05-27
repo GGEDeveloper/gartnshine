@@ -17,7 +17,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Registra uma movimentação de estoque
+   * Registra uma movimentação de stock
    */
   static async createMovement(movementData) {
     const connection = await this.pool.getConnection();
@@ -42,7 +42,7 @@ class Inventory extends BaseModel {
         ]
       );
       
-      // Atualizar o estoque atual do produto
+      // Atualizar o stock atual do produto
       await this.updateProductStock(
         connection,
         movementData.product_id,
@@ -63,12 +63,12 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Atualiza o estoque de um produto
+   * Atualiza o stock de um produto
    * @private
    */
   static async updateProductStock(connection, productId, quantityChange, unitPrice) {
     try {
-      // Atualizar o estoque do produto
+      // Atualizar o stock do produto
       await connection.query(
         'UPDATE products SET stock_quantity = stock_quantity + ?, updated_at = NOW() WHERE id = ?',
         [quantityChange, productId]
@@ -104,7 +104,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Obtém o histórico de movimentações de estoque
+   * Obtém o histórico de movimentações de stock
    */
   static async getMovementHistory(filters = {}) {
     const { productId, startDate, endDate, transactionType, limit = 100, offset = 0 } = filters;
@@ -151,7 +151,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Obtém o relatório de estoque atual
+   * Obtém o relatório de stock atual
    */
   static async getCurrentStockReport(filters = {}) {
     const { categoryId, lowStockThreshold } = filters;
@@ -208,7 +208,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Obtém produtos com estoque baixo
+   * Obtém produtos com stock baixo
    */
   static async getLowStockProducts(threshold = 10) {
     try {
@@ -238,7 +238,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Calcula o valor total do estoque
+   * Calcula o valor total do stock
    */
   static async calculateInventoryValue() {
     try {
@@ -259,7 +259,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Ajusta o estoque de um produto
+   * Ajusta o stock de um produto
    */
   static async adjustStock(productId, newQuantity, reason, userId) {
     const connection = await this.pool.getConnection();
@@ -297,13 +297,13 @@ class Inventory extends BaseModel {
           'adjustment',
           quantity,
           product[0].purchase_price || 0,
-          reason || `Ajuste de estoque: ${transactionType} ${quantity} unidades`,
+          reason || `Ajuste de stock: ${transactionType} ${quantity} unidades`,
           userId || 'Sistema',
           userId || null
         ]
       );
       
-      // Atualizar o estoque
+      // Atualizar o stock
       await connection.query(
         'UPDATE products SET stock_quantity = ?, updated_at = NOW() WHERE id = ?',
         [newQuantity, productId]
@@ -403,7 +403,7 @@ class Inventory extends BaseModel {
   }
 
   /**
-   * Obtém o estoque atual de um produto
+   * Obtém o stock atual de um produto
    */
   static async getCurrentStock(productId) {
     try {

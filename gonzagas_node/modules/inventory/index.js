@@ -1,7 +1,7 @@
 /**
- * Módulo de Estoque
+ * Módulo de stock
  * 
- * Este módulo gerencia o controle de estoque de produtos.
+ * Este módulo gerencia o controle de stock de produtos.
  */
 
 const express = require('express');

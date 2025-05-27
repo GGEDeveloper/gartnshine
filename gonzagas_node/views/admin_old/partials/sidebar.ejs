@@ -51,7 +51,7 @@
       '/admin/categorias': 'cadastros',
       '/admin/clientes': 'cadastros',
       '/admin/fornecedores': 'cadastros',
-      '/admin/estoque': 'operacoes',
+      '/admin/stock': 'operacoes',
       '/admin/vendas': 'operacoes',
       '/admin/compras': 'operacoes',
       '/admin/relatorios': 'relatorios',
@@ -170,10 +170,10 @@
       <!-- Menu Operações -->
       <div class="mt-1">
         <button @click="toggleSubmenu('operacoes')" 
-                :class="isActive('operacoes') || isRouteActive('/admin/estoque') || isRouteActive('/admin/vendas') || isRouteActive('/admin/compras') ? 'text-blue-400' : 'text-gray-200 hover:bg-gray-700'"
+                :class="isActive('operacoes') || isRouteActive('/admin/stock') || isRouteActive('/admin/vendas') || isRouteActive('/admin/compras') ? 'text-blue-400' : 'text-gray-200 hover:bg-gray-700'"
                 class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-r-md transition-colors duration-200">
           <div class="flex items-center">
-            <i class="fas fa-cogs w-5 text-center mr-3" :class="isActive('operacoes') || isRouteActive('/admin/estoque') || isRouteActive('/admin/vendas') || isRouteActive('/admin/compras') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
+            <i class="fas fa-cogs w-5 text-center mr-3" :class="isActive('operacoes') || isRouteActive('/admin/stock') || isRouteActive('/admin/vendas') || isRouteActive('/admin/compras') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
             <span>Operações</span>
           </div>
           <i class="fas fa-chevron-right text-xs transition-transform duration-200" 
@@ -181,12 +181,12 @@
         </button>
         
         <div x-show="isActive('operacoes')" x-collapse class="mt-1 space-y-1 pl-12">
-          <a href="/admin/estoque" 
-             :class="isRouteActive('/admin/estoque') ? 'text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+          <a href="/admin/stock" 
+             :class="isRouteActive('/admin/stock') ? 'text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
              class="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
-            <i class="fas fa-warehouse w-5 text-center mr-2" :class="isRouteActive('/admin/estoque') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
-            <span>Estoque</span>
-            <span x-show="isRouteActive('/admin/estoque')" class="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+            <i class="fas fa-warehouse w-5 text-center mr-2" :class="isRouteActive('/admin/stock') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
+            <span>stock</span>
+            <span x-show="isRouteActive('/admin/stock')" class="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
           </a>
           
           <a href="/admin/vendas" 
@@ -229,12 +229,12 @@
             <span x-show="isRouteActive('/admin/relatorios/vendas')" class="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
           </a>
           
-          <a href="/admin/relatorios/estoque" 
-             :class="isRouteActive('/admin/relatorios/estoque') ? 'text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+          <a href="/admin/relatorios/stock" 
+             :class="isRouteActive('/admin/relatorios/stock') ? 'text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
              class="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
-            <i class="fas fa-boxes w-5 text-center mr-2" :class="isRouteActive('/admin/relatorios/estoque') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
-            <span>Estoque</span>
-            <span x-show="isRouteActive('/admin/relatorios/estoque')" class="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+            <i class="fas fa-boxes w-5 text-center mr-2" :class="isRouteActive('/admin/relatorios/stock') ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'"></i>
+            <span>stock</span>
+            <span x-show="isRouteActive('/admin/relatorios/stock')" class="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
           </a>
           
           <a href="/admin/relatorios/financeiro" 
