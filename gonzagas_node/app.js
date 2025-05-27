@@ -208,12 +208,13 @@ app.use(cors({
 
 // Serve static files with proper headers and MIME types
 app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, path) => {
+  setHeaders: function (res, filePathString, stat) { 
     // Set CORP header for all static files
     res.header('Cross-Origin-Resource-Policy', 'same-site');
     
     // Set proper MIME types based on file extension
-    const ext = path.extname(path).toLowerCase();
+    const pathModule = require('path'); 
+    const ext = pathModule.extname(filePathString).toLowerCase(); 
     const mimeTypes = {
       '.html': 'text/html',
       '.js': 'text/javascript',
@@ -286,6 +287,7 @@ app.use((req, res, next) => {
   }
 });
 
+/* // Comentado para evitar dupla inicialização do servidor. server.js é o responsável.
 // Inicialização direta do servidor Express
 const server = app.listen(app.get('port'), () => {
   console.log(`\n${'='.repeat(50)}`);
@@ -294,6 +296,7 @@ const server = app.listen(app.get('port'), () => {
   console.log(`${' '.repeat(10)}Servidor rodando em http://localhost:${app.get('port')}`);
   console.log(`${'='.repeat(50)}\n`);
 });
+*/
 
 // Routers principais - registrados apenas uma vez, fora de qualquer função
 const staticRouter = require('./routes/static');
