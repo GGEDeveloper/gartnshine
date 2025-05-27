@@ -135,7 +135,9 @@ app.use(helmet({
         "'unsafe-inline'",
         "'unsafe-eval'",
         'https://artnshine.pt',
-        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap JS e outros scripts do jsdelivr
+        'https://cdn.jsdelivr.net', // Adicionado para Bootstrap JS e outros scripts do jsdelivr
+        'https://cdn.datatables.net', // Adicionado para DataTables JS
+        'https://code.jquery.com'    // Adicionado para jQuery
       ],
       scriptSrcAttr: [
         "'self'",
@@ -145,7 +147,9 @@ app.use(helmet({
         "'self'",
         "'unsafe-inline'",
         'https://artnshine.pt',
-        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap JS e outros scripts do jsdelivr
+        'https://cdn.jsdelivr.net', // Adicionado para Bootstrap JS e outros scripts do jsdelivr
+        'https://cdn.datatables.net', // Adicionado para DataTables JS
+        'https://code.jquery.com'    // Adicionado para jQuery
       ],
       styleSrc: [
         "'self'",
@@ -153,7 +157,8 @@ app.use(helmet({
         'https://artnshine.pt',
         'https://fonts.googleapis.com',
         'https://cdnjs.cloudflare.com',
-        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap CSS e ApexCharts CSS
+        'https://cdn.jsdelivr.net', // Adicionado para Bootstrap CSS e ApexCharts CSS
+        'https://cdn.datatables.net' // Adicionado para DataTables CSS
       ],
       styleSrcElem: [
         "'self'",
@@ -161,7 +166,8 @@ app.use(helmet({
         'https://artnshine.pt',
         'https://fonts.googleapis.com',
         'https://cdnjs.cloudflare.com',
-        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap CSS e ApexCharts CSS
+        'https://cdn.jsdelivr.net', // Adicionado para Bootstrap CSS e ApexCharts CSS
+        'https://cdn.datatables.net' // Adicionado para DataTables CSS
       ],
       fontSrc: [
         "'self'", 
@@ -177,7 +183,8 @@ app.use(helmet({
         "blob:", 
         "http://localhost:3000", 
         "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000"
+        "http://172.30.46.39:3000",
+        'https://ui-avatars.com' // Adicionado para ui-avatars
       ],
       mediaSrc: [
         "'self'", 
