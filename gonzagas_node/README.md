@@ -16,7 +16,11 @@ This project is the Node.js backend and administrative panel for Gonzaga's Store
 - **Badge Visibility**: Improved text color on badges for better readability.
 - **Script Loading**: Resolved issues with JavaScript execution on the inventory page by ensuring correct integration with EJS layouts.
 
-## Prerequisites
+## Implantação
+
+Para instruções detalhadas de implantação no cPanel do Dominios.pt, consulte o arquivo [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Pré-requisitos
 
 - Node.js (version specified in `.nvmrc` or latest LTS recommended)
 - npm (or yarn)
