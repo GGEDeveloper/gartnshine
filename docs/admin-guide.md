@@ -241,7 +241,8 @@ Esta seção é direcionada a desenvolvedores e IAs de codificação para auxili
         *   Verifique os blocos `try...catch` no backend (ex: no `ProductController.js` ou diretamente nas rotas) para captura específica de códigos de erro SQL (ex: MySQL error code `1062` para entrada duplicada).
         *   Analise se há validação no frontend para verificar a unicidade da referência *antes* da submissão para melhorar a UX. Se não, considere adicionar.
         *   Considere logs detalhados da query SQL e dos dados (`req.body`) enviados ao backend.
-        *   Inspecione o `Product.js` para garantir que a lógica de inserção/atualização não esteja tentando inserir uma referência duplicada sob certas condições (ex: lógica de upsert falha).
+        *   Inspecione o tratamento de erros do pool de conexões. O pool está se esgotando devido a conexões não liberadas (`connection.release()`) nos modelos ou controladores? Há erros de autenticação específicos para o usuário do banco configurado?
+        *   Aumente o nível de log do driver do banco de dados (se suportado) para obter mais detalhes sobre as falhas de conexão.
 
 2.  **Falha ao Ajustar Estoque: Produto Não Encontrado ou ID Inválido**
     *   **Sintoma Comum**: Operação de ajuste de estoque (`POST /admin/inventory/adjust`) falha com erro específico de tipo ou tamanho, ou um erro genérico se não tratado.
@@ -288,7 +289,88 @@ Esta seção é direcionada a desenvolvedores e IAs de codificação para auxili
         *   Verifique se os valores em `config.js` para limites de tamanho e tipos MIME são os esperados e se estão sendo corretamente aplicados na configuração do Multer.
         *   Confirme se o nome do campo no formulário HTML (`<input type="file" name="imageFieldName">`) corresponde ao esperado pelo Multer no backend.
 
-Lembre-se que as credenciais de acesso direto ao banco de dados (`DB_HOST=localhost`, `DB_PORT=3306`, `DB_USER=admin`, `DB_PASSWORD=****`, `DB_NAME=gonzagas_db`) podem ser usadas por um desenvolvedor ou administrador de banco de dados para diagnósticos avançados, caso suspeitem de problemas de integridade de dados ou para executar consultas de verificação diretamente no `gonzagas_db`.
+7.X. Erro 'Cannot find module' (ex: 'uuid') no Ambiente de Produção (cPanel/Passenger)
+
+**Sintoma:** A aplicação Node.js falha ao iniciar no servidor de produção (hospedado com cPanel e Phusion Passenger), e os logs do Passenger exibem um erro como `Error: Cannot find module 'nome_do_modulo'` (por exemplo, `Error: Cannot find module 'uuid'`). Mesmo após listar o módulo no `package.json`, executar `npm install` no servidor e tentar reiniciar a aplicação via cPanel, o erro persiste. Frequentemente, o PID (Process ID) da aplicação nos logs do Passenger não muda, indicando que um processo antigo está sendo reutilizado ou que as atualizações não estão sendo carregadas corretamente.
+
+**Causas Comuns e Diagnóstico:**
+
+1.  **Módulo Ausente no `package.json`:** A causa inicial mais óbvia. Sempre verifique se o módulo está listado nas `dependencies` ou `devDependencies` (conforme apropriado) do `package.json`.
+2.  **`npm install` Incompleto ou no Local Errado:** Certifique-se de que `npm install` foi executado *no servidor*, *dentro do diretório da aplicação*, e *com o ambiente Node.js correto ativado* (se estiver usando um gerenciador de versões como NVM ou o ambiente virtual do cPanel).
+3.  **Problemas de Cache ou Reinício do Phusion Passenger:** O Passenger pode manter processos antigos em execução ou não carregar novas variáveis de ambiente/código imediatamente após um simples "Stop/Start" no cPanel. O PID da aplicação nos logs é um bom indicador disso.
+4.  **`NODE_PATH` Incorreto ou Conflitante:**
+    *   A variável de ambiente `NODE_PATH` pode não estar definida, estar definida incorretamente, ou estar sendo sobrescrita/ignorada.
+    *   Se definida via cPanel, pode não estar sendo aplicada corretamente ao processo do Passenger.
+5.  **Arquivo de Inicialização Incorreto no cPanel:** A configuração "Application startup file" no "Setup Node.js App" do cPanel deve apontar para o arquivo correto que inicia seu servidor (geralmente `server.js` ou `app.js`). Se estiver incorreto, suas lógicas de inicialização (incluindo possíveis hacks para `module.paths`) não serão executadas.
+
+**Passos Detalhados para Solução (Caso Específico `uuid`):
+
+1.  **Verificar e Atualizar `package.json`:**
+    *   Garanta que o módulo problemático (ex: `"uuid": "^9.0.1"`) está em `dependencies`.
+    *   Faça commit e push das alterações para o repositório Git.
+
+2.  **Atualizar Servidor e Instalar Dependências:**
+    *   No servidor, via SSH, navegue até o diretório raiz da aplicação (ex: `/home/artnshin/artnshine.pt/gonzagas_node`).
+    *   Ative o ambiente Node.js específico da aplicação (ex: `source /home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/bin/activate`).
+    *   Execute `git pull` para obter as últimas alterações (incluindo o `package.json` atualizado).
+    *   Execute `npm install` para instalar quaisquer novas dependências. Verifique se o módulo agora existe no caminho esperado (ex: `/home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/lib/node_modules/uuid`).
+
+3.  **Modificar Programaticamente `module.paths` (Solução Robusta):**
+    *   Esta é uma etapa crucial se o Passenger ou cPanel não estiverem gerenciando `NODE_PATH` de forma confiável.
+    *   No **topo absoluto** do seu arquivo de inicialização do servidor (ex: `server.js`), adicione o seguinte código, adaptando o `actualModulesPath` para o caminho correto do seu ambiente virtual no servidor:
+        ```javascript
+        // --- Início do código para adicionar NODE_PATH ---
+        const fs = require('fs');
+        const path = require('path');
+
+        // Caminho absoluto para a pasta node_modules dentro do seu nodevenv
+        // !! IMPORTANTE: Adapte este caminho para a sua configuração de servidor !!
+        const actualModulesPath = '/home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/lib/node_modules';
+
+        if (fs.existsSync(actualModulesPath)) {
+          if (module.paths.indexOf(actualModulesPath) === -1) {
+            module.paths.push(actualModulesPath);
+            // console.log('[DEBUG] Adicionado programaticamente ao module.paths:', actualModulesPath);
+          } else {
+            // console.log('[DEBUG] module.paths já contém:', actualModulesPath);
+          }
+        } else {
+          console.error('[ERRO CRÍTICO] Caminho para node_modules do venv não encontrado:', actualModulesPath);
+        }
+        // --- Fim do código para adicionar NODE_PATH ---
+
+        // O resto do seu server.js começa aqui...
+        ```
+    *   Faça commit e push desta alteração para o `server.js`.
+    *   Execute `git pull` no servidor para obter este `server.js` modificado.
+
+4.  **Forçar Reinício Completo do Phusion Passenger:**
+    *   No servidor, via SSH, dentro do diretório da aplicação, execute:
+        ```bash
+        mkdir -p tmp
+        touch tmp/restart.txt
+        ```
+    *   Este comando sinaliza ao Passenger para descartar processos antigos e reiniciar completamente a aplicação na próxima requisição.
+
+5.  **Configurações Finais no cPanel ("Setup Node.js App")**:
+    *   Acesse a interface "Setup Node.js App" no cPanel para sua aplicação.
+    *   **Confirme** que "Application startup file" está definido para o arquivo que você modificou no passo 3 (ex: `server.js`).
+    *   **Remova** qualquer definição da variável de ambiente `NODE_PATH` que possa existir nas configurações do cPanel. Isso evita conflitos, pois agora estamos gerenciando os caminhos dos módulos programaticamente no `server.js`.
+    *   Salve todas as alterações na configuração da aplicação no cPanel.
+
+6.  **Reiniciar a Aplicação via cPanel:**
+    *   Clique em **"Stop App"**.
+    *   **Aguarde pelo menos 30-60 segundos** para garantir que o Passenger realmente encerre os processos antigos.
+    *   Clique em **"Start App"**.
+
+7.  **Verificação Final:**
+    *   Acesse o site da aplicação. Ele deve carregar sem o erro "Cannot find module".
+    *   Verifique os logs do Passenger. Você deve ver:
+        *   Um **novo PID** para a aplicação, indicando um reinício bem-sucedido.
+        *   Se você deixou os `console.log` de debug no `server.js`, eles devem aparecer, confirmando que o `module.paths` foi modificado.
+        *   O erro "Cannot find module" não deve mais estar presente.
+
+Este conjunto de passos aborda tanto a configuração correta das dependências quanto os problemas comuns de reinício e configuração de ambiente com Phusion Passenger no cPanel, fornecendo uma solução robusta para erros de resolução de módulos.
 
 ## 8. Gerenciamento de Checkpoints (Backup e Restauração)
 
