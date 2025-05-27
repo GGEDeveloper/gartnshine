@@ -1,5 +1,25 @@
 #!/usr/bin/env node
 
+// --- Início do código para adicionar NODE_PATH ---
+const fs = require('fs');
+const path = require('path');
+
+// Caminho absoluto para a pasta node_modules dentro do seu nodevenv
+const actualModulesPath = '/home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/lib/node_modules';
+
+// Adiciona ao module.paths se o caminho existir
+if (fs.existsSync(actualModulesPath)) {
+  if (module.paths.indexOf(actualModulesPath) === -1) {
+    module.paths.push(actualModulesPath);
+    console.log('[GONZAGAS_DEBUG] Adicionado programaticamente ao module.paths:', actualModulesPath);
+  } else {
+    console.log('[GONZAGAS_DEBUG] module.paths já contém:', actualModulesPath);
+  }
+} else {
+  console.error('[GONZAGAS_DEBUG] ERRO CRÍTICO: Caminho para node_modules do venv não encontrado:', actualModulesPath);
+}
+// --- Fim do código para adicionar NODE_PATH ---
+
 /**
  * Módulo de inicialização do servidor.
  * 
