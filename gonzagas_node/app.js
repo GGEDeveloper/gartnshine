@@ -133,7 +133,8 @@ app.use(helmet({
       scriptSrc: [
         "'self'",
         "'unsafe-inline'",
-        "'unsafe-eval'"
+        "'unsafe-eval'",
+        'https://artnshine.pt'
       ],
       scriptSrcAttr: [
         "'self'",
@@ -142,23 +143,27 @@ app.use(helmet({
       styleSrc: [
         "'self'",
         "'unsafe-inline'",
+        'https://artnshine.pt',
         "https://fonts.googleapis.com",
         "https://cdnjs.cloudflare.com"
       ],
       styleSrcElem: [
         "'self'",
         "'unsafe-inline'",
+        'https://artnshine.pt',
         "https://fonts.googleapis.com",
         "https://cdnjs.cloudflare.com"
       ],
       fontSrc: [
         "'self'", 
+        'https://artnshine.pt',
         "https://fonts.gstatic.com", 
         "https://cdnjs.cloudflare.com",
         "data:"
       ],
       imgSrc: [
         "'self'", 
+        'https://artnshine.pt',
         "data:", 
         "blob:", 
         "http://localhost:3000", 
@@ -167,6 +172,7 @@ app.use(helmet({
       ],
       mediaSrc: [
         "'self'", 
+        'https://artnshine.pt',
         "data:", 
         "blob:", 
         "http://localhost:3000", 
@@ -175,15 +181,18 @@ app.use(helmet({
       ],
       formAction: [
         "'self'", 
+        'https://artnshine.pt',
         "http://localhost:3000", 
         "http://127.0.0.1:3000", 
         "http://172.30.46.39:3000"
       ],
       connectSrc: [
         "'self'", 
+        'https://artnshine.pt',
         "http://localhost:3000", 
         "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000"
+        "http://172.30.46.39:3000",
+        'wss://artnshine.pt'
       ]
     }
   },
@@ -197,8 +206,44 @@ app.use(cors({
   credentials: true
 }));
 
-// Static files - serve before any route handling
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files with proper headers and MIME types
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    // Set CORP header for all static files
+    res.header('Cross-Origin-Resource-Policy', 'same-site');
+    
+    // Set proper MIME types based on file extension
+    const ext = path.extname(path).toLowerCase();
+    const mimeTypes = {
+      '.html': 'text/html',
+      '.js': 'text/javascript',
+      '.css': 'text/css',
+      '.json': 'application/json',
+      '.png': 'image/png',
+      '.jpg': 'image/jpg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.svg': 'image/svg+xml',
+      '.wav': 'audio/wav',
+      '.mp4': 'video/mp4',
+      '.woff': 'application/font-woff',
+      '.ttf': 'application/font-ttf',
+      '.eot': 'application/vnd.ms-fontobject',
+      '.otf': 'application/font-otf',
+      '.wasm': 'application/wasm',
+      '.ico': 'image/x-icon' // MIME type for favicon.ico
+    };
+    
+    // Set the Content-Type header
+    res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+  }
+}));
+
+// Handle 404 for static files
+app.use(['/css/*', '/js/*', '/*.ico', '/*.png', '/*.jpg', '/*.jpeg', '/*.gif', '/*.svg'], (req, res) => {
+  console.error(`Static file not found: ${req.originalUrl}`);
+  res.status(404).send('File not found');
+});
 app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'products')));
 
 // Set up view engine
