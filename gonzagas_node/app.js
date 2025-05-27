@@ -134,25 +134,34 @@ app.use(helmet({
         "'self'",
         "'unsafe-inline'",
         "'unsafe-eval'",
-        'https://artnshine.pt'
+        'https://artnshine.pt',
+        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap JS e outros scripts do jsdelivr
       ],
       scriptSrcAttr: [
         "'self'",
         "'unsafe-inline'"
       ],
+      scriptSrcElem: [ // Adicionada diretiva explícita
+        "'self'",
+        "'unsafe-inline'",
+        'https://artnshine.pt',
+        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap JS e outros scripts do jsdelivr
+      ],
       styleSrc: [
         "'self'",
         "'unsafe-inline'",
         'https://artnshine.pt',
-        "https://fonts.googleapis.com",
-        "https://cdnjs.cloudflare.com"
+        'https://fonts.googleapis.com',
+        'https://cdnjs.cloudflare.com',
+        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap CSS e ApexCharts CSS
       ],
       styleSrcElem: [
         "'self'",
         "'unsafe-inline'",
         'https://artnshine.pt',
-        "https://fonts.googleapis.com",
-        "https://cdnjs.cloudflare.com"
+        'https://fonts.googleapis.com',
+        'https://cdnjs.cloudflare.com',
+        'https://cdn.jsdelivr.net' // Adicionado para Bootstrap CSS e ApexCharts CSS
       ],
       fontSrc: [
         "'self'", 
