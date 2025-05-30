@@ -21,6 +21,8 @@
   <!-- Main CSS -->
   <link rel="stylesheet" href="/css/main.css">
   <!-- Catalog CSS -->
+  <!-- GLightbox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
   <link rel="stylesheet" href="/css/catalog.css">
   
   <style>
@@ -54,6 +56,54 @@
   
   <%- include('../partials/footer') %>
   
+  <!-- GLightbox JS -->
+  <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+  <script type="text/javascript">
+    const lightbox = GLightbox({
+      touchNavigation: true,
+      loop: true,
+      autoplayVideos: true
+    });
+
+    // Specific logic for /media/gallery or /media/ pages
+    if (window.location.pathname.startsWith('/media/gallery') || window.location.pathname.startsWith('/media/')) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const mediaLinks = document.querySelectorAll('a[href*="/media/"]');
+        let galleryHasItems = false;
+
+        mediaLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          // Check if the link itself is an image/video, not just contains /media/
+          const isDirectMediaLink = /\/media\/[^\/]+\.(jpe?g|png|gif|webp|mp4|webm|ogg)$/i.test(href);
+
+          if (isDirectMediaLink) {
+            const isImage = /\.(jpe?g|png|gif|webp)$/i.test(href);
+            const isVideo = /\.(mp4|webm|ogg)$/i.test(href);
+
+            if (isImage || isVideo) {
+              link.classList.add('glightbox');
+              link.setAttribute('data-gallery', 'media-page-gallery');
+              galleryHasItems = true;
+              if (isVideo) {
+                link.setAttribute('data-type', 'video');
+              }
+              const filename = href.substring(href.lastIndexOf('/') + 1);
+              link.setAttribute('data-title', decodeURIComponent(filename));
+            }
+          }
+        });
+        
+        // If items were added to a gallery, GLightbox should pick them up.
+        // If GLightbox was initialized with a specific selector that didn't exist yet,
+        // you might need to re-initialize or call lightbox.reload() if available.
+        // However, with the default class selector, it should work.
+        if (galleryHasItems) {
+            // console.log('GLightbox should process new items for media gallery page');
+        }
+      });
+    }
+  </script>
+
   <!-- Main JavaScript -->
   <script src="/js/main.js"></script>
 </body>
