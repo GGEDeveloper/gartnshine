@@ -74,7 +74,7 @@
         mediaLinks.forEach(link => {
           const href = link.getAttribute('href');
           // Check if the link itself is an image/video, not just contains /media/
-          const isDirectMediaLink = /\/media\/[^\/]+\.(jpe?g|png|gif|webp|mp4|webm|ogg)$/i.test(href);
+          const isDirectMediaLink = /^\/media\/gallery\/[^\/]+\.(jpe?g|png|gif|webp|mp4|webm|ogg)$/i.test(href);
 
           if (isDirectMediaLink) {
             const isImage = /\.(jpe?g|png|gif|webp)$/i.test(href);
