@@ -68,37 +68,52 @@
     // Specific logic for /media/gallery or /media/ pages
     if (window.location.pathname.startsWith('/media/gallery') || window.location.pathname.startsWith('/media/')) {
       document.addEventListener('DOMContentLoaded', () => {
-        const mediaLinks = document.querySelectorAll('a[href*="/media/"]');
+        const galleryImages = document.querySelectorAll('img.gallery-image');
         let galleryHasItems = false;
 
-        mediaLinks.forEach(link => {
-          const href = link.getAttribute('href');
-          // Check if the link itself is an image/video, not just contains /media/
-          const isDirectMediaLink = /^\/media\/gallery\/[^\/]+\.(jpe?g|png|gif|webp|mp4|webm|ogg)$/i.test(href);
+        galleryImages.forEach(img => {
+          const imgSrc = img.src;
+          if (!imgSrc) return;
 
-          if (isDirectMediaLink) {
-            const isImage = /\.(jpe?g|png|gif|webp)$/i.test(href);
-            const isVideo = /\.(mp4|webm|ogg)$/i.test(href);
+          // Prevent double-wrapping if script runs multiple times or if already wrapped
+          if (img.parentElement && img.parentElement.classList.contains('glightbox')) {
+            return;
+          }
 
-            if (isImage || isVideo) {
-              link.classList.add('glightbox');
-              link.setAttribute('data-gallery', 'media-page-gallery');
+          const href = imgSrc; // For GLightbox, href is the full media path
+          const isImage = /\.(jpe?g|png|gif|webp)$/i.test(href);
+          // Assuming videos would not be in an <img> tag with class 'gallery-image' in this context,
+          // but check just in case the src points to a video file somehow.
+          const isVideo = /\.(mp4|webm|ogg)$/i.test(href);
+
+          if (isImage || isVideo) {
+            const anchor = document.createElement('a');
+            anchor.href = href;
+            anchor.classList.add('glightbox');
+            anchor.setAttribute('data-gallery', 'media-page-gallery');
+            
+            let title = img.alt || decodeURIComponent(href.substring(href.lastIndexOf('/') + 1));
+            anchor.setAttribute('data-title', title);
+
+            if (isVideo) {
+              anchor.setAttribute('data-type', 'video');
+            }
+
+            // Wrap the image with the anchor
+            if (img.parentNode) {
+              img.parentNode.insertBefore(anchor, img);
+              anchor.appendChild(img);
               galleryHasItems = true;
-              if (isVideo) {
-                link.setAttribute('data-type', 'video');
-              }
-              const filename = href.substring(href.lastIndexOf('/') + 1);
-              link.setAttribute('data-title', decodeURIComponent(filename));
             }
           }
         });
-        
-        // If items were added to a gallery, GLightbox should pick them up.
-        // If GLightbox was initialized with a specific selector that didn't exist yet,
-        // you might need to re-initialize or call lightbox.reload() if available.
-        // However, with the default class selector, it should work.
+
         if (galleryHasItems) {
-            // console.log('GLightbox should process new items for media gallery page');
+          // console.log('GLightbox setup for .gallery-image elements complete.');
+          // If GLightbox instance `lightbox` is available and has a reload method:
+          if (typeof lightbox !== 'undefined' && lightbox.reload) {
+            lightbox.reload();
+          }
         }
       });
     }
