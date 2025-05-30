@@ -209,7 +209,8 @@ app.use(helmet({
         "http://localhost:3000", 
         "http://127.0.0.1:3000", 
         "http://172.30.46.39:3000",
-        'wss://artnshine.pt'
+        'wss://*.artnshine.pt',
+        'https://cdn.datatables.net'
       ]
     }
   },

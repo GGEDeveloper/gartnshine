@@ -12,19 +12,61 @@
     </div>
   </div>
 
+  <div class="card mb-3">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Filtros</h5>
+    </div>
+    <div class="card-body">
+      <form id="product-filters" class="row g-2">
+        <div class="col-md-3">
+          <input type="text" id="filter-reference" class="form-control form-control-sm" placeholder="Referência">
+        </div>
+        <div class="col-md-3">
+          <select id="filter-category" class="form-select form-select-sm">
+            <option value="">Todas as Categorias</option>
+            <% if (typeof families !== 'undefined' && families.length > 0) { %>
+              <% families.forEach(family => { %>
+                <option value="<%= family.name %>"><%= family.name %></option>
+              <% }); %>
+            <% } %>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select id="filter-status" class="form-select form-select-sm">
+            <option value="">Todos os Status</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select id="filter-stock" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="in_stock">Em Stock</option>
+            <option value="low_stock">Stock Baixo</option>
+            <option value="out_of_stock">Fora de Stock</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="button" id="reset-filters" class="btn btn-outline-secondary btn-sm w-100">Limpar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
           <% if (products && products.length > 0) { %>
             <div class="table-responsive">
-              <table class="table table-hover mb-0">
+              <table class="table table-hover mb-0 datatable" style="width:100%">
                 <thead>
                   <tr>
                     <th>ID</th>
                     <th>Imagem</th>
                     <th>Referência</th>
-                    <th>Nome</th>
+<th>Categoria</th>
+<th>Nome</th>
                     <th>Preço</th>
                     <th>Stock</th>
                     <th>Status</th>
@@ -50,7 +92,8 @@
                         <% } %>
                       </td>
                       <td><%= product.reference || 'N/A' %></td>
-                      <td><%= product.name %></td>
+<td><%= product.family_name || '' %></td>
+<td><%= product.name %></td>
                       <td><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
                       <td>
                         <span class="badge bg-<%= product.current_stock > 10 ? 'success' : product.current_stock > 0 ? 'warning' : 'danger' %>">
@@ -113,160 +156,6 @@
     </div>
   </div>
 
-  <!-- Filter Section -->
-  <div class="card mb-3">
-    <div class="card-header">
-      <h5 class="card-title mb-0">Filtros</h5>
-    </div>
-    <div class="card-body">
-      <div class="filter-row">
-        <div class="filter-group">
-          <label for="filter-product-reference">Referência</label>
-          <input type="text" id="filter-product-reference" class="form-control form-control-sm" placeholder="Código da Ref.">
-        </div>
-        
-        <div class="filter-group">
-          <label for="filter-product-category">Categoria</label>
-          <select id="filter-product-category" class="form-select form-select-sm">
-            <option value="">Todas as Categorias</option>
-            <% if (typeof productFamilies !== 'undefined' && productFamilies.length > 0) { %>
-              <% productFamilies.forEach(family => { %>
-                <option value="<%= family.name %>"><%= family.name %></option> <% /* Using family.name for filtering for now, can switch to family.id if needed */ %>
-              <% }); %>
-            <% } %>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="filter-product-status">Status do Produto</label>
-          <select id="filter-product-status" class="form-select form-select-sm">
-            <option value="">Todos os Status</option>
-            <!-- TODO: Define product statuses, e.g.: -->
-            <option value="active">Ativo</option>
-            <option value="inactive">Inativo</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="filter-product-stock">Status do Stock</label>
-          <select id="filter-product-stock" class="form-select form-select-sm">
-            <option value="">Todos</option>
-            <option value="in_stock">Em Stock</option>
-            <option value="low_stock">Stock Baixo</option>
-            <option value="out_of_stock">Fora de Stock</option>
-          </select>
-        </div>
-        
-        <div class="filter-group actions">
-          <button id="reset-product-filters" class="btn btn-outline-secondary btn-sm" title="Limpar filtros">
-            <i class="fas fa-undo"></i> Limpar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Filter Section -->
-
-  <div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <% if (products && products.length > 0) { %>
-            <div class="table-responsive">
-              <table class="table table-hover mb-0">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Imagem</th>
-                    <th>Referência</th>
-                    <th>Nome</th>
-                    <th>Preço</th>
-                    <th>stock</th>
-                    <th>Status</th>
-                    <th class="text-end">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% products.forEach(product => { %>
-                    <tr 
-                      data-family-name="<%= product.family_name || '' %>" 
-                      data-is-active="<%= product.is_active %>" 
-                      data-stock-quantity="<%= product.stock_quantity || 0 %>"
-                      data-reference="<%= product.reference || '' %>"
-                    >
-                      <td><%= product.id %></td>
-                      <td>
-                        <% if (product.image_url) { %>
-                          <img src="/media/<%= product.image_url %>" alt="<%= product.name %>" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
-                        <% } else { %>
-                          <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <i class="fas fa-box text-muted"></i>
-                          </div>
-                        <% } %>
-                      </td>
-                      <td><%= product.reference || 'N/A' %></td>
-                      <td><%= product.name %></td>
-                      <td><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
-                      <td>
-                        <span class="badge bg-<%= product.stock_quantity > 10 ? 'success' : product.stock_quantity > 0 ? 'warning' : 'danger' %>">
-                          <%= product.stock_quantity || 0 %>
-                        </span>
-                      </td>
-                      <td>
-                        <span class="badge bg-<%= product.is_active ? 'success' : 'secondary' %>">
-                          <%= product.is_active ? 'Ativo' : 'Inativo' %>
-                        </span>
-                      </td>
-                      <td class="text-end">
-                        <div class="btn-group">
-                          <a href="/admin/products/edit/<%= product.id %>" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-edit"></i>
-                          </a>
-                          <a href="/admin/products/delete/<%= product.id %>" 
-                             class="btn btn-sm btn-outline-danger"
-                             onclick="return confirm('Tem certeza que deseja excluir este produto?')">
-                            <i class="fas fa-trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  <% }); %>
-                </tbody>
-              </table>
-            </div>
-
-            <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
-              <nav class="mt-3">
-                <ul class="pagination justify-content-center">
-                  <% if (currentPage > 1) { %>
-                    <li class="page-item">
-                      <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">Anterior</a>
-                    </li>
-                  <% } %>
-                  
-                  <% for (let i = 1; i <= totalPages; i++) { %>
-                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                      <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
-                    </li>
-                  <% } %>
-                  
-                  <% if (currentPage < totalPages) { %>
-                    <li class="page-item">
-                      <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">Próximo</a>
-                    </li>
-                  <% } %>
-                </ul>
-              </nav>
-            <% } %>
-          <% } else { %>
-            <div class="alert alert-info mb-0">
-              Nenhum produto encontrado. <a href="/admin/products/add">Adicionar um novo produto</a>.
-            </div>
-          <% } %>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <% locals.styles = locals.styles || []; %>
@@ -310,104 +199,40 @@
 <% locals.scripts = locals.scripts || []; %>
 <% locals.scripts.push('/js/admin/product-filters.js'); // Placeholder if we move to external file %>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const referenceFilter = document.getElementById('filter-product-reference');
-    const categoryFilter = document.getElementById('filter-product-category');
-    const statusFilter = document.getElementById('filter-product-status');
-    const stockFilter = document.getElementById('filter-product-stock');
-    const resetFiltersButton = document.getElementById('reset-product-filters');
-    const productTableBody = document.querySelector('.table tbody'); // Target tbody directly
-
-    // Ensure productTableBody exists before proceeding
-    if (!productTableBody) {
-        console.warn('Product table body not found. Filtering will not work.');
-        return;
+// --- Filtros customizados DataTables ---
+$(document).ready(function() {
+  var table = $('.datatable').DataTable();
+  // Referência
+  $('#filter-reference').on('keyup change', function() {
+    table.column(2).search(this.value).draw();
+  });
+  // Categoria
+  $('#filter-category').on('change', function() {
+    table.column(3).search(this.value).draw();
+  });
+  // Status
+  $('#filter-status').on('change', function() {
+    table.column(7).search(this.value).draw();
+  });
+  // Stock
+  $('#filter-stock').on('change', function() {
+    let val = this.value;
+    table.column(6).search('', false, false); // Limpa filtro anterior
+    if (val === 'in_stock') {
+      table.column(6).search('^[1-9][0-9]*$', true, false).draw();
+    } else if (val === 'low_stock') {
+      table.column(6).search('^(1|2|3|4|5|6|7|8|9|10)$', true, false).draw();
+    } else if (val === 'out_of_stock') {
+      table.column(6).search('^0$', true, false).draw();
+    } else {
+      table.draw();
     }
-    const productRows = Array.from(productTableBody.querySelectorAll('tr'));
-
-    function applyFilters() {
-        const referenceValue = referenceFilter ? referenceFilter.value.toLowerCase().trim() : '';
-        const categoryValue = categoryFilter ? categoryFilter.value : '';
-        const statusValue = statusFilter ? statusFilter.value : '';
-        const stockValue = stockFilter ? stockFilter.value : '';
-
-        // Debug: Log selected stock filter value
-        if (stockValue) { // Log only when a stock filter is active
-            console.log(`Selected stock filter: ${stockValue}`);
-        }
-
-        productRows.forEach(row => {
-            const rowReference = (row.dataset.reference || '').toLowerCase();
-            const rowFamilyName = row.dataset.familyName || '';
-            // product.is_active is boolean in DB, comes as string 'true'/'false' in dataset
-            const rowIsActive = row.dataset.isActive === 'true'; 
-            const rowStockQuantity = parseInt(row.dataset.stockQuantity || 0, 10);
-
-            let matchesReference = true;
-            let matchesCategory = true;
-            let matchesStatus = true;
-            let matchesStock = true;
-
-            if (referenceValue) {
-                matchesReference = rowReference.includes(referenceValue);
-            }
-
-            if (categoryValue) {
-                matchesCategory = (rowFamilyName || '').trim().toLowerCase() === (categoryValue || '').trim().toLowerCase();
-            }
-
-            if (statusValue) {
-                if (statusValue === 'active') {
-                    matchesStatus = rowIsActive;
-                } else if (statusValue === 'inactive') {
-                    matchesStatus = !rowIsActive;
-                }
-            }
-            
-            if (stockValue) {
-                if (stockValue === 'in_stock') {
-                    matchesStock = rowStockQuantity > 0;
-                } else if (stockValue === 'low_stock') {
-                    const isGreaterThanZero = rowStockQuantity > 0;
-                    const isLessThanOrEqualToTen = rowStockQuantity <= 10;
-                    const combinedCondition = isGreaterThanZero && isLessThanOrEqualToTen;
-                    console.log(`Product Ref: ${rowReference}, Stock Qty: ${rowStockQuantity}, >0: ${isGreaterThanZero}, <=10: ${isLessThanOrEqualToTen}, Combined: ${combinedCondition}`);
-                    matchesStock = combinedCondition;
-                } else if (stockValue === 'out_of_stock') {
-                    matchesStock = rowStockQuantity <= 0;
-                }
-            }
-
-            // Debug: Log final match status for a specific product if needed
-            // if (rowReference === 'some-specific-reference-to-debug') {
-            //     console.log(`Ref: ${rowReference}, matchesReference: ${matchesReference}, matchesCategory: ${matchesCategory}, matchesStatus: ${matchesStatus}, matchesStock: ${matchesStock}`);
-            // }
-
-            if (matchesReference && matchesCategory && matchesStatus && matchesStock) {
-                row.style.display = ''; // Show row
-            } else {
-                row.style.display = 'none'; // Hide row
-            }
-        });
-    }
-
-    // Attach event listeners if elements exist
-    if (referenceFilter) referenceFilter.addEventListener('input', applyFilters);
-    if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
-    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
-    if (stockFilter) stockFilter.addEventListener('change', applyFilters);
-
-    if (resetFiltersButton) {
-        resetFiltersButton.addEventListener('click', () => {
-            if (referenceFilter) referenceFilter.value = '';
-            if (categoryFilter) categoryFilter.value = '';
-            if (statusFilter) statusFilter.value = '';
-            if (stockFilter) stockFilter.value = '';
-            applyFilters(); // Re-apply to show all rows
-        });
-    }
-
-    // Initial filter application in case of pre-filled values (e.g., from query params in future)
-    // applyFilters(); // Uncomment if needed for initial load filtering
+  });
+  // Limpar filtros
+  $('#reset-filters').on('click', function() {
+    $('#product-filters')[0].reset();
+    $('#product-filters select, #product-filters input').trigger('change').trigger('keyup');
+    table.columns().search('').draw();
+  });
 });
 </script>
