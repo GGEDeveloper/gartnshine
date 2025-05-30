@@ -6,10 +6,10 @@ const Inventory = require('../models/Inventory');
 
 class InventoryController extends BaseController {
   constructor() {
-    super({});
+    super({}); // Pass an empty object or a relevant model if BaseController expects one
     this.Product = Product;
     this.ProductFamily = ProductFamily;
-    this.Inventory = Inventory;
+    this.Inventory = Inventory; // Assuming Inventory model is used for movements
   }
 
   // Validação para movimentações de stock
@@ -25,297 +25,120 @@ class InventoryController extends BaseController {
     ];
   }
 
-  // Registrar entrada de stock
-  async stockIn(req, res) {
-    try {
-      // Validação
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return this.error(res, 'Validation failed', 400, errors);
-      }
-
-      const movement = {
-        ...req.body,
-        movement_type: 'in', // Forçar tipo de movimento como entrada
-        user_id: req.user.id // ID do usuário autenticado
-      };
-
-      // Registrar movimento
-      const result = await this.model.createMovement(movement);
-      
-      // Atualizar stock atual
-      await this.model.updateStock(
-        movement.product_id, 
-        movement.quantity, 
-        'in',
-        movement.unit_cost
-      );
-
-      return this.success(res, result, 201);
-    } catch (error) {
-      console.error('Error in stock in:', error);
-      return this.error(res, 'Failed to register stock in', 500);
-    }
-  }
-
-  // Listar produtos com stock
   async index(req, res) {
+    console.log('>>> InventoryController.index called - Path:', req.path, 'User:', req.user ? req.user.id : 'No user');
     try {
-      const products = await this.Product.getAllWithStock();
-      const productFamilies = await this.ProductFamily.getAll();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const filterOptions = {
+        family_id: req.query.family_id,
+        search: req.query.search,
+        low_stock: req.query.filter === 'low_stock',
+        out_of_stock: req.query.filter === 'out_of_stock'
+      };
       
+      const { products, totalProducts } = await this.Product.getAllWithStock({
+        limit,
+        offset,
+        ...filterOptions
+      });
+
+      const families = await this.ProductFamily.getAll();
+      const totalPages = Math.ceil(totalProducts / limit);
+
       res.render('admin/inventory/index', {
-        title: 'Gerenciamento de stock',
+        layout: 'admin/layouts/main',
+        title: 'Inventory Management',
         products,
-        productFamilies,
-        user: req.session.user || { name: 'Admin' },
-        siteTitle: 'Gonzaga\'s Art & Shine',
-        theme: {
-          colorPrimary: '#1e1e1e',
-          colorSecondary: '#4a3c2d',
-          colorAccent: '#6a8c69',
-          colorText: '#333333',
-          colorHighlight: '#d4a76a'
-        },
-        breadcrumb: [
-          { title: 'Dashboard', url: '/admin' },
-          { title: 'stock', active: true }
-        ]
+        productFamilies: families,
+        totalProducts,
+        totalPages,
+        currentPage: page,
+        limit,
+        currentPath: req.path,
+        user: req.user,
+        breadcrumbs: res.locals.breadcrumb,
+        filterOptions, // Pass filter options to the view for sticky filters
+        success_msg: req.flash('success_msg'),
+        error_msg: req.flash('error_msg')
       });
     } catch (error) {
-      console.error('Error loading inventory:', error);
-      req.flash('error_msg', 'Erro ao carregar o stock');
-      res.redirect('/admin/dashboard');
+      console.error('Error loading inventory page:', error);
+      this.error(res, 'Failed to load inventory page. ' + error.message);
     }
   }
 
-  // Exibir histórico de um produto
+  // Show history for a specific product
   async showProductHistory(req, res) {
+    console.log('>>> InventoryController.showProductHistory called - Product ID:', req.params.productId);
     try {
       const productId = parseInt(req.params.productId);
-      const product = await this.Product.getByIdWithDetails(productId);
-      
-      if (!product) {
-        req.flash('error_msg', 'Produto não encontrado');
-        return res.redirect('/admin/inventory');
+      if (isNaN(productId)) {
+        return this.error(res, 'Invalid Product ID.', 400);
       }
+
+      const product = await this.Product.findById(productId);
+      if (!product) {
+        return this.error(res, 'Product not found.', 404);
+      }
+
+      const history = await this.Inventory.getProductHistory(productId);
       
-      const transactions = await this.Inventory.getProductTransactions(productId);
-      
-      res.render('admin/inventory/product', {
-        title: `Histórico - ${product.name}`,
+      res.render('admin/inventory/history', {
+        layout: 'admin/layouts/main',
+        title: `Inventory History for ${product.name}`,
         product,
-        transactions
+        history,
+        currentPath: req.path,
+        user: req.user,
+        breadcrumbs: res.locals.breadcrumb,
+        success_msg: req.flash('success_msg'),
+        error_msg: req.flash('error_msg')
       });
     } catch (error) {
-      console.error('Error loading product history:', error);
-      req.flash('error_msg', 'Erro ao carregar o histórico do produto');
-      res.redirect('/admin/inventory');
+      console.error('Error fetching product inventory history:', error);
+      this.error(res, 'Failed to fetch product history. ' + error.message);
     }
   }
 
-  // Listar todas as transações
-  async listTransactions(req, res) {
-    try {
-      const { product_id, type, date } = req.query;
-      
-      const filter = {};
-      if (product_id) filter.product_id = product_id;
-      if (type) filter.transaction_type = type;
-      if (date) filter.date = date;
-      
-      const transactions = await this.Inventory.getAllTransactions(filter);
-      const products = await this.Product.getAll();
-      
-      res.render('admin/inventory/transactions', {
-        title: 'Histórico de Transações',
-        transactions,
-        products,
-        filters: { product_id, type, date }
-      });
-    } catch (error) {
-      console.error('Error loading transactions:', error);
-      req.flash('error_msg', 'Erro ao carregar as transações');
-      res.redirect('/admin/inventory');
-    }
-  }
-
-  // Processar ajuste de stock
+  // Process stock adjustment
   async processAdjustment(req, res) {
+    console.log('>>> InventoryController.processAdjustment called - Body:', req.body);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return this.error(res, 'Validation failed for stock adjustment.', 400, errors);
+    }
+
     try {
-      const { product_id, transaction_type, quantity, unit_price, notes } = req.body;
-      const user_id = req.user.id;
+      const { product_id, quantity, movement_type, reference, notes, unit_cost, supplier_id } = req.body;
       
-      // Validação
-      if (!['in', 'out', 'adjustment'].includes(transaction_type)) {
-        req.flash('error_msg', 'Tipo de transação inválido');
-        return res.redirect('back');
-      }
-      
-      if (isNaN(quantity) || quantity < 0) {
-        req.flash('error_msg', 'Quantidade inválida');
-        return res.redirect('back');
-      }
-      
-      // Obter produto
-      const product = await this.Product.getById(product_id);
-      if (!product) {
-        req.flash('error_msg', 'Produto não encontrado');
-        return res.redirect('/admin/inventory');
-      }
-      
-      // Preparar dados da transação
-      const transactionData = {
+      const movementData = {
         product_id: parseInt(product_id),
-        transaction_type,
-        quantity: parseFloat(quantity),
-        unit_price: parseFloat(unit_price) || 0,
-        total_amount: parseFloat(quantity) * (parseFloat(unit_price) || 0),
-        notes: notes || '',
-        created_by: req.user.username || 'Sistema',
-        user_id
+        quantity: parseInt(quantity),
+        movement_type,
+        reference,
+        notes,
+        unit_cost: unit_cost ? parseFloat(unit_cost) : null,
+        supplier_id: supplier_id ? parseInt(supplier_id) : null,
+        user_id: req.user ? req.user.id : null // Assuming user ID is available in req.user
       };
+
+      await this.Inventory.createMovement(movementData);
       
-      // Processar ajuste
-      if (transaction_type === 'adjustment') {
-        const currentStock = product.current_stock || 0;
-        const adjustment = parseFloat(quantity) - currentStock;
-        
-        if (adjustment > 0) {
-          // Entrada
-          transactionData.transaction_type = 'in';
-          transactionData.quantity = adjustment;
-          transactionData.notes = `Ajuste de stock (definir para ${quantity}): ${notes || ''}`.trim();
-        } else if (adjustment < 0) {
-          // Saída
-          transactionData.transaction_type = 'out';
-          transactionData.quantity = Math.abs(adjustment);
-          transactionData.notes = `Ajuste de stock (definir para ${quantity}): ${notes || ''}`.trim();
-        } else {
-          // Sem alteração na quantidade, apenas registro
-          req.flash('info_msg', 'Nenhuma alteração no stock necessária');
-          return res.redirect(`/admin/inventory/${product_id}`);
-        }
-      }
-      
-      // Registrar transação
-      await this.Inventory.create(transactionData);
-      
-      // Atualizar stock do produto
-      const stockChange = transactionData.transaction_type === 'in' 
-        ? transactionData.quantity 
-        : -transactionData.quantity;
-      
-      await this.Product.updateStock(
-        product_id, 
-        stockChange, 
-        transactionData.unit_price
-      );
-      
-      req.flash('success_msg', 'stock atualizado com sucesso');
-      res.redirect(`/admin/inventory/${product_id}`);
-      
+      return this.success(res, null, 200, 'Stock adjusted successfully.');
     } catch (error) {
-      console.error('Error processing inventory adjustment:', error);
-      req.flash('error_msg', 'Erro ao processar o ajuste de stock');
-      res.redirect('back');
+      console.error('Error processing stock adjustment:', error);
+      return this.error(res, 'Failed to process stock adjustment. ' + error.message);
     }
   }
 
-  // Ajuste de stock
-  async adjustStock(req, res) {
-    try {
-      const { product_id, new_quantity, reason } = req.body;
-      
-      // Validação básica
-      if (!product_id || new_quantity === undefined) {
-        return this.error(res, 'Product ID and new quantity are required', 400);
-      }
-
-      // Obter stock atual
-      const currentStock = await this.model.getCurrentStock(product_id);
-      const difference = new_quantity - currentStock;
-
-      if (difference === 0) {
-        return this.success(res, { message: 'No stock adjustment needed' });
-      }
-
-      // Criar movimento de ajuste
-      const movement = {
-        product_id,
-        quantity: Math.abs(difference),
-        movement_type: difference > 0 ? 'in' : 'out',
-        reference: 'STOCK_ADJUST',
-        notes: reason || 'Stock adjustment',
-        user_id: req.user.id
-      };
-
-      // Registrar movimento
-      await this.model.createMovement(movement);
-      
-      // Atualizar stock
-      await this.model.updateStock(
-        product_id, 
-        Math.abs(difference), 
-        difference > 0 ? 'in' : 'out'
-      );
-
-      return this.success(res, { 
-        message: 'Stock adjusted successfully',
-        previous_quantity: currentStock,
-        new_quantity,
-        difference
-      });
-    } catch (error) {
-      console.error('Error adjusting stock:', error);
-      return this.error(res, 'Failed to adjust stock', 500);
-    }
-  }
-
-  // Obter histórico de movimentações
-  async getMovementHistory(req, res) {
-    try {
-      const { product_id, start_date, end_date, movement_type, limit = 50, page = 1 } = req.query;
-      
-      const filters = {
-        product_id: product_id ? parseInt(product_id) : null,
-        start_date: start_date ? new Date(start_date) : null,
-        end_date: end_date ? new Date(end_date) : null,
-        movement_type: movement_type || null,
-        limit: parseInt(limit),
-        offset: (parseInt(page) - 1) * parseInt(limit)
-      };
-
-      const { movements, total } = await this.model.getMovementHistory(filters);
-      
-      return this.success(res, {
-        data: movements,
-        pagination: {
-          total,
-          page: parseInt(page),
-          limit: parseInt(limit),
-          total_pages: Math.ceil(total / parseInt(limit))
-        }
-      });
-    } catch (error) {
-      console.error('Error getting movement history:', error);
-      return this.error(res, 'Failed to fetch movement history', 500);
-    }
-  }
-
-  // Obter relatório de stock atual
+  // Obter stock atual de um produto
   async getCurrentStock(req, res) {
     try {
-      const { low_stock_threshold = 10, category_id, supplier_id } = req.query;
-      
-      const filters = {
-        low_stock_threshold: parseInt(low_stock_threshold),
-        category_id: category_id ? parseInt(category_id) : null,
-        supplier_id: supplier_id ? parseInt(supplier_id) : null
-      };
-
-      const stock = await this.model.getCurrentStockReport(filters);
-      
+      const { productId } = req.params;
+      const stock = await this.Inventory.getCurrentStock(productId);
       return this.success(res, stock);
     } catch (error) {
       console.error('Error getting current stock:', error);
@@ -327,7 +150,7 @@ class InventoryController extends BaseController {
   async getLowStockProducts(req, res) {
     try {
       const { threshold = 10 } = req.query;
-      const products = await this.model.getLowStockProducts(parseInt(threshold));
+      const products = await this.Inventory.getLowStockProducts(parseInt(threshold));
       return this.success(res, products);
     } catch (error) {
       console.error('Error getting low stock products:', error);
@@ -338,50 +161,39 @@ class InventoryController extends BaseController {
   // Obter valor total do stock
   async getInventoryValue(req, res) {
     try {
-      const value = await this.model.calculateInventoryValue();
+      const value = await this.Inventory.calculateInventoryValue();
       return this.success(res, { total_value: value });
     } catch (error) {
       console.error('Error calculating inventory value:', error);
       return this.error(res, 'Failed to calculate inventory value', 500);
     }
   }
+
+  // Métodos auxiliares
+  error(res, message, status = 500, errors = null) {
+    // If req is not available in this context, remove req.accepts and req.flash
+    console.error('Controller Error:', message, 'Status:', status, 'Errors:', errors ? JSON.stringify(errors.array ? errors.array() : errors) : 'N/A');
+    if (res.headersSent) return;
+    
+    // Simplified error handling if req is not available
+    return res.status(status).json({
+        success: false,
+        message,
+        errors: errors ? (errors.array ? errors.array() : errors) : undefined
+    });
+  }
+
+  success(res, data, status = 200, message = null) {
+    // If req is not available in this context, remove req.accepts and req.flash
+    if (res.headersSent) return;
+
+    // Simplified success handling if req is not available
+    return res.status(status).json({
+        success: true,
+        data,
+        message
+    });
+  }
 }
-
-// Métodos auxiliares
-InventoryController.prototype.error = function(res, message, status = 500, errors = null) {
-  if (res.headersSent) return;
-  
-  if (res.req.accepts('html')) {
-    // Se for uma requisição de navegador, redirecionar com mensagem de erro
-    const flash = res.req.flash || (() => {});
-    flash('error_msg', message);
-    return res.redirect('back');
-  } else {
-    // Se for uma API, retornar JSON
-    return res.status(status).json({
-      success: false,
-      message,
-      errors: errors ? errors.array() : undefined
-    });
-  }
-};
-
-InventoryController.prototype.success = function(res, data, status = 200, message = null) {
-  if (res.headersSent) return;
-  
-  if (res.req.accepts('html')) {
-    // Se for uma requisição de navegador, redirecionar com mensagem de sucesso
-    const flash = res.req.flash || (() => {});
-    if (message) flash('success_msg', message);
-    return res.redirect('back');
-  } else {
-    // Se for uma API, retornar JSON
-    return res.status(status).json({
-      success: true,
-      data,
-      message
-    });
-  }
-};
 
 module.exports = new InventoryController();

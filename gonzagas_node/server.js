@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// --- Início do código para adicionar NODE_PATH ---
+/* --- Início do código para adicionar NODE_PATH ---
 const fs = require('fs');
 const path = require('path');
 
@@ -18,7 +18,7 @@ if (fs.existsSync(actualModulesPath)) {
 } else {
   console.error('[GONZAGAS_DEBUG] ERRO CRÍTICO: Caminho para node_modules do venv não encontrado:', actualModulesPath);
 }
-// --- Fim do código para adicionar NODE_PATH ---
+// --- Fim do código para adicionar NODE_PATH --- */
 
 /**
  * Módulo de inicialização do servidor.

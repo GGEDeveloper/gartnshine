@@ -138,10 +138,10 @@
                 <div class="form-group mb-3">
                   <label for="image" class="form-label">Imagem do Produto</label>
                   <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                  <% if (typeof product !== 'undefined' && product.image_filename) { %>
-                    <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>" class="img-thumbnail mt-2" style="max-height: 150px;">
+                  <% if (typeof product !== 'undefined' && product.image_url && product.image_url.trim() !== '') { %>
+                    <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="img-thumbnail mt-2" style="max-height: 150px;" onerror="this.onerror=null;this.src='/img/placeholder-product.png';">
                   <% } else if (typeof product !== 'undefined' && product.reference) { %>
-                     <img src="/media/<%= product.reference %>.jpg" alt="<%= (typeof product !== 'undefined' && product.name) ? product.name : 'Product Image' %>" 
+                     <img src="/media/products/<%= product.reference %>.jpg" alt="<%= (typeof product !== 'undefined' && product.name) ? product.name : 'Product Image' %>" 
                           class="img-thumbnail mt-2" style="max-height: 150px;"
                           onerror="this.onerror=null;this.src='/img/placeholder-product.png';">
                   <% } else { %>
@@ -154,6 +154,22 @@
                   <select class="form-select" id="is_active" name="is_active">
                     <option value="1" <%= (typeof product === 'undefined' || (typeof product !== 'undefined' && product.is_active == 1)) ? 'selected' : '' %>>Ativo</option>
                     <option value="0" <%= (typeof product !== 'undefined' && product.is_active == 0) ? 'selected' : '' %>>Inativo</option>
+                  </select>
+                </div>
+                
+                <div class="form-group mb-3">
+                  <label for="is_featured" class="form-label">Destaque na Home?</label>
+                  <select class="form-select" id="is_featured" name="is_featured">
+                    <option value="0" <%= (typeof product === 'undefined' || (typeof product !== 'undefined' && !product.is_featured)) ? 'selected' : '' %>>Não</option>
+                    <option value="1" <%= (typeof product !== 'undefined' && product.is_featured) ? 'selected' : '' %>>Sim</option>
+                  </select>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="is_catalog_visible" class="form-label">Visível no Catálogo?</label>
+                  <select class="form-select" id="is_catalog_visible" name="is_catalog_visible">
+                    <option value="1" <%= (typeof formValues !== 'undefined' && (formValues.is_catalog_visible === 1 || formValues.is_catalog_visible === true || formValues.is_catalog_visible === '1')) ? 'selected' : '' %>>Sim</option>
+                    <option value="0" <%= (typeof formValues !== 'undefined' && (formValues.is_catalog_visible === 0 || formValues.is_catalog_visible === false || formValues.is_catalog_visible === '0')) ? 'selected' : '' %>>Não</option>
                   </select>
                 </div>
                 

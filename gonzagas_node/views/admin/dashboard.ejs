@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="mt-3">
-            <a href="/admin/categories" class="btn btn-sm btn-outline-success">Ver Categorias</a>
+            <a href="/admin/product-families" class="btn btn-sm btn-outline-success">Ver Famílias</a>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="mt-3">
-            <a href="/admin/inventory?filter=low_stock" class="btn btn-sm btn-outline-warning">Ver Itens</a>
+            <a href="/admin/inventory?filter=low_stock" class="btn btn-sm btn-outline-warning">Ver Stock</a>
           </div>
         </div>
       </div>
@@ -72,74 +72,51 @@
               <h3 class="mb-0"><%= stats.outOfStock %></h3>
             </div>
             <div class="stat-icon bg-danger">
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-ban"></i>
             </div>
           </div>
           <div class="mt-3">
-            <a href="/admin/inventory?filter=out_of_stock" class="btn btn-sm btn-outline-danger">Ver Itens</a>
+            <a href="/admin/inventory?filter=out_of_stock" class="btn btn-sm btn-outline-danger">Ver Stock</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Recent Activity -->
-  <div class="row mt-4">
+  <!-- Charts and Recent Activity -->
+  <div class="row mt-4 g-4">
     <!-- Recent Products -->
-    <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">Produtos Recentes</h5>
-          <a href="/admin/products" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="card-title mb-0">Produtos Recentes</h6>
         </div>
         <div class="card-body">
           <% if (stats.recentProducts && stats.recentProducts.length > 0) { %>
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>Preço</th>
-                    <th>stock</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% stats.recentProducts.forEach(product => { %>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <% if (product.image_url) { %>
-                            <img src="<%= product.image_url %>" alt="<%= product.name %>" class="rounded me-2" width="40" height="40">
-                          <% } else { %>
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
-                              <i class="fas fa-box text-muted"></i>
-                            </div>
-                          <% } %>
-                          <div>
-                            <div class="fw-bold"><%= product.name %></div>
-                            <small class="text-muted"><%= product.reference %></small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>R$ <%= parseFloat(product.sale_price).toFixed(2) %></td>
-                      <td><%= product.current_stock %></td>
-                      <td>
-                        <% if (product.is_active) { %>
-                          <span class="badge bg-success">Ativo</span>
-                        <% } else { %>
-                          <span class="badge bg-secondary">Inativo</span>
-                        <% } %>
-                      </td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
+            <ul class="list-group list-group-flush">
+              <% stats.recentProducts.forEach(product => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <% if (product.image_url) { %>
+                      <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                    <% } else { %>
+                      <div class="text-center text-muted d-flex align-items-center justify-content-center" style="width: 100%; height: 100%; border: 1px dashed #ccc; border-radius: .25rem;">
+                        <small>Sem imagem</small>
+                      </div>
+                    <% } %>
+                    <div>
+                      <h6 class="mb-0"><%= product.name %></h6>
+                      <small class="text-muted">Ref: <%= product.reference %></small>
+                    </div>
+                  </div>
+                  <span class="badge bg-primary rounded-pill"><%= product.current_stock %></span>
+                </li>
+              <% }) %>
+            </ul>
           <% } else { %>
             <div class="text-center py-4">
-              <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-              <p class="text-muted mb-0">Nenhum produto cadastrado</p>
+              <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-0">Nenhum produto adicionado recentemente</p>
             </div>
           <% } %>
         </div>
@@ -147,34 +124,49 @@
     </div>
 
     <!-- Recent Transactions -->
-    <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">Transações Recentes</h5>
-          <a href="/admin/inventory/transactions" class="btn btn-sm btn-outline-primary">Ver Todas</a>
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="card-title mb-0">Transações Recentes</h6>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <% if (stats.recentTransactions && stats.recentTransactions.length > 0) { %>
             <div class="table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover align-middle">
                 <thead>
                   <tr>
-                    <th>Data</th>
                     <th>Produto</th>
                     <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Detalhes</th>
                     <th>Quantidade</th>
                   </tr>
                 </thead>
                 <tbody>
                   <% stats.recentTransactions.forEach(transaction => { %>
                     <tr>
-                      <td><%= new Date(transaction.created_at).toLocaleString() %></td>
-                      <td><%= transaction.product_name || 'N/A' %></td>
                       <td>
-                        <% if (transaction.transaction_type === 'in') { %>
-                          <span class="badge bg-success">Entrada</span>
+                        <div class="d-flex align-items-center">
+                          <% if (transaction.product_image_url) { %>
+                            <img src="/media/products/<%= transaction.product_image_url %>" alt="<%= transaction.product_name %>" class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                          <% } else { %>
+                            <div class="bg-light d-flex align-items-center justify-content-center img-thumbnail me-2" style="width: 40px; height: 40px;">
+                              <i class="fas fa-box text-muted"></i>
+                            </div>
+                          <% } %>
+                          <div>
+                            <div class="fw-bold"><%= transaction.product_name %></div>
+                            <small class="text-muted">Ref: <%= transaction.product_reference %></small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <% if (transaction.type === 'in') { %>
+                          <span class="badge bg-success-soft text-success">Entrada</span>
+                        <% } else if (transaction.type === 'out') { %>
+                          <span class="badge bg-danger-soft text-danger">Saída</span>
                         <% } else { %>
-                          <span class="badge bg-danger">Saída</span>
+                          <span class="badge bg-secondary-soft text-secondary"><%= transaction.type %></span>
                         <% } %>
                       </td>
                       <td><%= transaction.quantity %></td>

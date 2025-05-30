@@ -97,6 +97,17 @@ class ProductFamily {
     }
   }
 
+  // Count all product families
+  static async count() {
+    try {
+      const [rows] = await this.pool.query('SELECT COUNT(*) as count FROM product_families');
+      return rows[0].count;
+    } catch (error) {
+      console.error('Error counting product families:', error);
+      throw error;
+    }
+  }
+
   // Get family with product count
   static async getAllWithProductCount() {
     try {

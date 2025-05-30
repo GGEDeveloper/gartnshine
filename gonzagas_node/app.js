@@ -28,6 +28,7 @@ app.set('views', path.join(__dirname, viewConfig.views.directory));
 app.set('view engine', viewConfig.views.extension);
 app.set('layout', viewConfig.layouts.public.default);
 app.set('view cache', viewConfig.views.cache);
+app.set('etag', false);
 
 // Configura o express-ejs-layouts
 app.use(expressLayouts);

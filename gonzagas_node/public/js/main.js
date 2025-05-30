@@ -137,10 +137,15 @@ function initGalleryItems() {
  * Video Background
  */
 function initVideoBackground() {
-  const videos = document.querySelectorAll('.hero-video, .brand-video');
+  const videos = document.querySelectorAll('.video-background'); 
   
   videos.forEach(video => {
     if (video) {
+      // Lógica para poster em mobile
+      if (window.innerWidth < 768 && video.dataset.posterMobile) {
+        video.poster = video.dataset.posterMobile;
+      }
+
       // Mute the video
       video.muted = true;
       

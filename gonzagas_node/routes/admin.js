@@ -1,9 +1,34 @@
+console.log('--- LOADING routes/admin.js ---');
 const express = require('express');
 const router = express.Router();
+const Product = require('../models/Product');
+const ProductFamily = require('../models/ProductFamily');
+
+// Standard Modules
 const path = require('path');
 const fs = require('fs').promises;
 const multer = require('multer');
+
+// Controllers
+const AuthController = require('../controllers/AuthController');
 const ProductFamilyController = require('../controllers/ProductFamilyController');
+const ProductController = require('../controllers/ProductController');
+const InventoryController = require('../controllers/InventoryController');
+
+// Middleware
+const { guestSessionRequired, adminSessionRequired, roleRequired } = require('../middleware/authMiddleware');
+
+// Models
+const Checkpoint = require('../models/Checkpoint');
+
+console.log('--- routes/admin.js: All controllers, middleware, and models loaded ---');
+
+// TEST ROUTE - Placed at the very beginning of route definitions
+router.get('/test-route', (req, res) => {
+  console.log('--- routes/admin.js: /test-route HIT ---');
+  res.send('Admin test route works!');
+});
+
 
 // Middleware para adicionar currentPath e breadcrumb a todas as rotas do admin
 const adminMiddleware = (req, res, next) => {
@@ -55,521 +80,260 @@ const adminMiddleware = (req, res, next) => {
     res.locals.breadcrumb = breadcrumb;
     
     // Adiciona ao objeto de renderização
-    res.locals.renderOptions = res.locals.renderOptions || {};
-    res.locals.renderOptions.currentPath = currentPath;
-    res.locals.renderOptions.breadcrumb = breadcrumb;
-    
+    res.locals.pageTitle = breadcrumb.length > 0 ? breadcrumb[breadcrumb.length - 1].label : 'Admin Dashboard';
+
     next();
   } catch (error) {
-    console.error('Erro no middleware de rotas do admin:', error);
-    next(error);
+    console.error('Error in adminMiddleware:', error);
+    // Se houver erro no middleware, passa para o próximo handler de erro
+    next(error); 
   }
 };
 
-// Aplica o middleware a todas as rotas do admin
+// Aplicar o middleware a todas as rotas do admin
 router.use(adminMiddleware);
 
-// Redireciona /admin para dashboard ou login
-router.get('/', (req, res) => {
-  if (req.session && req.session.user && req.session.user.role === 'admin') {
-    return res.redirect('/admin/dashboard');
+
+// Rota para o painel de administração
+router.get('/', adminSessionRequired, async (req, res) => {
+  try {
+    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
+      Product.count(),
+      ProductFamily.count(),
+      Product.countLowStock()
+    ]);
+
+    res.render('admin/dashboard', {
+      title: 'Admin Dashboard',
+      user: req.session.user,
+      stats: {
+        products: totalProducts,
+        families: totalFamilies,
+        lowStock: lowStockProducts,
+        // Add other stats like orders, users, revenue as needed later
+        orders: 0, // Placeholder
+        users: 0, // Placeholder
+        revenue: '0.00' // Placeholder
+      }
+    });
+  } catch (error) {
+    console.error('Error loading dashboard stats:', error);
+    req.flash('error_msg', 'Failed to load dashboard data.');
+    res.render('admin/dashboard', {
+      title: 'Admin Dashboard',
+      user: req.session.user,
+      stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
+      error_msg: req.flash('error_msg')
+    });
   }
-  return res.redirect('/admin/login');
 });
 
-// Outras importações e configurações
-const Product = require('../models/Product');
-const ProductFamily = require('../models/ProductFamily');
-const Checkpoint = require('../models/Checkpoint');
-const Inventory = require('../models/Inventory');
-const adminSessionRequired = require('../middleware/adminAuth');
-const { authenticateUser } = require('../middleware/auth');
-
-// Função para autenticar por email OU nome
-async function authenticateByUsernameOrEmail(username, password) {
+// Alias for dashboard
+router.get('/dashboard', adminSessionRequired, async (req, res) => {
   try {
-    console.log('[AUTH] Iniciando autenticação para:', username);
-    const User = require('../models/User');
-    console.log('[AUTH] Tentando autenticar:', username);
-    
-    // Procurar por email
-    console.log('[AUTH] Buscando por email...');
-    let user = await User.findByEmail(username);
-    
-    if (user) {
-      console.log('[AUTH] Encontrado por email:', user.email, 'ID:', user.id, 'Role:', user.role);
-    } else {
-      console.log('[AUTH] Nenhum usuário encontrado com o email:', username);
-      
-      // Procurar por nome
-      console.log('[AUTH] Buscando por nome de usuário...');
-      try {
-        const [rows] = await require('../config/database').pool.query(
-          'SELECT * FROM users WHERE name = ? LIMIT 1',
-          [username]
-        );
-        user = rows[0];
-        
-        if (user) {
-          console.log('[AUTH] Encontrado por nome:', user.name, 'ID:', user.id, 'Role:', user.role);
-        } else {
-          console.log('[AUTH] Nenhum usuário encontrado com o nome:', username);
-        }
-      } catch (dbErr) {
-        console.error('[AUTH] Erro ao buscar usuário por nome:', dbErr);
-        return null;
+    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
+      Product.count(),
+      ProductFamily.count(),
+      Product.countLowStock()
+    ]);
+
+    res.render('admin/dashboard', {
+      title: 'Admin Dashboard',
+      user: req.session.user,
+      stats: {
+        products: totalProducts,
+        families: totalFamilies,
+        lowStock: lowStockProducts,
+        orders: 0, // Placeholder
+        users: 0, // Placeholder
+        revenue: '0.00' // Placeholder
       }
-    }
-    
-    if (!user) {
-      console.log('[AUTH] Usuário não encontrado no sistema:', username);
-      return null;
-    }
-    
-    console.log('[AUTH] Validando senha para o usuário:', user.email);
-    const bcrypt = require('bcryptjs');
-    
-    try {
-      const valid = await bcrypt.compare(password, user.password);
-      
-      if (!valid) {
-        console.log('[AUTH] Senha inválida para o usuário:', user.email);
-        return null;
-      }
-      
-      console.log('[AUTH] Autenticação bem-sucedida para:', user.email, 'Role:', user.role);
-      
-      return {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      };
-      
-    } catch (hashErr) {
-      console.error('[AUTH] Erro ao comparar hashes de senha:', hashErr);
-      return null;
-    }
-    
-  } catch (err) {
-    console.error('[AUTH] Erro no processo de autenticação:', err);
-    return null;
+    });
+  } catch (error) {
+    console.error('Error loading dashboard stats:', error);
+    req.flash('error_msg', 'Failed to load dashboard data.');
+    // Render with N/A on error to prevent breaking the page, and show flash message
+    res.render('admin/dashboard', {
+      title: 'Admin Dashboard',
+      user: req.session.user,
+      stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
+      error_msg: req.flash('error_msg') 
+    });
   }
-}
+});
 
-const config = require('../config/config');
-const InventoryController = require('../controllers/InventoryController');
+// Authentication routes
+router.get('/login', guestSessionRequired, AuthController.showLoginForm.bind(AuthController));
+router.post('/login', guestSessionRequired, AuthController.login.bind(AuthController));
+router.get('/logout', adminSessionRequired, AuthController.logout.bind(AuthController));
 
-// Setup multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../media_processed'));
+// Configuração do Multer para upload de imagens de produtos
+const productStorage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '..', 'public', 'media', 'products');
+    try {
+      await fs.mkdir(uploadPath, { recursive: true });
+      cb(null, uploadPath);
+    } catch (error) {
+      console.error('Error creating product image upload directory:', error);
+      cb(error);
+    }
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+const productImageUpload = multer({
+  storage: productStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-    
-    if (extname && mimetype) {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const mimetype = allowedTypes.test(file.mimetype);
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    if (mimetype && extname) {
       return cb(null, true);
     }
-    
-    cb(new Error('Error: Images only!'));
+    cb(new Error('Tipo de arquivo inválido. Apenas imagens são permitidas.'));
   }
 });
 
-// Rota para a página de pedidos
-router.get('/orders', async (req, res) => {
-  try {
-    if (!req.session.user || req.session.user.role !== 'admin') {
-      return res.redirect('/admin/login');
+// Configuração do Multer para upload de imagens do Summernote
+const summernoteStorage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '..', 'public', 'media', 'content');
+    try {
+      await fs.mkdir(uploadPath, { recursive: true });
+      cb(null, uploadPath);
+    } catch (error) {
+      console.error('Error creating Summernote image upload directory:', error);
+      cb(error);
     }
-
-    // Aqui você pode adicionar a lógica para buscar os pedidos do banco de dados
-    const orders = []; // Substitua por sua lógica de busca de pedidos
-
-    res.render('admin/orders', {
-      title: 'Pedidos',
-      user: req.session.user,
-      orders: orders,
-      currentPath: '/orders'
-    });
-  } catch (error) {
-    console.error('Erro ao carregar a página de pedidos:', error);
-    res.status(500).render('error', {
-      message: 'Ocorreu um erro ao carregar a página de pedidos.',
-      error: {}
-    });
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'content-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// Rota GET para a página de login
-router.get('/login', (req, res) => {
-  // Se o usuário já estiver autenticado, redirecionar para o dashboard
-  if (req.session.user) {
-    return res.redirect('/admin/dashboard');
-  }
-  
-  // Usar o layout principal do site para a página de login
-  res.render('admin/login', {
-    title: 'Acesso Restrito',
-    error: req.flash('error'),
-    layout: 'admin/layouts/auth',  // Usa o layout de autenticação do admin
-    siteTitle: config.site.name, 
-    theme: {
-      colorPrimary: '#6c5ce7',
-      colorSecondary: '#a29bfe',
-      colorAccent: '#fd79a8',
-      colorText: '#2d3436',
-      colorHighlight: '#dfe6e9',
-      primaryRgb: '108, 92, 231'
+const summernoteImageUpload = multer({
+  storage: summernoteStorage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const mimetype = allowedTypes.test(file.mimetype);
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    if (mimetype && extname) {
+      return cb(null, true);
     }
-  });
+    cb(new Error('Tipo de arquivo inválido para Summernote. Apenas imagens são permitidas.'));
+  }
 });
 
-// Rota POST para processar o login
-router.post('/login', async (req, res) => {
-  console.log('[LOGIN] Body recebido:', req.body);
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    req.flash('error', 'Por favor, forneça email/nome de usuário e senha');
-    return res.redirect('/admin/login');
-  }
-
-  const user = await authenticateByUsernameOrEmail(username, password);
-  if (user) {
-    req.session.user = user;
-    return res.redirect('/admin/dashboard');
+// Rota para upload de imagem do Summernote
+router.post('/upload/image', adminSessionRequired, summernoteImageUpload.single('image'), (req, res) => {
+  if (req.file) {
+    // O caminho deve ser relativo à pasta 'public' para ser acessível via URL
+    const imageUrl = `/media/content/${req.file.filename}`;
+    res.json({ success: true, url: imageUrl });
   } else {
-    req.flash('error', 'Nome de usuário ou senha inválidos');
-    res.redirect('/admin/login');
+    res.status(400).json({ success: false, message: 'Nenhum arquivo enviado ou tipo de arquivo inválido.' });
   }
 });
 
-// Logout route
-router.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/admin/login');
-});
-
-// Apply authentication middleware to all admin routes EXCEPT login
-router.use((req, res, next) => {
-  // Se for a rota de login, não aplicar o middleware de autenticação
-  if (req.path === '/login' || req.path === '/logout') {
-    return next();
-  }
-  
-  // Aplicar o middleware de autenticação para todas as outras rotas
-  adminSessionRequired(req, res, next);
-});
-
-// Admin dashboard
-router.get('/dashboard', adminSessionRequired, async (req, res) => {
-  try {
-    // Define o breadcrumb específico para o dashboard
-    res.locals.breadcrumb = [
-      { label: 'Home', url: '/admin' },
-      { label: 'Dashboard', active: true }
-    ];
-    
-    // Buscar dados do dashboard em paralelo
-    const [
-      [productsCount],
-      [familiesCount],
-      [lowStock],
-      [outOfStock],
-      [recentProducts],
-      [recentTransactions]
-    ] = await Promise.all([
-      // Contagem de produtos
-      Product.pool.query('SELECT COUNT(*) as count FROM products'),
-      // Contagem de famílias
-      Product.pool.query('SELECT COUNT(*) as count FROM product_families'),
-      // Produtos com baixo stock
-      Product.pool.query("SELECT COUNT(*) as count FROM products WHERE current_stock > 0 AND current_stock < 5"),
-      // Produtos sem stock
-      Product.pool.query("SELECT COUNT(*) as count FROM products WHERE current_stock <= 0"),
-      // Produtos recentes
-      Product.pool.query(`
-        SELECT p.id, p.reference, p.name, p.sale_price, p.current_stock, p.is_active,
-               (SELECT CONCAT('/media/', image_filename) 
-                FROM product_images 
-                WHERE product_id = p.id 
-                ORDER BY is_primary DESC, sort_order ASC, id ASC 
-                LIMIT 1) as image_url
-        FROM products p
-        ORDER BY p.created_at DESC 
-        LIMIT 5
-      `),
-      // Transações recentes
-      Product.pool.query(`
-        SELECT t.*, p.name as product_name 
-        FROM inventory_transactions t
-        LEFT JOIN products p ON t.product_id = p.id
-        ORDER BY t.created_at DESC 
-        LIMIT 5
-      `)
-    ]);
-
-    // Preparar os dados para o template
-    const stats = {
-      products: productsCount[0].count,
-      families: familiesCount[0].count,
-      lowStock: lowStock[0].count,
-      outOfStock: outOfStock[0].count
-    };
-
-    // Renderizar o template com todos os dados
-    res.render('admin/dashboard', {
-      title: 'Dashboard',
-      siteTitle: config.site.name, 
-      breadcrumb: [
-        { label: 'Home', url: '/admin' },
-        { label: 'Dashboard', active: true }
-      ],
-      stats: {
-        products: productsCount[0].count,
-        families: familiesCount[0].count,
-        lowStock: lowStock[0].count,
-        outOfStock: outOfStock[0].count,
-        recentProducts: recentProducts || [],
-        recentTransactions: recentTransactions || []
-      },
-      theme: {
-        colorPrimary: '#1e1e1e',
-        colorSecondary: '#4a3c2d',
-        colorAccent: '#6a8c69',
-        colorText: '#333333',
-        colorHighlight: '#b19cd9',
-        colorSuccess: '#4caf50',
-        colorWarning: '#ff9800',
-        colorDanger: '#f44336',
-        colorInfo: '#2196f3'
-      },
-      styles: `
-        <style>
-          :root {
-            --primary: #4e73df;
-            --success: #1cc88a;
-            --info: #36b9cc;
-            --warning: #f6c23e;
-            --danger: #e74a3b;
-            --light: #f8f9fc;
-            --dark: #5a5c69;
-          }
-        </style>
-      `,
-      colorSuccessRgb: '76, 175, 80',
-      colorWarningRgb: '255, 152, 0',
-      colorDangerRgb: '244, 67, 54',
-      colorPrimaryRgb: '30, 30, 30',
-      user: req.session.user,
-      success: req.flash('success'),
-      error: req.flash('error')
-    });
-  } catch (error) {
-    console.error('ERRO NO DASHBOARD:', error);
-    req.flash('error', 'Erro ao carregar o painel de controle');
-    res.redirect('/admin');
-  }
-});
-
-// Product management routes
-router.get('/products', async (req, res) => {
-  try {
-    console.log('Iniciando busca de produtos...');
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || config.pagination.defaultLimitAdmin || 10; 
-    const offset = (page - 1) * limit;
-    
-    // Buscar produtos e contar o total
-    const [products, totalProducts, productFamilies] = await Promise.all([
-      Product.getAll(limit, offset),
-      Product.count(),
-      ProductFamily.getAll() // Fetch all product families
-    ]);
-
-    const totalPages = Math.ceil(totalProducts / limit);
-    
-    // Formatar os produtos para a view
-    const formattedProducts = products.map(product => ({
-      id: product.id,
-      name: product.name || 'Sem nome',
-      reference: product.reference || 'N/A',
-      price: parseFloat(product.sale_price) || 0,
-      stock_quantity: parseInt(product.current_stock) || 0,
-      is_active: product.is_active === 1 || product.is_active === true,
-      family_name: product.family_name || 'Sem família',
-      image_url: product.image_filename || (product.reference ? `${product.reference}.jpg` : null)
-    }));
-    
-    res.render('admin/products/simple-index', {
-      title: 'Gerenciar Produtos',
-      products: formattedProducts,
-      pagination: {
-        currentPage: page,
-        totalPages: totalPages,
-        totalItems: totalProducts,
-        startItem: offset + 1,
-        endItem: Math.min(offset + limit, totalProducts)
-      },
-      productFamilies: productFamilies, // Pass product families to the view
-      limit: limit,
-      currentPath: '/admin/products',
-      user: req.session.user || { name: 'Admin' },
-      siteTitle: config.site.name, 
-      theme: {
-        colorPrimary: '#1e1e1e',
-        colorSecondary: '#4a3c2d',
-        colorAccent: '#6a8c69',
-        colorText: '#333333',
-        colorHighlight: '#d4a76a'
-      },
-      breadcrumb: [
-        { title: 'Dashboard', url: '/admin' },
-        { title: 'Produtos', active: true }
-      ]
-    });
-  } catch (error) {
-    console.error('Error loading products:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Falha ao carregar os produtos. Por favor, tente novamente.'
-    });
-  }
-});
-
-router.get('/products/add', async (req, res) => {
-  try {
-    const families = await ProductFamily.getAll();
-    
-    res.render('admin/products/product-form', {
-      title: 'Add Product',
-      product: {},
-      families,
-      isNew: true
-    });
-  } catch (error) {
-    console.error('Error loading product form:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load the product form.'
-    });
-  }
-});
-
-router.post('/products/add', upload.single('image'), async (req, res) => {
-  try {
-    const product = req.body;
-    
-    // Handle checkbox values
-    product.is_active = product.is_active === 'on';
-    product.featured = product.featured === 'on';
-    
-    // Handle file upload
-    if (req.file) {
-      product.image_filename = req.file.filename;
-    }
-    
-    await Product.create(product);
-    
-    req.flash('success_msg', 'Product added successfully');
-    res.redirect('/admin/products');
-  } catch (error) {
-    console.error('Error adding product:', error);
-    req.flash('error_msg', 'Failed to add product');
-    res.redirect('/admin/products/add');
-  }
-});
-
-router.get('/products/edit/:id', async (req, res) => {
-  try {
-    const productId = parseInt(req.params.id);
-    const product = await Product.getById(productId);
-    
-    if (!product) {
-      req.flash('error_msg', 'Product not found');
-      return res.redirect('/admin/products');
-    }
-    
-    const families = await ProductFamily.getAll();
-    
-    res.render('admin/products/product-form', {
-      title: 'Edit Product',
-      product,
-      families,
-      isNew: false
-    });
-  } catch (error) {
-    console.error('Error loading product for editing:', error);
-    req.flash('error_msg', 'Failed to load product for editing');
-    res.redirect('/admin/products');
-  }
-});
-
-router.post('/products/edit/:id', upload.single('image'), async (req, res) => {
-  try {
-    const productId = parseInt(req.params.id);
-    const product = req.body;
-    
-    // Handle checkbox values
-    product.is_active = product.is_active === 'on';
-    product.featured = product.featured === 'on';
-    
-    // Handle file upload
-    if (req.file) {
-      product.image_filename = req.file.filename;
-    }
-    
-    await Product.update(productId, product);
-    
-    req.flash('success_msg', 'Product updated successfully');
-    res.redirect('/admin/products');
-  } catch (error) {
-    console.error('Error updating product:', error);
-    req.flash('error_msg', 'Failed to update product');
-    res.redirect(`/admin/products/edit/${req.params.id}`);
-  }
-});
-
-router.post('/products/delete/:id', async (req, res) => {
-  try {
-    const productId = parseInt(req.params.id);
-    await Product.delete(productId);
-    
-    req.flash('success_msg', 'Product deleted successfully');
-    res.redirect('/admin/products');
-  } catch (error) {
-    console.error('Error deleting product:', error);
-    req.flash('error_msg', 'Failed to delete product');
-    res.redirect('/admin/products');
-  }
-});
 
 // Product Family Routes
-router.get('/product-families', adminMiddleware, ProductFamilyController.listFamilies);
-router.get('/product-families/add', adminMiddleware, ProductFamilyController.showAddForm);
-router.post('/product-families/add', adminMiddleware, ProductFamilyController.createFamily);
-router.get('/product-families/edit/:id', adminMiddleware, ProductFamilyController.showEditForm);
-router.post('/product-families/edit/:id', adminMiddleware, ProductFamilyController.updateFamily);
-router.post('/product-families/delete/:id', adminMiddleware, ProductFamilyController.deleteFamily);
+router.get('/product-families', adminSessionRequired, ProductFamilyController.listFamilies);
+router.get('/product-families/create', adminSessionRequired, ProductFamilyController.showAddForm);
+router.post('/product-families/create', adminSessionRequired, ProductFamilyController.createFamily);
+router.get('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.showEditForm);
+router.post('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.updateFamily);
+router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyController.deleteFamily);
 
-// Inventory management routes
-// Rotas de gerenciamento de inventário
+
+// Product Management Routes
+router.get('/products', adminSessionRequired, ProductController.index);
+router.get('/products/create', adminSessionRequired, ProductController.create);
+router.post('/products/create', 
+  adminSessionRequired, 
+  productImageUpload.fields([
+    { name: 'images', maxCount: 10 }, // Para múltiplas imagens
+    { name: 'image', maxCount: 1 }    // Para uma imagem principal (se houver)
+  ]), 
+  ProductController.store
+);
+router.get('/products/edit/:id', adminSessionRequired, ProductController.edit);
+router.post('/products/edit/:id', 
+  adminSessionRequired, 
+  productImageUpload.fields([
+    { name: 'images', maxCount: 10 },
+    { name: 'image', maxCount: 1 } 
+  ]),
+  ProductController.update
+);
+router.delete('/products/:id', adminSessionRequired, ProductController.delete);
+
+// Rota para remover uma imagem de um produto
+router.delete('/products/:productId/images/:imageId', adminSessionRequired, async (req, res) => {
+  try {
+    const { productId, imageId } = req.params;
+    // Lógica para encontrar a imagem pelo imageId e verificar se pertence ao productId
+    // Lógica para deletar a imagem do sistema de arquivos e do banco de dados
+    
+    // Exemplo: (Esta parte precisa ser implementada no seu Product model)
+    // const imagePath = await Product.removeImage(productId, imageId); 
+    // if (imagePath) {
+    //   await fs.unlink(path.join(__dirname, '..', 'public', imagePath)); // Deleta do sistema de arquivos
+    // }
+
+    // Simulação de sucesso
+    console.log(`Attempting to delete image ${imageId} for product ${productId}`);
+    // Aqui você chamaria seu model para remover a referência da imagem do produto
+    // e deletar o arquivo físico se necessário.
+
+    // Supondo que seu model Product.removeImage(productId, imageId) faz o necessário:
+    const success = await Product.deleteProductImage(imageId); // Ou um método similar
+    
+    if (success) {
+      // Se a imagem foi removida do DB, tente remover do sistema de arquivos
+      // Você precisará do caminho do arquivo para isso, que o model deveria fornecer ou você buscaria
+      // Ex: const imageRecord = await ProductImage.findById(imageId);
+      // if (imageRecord && imageRecord.path) {
+      //   try {
+      //     await fs.unlink(path.join(__dirname, '..', 'public', imageRecord.path));
+      //   } catch (fileError) {
+      //     console.error('Failed to delete image file:', fileError); 
+      //     // Pode não ser um erro crítico se o DB está limpo
+      //   }
+      // }
+      req.flash('success_msg', 'Imagem removida com sucesso.');
+      res.json({ success: true, message: 'Imagem removida com sucesso.' });
+    } else {
+      req.flash('error_msg', 'Erro ao remover a imagem.');
+      res.status(404).json({ success: false, message: 'Imagem não encontrada ou erro ao remover.' });
+    }
+  } catch (error) {
+    console.error('Error deleting product image:', error);
+    req.flash('error_msg', 'Erro interno ao tentar remover a imagem.');
+    res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+  }
+});
+
+
+// User Management Routes
+// router.get('/users', adminSessionRequired, UserController.index);
+// router.get('/users/create', adminSessionRequired, UserController.create);
+// router.post('/users/create', adminSessionRequired, UserController.store);
+// router.get('/users/edit/:id', adminSessionRequired, UserController.edit);
+// router.post('/users/edit/:id', adminSessionRequired, UserController.update);
+// router.post('/users/delete/:id', adminSessionRequired, UserController.delete);
+
+
+// Inventory Management Routes
+
 router.get('/inventory', adminSessionRequired, InventoryController.index.bind(InventoryController));
-router.get('/inventory/transactions', adminSessionRequired, InventoryController.listTransactions.bind(InventoryController));
-router.get('/inventory/:productId', adminSessionRequired, InventoryController.showProductHistory.bind(InventoryController));
+router.get('/inventory/history/:productId', adminSessionRequired, InventoryController.showProductHistory.bind(InventoryController));
 router.post('/inventory/adjust', adminSessionRequired, InventoryController.processAdjustment.bind(InventoryController));
 
 // Checkpoint management routes
@@ -634,4 +398,4 @@ router.post('/checkpoints/delete/:id', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

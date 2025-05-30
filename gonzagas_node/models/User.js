@@ -8,7 +8,7 @@ class User {
     try {
       console.log('[USER MODEL] Executando query SQL...');
       const result = await pool.query(
-        'SELECT * FROM users WHERE email = ?',
+        'SELECT id, name, email, role, password, created_at, updated_at FROM users WHERE email = ?', // Explicitly select password
         [email]
       );
       
@@ -18,12 +18,15 @@ class User {
       console.log('[USER MODEL] Linhas retornadas:', rows.length);
       
       if (rows.length > 0) {
-        console.log('[USER MODEL] Usuário encontrado:', {
-          id: rows[0].id,
-          email: rows[0].email,
-          name: rows[0].name,
-          role: rows[0].role
+        const userRow = rows[0];
+        console.log('[USER MODEL] Usuário encontrado (raw row):', {
+          id: userRow.id,
+          email: userRow.email,
+          name: userRow.name,
+          role: userRow.role,
+          password_hash_present: !!userRow.password // Check if password field exists
         });
+        console.log('[USER MODEL] Hash da senha do usuário (do raw row):', userRow.password ? userRow.password.substring(0, 10) + '...' : 'Password field missing or empty');
       } else {
         console.log('[USER MODEL] Nenhum usuário encontrado para o email:', email);
       }

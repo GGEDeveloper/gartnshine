@@ -1,17 +1,17 @@
 <main>
     <!-- Hero Section with Video Background -->
     <section class="hero">
-      <div class="video-background">
-        <% const videoFile = mediaFiles.find(file => file.type === 'video'); %>
-        <% if (videoFile) { %>
-          <video autoplay muted loop playsinline>
-            <source src="<%= videoFile.path %>" type="video/mp4">
-          </video>
-        <% } %>
+      <div class="video-background-container"> 
+        <video autoplay muted loop playsinline class="video-background" poster="/images/placeholder-hero.jpg" data-poster-mobile="/images/placeholder-hero-mobile.jpg">
+          <source src="/videos/hero-background.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
-      <div class="hero-content">
-        <h1><%= siteTitle %></h1>
-        <p><%= siteDescription %></p>
+      <div class="hero-overlay"> 
+        <div class="hero-content">
+          <h1><%= siteTitle %></h1>
+          <p><%= siteDescription %></p>
+        </div>
       </div>
     </section>
     

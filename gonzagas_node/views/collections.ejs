@@ -454,7 +454,7 @@
         %>
           <div class="gallery-item" style="width: 100% !important; max-width: 300px !important; aspect-ratio: 1 / 1 !important; overflow: hidden !important; border-radius: 12px !important; position: relative !important; margin: 0 auto !important;">
             <a 
-              href="<%= image.url %>" 
+              href="/media/gallery/<%= image.filename %>" 
               data-lightbox="gallery" 
               data-title="<%= imageName %>"
               class="gallery-link"
@@ -462,7 +462,7 @@
             >
               <div class="gallery-image-container" style="width: 100% !important; height: 0 !important; padding-bottom: 100% !important; position: relative !important; overflow: hidden !important;">
                 <img 
-                  src="<%= image.url %>" 
+                  src="/media/gallery/<%= image.filename %>" 
                   alt="<%= imageName %>"
                   class="gallery-image" 
                   style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; display: block !important;"

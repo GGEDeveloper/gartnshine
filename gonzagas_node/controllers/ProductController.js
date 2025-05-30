@@ -1,36 +1,297 @@
 const BaseController = require('./BaseController');
 const Product = require('../models/Product');
-const { body } = require('express-validator');
+const ProductFamily = require('../models/ProductFamily');
+const { body, validationResult } = require('express-validator');
+const path = require('path'); // For image path manipulation
 
 class ProductController extends BaseController {
   constructor() {
     super(Product);
   }
 
-  // Validação para criação/atualização de produtos
-  static validate() {
-    return [
-      body('reference').notEmpty().withMessage('Reference is required'),
-      body('name').notEmpty().withMessage('Name is required'),
-      body('description').optional(),
-      body('family_id').isInt().withMessage('Family ID must be an integer'),
-      body('is_active').optional().isBoolean().withMessage('is_active must be a boolean'),
-      body('featured').optional().isBoolean().withMessage('featured must be a boolean'),
-      body('sort_order').optional().isInt().withMessage('sort_order must be an integer')
-    ];
+  // Admin: Listar todos os produtos para gerenciamento
+  async index(req, res) {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      const products = await Product.getAll(limit, offset);
+      const totalProducts = await Product.count();
+      const totalPages = Math.ceil(totalProducts / limit);
+      const productFamilies = await ProductFamily.getAll();
+
+      res.render('admin/products/index', {
+        layout: 'admin/layouts/main',
+        title: 'Manage Products',
+        products,
+        productFamilies,
+        totalProducts,
+        totalPages,
+        currentPage: page,
+        limit,
+        currentPath: req.path,
+        user: req.user,
+        breadcrumbs: res.locals.breadcrumb,
+        success_msg: req.flash('success_msg'),
+        error_msg: req.flash('error_msg')
+      });
+    } catch (error) {
+      console.error('Error loading products admin page:', error);
+      req.flash('error_msg', 'Falha ao carregar a página de produtos. Por favor, tente novamente.');
+      res.redirect('/admin/dashboard');
+    }
   }
 
-  // Listar produtos ativos (para catálogo)
-  async getActive(req, res) {
+  // Show form to create a new product
+  async create(req, res) {
+    try {
+      const productFamilies = await ProductFamily.getAll();
+      res.render('admin/products/product-form', { 
+        layout: 'admin/layouts/main',
+        title: 'Create New Product',
+        product: {}, 
+        productFamilies,
+        isNew: true, 
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null 
+      });
+    } catch (error) {
+      console.error('Error showing create product form:', error);
+      req.flash('error_msg', 'Failed to load the create product form.');
+      res.redirect('/admin/products');
+    }
+  }
+
+  // Store a new product in the database
+  async store(req, res) {
+    console.log('--- ProductController.store ---');
+    console.log('Body:', req.body);
+    console.log('Files:', req.files);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const productFamilies = await ProductFamily.getAll();
+      return res.status(400).render('admin/products/product-form', {
+        layout: 'admin/layouts/main',
+        title: 'Create New Product',
+        product: req.body,
+        productFamilies,
+        isNew: true,
+        errors: errors.array(),
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null
+      });
+    }
+
+    try {
+      const productData = { ...req.body };
+      
+      productData.is_active = !!(productData.is_active === 'on' || productData.is_active === true || productData.is_active === 'true' || productData.is_active === '1');
+      productData.is_catalog_visible = !!(productData.is_catalog_visible === 'on' || productData.is_catalog_visible === true || productData.is_catalog_visible === 'true' || productData.is_catalog_visible === '1');
+      productData.featured = !!(productData.featured === 'on' || productData.featured === true || productData.featured === 'true' || productData.featured === '1');
+
+      const images = req.files && req.files.images ? req.files.images.map(file => ({
+        path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
+        filename: file.filename,
+        is_main: false 
+      })) : [];
+      
+      const mainImage = req.files && req.files.image ? {
+        path: path.join('/media/products/', req.files.image[0].filename).replace(/\\/g, '/'),
+        filename: req.files.image[0].filename,
+        is_main: true
+      } : null;
+
+      if (mainImage) {
+        images.unshift(mainImage); 
+      }
+      
+      await Product.createProductWithImages(productData, images);
+      
+      req.flash('success_msg', 'Product created successfully!');
+      res.redirect('/admin/products');
+    } catch (error) {
+      console.error('Error storing product:', error);
+      req.flash('error_msg', 'Failed to create product. ' + error.message);
+      const productFamilies = await ProductFamily.getAll();
+      res.status(500).render('admin/products/product-form', {
+        layout: 'admin/layouts/main',
+        title: 'Create New Product',
+        product: req.body,
+        productFamilies,
+        isNew: true,
+        error_msg: req.flash('error_msg'),
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null
+      });
+    }
+  }
+
+  // Show form to edit an existing product
+  async edit(req, res) {
+    console.log('--- ENTERING ProductController.edit method ---');
+    console.log('Requested Product ID:', req.params.id);
+
+    try {
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        req.flash('error_msg', 'Invalid Product ID.');
+        return res.redirect('/admin/products');
+      }
+
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        req.flash('error_msg', 'Product not found.');
+        return res.redirect('/admin/products');
+      }
+      console.log('product.is_catalog_visible:', product.is_catalog_visible);
+      console.log('typeof product.is_catalog_visible:', typeof product.is_catalog_visible);
+
+      const productFamilies = await ProductFamily.getAll();
+      
+      res.render('admin/products/product-form', {
+        layout: 'admin/layouts/main',
+        title: `Edit Product: ${product.name}`,
+        product,
+        productFamilies,
+        isNew: false, 
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null,
+        success_msg: req.flash('success_msg'),
+        error_msg: req.flash('error_msg')
+      });
+    } catch (error) {
+      console.error('--- ERROR in ProductController.edit ---:', error);
+      req.flash('error_msg', `Failed to load product for editing: ${error.message}`);
+      res.redirect('/admin/products');
+    }
+  }
+
+  // Update an existing product
+  async update(req, res) {
+    console.log('--- ProductController.update ---');
+    const productId = parseInt(req.params.id);
+    console.log('Product ID:', productId);
+    console.log('Body:', req.body);
+    console.log('Files:', req.files);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const product = await Product.findById(productId);
+      const productFamilies = await ProductFamily.getAll();
+      return res.status(400).render('admin/products/product-form', {
+        layout: 'admin/layouts/main',
+        title: 'Edit Product',
+        product: { ...product, ...req.body },
+        productFamilies,
+        isNew: false,
+        errors: errors.array(),
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null
+      });
+    }
+
+    try {
+      const productData = { ...req.body };
+      
+      productData.is_active = !!(productData.is_active === 'on' || productData.is_active === true || productData.is_active === 'true' || productData.is_active === '1' || productData.is_active === 1);
+      productData.is_catalog_visible = !!(productData.is_catalog_visible === 'on' || productData.is_catalog_visible === true || productData.is_catalog_visible === 'true' || productData.is_catalog_visible === '1' || productData.is_catalog_visible === 1);
+      productData.featured = !!(productData.featured === 'on' || productData.featured === true || productData.featured === 'true' || productData.featured === '1' || productData.featured === 1);
+
+      const newImages = req.files && req.files.images ? req.files.images.map(file => ({
+        path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
+        filename: file.filename,
+        is_main: false
+      })) : [];
+
+      const newMainImage = req.files && req.files.image ? {
+        path: path.join('/media/products/', req.files.image[0].filename).replace(/\\/g, '/'),
+        filename: req.files.image[0].filename,
+        is_main: true
+      } : null;
+      
+      let allNewImages = [];
+      if (newMainImage) allNewImages.push(newMainImage);
+      allNewImages = allNewImages.concat(newImages);
+
+      await Product.updateProductWithImages(productId, productData, allNewImages);
+      
+      req.flash('success_msg', 'Product updated successfully!');
+      res.redirect(`/admin/products/edit/${productId}`);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      req.flash('error_msg', 'Failed to update product. ' + error.message);
+      const product = await Product.findById(productId);
+      const productFamilies = await ProductFamily.getAll();
+      res.status(500).render('admin/products/product-form', {
+        layout: 'admin/layouts/main',
+        title: 'Edit Product',
+        product: { ...product, ...req.body },
+        productFamilies,
+        isNew: false,
+        error_msg: req.flash('error_msg'),
+        breadcrumbs: res.locals.breadcrumb,
+        user: req.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null
+      });
+    }
+  }
+
+  // Delete a product
+  async delete(req, res) {
+    console.log('--- ProductController.delete ---');
+    const productId = parseInt(req.params.id);
+    console.log('Product ID to delete:', productId);
+
+    try {
+      const result = await Product.deleteById(productId);
+      
+      if (result && result.affectedRows > 0) { 
+          req.flash('success_msg', 'Product deleted successfully.');
+      } else {
+          req.flash('error_msg', 'Product not found or could not be deleted.');
+      }
+      res.redirect('/admin/products');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      req.flash('error_msg', 'Failed to delete product. ' + error.message);
+      res.redirect('/admin/products');
+    }
+  }
+
+  // Public: Listar todos os produtos ativos para o catálogo
+  async getPublic(req, res) {
     try {
       const products = await Product.getActive();
       return this.success(res, products);
     } catch (error) {
-      console.error('Error getting active products:', error);
-      return this.error(res, 'Failed to fetch active products', 500);
+      console.error('Error getting public products:', error);
+      return this.error(res, 'Failed to fetch products', 500);
     }
   }
 
+  // Public: Obter um produto pelo ID
+  async getById(req, res) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findById(id);
+      if (!product) {
+        return this.error(res, 'Product not found', 404);
+      }
+      return this.success(res, product);
+    } catch (error) {
+      console.error('Error getting product by ID:', error);
+      return this.error(res, 'Failed to fetch product', 500);
+    }
+  }
+  
   // Listar produtos em destaque
   async getFeatured(req, res) {
     try {
@@ -62,9 +323,8 @@ class ProductController extends BaseController {
       }
 
       const { id } = req.params;
-      const imageUrl = `/uploads/${req.file.filename}`;
+      const imageUrl = path.join('/media/products/', req.file.filename).replace(/\\/g, '/');
       
-      // Atualizar o produto com a URL da imagem
       const updatedProduct = await Product.addImage(id, imageUrl);
       
       if (!updatedProduct) {

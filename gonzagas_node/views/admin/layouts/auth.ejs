@@ -1,159 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title><%= title || 'Admin - Gonzaga\'s' %></title>
-  
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="/img/favicon.ico">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/admin.css">
-  
-  <!-- ApexCharts -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css">
-  
-  <!-- Inline styles from login page -->
-  <style>
-    :root {
-      --color-primary: #6c5ce7;
-      --color-secondary: #5a4bcf;
-      --primary-rgb: 108, 92, 231;
-    }
-    
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Nunito', sans-serif;
-    }
-    
-    .auth-page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 2rem 0;
-    }
-    
-    .auth-container {
-      max-width: 500px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 2.5rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    
-    .auth-logo h2 {
-      color: var(--color-primary);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      font-family: 'Playfair Display', serif;
-    }
-    
-    .auth-logo p {
-      color: #6c757d;
-      font-size: 1.1rem;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-    }
-    
-    .form-control:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.15);
-    }
-    
-    .btn-auth {
-      background-color: var(--color-primary);
-      border: none;
-      padding: 0.75rem 2rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
-    
-    .btn-auth:hover {
-      background-color: var(--color-secondary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
-    }
-    
-    .input-group-text {
-      background-color: #f8f9fa;
-      color: #6c757d;
-    }
-    
-    .auth-link {
-      color: #6c757d;
-      transition: color 0.2s;
-      text-decoration: none;
-    }
-    
-    .auth-link:hover {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
-    
-    .divider {
-      position: relative;
-      text-align: center;
-      margin: 1.5rem 0;
-      color: #6c757d;
-    }
-    
-    .divider::before,
-    .divider::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 45%;
-      height: 1px;
-      background-color: #e9ecef;
-    }
-    
-    .divider::before {
-      left: 0;
-    }
-    
-    .divider::after {
-      right: 0;
-    }
-  </style>
-  
-  <% if (typeof styles !== 'undefined') { %>
-    <%- styles %>
-  <% } %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Admin' %></title>
+    <link rel="stylesheet" href="/css/admin.css"> <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <!-- Add any other global auth-specific styles or scripts here -->
 </head>
-<body class="auth-page">
-  <div class="container">
-    <%- body %>
-  </div>
-
-  <!-- Bootstrap Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Custom JS -->
-  <script src="/js/admin.js"></script>
-  
-  <% if (typeof scripts !== 'undefined') { %>
-    <%- scripts %>
-  <% } %>
+<body class="bg-light">
+    <div class="container">
+        <%- body %>
+    </div>
+    <script src="/js/admin.js"></script>
+    <!-- Add any other global auth-specific scripts here -->
 </body>
 </html>

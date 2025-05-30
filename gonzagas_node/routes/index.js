@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+const CatalogController = require('../controllers/CatalogController');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -176,6 +177,9 @@ router.get('/collection/:familyId', async (req, res) => {
     });
   }
 });
+
+// Catalog page
+router.get('/catalog', CatalogController.displayCatalog);
 
 // Product detail page
 router.get('/product/:id', async (req, res) => {

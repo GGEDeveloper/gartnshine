@@ -76,6 +76,14 @@
                   </select>
                 </div>
                 
+                  <div class="form-group">
+                    <label for="is_catalog_visible">Visível no Catálogo Público?</label>
+                    <select class="form-control" id="is_catalog_visible" name="is_catalog_visible">
+                      <option value="1" <%= (typeof product !== 'undefined' && product.is_catalog_visible) ? 'selected' : '' %>>Sim</option>
+                      <option value="0" <%= (typeof product !== 'undefined' && !product.is_catalog_visible && product.is_catalog_visible !== null) ? 'selected' : '' %>>Não</option>
+                    </select>
+                  </div>
+
                 <div class="form-group">
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="featured" name="featured" <%= product && product.featured ? 'checked' : '' %>>
