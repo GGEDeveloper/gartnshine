@@ -33,6 +33,11 @@
       --color-text: <%= theme.colorText || '#ffffff' %>;
       --color-highlight: <%= theme.colorHighlight || '#d4b190' %>;
     }
+    
+    /* Hide the description container in GLightbox */
+    .glightbox-container .gslide-description {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -59,10 +64,55 @@
   <!-- GLightbox JS -->
   <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
   <script type="text/javascript">
+    // Inicializa o GLightbox
     const lightbox = GLightbox({
+      selector: '.glightbox',
       touchNavigation: true,
+      keyboardNavigation: true,
+      closeButton: true,
       loop: true,
       autoplayVideos: true
+    });
+    
+    // Debug
+    console.log('GLightbox initialized');
+    
+    // Script para modificar o DOM e adicionar o GLightbox às imagens
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM fully loaded');
+      
+      const galleryImages = document.querySelectorAll('img.gallery-image');
+      console.log('Found', galleryImages.length, 'gallery images');
+      
+      galleryImages.forEach(img => {
+        // Se já estiver dentro de um link GLightbox, pule
+        if (img.closest('a.glightbox')) {
+          console.log('Image already has GLightbox parent, skipping:', img.src);
+          return;
+        }
+        
+        const wrapper = document.createElement('a');
+        wrapper.href = img.src;
+        wrapper.className = 'glightbox';
+        wrapper.setAttribute('data-gallery', 'gallery1');
+        
+        // Adiciona título se disponível
+        if (img.alt) {
+          wrapper.setAttribute('data-title', img.alt);
+        }
+        
+        // Envolve a imagem com o link
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        
+        console.log('Wrapped image with GLightbox link:', img.src);
+      });
+      
+      // Recarrega o GLightbox para pegar os novos elementos
+      if (galleryImages.length > 0) {
+        console.log('Reloading GLightbox with new elements');
+        lightbox.reload();
+      }
     });
 
     // Specific logic for /media/gallery or /media/ pages
@@ -109,7 +159,7 @@
         });
 
         if (galleryHasItems) {
-          // console.log('GLightbox setup for .gallery-image elements complete.');
+          console.log('GLightbox setup for .gallery-image elements complete.');
           // If GLightbox instance `lightbox` is available and has a reload method:
           if (typeof lightbox !== 'undefined' && lightbox.reload) {
             lightbox.reload();

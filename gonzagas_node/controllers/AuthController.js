@@ -84,15 +84,20 @@ class AuthController extends BaseController {
   async logout(req, res) {
     console.log('>>> AuthController.logout called');
     try {
+      // Set flash message before destroying the session
+      req.flash('success_msg', 'You have been logged out.');
+
       req.session.destroy((err) => {
         if (err) {
           console.error('Error destroying session:', err);
-          req.flash('error_msg', 'Logout failed. Please try again.');
+          // If session destruction fails, the flash message might not be available
+          // So, we might need a different way to communicate this error or just redirect
+          // For now, let's keep the error flash for the redirect page if possible, or rely on logs.
+          // req.flash('error_msg', 'Logout failed. Please try again.'); // This might not work if session is gone
           return res.redirect('/admin/dashboard'); // Or wherever appropriate
         }
         res.clearCookie('connect.sid'); // Clear the session cookie
-        req.flash('success_msg', 'You have been logged out.');
-        res.redirect('/admin/login');
+        res.redirect('/');
       });
     } catch (error) {
       console.error('Error during logout:', error);
