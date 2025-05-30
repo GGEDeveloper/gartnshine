@@ -1,11 +1,5 @@
 <header class="main-header">
   <div class="header-container">
-    <div class="logo-container">
-      <a href="/" class="logo">
-        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
-      </a>
-    </div>
-    
     <nav class="main-nav">
       <button class="menu-toggle" aria-label="Toggle menu">
         <span></span>
@@ -17,7 +11,7 @@
         <li><a href="/" class="<%= typeof title !== 'undefined' && title === 'Home' ? 'active' : '' %>">Home</a></li>
         
         <!-- Collections link -->
-        <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Collections</a></li>
+        <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Gallery</a></li>
         
         <!-- Catalog link -->
         <li><a href="/catalog" class="<%= typeof title !== 'undefined' && title === 'Catalog' ? 'active' : '' %>">Catalog</a></li>
@@ -42,15 +36,50 @@
         <% } %>
       </ul>
     </nav>
+
+    <div class="logo-container">
+      <a href="/" class="logo">
+        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
+      </a>
+    </div>
   </div>
 </header>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
   // Toggle mobile menu
-  document.querySelector('.menu-toggle').addEventListener('click', function() {
-    document.querySelector('.nav-menu').classList.toggle('active');
-    this.classList.toggle('active');
-  });
+  const menuToggleButton = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+
+  // console.log('[DEBUG DOMContentLoaded] Menu Toggle Button:', menuToggleButton);
+  // console.log('[DEBUG DOMContentLoaded] Nav Menu:', navMenu);
+
+  let isMenuOpen = false; // Standard: menu starts closed.
+
+  if (menuToggleButton && navMenu) {
+    // Initial sync: If JS assumes menu is open, but button is hamburger, make button active (X)
+    // However, the user describes the button starting as hamburger while panel is open.
+    // So, the first click should make isMenuOpen = false, remove active from panel (closing it),
+    // and remove active from button (keeping it hamburger, which is correct for closed state).
+
+    menuToggleButton.addEventListener('click', function() {
+      isMenuOpen = !isMenuOpen; // Toggle state
+
+      if (isMenuOpen) {
+        // This state means: Menu should be OPEN, Button should be X
+        navMenu.classList.add('active');
+        this.classList.add('active');
+        console.log('[DEBUG Click] State: OPEN. navMenu:', navMenu.classList.toString(), 'Button:', this.classList.toString());
+      } else {
+        // This state means: Menu should be CLOSED, Button should be Hamburger
+        navMenu.classList.remove('active');
+        this.classList.remove('active');
+        console.log('[DEBUG Click] State: CLOSED. navMenu:', navMenu.classList.toString(), 'Button:', this.classList.toString());
+      }
+    });
+  } else {
+    console.error('[DEBUG DOMContentLoaded] Menu toggle button or nav menu not found!');
+  }
   
   // Handle dropdowns
   document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
@@ -59,4 +88,5 @@
       this.parentNode.classList.toggle('open');
     });
   });
-</script> 
+});
+</script>

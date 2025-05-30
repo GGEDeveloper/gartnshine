@@ -372,6 +372,30 @@ img {
 .hero-content {
   text-align: center;
   color: var(--color-text);
+  padding: 1.5rem; /* Controla o espaço interno da caixa */
+  max-width: 650px; /* Largura máxima da caixa */
+  margin: 0 auto; /* Centra a caixa */
+  background-color: rgba(0, 0, 0, 0.25); /* Fundo subtil para a caixa */
+  border-radius: 8px; /* Cantos arredondados */
+  position: relative; /* Para contexto de posicionamento se necessário */
+  z-index: 2; /* Garante que fica por cima do vídeo/overlay */
+}
+
+.hero-content h1 {
+  font-size: 2.8rem; /* Tamanho do título reduzido */
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra do texto (de .hero-title) */
+  background: linear-gradient(90deg, var(--color-text), var(--color-highlight)); /* Gradiente (de .hero-title) */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-content p {
+  font-size: 1rem; /* Tamanho do parágrafo */
+  opacity: 0.9;
+  font-weight: 300;
+  margin-bottom: 0; /* Remove margem inferior se for o último elemento */
 }
 
 .hero-title {
@@ -1317,24 +1341,55 @@ section {
 
 @media (max-width: 768px) {
   .menu-toggle {
+    display: block; /* Show hamburger */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem; /* Clickable area */
+    z-index: 1020; /* Ensure it's above other elements if needed when menu is open */
+    position: relative; /* For positioning spans if needed, or if it's part of a fixed header */
+    z-index: 1020; /* Ensure toggle button is above the nav-menu */
+  }
+
+  .menu-toggle span {
     display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-text); /* Or your desired icon color */
+    margin: 5px 0;
+    transition: all 0.3s ease-in-out;
+    border-radius: 1px;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
   }
   
   .nav-menu {
     position: fixed;
     top: 0;
-    right: -300px;
+    left: -300px;
     width: 300px;
     height: 100vh;
     background-color: var(--color-secondary);
     flex-direction: column;
     padding: 4rem 1rem 1rem;
-    transition: right 0.3s ease;
-    z-index: 10;
+    transition: left 0.3s ease;
+    z-index: 1010;
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    overflow-y: auto; /* Allow scroll for many items */
   }
   
   .nav-menu.active {
-    right: 0;
+    left: 0;
   }
   
   .dropdown-menu {
@@ -1373,6 +1428,70 @@ section {
   
   .section-header h2 {
     font-size: 2rem;
+  }
+
+  .nav-menu li a {
+    display: block;
+    padding: 0.75rem 0; /* Adjusted vertical padding */
+    /* Horizontal padding is effectively 1rem due to parent .nav-menu padding: ... 1rem 1rem; */
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-menu li a:hover,
+  .nav-menu li a:active, /* Touch feedback */
+  .nav-menu li a.active { /* Current page link */
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle highlight */
+    color: var(--color-highlight);
+  }
+
+  /* Styles for the Admin dropdown UL within the mobile menu */
+  .nav-menu .dropdown-menu {
+    padding-left: 1rem; /* Indent the submenu relative to main items text */
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    background-color: rgba(0,0,0,0.1); /* Slightly different background for submenu section */
+    border-radius: 4px;
+  }
+
+  /* Styles for Admin submenu LI A items */
+  .nav-menu .dropdown-menu li a {
+    padding: 0.6rem 0; /* Slightly less vertical padding */
+    font-size: 0.9em; /* Slightly smaller font size */
+    /* color: var(--color-text-muted); /* Optional: make them slightly less prominent if desired */
+  }
+  /* Hover/active for submenu items, ensure they don't get double background from parent */
+  .nav-menu .dropdown-menu li a:hover,
+  .nav-menu .dropdown-menu li a:active,
+  .nav-menu .dropdown-menu li a.active {
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly more pronounced highlight for submenu items */
+  }
+
+  .admin-link {
+    display: list-item; /* Ensure the non-logged-in admin link is visible */
+  }
+
+  /* Footer Mobile Styles */
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .footer-section {
+    margin-bottom: 1rem;
+    /* width: 100%; Consider if this is needed */
+  }
+
+  .social-links {
+    justify-content: center; /* Center icons if there's space */
+    /* To stack social links vertically:
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    */
   }
 }
 
