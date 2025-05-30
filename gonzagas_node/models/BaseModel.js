@@ -1,6 +1,6 @@
 const { pool } = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 class BaseModel {
   static tableName = '';
