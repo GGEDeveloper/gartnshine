@@ -22,7 +22,6 @@
   "author": "Gonzaga's Art & Shine",
   "license": "UNLICENSED",
   "dependencies": {
-
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
@@ -32,6 +31,7 @@
     "ejs": "^3.1.10",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
+    "express-messages": "^1.0.1",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
