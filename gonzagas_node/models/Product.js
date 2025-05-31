@@ -14,21 +14,66 @@ class Product extends BaseModel {
     return pool;
   }
   // Get all products with family information and pagination support
-  static async getAll(limit = 10, offset = 0) {
+  static async getAll(limit = 10, offset = 0, filterOptions = {}) {
     try {
-      const [rows] = await pool.query(`
-        SELECT p.*, p.sale_price as price, f.name as family_name, (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url 
+      const whereClauses = [];
+      const params = [];
+
+      if (filterOptions.reference) {
+        whereClauses.push('p.reference LIKE ?');
+        params.push(`%${filterOptions.reference}%`);
+      }
+
+      if (filterOptions.categoryName && filterOptions.categoryName !== '') {
+        const [families] = await pool.query('SELECT id FROM product_families WHERE name = ?', [filterOptions.categoryName]);
+        if (families.length > 0) {
+          whereClauses.push('p.family_id = ?');
+          params.push(families[0].id);
+        } else {
+          // Category name provided but not found, so no results should match this specific filter
+          whereClauses.push('1 = 0'); // Effectively makes the query return no rows for this condition
+        }
+      }
+
+      if (filterOptions.status) {
+        whereClauses.push('p.is_active = ?');
+        params.push(filterOptions.status === 'Ativo' ? 1 : 0);
+      }
+
+      if (filterOptions.stock_status) {
+        if (filterOptions.stock_status === 'in_stock') {
+          whereClauses.push('p.current_stock > 0');
+        } else if (filterOptions.stock_status === 'low_stock') {
+          whereClauses.push('(p.current_stock > 0 AND p.current_stock <= 10)'); // Low stock threshold is 10
+        } else if (filterOptions.stock_status === 'out_of_stock') {
+          whereClauses.push('(p.current_stock IS NULL OR p.current_stock <= 0)');
+        }
+      }
+
+      let whereString = '';
+      if (whereClauses.length > 0) {
+        whereString = `WHERE ${whereClauses.join(' AND ')}`;
+      }
+
+      const sql = `
+        SELECT p.*, p.sale_price as price, f.name as family_name, 
+               (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url 
         FROM products p
         LEFT JOIN product_families f ON p.family_id = f.id
+        ${whereString}
         ORDER BY p.reference
         LIMIT ? OFFSET ?
-      `, [limit, offset]);
-      console.log('Query executada com sucesso. Produtos encontrados:', rows.length);
+      `;
+
+      const queryParams = [...params, limit, offset];
+      // console.log('Executing SQL for getAll:', sql, 'with params:', queryParams);
+      const [rows] = await pool.query(sql, queryParams);
+      console.log('Product.getAll filtered query executed. Products found:', rows.length);
       return rows;
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
+      console.error('Erro ao buscar produtos com filtros:', error);
       throw error;
-    }
+    }  
   }
 
   // Count products with low stock
@@ -90,12 +135,53 @@ class Product extends BaseModel {
   }
   
   // Count total number of products
-  static async count() {
+  static async count(filterOptions = {}) {
     try {
-      const [rows] = await pool.query('SELECT COUNT(*) as total FROM products');
+      const whereClauses = [];
+      const params = [];
+
+      if (filterOptions.reference) {
+        whereClauses.push('p.reference LIKE ?');
+        params.push(`%${filterOptions.reference}%`);
+      }
+
+      if (filterOptions.categoryName && filterOptions.categoryName !== '') {
+        const [families] = await pool.query('SELECT id FROM product_families WHERE name = ?', [filterOptions.categoryName]);
+        if (families.length > 0) {
+          whereClauses.push('p.family_id = ?');
+          params.push(families[0].id);
+        } else {
+          whereClauses.push('1 = 0'); 
+        }
+      }
+
+      if (filterOptions.status) {
+        whereClauses.push('p.is_active = ?');
+        params.push(filterOptions.status === 'Ativo' ? 1 : 0);
+      }
+
+      if (filterOptions.stock_status) {
+        if (filterOptions.stock_status === 'in_stock') {
+          whereClauses.push('p.current_stock > 0');
+        } else if (filterOptions.stock_status === 'low_stock') {
+          whereClauses.push('(p.current_stock > 0 AND p.current_stock <= 10)');
+        } else if (filterOptions.stock_status === 'out_of_stock') {
+          whereClauses.push('(p.current_stock IS NULL OR p.current_stock <= 0)');
+        }
+      }
+
+      let whereString = '';
+      if (whereClauses.length > 0) {
+        // Note: we use 'products p' in the FROM clause for consistency with getAll, though 'p.' isn't strictly needed for COUNT if not joining
+        whereString = `WHERE ${whereClauses.join(' AND ')}`;
+      }
+
+      const sql = `SELECT COUNT(*) as total FROM products p ${whereString}`;
+      // console.log('Executing SQL for count:', sql, 'with params:', params);
+      const [rows] = await pool.query(sql, params);
       return rows[0].total;
     } catch (error) {
-      console.error('Erro ao contar produtos:', error);
+      console.error('Erro ao contar produtos com filtros:', error);
       throw error;
     }
   }
@@ -480,90 +566,114 @@ class Product extends BaseModel {
     }
   }
 
-  // Obter todos os produtos com informações de stock, filtros e paginação
   static async getAllWithStock(options = {}) {
-    const {
-      limit = 20, // Default limit
-      offset = 0,  // Default offset
-      family_id,
-      search,
-      low_stock,
-      out_of_stock
-    } = options;
+  console.log('--- Product.getAllWithStock ---');
+  console.log('Received options:', JSON.stringify(options, null, 2));
 
-    try {
-      let whereClauses = ['p.is_active = 1']; // Start with a base condition, e.g., only active products
-      const params = [];
-      const countParams = [];
+  const {
+    limit = 20, // Default limit
+    offset = 0,  // Default offset
+    reference,
+    categoryName,
+    status,
+    stock_status
+  } = options;
 
-      if (family_id) {
-        whereClauses.push('p.family_id = ?');
-        params.push(family_id);
-        countParams.push(family_id);
-      }
+  try {
+    let whereClauses = [];
+    const params = [];
+    const countParams = [];
 
-      if (search) {
-        whereClauses.push('(p.name LIKE ? OR p.reference LIKE ?)');
-        const searchTerm = `%${search}%`;
-        params.push(searchTerm, searchTerm);
-        countParams.push(searchTerm, searchTerm);
-      }
+    // Handle product status (active/inactive)
+    if (status) {
+      whereClauses.push('p.is_active = ?');
+      const statusVal = status === 'active' ? 1 : 0;
+      params.push(statusVal);
+      countParams.push(statusVal);
+    } else {
+      // Default to active products if no status filter is specified
+      whereClauses.push('p.is_active = 1');
+      // No param needed for default active status unless we explicitly add 1 to params
+    }
 
-      if (low_stock) {
-        // Assumes min_stock is a column in products table indicating the threshold
-        whereClauses.push('p.current_stock > 0 AND p.current_stock <= p.min_stock');
-      }
+    if (reference) {
+      whereClauses.push('p.reference LIKE ?');
+      const refTerm = `%${reference}%`;
+      params.push(refTerm);
+      countParams.push(refTerm);
+    }
 
-      if (out_of_stock) {
+    if (categoryName) {
+      whereClauses.push('f.name LIKE ?'); // Join with product_families as f is in the main query
+      const catTerm = `%${categoryName}%`;
+      params.push(catTerm);
+      countParams.push(catTerm);
+    }
+
+    if (stock_status) {
+      if (stock_status === 'in_stock') {
+        whereClauses.push('p.current_stock > 10');
+      } else if (stock_status === 'low_stock') {
+        whereClauses.push('p.current_stock > 0 AND p.current_stock <= 10');
+      } else if (stock_status === 'out_of_stock') {
         whereClauses.push('p.current_stock <= 0');
       }
-
-      const whereString = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
-
-      // Query para obter o total de produtos com os filtros aplicados
-      const countSql = `
-        SELECT COUNT(*) as total
-        FROM products p
-        ${whereString}
-      `;
-      const [countResult] = await pool.query(countSql, countParams);
-      const totalProducts = countResult[0].total;
-
-      // Query para obter os produtos com os filtros e paginação
-      const productsSqlParams = [...params]; // Use a copy for the products query before adding limit/offset
-      productsSqlParams.push(limit, offset);
-      const productsSql = `
-        SELECT 
-          p.*, 
-          f.name as family_name,
-          (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url,
-          (SELECT COUNT(*) FROM product_images WHERE product_id = p.id) as image_count,
-          p.current_stock as current_stock_value 
-        FROM products p
-        LEFT JOIN product_families f ON p.family_id = f.id
-        ${whereString}
-        ORDER BY p.reference ASC
-        LIMIT ? OFFSET ?
-      `;
-      
-      const [rows] = await pool.query(productsSql, productsSqlParams);
-      
-      const products = rows.map(row => ({
-        ...row,
-        current_stock: parseFloat(row.current_stock_value) || 0,
-        sale_price: parseFloat(row.sale_price) || 0,
-        purchase_price: parseFloat(row.purchase_price) || 0,
-        weight: parseFloat(row.weight) || 0
-      }));
-
-      return { products, totalProducts };
-
-    } catch (error) {
-      console.error('Error getting products with stock:', error);
-      throw error; // Rethrow or handle as appropriate for your application
     }
+
+    console.log('Constructed whereClauses:', JSON.stringify(whereClauses));
+    console.log('Constructed params (for main query, before limit/offset):', JSON.stringify(params));
+    console.log('Constructed countParams:', JSON.stringify(countParams));
+
+    const whereString = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
+    console.log('Generated whereString:', whereString);
+
+    const countSql = `
+      SELECT COUNT(*) as total
+      FROM products p
+      LEFT JOIN product_families f ON p.family_id = f.id
+      ${whereString}
+    `;
+    console.log('Generated countSql:', countSql);
+    console.log('Parameters for countSql:', JSON.stringify(countParams));
+    const [countResult] = await pool.query(countSql, countParams);
+    const totalProducts = countResult[0].total;
+
+    const productsSqlParams = [...params];
+    productsSqlParams.push(limit, offset);
+
+    const productsSql = `
+      SELECT 
+        p.*, 
+        f.name as family_name,
+        (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url,
+        (SELECT COUNT(*) FROM product_images WHERE product_id = p.id) as image_count,
+        p.current_stock as current_stock_value 
+      FROM products p
+      LEFT JOIN product_families f ON p.family_id = f.id
+      ${whereString}
+      ORDER BY p.reference ASC
+      LIMIT ? OFFSET ?
+    `;
+    
+    console.log('Generated productsSql:', productsSql);
+    console.log('Parameters for productsSql:', JSON.stringify(productsSqlParams));
+    const [rows] = await pool.query(productsSql, productsSqlParams);
+
+    const products = rows.map(row => ({
+      ...row,
+      current_stock: parseFloat(row.current_stock_value) || 0,
+      sale_price: parseFloat(row.sale_price) || 0,
+      purchase_price: parseFloat(row.purchase_price) || 0,
+      weight: parseFloat(row.weight) || 0
+    }));
+
+    return { products, totalProducts };
+
+  } catch (error) {
+    console.error('Error getting products with stock:', error);
+    throw error;
   }
-  
+}
   // Registrar histórico de preço
   static async recordPriceHistory(connection, productId, price) {
     try {

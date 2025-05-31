@@ -174,46 +174,48 @@
                 </button>
               </div>
             </div>
-            <div class="filter-row">
+            <form id="inventory-filters" class="row g-2" method="GET" action="/admin/inventory">
+              <div class="filter-row">
               <div class="filter-group">
                 <label for="filter-reference">Referência</label>
-                <input type="text" id="filter-reference" class="form-control" placeholder="Código de Referência">
+                <input type="text" id="filter-reference" name="reference" class="form-control" placeholder="Código de Referência" value="<%= typeof queryParams !== 'undefined' && queryParams.reference ? queryParams.reference : '' %>">
               </div>
               
               <div class="filter-group">
                 <label for="filter-category">Categoria</label>
-                <select id="filter-category" class="form-select">
+                <select id="filter-category" name="category" class="form-select">
                   <option value="">Todas</option>
                   <% productFamilies.forEach(family => { %>
-                    <option value="<%= family.name %>"><%= family.name %></option>
+                    <option value="<%= family.name %>" <%= typeof queryParams !== 'undefined' && queryParams.category === family.name ? 'selected' : '' %>><%= family.name %></option>
                   <% }); %>
                 </select>
               </div>
               
               <div class="filter-group">
                 <label for="filter-status">Status do Produto</label>
-                <select id="filter-status" class="form-select">
+                <select id="filter-status" name="status" class="form-select">
                   <option value="">Todos</option>
-                  <option value="active">Ativo</option>
-                  <option value="inactive">Inativo</option>
+                  <option value="active" <%= typeof queryParams !== 'undefined' && queryParams.status === 'active' ? 'selected' : '' %>>Ativo</option>
+                  <option value="inactive" <%= typeof queryParams !== 'undefined' && queryParams.status === 'inactive' ? 'selected' : '' %>>Inativo</option>
                 </select>
               </div>
 
               <div class="filter-group">
                 <label for="filter-stock">Status do Stock</label>
-                <select id="filter-stock" class="form-select">
+                <select id="filter-stock" name="stock_status" class="form-select">
                   <option value="">Todos</option>
-                  <option value="in_stock">Em Stock</option>
-                  <option value="low_stock">Stock Baixo</option>
-                  <option value="out_of_stock">Fora de Stock</option>
+                  <option value="in_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'in_stock' ? 'selected' : '' %>>Em Stock</option>
+                  <option value="low_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'low_stock' ? 'selected' : '' %>>Stock Baixo</option>
+                  <option value="out_of_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'out_of_stock' ? 'selected' : '' %>>Fora de Stock</option>
                 </select>
               </div>
               
               <div class="filter-group actions">
-                <button type="button" class="btn btn-primary" id="apply-filters-btn">Aplicar Filtros</button>
-                <button type="button" class="btn btn-outline-secondary" id="reset-filters-btn">Limpar Filtros</button>
+                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                <a href="/admin/inventory" class="btn btn-outline-secondary">Limpar Filtros</a>
               </div>
             </div>
+            </form>
           </div>
           
           <div class="table-responsive">

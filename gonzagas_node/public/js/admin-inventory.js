@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const applyFiltersBtn = document.getElementById('apply-filters-btn'); // New button
   const resetFiltersBtn = document.getElementById('reset-filters-btn');
 
-  function applyFilters() {
+  /* // Server-side filtering now
+function applyFilters() {
     console.log('Applying filters...');
     const referenceValue = referenceFilter ? referenceFilter.value.toLowerCase() : '';
     const categoryValue = categoryFilter ? categoryFilter.value : '';
@@ -67,10 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Apply filters only when the 'Apply Filters' button is clicked
+  /* // Server-side filtering now
   if (applyFiltersBtn) {
     applyFiltersBtn.addEventListener('click', applyFilters);
-  }
+  }*/
 
+  /* // Server-side filtering now
   if (resetFiltersBtn) {
     resetFiltersBtn.addEventListener('click', function() {
       if (referenceFilter) referenceFilter.value = '';
@@ -79,10 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
       if (stockFilter) stockFilter.value = '';
       applyFilters(); // Apply empty filters to show all
     });
-  }
+  }*/
 
   // Initial filter application on page load to show all items
-  applyFilters();
+  // applyFilters(); // Server-side filtering now
 
   // --- Existing Column visibility logic --- 
   const columnsBtn = document.getElementById('toggle-columns-btn');

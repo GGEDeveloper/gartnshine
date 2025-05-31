@@ -26,6 +26,9 @@ class InventoryController extends BaseController {
   }
 
   async index(req, res) {
+    console.log('--- InventoryController.index ---');
+    console.log('Raw req.query:', JSON.stringify(req.query, null, 2)); // Log detalhado do req.query
+
     console.log('>>> InventoryController.index called - Path:', req.path, 'User:', req.user ? req.user.id : 'No user');
     try {
       const page = parseInt(req.query.page) || 1;
@@ -33,11 +36,12 @@ class InventoryController extends BaseController {
       const offset = (page - 1) * limit;
 
       const filterOptions = {
-        family_id: req.query.family_id,
-        search: req.query.search,
-        low_stock: req.query.filter === 'low_stock',
-        out_of_stock: req.query.filter === 'out_of_stock'
+        reference: req.query.reference,
+        categoryName: req.query.category, // Matches Product.js model
+        status: req.query.status,         // Matches Product.js model
+        stock_status: req.query.stock_status // Matches Product.js model
       };
+      console.log('Constructed filterOptions:', JSON.stringify(filterOptions, null, 2)); // Log detalhado das filterOptions
       
       const { products, totalProducts } = await this.Product.getAllWithStock({
         limit,
@@ -60,7 +64,7 @@ class InventoryController extends BaseController {
         currentPath: req.path,
         user: req.user,
         breadcrumbs: res.locals.breadcrumb,
-        filterOptions, // Pass filter options to the view for sticky filters
+        queryParams: req.query, // Pass full query for sticky filters
         success_msg: req.flash('success_msg'),
         error_msg: req.flash('error_msg')
       });

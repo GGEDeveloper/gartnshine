@@ -11,13 +11,29 @@ class ProductController extends BaseController {
 
   // Admin: Listar todos os produtos para gerenciamento
   async index(req, res) {
+    console.log('ProductController.index - query params:', req.query);
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
 
-      const products = await Product.getAll(limit, offset);
-      const totalProducts = await Product.count();
+      const filterOptions = {
+        reference: req.query.reference,
+        categoryName: req.query.category, // Will need to resolve to family_id in Model
+        status: req.query.status,
+        stock_status: req.query.stock_status
+      };
+
+      // Remove undefined or empty string filters
+      for (const key in filterOptions) {
+        if (filterOptions[key] === undefined || filterOptions[key] === '') {
+          delete filterOptions[key];
+        }
+      }
+      console.log('ProductController.index - Constructed filterOptions:', filterOptions);
+
+      const products = await Product.getAll(limit, offset, filterOptions);
+      const totalProducts = await Product.count(filterOptions);
       const totalPages = Math.ceil(totalProducts / limit);
       const productFamilies = await ProductFamily.getAll();
 
@@ -31,6 +47,7 @@ class ProductController extends BaseController {
         currentPage: page,
         limit,
         currentPath: req.path,
+        queryParams: req.query,
         user: req.user,
         breadcrumbs: res.locals.breadcrumb,
         success_msg: req.flash('success_msg'),

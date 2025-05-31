@@ -17,37 +17,40 @@
       <h5 class="card-title mb-0">Filtros</h5>
     </div>
     <div class="card-body">
-      <form id="product-filters" class="row g-2">
+      <form id="product-filters" class="row g-2" method="GET" action="/admin/products">
         <div class="col-md-3">
-          <input type="text" id="filter-reference" class="form-control form-control-sm" placeholder="Referência">
+          <input type="text" id="filter-reference" name="reference" class="form-control form-control-sm" placeholder="Referência" value="<%= typeof queryParams !== 'undefined' && queryParams.reference ? queryParams.reference : '' %>">
         </div>
         <div class="col-md-3">
-          <select id="filter-category" class="form-select form-select-sm">
+          <select id="filter-category" name="category" class="form-select form-select-sm">
             <option value="">Todas as Categorias</option>
-            <% if (typeof families !== 'undefined' && families.length > 0) { %>
-              <% families.forEach(family => { %>
-                <option value="<%= family.name %>"><%= family.name %></option>
+            <% if (typeof productFamilies !== 'undefined' && productFamilies.length > 0) { %>
+              <% productFamilies.forEach(family => { %>
+                <option value="<%= family.name %>" <%= typeof queryParams !== 'undefined' && queryParams.category === family.name ? 'selected' : '' %>><%= family.name %></option>
               <% }); %>
             <% } %>
           </select>
         </div>
         <div class="col-md-2">
-          <select id="filter-status" class="form-select form-select-sm">
+          <select id="filter-status" name="status" class="form-select form-select-sm">
             <option value="">Todos os Status</option>
-            <option value="Ativo">Ativo</option>
-            <option value="Inativo">Inativo</option>
+            <option value="Ativo" <%= typeof queryParams !== 'undefined' && queryParams.status === 'Ativo' ? 'selected' : '' %>>Ativo</option>
+            <option value="Inativo" <%= typeof queryParams !== 'undefined' && queryParams.status === 'Inativo' ? 'selected' : '' %>>Inativo</option>
           </select>
         </div>
         <div class="col-md-2">
-          <select id="filter-stock" class="form-select form-select-sm">
+          <select id="filter-stock" name="stock_status" class="form-select form-select-sm">
             <option value="">Todos</option>
-            <option value="in_stock">Em Stock</option>
-            <option value="low_stock">Stock Baixo</option>
-            <option value="out_of_stock">Fora de Stock</option>
+            <option value="in_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'in_stock' ? 'selected' : '' %>>Em Stock</option>
+            <option value="low_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'low_stock' ? 'selected' : '' %>>Stock Baixo</option>
+            <option value="out_of_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'out_of_stock' ? 'selected' : '' %>>Fora de Stock</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <button type="button" id="reset-filters" class="btn btn-outline-secondary btn-sm w-100">Limpar</button>
+        <div class="col-md-1">
+          <button type="submit" class="btn btn-primary btn-sm w-100">Filtrar</button>
+        </div>
+        <div class="col-md-1">
+          <a href="/admin/products" id="reset-filters" class="btn btn-outline-secondary btn-sm w-100">Limpar</a>
         </div>
       </form>
     </div>
@@ -198,41 +201,110 @@
 
 <% locals.scripts = locals.scripts || []; %>
 <% locals.scripts.push('/js/admin/product-filters.js'); // Placeholder if we move to external file %>
+<!-- 
 <script>
-// --- Filtros customizados DataTables ---
+console.log('Inline script block started.');
+if (typeof jQuery === 'undefined') {
+  console.error('jQuery is NOT LOADED before this script block!');
+}
 $(document).ready(function() {
-  var table = $('.datatable').DataTable();
-  // Referência
-  $('#filter-reference').on('keyup change', function() {
-    table.column(2).search(this.value).draw();
+  console.log('Document ready. Initializing DataTables...');
+
+  var table = $('.datatable').DataTable({
+    // Optional: Add language settings if you have the pt-BR.json loaded
+    // language: {
+    //   url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+    // }
   });
-  // Categoria
-  $('#filter-category').on('change', function() {
-    table.column(3).search(this.value).draw();
-  });
-  // Status
-  $('#filter-status').on('change', function() {
-    table.column(7).search(this.value).draw();
-  });
-  // Stock
-  $('#filter-stock').on('change', function() {
-    let val = this.value;
-    table.column(6).search('', false, false); // Limpa filtro anterior
-    if (val === 'in_stock') {
-      table.column(6).search('^[1-9][0-9]*$', true, false).draw();
-    } else if (val === 'low_stock') {
-      table.column(6).search('^(1|2|3|4|5|6|7|8|9|10)$', true, false).draw();
-    } else if (val === 'out_of_stock') {
-      table.column(6).search('^0$', true, false).draw();
-    } else {
-      table.draw();
+
+  if (table && table.settings) {
+    console.log('DataTables initialized successfully.');
+  } else {
+    console.error('DataTables FAILED to initialize.');
+    return; // Stop if DataTables didn't initialize
+  }
+
+  // Prevent form submission on Enter key for text filter inputs
+  $('#product-filters input[type="text"]').on('keypress', function(e) {
+    if (e.which === 13) { // 13 is the Enter key
+      console.log('Enter key pressed in text input. Preventing default form submission.');
+      e.preventDefault();
+      // Trigger keyup to make sure DataTables search is applied
+      $(this).trigger('keyup');
     }
   });
+
+  // Referência
+  $('#filter-reference').on('keyup change', function() {
+    var searchValue = this.value;
+    console.log('Filter Reference: KeyUp/Change. Value: ' + searchValue + ' Column: 1');
+    table.column(1).search(searchValue, false, false).draw(); // regex=false, smartSearch=false
+    console.log('Reference filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
+    console.log('Reference filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
+  });
+
+  // Categoria
+  $('#filter-category').on('change', function() {
+    var searchValue = this.value;
+    console.log('Filter Category: Change. Value:', searchValue, 'Column: 3');
+    table.column(3).search(searchValue, false, false); // regex=false, smartSearch=false
+    console.log('Category filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
+    table.draw();
+    console.log('Category filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
+  });
+
+  // Status
+  $('#filter-status').on('change', function() {
+    var searchValue = this.value;
+    console.log('Filter Status: Change. Value:', searchValue, 'Column: 5');
+    table.column(5).search(searchValue, false, false); // regex=false, smartSearch=false
+    console.log('Status filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
+    table.draw();
+    console.log('Status filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
+  });
+
+  // Stock
+  $('#filter-stock').on('change', function() {
+    var searchValue = this.value;
+    console.log('Filter Stock: Change. Value:', searchValue, 'Column: 6');
+    
+    // Clear any previous search on the stock column first
+    table.column(6).search('', true, false); // Clear previous regex search, then draw immediately to reflect this clear
+
+    if (searchValue === 'in_stock') {
+      console.log('Stock: Searching for in_stock (^[1-9][0-9]*$)');
+      table.column(6).search('^[1-9][0-9]*$', true, false); // isRegex=true, smartSearch=false
+    } else if (searchValue === 'low_stock') {
+      console.log('Stock: Searching for low_stock (^(?:[1-9]|10)$)');
+      table.column(6).search('^(?:[1-9]|10)$', true, false); // isRegex=true, smartSearch=false
+    } else if (searchValue === 'out_of_stock') {
+      console.log('Stock: Searching for out_of_stock (^0$)');
+      table.column(6).search('^0$', true, false); // isRegex=true, smartSearch=false
+    } else {
+      console.log('Stock: Clearing filter (selected "Todos" or empty)');
+      // table.column(6).search('', true, false); // Already cleared above
+    }
+    // It's important to draw after setting the search term or after clearing it if no specific stock status is selected.
+    console.log('Stock filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
+    table.draw();
+    console.log('Stock filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
+  });
+
   // Limpar filtros
   $('#reset-filters').on('click', function() {
-    $('#product-filters')[0].reset();
-    $('#product-filters select, #product-filters input').trigger('change').trigger('keyup');
-    table.columns().search('').draw();
+    console.log('Reset Filters button clicked.');
+    $('#product-filters')[0].reset(); // Reset form fields
+
+    console.log('Triggering change/keyup on individual filters for reset...');
+    // These triggers will cause their respective search functions to run with empty values,
+    // which should clear their specific column filters and redraw the table.
+    $('#filter-reference').trigger('keyup'); 
+    $('#filter-category').trigger('change'); 
+    $('#filter-status').trigger('change');   
+    $('#filter-stock').trigger('change');    
+
+    console.log('Filters reset.');
   });
 });
 </script>
+-->
