@@ -1,7 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM Content Loaded - Inventory Page Script with Apply Button');
-  const productTable = document.getElementById('product-table');
-  const productRows = productTable ? Array.from(productTable.querySelectorAll('tbody tr')) : [];
+  const productTableElement = document.getElementById('product-table'); // Renamed to avoid conflict
+  const productRows = productTableElement ? Array.from(productTableElement.querySelectorAll('tbody tr')) : [];
+
+  // Initialize DataTables
+  if (productTableElement) {
+    console.log('Initializing DataTables for inventory table...');
+    $('#product-table').DataTable({
+      responsive: true,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+      },
+      // Since filtering and pagination are server-side, 
+      // disable DataTables' client-side processing for these.
+      searching: false, 
+      ordering: true, // Keep client-side ordering for currently loaded data if desired
+      paging: false // Assuming pagination is server-side
+    });
+    console.log('DataTables for inventory initialized.');
+  } else {
+    console.error('Inventory table #product-table not found for DataTables initialization.');
+  }
 
   const referenceFilter = document.getElementById('filter-reference');
   const categoryFilter = document.getElementById('filter-category');

@@ -1,4 +1,3 @@
-<div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <div class="page-title-box">
@@ -159,8 +158,6 @@
     </div>
   </div>
 
-</div>
-
 <% locals.styles = locals.styles || []; %>
 <% locals.styles.push(`
 <style>
@@ -200,111 +197,28 @@
 `); %>
 
 <% locals.scripts = locals.scripts || []; %>
-<% locals.scripts.push('/js/admin/product-filters.js'); // Placeholder if we move to external file %>
-<!-- 
+<% locals.scripts.push( `
 <script>
-console.log('Inline script block started.');
-if (typeof jQuery === 'undefined') {
-  console.error('jQuery is NOT LOADED before this script block!');
-}
-$(document).ready(function() {
-  console.log('Document ready. Initializing DataTables...');
+  $(document).ready(function() {
+    console.log('Document ready. Initializing DataTables for products page...');
+    var table = $('.datatable').DataTable({
+      responsive: true,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+      },
+      // Server-side processing is handled by page reloads with query parameters,
+      // so client-side searching/ordering is not strictly necessary here if pagination is also server-side.
+      // If you want to keep client-side sorting/searching on the CURRENTLY LOADED page data, keep these true.
+      // For full server-side behavior, these would be false and you'd use DataTables ajax options.
+      searching: true, // Keep client-side search on current page data
+      ordering: true   // Keep client-side ordering on current page data
+    });
 
-  var table = $('.datatable').DataTable({
-    // Optional: Add language settings if you have the pt-BR.json loaded
-    // language: {
-    //   url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-    // }
-  });
-
-  if (table && table.settings) {
-    console.log('DataTables initialized successfully.');
-  } else {
-    console.error('DataTables FAILED to initialize.');
-    return; // Stop if DataTables didn't initialize
-  }
-
-  // Prevent form submission on Enter key for text filter inputs
-  $('#product-filters input[type="text"]').on('keypress', function(e) {
-    if (e.which === 13) { // 13 is the Enter key
-      console.log('Enter key pressed in text input. Preventing default form submission.');
-      e.preventDefault();
-      // Trigger keyup to make sure DataTables search is applied
-      $(this).trigger('keyup');
-    }
-  });
-
-  // Referência
-  $('#filter-reference').on('keyup change', function() {
-    var searchValue = this.value;
-    console.log('Filter Reference: KeyUp/Change. Value: ' + searchValue + ' Column: 1');
-    table.column(1).search(searchValue, false, false).draw(); // regex=false, smartSearch=false
-    console.log('Reference filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
-    console.log('Reference filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
-  });
-
-  // Categoria
-  $('#filter-category').on('change', function() {
-    var searchValue = this.value;
-    console.log('Filter Category: Change. Value:', searchValue, 'Column: 3');
-    table.column(3).search(searchValue, false, false); // regex=false, smartSearch=false
-    console.log('Category filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
-    table.draw();
-    console.log('Category filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
-  });
-
-  // Status
-  $('#filter-status').on('change', function() {
-    var searchValue = this.value;
-    console.log('Filter Status: Change. Value:', searchValue, 'Column: 5');
-    table.column(5).search(searchValue, false, false); // regex=false, smartSearch=false
-    console.log('Status filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
-    table.draw();
-    console.log('Status filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
-  });
-
-  // Stock
-  $('#filter-stock').on('change', function() {
-    var searchValue = this.value;
-    console.log('Filter Stock: Change. Value:', searchValue, 'Column: 6');
-    
-    // Clear any previous search on the stock column first
-    table.column(6).search('', true, false); // Clear previous regex search, then draw immediately to reflect this clear
-
-    if (searchValue === 'in_stock') {
-      console.log('Stock: Searching for in_stock (^[1-9][0-9]*$)');
-      table.column(6).search('^[1-9][0-9]*$', true, false); // isRegex=true, smartSearch=false
-    } else if (searchValue === 'low_stock') {
-      console.log('Stock: Searching for low_stock (^(?:[1-9]|10)$)');
-      table.column(6).search('^(?:[1-9]|10)$', true, false); // isRegex=true, smartSearch=false
-    } else if (searchValue === 'out_of_stock') {
-      console.log('Stock: Searching for out_of_stock (^0$)');
-      table.column(6).search('^0$', true, false); // isRegex=true, smartSearch=false
+    if (table && table.settings) {
+      console.log('DataTables initialized successfully for products page.');
     } else {
-      console.log('Stock: Clearing filter (selected "Todos" or empty)');
-      // table.column(6).search('', true, false); // Already cleared above
+      console.error('DataTables FAILED to initialize for products page.');
     }
-    // It's important to draw after setting the search term or after clearing it if no specific stock status is selected.
-    console.log('Stock filter applied. Rows before draw:', table.rows({ search: 'applied' }).nodes().length);
-    table.draw();
-    console.log('Stock filter drawn. Visible rows:', table.rows({ page: 'current' }).nodes().length);
   });
-
-  // Limpar filtros
-  $('#reset-filters').on('click', function() {
-    console.log('Reset Filters button clicked.');
-    $('#product-filters')[0].reset(); // Reset form fields
-
-    console.log('Triggering change/keyup on individual filters for reset...');
-    // These triggers will cause their respective search functions to run with empty values,
-    // which should clear their specific column filters and redraw the table.
-    $('#filter-reference').trigger('keyup'); 
-    $('#filter-category').trigger('change'); 
-    $('#filter-status').trigger('change');   
-    $('#filter-stock').trigger('change');    
-
-    console.log('Filters reset.');
-  });
-});
 </script>
--->
+`); %>
