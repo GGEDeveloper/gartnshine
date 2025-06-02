@@ -183,6 +183,47 @@
                   <label for="dimensions" class="form-label">Dimensões (CxLxA cm)</label>
                   <input type="text" class="form-control" id="dimensions" name="dimensions" 
                          value="<%= (typeof product !== 'undefined' && product.dimensions) ? product.dimensions : '' %>" placeholder="e.g., 10x5x2">
+                <div class="form-group mb-3">
+                  <label for="images" class="form-label">Imagens do Produto</label>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple>
+                    <label class="custom-file-label" for="images">Escolher arquivos</label>
+                  </div>
+                  <small class="form-text text-muted">Selecione uma ou mais imagens para o produto.</small>
+                </div>
+
+                <div class="row mt-3" id="newImagePreviews">
+                  <!-- New image previews will be dynamically added here by JavaScript -->
+                </div>
+
+                <div class="card card-outline card-info mt-3">
+                  <div class="card-header">
+                    <h3 class="card-title">Imagens Existentes</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="row" id="existingImagePreviews">
+                      <% if (typeof product !== 'undefined' && product.images && product.images.length > 0) { %>
+                        <% product.images.forEach(image => { %>
+                          <div class="col-md-3 mb-3 existing-image-preview" data-image-id="<%= image.id %>">
+                            <div class="card h-100">
+                              <img src="<%= image.image_url %>" class="card-img-top img-fluid" alt="<%= image.image_filename %>" style="height: 150px; object-fit: cover;">
+                              <div class="card-body d-flex flex-column">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="primary_image_id" id="imageRadio<%= image.id %>" value="<%= image.id %>" <%= image.is_primary ? 'checked' : '' %>>
+                                  <label class="form-check-label" for="imageRadio<%= image.id %>">Principal</label>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm mt-2 delete-existing-image" data-image-id="<%= image.id %>">
+                                  <i class="fas fa-trash"></i> Remover
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        <% }); %>
+                      <% } else { %>
+                        <p class="text-muted">Nenhuma imagem existente para este produto.</p>
+                      <% } %>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="card card-outline card-info mt-3">

@@ -409,7 +409,7 @@ class Product extends BaseModel {
       await connection.beginTransaction();
 
       // Mapear campos permitidos para inserção
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes'];
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'attributes'];
       const fieldsToInsert = {};
 
       // Filtrar e converter campos

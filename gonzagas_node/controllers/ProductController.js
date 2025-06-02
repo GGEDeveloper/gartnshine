@@ -108,18 +108,43 @@ class ProductController extends BaseController {
       
       productData.is_active = !!(productData.is_active === 'on' || productData.is_active === true || productData.is_active === 'true' || productData.is_active === '1');
       productData.is_catalog_visible = !!(productData.is_catalog_visible === 'on' || productData.is_catalog_visible === true || productData.is_catalog_visible === 'true' || productData.is_catalog_visible === '1');
-      productData.featured = !!(req.body.is_featured === 'on' || req.body.is_featured === true || req.body.is_featured === 'true' || req.body.is_featured === '1' || req.body.is_featured === 1);
+      productData.featured = !!(req.body.featured === 'on' || req.body.featured === true || req.body.featured === 'true' || req.body.featured === '1' || req.body.featured === 1);
+
+      // Handle product attributes
+      const attributes = [];
+      if (Array.isArray(req.body.attributeNames) && Array.isArray(req.body.attributeValues)) {
+        for (let i = 0; i < req.body.attributeNames.length; i++) {
+          const name = req.body.attributeNames[i].trim();
+          const value = req.body.attributeValues[i].trim();
+          if (name && value) {
+            attributes.push({ name, value });
+          }
+        }
+      }
+      productData.attributes = JSON.stringify(attributes);
 
       const images = req.files && req.files.images ? req.files.images.map(file => ({
         path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
         filename: file.filename,
-        is_main: false 
+        is_primary: false // Default to false, will be set by primary_image_id
       })) : [];
       
+      // If a primary image was selected from newly uploaded images
+      const primaryImageFilename = req.body.primary_image_filename; // Assuming this field is sent from the form
+      if (primaryImageFilename) {
+        images = images.map(img => ({
+          ...img,
+          is_primary: img.filename === primaryImageFilename
+        }));
+      } else if (images.length > 0) {
+        // If no primary image is explicitly selected, make the first uploaded image primary
+        images[0].is_primary = true;
+      }
+
       const mainImage = req.files && req.files.image ? {
         path: path.join('/media/products/', req.files.image[0].filename).replace(/\\/g, '/'),
         filename: req.files.image[0].filename,
-        is_main: true
+        is_primary: true
       } : null;
 
       if (mainImage) {

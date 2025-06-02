@@ -258,7 +258,7 @@ router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyC
 
 // Product Management Routes
 router.get('/products', adminSessionRequired, ProductController.index);
-router.get('/products/create', adminSessionRequired, ProductController.create);
+router.get('/products/add', adminSessionRequired, ProductController.create);
 router.post('/products/create', 
   adminSessionRequired, 
   productImageUpload.fields([

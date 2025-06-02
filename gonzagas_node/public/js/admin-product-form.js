@@ -58,15 +58,92 @@ $(document).ready(function() {
   // Inicialização do file input personalizado
   bsCustomFileInput.init();
 
-  // Preview da imagem ao selecionar
-  $('#image').on('change', function() {
-    const file = this.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        $('#imagePreview').attr('src', e.target.result);
+  // Handle multiple image previews and primary selection for newly uploaded images
+  $('#images').on('change', function() {
+    const files = this.files;
+    const $imagePreviewsContainer = $('#newImagePreviews');
+    $imagePreviewsContainer.empty(); // Clear previous previews
+
+    if (files.length > 0) {
+      // Disable existing primary image radios if new images are uploaded
+      $('input[name="primary_image_id"]').prop('checked', false).prop('disabled', true);
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewHtml = `
+            <div class="col-md-3 mb-3 new-image-preview" data-filename="${file.name}">
+              <div class="card h-100">
+                <img src="${e.target.result}" class="card-img-top img-fluid" alt="${file.name}" style="height: 150px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                  <div class="form-check">
+                    <input class="form-check-input primary-image-radio" type="radio" name="primary_image_filename" id="newImageRadio${i}" value="${file.name}" ${i === 0 ? 'checked' : ''}>
+                    <label class="form-check-label" for="newImageRadio${i}">Principal</label>
+                  </div>
+                  <button type="button" class="btn btn-danger btn-sm mt-2 remove-new-image" data-filename="${file.name}">Remover</button>
+                </div>
+              </div>
+            </div>
+          `;
+          $imagePreviewsContainer.append(previewHtml);
+
+          // If this is the first image, mark its radio as checked
+          if (i === 0) {
+            $('#newImageRadio' + i).prop('checked', true);
+          }
+        };
+        reader.readAsDataURL(file);
       }
-      reader.readAsDataURL(file);
+    }
+
+    // Re-enable existing primary image radios if no new images are selected
+    if (files.length === 0) {
+      $('input[name="primary_image_id"]').prop('disabled', false);
+    }
+  });
+
+  // Handle click on existing primary image radio
+  $(document).on('change', 'input[name="primary_image_id"]', function() {
+    if ($(this).is(':checked')) {
+      // If an existing image is chosen as primary, uncheck and disable new image radios
+      $('input[name="primary_image_filename"]').prop('checked', false);
+      $('#images').val(''); // Clear file input to prevent re-uploading new images
+      $('#newImagePreviews').empty(); // Clear new image previews
+    }
+  });
+
+  // Handle removal of newly added images
+  $(document).on('click', '.remove-new-image', function() {
+    const filenameToRemove = $(this).data('filename');
+    $(this).closest('.new-image-preview').remove();
+
+    // Remove the file from the FileList object associated with the input
+    const dt = new DataTransfer();
+    const files = $('#images')[0].files;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].name !== filenameToRemove) {
+        dt.items.add(files[i]);
+      }
+    }
+    $('#images')[0].files = dt.files;
+
+    // If no new images are left, re-enable existing primary image radios
+    if ($('#newImagePreviews .new-image-preview').length === 0) {
+      $('input[name="primary_image_id"]').prop('disabled', false);
+    } else {
+      // If the removed image was primary, set the first remaining new image as primary
+      if ($(this).siblings('.card-body').find('.primary-image-radio').is(':checked')) {
+        $('#newImagePreviews .new-image-preview:first .primary-image-radio').prop('checked', true);
+      }
+    }
+  });
+
+  // Handle primary image selection for newly added images
+  $(document).on('change', 'input[name="primary_image_filename"]', function() {
+    if ($(this).is(':checked')) {
+      // If a new image is chosen as primary, uncheck existing image radios
+      $('input[name="primary_image_id"]').prop('checked', false);
     }
   });
 
