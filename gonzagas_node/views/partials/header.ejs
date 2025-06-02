@@ -14,7 +14,9 @@
         <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Gallery</a></li>
         
         <!-- Catalog link -->
+        <% if (typeof siteSettings !== 'undefined' && siteSettings.catalog_page_enabled) { %>
         <li><a href="/catalog" class="<%= typeof title !== 'undefined' && title === 'Catalog' ? 'active' : '' %>">Catalog</a></li>
+        <% } %>
         
         <li><a href="/about" class="<%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">About</a></li>
         
@@ -27,6 +29,7 @@
               <li><a href="/admin/families">Categories</a></li>
               <li><a href="/admin/inventory">Inventory</a></li>
               <li><a href="/admin/checkpoints">Checkpoints</a></li>
+              <li><a href="/admin/settings">Settings</a></li>
               <li><a href="/admin/logout">Logout</a></li>
             </ul>
           </li>

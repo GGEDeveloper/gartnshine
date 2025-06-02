@@ -136,10 +136,11 @@ img {
   background-color: var(--color-highlight);
 }
 
+/* === START: COMMENTED OUT OLD GLOBAL DROPDOWN STYLES ===
 /* Dropdown styles */
-.dropdown {
-  position: relative;
-}
+/*.dropdown {
+  position: relative; /* Establishes positioning context for the dropdown menu */
+/*}
 
 .dropdown-toggle::after {
   content: '▾';
@@ -160,7 +161,7 @@ img {
   visibility: hidden;
   transform: translateY(10px);
   transition: all 0.3s ease;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .dropdown.open .dropdown-menu {
@@ -182,7 +183,77 @@ img {
 
 .dropdown-menu a:hover {
   background-color: rgba(255, 255, 255, 0.05);
+}*/
+/* === END: COMMENTED OUT OLD GLOBAL DROPDOWN STYLES === */
+
+/* === NEW GLOBAL DROPDOWN STYLES === */
+.dropdown {
+  position: relative; /* Crucial for positioning the dropdown menu */
+  display: inline-block; /* Adjust if it's a direct list item in a flex container */
 }
+
+.dropdown-toggle::after {
+  content: ' \25BE'; /* Downward arrow unicode character */
+  display: inline-block;
+  margin-left: 0.3em;
+  font-size: 0.8em;
+  vertical-align: middle;
+  border: none; /* Ensure no default browser borders on pseudo-elements */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position below the parent */
+  left: 0;
+  z-index: 1000;
+  display: none; /* Hidden by default, rely on .open class to show */
+  min-width: 200px;
+  padding: 0.5rem 0;
+  margin: 2px 0 0; /* Small gap from parent */
+  font-size: 0.9rem;
+  color: var(--color-text-light); /* Text color for dropdown items */
+  text-align: left;
+  list-style: none;
+  background-color: var(--color-secondary); /* Dropdown background */
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.dropdown.open > .dropdown-menu { /* Use > for direct child, ensure .open is on .dropdown */
+  display: block; /* Show the menu */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu a {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: var(--color-text-light); /* Ensure links inherit or have specific color */
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  text-decoration: none;
+  box-sizing: border-box; /* Consistent padding and border behavior */
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
+  color: var(--color-text); /* Text color on hover/focus */
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover background */
+  text-decoration: none;
+}
+/* === END NEW GLOBAL DROPDOWN STYLES === */
 
 /* Admin link style - subtle visibility */
 .admin-link {
@@ -331,6 +402,7 @@ img {
   justify-content: center;
   align-items: center;
   overflow: hidden; /* Para garantir que o vídeo não transborde */
+  z-index: 10; /* Garante que o hero esteja acima de outros elementos */
 }
 
 .video-background-container {
@@ -372,17 +444,18 @@ img {
 .hero-content {
   text-align: center;
   color: var(--color-text);
-  padding: 1.5rem; /* Controla o espaço interno da caixa */
-  max-width: 650px; /* Largura máxima da caixa */
+  padding: 0.85rem; /* Controla o espaço interno da caixa */
+  max-width: 425px; /* Largura máxima da caixa */
   margin: 0 auto; /* Centra a caixa */
   background-color: rgba(0, 0, 0, 0.25); /* Fundo subtil para a caixa */
   border-radius: 8px; /* Cantos arredondados */
   position: relative; /* Para contexto de posicionamento se necessário */
   z-index: 2; /* Garante que fica por cima do vídeo/overlay */
+  transform: translateY(-3rem); /* Move a caixa um pouco para cima */
 }
 
 .hero-content h1 {
-  font-size: 2.8rem; /* Tamanho do título reduzido */
+  font-size: 1.85rem; /* Tamanho do título reduzido */
   margin-bottom: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra do texto (de .hero-title) */
   background: linear-gradient(90deg, var(--color-text), var(--color-highlight)); /* Gradiente (de .hero-title) */
@@ -392,7 +465,7 @@ img {
 }
 
 .hero-content p {
-  font-size: 1rem; /* Tamanho do parágrafo */
+  font-size: 0.75rem; /* Tamanho do parágrafo */
   opacity: 0.9;
   font-weight: 300;
   margin-bottom: 0; /* Remove margem inferior se for o último elemento */
@@ -474,12 +547,14 @@ section {
 
 .product-card {
   border-radius: 10px;
-  overflow: hidden;
+  overflow: hidden; /* Importante para conter a imagem se ela transbordar */
   background-color: rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   opacity: 0;
   transform: translateY(20px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex; /* Adicionado para melhor controle do layout interno se necessário */
+  flex-direction: column; /* Adicionado para empilhar imagem e info */
 }
 
 .product-card.visible {
@@ -492,17 +567,91 @@ section {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.product-image {
-  height: 250px;
-  overflow: hidden;
-  position: relative;
+/* Estilo base para product-card */
+.product-card {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 250px; /* Largura máxima do card */
+  margin: 0 auto; /* Centraliza o card */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transform-style: preserve-3d; /* Permite transformações 3D nos filhos */
 }
 
+/* Estilo base para product-image */
+.product-image {
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* Mantém proporção quadrada */
+  position: relative;
+  background: #f5f5f5;
+}
+
+/* Estilo para a imagem dentro do product-image */
 .product-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
+}
+
+/* Estilo para o conteúdo do card */
+.product-info {
+  padding: 12px;
+  text-align: center;
+}
+
+/* Ajustes para o Swiper */
+.swiper-slide {
+  height: auto;
+  display: flex;
+  width: 250px; /* Define a largura do slide para corresponder ao max-width do product-card */
+  transform-style: preserve-3d; /* Permite transformações 3D nos filhos */
+}
+
+/* Garante que as imagens dentro do Swiper respeitem as dimensões */
+.swiper-slide .swiper-container {
+  width: 100%;
+  height: 100%;
+  position: relative; /* Garante que os botões de navegação sejam posicionados relativamente a este contentor */
+}
+
+.swiper-container {
+  position: relative; /* Garante que os botões de navegação sejam posicionados relativamente a este contentor */
+}
+
+/* Efeito hover suave */
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-image a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-image img {
+  display: block;     /* Remove espaços indesejados */
+  width: 100%;        /* Preenche a largura do .product-image */
+  height: 100%;       /* Preenche a altura do .product-image */
+  object-fit: cover;  /* Cobre a área, mantém proporção, corta se necessário */
+  /* position: absolute; -- Temporarily commented out for debugging */
+  /* top: 0; -- Temporarily commented out for debugging */
+  /* left: 0; -- Temporarily commented out for debugging */
+  transition: transform 0.5s ease; /* Mantém a transição de zoom */
 }
 
 .product-card:hover .product-image img {
@@ -693,6 +842,7 @@ section {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
+/* -- DUPLICATE STYLES COMMENTED OUT TO AVOID CONFLICT --
 .product-image {
   position: relative;
   height: 300px;
@@ -705,6 +855,7 @@ section {
   object-fit: cover;
   transition: transform 0.5s ease;
 }
+*/
 
 .product-overlay {
   position: absolute;
@@ -1337,7 +1488,7 @@ section {
   .hero-title {
     font-size: 2.5rem;
   }
-}
+  /* Removed premature closing brace that was here. */
 
 @media (max-width: 768px) {
   .menu-toggle {
@@ -1391,21 +1542,91 @@ section {
   .nav-menu.active {
     left: 0;
   }
-  
-  .dropdown-menu {
-    position: static;
+
+  /* === START: COMMENTED OUT OLD MOBILE DROPDOWN STYLES === */
+  /* Mobile-specific dropdown styles */
+  /*.dropdown-menu { /* General dropdowns within mobile nav panel */
+/*    position: static;
     opacity: 1;
     visibility: visible;
     transform: none;
     background-color: transparent;
     box-shadow: none;
-    display: none;
-  }
+    display: none; /* Initially hidden */
+/*  }
   
-  .dropdown.open .dropdown-menu {
+/*  .dropdown.open .dropdown-menu {
+/*    display: block;
+/*  }
+
+/*  /* Styles for the Admin dropdown UL specifically within the mobile .nav-menu */
+/*  .nav-menu .dropdown-menu {
+/*    padding-left: 1rem; 
+/*    margin-top: 0.25rem;
+/*    margin-bottom: 0.5rem;
+/*    background-color: rgba(0,0,0,0.1); 
+/*    border-radius: 4px;
+/*  }
+
+/*  .nav-menu .dropdown-menu li a {
+/*    padding: 0.6rem 0; 
+/*    font-size: 0.9em; 
+/*  }
+
+/*  .nav-menu .dropdown-menu li a:hover,
+/*  .nav-menu .dropdown-menu li a:active,
+/*  .nav-menu .dropdown-menu li a.active {
+/*    background-color: rgba(255, 255, 255, 0.1);
+/*  }*/
+  /* === END: COMMENTED OUT OLD MOBILE DROPDOWN STYLES === */
+
+  /* === NEW MOBILE DROPDOWN STYLES (@media max-width: 768px) === */
+  .nav-menu .dropdown-toggle::after {
+    /* Optionally, change arrow or hide it for mobile slide-in */
+    /* content: ' +'; /* Example: change to a plus sign */
+    /* display: inline-block; */ /* Ensure it shows if not hidden */
+    float: right; /* Align arrow to the right for mobile list items */
+    margin-right: 0.5rem;
+  }
+
+  .nav-menu .dropdown-menu { /* Targets dropdown menus within the mobile nav panel */
+    display: none; /* Hidden by default */
+    position: static; /* Overrides absolute positioning from desktop */
+    width: auto; /* Take available width within the panel */
+    background-color: rgba(0,0,0,0.15); /* Slightly darker background for nesting */
+    border: none;
+    box-shadow: none;
+    padding-left: 1rem; /* Indent submenu items */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    /* Resetting desktop transition properties as they might not be desired for static display */
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+
+  .nav-menu .dropdown.open > .dropdown-menu {
     display: block;
   }
-  
+
+  .nav-menu .dropdown-menu a {
+    padding: 0.75rem 1rem; /* Adjust padding for mobile */
+    font-size: 0.9em;
+    color: var(--color-text-light-secondary); /* Ensure good contrast on mobile panel */
+  }
+
+  .nav-menu .dropdown-menu a:hover,
+  .nav-menu .dropdown-menu a:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-light);
+  }
+  /* === END NEW MOBILE DROPDOWN STYLES === */
+
+} /* This closes @media (max-width: 768px) */
+
+/* General styles (hero, brand-story, etc.) resume here, assumed to be part of @media (max-width: 992px) or global */
   .hero-title {
     font-size: 2rem;
   }
@@ -1432,40 +1653,17 @@ section {
 
   .nav-menu li a {
     display: block;
-    padding: 0.75rem 0; /* Adjusted vertical padding */
-    /* Horizontal padding is effectively 1rem due to parent .nav-menu padding: ... 1rem 1rem; */
+    padding: 0.75rem 0; 
     color: var(--color-text);
     text-decoration: none;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .nav-menu li a:hover,
-  .nav-menu li a:active, /* Touch feedback */
-  .nav-menu li a.active { /* Current page link */
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle highlight */
+  .nav-menu li a:active, 
+  .nav-menu li a.active { 
+    background-color: rgba(255, 255, 255, 0.05); 
     color: var(--color-highlight);
-  }
-
-  /* Styles for the Admin dropdown UL within the mobile menu */
-  .nav-menu .dropdown-menu {
-    padding-left: 1rem; /* Indent the submenu relative to main items text */
-    margin-top: 0.25rem;
-    margin-bottom: 0.5rem;
-    background-color: rgba(0,0,0,0.1); /* Slightly different background for submenu section */
-    border-radius: 4px;
-  }
-
-  /* Styles for Admin submenu LI A items */
-  .nav-menu .dropdown-menu li a {
-    padding: 0.6rem 0; /* Slightly less vertical padding */
-    font-size: 0.9em; /* Slightly smaller font size */
-    /* color: var(--color-text-muted); /* Optional: make them slightly less prominent if desired */
-  }
-  /* Hover/active for submenu items, ensure they don't get double background from parent */
-  .nav-menu .dropdown-menu li a:hover,
-  .nav-menu .dropdown-menu li a:active,
-  .nav-menu .dropdown-menu li a.active {
-    background-color: rgba(255, 255, 255, 0.1); /* Slightly more pronounced highlight for submenu items */
   }
 
   .admin-link {
@@ -1494,6 +1692,7 @@ section {
     */
   }
 }
+
 
 @media (max-width: 576px) {
   .hero {

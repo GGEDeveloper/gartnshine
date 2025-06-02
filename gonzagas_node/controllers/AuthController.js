@@ -64,9 +64,9 @@ class AuthController extends BaseController {
         // Store user information in session (excluding sensitive data like password)
         req.session.user = {
           id: user.id,
-          username: user.username,
+          username: user.name, // Corrected from user.username to user.name based on User model structure
           email: user.email,
-          role: user.role_id // or user.role, depending on your User model
+          role: user.role // Corrected from user.role_id to user.role to store the role name string
           // Add any other necessary user details to the session
         };
         req.flash('success_msg', 'You are now logged in.');

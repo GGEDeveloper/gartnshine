@@ -5,6 +5,7 @@ const fs = require('fs').promises;
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
+const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -67,6 +68,7 @@ router.get('/', async (req, res) => {
     }
     
     console.log(`Rendering index with ${mediaFiles.length} media files`);
+    console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
       title: 'Home',
       featured: featured || [],
@@ -181,34 +183,11 @@ router.get('/collection/:familyId', async (req, res) => {
 // Catalog page
 router.get('/catalog', CatalogController.displayCatalog);
 
+// Product detail under construction page
+router.get('/product/:id/details-uc', ProductController.showProductDetailUnderConstruction);
+
 // Product detail page
-router.get('/product/:id', async (req, res) => {
-  try {
-    const productId = parseInt(req.params.id);
-    const product = await Product.getById(productId);
-    
-    if (!product) {
-      return res.status(404).render('error', {
-        title: 'Not Found',
-        message: 'Product not found.'
-      });
-    }
-    
-    const families = await ProductFamily.getAll();
-    
-    res.render('product', {
-      title: product.name,
-      product,
-      families
-    });
-  } catch (error) {
-    console.error('Error loading product:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load the product details.'
-    });
-  }
-});
+router.get('/product/:id', ProductController.showProductDetailUnderConstruction);
 
 // About page
 router.get('/about', (req, res) => {

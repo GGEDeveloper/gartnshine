@@ -94,6 +94,10 @@ const adminMiddleware = (req, res, next) => {
 router.use(adminMiddleware);
 
 
+// Mount settings router
+const settingsAdminRouter = require('./admin/settings');
+router.use('/settings', settingsAdminRouter);
+
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
   try {

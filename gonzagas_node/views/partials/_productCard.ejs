@@ -1,0 +1,42 @@
+<div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>">
+  <div class="product-image">
+    <a href="/product/<%= product.id %>" aria-label="Ver detalhes do produto <%= product.name %>">
+      <% if (product.image_url) { %>
+        <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" loading="lazy">
+      <% } else { %>
+        <img src="/images/placeholder-image.png" alt="Imagem indisponível" loading="lazy">
+      <% } %>
+    </a>
+  </div>
+  <div class="product-info">
+    <% if (product.reference) { %>
+      <p class="product-reference">Ref: <%= product.reference %></p>
+    <% } %>
+    <p class="product-price">
+      <% 
+      // Parse para float, tratando possíveis valores não numéricos
+      const rawPrice = parseFloat(product.price); 
+      const rawSalePrice = parseFloat(product.sale_price);
+
+      // Garantir que temos números válidos para trabalhar, ou zero caso contrário
+      const price = !isNaN(rawPrice) ? rawPrice : 0;
+      const salePrice = !isNaN(rawSalePrice) ? rawSalePrice : 0;
+
+      const formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value);
+      };
+
+      if (salePrice > 0 && salePrice < price) { // Se existe preço promocional válido e menor que o preço normal
+      %> 
+        <span class="sale-price"><%= formatCurrency(salePrice) %></span>
+        <span class="original-price"><del><%= formatCurrency(price) %></del></span>
+      <% } else if (price > 0) { // Senão, se existe um preço normal válido
+      %>
+        <%= formatCurrency(price) %>
+      <% } else { // Senão, mostrar "Preço sob consulta"
+      %>
+        Preço sob consulta
+      <% } %>
+    </p>
+  </div>
+</div>

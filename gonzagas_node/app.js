@@ -9,6 +9,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 const { pool } = require('./config/database');
+const SiteSettings = require('./models/SiteSettings'); // Added for site settings
 
 // Carrega as configurações
 const config = require('./config/config');
@@ -113,6 +114,22 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware to load site settings globally
+app.use(async (req, res, next) => {
+  try {
+    const settings = await SiteSettings.getSettings();
+    res.locals.siteSettings = settings;
+  } catch (error) {
+    console.error('Error loading site settings for views:', error);
+    // Provide default settings to prevent crashes if DB fetch fails
+    res.locals.siteSettings = {
+      featured_carousel_enabled: true, // Default to true if error
+      catalog_page_enabled: true,    // Default to true if error
+    };
+  }
+  next();
+});
+
 // Carrega dados de famílias para o menu de navegação
 app.use(async (req, res, next) => {
   try {
@@ -150,7 +167,8 @@ app.use(helmet({
         'https://artnshine.pt',
         'https://cdn.jsdelivr.net', // Adicionado para Bootstrap JS e outros scripts do jsdelivr
         'https://cdn.datatables.net', // Adicionado para DataTables JS
-        'https://code.jquery.com'    // Adicionado para jQuery
+        'https://code.jquery.com',
+        'https://unpkg.com'    // Adicionado para Swiper JS
       ],
       styleSrc: [
         "'self'",
@@ -159,7 +177,8 @@ app.use(helmet({
         'https://fonts.googleapis.com',
         'https://cdnjs.cloudflare.com',
         'https://cdn.jsdelivr.net', // Adicionado para Bootstrap CSS e ApexCharts CSS
-        'https://cdn.datatables.net' // Adicionado para DataTables CSS
+        'https://cdn.datatables.net',
+        'https://unpkg.com' // Adicionado para Swiper CSS e JS
       ],
       styleSrcElem: [
         "'self'",
@@ -168,7 +187,8 @@ app.use(helmet({
         'https://fonts.googleapis.com',
         'https://cdnjs.cloudflare.com',
         'https://cdn.jsdelivr.net', // Adicionado para Bootstrap CSS e ApexCharts CSS
-        'https://cdn.datatables.net' // Adicionado para DataTables CSS
+        'https://cdn.datatables.net', // Adicionado para DataTables CSS
+        'https://unpkg.com'    // Adicionado para Swiper CSS
       ],
       fontSrc: [
         "'self'", 

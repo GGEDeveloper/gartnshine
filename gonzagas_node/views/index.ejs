@@ -7,15 +7,14 @@
           Your browser does not support the video tag.
         </video>
       </div>
-      <div class="hero-overlay"> 
-        <div class="hero-content">
-          <h1><%= siteTitle %></h1>
-          <p><%= siteDescription %></p>
-        </div>
+      <div class="hero-content">
+        <h1><%= siteTitle %></h1>
+        <p><%= siteDescription %></p>
       </div>
     </section>
     
     <!-- Featured Products -->
+    <% if (typeof siteSettings !== 'undefined' && siteSettings.featured_carousel_enabled) { %>
     <section class="featured-section">
       <div class="section-header">
         <h2>Featured Pieces</h2>
@@ -25,31 +24,73 @@
           <span></span>
         </div>
       </div>
-      <div class="product-grid">
-        <% featured.slice(0, 4).forEach(product => { %>
-          <div class="product-card">
-            <div class="product-image">
-              <img src="/media/<%= product.image_filename %>" alt="<%= product.name %>" loading="lazy">
-              <div class="product-overlay">
-                <a href="/product/<%= product.id %>" class="btn">View Details</a>
-              </div>
+
+      <!-- Swiper -->
+      <div class="swiper-container featured-swiper">
+        <div class="swiper-wrapper">
+          <% featured.forEach(product => { %>
+            <div class="swiper-slide">
+              <%- include('partials/_productCard', {product: product}) %>
             </div>
-            <div class="product-info">
-              <h3><%= product.name %></h3>
-              <p class="product-category"><%= product.category %></p>
-              <p class="price">
-                <% if (product.sale_price) { %>
-                  <span class="sale-price">$<%= Number(product.sale_price).toFixed(2) %></span>
-                  <span class="original-price">$<%= Number(product.price).toFixed(2) %></span>
-                <% } else { %>
-                  $<%= Number(product.price).toFixed(2) %>
-                <% } %>
-              </p>
-            </div>
-          </div>
-        <% }); %>
+          <% }); %>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          if (typeof Swiper !== 'undefined') {
+            var swiper = new Swiper('.featured-swiper', {
+              effect: 'coverflow', // Ativa o efeito 3D 'coverflow'
+              grabCursor: true,
+              centeredSlides: true,
+              slidesPerView: 'auto',
+              coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              },
+              loop: true, // Habilita o loop contínuo para o autoplay
+              autoplay: {
+                delay: 3000, // Tempo em ms entre as transições (3 segundos)
+                disableOnInteraction: false, // Continua a reprodução automática mesmo após interação do usuário
+              },
+              pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+              },
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              },
+              breakpoints: {
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 30
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 30
+                }
+              }
+            });
+          } else {
+            console.error('Swiper library not loaded.');
+          }
+        });
+      </script>
     </section>
+    <% } %>
     
 
 </main>

@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { Op } = require('sequelize');
 const { check, validationResult } = require('express-validator');
-const { requireAuth } = require('../../middleware/auth');
+const { adminSessionRequired, roleRequired } = require('../../middleware/authMiddleware.js');
 const Product = require('../../models/Product');
 const { formatError } = require('../../utils/error-handler');
 
 // Middleware para verificar se o usuário tem permissão para gerenciar produtos
-router.use(requireAuth('manage_products'));
+router.use(adminSessionRequired);
+router.use(roleRequired('manage_products'));
 
 /**
  * Lista todos os produtos

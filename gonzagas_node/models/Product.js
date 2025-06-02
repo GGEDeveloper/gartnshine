@@ -516,6 +516,7 @@ class Product extends BaseModel {
       await connection.query('UPDATE products SET ? WHERE id = ?', [fieldsToUpdate, productId]);
 
       // Gerir imagens a apagar
+      const imagesToDelete = productData.imagesToDelete || [];
       if (imagesToDelete && imagesToDelete.length > 0) {
         // TODO: Apagar ficheiros do sistema de ficheiros antes de apagar do DB
         // Por agora, apenas remove do DB
