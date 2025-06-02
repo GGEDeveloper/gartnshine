@@ -29,7 +29,7 @@
       <div class="featured-carousel">
         <% featured.forEach(product => { %>
           <div class="slick-slide">
-            <%- include('partials/_productCard', {product: product}) %>
+            <%- include('partials/_productCard', {product: product, isCatalogPage: false}) %>
           </div>
         <% }); %>
       </div>

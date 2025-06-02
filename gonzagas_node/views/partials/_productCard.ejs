@@ -1,16 +1,26 @@
 <div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>">
   <div class="product-image">
-    <a href="/product/<%= product.id %>" aria-label="Ver detalhes do produto <%= product.name %>">
-      <% if (product.image_url) { %>
-        <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" loading="lazy">
-      <% } else { %>
-        <img src="/images/placeholder-image.png" alt="Imagem indisponível" loading="lazy">
-      <% } %>
-    </a>
+    <% 
+      const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
+      const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/placeholder-image.png';
+    %>
+
+    <% if (typeof isCatalogPage !== 'undefined' && isCatalogPage) { %>
+      <a href="<%= imageUrl %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
+        <img src="<%= imageUrl %>" alt="<%= product.name %>" loading="lazy" class="img-fluid">
+      </a>
+    <% } else { %>
+      <a href="<%= catalogLink %>" class="d-block mb-2" aria-label="Ver produtos da categoria <%= product.family_name || 'Catálogo' %>">
+        <img src="<%= imageUrl %>" alt="<%= product.name %>" loading="lazy" class="img-fluid">
+      </a>
+    <% } %>
   </div>
   <div class="product-info">
     <% if (product.reference) { %>
-      <p class="product-reference">Ref: <%= product.reference %></p>
+      <p class="product-reference mb-1">Ref: <%= product.reference %></p>
+    <% } %>
+    <% if (product.family_name) { %>
+      <p class="product-family mb-1"><small class="text-highlight"><%= product.family_name %></small></p>
     <% } %>
     <p class="product-price">
       <% if (product.formatted_sale_price && product.formatted_purchase_price && 
