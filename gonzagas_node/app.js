@@ -195,6 +195,7 @@ app.use(helmet({
         'https://artnshine.pt',
         "https://fonts.gstatic.com", 
         "https://cdnjs.cloudflare.com",
+        "https://cdn.jsdelivr.net",  // Adicionado para as fontes do Slick Carousel
         "data:"
       ],
       imgSrc: [
@@ -205,7 +206,8 @@ app.use(helmet({
         "http://localhost:3000", 
         "http://127.0.0.1:3000", 
         "http://172.30.46.39:3000",
-        'https://ui-avatars.com' // Adicionado para ui-avatars
+        'https://ui-avatars.com', 
+        'https://cdn.jsdelivr.net' // Adicionado para o ajax-loader.gif do Slick Carousel
       ],
       mediaSrc: [
         "'self'", 

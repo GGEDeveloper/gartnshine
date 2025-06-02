@@ -1,18 +1,101 @@
-<main class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <div class="card p-5" style="background-color: var(--color-secondary, #1a1a1c); color: var(--color-text, #f0f0f0);">
-                <div class="mb-4">
-                    <img src="/logo.svg" alt="Gonzaga's Art & Shine Logo" class="mx-auto d-block" style="max-height: 180px;">
-                </div>
-                <h1 class="display-4 mt-3" style="color: var(--color-highlight, #b19cd9);">Catálogo em Construção</h1>
-                <p>Volte em breve para descobrir as nossas novidades e coleções exclusivas!</p>
-                <hr class="my-4" style="border-top-color: var(--color-text-muted, #aaaaaa);">
-                <p>Entretanto, pode explorar o nosso site:</p>
-                <a href="/" class="btn btn-lg mt-3" style="background-color: var(--color-accent, #43c59e); border-color: var(--color-accent, #43c59e); color: var(--color-primary, #121212);">Página Inicial</a>
-                <!-- Adicionar outros links relevantes, como /about ou /contact, se existirem -->
-                <!-- Exemplo: <a href="/contact" class="btn btn-outline-secondary btn-lg mt-3 ms-2">Contacto</a> -->
+<main class="container my-5">
+    <div class="row">
+        <!-- Filter Sidebar -->
+        <aside class="col-lg-3 col-md-4">
+            <div class="card bg-dark text-white p-3 mb-4">
+                <form id="filterForm" method="GET" action="/catalog">
+                    <h4 class="mb-3">Filtrar por Família</h4>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="allFamilies" 
+                                   name="families" value="all" <%= selectedFamilyIds.length === 0 ? 'checked' : '' %>>
+                            <label class="form-check-label" for="allFamilies">
+                                Todas as Famílias
+                            </label>
+                        </div>
+                        <% families.forEach(family => { %>
+                            <div class="form-check">
+                                <input class="form-check-input family-checkbox" type="checkbox" 
+                                       id="family-<%= family.id %>" name="families" 
+                                       value="<%= family.id %>" <%= selectedFamilyIds.includes(family.id) ? 'checked' : '' %>>
+                                <label class="form-check-label" for="family-<%= family.id %>">
+                                    <%= family.name %>
+                                </label>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Aplicar Filtros
+                    </button>
+                    <a href="/catalog" class="btn btn-outline-light w-100 mt-2">
+                        <i class="fas fa-times me-2"></i>Limpar Filtros
+                    </a>
+                </form>
             </div>
-        </div>
+        </aside>
+
+        <!-- Product Display Area -->
+        <section class="col-lg-9 col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Catálogo de Produtos</h2>
+                <div class="d-none d-md-block">
+                    <span class="text-muted"><%= products.length %> produto<%= products.length !== 1 ? 's' : '' %> encontrado<%= products.length !== 1 ? 's' : '' %></span>
+                </div>
+            </div>
+            
+            <% if (products && products.length > 0) { %>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-4">
+                    <% products.forEach(product => { %>
+                        <div class="col mb-4">
+                            <%- include('../partials/_productCard', { product: product }) %>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info text-center mt-4" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>Nenhum produto encontrado com os filtros selecionados.
+                </div>
+            <% } %>
+        </section>
     </div>
 </main>
+
+<!-- Add JavaScript for filter form handling -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filterForm');
+    const checkboxes = form.querySelectorAll('.family-checkbox');
+    const allFamiliesCheckbox = document.getElementById('allFamilies');
+
+    // Handle "All Families" checkbox
+    allFamiliesCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            // Submit form with no family filters
+            const formData = new FormData(form);
+            formData.delete('families');
+            const params = new URLSearchParams(formData);
+            window.location.href = '/catalog' + (params.toString() ? '?' + params.toString() : '');
+        }
+    });
+
+    // Handle individual family checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            allFamiliesCheckbox.checked = false;
+            form.submit();
+        });
+    });
+
+    // Handle form submission to prevent empty form submission
+    form.addEventListener('submit', function(e) {
+        const checkedBoxes = form.querySelectorAll('input[name="families"]:checked');
+        if (checkedBoxes.length === 0) {
+            e.preventDefault();
+            window.location.href = '/catalog';
+        }
+    });
+});
+</script>

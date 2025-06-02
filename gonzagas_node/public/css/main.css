@@ -598,7 +598,7 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
 
@@ -612,7 +612,7 @@ section {
 .swiper-slide {
   height: auto;
   display: flex;
-  width: 250px; /* Define a largura do slide para corresponder ao max-width do product-card */
+
   transform-style: preserve-3d; /* Permite transformações 3D nos filhos */
 }
 
@@ -643,16 +643,7 @@ section {
   height: 100%;
 }
 
-.product-image img {
-  display: block;     /* Remove espaços indesejados */
-  width: 100%;        /* Preenche a largura do .product-image */
-  height: 100%;       /* Preenche a altura do .product-image */
-  object-fit: cover;  /* Cobre a área, mantém proporção, corta se necessário */
-  /* position: absolute; -- Temporarily commented out for debugging */
-  /* top: 0; -- Temporarily commented out for debugging */
-  /* left: 0; -- Temporarily commented out for debugging */
-  transition: transform 0.5s ease; /* Mantém a transição de zoom */
-}
+
 
 .product-card:hover .product-image img {
   transform: scale(1.05);
@@ -705,7 +696,7 @@ section {
 .collection-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .collection-image::after {
@@ -852,10 +843,9 @@ section {
 .product-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
-*/
 
 .product-overlay {
   position: absolute;
@@ -952,7 +942,7 @@ section {
 .collection-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .collection-image::after {
@@ -1183,7 +1173,8 @@ section {
 .thumbnail img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  border-radius: 5px;
 }
 
 .product-title {
@@ -1491,6 +1482,14 @@ section {
   /* Removed premature closing brace that was here. */
 
 @media (max-width: 768px) {
+  .product-card {
+    width: calc(50% - 5px);
+    max-width: unset;
+  }
+
+  .slick-slide {
+    width: calc(50% - 5px);
+  }
   .menu-toggle {
     display: block; /* Show hamburger */
     background: transparent;

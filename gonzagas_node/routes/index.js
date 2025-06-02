@@ -15,6 +15,18 @@ router.get('/', async (req, res) => {
     
     try {
       featured = await Product.getFeatured();
+
+      // Format prices for featured products
+      featured = featured.map(product => ({
+        ...product,
+        formatted_sale_price: product.sale_price ? 
+          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+          null,
+        formatted_purchase_price: product.purchase_price ?
+          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+          null
+      }));
+
       families = await ProductFamily.getAll();
     } catch (dbError) {
       console.error('Database error:', dbError);
@@ -91,6 +103,7 @@ router.get('/collections', async (req, res) => {
   try {
     // Try multiple possible media paths
     const possiblePaths = [
+      path.join(__dirname, '../public/media/gallery'), // New dedicated gallery path
       path.join(__dirname, '../../media'),
       path.join(__dirname, '../public/media'),
       path.join(__dirname, '../media')

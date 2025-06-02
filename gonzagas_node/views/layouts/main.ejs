@@ -23,8 +23,9 @@
   <!-- Catalog CSS -->
   <!-- GLightbox CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <!-- Slick Carousel CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
   <link rel="stylesheet" href="/css/catalog.css">
   
   <style>
@@ -171,8 +172,22 @@
     }
   </script>
 
-  <!-- Swiper JS -->
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Evitar conflitos com outras bibliotecas que usam o símbolo $
+    var $j = jQuery.noConflict();
+    // Tornar o jQuery disponível globalmente para outros scripts
+    window.jQuery = window.$ = $j;
+  </script>
+  <!-- Slick Carousel JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>
+    // Garantir que o Slick esteja disponível com o jQuery correto
+    if (typeof $j.fn.slick === 'undefined') {
+      console.error('Slick Carousel não foi carregado corretamente!');
+    }
+  </script>
   <!-- Main JavaScript -->
   <script src="/js/main.js"></script>
 </body>

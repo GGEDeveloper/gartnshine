@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCatalogFilters();
   initCatalogView();
   initProductDetails();
+  console.log('DOM carregado, verificando jQuery...');
+  checkJQuery();
 });
 
 /**
@@ -352,5 +354,63 @@ function loadMoreProducts() {
       // Initialize animations for new products
       initProductAnimations();
     }, 1000);
+  }
+}
+
+/**
+ * Slick Carousel Initialization
+ */
+// Função para verificar se o jQuery está carregado
+function checkJQuery() {
+  if (window.jQuery) {
+    // jQuery está carregado, inicializa o Slick
+    initSlick();
+  } else {
+    // jQuery ainda não está carregado, tenta novamente em 100ms
+    setTimeout(checkJQuery, 100);
+  }
+}
+
+// Função para inicializar o Slick Carousel
+function initSlick() {
+  // Usar $j (jQuery.noConflict) para evitar conflitos
+  if (typeof $j !== 'undefined' && typeof $j.fn.slick === 'function') {
+    $j('.featured-carousel').slick({
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    });
+    console.log('Slick Carousel inicializado com sucesso!');
+  } else {
+    console.error('Erro: Slick Carousel não foi carregado corretamente ou jQuery não está disponível.');
   }
 }

@@ -104,13 +104,14 @@ class Product extends BaseModel {
           p.family_id,
 
           p.is_active,
-          p.sale_price as price,
+          p.sale_price,
+          p.purchase_price,
           p.description,
           f.name as family_name,
           (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
         FROM products p
         LEFT JOIN product_families f ON p.family_id = f.id
-        WHERE p.is_active = 1
+        WHERE p.is_active = 1 AND p.is_catalog_visible = 1
         ORDER BY p.featured DESC, p.reference ASC
         LIMIT ? OFFSET ?
       `, [limit, offset]);
@@ -217,7 +218,7 @@ class Product extends BaseModel {
   }
 
   // Get featured products
-  static async getFeatured(limit = 4) {
+  static async getFeatured(limit = null) {
     try {
       const [rows] = await pool.query(`
         SELECT p.*, f.name as family_name, 
@@ -226,8 +227,7 @@ class Product extends BaseModel {
         JOIN product_families f ON p.family_id = f.id
         WHERE p.is_active = 1 AND p.featured = 1
         ORDER BY p.reference
-        LIMIT ?
-      `, [limit]);
+    `);
       return rows;
     } catch (error) {
       console.error('Error getting featured products:', error);

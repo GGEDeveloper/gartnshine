@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
-const path = require('path'); // Adicionado
-const fs = require('fs'); // Adicionado
+const ProductFamily = require('../models/ProductFamily');
+const path = require('path');
+const fs = require('fs');
 
 class CatalogController {
   /**
@@ -10,41 +11,72 @@ class CatalogController {
     try {
       // Check if catalog page is enabled in site settings
       if (res.locals.siteSettings && res.locals.siteSettings.catalog_page_enabled === false) {
-        // DISABLED: Show "Catálogo em Construção" page
-        // The 'public/catalog.ejs' template is used, which has the title 'Catálogo em Construção'.
         console.log('[CatalogController] Catalog page is DISABLED. Rendering construction page.');
         return res.status(200).render('public/catalog', { 
           title: 'Catálogo em Construção',
           currentPath: '/catalog', 
-          layout: 'layouts/main',
-          // Add any specific flags if the construction page needs to know it's in 'disabled' mode
+          layout: 'layouts/main'
         });
       }
 
-      // ENABLED: Show the actual live catalog page.
-      // For now, this also points to 'public/catalog.ejs'. 
-      // When the live catalog is fully developed, this section will render it with actual data.
       console.log('[CatalogController] Catalog page is ENABLED. Rendering catalog page.');
-      const templatePath = path.join(__dirname, '../views/public/catalog.ejs');
-      // console.log('[CatalogController] Attempting to render template at absolute path:', templatePath); // Optional: for debugging
-      // if (fs.existsSync(templatePath)) { // Optional: for debugging
-      //   console.log('[CatalogController] Template file confirmed to exist at:', templatePath);
-      // } else {
-      //   console.error('[CatalogController] CRITICAL: Template file DOES NOT EXIST at:', templatePath);
-      // }
 
-      res.render('public/catalog', { 
-        title: 'Catálogo', // Title for the live/enabled catalog page
+      // Get selected family IDs from query params
+      const selectedFamilyIds = req.query.families 
+        ? Array.isArray(req.query.families) 
+          ? req.query.families.map(id => parseInt(id))
+          : [parseInt(req.query.families)]
+        : [];
+
+      // Get all active products visible in catalog
+      let products = await Product.getActiveForCatalog(1000, 0);
+      
+      // Get all families that have products in the catalog
+      let families = await ProductFamily.getAll();
+      
+      // Filter products by selected families if any
+      if (selectedFamilyIds.length > 0) {
+        products = products.filter(product => 
+          selectedFamilyIds.includes(product.family_id)
+        );
+      }
+      
+      // Only show families that have visible products
+      families = families.filter(family => 
+        products.some(p => p.family_id === family.id)
+      );
+      
+      // Format prices for display
+      products = products.map(product => ({
+        ...product,
+        formatted_sale_price: product.sale_price ? 
+          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+          null,
+        formatted_purchase_price: product.purchase_price ?
+          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+          null
+      }));
+
+      // Render the catalog page with the products and families
+      res.render('public/catalog', {
+        title: 'Catálogo',
         currentPath: '/catalog',
-        layout: 'layouts/main' 
-        // TODO: When live, fetch and pass product data here
+        layout: 'layouts/main',
+        products: products,
+        families: families,
+        selectedFamilyIds: selectedFamilyIds,
+        helpers: {
+          isFamilySelected: function(familyId) {
+            return selectedFamilyIds.includes(familyId) ? 'checked' : '';
+          }
+        }
       });
     } catch (error) {
-      // Logs de erro mais detalhados
-      console.error('[CatalogController] Error in displayCatalog:', error); 
-      console.error('[CatalogController] Error rendering catalog placeholder page message:', error.message);
-      console.error('[CatalogController] Stack trace:', error.stack);
-      res.status(500).send('Error loading page. Please try again later.');
+      console.error('Error in displayCatalog:', error);
+      res.status(500).render('error', {
+        message: 'Ocorreu um erro ao carregar o catálogo.',
+        error: {}
+      });
     }
   }
 }

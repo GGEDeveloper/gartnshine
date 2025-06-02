@@ -25,70 +25,40 @@
         </div>
       </div>
 
-      <!-- Swiper -->
-      <div class="swiper-container featured-swiper">
-        <div class="swiper-wrapper">
-          <% featured.forEach(product => { %>
-            <div class="swiper-slide">
-              <%- include('partials/_productCard', {product: product}) %>
-            </div>
-          <% }); %>
-        </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+      <!-- Slick Carousel -->
+      <div class="featured-carousel">
+        <% featured.forEach(product => { %>
+          <div class="slick-slide">
+            <%- include('partials/_productCard', {product: product}) %>
+          </div>
+        <% }); %>
       </div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          if (typeof Swiper !== 'undefined') {
-            var swiper = new Swiper('.featured-swiper', {
-              effect: 'coverflow', // Ativa o efeito 3D 'coverflow'
-              grabCursor: true,
-              centeredSlides: true,
-              slidesPerView: 'auto',
-              coverflowEffect: {
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-              },
-              loop: true, // Habilita o loop contínuo para o autoplay
-              autoplay: {
-                delay: 3000, // Tempo em ms entre as transições (3 segundos)
-                disableOnInteraction: false, // Continua a reprodução automática mesmo após interação do usuário
-              },
-              pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-              },
-              navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              },
-              breakpoints: {
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20
-                },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 30
-                },
-                1024: {
-                  slidesPerView: 4,
-                  spaceBetween: 30
-                }
-              }
-            });
-          } else {
-            console.error('Swiper library not loaded.');
-          }
-        });
-      </script>
+      <style>
+        .featured-carousel {
+          margin: 30px auto;
+          max-width: 1200px;
+          padding: 0 20px;
+        }
+        .slick-slide {
+          padding: 0 15px;
+          box-sizing: border-box;
+        }
+        .slick-prev:before,
+        .slick-next:before {
+          color: var(--color-accent);
+          font-size: 24px;
+        }
+        .slick-dots li button:before {
+          font-size: 12px;
+          color: var(--color-accent);
+        }
+        .slick-dots li.slick-active button:before {
+          color: var(--color-highlight);
+        }
+      </style>
+
+
     </section>
     <% } %>
     
