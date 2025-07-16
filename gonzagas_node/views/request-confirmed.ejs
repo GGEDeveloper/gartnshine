@@ -1,0 +1,379 @@
+<%- include('partials/header') %>
+
+<div class="container">
+  <div class="confirmation-container">
+    <div class="confirmation-header">
+      <div class="confirmation-icon">✅</div>
+      <h1>Solicitação Confirmada</h1>
+      <p>Sua solicitação foi processada com sucesso</p>
+    </div>
+
+    <div class="confirmation-details">
+      <div class="detail-card">
+        <h2>Detalhes da Solicitação</h2>
+        <div class="detail-item">
+          <span class="label">Tipo:</span>
+          <span class="value">
+            <% 
+              const typeNames = {
+                'access': 'Acesso aos Dados',
+                'deletion': 'Eliminação de Dados',
+                'rectification': 'Retificação de Dados',
+                'portability': 'Portabilidade de Dados',
+                'objection': 'Oposição ao Tratamento'
+              };
+            %>
+            <%= typeNames[request.request_type] || request.request_type %>
+          </span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label">Email:</span>
+          <span class="value"><%= request.email %></span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label">Status:</span>
+          <span class="value status-<%= request.status %>">
+            <%= request.status === 'completed' ? 'Concluído' : 'Pendente' %>
+          </span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label">Solicitado em:</span>
+          <span class="value"><%= new Date(request.created_at).toLocaleDateString('pt-PT') %></span>
+        </div>
+        
+        <% if (request.processed_at) { %>
+        <div class="detail-item">
+          <span class="label">Processado em:</span>
+          <span class="value"><%= new Date(request.processed_at).toLocaleDateString('pt-PT') %></span>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="result-card">
+        <h2>Resultado</h2>
+        
+        <% if (request.request_type === 'access' && result.dataFile) { %>
+        <div class="access-result">
+          <p>Seus dados pessoais foram compilados e estão disponíveis para download.</p>
+          <div class="download-section">
+            <div class="file-info">
+              <i class="fas fa-file-download"></i>
+              <span>Arquivo: <%= result.dataFile.filename %></span>
+              <span>Tamanho: <%= Math.round(result.dataFile.size / 1024) %>KB</span>
+            </div>
+            <a href="/user-rights/download/<%= request.request_token %>" class="download-btn">
+              <i class="fas fa-download"></i>
+              Baixar Dados
+            </a>
+          </div>
+        </div>
+        <% } else if (request.request_type === 'deletion') { %>
+        <div class="deletion-result">
+          <p>✅ Seus dados pessoais foram eliminados com sucesso do nosso sistema.</p>
+          <div class="deletion-info">
+            <h3>Dados Eliminados:</h3>
+            <ul>
+              <li>Dados de consentimento de cookies</li>
+              <li>Logs de atividade</li>
+              <li>Informações de sessão</li>
+            </ul>
+          </div>
+        </div>
+        <% } else if (request.request_type === 'rectification') { %>
+        <div class="rectification-result">
+          <p>✅ Sua solicitação de retificação foi processada.</p>
+          <p>Se você forneceu correções específicas, elas foram aplicadas aos seus dados.</p>
+        </div>
+        <% } else { %>
+        <div class="general-result">
+          <p>✅ <%= result.message || 'Sua solicitação foi processada com sucesso.' %></p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="next-steps">
+      <h2>Próximos Passos</h2>
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-icon">📧</div>
+          <h3>Confirmação por Email</h3>
+          <p>Você receberá um email de confirmação com os detalhes do processamento.</p>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">🔒</div>
+          <h3>Privacidade Garantida</h3>
+          <p>Seus dados continuam protegidos conforme nossa Política de Privacidade.</p>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">❓</div>
+          <h3>Dúvidas?</h3>
+          <p>Entre em contato conosco: <a href="mailto:geral@artnshine.pt">geral@artnshine.pt</a></p>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-icon">🏠</div>
+          <h3>Continuar Navegando</h3>
+          <p><a href="/">Voltar ao catálogo</a> ou <a href="/user-rights">fazer nova solicitação</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.confirmation-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.confirmation-header h1 {
+  font-size: 2.5rem;
+  color: #c0a080;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-header p {
+  font-size: 1.2rem;
+  color: #b0b0b0;
+}
+
+.confirmation-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.detail-card,
+.result-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.detail-card h2,
+.result-card h2 {
+  color: #c0a080;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.detail-item .label {
+  color: #888;
+  font-weight: 500;
+}
+
+.detail-item .value {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.status-completed {
+  color: #4caf50 !important;
+}
+
+.status-pending {
+  color: #ff9800 !important;
+}
+
+.access-result {
+  text-align: center;
+}
+
+.access-result p {
+  color: #b0b0b0;
+  margin-bottom: 2rem;
+}
+
+.download-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: #b0b0b0;
+}
+
+.file-info i {
+  color: #c0a080;
+  font-size: 1.5rem;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #c0a080;
+  color: #1a1a1a;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background: #d4b190;
+  transform: translateY(-1px);
+}
+
+.deletion-result,
+.rectification-result,
+.general-result {
+  text-align: center;
+}
+
+.deletion-result p,
+.rectification-result p,
+.general-result p {
+  color: #4caf50;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.deletion-info h3 {
+  color: #c0a080;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.deletion-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.deletion-info li {
+  color: #b0b0b0;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.deletion-info li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+}
+
+.next-steps {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.next-steps h2 {
+  color: #c0a080;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.step-item {
+  text-align: center;
+}
+
+.step-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-item h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.step-item p {
+  color: #b0b0b0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.step-item a {
+  color: #c0a080;
+  text-decoration: none;
+}
+
+.step-item a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .confirmation-container {
+    padding: 1rem;
+  }
+  
+  .confirmation-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .confirmation-header h1 {
+    font-size: 2rem;
+  }
+  
+  .detail-card,
+  .result-card {
+    padding: 1.5rem;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .detail-item .label {
+    font-size: 0.9rem;
+  }
+}
+</style>
+
+<%- include('partials/footer') %> 

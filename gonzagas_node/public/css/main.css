@@ -1692,6 +1692,86 @@ section {
   }
 }
 
+/* Footer links styling */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  color: #b0b0b0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #c0a080;
+}
+
+.footer-links a i {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* Footer responsive adjustments */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    text-align: center;
+  }
+  
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .footer-links li {
+    margin-bottom: 0;
+  }
+}
+
+/* Privacy links in copyright - very discrete */
+.privacy-links {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: #666;
+  text-align: center;
+}
+
+.privacy-links a {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.privacy-links a:hover {
+  color: #c0a080;
+  text-decoration: underline;
+}
+
+/* Mobile adjustments for privacy links */
+@media (max-width: 768px) {
+  .privacy-links {
+    font-size: 0.65rem;
+    margin-top: 0.25rem;
+  }
+}
+
 
 @media (max-width: 576px) {
   .hero {

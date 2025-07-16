@@ -1,0 +1,408 @@
+<%- include('partials/header') %>
+
+<div class="container">
+  <div class="user-rights-container">
+    <div class="user-rights-header">
+      <h1>Seus Direitos de Proteção de Dados</h1>
+      <p>Conforme o Regulamento Geral de Proteção de Dados (RGPD), você tem direitos específicos sobre seus dados pessoais.</p>
+    </div>
+
+    <div class="user-rights-content">
+      <div class="rights-info">
+        <h2>🔒 Seus Direitos</h2>
+        <div class="rights-grid">
+          <div class="right-card">
+            <div class="right-icon">📋</div>
+            <h3>Direito de Acesso</h3>
+            <p>Solicite uma cópia de todos os dados pessoais que temos sobre você.</p>
+          </div>
+          
+          <div class="right-card">
+            <div class="right-icon">✏️</div>
+            <h3>Direito de Retificação</h3>
+            <p>Solicite correção de dados pessoais incorretos ou incompletos.</p>
+          </div>
+          
+          <div class="right-card">
+            <div class="right-icon">🗑️</div>
+            <h3>Direito de Eliminação</h3>
+            <p>Solicite a eliminação dos seus dados pessoais ("direito ao esquecimento").</p>
+          </div>
+          
+          <div class="right-card">
+            <div class="right-icon">📦</div>
+            <h3>Direito de Portabilidade</h3>
+            <p>Solicite seus dados em formato estruturado e legível por máquina.</p>
+          </div>
+          
+          <div class="right-card">
+            <div class="right-icon">🚫</div>
+            <h3>Direito de Oposição</h3>
+            <p>Oponha-se ao tratamento dos seus dados pessoais.</p>
+          </div>
+          
+          <div class="right-card">
+            <div class="right-icon">⏸️</div>
+            <h3>Direito de Limitação</h3>
+            <p>Solicite a limitação do tratamento dos seus dados.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="request-form-container">
+        <h2>🔐 Fazer Solicitação</h2>
+        <p>Selecione o tipo de solicitação que deseja fazer:</p>
+        
+        <form id="userRightsForm" class="user-rights-form">
+          <div class="form-group">
+            <label for="email">Email de Contato</label>
+            <input type="email" id="email" name="email" required 
+                   placeholder="Digite seu email para receber a confirmação">
+          </div>
+          
+          <div class="form-group">
+            <label for="requestType">Tipo de Solicitação</label>
+            <select id="requestType" name="requestType" required>
+              <option value="">Selecione o tipo de solicitação</option>
+              <option value="access">Acesso aos Dados</option>
+              <option value="rectification">Retificação de Dados</option>
+              <option value="deletion">Eliminação de Dados</option>
+              <option value="portability">Portabilidade de Dados</option>
+              <option value="objection">Oposição ao Tratamento</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="details">Detalhes da Solicitação (opcional)</label>
+            <textarea id="details" name="details" rows="4" 
+                      placeholder="Descreva detalhes específicos da sua solicitação..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Enviar Solicitação</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="user-rights-info">
+      <h2>ℹ️ Informações Importantes</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <h3>Prazo de Resposta</h3>
+          <p>Responderemos à sua solicitação em até 30 dias após a confirmação.</p>
+        </div>
+        
+        <div class="info-item">
+          <h3>Verificação de Identidade</h3>
+          <p>Podemos solicitar informações adicionais para verificar sua identidade.</p>
+        </div>
+        
+        <div class="info-item">
+          <h3>Gratuidade</h3>
+          <p>O exercício dos seus direitos é gratuito, exceto em casos específicos.</p>
+        </div>
+        
+        <div class="info-item">
+          <h3>Reclamação</h3>
+          <p>Você pode apresentar reclamação à autoridade de proteção de dados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.user-rights-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.user-rights-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.user-rights-header h1 {
+  font-size: 2.5rem;
+  color: #c0a080;
+  margin-bottom: 1rem;
+}
+
+.user-rights-header p {
+  font-size: 1.1rem;
+  color: #b0b0b0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.user-rights-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.rights-info h2,
+.request-form-container h2 {
+  color: #c0a080;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.rights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.right-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.right-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(192, 160, 128, 0.3);
+  transform: translateY(-2px);
+}
+
+.right-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.right-card h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.right-card p {
+  color: #b0b0b0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.user-rights-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: #c0a080;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #c0a080;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  background: #c0a080;
+  color: #1a1a1a;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #d4b190;
+  transform: translateY(-1px);
+}
+
+.user-rights-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.user-rights-info h2 {
+  color: #c0a080;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.info-item h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.info-item p {
+  color: #b0b0b0;
+  line-height: 1.5;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid;
+}
+
+.alert.success {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.alert.error {
+  background: rgba(244, 67, 54, 0.1);
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.alert.info {
+  background: rgba(33, 150, 243, 0.1);
+  border-color: #2196f3;
+  color: #2196f3;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .user-rights-container {
+    padding: 1rem;
+  }
+  
+  .user-rights-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .rights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-rights-header h1 {
+    font-size: 2rem;
+  }
+  
+  .right-card {
+    padding: 1rem;
+  }
+  
+  .user-rights-form {
+    padding: 1.5rem;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('userRightsForm');
+  const submitButton = form.querySelector('button[type="submit"]');
+  
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Disable submit button
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
+    
+    try {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+      
+      const response = await fetch('/user-rights/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      // Remove existing alerts
+      const existingAlerts = document.querySelectorAll('.alert');
+      existingAlerts.forEach(alert => alert.remove());
+      
+      // Show result
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert ${result.success ? 'success' : 'error'}`;
+      alertDiv.textContent = result.message || (result.success ? 'Solicitação enviada com sucesso!' : 'Erro ao enviar solicitação');
+      
+      form.insertBefore(alertDiv, form.firstChild);
+      
+      if (result.success) {
+        form.reset();
+      }
+      
+    } catch (error) {
+      console.error('Error submitting request:', error);
+      
+      // Remove existing alerts
+      const existingAlerts = document.querySelectorAll('.alert');
+      existingAlerts.forEach(alert => alert.remove());
+      
+      // Show error
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert error';
+      alertDiv.textContent = 'Erro de conexão. Tente novamente.';
+      
+      form.insertBefore(alertDiv, form.firstChild);
+      
+    } finally {
+      // Re-enable submit button
+      submitButton.disabled = false;
+      submitButton.textContent = 'Enviar Solicitação';
+    }
+  });
+});
+</script>
+
+<%- include('partials/footer') %> 

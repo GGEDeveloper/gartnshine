@@ -209,4 +209,18 @@ router.get('/about', (req, res) => {
   });
 });
 
+// Privacy Policy page
+router.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', {
+    title: 'Política de Privacidade'
+  });
+});
+
+// Terms of Service page
+router.get('/terms-of-service', (req, res) => {
+  res.render('terms-of-service', {
+    title: 'Termos de Serviço'
+  });
+});
+
 module.exports = router; 

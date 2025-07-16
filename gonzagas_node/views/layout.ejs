@@ -15,6 +15,12 @@
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/cookie-banner.css">
+        <link rel="stylesheet" href="/css/mobile/mobile-base.css">
+      <link rel="stylesheet" href="/css/mobile/mobile-header.css">
+      <link rel="stylesheet" href="/css/mobile/mobile-cards.css">
+      <link rel="stylesheet" href="/css/mobile/mobile-catalog.css">
+      <link rel="stylesheet" href="/css/mobile/mobile-admin.css">
   <% if (typeof customCss !== 'undefined' && customCss) { %>
     <link rel="stylesheet" href="/css/<%= customCss %>.css">
   <% } %>
@@ -34,6 +40,9 @@
   <!-- Header -->
   <%- include('partials/header') %>
   
+  <!-- Mobile Header -->
+  <%- include('partials/mobile-header') %>
+  
   <!-- Flash Messages -->
   <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
     <div class="alert alert-success">
@@ -48,18 +57,27 @@
   <% } %>
   
   <!-- Main Content -->
-  <main class="container">
+  <main class="container main-content">
     <%- body %>
   </main>
   
   <!-- Footer -->
   <%- include('partials/footer') %>
   
+  <!-- Cookie Banner -->
+  <%- include('partials/cookie-banner') %>
+  
   <!-- Main JavaScript -->
   <script src="/js/main.js"></script>
   
   <!-- Carousel JavaScript -->
   <script src="/js/carousel.js"></script>
+  
+  <!-- Cookie Consent JavaScript -->
+  <script src="/js/cookie-consent.js"></script>
+  
+  <!-- Mobile Navigation JavaScript -->
+  <script src="/js/mobile-nav.js"></script>
   
   <% if (typeof customJs !== 'undefined' && customJs) { %>
     <script src="/js/<%= customJs %>.js"></script>

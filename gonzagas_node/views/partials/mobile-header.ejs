@@ -1,0 +1,251 @@
+<!-- Mobile Header -->
+<header class="header">
+  <div class="header-content">
+    <!-- Logo -->
+    <div class="header-logo">
+      <img src="/logo.svg" alt="Gonzaga's Art & Shine Logo" class="header-logo-img">
+      <h1>
+        <span class="header-logo-text">Gonzaga's Art & Shine</span>
+        <span class="header-logo-short">G.A&S</span>
+      </h1>
+    </div>
+    
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Abrir menu de navegação">
+      <div class="hamburger">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </div>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-content">
+    <!-- Mobile Nav Header -->
+    <div class="mobile-nav-header">
+      <div class="header-logo">
+        <img src="/logo.svg" alt="Gonzaga's Art & Shine Logo" class="header-logo-img">
+        <h1>Gonzaga's Art & Shine</h1>
+      </div>
+      <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Fechar menu de navegação">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <!-- Mobile Navigation Links -->
+    <div class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link <%= currentPath === '/' ? 'active' : '' %>">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      
+      <a href="/catalog" class="mobile-nav-link <%= currentPath === '/catalog' ? 'active' : '' %>">
+        <i class="fas fa-gem"></i>
+        <span>Catálogo</span>
+      </a>
+      
+      <a href="/collections" class="mobile-nav-link <%= currentPath === '/collections' ? 'active' : '' %>">
+        <i class="fas fa-layer-group"></i>
+        <span>Coleções</span>
+      </a>
+      
+      <a href="/about" class="mobile-nav-link <%= currentPath === '/about' ? 'active' : '' %>">
+        <i class="fas fa-info-circle"></i>
+        <span>Sobre Nós</span>
+      </a>
+      
+      <!-- Dropdown de Famílias/Categorias -->
+      <div class="mobile-nav-dropdown">
+        <button class="mobile-nav-link mobile-nav-dropdown-toggle" id="mobile-families-toggle">
+          <i class="fas fa-tags"></i>
+          <span>Categorias</span>
+          <i class="fas fa-chevron-down mobile-nav-dropdown-arrow"></i>
+        </button>
+        
+        <div class="mobile-nav-dropdown-content" id="mobile-families-dropdown">
+          <% if (typeof families !== 'undefined' && families && families.length > 0) { %>
+            <% families.forEach(family => { %>
+              <a href="/collection/<%= family.code %>" class="mobile-nav-dropdown-link">
+                <i class="fas fa-tag"></i>
+                <span><%= family.name %></span>
+              </a>
+            <% }) %>
+          <% } else { %>
+            <span class="mobile-nav-dropdown-empty">Nenhuma categoria disponível</span>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Navigation Actions -->
+    <div class="mobile-nav-actions">
+      <!-- Social Links -->
+      <div class="mobile-nav-social">
+        <a href="https://www.instagram.com/gonzagaartnshine/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61573519807731" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </div>
+      
+      <!-- Contact Info -->
+      <div class="mobile-nav-contact">
+        <p>Entre em contacto:</p>
+        <p><a href="mailto:geral@artnshine.pt">geral@artnshine.pt</a></p>
+        <p><a href="https://artnshine.pt">artnshine.pt</a></p>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+<style>
+/* Mobile header responsive adjustments */
+@media (max-width: 480px) {
+  .header-logo-text {
+    display: none;
+  }
+  
+  .header-logo-short {
+    display: inline;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .header-logo-text {
+    display: inline;
+  }
+  
+  .header-logo-short {
+    display: none;
+  }
+}
+
+/* Mobile navigation dropdown */
+.mobile-nav-dropdown {
+  position: relative;
+}
+
+.mobile-nav-dropdown-toggle {
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-nav-dropdown-arrow {
+  transition: transform 0.3s ease;
+  margin-left: auto;
+}
+
+.mobile-nav-dropdown-toggle.active .mobile-nav-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.mobile-nav-dropdown-content.active {
+  max-height: 300px;
+}
+
+.mobile-nav-dropdown-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: var(--mobile-text-base);
+  font-weight: 400;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  margin-bottom: 0.25rem;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-dropdown-link:hover,
+.mobile-nav-dropdown-link:focus {
+  background: rgba(192, 160, 128, 0.1);
+  color: #c0a080;
+  transform: translateX(5px);
+}
+
+.mobile-nav-dropdown-link i {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  color: #c0a080;
+  width: 20px;
+  text-align: center;
+}
+
+.mobile-nav-dropdown-empty {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #888;
+  font-size: var(--mobile-text-sm);
+  font-style: italic;
+}
+
+/* Mobile navigation overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--mobile-z-nav) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Animações de entrada para os links */
+.mobile-nav-link {
+  transform: translateX(-20px);
+  opacity: 0;
+  animation: slideInLeft 0.3s ease forwards;
+}
+
+@keyframes slideInLeft {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Staggered animation delays */
+.mobile-nav-link:nth-child(1) { animation-delay: 0.1s; }
+.mobile-nav-link:nth-child(2) { animation-delay: 0.2s; }
+.mobile-nav-link:nth-child(3) { animation-delay: 0.3s; }
+.mobile-nav-link:nth-child(4) { animation-delay: 0.4s; }
+.mobile-nav-dropdown { animation-delay: 0.5s; }
+
+/* Esconder navegação desktop em mobile */
+@media (max-width: 768px) {
+  .desktop-nav,
+  .desktop-header {
+    display: none !important;
+  }
+}
+</style> 

@@ -10,7 +10,10 @@
     "db:init": "node scripts/init-db.js",
     "db:reset": "node scripts/init-db.js",
     "db:migrate": "node scripts/run-migrations.js",
-    "db:test": "node -e 'require(\"./config/database\").testConnection().then(console.log).catch(console.error)'"
+    "db:test": "node -e 'require(\"./config/database\").testConnection().then(console.log).catch(console.error)'",
+    "db:create-cookie-table": "node scripts/create-cookie-table.js",
+    "db:create-user-rights-table": "node scripts/create-user-rights-table.js",
+    "db:create-audit-logs-table": "node scripts/create-audit-logs-table.js"
   },
   "keywords": [
     "jewelry",
@@ -39,6 +42,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.13.0",
+    "nodemailer": "^7.0.5",
     "readline-sync": "^1.4.10",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",

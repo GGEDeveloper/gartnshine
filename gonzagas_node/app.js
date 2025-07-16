@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 const { pool } = require('./config/database');
 const SiteSettings = require('./models/SiteSettings'); // Added for site settings
+const { cookieConsentMiddleware } = require('./middleware/cookieConsent');
 
 // Carrega as configurações
 const config = require('./config/config');
@@ -81,6 +82,9 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(session(sessionConfig));
 app.use(flash());
+
+// Cookie consent middleware (after session)
+app.use(cookieConsentMiddleware);
 
 // Logging
 if (app.get('env') === 'development') {
@@ -345,6 +349,10 @@ const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
+const cookieConsentRouter = require('./routes/cookie-consent');
+app.use(cookieConsentRouter);
+const userRightsRouter = require('./routes/user-rights');
+app.use(userRightsRouter);
 
 // Tratamento de erros 404 (deve ficar APÓS todos os routers)
 app.use((req, res, next) => {
