@@ -11,30 +11,54 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts - Enhanced for Visual Refresh 2025 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&family=Comfortaa:wght@300;400;500&display=swap" rel="stylesheet">
   
-  <!-- Theme CSS -->
+  <!-- Visual Refresh 2025 - Theme System -->
+  <link rel="stylesheet" href="/css/themes/theme-system.css">
+  
+  <!-- Visual Refresh 2025 - Components -->
+  <link rel="stylesheet" href="/css/components/buttons.css">
+  <link rel="stylesheet" href="/css/components/cards.css">
+  
+  <!-- Visual Refresh 2025 - Responsive Utilities -->
+  <link rel="stylesheet" href="/css/utilities/responsive.css">
+  
+  <!-- Legacy CSS (transitional) -->
   <link rel="stylesheet" href="/css/theme.css">
-  <!-- Main CSS -->
   <link rel="stylesheet" href="/css/main.css">
-  <!-- Catalog CSS -->
-  <!-- GLightbox CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-  <!-- Slick Carousel CSS -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
   <link rel="stylesheet" href="/css/catalog.css">
   
+  <!-- External Libraries -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  
   <style>
+    /* Legacy theme variables for backward compatibility */
     :root {
       --color-primary: <%= theme.colorPrimary || '#1a1a1a' %>;
       --color-secondary: <%= theme.colorSecondary || '#2d2d2d' %>;
       --color-accent: <%= theme.colorAccent || '#c0a080' %>;
       --color-text: <%= theme.colorText || '#ffffff' %>;
       --color-highlight: <%= theme.colorHighlight || '#d4b190' %>;
+    }
+    
+    /* Enhanced body styling for theme transitions */
+    body {
+      background: var(--color-surface-primary, var(--color-primary));
+      color: var(--color-text-primary, var(--color-text));
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Theme transition class for smooth changes */
+    .theme-transition * {
+      transition: background-color 0.3s ease, 
+                 color 0.3s ease, 
+                 border-color 0.3s ease,
+                 box-shadow 0.3s ease !important;
     }
     
     /* Hide the description container in GLightbox */
@@ -190,5 +214,49 @@
   </script>
   <!-- Main JavaScript -->
   <script src="/js/main.js"></script>
+  
+  <!-- Visual Refresh 2025 - Theme Controller -->
+  <script src="/js/theme-controller.js"></script>
+  
+  <!-- BOOM Festival Integration -->
+  <script src="/js/boom-festival-integration.js"></script>
+  
+  <!-- Performance Optimizer -->
+  <script src="/js/performance-optimizer.js"></script>
+  
+  <!-- Theme Integration Script -->
+  <script>
+    // Enhanced theme integration for Visual Refresh 2025
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize theme system
+      if (window.themeController) {
+        // Subscribe to theme changes for enhanced integration
+        window.themeController.onThemeChange(function(theme) {
+          console.log('🎨 Tema alterado para:', theme);
+          
+          // Update page title with theme indicator
+          const titleElement = document.querySelector('title');
+          if (titleElement) {
+            const baseTitle = titleElement.textContent.replace(/ \(.*\)$/, '');
+            const themeNames = {
+              dark: 'Terra Noturna',
+              light: 'Terra Diurna',
+              boom: 'BOOM Festival'
+            };
+            titleElement.textContent = `${baseTitle} (${themeNames[theme] || theme})`;
+          }
+        });
+        
+        // Auto-activate BOOM theme during festival period
+        const now = new Date();
+        const boomStart = new Date('2025-07-17');
+        const boomEnd = new Date('2025-07-24');
+        
+        if (now >= boomStart && now <= boomEnd) {
+          window.themeController.activateBoomMode();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
