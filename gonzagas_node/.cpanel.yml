@@ -1,0 +1,17 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/yourusername/public_html/
+    - /bin/cp -R * $DEPLOYPATH
+    - cd $DEPLOYPATH
+    - npm install --production
+    - chmod 755 server.js
+    - chmod -R 755 public/
+    - chmod -R 755 views/
+    - chmod -R 755 routes/
+    - chmod -R 755 controllers/
+    - chmod -R 755 models/
+    - chmod -R 755 middleware/
+    - chmod -R 755 config/
+    - chmod -R 755 scripts/
+    - echo "Deployment completed successfully" 
