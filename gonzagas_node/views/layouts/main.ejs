@@ -1,194 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt" class="h-100">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | <%= siteTitle %></title>
-  
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico">
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <!-- Theme CSS -->
-  <link rel="stylesheet" href="/css/theme.css">
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="/css/main.css">
-  <!-- Catalog CSS -->
-  <!-- GLightbox CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-  <!-- Slick Carousel CSS -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-  <link rel="stylesheet" href="/css/catalog.css">
-  
-  <style>
-    :root {
-      --color-primary: <%= theme.colorPrimary || '#1a1a1a' %>;
-      --color-secondary: <%= theme.colorSecondary || '#2d2d2d' %>;
-      --color-accent: <%= theme.colorAccent || '#c0a080' %>;
-      --color-text: <%= theme.colorText || '#ffffff' %>;
-      --color-highlight: <%= theme.colorHighlight || '#d4b190' %>;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- title || 'Gonzaga\'s Art & Shine' %></title>
     
-    /* Hide the description container in GLightbox */
-    .glightbox-container .gslide-description {
-      display: none !important;
-    }
-  </style>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/notifications.css">
+    
+    <!-- GLightbox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    
+    <%- style %>
 </head>
-<body>
-  <%- include('../partials/header') %>
-  
-  <!-- Flash Messages -->
-  <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
-    <div class="alert alert-success">
-      <%= success_msg %>
-    </div>
-  <% } %>
-  
-  <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
-    <div class="alert alert-danger">
-      <%= error_msg %>
-    </div>
-  <% } %>
-  
-  <!-- Main Content -->
-  <%- body %>
-  
-  <%- include('../partials/footer') %>
-  
-  <!-- GLightbox JS -->
-  <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-  <script type="text/javascript">
-    // Inicializa o GLightbox
-    const lightbox = GLightbox({
-      selector: '.glightbox',
-      touchNavigation: true,
-      keyboardNavigation: true,
-      closeButton: true,
-      loop: true,
-      autoplayVideos: true
-    });
+<body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     
-    // Debug
-    console.log('GLightbox initialized');
+    <%- include('../partials/header') %>
     
-    // Script para modificar o DOM e adicionar o GLightbox às imagens
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM fully loaded');
-      
-      const galleryImages = document.querySelectorAll('img.gallery-image');
-      console.log('Found', galleryImages.length, 'gallery images');
-      
-      galleryImages.forEach(img => {
-        // Se já estiver dentro de um link GLightbox, pule
-        if (img.closest('a.glightbox')) {
-          console.log('Image already has GLightbox parent, skipping:', img.src);
-          return;
-        }
-        
-        const wrapper = document.createElement('a');
-        wrapper.href = img.src;
-        wrapper.className = 'glightbox';
-        wrapper.setAttribute('data-gallery', 'gallery1');
-        
-        // Adiciona título se disponível
-        if (img.alt) {
-          wrapper.setAttribute('data-title', img.alt);
-        }
-        
-        // Envolve a imagem com o link
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-        
-        console.log('Wrapped image with GLightbox link:', img.src);
-      });
-      
-      // Recarrega o GLightbox para pegar os novos elementos
-      if (galleryImages.length > 0) {
-        console.log('Reloading GLightbox with new elements');
-        lightbox.reload();
-      }
-    });
-
-    // Specific logic for /media/gallery or /media/ pages
-    if (window.location.pathname.startsWith('/media/gallery') || window.location.pathname.startsWith('/media/')) {
-      document.addEventListener('DOMContentLoaded', () => {
-        const galleryImages = document.querySelectorAll('img.gallery-image');
-        let galleryHasItems = false;
-
-        galleryImages.forEach(img => {
-          const imgSrc = img.src;
-          if (!imgSrc) return;
-
-          // Prevent double-wrapping if script runs multiple times or if already wrapped
-          if (img.parentElement && img.parentElement.classList.contains('glightbox')) {
-            return;
-          }
-
-          const href = imgSrc; // For GLightbox, href is the full media path
-          const isImage = /\.(jpe?g|png|gif|webp)$/i.test(href);
-          // Assuming videos would not be in an <img> tag with class 'gallery-image' in this context,
-          // but check just in case the src points to a video file somehow.
-          const isVideo = /\.(mp4|webm|ogg)$/i.test(href);
-
-          if (isImage || isVideo) {
-            const anchor = document.createElement('a');
-            anchor.href = href;
-            anchor.classList.add('glightbox');
-            anchor.setAttribute('data-gallery', 'media-page-gallery');
-            
-            let title = img.alt || decodeURIComponent(href.substring(href.lastIndexOf('/') + 1));
-            anchor.setAttribute('data-title', title);
-
-            if (isVideo) {
-              anchor.setAttribute('data-type', 'video');
-            }
-
-            // Wrap the image with the anchor
-            if (img.parentNode) {
-              img.parentNode.insertBefore(anchor, img);
-              anchor.appendChild(img);
-              galleryHasItems = true;
-            }
-          }
-        });
-
-        if (galleryHasItems) {
-          console.log('GLightbox setup for .gallery-image elements complete.');
-          // If GLightbox instance `lightbox` is available and has a reload method:
-          if (typeof lightbox !== 'undefined' && lightbox.reload) {
-            lightbox.reload();
-          }
-        }
-      });
-    }
-  </script>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    // Evitar conflitos com outras bibliotecas que usam o símbolo $
-    var $j = jQuery.noConflict();
-    // Tornar o jQuery disponível globalmente para outros scripts
-    window.jQuery = window.$ = $j;
-  </script>
-  <!-- Slick Carousel JS -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-  <script>
-    // Garantir que o Slick esteja disponível com o jQuery correto
-    if (typeof $j.fn.slick === 'undefined') {
-      console.error('Slick Carousel não foi carregado corretamente!');
-    }
-  </script>
-  <!-- Main JavaScript -->
-  <script src="/js/main.js"></script>
+    <main class="flex-shrink-0">
+        <%- body %>
+    </main>
+    
+    <%- include('../partials/footer') %>
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/notifications.js"></script>
+    
+    <!-- Flash Messages para Notificações -->
+    <script>
+        // Passar mensagens flash para o JavaScript
+        window.flashMessages = {
+            <% if (typeof messages !== 'undefined') { %>
+                <% Object.keys(messages).forEach(function(type) { %>
+                    "<%= type %>": <%- JSON.stringify(messages[type]) %>,
+                <% }); %>
+            <% } %>
+        };
+    </script>
+    
+    <%- script %>
 </body>
 </html>

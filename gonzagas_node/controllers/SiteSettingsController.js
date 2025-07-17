@@ -14,36 +14,40 @@ class SiteSettingsController {
             { name: 'Site Settings', url: '/admin/settings' }
         ],
         user: req.session.user, // Pass user for layout
-        // Add any other variables your layout might need
+        messages: req.flash() // Pass flash messages
       });
     } catch (error) {
-      console.error('Error showing site settings form:', error);
-      req.flash('error_msg', 'Failed to load site settings.');
-      res.redirect('/admin'); // Or an appropriate error page
+      console.error('Erro ao carregar configurações:', error);
+      req.flash('error', 'Erro ao carregar as configurações do site');
+      res.redirect('/admin');
     }
   }
 
-  async saveSettings(req, res) {
+  async updateSettings(req, res) {
     try {
-      const { featured_carousel_enabled, catalog_page_enabled } = req.body;
+      const {
+        featured_carousel_enabled,
+        catalog_page_enabled,
+        hide_catalog_prices
+      } = req.body;
 
-      // Convert checkbox values (which might be 'on' or undefined) to boolean
-      const settingsData = {
-        featured_carousel_enabled: featured_carousel_enabled === 'on' || featured_carousel_enabled === 'true' || featured_carousel_enabled === true,
-        catalog_page_enabled: catalog_page_enabled === 'on' || catalog_page_enabled === 'true' || catalog_page_enabled === true,
+      // Convert checkbox values to boolean
+      const updates = {
+        featured_carousel_enabled: featured_carousel_enabled === 'on' ? 1 : 0,
+        catalog_page_enabled: catalog_page_enabled === 'on' ? 1 : 0,
+        hide_catalog_prices: hide_catalog_prices === 'on' ? 1 : 0
       };
 
-      const result = await SiteSettings.updateSettings(settingsData);
+      console.log('Atualizando configurações com dados:', updates);
 
-      if (result.success) {
-        req.flash('success_msg', result.message);
-      } else {
-        req.flash('error_msg', result.message);
-      }
+      await SiteSettings.updateSettings(updates);
+
+      req.flash('success', 'Configurações do site atualizadas com sucesso!');
       res.redirect('/admin/settings');
+
     } catch (error) {
-      console.error('Error saving site settings:', error);
-      req.flash('error_msg', 'Failed to save site settings: ' + error.message);
+      console.error('Erro ao atualizar configurações:', error);
+      req.flash('error', 'Erro ao salvar as configurações. Tente novamente.');
       res.redirect('/admin/settings');
     }
   }

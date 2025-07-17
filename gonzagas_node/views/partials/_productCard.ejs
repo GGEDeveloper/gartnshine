@@ -23,16 +23,20 @@
       <p class="product-family mb-1"><small class="text-highlight"><%= product.family_name %></small></p>
     <% } %>
     <p class="product-price">
-      <% if (product.formatted_sale_price && product.formatted_purchase_price && 
-            parseFloat(product.sale_price) < parseFloat(product.purchase_price)) { %>
-        <span class="sale-price fw-bold"><%= product.formatted_sale_price %></span>
-        <span class="original-price text-muted text-decoration-line-through ms-2">
-          <small><%= product.formatted_purchase_price %></small>
-        </span>
-      <% } else if (product.formatted_sale_price) { %>
-        <span class="sale-price"><%= product.formatted_sale_price %></span>
-      <% } else { %>
+      <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
         <span class="text-muted fst-italic">Preço sob consulta</span>
+      <% } else { %>
+        <% if (product.formatted_sale_price && product.formatted_purchase_price && 
+              parseFloat(product.sale_price) < parseFloat(product.purchase_price)) { %>
+          <span class="sale-price fw-bold"><%= product.formatted_sale_price %></span>
+          <span class="original-price text-muted text-decoration-line-through ms-2">
+            <small><%= product.formatted_purchase_price %></small>
+          </span>
+        <% } else if (product.formatted_sale_price) { %>
+          <span class="sale-price"><%= product.formatted_sale_price %></span>
+        <% } else { %>
+          <span class="text-muted fst-italic">Preço sob consulta</span>
+        <% } %>
       <% } %>
     </p>
   </div>

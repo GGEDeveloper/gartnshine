@@ -11,6 +11,6 @@ router.use(roleRequired(['admin', 'superadmin'])); // Adjust roles as needed
 router.get('/', SiteSettingsController.showSettingsForm);
 
 // POST route to save the settings
-router.post('/', SiteSettingsController.saveSettings);
+router.post('/', SiteSettingsController.updateSettings);
 
 module.exports = router;

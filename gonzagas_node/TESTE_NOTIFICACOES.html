@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Sistema de Notificações - Gonzaga's Art & Shine</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Sistema de Notificações -->
+    <link rel="stylesheet" href="/css/notifications.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+        .demo-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .btn-demo {
+            margin: 10px;
+            min-width: 200px;
+        }
+        .brand-title {
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-section {
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="demo-container">
+            <h1 class="brand-title">
+                <i class="fas fa-gem"></i> Gonzaga's Art & Shine
+            </h1>
+            <h2 class="text-center mb-4">Sistema de Notificações Popup</h2>
+            
+            <!-- Demonstração de Tipos -->
+            <div class="demo-section">
+                <h3><i class="fas fa-bell"></i> Tipos de Notificação</h3>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <button class="btn btn-success btn-demo" onclick="testSuccess()">
+                            <i class="fas fa-check-circle"></i><br>Success
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-danger btn-demo" onclick="testError()">
+                            <i class="fas fa-exclamation-circle"></i><br>Error
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-warning btn-demo" onclick="testWarning()">
+                            <i class="fas fa-exclamation-triangle"></i><br>Warning
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-info btn-demo" onclick="testInfo()">
+                            <i class="fas fa-info-circle"></i><br>Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demonstração de Funcionalidades -->
+            <div class="demo-section">
+                <h3><i class="fas fa-cogs"></i> Funcionalidades</h3>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-demo" onclick="testMultiple()">
+                            <i class="fas fa-layer-group"></i><br>Múltiplas
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-secondary btn-demo" onclick="testPersistent()">
+                            <i class="fas fa-lock"></i><br>Persistente
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-dark btn-demo" onclick="testClear()">
+                            <i class="fas fa-broom"></i><br>Limpar Todas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demonstração de Atributos HTML -->
+            <div class="demo-section">
+                <h3><i class="fas fa-code"></i> Via Atributos HTML</h3>
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-success btn-demo"
+                                data-notification="Configurações salvas com sucesso!"
+                                data-notification-type="success">
+                            <i class="fas fa-save"></i><br>Salvar Config
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-warning btn-demo"
+                                data-notification="Processando dados..."
+                                data-notification-type="info">
+                            <i class="fas fa-spinner"></i><br>Processar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulação de Login -->
+            <div class="demo-section">
+                <h3><i class="fas fa-user-shield"></i> Simulação de Login</h3>
+                <div class="text-center">
+                    <button class="btn btn-outline-light btn-demo" onclick="simulateLogin()">
+                        <i class="fas fa-sign-in-alt"></i><br>Simular Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instruções -->
+            <div class="demo-section">
+                <h3><i class="fas fa-info"></i> Como Testar no Sistema Real</h3>
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <ol>
+                            <li><strong>Acesse:</strong> <code>http://localhost:3000/admin/login</code></li>
+                            <li><strong>Login:</strong> gonzaga@artnshine.pt</li>
+                            <li><strong>Senha:</strong> covil</li>
+                            <li><strong>Vá em:</strong> Settings → Altere configurações → Salve</li>
+                            <li><strong>Observe:</strong> As notificações elegantes em ação!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/notifications.js"></script>
+    
+    <script>
+        function testSuccess() {
+            notifications.success('Produto salvo com sucesso! 🎉');
+        }
+
+        function testError() {
+            notifications.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+        }
+
+        function testWarning() {
+            notifications.warning('Estoque baixo detectado. Considere reabastecer.');
+        }
+
+        function testInfo() {
+            notifications.info('Processando dados... Aguarde um momento.');
+        }
+
+        function testMultiple() {
+            notifications.info('Iniciando processo...', 1500);
+            setTimeout(() => {
+                notifications.warning('Validando dados...', 1500);
+            }, 800);
+            setTimeout(() => {
+                notifications.success('Processo concluído com sucesso!');
+            }, 1600);
+        }
+
+        function testPersistent() {
+            notifications.error('Esta notificação não fecha automaticamente. Clique no X para fechar.', 0);
+        }
+
+        function testClear() {
+            notifications.clear();
+            notifications.info('Todas as notificações foram removidas!');
+        }
+
+        function simulateLogin() {
+            notifications.info('Verificando credenciais...', 2000);
+            setTimeout(() => {
+                notifications.success('Login realizado com sucesso! Bem-vindo, Gonzaga! 👋', 4000);
+            }, 2000);
+        }
+
+        // Mensagem de boas-vindas
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                notifications.info('Bem-vindo ao sistema de notificações da Gonzaga\'s Art & Shine! ✨', 6000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

@@ -45,6 +45,17 @@
                 </div>
 
                 <div class="form-group row">
+                    <label for="hide_catalog_prices" class="col-sm-4 col-form-label">Hide Catalog Prices</label>
+                    <div class="col-sm-8">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="hide_catalog_prices" name="hide_catalog_prices" <%- settings.hide_catalog_prices ? 'checked' : '' %>>
+                            <label class="custom-control-label" for="hide_catalog_prices">Show "Price on Request" Instead of Prices</label>
+                        </div>
+                        <small class="form-text text-muted">When enabled, all products in the catalog will show "Preço sob consulta" instead of actual prices.</small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <div class="col-sm-8 offset-sm-4">
                         <button type="submit" class="btn btn-primary">Save Settings</button>
                     </div>

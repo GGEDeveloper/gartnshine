@@ -9,16 +9,22 @@
 
                 <% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
                     <div class="alert alert-danger" role="alert">
-                        <%= error_msg %>
+                        <% error_msg.forEach(function(message) { %>
+                            <%= message %><br>
+                        <% }); %>
                     </div>
                 <% } %>
                 <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
                     <div class="alert alert-success" role="alert">
-                        <%= success_msg %>
+                        <% success_msg.forEach(function(message) { %>
+                            <%= message %><br>
+                        <% }); %>
                     </div>
                 <% } %>
 
-                <form action="/admin/login" method="POST">
+                <form action="/admin/login" method="POST" 
+                      data-success-message="Login realizado com sucesso!"
+                      data-error-message="Erro ao fazer login. Verifique suas credenciais.">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="email" name="email" required autofocus>
@@ -31,7 +37,7 @@
                         <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
                         <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div> -->
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 </form>
                 <!-- <div class="text-center mt-3">
                     <a href="/admin/forgot-password">Forgot password?</a>

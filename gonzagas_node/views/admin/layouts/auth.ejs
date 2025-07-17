@@ -19,6 +19,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/notifications.css">
     
     <!-- Add any other global auth-specific styles or scripts here -->
 </head>
@@ -26,6 +27,9 @@
     <div class="container">
         <%- body %>
     </div>
+    
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
@@ -34,6 +38,39 @@
     
     <!-- Custom JS -->
     <script src="/js/admin.js"></script>
+    <script src="/js/notifications.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize notification system
+            window.notifications = new NotificationSystem();
+            
+            // Handle URL parameters for logout/error messages
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'success') {
+                window.notifications.show('Logout realizado com sucesso. Sessão encerrada.', 'success');
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            if (urlParams.get('error') === 'logout_failed') {
+                window.notifications.show('Erro ao fazer logout. Tente novamente.', 'error');
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            <% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+                <% error_msg.forEach(function(message) { %>
+                    window.notifications.show('<%= message %>', 'error');
+                <% }); %>
+            <% } %>
+            
+            <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+                <% success_msg.forEach(function(message) { %>
+                    window.notifications.show('<%= message %>', 'success');
+                <% }); %>
+            <% } %>
+        });
+    </script>
     
     <!-- Add any other global auth-specific scripts here -->
 </body>

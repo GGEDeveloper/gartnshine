@@ -3,18 +3,19 @@ const { pool } = require('../config/database');
 class SiteSettings {
   static async getSettings() {
     try {
-      const [rows] = await pool.query('SELECT id, featured_carousel_enabled, catalog_page_enabled FROM site_settings WHERE id = 1 LIMIT 1');
+      const [rows] = await pool.query('SELECT id, featured_carousel_enabled, catalog_page_enabled, hide_catalog_prices FROM site_settings WHERE id = 1 LIMIT 1');
       if (rows.length > 0) {
         // Convert TINYINT(1) to boolean
         return {
           ...rows[0],
           featured_carousel_enabled: !!rows[0].featured_carousel_enabled,
           catalog_page_enabled: !!rows[0].catalog_page_enabled,
+          hide_catalog_prices: !!rows[0].hide_catalog_prices,
         };
       }
       // This case should ideally not happen if the table is initialized correctly
       console.warn('SiteSettings.getSettings: No settings found in database, returning defaults.');
-      return { id: 1, featured_carousel_enabled: true, catalog_page_enabled: true };
+      return { id: 1, featured_carousel_enabled: true, catalog_page_enabled: true, hide_catalog_prices: false };
     } catch (error) {
       console.error('Error fetching site settings:', error);
       throw error;
@@ -22,15 +23,16 @@ class SiteSettings {
   }
 
   static async updateSettings(settingsData) {
-    const { featured_carousel_enabled, catalog_page_enabled } = settingsData;
+    const { featured_carousel_enabled, catalog_page_enabled, hide_catalog_prices } = settingsData;
     try {
       // Ensure boolean values are converted to 0 or 1 for MySQL
       const featuredCarousel = featured_carousel_enabled ? 1 : 0;
       const catalogPage = catalog_page_enabled ? 1 : 0;
+      const hideCatalogPrices = hide_catalog_prices ? 1 : 0;
 
       const [result] = await pool.query(
-        'UPDATE site_settings SET featured_carousel_enabled = ?, catalog_page_enabled = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1',
-        [featuredCarousel, catalogPage]
+        'UPDATE site_settings SET featured_carousel_enabled = ?, catalog_page_enabled = ?, hide_catalog_prices = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1',
+        [featuredCarousel, catalogPage, hideCatalogPrices]
       );
 
       if (result.affectedRows > 0) {
@@ -41,7 +43,8 @@ class SiteSettings {
         // For robustness, we can try to re-fetch to confirm.
         const currentSettings = await this.getSettings();
         if (currentSettings.featured_carousel_enabled === featured_carousel_enabled &&
-            currentSettings.catalog_page_enabled === catalog_page_enabled) {
+            currentSettings.catalog_page_enabled === catalog_page_enabled &&
+            currentSettings.hide_catalog_prices === hide_catalog_prices) {
              return { success: true, message: 'Site settings are already up to date.' };
         }
         console.warn('SiteSettings.updateSettings: Update reported 0 affected rows, but settings might not have changed or row id=1 missing.');

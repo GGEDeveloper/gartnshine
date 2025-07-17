@@ -135,7 +135,8 @@ a:hover {
 }
 
 /* Layout Components */
-.wrapper {
+.wrapper,
+#wrapper {
   display: flex;
   width: 100%;
   min-height: 100vh;
@@ -212,13 +213,15 @@ a:hover {
   letter-spacing: 0.5px;
 }
 
-.main {
+.main,
+#content-wrapper {
   flex: 1;
   padding-left: var(--sidebar-width);
   background-color: var(--primary-light);
   transition: var(--transition);
   width: 100%;
   box-sizing: border-box;
+  margin-left: 0;
 }
 
 .header {
@@ -260,11 +263,64 @@ a:hover {
   color: var(--primary);
 }
 
-.content {
+.content,
+#content {
   padding: 1.5rem;
   overflow-x: hidden; /* Prevent horizontal overflow */
   width: 100%;
   box-sizing: border-box;
+}
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+}
+
+/* Ensure proper spacing for admin content */
+#content-wrapper.d-flex.flex-column {
+  min-height: 100vh;
+  margin-left: 0 !important;
+  padding-left: var(--sidebar-width) !important;
+}
+
+/* Override any Bootstrap flexbox conflicts */
+#content-wrapper .container-fluid {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* CRITICAL FIX: Ensure sidebar doesn't overlap content */
+/* Desktop and larger screens */
+@media (min-width: 992px) {
+  #content-wrapper {
+    margin-left: var(--sidebar-width) !important;
+    padding-left: 0 !important;
+    width: calc(100% - var(--sidebar-width)) !important;
+  }
+  
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: var(--sidebar-width) !important;
+    height: 100vh !important;
+    z-index: 100 !important;
+  }
+  
+  /* Ensure content area has proper spacing */
+  #content {
+    padding: 1.5rem !important;
+    margin: 0 !important;
+  }
+  
+  /* Fix any table overflow issues */
+  .table-responsive {
+    margin-right: 1rem;
+  }
 }
 
 .footer {

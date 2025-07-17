@@ -1,93 +1,275 @@
-# Gonzaga's Store - Node.js Backend & Admin Panel
+# 🎨 Gonzaga's Art & Shine - Sistema de Catálogo Online
 
-This project is the Node.js backend and administrative panel for Gonzaga's Store.
+> **Catálogo digital profissional para joalharia em prata 925 com inspiração Bali e tendências boho**
 
-## Features
+## 🌟 **Visão Geral**
 
-- Product Management
-- Inventory Management with advanced filtering
-- Product Family (Category) Management
-- User Authentication
-- Admin Dashboard
+Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**, permitindo gestão completa de inventário e apresentação elegante de produtos de joalharia. O sistema combina um catálogo público protegido por password com uma área administrativa completa para gestão de produtos, stock e preços.
 
-## Recent Updates
+### 🔗 **Links Oficiais**
+- **Instagram:** [https://www.instagram.com/gonzagaartnshine/](https://www.instagram.com/gonzagaartnshine/)
+- **Facebook:** [https://www.facebook.com/profile.php?id=61573519807731](https://www.facebook.com/profile.php?id=61573519807731)
 
-- **Inventory Page Filters**: Implemented robust filtering for Reference, Category, Product Status, and Stock Status. Filters are now applied via an "Apply Filters" button for better user control.
-- **Badge Visibility**: Improved text color on badges for better readability.
-- **Script Loading**: Resolved issues with JavaScript execution on the inventory page by ensuring correct integration with EJS layouts.
+## ✨ **Características Principais**
 
-## Implantação
+### 🛍️ **Catálogo Público**
+- **Protecção por password** (password: `0009`)
+- **Design responsivo** adaptado para mobile e desktop
+- **Filtros avançados** por categoria, preço, disponibilidade
+- **Galeria de imagens** com zoom e navegação suave
+- **Sistema "Preços sob consulta"** - toggle para ocultar/mostrar preços
+- **Tema escuro** com nuances psicadélicas e geométricas
 
-Para instruções detalhadas de implantação no cPanel do Dominios.pt, consulte o arquivo [DEPLOYMENT.md](DEPLOYMENT.md).
+### 🔐 **Área Administrativa**
+- **Gestão completa de produtos** (CRUD com upload de imagens)
+- **Controlo de stock** com histórico de movimentos
+- **Sistema de preços** com histórico de alterações
+- **Gestão de famílias** de produtos (categorias)
+- **Sistema de checkpoints** para backup/restore da base de dados
+- **Dashboard com estatísticas** em tempo real
+- **Sistema de auditoria** completo
 
-## Pré-requisitos
+### 🎯 **Funcionalidades Especiais**
+- **Sistema de notificações popup** elegante (4 tipos: success, error, warning, info)
+- **Gestão automática de media** com redimensionamento
+- **Filtros dinâmicos** em tempo real
+- **Paginação inteligente**
+- **Sistema de pesquisa** avançado
+- **Responsive design** para todos os dispositivos
 
-- Node.js (version specified in `.nvmrc` or latest LTS recommended)
-- npm (or yarn)
-- PostgreSQL (or your configured database)
+## 🏗️ **Arquitectura Técnica**
 
-## Installation
+### **Stack Tecnológico**
+- **Backend:** Node.js + Express.js
+- **Frontend:** EJS (templating) + Bootstrap 5 + CSS3 custom
+- **Base de Dados:** MariaDB/MySQL
+- **Gestão de Sessões:** express-session + connect-flash
+- **Segurança:** Helmet.js + bcrypt + CSRF protection
+- **Media:** Multer para upload de ficheiros
+- **Processo:** PM2 para gestão em produção
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <your-repository-url>
-    cd gonzagas_node
-    ```
+### **Estrutura do Projecto**
+```
+gonzagas_node/
+├── config/              # Configurações (DB, app settings)
+├── controllers/         # Lógica de negócio
+├── models/             # Modelos de dados
+├── views/              # Templates EJS
+│   ├── admin/          # Área administrativa
+│   ├── layouts/        # Layouts base
+│   └── partials/       # Componentes reutilizáveis
+├── public/             # Assets estáticos
+│   ├── css/            # Estilos personalizados
+│   ├── js/             # JavaScript frontend
+│   ├── media/          # Imagens de produtos
+│   └── images/         # Assets do site
+├── routes/             # Definição de rotas
+├── middleware/         # Middleware personalizado
+├── scripts/            # Scripts de manutenção
+└── sql/                # Migrações e esquemas
+```
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    # or
-    # yarn install
-    ```
+## 📊 **Base de Dados**
 
-3.  **Set up environment variables:**
-    Create a `.env` file in the root directory by copying `.env.example` (if it exists) or by adding the necessary variables:
-    ```env
-    NODE_ENV=development
-    PORT=3000
-    DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
-    SESSION_SECRET=your_very_strong_session_secret
-    # Add other necessary variables (e.g., API keys, email settings)
-    ```
-    Ensure your `DATABASE_URL` is correctly configured to point to your database instance.
+### **Tabelas Principais**
+- **`products`** - Produtos com todas as informações
+- **`product_families`** - Categorias de produtos
+- **`product_price_history`** - Histórico de alterações de preços
+- **`inventory_movements`** - Movimentos de stock
+- **`users`** - Utilizadores administrativos
+- **`site_settings`** - Configurações do sistema
+- **`audit_logs`** - Log de auditoria
 
-4.  **Run database migrations (if applicable):**
-    If your project uses a migration tool (e.g., Knex, Sequelize), run the migrations:
-    ```bash
-    # Example: npx knex migrate:latest
-    ```
+### **Schema Highlights**
+```sql
+-- Produtos com referências, preços, stock e metadata
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    reference VARCHAR(50) UNIQUE,
+    name VARCHAR(255),
+    purchase_price DECIMAL(10,2),
+    sale_price DECIMAL(10,2),
+    current_stock INT DEFAULT 0,
+    family_id INT,
+    style VARCHAR(50),
+    material VARCHAR(100),
+    is_catalog_visible BOOLEAN DEFAULT 1,
+    -- ... mais campos
+);
 
-## Running the Application
+-- Sistema de preços sob consulta
+CREATE TABLE site_settings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    hide_catalog_prices BOOLEAN DEFAULT 0,
+    -- ... outras configurações
+);
+```
 
--   **Development Mode:**
-    ```bash
-    npm run dev
-    # or if no dev script is configured:
-    # NODE_ENV=development node app.js
-    ```
-    This usually enables features like hot-reloading and more detailed logging.
+## 🚀 **Instalação e Configuração**
 
--   **Production Mode:**
-    ```bash
-    NODE_ENV=production node app.js
-    ```
+### **Desenvolvimento Local**
+```bash
+# Clonar repositório
+git clone <repository-url>
+cd gonzagas_node
 
-## Project Structure (Overview)
+# Instalar dependências
+npm install
 
--   `app.js`: Main application entry point.
--   `config/`: Configuration files (database, views, etc.).
--   `controllers/`: Request handlers and business logic.
--   `models/`: Database models and interactions.
--   `routes/`: Express route definitions.
--   `views/`: EJS templates for rendering HTML.
--   `public/`: Static assets (CSS, JavaScript, images).
--   `middleware/`: Custom Express middleware.
+# Configurar base de dados (ver PRODUCTION_SETUP.md)
+mysql -u root -p < sql/schema.sql
 
-## Next Steps for Deployment
+# Configurar ambiente (copiar de .env.example)
+cp .env.example .env
 
-1.  **Commit all changes to Git.**
-2.  **Ensure your production environment variables are correctly set on your deployment server.**
-3.  **Choose a deployment strategy/platform (e.g., Heroku, AWS, DigitalOcean, Vercel, Netlify for static parts if any).**
+# Iniciar servidor de desenvolvimento
+npm start
+```
 
-This README provides a starting point. You should expand it with more details specific to your project's setup and deployment process.
+### **Produção**
+Ver o ficheiro detalhado **[PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md)** para instruções completas de instalação em ambiente de produção.
+
+## 🎯 **Credenciais de Acesso**
+
+### **Administração**
+- **URL:** `/admin`
+- **Email:** gonzaga@artnshine.pt
+- **Password:** covil
+
+### **Catálogo Público**
+- **URL:** `/catalog`
+- **Password:** 0009
+
+Ver **[CREDENCIAIS_ADMIN.md](./CREDENCIAIS_ADMIN.md)** para lista completa de utilizadores.
+
+## 🔧 **Scripts Disponíveis**
+
+```bash
+# Desenvolvimento
+npm start                    # Iniciar servidor
+npm run dev                  # Servidor com nodemon
+
+# Produção
+npm run start:prod           # Iniciar com PM2
+
+# Base de Dados
+node scripts/create_production_dump.js     # Criar dump SQL
+node scripts/create-gonzaga-admin.js       # Criar utilizador admin
+
+# Manutenção
+npm run backup               # Backup automático
+npm run logs                 # Ver logs do sistema
+```
+
+## 📖 **Documentação Adicional**
+
+- **[PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md)** - Guia completo de instalação em produção
+- **[SISTEMA_NOTIFICACOES.md](./SISTEMA_NOTIFICACOES.md)** - Documentação do sistema de notificações
+- **[README_hide_catalog_prices.md](./README_hide_catalog_prices.md)** - Sistema de preços sob consulta
+- **[CREDENCIAIS_ADMIN.md](./CREDENCIAIS_ADMIN.md)** - Lista de utilizadores e credenciais
+
+## 🛠️ **Desenvolvido Para**
+
+### **Especificações do Cliente**
+- **Marca:** Gonzaga's Art & Shine
+- **Operações:** Venda de joalharia, principalmente prata 925
+- **Estilo:** Tendências Bali e boho
+- **Hosting:** cPanel hosting
+- **Tema:** Escuro, baseado na natureza/floresta, com nuances psicadélicas e geométricas
+
+### **Requisitos Técnicos Implementados**
+- ✅ Sistema modular e escalável
+- ✅ Base de dados MariaDB optimizada
+- ✅ Sistema de checkpoints para backup/restore
+- ✅ Integração com media files existentes
+- ✅ Painel admin com controlo total
+- ✅ Catalogo dinâmico separado da gestão
+- ✅ Design responsivo e moderno
+- ✅ Sistema de segurança robusto
+
+## 📱 **Funcionalidades Visuais**
+
+### **Design System**
+- **Paleta de cores:** Tons escuros com dourado para acentos
+- **Tipografia:** Poppins (headings) + Inter (body)
+- **Ícones:** FontAwesome 6
+- **Animações:** Transições suaves CSS3
+- **Layout:** CSS Grid + Flexbox
+- **Responsividade:** Mobile-first approach
+
+### **Componentes Especiais**
+- Cards de produto com hover effects
+- Sistema de notificações popup animado
+- Filtros dinâmicos com feedback visual
+- Sidebar administrativa com navegação intuitiva
+- Upload de imagens com preview e progresso
+- Tabelas responsivas com paginação
+
+## 🔐 **Segurança Implementada**
+
+- **Autenticação:** bcrypt para passwords
+- **Autorização:** Sistema de roles (admin)
+- **CSRF Protection:** Tokens em formulários
+- **Headers de Segurança:** Helmet.js configurado
+- **Sanitização:** Validação e escape de inputs
+- **Rate Limiting:** Protecção contra spam
+- **Session Security:** Configurações seguras
+
+## 📊 **Performance**
+
+- **Optimizações de imagem** automáticas
+- **Cache de assets** estáticos
+- **Lazy loading** de imagens
+- **Minificação** de CSS/JS
+- **Database indexing** optimizado
+- **Memory management** com PM2
+
+## 🤝 **Contribuição e Manutenção**
+
+### **Estrutura de Commits**
+```
+feat: nova funcionalidade
+fix: correção de bug  
+docs: documentação
+style: formatação
+refactor: refactoring
+test: testes
+chore: manutenção
+```
+
+### **Workflow de Desenvolvimento**
+1. **Desenvolvimento local** com live reload
+2. **Testing** em ambiente de staging
+3. **Deploy** via PM2 em produção
+4. **Monitoring** contínuo via logs
+
+## 📞 **Suporte e Contacto**
+
+Para questões técnicas, melhorias ou suporte:
+- **Issues:** [GitHub Issues](link-to-issues)
+- **Documentação:** Ver pasta `/docs`
+- **Email:** [contacto técnico]
+
+---
+
+## 🏆 **Status do Projecto**
+
+**✅ COMPLETO E FUNCIONAL**
+
+- ✅ Sistema de catálogo público com protecção
+- ✅ Área administrativa completa  
+- ✅ Gestão de produtos, stock e preços
+- ✅ Sistema de notificações elegante
+- ✅ Funcionalidade "preços sob consulta"
+- ✅ Design responsivo e moderno
+- ✅ Segurança e performance optimizados
+- ✅ Documentação completa
+- ✅ Pronto para produção
+
+---
+
+**🎨 Gonzaga's Art & Shine** - *Catálogo Digital Profissional*  
+*Sistema desenvolvido especificamente para joalharia em prata 925 com inspiração Bali/Boho*
+
+**Tech Stack:** Node.js + Express + MariaDB + Bootstrap 5 + EJS  
+**Deploy Ready:** ✅ cPanel + PM2 + Nginx/Apache
