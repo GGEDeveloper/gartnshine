@@ -1,10 +1,32 @@
 ---
+# 🔧 DEPLOYMENT CONFIGURATION - Gonzaga's Art & Shine
+# CloudLinux compatible deployment for dominios.pt
+# Based on lessons learned from multi-domain conflicts
+
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/yourusername/public_html/
+    # 🏗️ PHASE 1: Environment setup
+    - echo "🚀 Starting deployment for Gonzaga's Art & Shine"
+    - export DEPLOYPATH=/home/artnshin/artnshine.pt/gonzagas_node
+    - echo "📁 Deploy path: $DEPLOYPATH"
+    
+    # 🧹 PHASE 2: Clean previous deployment
+    - echo "🧹 Cleaning previous node_modules (CloudLinux requirement)"
+    - /bin/rm -rf $DEPLOYPATH/node_modules
+    - /bin/rm -rf $DEPLOYPATH/package-lock.json
+    
+    # 📂 PHASE 3: Copy application files
+    - echo "📂 Copying application files"
     - /bin/cp -R * $DEPLOYPATH
     - cd $DEPLOYPATH
-    - npm install --production
+    
+    # 🛡️ PHASE 4: CloudLinux compatibility
+    - echo "🛡️ Ensuring CloudLinux compatibility"
+    - /bin/rm -rf node_modules
+    - /bin/rm -rf package-lock.json
+    
+    # 🔐 PHASE 5: Set permissions
+    - echo "🔐 Setting correct permissions"
     - chmod 755 server.js
     - chmod -R 755 public/
     - chmod -R 755 views/
@@ -14,4 +36,15 @@ deployment:
     - chmod -R 755 middleware/
     - chmod -R 755 config/
     - chmod -R 755 scripts/
-    - echo "Deployment completed successfully" 
+    - chmod -R 755 utils/
+    - chmod -R 755 uploads/
+    
+    # 📝 PHASE 6: Environment file
+    - echo "📝 Ensuring environment file permissions"
+    - chmod 600 .env 2>/dev/null || echo "⚠️ .env not found - configure manually in cPanel"
+    
+    # ✅ PHASE 7: Completion
+    - echo "✅ File deployment completed successfully"
+    - echo "🔧 IMPORTANT: Use cPanel 'Run NPM Install' to create symlink"
+    - echo "🚀 Then start the application in cPanel Node.js Selector"
+    - echo "🌐 Site will be available at: https://artnshine.pt" 
