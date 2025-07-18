@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCatalogFilters();
   initCatalogView();
   initProductDetails();
+  initFeaturedCarousel();
   console.log('DOM carregado, verificando jQuery...');
   checkJQuery();
 });
@@ -36,8 +37,71 @@ function initNavigation() {
         spans[1].classList.toggle('opacity-0');
         spans[2].classList.toggle('-rotate-45');
         spans[2].classList.toggle('-translate-y-2.5');
-      }
+        }
+}
+
+/**
+ * Initialize Featured Products Carousel
+ */
+function initFeaturedCarousel() {
+  // Wait for jQuery to be available
+  if (typeof $ !== 'undefined') {
+    $('.featured-carousel').slick({
+      infinite: true,
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+      arrows: true,
+      dots: true,
+      swipeToSlide: true,
+      touchMove: true,
+      draggable: true,
+      accessibility: true,
+      pauseOnHover: true,
+      pauseOnFocus: true,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 992,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            centerMode: true,
+            centerPadding: '60px'
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            centerMode: true,
+            centerPadding: '40px'
+          }
+        }
+      ]
     });
+  } else {
+    // If jQuery not loaded yet, wait a bit and try again
+    setTimeout(initFeaturedCarousel, 100);
+  }
+});
   }
 
   // Dropdown menus

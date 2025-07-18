@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const SiteSettingsController = require('../../controllers/SiteSettingsController');
-const { adminSessionRequired, roleRequired } = require('../../middleware/authMiddleware'); // Assuming your auth middleware
+const { adminSessionRequired } = require('../../middleware/authMiddleware');
 
-// Protect all routes in this file
+// Protect all routes in this file - only require admin session
 router.use(adminSessionRequired);
-router.use(roleRequired(['admin', 'superadmin'])); // Adjust roles as needed
 
 // GET route to display the settings form
 router.get('/', SiteSettingsController.showSettingsForm);
