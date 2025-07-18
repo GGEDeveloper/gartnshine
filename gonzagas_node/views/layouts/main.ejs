@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt" class="h-100">
+<html lang="pt-BR" class="h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%- title || 'Gonzaga\'s Art & Shine' %></title>
-  
-  <!-- Favicon -->
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<%= typeof siteDescription !== 'undefined' ? siteDescription : 'Gonzaga\'s Art & Shine - Elegância que nasce da terra' %>">
+    <meta name="keywords" content="joias, prata, bali, boho, elegância, artesanal, Gonzaga">
+    <meta name="author" content="Gonzaga's Art & Shine">
+    <meta name="robots" content="index, follow">
+    
+    <title><%= title %> | <%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+  <!-- Main CSS Files -->
     <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/catalog.css">
     <link rel="stylesheet" href="/css/notifications.css">
     
   <!-- GLightbox CSS -->
@@ -22,6 +31,17 @@
     <!-- Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    
+    <!-- Theme Variables -->
+    <style>
+      :root {
+        --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#1e1e1e' %>;
+        --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#4a3c2d' %>;
+        --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#6a8c69' %>;
+        --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f0f0f0' %>;
+        --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#b19cd9' %>;
+      }
+    </style>
     
     <%- style %>
 </head>
@@ -35,7 +55,7 @@
   
   <%- include('../partials/footer') %>
   
-    <!-- JavaScript -->
+    <!-- CDN Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     
@@ -51,7 +71,7 @@
     <script src="/js/modules/carousel.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/notifications.js"></script>
-    <script src="/js/mobile-navigation.js"></script>
+    <script src="/js/frontend-mobile-navigation-fix.js"></script>
     <script src="/js/featured-carousel.js"></script>
     
     <!-- Flash Messages para Notificações -->

@@ -88,7 +88,14 @@ router.get('/', async (req, res) => {
       families: families || [],
       mediaFiles: mediaFiles || [],
       siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra'
+      siteDescription: 'Elegância que nasce da terra',
+      theme: {
+        colorPrimary: '#1e1e1e',
+        colorSecondary: '#4a3c2d', 
+        colorAccent: '#6a8c69',
+        colorText: '#f0f0f0',
+        colorHighlight: '#b19cd9'
+      }
     });
   } catch (error) {
     console.error('Error loading home page:', error);
@@ -152,6 +159,15 @@ router.get('/collections', async (req, res) => {
       layout: 'layouts/main',
       images: imageFiles,
       user: req.user || null,
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteDescription: 'Elegância que nasce da terra',
+      theme: {
+        colorPrimary: '#1e1e1e',
+        colorSecondary: '#4a3c2d', 
+        colorAccent: '#6a8c69',
+        colorText: '#f0f0f0',
+        colorHighlight: '#b19cd9'
+      },
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });

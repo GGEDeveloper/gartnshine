@@ -65,6 +65,15 @@ class CatalogController {
         products: products,
         families: families,
         selectedFamilyIds: selectedFamilyIds,
+        siteTitle: 'Gonzaga\'s Art & Shine',
+        siteDescription: 'Elegância que nasce da terra',
+        theme: {
+          colorPrimary: '#1e1e1e',
+          colorSecondary: '#4a3c2d', 
+          colorAccent: '#6a8c69',
+          colorText: '#f0f0f0',
+          colorHighlight: '#b19cd9'
+        },
         helpers: {
           isFamilySelected: function(familyId) {
             return selectedFamilyIds.includes(familyId) ? 'checked' : '';
