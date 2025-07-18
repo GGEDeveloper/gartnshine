@@ -1,0 +1,265 @@
+/**
+ * Admin Layout Fix CSS
+ * Gonzaga's Art & Shine
+ * Corrige problemas de margem à esquerda na área admin
+ */
+
+/* ===== RESET GLOBAL ADMIN ===== */
+/* Garantir que não há overflow horizontal */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ===== WRAPPER PRINCIPAL ===== */
+#wrapper {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  position: relative !important;
+}
+
+/* ===== SIDEBAR CORRIGIDA ===== */
+.sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 260px !important;
+  height: 100vh !important;
+  background: var(--primary, #2c3e50) !important;
+  z-index: 100 !important;
+  transform: none !important;
+  transition: transform 0.3s ease !important;
+}
+
+/* ===== CONTENT WRAPPER SEM MARGEM PROBLEMÁTICA ===== */
+#content-wrapper {
+  margin-left: 260px !important;
+  width: calc(100% - 260px) !important;
+  max-width: calc(100% - 260px) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== CONTENT PRINCIPAL ===== */
+#content {
+  flex: 1 !important;
+  padding: 1.5rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== CONTAINERS ===== */
+.container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== HEADER CORRIGIDO ===== */
+.header {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 1.5rem !important;
+  height: 70px !important;
+  background: #ffffff !important;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 99 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== TABELAS E RESPONSIVIDADE ===== */
+.table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  border-radius: 0.5rem !important;
+  box-sizing: border-box !important;
+}
+
+.table {
+  width: 100% !important;
+  margin-bottom: 0 !important;
+  overflow-x: auto !important;
+}
+
+/* ===== CARDS E COMPONENTES ===== */
+.card {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.col, [class*="col-"] {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== MOBILE RESPONSIVO ===== */
+@media (max-width: 991.98px) {
+  /* Sidebar oculta em mobile */
+  .sidebar {
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  /* Content sem margem em mobile */
+  #content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Sidebar ativa em mobile */
+  body.sidebar-open .sidebar {
+    transform: translateX(0) !important;
+  }
+  
+  /* Overlay quando sidebar aberta em mobile */
+  body.sidebar-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+  }
+}
+
+/* ===== MOBILE MUITO PEQUENO ===== */
+@media (max-width: 576px) {
+  #content {
+    padding: 1rem !important;
+  }
+  
+  .header {
+    padding: 0 1rem !important;
+  }
+  
+  .col, [class*="col-"] {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+/* ===== FORCE FIXES PARA ELEMENTOS PROBLEMÁTICOS ===== */
+/* Remove qualquer margem/padding que possa estar a causar problemas */
+.main,
+.main-content,
+.page-content,
+.admin-content {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== SIDEBAR TOGGLE FUNCTIONALITY ===== */
+.sidebar-toggle {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar-toggle {
+    display: block !important;
+  }
+}
+
+/* ===== DEBUG HELPER (Remove in production) ===== */
+/*
+.debug-layout * {
+  border: 1px solid red !important;
+  box-sizing: border-box !important;
+}
+
+.debug-layout #wrapper {
+  border: 3px solid blue !important;
+}
+
+.debug-layout #content-wrapper {
+  border: 3px solid green !important;
+}
+
+.debug-layout .sidebar {
+  border: 3px solid orange !important;
+}
+*/
+
+/* ===== PRINT FIXES ===== */
+@media print {
+  .sidebar {
+    display: none !important;
+  }
+  
+  #content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* ===== ACESSIBILIDADE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  #content-wrapper {
+    transition: none !important;
+  }
+}
+
+/* ===== FORCE OVERRIDE PARA QUALQUER CONFLITO ===== */
+.admin-layout-fixed #content-wrapper {
+  margin-left: 260px !important;
+  width: calc(100% - 260px) !important;
+  padding-left: 0 !important;
+}
+
+.admin-layout-fixed .sidebar {
+  position: fixed !important;
+  left: 0 !important;
+  width: 260px !important;
+}
+
+@media (max-width: 991.98px) {
+  .admin-layout-fixed #content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+} 
