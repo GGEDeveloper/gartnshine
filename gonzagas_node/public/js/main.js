@@ -103,8 +103,7 @@ function initFeaturedCarousel() {
     // If jQuery not loaded yet, wait a bit and try again
     setTimeout(initFeaturedCarousel, 100);
   }
-});
-  }
+}
 
   // Dropdown menus
   if (dropdownToggles) {
