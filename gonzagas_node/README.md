@@ -108,13 +108,13 @@ CREATE TABLE site_settings (
 ## 🚀 **Instalação e Configuração**
 
 ### **Desenvolvimento Local**
-```bash
+    ```bash
 # Clonar repositório
 git clone <repository-url>
 cd gonzagas_node
 
 # Instalar dependências
-npm install
+    npm install
 
 # Configurar base de dados (ver PRODUCTION_SETUP.md)
 mysql -u root -p < sql/schema.sql
@@ -144,7 +144,7 @@ Ver **[CREDENCIAIS_ADMIN.md](./CREDENCIAIS_ADMIN.md)** para lista completa de ut
 
 ## 🔧 **Scripts Disponíveis**
 
-```bash
+    ```bash
 # Desenvolvimento
 npm start                    # Iniciar servidor
 npm run dev                  # Servidor com nodemon

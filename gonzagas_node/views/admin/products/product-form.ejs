@@ -7,7 +7,7 @@
                 <i class="fas fa-eye"></i> Visualizar
             </a>
         <% } %>
-    </div>
+          </div>
 
     <%- include('../partials/flash-messages') %>
 
@@ -31,7 +31,7 @@
                     <input type="hidden" name="_method" value="PUT">
                 <% } %>
 
-                <div class="row">
+            <div class="row">
                     <!-- Coluna Esquerda -->
                     <div class="col-md-6">
                         <!-- Informações Básicas -->
@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group mb-3">
+                <div class="form-group mb-3">
                             <label for="reference" class="form-label">Referência</label>
                             <input 
                                 type="text" 
@@ -59,9 +59,9 @@
                                 name="reference" 
                                 value="<%= product ? product.reference : '' %>"
                             >
-                        </div>
-
-                        <div class="form-group mb-3">
+                </div>
+                
+                <div class="form-group mb-3">
                             <label for="barcode" class="form-label">Código de Barras</label>
                             <input 
                                 type="text" 
@@ -70,27 +70,27 @@
                                 name="barcode" 
                                 value="<%= product ? product.barcode : '' %>"
                             >
-                        </div>
-
-                        <div class="form-group mb-3">
+                </div>
+                
+                    <div class="form-group mb-3">
                             <label for="family_id" class="form-label">Família de Produtos</label>
                             <select class="form-control" id="family_id" name="family_id">
-                                <option value="">Selecione uma família</option>
+                        <option value="">Selecione uma família</option>
                                 <% if (families && families.length > 0) { %>
-                                    <% families.forEach(family => { %>
+                          <% families.forEach(family => { %>
                                         <option 
                                             value="<%= family.id %>" 
                                             <%= product && product.family_id == family.id ? 'selected' : '' %>
                                         >
-                                            <%= family.name %>
-                                        </option>
-                                    <% }); %>
-                                <% } %>
-                            </select>
-                        </div>
+                              <%= family.name %>
+                            </option>
+                          <% }); %>
+                        <% } %>
+                      </select>
+                    </div>
 
                         <!-- Preços -->
-                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                             <label for="purchase_price" class="form-label">Preço de Compra (€)</label>
                             <input 
                                 type="number" 
@@ -101,9 +101,9 @@
                                 min="0"
                                 value="<%= product ? product.purchase_price : '' %>"
                             >
-                        </div>
+                </div>
 
-                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                             <label for="sale_price" class="form-label">Preço de Venda (€)</label>
                             <input 
                                 type="number" 
@@ -114,13 +114,13 @@
                                 min="0"
                                 value="<%= product ? product.sale_price : '' %>"
                             >
-                        </div>
+                      </div>
                     </div>
 
                     <!-- Coluna Direita -->
                     <div class="col-md-6">
                         <!-- Estoque -->
-                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                             <label for="current_stock" class="form-label">Estoque Atual</label>
                             <input 
                                 type="number" 
@@ -130,9 +130,9 @@
                                 min="0"
                                 value="<%= product ? product.current_stock : '0' %>"
                             >
-                        </div>
+                      </div>
 
-                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                             <label for="min_stock" class="form-label">Estoque Mínimo</label>
                             <input 
                                 type="number" 
@@ -142,10 +142,10 @@
                                 min="0"
                                 value="<%= product ? product.min_stock : '0' %>"
                             >
-                        </div>
+                </div>
 
                         <!-- Características Físicas -->
-                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                             <label for="weight" class="form-label">Peso</label>
                             <div class="input-group">
                                 <input 
@@ -161,10 +161,10 @@
                                     <option value="g" <%= product && product.weight_unit === 'g' ? 'selected' : '' %>>g</option>
                                     <option value="kg" <%= product && product.weight_unit === 'kg' ? 'selected' : '' %>>kg</option>
                                 </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
+                  </div>
+                </div>
+                
+                <div class="form-group mb-3">
                             <label for="dimensions" class="form-label">Dimensões</label>
                             <input 
                                 type="text" 
@@ -174,10 +174,10 @@
                                 placeholder="Ex: 10x5x2 cm"
                                 value="<%= product ? product.dimensions : '' %>"
                             >
-                        </div>
+                </div>
 
                         <!-- Materiais e Estilo -->
-                        <div class="form-group mb-3">
+                <div class="form-group mb-3">
                             <label for="material" class="form-label">Material</label>
                             <input 
                                 type="text" 
@@ -186,9 +186,9 @@
                                 name="material" 
                                 value="<%= product ? product.material : 'Prata 925' %>"
                             >
-                        </div>
+                </div>
 
-                        <div class="form-group mb-3">
+                <div class="form-group mb-3">
                             <label for="style" class="form-label">Estilo</label>
                             <input 
                                 type="text" 
@@ -197,10 +197,10 @@
                                 name="style" 
                                 value="<%= product ? product.style : '' %>"
                             >
-                        </div>
-                    </div>
                 </div>
-
+                </div>
+                </div>
+                
                 <!-- Descrição -->
                 <div class="form-group mb-3">
                     <label for="description" class="form-label">Descrição</label>
@@ -237,8 +237,8 @@
                             <label class="form-check-label" for="is_active">
                                 Produto Ativo
                             </label>
-                        </div>
-                    </div>
+                </div>
+                  </div>
                     <div class="col-md-4">
                         <div class="form-check mb-3">
                             <input 
@@ -251,8 +251,8 @@
                             <label class="form-check-label" for="is_catalog_visible">
                                 Visível no Catálogo
                             </label>
-                        </div>
-                    </div>
+                              </div>
+                            </div>
                     <div class="col-md-4">
                         <div class="form-check mb-3">
                             <input 
@@ -265,8 +265,8 @@
                             <label class="form-check-label" for="featured">
                                 Produto em Destaque
                             </label>
-                        </div>
                     </div>
+                  </div>
                 </div>
 
                 <!-- Imagem -->
@@ -284,9 +284,9 @@
                             <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" style="max-width: 150px; height: auto;">
                             <p class="text-muted mt-1">Imagem atual: <%= product.image_url %></p>
                         </div>
-                    <% } %>
-                </div>
-
+                      <% } %>
+          </div>
+          
                 <!-- Botões -->
                 <div class="form-group d-flex justify-content-between">
                     <a href="/admin/products" class="btn btn-secondary">
@@ -301,23 +301,23 @@
                                 data-notification-type="success"
                                 onclick="confirmDelete(<%= product.id %>)"
                             >
-                                <i class="fas fa-trash"></i> Excluir
-                            </button>
-                        <% } %>
+                <i class="fas fa-trash"></i> Excluir
+              </button>
+            <% } %>
                         <button 
                             type="submit" 
                             class="btn btn-primary"
                             data-notification="Produto salvo com sucesso!"
                             data-notification-type="success"
                         >
-                            <i class="fas fa-save"></i> Salvar
-                        </button>
+              <i class="fas fa-save"></i> Salvar
+            </button>
                     </div>
-                </div>
-            </form>
-        </div>
+          </div>
+        </form>
+      </div>
     </div>
-</div>
+  </div>
 
 <% if (product && product.id) { %>
 <script>

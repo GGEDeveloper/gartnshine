@@ -11,12 +11,12 @@ class AuthController extends BaseController {
 
   // Exibir formulário de login
   showLoginForm(req, res) {
-    res.render('admin/auth/login', {
+      res.render('admin/auth/login', {
       layout: 'admin/layouts/auth',
       title: 'Login - Admin',
       error_msg: req.flash('error'),
       success_msg: req.flash('success')
-    });
+      });
   }
 
   // Processar login
@@ -47,14 +47,14 @@ class AuthController extends BaseController {
       // Verificar se é admin
       if (user.role !== 'admin') {
         req.flash('error', 'Acesso negado. Apenas administradores podem acessar esta área.');
-        return res.redirect('/admin/login');
-      }
+          return res.redirect('/admin/login');
+        }
 
       // Salvar na sessão
-      req.session.user = {
-        id: user.id,
+        req.session.user = {
+          id: user.id,
         name: user.name,
-        email: user.email,
+          email: user.email,
         role: user.role
       };
 
@@ -75,9 +75,9 @@ class AuthController extends BaseController {
     
     // Preparar mensagem antes de destruir a sessão
     const logoutMessage = `Logout realizado com sucesso. Até logo, ${userName}!`;
-    
-    req.session.destroy((err) => {
-      if (err) {
+
+      req.session.destroy((err) => {
+        if (err) {
         console.error('Erro ao fazer logout:', err);
         return res.redirect('/admin/login?error=logout_failed');
       }
