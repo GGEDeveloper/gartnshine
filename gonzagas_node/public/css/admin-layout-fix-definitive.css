@@ -1,0 +1,295 @@
+/**
+ * Admin Layout Fix - DEFINITIVO
+ * Gonzaga's Art & Shine
+ * RESOLVE PROBLEMA: Margem à esquerda no admin mobile
+ * CAUSA IDENTIFICADA: Conflitos CSS specificity entre desktop e mobile
+ */
+
+/* ===== RESET GLOBAL ADMIN ===== */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ===== DESKTOP LAYOUT (acima de 992px) ===== */
+@media (min-width: 992px) {
+  /* Wrapper Desktop */
+  #wrapper {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+  }
+
+  /* Sidebar Desktop */
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 260px !important;
+    height: 100vh !important;
+    background: var(--primary, #2c3e50) !important;
+    z-index: 100 !important;
+    transform: none !important;
+    transition: transform 0.3s ease !important;
+  }
+
+  /* Content Wrapper Desktop */
+  body.admin-layout-fixed #wrapper #content-wrapper {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    max-width: calc(100% - 260px) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ===== MOBILE LAYOUT (991px e abaixo) - ESPECIFICIDADE MÁXIMA ===== */
+@media (max-width: 991.98px) {
+  /* Wrapper Mobile */
+  body.admin-layout-fixed #wrapper {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Sidebar Mobile - ESCONDIDA por padrão */
+  body.admin-layout-fixed .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 280px !important;
+    height: 100vh !important;
+    background: var(--primary, #2c3e50) !important;
+    z-index: 1000 !important;
+    transform: none !important;
+    transition: left 0.3s ease !important;
+    overflow-y: auto !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3) !important;
+  }
+
+  /* Sidebar Mobile - ATIVA */
+  body.admin-layout-fixed.sidebar-open .sidebar,
+  body.admin-layout-fixed .sidebar.open {
+    left: 0 !important;
+  }
+
+  /* Content Wrapper Mobile - SEM MARGEM À ESQUERDA */
+  body.admin-layout-fixed #wrapper #content-wrapper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  /* Content Principal Mobile */
+  body.admin-layout-fixed #wrapper #content-wrapper #content {
+    flex: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    margin-left: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  /* Container Fluid Mobile */
+  body.admin-layout-fixed #wrapper #content-wrapper #content .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  /* Header Mobile */
+  body.admin-layout-fixed #wrapper #content-wrapper #content .header,
+  body.admin-layout-fixed #wrapper #content-wrapper .header {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 1rem !important;
+    height: 60px !important;
+    background: #ffffff !important;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1001 !important; /* MAIOR que overlay para sempre ser clicável */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    pointer-events: auto !important; /* Garantir que é clicável */
+  }
+
+  /* Botões do header sempre clicáveis */
+  body.admin-layout-fixed .header .btn,
+  body.admin-layout-fixed .header .dropdown,
+  body.admin-layout-fixed .header button,
+  body.admin-layout-fixed .header a {
+    pointer-events: auto !important;
+    z-index: 1002 !important;
+    position: relative !important;
+  }
+
+  /* Overlay quando sidebar aberta - NÃO cobre o header */
+  body.admin-layout-fixed.sidebar-open::before {
+    content: '';
+    position: fixed;
+    top: 60px !important; /* Inicia APÓS o header */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px) !important; /* Altura menos o header */
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999; /* Menor que header */
+    pointer-events: auto !important;
+  }
+
+  /* Sidebar mobile deve ter z-index correto */
+  body.admin-layout-fixed .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 280px !important;
+    height: 100vh !important;
+    background: var(--primary, #2c3e50) !important;
+    z-index: 1000 !important; /* Entre overlay e header */
+    transform: none !important;
+    transition: left 0.3s ease !important;
+    overflow-y: auto !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3) !important;
+    pointer-events: auto !important;
+  }
+
+  /* Forçar todos os elementos principais */
+  body.admin-layout-fixed .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  body.admin-layout-fixed .col, 
+  body.admin-layout-fixed [class*="col-"] {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  body.admin-layout-fixed .card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  body.admin-layout-fixed .table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    border-radius: 0.5rem !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ===== MOBILE PEQUENO (576px e abaixo) ===== */
+@media (max-width: 576px) {
+  body.admin-layout-fixed .sidebar {
+    width: 100% !important;
+  }
+  
+  body.admin-layout-fixed #wrapper #content-wrapper #content {
+    padding: 0.75rem !important;
+  }
+  
+  body.admin-layout-fixed .header {
+    padding: 0 0.75rem !important;
+    height: 56px !important;
+  }
+  
+  body.admin-layout-fixed .col, 
+  body.admin-layout-fixed [class*="col-"] {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+/* ===== FORCE RESET PARA ELEMENTOS ESPECÍFICOS ===== */
+@media (max-width: 991.98px) {
+  /* Reset qualquer transform que possa estar sendo aplicado */
+  body.admin-layout-fixed #wrapper,
+  body.admin-layout-fixed #content-wrapper,
+  body.admin-layout-fixed #content,
+  body.admin-layout-fixed .container-fluid,
+  body.admin-layout-fixed .row,
+  body.admin-layout-fixed .col,
+  body.admin-layout-fixed [class*="col-"],
+  body.admin-layout-fixed .card,
+  body.admin-layout-fixed .card-body,
+  body.admin-layout-fixed .table-responsive {
+    transform: none !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    position: relative !important;
+  }
+}
+
+/* ===== DEBUG CSS (remover em produção) ===== */
+/* 
+@media (max-width: 991.98px) {
+  body.admin-layout-fixed.debug-layout #wrapper {
+    border: 3px solid blue !important;
+  }
+  body.admin-layout-fixed.debug-layout #content-wrapper {
+    border: 3px solid green !important;
+  }
+  body.admin-layout-fixed.debug-layout #content {
+    border: 3px solid red !important;
+  }
+  body.admin-layout-fixed.debug-layout .container-fluid {
+    border: 3px solid orange !important;
+  }
+}
+*/ 
