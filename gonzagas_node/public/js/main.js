@@ -37,7 +37,9 @@ function initNavigation() {
         spans[1].classList.toggle('opacity-0');
         spans[2].classList.toggle('-rotate-45');
         spans[2].classList.toggle('-translate-y-2.5');
-        }
+      }
+    });
+  }
 }
 
 /**
