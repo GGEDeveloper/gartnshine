@@ -12,6 +12,18 @@
   body {
     overflow-x: hidden !important;
     position: relative;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Fix any layout that might push content to the right */
+  #wrapper {
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
   
   /* Sidebar mobile fixes */
@@ -46,7 +58,13 @@
     margin-left: 0 !important;
     padding-left: 0 !important;
     width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
     transition: none !important;
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow-x: hidden !important;
   }
 
   /* Content area mobile */
@@ -54,6 +72,27 @@
   #content {
     padding: 1rem !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Container and content fixes */
+  .container-fluid,
+  .container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Card and content area fixes */
+  .card {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
   }
 
