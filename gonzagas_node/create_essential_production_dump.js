@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Script para criar uma dump otimizada para produção
- * Reordena as tabelas por ordem de dependências para evitar erros de foreign key
+ * Script para criar uma dump de produção apenas com tabelas essenciais
+ * Inclui apenas tabelas que existem realmente na base de dados
  */
 
 const fs = require('fs');
@@ -10,22 +10,19 @@ const path = require('path');
 
 // Configuração
 const INPUT_FILE = 'gonzagas_local_complete_dump.sql';
-const OUTPUT_FILE = 'gonzagas_production_ready_dump.sql';
+const OUTPUT_FILE = 'gonzagas_essential_production_dump.sql';
 
-console.log('🔄 Criando dump otimizada para produção...');
+console.log('🔄 Criando dump essencial para produção...');
 
-// Ordem correta das tabelas (sem dependências primeiro)
-const TABLE_ORDER = [
+// Apenas tabelas que existem realmente (ordem de dependências)
+const ESSENTIAL_TABLES = [
   'admin_users',
-  'users', 
-  'site_settings',
+  'site_settings', 
   'product_families',
   'products',
   'product_images',
   'activity_logs',
-  'audit_logs',
-  'cookie_consent',
-  'user_rights'
+  'audit_logs'
 ];
 
 // Função para extrair uma tabela da dump
@@ -49,16 +46,16 @@ function extractTable(content, tableName) {
 }
 
 // Função principal
-function createOptimizedDump() {
+function createEssentialDump() {
   try {
     // Ler o arquivo original
     const originalContent = fs.readFileSync(INPUT_FILE, 'utf8');
     
     // Cabeçalho da nova dump
-    let optimizedDump = `-- ====================================
--- GONZAGA'S ART & SHINE - PRODUCTION READY DATABASE DUMP
+    let essentialDump = `-- ====================================
+-- GONZAGA'S ART & SHINE - ESSENTIAL PRODUCTION DATABASE DUMP
 -- Gerado automaticamente em ${new Date().toISOString()}
--- Ordem de tabelas otimizada para importação sem erros
+-- Contém apenas tabelas essenciais que existem na base de dados local
 -- ====================================
 
 -- Configurações para importação segura
@@ -83,20 +80,24 @@ SET CHARACTER_SET_CLIENT = utf8mb4;
 
 `;
 
-    // Extrair e adicionar cada tabela na ordem correta
-    TABLE_ORDER.forEach((tableName, index) => {
-      console.log(`📦 Processando tabela ${index + 1}/${TABLE_ORDER.length}: ${tableName}`);
+    // Extrair e adicionar cada tabela essencial na ordem correta
+    ESSENTIAL_TABLES.forEach((tableName, index) => {
+      console.log(`📦 Processando tabela ${index + 1}/${ESSENTIAL_TABLES.length}: ${tableName}`);
       
-      optimizedDump += `-- ====================================\n`;
-      optimizedDump += `-- ${index + 1}. ${tableName.toUpperCase()}\n`;
-      optimizedDump += `-- ====================================\n\n`;
+      essentialDump += `-- ====================================\n`;
+      essentialDump += `-- ${index + 1}. ${tableName.toUpperCase()}\n`;
+      essentialDump += `-- ====================================\n\n`;
       
       const tableContent = extractTable(originalContent, tableName);
-      optimizedDump += tableContent;
+      if (tableContent) {
+        essentialDump += tableContent;
+      } else {
+        console.error(`❌ Erro: Tabela ${tableName} não pôde ser extraída`);
+      }
     });
 
     // Rodapé - restaurar configurações
-    optimizedDump += `-- ====================================
+    essentialDump += `-- ====================================
 -- FINALIZAR IMPORTAÇÃO
 -- ====================================
 
@@ -115,27 +116,28 @@ COMMIT;
 SET AUTOCOMMIT = 1;
 
 -- ====================================
--- DUMP FINALIZADA COM SUCESSO
+-- DUMP ESSENCIAL FINALIZADA COM SUCESSO
 -- ====================================
-SELECT 'Base de dados importada com sucesso!' as status;
-SELECT 'Todas as tabelas foram criadas na ordem correta' as info;
-SELECT 'Foreign keys adicionadas no final para evitar erros' as details;
+SELECT 'Base de dados essencial importada com sucesso!' as status;
+SELECT 'Todas as tabelas essenciais foram criadas na ordem correta' as info;
+SELECT '${ESSENTIAL_TABLES.length} tabelas processadas' as details;
 `;
 
     // Escrever o arquivo final
-    fs.writeFileSync(OUTPUT_FILE, optimizedDump);
+    fs.writeFileSync(OUTPUT_FILE, essentialDump);
     
-    console.log('✅ Dump otimizada criada com sucesso!');
+    console.log('✅ Dump essencial criada com sucesso!');
     console.log(`📄 Arquivo: ${OUTPUT_FILE}`);
     console.log(`📊 Tamanho: ${(fs.statSync(OUTPUT_FILE).size / 1024).toFixed(2)} KB`);
     
     // Mostrar estatísticas
-    const tableCount = TABLE_ORDER.length;
-    console.log(`📦 Tabelas processadas: ${tableCount}`);
+    const tableCount = ESSENTIAL_TABLES.length;
+    console.log(`📦 Tabelas essenciais processadas: ${tableCount}`);
     console.log('🎯 Ordem de importação otimizada para produção');
+    console.log('✨ Apenas tabelas que existem na base de dados local');
     
   } catch (error) {
-    console.error('❌ Erro ao criar dump otimizada:', error.message);
+    console.error('❌ Erro ao criar dump essencial:', error.message);
     process.exit(1);
   }
 }
@@ -148,4 +150,4 @@ if (!fs.existsSync(INPUT_FILE)) {
 }
 
 // Executar
-createOptimizedDump(); 
+createEssentialDump(); 

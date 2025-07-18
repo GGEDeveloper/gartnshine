@@ -1,7 +1,7 @@
 -- ====================================
--- GONZAGA'S ART & SHINE - PRODUCTION READY DATABASE DUMP
--- Gerado automaticamente em 2025-07-18T16:04:11.167Z
--- Ordem de tabelas otimizada para importação sem erros
+-- GONZAGA'S ART & SHINE - ESSENTIAL PRODUCTION DATABASE DUMP
+-- Gerado automaticamente em 2025-07-18T16:05:05.590Z
+-- Contém apenas tabelas essenciais que existem na base de dados local
 -- ====================================
 
 -- Configurações para importação segura
@@ -64,55 +64,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 2. USERS
--- ====================================
-
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('admin','user') DEFAULT 'user',
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES
-(1,'Administrador','admin@gonzagas.com','$2b$10$OpQSfinNzajl/Ze7RMsaV.jOD38f5YwpUI.aeFy6Wt7obObCxjA8a','admin','2025-05-22 16:42:08','2025-05-22 17:36:43'),
-(3,'Gonzaga','g.art.shine@gmail.com','b02IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin','2025-05-22 21:00:07','2025-07-17 16:32:14'),
-(4,'mike','miguelmelo70@gmail.com','$2b$10$ZXMBcvchUbbmYgwnaySSOe1pVtY5Wt4iwpK2CEDi5ytQTGWwOuC9u','admin','2025-05-22 21:04:15','2025-05-22 21:14:55'),
-(5,'Gonzaga','gonzaga@artnshine.pt','$2a$10$goRYOLkXUINjrAHNIYFoZuVp06S.k.sQpsEOgC3dN9XRuzOezja46','admin','2025-07-17 16:32:05','2025-07-17 16:32:05');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-07-18 16:52:53
-
--- ====================================
--- 3. SITE_SETTINGS
+-- 2. SITE_SETTINGS
 -- ====================================
 
 -- Table structure for table `site_settings`
@@ -146,7 +98,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 4. PRODUCT_FAMILIES
+-- 3. PRODUCT_FAMILIES
 -- ====================================
 
 -- Table structure for table `product_families`
@@ -186,7 +138,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 5. PRODUCTS
+-- 4. PRODUCTS
 -- ====================================
 
 -- Table structure for table `products`
@@ -438,7 +390,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 6. PRODUCT_IMAGES
+-- 5. PRODUCT_IMAGES
 -- ====================================
 
 -- Table structure for table `product_images`
@@ -661,7 +613,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 7. ACTIVITY_LOGS
+-- 6. ACTIVITY_LOGS
 -- ====================================
 
 -- Table structure for table `activity_logs`
@@ -699,7 +651,7 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 8. AUDIT_LOGS
+-- 7. AUDIT_LOGS
 -- ====================================
 
 -- Table structure for table `audit_logs`
@@ -746,14 +698,6 @@ UNLOCK TABLES;
 --
 
 -- ====================================
--- 9. COOKIE_CONSENT
--- ====================================
-
--- ====================================
--- 10. USER_RIGHTS
--- ====================================
-
--- ====================================
 -- FINALIZAR IMPORTAÇÃO
 -- ====================================
 
@@ -772,8 +716,8 @@ COMMIT;
 SET AUTOCOMMIT = 1;
 
 -- ====================================
--- DUMP FINALIZADA COM SUCESSO
+-- DUMP ESSENCIAL FINALIZADA COM SUCESSO
 -- ====================================
-SELECT 'Base de dados importada com sucesso!' as status;
-SELECT 'Todas as tabelas foram criadas na ordem correta' as info;
-SELECT 'Foreign keys adicionadas no final para evitar erros' as details;
+SELECT 'Base de dados essencial importada com sucesso!' as status;
+SELECT 'Todas as tabelas essenciais foram criadas na ordem correta' as info;
+SELECT '7 tabelas processadas' as details;
