@@ -1,481 +1,247 @@
 /**
  * Main JavaScript for Gonzaga's Art & Shine
+ * Modular Architecture Entry Point
  */
 
+// Global application namespace
+window.Gonzaga = window.Gonzaga || {};
+
+// Module manager
+window.Gonzaga.ModuleManager = (function() {
+  'use strict';
+
+  const loadedModules = new Set();
+  const failedModules = new Set();
+
+  /**
+   * Initialize a module safely
+   * @param {string} moduleName - Name of the module
+   * @param {Object} moduleObject - Module object to initialize
+   */
+  function initModule(moduleName, moduleObject) {
+    if (loadedModules.has(moduleName)) {
+      console.log(`[Module Manager] ${moduleName} already loaded`);
+      return;
+    }
+
+    if (!moduleObject || typeof moduleObject.init !== 'function') {
+      console.error(`[Module Manager] ${moduleName} is not a valid module`);
+      failedModules.add(moduleName);
+      return;
+    }
+
+    try {
+      moduleObject.init();
+      loadedModules.add(moduleName);
+      console.log(`[Module Manager] ${moduleName} initialized successfully`);
+    } catch (error) {
+      console.error(`[Module Manager] Failed to initialize ${moduleName}:`, error);
+      failedModules.add(moduleName);
+    }
+  }
+
+  /**
+   * Initialize all modules in correct order
+   */
+  function initAllModules() {
+    const moduleOrder = window.GonzagaConfig?.moduleLoadOrder || ['utils', 'navigation', 'ui', 'carousel'];
+    
+    moduleOrder.forEach(moduleName => {
+      const moduleMap = {
+        'utils': window.GonzagaUtils,
+        'navigation': window.GonzagaNavigation,
+        'ui': window.GonzagaUI,
+        'carousel': window.GonzagaCarousel
+      };
+
+      const moduleObject = moduleMap[moduleName];
+      if (moduleObject) {
+        initModule(moduleName, moduleObject);
+      } else {
+        console.warn(`[Module Manager] Module ${moduleName} not found`);
+      }
+    });
+
+    // Initialize legacy components that haven't been modularized yet
+    initLegacyComponents();
+
+    console.log(`[Module Manager] Initialization complete. Loaded: ${loadedModules.size}, Failed: ${failedModules.size}`);
+  }
+
+  /**
+   * Initialize legacy components (temporary)
+   */
+  function initLegacyComponents() {
+    try {
+      if (typeof initProductAnimations === 'function') initProductAnimations();
+      if (typeof initGalleryItems === 'function') initGalleryItems();
+      if (typeof initCatalogFilters === 'function') initCatalogFilters();
+      if (typeof initCatalogView === 'function') initCatalogView();
+      if (typeof initProductDetails === 'function') initProductDetails();
+    } catch (error) {
+      console.error('[Module Manager] Error initializing legacy components:', error);
+    }
+  }
+
+  /**
+   * Get module status
+   */
+  function getStatus() {
+    return {
+      loaded: Array.from(loadedModules),
+      failed: Array.from(failedModules),
+      total: loadedModules.size + failedModules.size
+    };
+  }
+
+  return {
+    init: initAllModules,
+    getStatus: getStatus
+  };
+})();
+
+// Main initialization
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize all components
-  initNavigation();
-  initProductAnimations();
-  initGalleryItems();
-  initVideoBackground();
-  initCatalogFilters();
-  initCatalogView();
-  initProductDetails();
-  initFeaturedCarousel();
-  console.log('DOM carregado, verificando jQuery...');
+  console.log('[Gonzaga] Starting application initialization...');
+  
+  // Check for required dependencies
   checkJQuery();
+  
+  // Initialize all modules
+  window.Gonzaga.ModuleManager.init();
+  
+  console.log('[Gonzaga] Application initialization complete');
 });
 
 /**
- * Navigation
+ * Check jQuery availability (legacy function kept for compatibility)
  */
-function initNavigation() {
-  const menuToggle = document.querySelector('.menu-toggle');
-  const navMenu = document.querySelector('.nav-menu');
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-  // Mobile menu toggle
-  if (menuToggle && navMenu) {
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      
-      // Transform hamburger to X
-      const spans = menuToggle.querySelectorAll('span');
-      if (spans.length >= 3) {
-        spans[0].classList.toggle('rotate-45');
-        spans[0].classList.toggle('translate-y-2.5');
-        spans[1].classList.toggle('opacity-0');
-        spans[2].classList.toggle('-rotate-45');
-        spans[2].classList.toggle('-translate-y-2.5');
-      }
-    });
-  }
-}
-
-/**
- * Initialize Featured Products Carousel
- */
-function initFeaturedCarousel() {
-  // Wait for jQuery to be available
+function checkJQuery() {
   if (typeof $ !== 'undefined') {
-    $('.featured-carousel').slick({
-      infinite: true,
-      slidesToShow: 4,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-      arrows: true,
-      dots: true,
-      swipeToSlide: true,
-      touchMove: true,
-      draggable: true,
-      accessibility: true,
-      pauseOnHover: true,
-      pauseOnFocus: true,
-      responsive: [
-        {
-          breakpoint: 1200,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1
-          }
-        },
-        {
-          breakpoint: 992,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            centerMode: true,
-            centerPadding: '60px'
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            centerMode: true,
-            centerPadding: '40px'
-          }
-        }
-      ]
-    });
+    console.log('[Gonzaga] jQuery detected:', $.fn.jquery);
   } else {
-    // If jQuery not loaded yet, wait a bit and try again
-    setTimeout(initFeaturedCarousel, 100);
+    console.warn('[Gonzaga] jQuery not detected');
   }
 }
 
-  // Dropdown menus
-  if (dropdownToggles) {
-    dropdownToggles.forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        const parent = toggle.parentElement;
-        
-        // Se o link tiver um href e não for apenas '#', permite a navegação
-        if (toggle.getAttribute('href') && toggle.getAttribute('href') !== '#') {
-          return; // Permite o comportamento padrão do link
-        }
-        
-        e.preventDefault();
-        
-        // Fecha todos os outros dropdowns
-        document.querySelectorAll('.dropdown').forEach(item => {
-          if (item !== parent) item.classList.remove('open');
-        });
-        
-        // Toggle this dropdown
-        parent.classList.toggle('open');
-      });
-    });
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown').forEach(item => {
-          item.classList.remove('open');
-        });
-      }
-    });
-  }
-
-  // Highlight active nav item based on current page
-  const currentPath = window.location.pathname;
-  document.querySelectorAll('.nav-menu a').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && currentPath.includes(href) && href !== '/') {
-      link.classList.add('active');
-    } else if (href === '/' && (currentPath === '/' || currentPath === '/index.html')) {
-      link.classList.add('active');
-    }
-  });
-}
+// Legacy functions that need to be modularized (keeping for compatibility)
 
 /**
- * Product Animations 
+ * Product animations (to be modularized)
  */
 function initProductAnimations() {
-  // Set up intersection observer for product cards
-  const productCards = document.querySelectorAll('.product-card, .collection-card');
+  const productCards = document.querySelectorAll('.product-card');
   
-  if (productCards.length > 0) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, Math.random() * 300); // Staggered animation
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+  if (productCards.length === 0) return;
 
-    productCards.forEach(card => {
-      observer.observe(card);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
     });
-  }
+  }, {
+    threshold: 0.1,
+    rootMargin: '50px'
+  });
+
+  productCards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(card);
+  });
 }
 
 /**
- * Gallery Items
+ * Gallery items initialization (to be modularized)
  */
 function initGalleryItems() {
-  // Set up intersection observer for gallery items
   const galleryItems = document.querySelectorAll('.gallery-item');
   
-  if (galleryItems.length > 0) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, Math.random() * 400); // Staggered animation
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+  if (galleryItems.length === 0) return;
 
-    galleryItems.forEach(item => {
-      observer.observe(item);
-    });
-  }
-}
-
-/**
- * Video Background
- */
-function initVideoBackground() {
-  const videos = document.querySelectorAll('.video-background'); 
-  
-  videos.forEach(video => {
-    if (video) {
-      // Lógica para poster em mobile
-      if (window.innerWidth < 768 && video.dataset.posterMobile) {
-        video.poster = video.dataset.posterMobile;
-      }
-
-      // Mute the video
-      video.muted = true;
-      
-      // Play when loaded
-      video.addEventListener('loadeddata', () => {
-        video.play().catch(error => {
-          console.warn('Auto-play was prevented:', error);
-          
-          // Create a play button as fallback
-          const playBtn = document.createElement('button');
-          playBtn.className = 'video-play-btn';
-          playBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>';
-          video.parentNode.appendChild(playBtn);
-          
-          playBtn.addEventListener('click', () => {
-            video.play();
-            playBtn.style.display = 'none';
-          });
-        });
-      });
-      
-      // Loop the video
-      video.loop = true;
-    }
+  galleryItems.forEach((item, index) => {
+    item.style.animationDelay = `${index * 0.1}s`;
   });
 }
 
 /**
- * Catalog Filters
+ * Catalog filters (to be modularized) 
  */
 function initCatalogFilters() {
-  const filtersToggle = document.querySelector('.filters-mobile-toggle');
-  const filtersContainer = document.querySelector('.catalog-filters');
-  const clearFiltersBtn = document.querySelector('.filters-clear');
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const productGrid = document.querySelector('.products-grid');
   
-  // Mobile filters toggle
-  if (filtersToggle && filtersContainer) {
-    filtersToggle.addEventListener('click', () => {
-      filtersContainer.classList.toggle('active');
-    });
-  }
-  
-  // Clear filters
-  if (clearFiltersBtn) {
-    clearFiltersBtn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-select').forEach(select => {
-        select.selectedIndex = 0;
+  if (!filterButtons.length || !productGrid) return;
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      
+      // Update active state
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      // Filter products
+      const products = productGrid.querySelectorAll('.product-card');
+      products.forEach(product => {
+        if (filter === 'all' || product.classList.contains(filter)) {
+          product.style.display = 'block';
+          product.style.opacity = '1';
+        } else {
+          product.style.opacity = '0';
+          setTimeout(() => {
+            product.style.display = 'none';
+          }, 300);
+        }
       });
-      
-      document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
-        checkbox.checked = false;
-      });
-      
-      document.querySelectorAll('.price-input, .price-slider').forEach(input => {
-        input.value = input.defaultValue;
-      });
-      
-      // Trigger change event to update products
-      const event = new Event('change');
-      document.querySelector('.filter-select')?.dispatchEvent(event);
-    });
-  }
-  
-  // Handle filter changes
-  const filterInputs = document.querySelectorAll('.filter-select, .filter-checkbox, .price-input, .price-slider');
-  
-  filterInputs.forEach(input => {
-    input.addEventListener('change', () => {
-      // Here you would normally fetch filtered products from the server
-      // For a static demo, we'll just add a loading state and then remove it
-      const productsContainer = document.querySelector('.catalog-grid');
-      
-      if (productsContainer) {
-        productsContainer.classList.add('loading');
-        
-        setTimeout(() => {
-          productsContainer.classList.remove('loading');
-        }, 800);
-      }
     });
   });
 }
 
 /**
- * Catalog View Switcher
+ * Catalog view switching (to be modularized)
  */
 function initCatalogView() {
-  const gridViewBtn = document.querySelector('.view-option[data-view="grid"]');
-  const listViewBtn = document.querySelector('.view-option[data-view="list"]');
-  const catalogGrid = document.querySelector('.catalog-grid');
+  const viewButtons = document.querySelectorAll('.view-btn');
+  const productGrid = document.querySelector('.products-grid');
   
-  if (gridViewBtn && listViewBtn && catalogGrid) {
-    // Grid view
-    gridViewBtn.addEventListener('click', () => {
-      listViewBtn.classList.remove('active');
-      gridViewBtn.classList.add('active');
-      catalogGrid.classList.remove('list-view');
+  if (!viewButtons.length || !productGrid) return;
+
+  viewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const view = button.dataset.view;
       
-      // Save preference
-      localStorage.setItem('catalog-view', 'grid');
-    });
-    
-    // List view
-    listViewBtn.addEventListener('click', () => {
-      gridViewBtn.classList.remove('active');
-      listViewBtn.classList.add('active');
-      catalogGrid.classList.add('list-view');
+      // Update active state
+      viewButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
       
-      // Save preference
-      localStorage.setItem('catalog-view', 'list');
+      // Update grid class
+      productGrid.className = `products-grid ${view}-view`;
     });
-    
-    // Load saved preference
-    const savedView = localStorage.getItem('catalog-view');
-    if (savedView === 'list') {
-      listViewBtn.click();
-    }
-  }
+  });
 }
 
 /**
- * Product Details Page
+ * Product details functionality (to be modularized)
  */
 function initProductDetails() {
-  const mainImage = document.querySelector('.main-image img');
-  const thumbnails = document.querySelectorAll('.thumbnail');
+  const productImages = document.querySelectorAll('.product-image');
   
-  if (mainImage && thumbnails.length > 0) {
-    // Thumbnail click
-    thumbnails.forEach(thumb => {
-      thumb.addEventListener('click', () => {
-        // Update main image
-        const newSrc = thumb.querySelector('img').getAttribute('src');
-        mainImage.setAttribute('src', newSrc);
-        
-        // Update active thumbnail
-        thumbnails.forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
-      });
+  productImages.forEach(img => {
+    img.addEventListener('click', () => {
+      // Add zoom functionality or modal
+      console.log('Product image clicked:', img.src);
     });
-  }
-  
-  // Favorite button
-  const favoriteBtn = document.querySelector('.product-favorite');
-  
-  if (favoriteBtn) {
-    favoriteBtn.addEventListener('click', () => {
-      favoriteBtn.classList.toggle('active');
-      
-      // Animation
-      if (favoriteBtn.classList.contains('active')) {
-        favoriteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
-      } else {
-        favoriteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
-      }
-    });
-  }
+  });
 }
 
-/**
- * Helper Functions
- */
-
-// Scroll to element smoothly
-function scrollToElement(element, offset = 0) {
-  const y = element.getBoundingClientRect().top + window.pageYOffset + offset;
-  window.scrollTo({top: y, behavior: 'smooth'});
-}
-
-// Format currency
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(amount);
-}
-
-// Debounce function for performance
-function debounce(func, wait = 300) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      timeout = null;
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// Load more products (for infinite scrolling)
-function loadMoreProducts() {
-  const productsContainer = document.querySelector('.catalog-grid');
-  const loadingIndicator = document.querySelector('.loading-placeholder');
-  
-  if (productsContainer && loadingIndicator) {
-    loadingIndicator.style.display = 'flex';
-    
-    // Simulate loading delay
-    setTimeout(() => {
-      // In a real app, you'd fetch products from the server here
-      loadingIndicator.style.display = 'none';
-      
-      // Initialize animations for new products
-      initProductAnimations();
-    }, 1000);
-  }
-}
-
-/**
- * Slick Carousel Initialization
- */
-// Função para verificar se o jQuery está carregado
-function checkJQuery() {
-  if (window.jQuery) {
-    // jQuery está carregado, inicializa o Slick
-    initSlick();
-  } else {
-    // jQuery ainda não está carregado, tenta novamente em 100ms
-    setTimeout(checkJQuery, 100);
-  }
-}
-
-// Função para inicializar o Slick Carousel
-function initSlick() {
-  // Usar $j (jQuery.noConflict) para evitar conflitos
-  if (typeof $j !== 'undefined' && typeof $j.fn.slick === 'function') {
-    $j('.featured-carousel').slick({
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-        }
-      ]
-    });
-    console.log('Slick Carousel inicializado com sucesso!');
-  } else {
-    console.error('Erro: Slick Carousel não foi carregado corretamente ou jQuery não está disponível.');
-  }
-}
+// Export functions for compatibility (temporary)
+window.initProductAnimations = initProductAnimations;
+window.initGalleryItems = initGalleryItems;
+window.initCatalogFilters = initCatalogFilters;
+window.initCatalogView = initCatalogView;
+window.initProductDetails = initProductDetails;
+window.checkJQuery = checkJQuery;

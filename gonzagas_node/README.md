@@ -48,6 +48,63 @@ Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**
 - **Media:** Multer para upload de ficheiros
 - **Processo:** PM2 para gestão em produção
 
+### 🔧 **Arquitetura Modular (Nova!)**
+
+#### **Sistema de Configuração Global**
+```javascript
+// public/js/config.js
+- Detecção automática de ambiente
+- Debug flags configuráveis
+- Feature toggles
+- Controle de timeouts
+```
+
+#### **Módulos JavaScript Organizados**
+```
+public/js/modules/
+├── utils.js        - Utilitários (debounce, throttle, DOM)
+├── navigation.js   - Sistema de navegação e scroll
+├── ui.js          - Componentes UI (loading, lightbox)
+└── carousel.js    - Sistema de carrosséis
+```
+
+#### **Module Manager**
+```javascript
+// public/js/main.js
+- Inicialização sequencial segura
+- Controle de dependências
+- Tratamento de erros
+- Sistema de logs debug
+```
+
+#### **CSS Componentizado**
+```css
+/* public/css/components.css */
+- Loading overlays reutilizáveis
+- Botões padronizados
+- Cards de produtos
+- Sistema grid responsivo
+```
+
+### 📱 **Interface Mobile Otimizada**
+
+#### **Admin Mobile-First**
+```css
+/* public/css/admin-mobile.css */
+- Sidebar responsiva com toggle
+- Menu hamburger funcional
+- Navegação touch otimizada
+- Layout adaptativo
+```
+
+#### **Tabelas Responsivas**
+```css
+/* public/css/admin-tables-mobile.css */
+- Scroll horizontal inteligente
+- Cards responsivos para dados
+- Botões touch-friendly
+```
+
 ### **Estrutura do Projecto**
 ```
 gonzagas_node/

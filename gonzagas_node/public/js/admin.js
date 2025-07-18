@@ -23,34 +23,129 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Sidebar Toggle Functionality
+ * Sidebar Toggle Functionality - Enhanced for Mobile
  */
 const initSidebar = () => {
   const sidebar = document.querySelector('.sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
-  const main = document.querySelector('.main');
+  const main = document.querySelector('.main, #content-wrapper');
   
   if (!sidebar || !sidebarToggle) return;
   
+  // Initialize sidebar state based on screen size
+  function initializeSidebarState() {
+    if (window.innerWidth < 992) {
+      // Mobile: Start with sidebar closed
+      document.body.classList.add('sidebar-toggled');
+    } else {
+      // Desktop: Load saved state or default to open
+      const savedState = localStorage.getItem('sidebarCollapsed');
+      if (savedState === 'true') {
+        document.body.classList.add('sidebar-toggled');
+      } else {
+        document.body.classList.remove('sidebar-toggled');
+      }
+    }
+  }
+  
   // Toggle sidebar on button click
-  sidebarToggle.addEventListener('click', () => {
+  sidebarToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     document.body.classList.toggle('sidebar-toggled');
-    localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-toggled'));
+    
+    // Only save state on desktop
+    if (window.innerWidth >= 992) {
+      localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-toggled'));
+    }
   });
   
   // Close sidebar when clicking outside on mobile
   document.addEventListener('click', (e) => {
+    if (window.innerWidth >= 992) return; // Only for mobile
+    
     const isClickInsideSidebar = sidebar.contains(e.target);
     const isClickOnToggle = sidebarToggle.contains(e.target);
+    const isClickOnOverlay = e.target === document.body;
     
-    if (!isClickInsideSidebar && !isClickOnToggle && window.innerWidth < 992) {
+    if (!isClickInsideSidebar && !isClickOnToggle) {
       document.body.classList.add('sidebar-toggled');
     }
   });
   
-  // Load saved sidebar state
-  if (localStorage.getItem('sidebarCollapsed') === 'true') {
-    document.body.classList.add('sidebar-toggled');
+  // Handle sidebar links on mobile - close sidebar after navigation
+  const sidebarLinks = sidebar.querySelectorAll('.nav-link');
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 992) {
+        // Small delay to allow navigation to start
+        setTimeout(() => {
+          document.body.classList.add('sidebar-toggled');
+        }, 100);
+      }
+    });
+  });
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 992) {
+      // Desktop: restore saved state
+      const savedState = localStorage.getItem('sidebarCollapsed');
+      if (savedState === 'true') {
+        document.body.classList.add('sidebar-toggled');
+      } else {
+        document.body.classList.remove('sidebar-toggled');
+      }
+    } else {
+      // Mobile: always start closed
+      document.body.classList.add('sidebar-toggled');
+    }
+  });
+  
+  // Prevent body scroll when sidebar is open on mobile
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        if (window.innerWidth < 992) {
+          const isOpen = !document.body.classList.contains('sidebar-toggled');
+          document.body.style.overflow = isOpen ? 'hidden' : '';
+        } else {
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  });
+  
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Initialize state on load
+  initializeSidebarState();
+  
+  // Handle touch gestures for sidebar (optional enhancement)
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  sidebar.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  sidebar.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+  
+  function handleSwipe() {
+    if (window.innerWidth >= 992) return;
+    
+    const swipeDistance = touchEndX - touchStartX;
+    const minSwipeDistance = 50;
+    
+    // Swipe left to close sidebar
+    if (swipeDistance < -minSwipeDistance) {
+      document.body.classList.add('sidebar-toggled');
+    }
   }
 };
 
