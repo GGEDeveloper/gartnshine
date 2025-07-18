@@ -3,7 +3,26 @@ const SiteSettings = require('../models/SiteSettings');
 class SiteSettingsController {
   async showSettingsForm(req, res) {
     try {
-      const settings = await SiteSettings.getSettings();
+      let settings;
+      
+      // Tentar obter configurações da BD
+      try {
+        settings = await SiteSettings.getSettings();
+        console.log('Settings carregadas com sucesso:', settings);
+      } catch (dbError) {
+        console.error('Erro na base de dados ao carregar configurações:', dbError);
+        
+        // Usar configurações padrão se há problema com a BD
+        settings = {
+          id: 1,
+          featured_carousel_enabled: true,
+          catalog_page_enabled: true,
+          hide_catalog_prices: false
+        };
+        
+        req.flash('warning', 'Usando configurações padrão. Verifique a ligação à base de dados.');
+      }
+      
       res.render('admin/settings/settings-form', {
         layout: 'admin/layouts/main', // Or your default admin layout
         title: 'Site Settings',
@@ -17,9 +36,9 @@ class SiteSettingsController {
         messages: req.flash() // Pass flash messages
       });
     } catch (error) {
-      console.error('Erro ao carregar configurações:', error);
-      req.flash('error', 'Erro ao carregar as configurações do site');
-      res.redirect('/admin');
+      console.error('Erro crítico ao carregar página de configurações:', error);
+      req.flash('error', 'Erro interno do servidor ao carregar configurações. Contacte o administrador.');
+      res.redirect('/admin/dashboard');
     }
   }
 
