@@ -67,10 +67,19 @@
   <!-- Cookie Banner -->
   <%- include('partials/cookie-banner') %>
   
-  <!-- Main JavaScript -->
+  <!-- Configuration and Module System -->
+  <script src="/js/config.js"></script>
+  
+  <!-- Load modules first in correct order -->
+  <script src="/js/modules/utils.js"></script>
+  <script src="/js/modules/navigation.js"></script>
+  <script src="/js/modules/ui.js"></script>
+  <script src="/js/modules/carousel.js"></script>
+  
+  <!-- Main JavaScript (Module Manager) - Load AFTER modules -->
   <script src="/js/main.js"></script>
   
-  <!-- Carousel JavaScript -->
+  <!-- Legacy JavaScript files -->
   <script src="/js/carousel.js"></script>
   
   <!-- Cookie Consent JavaScript -->

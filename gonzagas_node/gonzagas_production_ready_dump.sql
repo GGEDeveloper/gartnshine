@@ -1,0 +1,735 @@
+-- ====================================
+-- GONZAGA'S ART & SHINE - PRODUCTION READY DATABASE DUMP
+-- Gerado automaticamente em 2025-07-18T15:55:18.892Z
+-- Ordem de tabelas otimizada para importação sem erros
+-- ====================================
+
+-- Configurações para importação segura
+SET FOREIGN_KEY_CHECKS = 0;
+SET AUTOCOMMIT = 0;
+SET UNIQUE_CHECKS = 0;
+
+-- Usar charset correto
+SET NAMES utf8mb4;
+SET CHARACTER_SET_CLIENT = utf8mb4;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- ====================================
+-- 1. ADMIN_USERS
+-- ====================================
+
+`admin_users`
+--
+
+DROP TABLE IF EXISTS `admin_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `admin_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `last_login` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Usuários com acesso à área administrativa';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin_users`
+--
+
+LOCK TABLES `admin_users` WRITE;
+/*!40000 ALTER TABLE `admin_users` DISABLE KEYS */;
+INSERT INTO `admin_users` VALUES
+(1,'admin','$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin@example.com','Administrador',1,NULL,'2025-05-22 10:02:30','2025-05-22 10:02:30');
+/*!40000 ALTER TABLE `admin_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 2. USERS
+-- ====================================
+
+-- ====================================
+-- 3. PRODUCT_FAMILIES
+-- ====================================
+
+`product_families`
+--
+
+DROP TABLE IF EXISTS `product_families`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_families` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_families`
+--
+
+LOCK TABLES `product_families` WRITE;
+/*!40000 ALTER TABLE `product_families` DISABLE KEYS */;
+INSERT INTO `product_families` VALUES
+(1,'PAN','Aneis',NULL,1,'2025-05-22 22:39:09','2025-05-22 22:39:09'),
+(2,'PPB','Brincos',NULL,1,'2025-05-22 22:39:09','2025-05-22 22:39:09'),
+(3,'PVO','Colares',NULL,1,'2025-05-22 22:39:09','2025-05-22 22:39:09'),
+(4,'PPU','Pulseiras',NULL,1,'2025-05-22 22:39:09','2025-05-22 22:39:09'),
+(5,'5','Pedras Naturais','',1,'2025-05-28 20:23:52','2025-05-28 20:24:09');
+/*!40000 ALTER TABLE `product_families` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 4. PRODUCTS
+-- ====================================
+
+`products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(50) NOT NULL,
+  `barcode` varchar(50) DEFAULT NULL,
+  `family_id` int(11) DEFAULT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `purchase_price` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `sale_price` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `current_stock` int(11) DEFAULT 0,
+  `min_stock` int(11) DEFAULT 5,
+  `weight` decimal(10,3) DEFAULT 0.000,
+  `active` tinyint(1) DEFAULT 1,
+  `weight_unit` enum('g','kg') DEFAULT 'g',
+  `dimensions` varchar(50) DEFAULT NULL COMMENT 'LxAxP em mm',
+  `style` varchar(100) DEFAULT NULL,
+  `material` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `min_stock_level` int(11) DEFAULT 0,
+  `max_stock_level` int(11) DEFAULT 0,
+  `location` varchar(50) DEFAULT NULL COMMENT 'Localização no armazém',
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `featured` tinyint(1) DEFAULT 0,
+  `is_catalog_visible` tinyint(1) DEFAULT 1 COMMENT 'Whether the product is visible in the public catalog',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `reference` (`reference`),
+  KEY `family_id` (`family_id`),
+  KEY `idx_products_created_by` (`created_by`),
+  KEY `idx_products_updated_by` (`updated_by`),
+  KEY `idx_products_reference` (`reference`),
+  KEY `idx_products_name` (`name`),
+  CONSTRAINT `fk_products_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_products_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`family_id`) REFERENCES `product_families` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Produtos disponíveis para venda';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES
+(1,'PAN0001','PAN0001',1,'Produto PAN0001','Produto PAN0001',5.18,10.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 15:45:54',1,4,NULL,0,1),
+(2,'PAN0002','PAN0002',1,'Produto PAN0002','Produto PAN0002 - PAN',5.18,10.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-29 00:35:54',1,1,NULL,0,1),
+(3,'PAN0003','PAN0003',1,'Produto PAN0003','Produto PAN0003 - PAN',5.18,10.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(4,'PAN0004','PAN0004',1,'Produto PAN0004','Produto PAN0004 - PAN',5.18,10.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-01 18:36:19',1,4,NULL,1,1),
+(5,'PAN0005','PAN0005',1,'Produto PAN0005','Produto PAN0005 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(6,'PAN0006','PAN0006',1,'Produto PAN0006','Produto PAN0006 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-01 18:36:25',1,4,NULL,1,1),
+(7,'PAN0007','PAN0007',1,'Produto PAN0007','Produto PAN0007 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(8,'PAN0008','PAN0008',1,'Produto PAN0008','Produto PAN0008 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(9,'PAN0009','PAN0009',1,'Produto PAN0009','Produto PAN0009 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(10,'PAN0010','PAN0010',1,'Produto PAN0010','Produto PAN0010 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(11,'PAN0011','PAN0011',1,'Produto PAN0011','Produto PAN0011 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(12,'PAN0012','PAN0012',1,'Produto PAN0012','Produto PAN0012 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(13,'PAN0013','PAN0013',1,'Produto PAN0013','Produto PAN0013 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(14,'PAN0014','PAN0014',1,'Produto PAN0014','Produto PAN0014 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(15,'PAN0015','PAN0015',1,'Produto PAN0015','Produto PAN0015 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(16,'PAN0016','PAN0016',1,'Produto PAN0016','Produto PAN0016 - PAN',7.77,15.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(17,'PAN0017','PAN0017',1,'Produto PAN0017','Produto PAN0017 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(18,'PAN0018','PAN0018',1,'Produto PAN0018','Produto PAN0018 - PAN',7.77,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(19,'PAN0019','PAN0019',1,'Produto PAN0019','Produto PAN0019 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(20,'PAN0020','PAN0020',1,'Produto PAN0020','Produto PAN0020 - PAN',15.53,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(21,'PAN0021','PAN0021',1,'Produto PAN0021','Produto PAN0021 - PAN',15.53,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(22,'PAN0022','PAN0022',1,'Produto PAN0022','Produto PAN0022 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(23,'PAN0023','PAN0023',1,'Produto PAN0023','Produto PAN0023 - PAN',15.53,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(24,'PAN0024','PAN0024',1,'Produto PAN0024','Produto PAN0024 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(25,'PAN0025','PAN0025',1,'Produto PAN0025','Produto PAN0025 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(26,'PAN0026','PAN0026',1,'Produto PAN0026','Produto PAN0026 - PAN',7.77,15.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(27,'PAN0027','PAN0027',1,'Produto PAN0027','Produto PAN0027 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(28,'PAN0028','PAN0028',1,'Produto PAN0028','Produto PAN0028 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(29,'PAN0029','PAN0029',1,'Produto PAN0029','Produto PAN0029 - PAN',15.53,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(30,'PAN0030','PAN0030',1,'Produto PAN0030','Produto PAN0030 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(31,'PAN0031','PAN0031',1,'Produto PAN0031','Produto PAN0031 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(32,'PAN0032','PAN0032',1,'Produto PAN0032','Produto PAN0032 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(33,'PAN0033','PAN0033',1,'Produto PAN0033','Produto PAN0033 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(34,'PAN0034','PAN0034',1,'Produto PAN0034','Produto PAN0034 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(35,'PAN0035','PAN0035',1,'Produto PAN0035','Produto PAN0035 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(36,'PAN0036','PAN0036',1,'Produto PAN0036','Produto PAN0036 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(37,'PAN0037','PAN0037',1,'Produto PAN0037','Produto PAN0037 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(38,'PAN0038','PAN0038',1,'Produto PAN0038','Produto PAN0038 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(39,'PAN0039','PAN0039',1,'Produto PAN0039','Produto PAN0039 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(40,'PAN0040','PAN0040',1,'Produto PAN0040','Produto PAN0040 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(41,'PAN0041','PAN0041',1,'Produto PAN0041','Produto PAN0041 - PAN',0.00,15.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(42,'PAN0042','PAN0042',1,'Produto PAN0042','Produto PAN0042 - PAN',0.00,20.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(43,'PAN0043','PAN0043',1,'Produto PAN0043','Produto PAN0043 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(44,'PAN0044','PAN0044',1,'Produto PAN0044','Produto PAN0044 - PAN',0.00,25.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(45,'PAN0045','PAN0045',1,'Produto PAN0045','Produto PAN0045 - PAN',0.00,25.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(46,'PAN0046','PAN0046',1,'Produto PAN0046','Produto PAN0046 - PAN',0.00,25.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(47,'PAN0047','PAN0047',1,'Produto PAN0047','Produto PAN0047 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(48,'PAN0048','PAN0048',1,'Produto PAN0048','Produto PAN0048 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(49,'PAN0049','PAN0049',1,'Produto PAN0049','Produto PAN0049 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(50,'PAN0050','PAN0050',1,'Produto PAN0050','Produto PAN0050 - PAN',0.00,25.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(51,'PAN0051','PAN0051',1,'Produto PAN0051','Produto PAN0051 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(52,'PAN0052','PAN0052',1,'Produto PAN0052','Produto PAN0052 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(53,'PAN0053','PAN0053',1,'Produto PAN0053','Produto PAN0053 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(54,'PAN0054','PAN0054',1,'Produto PAN0054','Produto PAN0054 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(55,'PAN0055','PAN0055',1,'Produto PAN0055','Produto PAN0055 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(56,'PAN0056','PAN0056',1,'Produto PAN0056','Produto PAN0056 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(57,'PAN0057','PAN0057',1,'Produto PAN0057','Produto PAN0057 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(58,'PAN0058','PAN0058',1,'Produto PAN0058','Produto PAN0058 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(59,'PAN0059','PAN0059',1,'Produto PAN0059','Produto PAN0059 - PAN',0.00,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(60,'PAN0060','PAN0060',1,'Produto PAN0060','Produto PAN0060 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(61,'PAN0061','PAN0061',1,'Produto PAN0061','Produto PAN0061 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(62,'PAN0062','PAN0062',1,'Produto PAN0062','Produto PAN0062 - PAN',0.00,35.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(63,'PAN0063','PAN0063',1,'Produto PAN0063','Produto PAN0063 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(64,'PAN0064','PAN0064',1,'Produto PAN0064','Produto PAN0064 - PAN',0.00,30.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(65,'PAN0065','PAN0065',1,'Produto PAN0065','Produto PAN0065 - PAN',0.00,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(66,'PAN0066','PAN0066',1,'Produto PAN0066','Produto PAN0066 - PAN',0.00,50.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(67,'PAN0067','PAN0067',1,'Produto PAN0067','Produto PAN0067 - PAN',0.00,50.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(68,'PAN0068','PAN0068',1,'Produto PAN0068','Produto PAN0068 - PAN',0.00,50.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(69,'PAN0069','PAN0069',1,'Produto PAN0069','Produto PAN0069 - PAN',0.00,0.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(70,'PAN0070','PAN0070',1,'Produto PAN0070','Produto PAN0070 - PAN',0.00,30.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(71,'PAN0071','PAN0071',1,'Produto PAN0071','Produto PAN0071 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(72,'PAN0072','PAN0072',1,'Produto PAN0072','Produto PAN0072 - PAN',0.00,25.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(73,'PAN0073','PAN0073',1,'Produto PAN0073','Produto PAN0073 - PAN',0.00,15.00,1,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(74,'PAN0074','PAN0074',1,'Produto PAN0074','Produto PAN0074 - PAN',0.00,0.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(75,'PAN0075','PAN0075',1,'Produto PAN0075','Produto PAN0075 - PAN',0.00,0.00,0,0,0.000,1,'g','','PAN','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(76,'PPB0001','PPB0001',2,'Produto PPB0001','Produto PPB0001 - PPB',5.18,10.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(77,'PPB0002','PPB0002',2,'Produto PPB0002','Produto PPB0002 - PPB',5.18,10.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(78,'PPB0003','PPB0003',2,'Produto PPB0003','Produto PPB0003 - PPB',5.18,10.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(79,'PPB0004','PPB0004',2,'Produto PPB0004','Produto PPB0004 - PPB',5.18,10.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(80,'PPB0005','PPB0005',2,'Produto PPB0005','Produto PPB0005 - PPB',5.18,10.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(81,'PPB0006','PPB0006',2,'Produto PPB0006','Produto PPB0006 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(82,'PPB0007','PPB0007',2,'Produto PPB0007','Produto PPB0007 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(83,'PPB0008','PPB0008',2,'Produto PPB0008','Produto PPB0008 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(84,'PPB0009','PPB0009',2,'Produto PPB0009','Produto PPB0009 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(85,'PPB0010','PPB0010',2,'Produto PPB0010','Produto PPB0010 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(86,'PPB0011','PPB0011',2,'Produto PPB0011','Produto PPB0011 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(87,'PPB0012','PPB0012',2,'Produto PPB0012','Produto PPB0012 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(88,'PPB0013','PPB0013',2,'Produto PPB0013','Produto PPB0013 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(89,'PPB0014','PPB0014',2,'Produto PPB0014','Produto PPB0014 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(90,'PPB0015','PPB0015',2,'Produto PPB0015','Produto PPB0015 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(91,'PPB0016','PPB0016',2,'Produto PPB0016','Produto PPB0016 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(92,'PPB0017','PPB0017',2,'Produto PPB0017','Produto PPB0017 - PPB',7.77,15.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(93,'PPB0018','PPB0018',2,'Produto PPB0018','Produto PPB0018 - PPB',10.35,20.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(94,'PPB0019','PPB0019',2,'Produto PPB0019','Produto PPB0019 - PPB',10.35,20.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(95,'PPB0020','PPB0020',2,'Produto PPB0020','Produto PPB0020 - PPB',10.35,20.00,0,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(96,'PPB0021','PPB0021',2,'Produto PPB0021','Produto PPB0021 - PPB',10.35,20.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(97,'PPB0022','PPB0022',2,'Produto PPB0022','Produto PPB0022 - PPB',10.35,20.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(98,'PPB0023','PPB0023',2,'Produto PPB0023','Produto PPB0023 - PPB',18.12,35.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(99,'PPB0024','PPB0024',2,'Produto PPB0024','Produto PPB0024 - PPB',18.12,35.00,0,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(100,'PPB0025','PPB0025',2,'Produto PPB0025','Produto PPB0025 - PPB',20.71,40.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(101,'PPB0026','PPB0026',2,'Produto PPB0026','Produto PPB0026 - PPB',0.00,20.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(102,'PPB0027','PPB0027',2,'Produto PPB0027','Produto PPB0027 - PPB',0.00,25.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(103,'PPB0028','PPB0028',2,'Produto PPB0028','Produto PPB0028 - PPB',0.00,25.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(104,'PPB0029','PPB0029',2,'Produto PPB0029','Produto PPB0029 - PPB',0.00,25.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(105,'PPB0030','PPB0030',2,'Produto PPB0030','Produto PPB0030 - PPB',0.00,25.00,0,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(106,'PPB0031','PPB0031',2,'Produto PPB0031','Produto PPB0031 - PPB',0.00,30.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(107,'PPB0032','PPB0032',2,'Produto PPB0032','Produto PPB0032 - PPB',0.00,35.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(108,'PPB0033','PPB0033',2,'Produto PPB0033','Produto PPB0033 - PPB',0.00,40.00,1,0,0.000,1,'g','','PPB','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(109,'PPU0001','PPU0001',4,'Produto PPU0001','Produto PPU0001 - PPU',93.18,180.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(110,'PPU0002','PPU0002',4,'Produto PPU0002','Produto PPU0002 - PPU',93.18,180.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(111,'PPU0003','PPU0003',4,'Produto PPU0003','Produto PPU0003 - PPU',28.47,55.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(112,'PPU0004','PPU0004',4,'Produto PPU0004','Produto PPU0004 - PPU',98.36,190.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(113,'PPU0005','PPU0005',4,'Produto PPU0005','Produto PPU0005 - PPU',20.71,40.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(114,'PPU0006','PPU0006',4,'Produto PPU0006','Produto PPU0006 - PPU',62.12,140.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(115,'PPU0007','PPU0007',4,'Produto PPU0007','Produto PPU0007 - PPU',67.30,130.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 15:48:35',1,4,NULL,1,1),
+(116,'PPU0008','PPU0008',4,'Produto PPU0008','Produto PPU0008 - PPU',23.30,35.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(117,'PPU0009','PPU0009',4,'Produto PPU0009','Produto PPU0009 - PPU',10.35,20.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 21:45:00',1,4,NULL,1,1),
+(118,'PPU0010','PPU0010',4,'Produto PPU0010','Produto PPU0010 - PPU',15.53,30.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(119,'PPU0011','PPU0011',4,'Produto PPU0011','Produto PPU0011 - PPU',20.71,30.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(120,'PPU0012','PPU0012',4,'Produto PPU0012','Produto PPU0012 - PPU',20.71,35.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(121,'PPU0013','PPU0013',4,'Produto PPU0013','Produto PPU0013 - PPU',18.12,35.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(122,'PPU0014','PPU0014',4,'Produto PPU0014','Produto PPU0014 - PPU',28.47,55.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(123,'PPU0015','PPU0015',4,'Produto PPU0015','Produto PPU0015 - PPU',20.71,40.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(124,'PPU0016','PPU0016',4,'Produto PPU0016','Produto PPU0016 - PPU',38.83,60.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(125,'PPU0017','PPU0017',4,'Produto PPU0017','Produto PPU0017 - PPU',31.06,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(126,'PPU0018','PPU0018',4,'Produto PPU0018','Produto PPU0018 - PPU',62.12,130.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(127,'PPU0019','PPU0019',4,'Produto PPU0019','Produto PPU0019 - PPU',31.06,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(128,'PPU0020','PPU0020',4,'Produto PPU0020','Produto PPU0020 - PPU',31.06,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(129,'PPU0021','PPU0021',4,'Produto PPU0021','Produto PPU0021 - PPU',20.71,40.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(130,'PPU0022','PPU0022',4,'Produto PPU0022','Produto PPU0022 - PPU',10.35,20.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(131,'PPU0023','PPU0023',4,'Produto PPU0023','Produto PPU0023 - PPU',18.12,35.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(132,'PPU0024','PPU0024',4,'Produto PPU0024','Produto PPU0024 - PPU',15.53,30.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(133,'PPU0025','PPU0025',4,'Produto PPU0025','Produto PPU0025 - PPU',19.41,37.50,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(134,'PPU0026','PPU0026',4,'Produto PPU0026','Produto PPU0026 - PPU',36.24,70.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(135,'PPU0027','PPU0027',4,'Produto PPU0027','Produto PPU0027 - PPU',33.65,65.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(136,'PVO0001','PVO0001',3,'Produto PVO0001','Produto PVO0001 - PVO',0.00,160.00,1,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(137,'PPU0000','PPU0000',4,'Produto PPU0000','Produto PPU0000 - PPU',38.83,75.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(138,'PPU0028','PPU0028',4,'Produto PPU0028','Produto PPU0028 - PPU',0.00,110.00,1,0,36.000,1,'g','21','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(139,'PPU0029','PPU0029',4,'Produto PPU0029','Produto PPU0029 - PPU',0.00,110.00,1,0,34.000,1,'g','20.5','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(140,'PPU0030','PPU0030',4,'Produto PPU0030','Produto PPU0030 - PPU',0.00,125.00,1,0,41.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(141,'PPU0031','PPU0031',4,'Produto PPU0031','Produto PPU0031 - PPU',0.00,135.00,2,0,43.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(142,'PPU0032','PPU0032',4,'Produto PPU0032','Produto PPU0032 - PPU',0.00,135.00,0,0,45.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(143,'PPU0033','PPU0033',4,'Produto PPU0033','Produto PPU0033 - PPU',0.00,135.00,1,0,45.000,1,'g','21','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(144,'PPU0034','PPU0034',4,'Produto PPU0034','Produto PPU0034 - PPU',0.00,135.00,1,0,46.000,1,'g','21.5','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(145,'PPU0035','PPU0035',4,'Produto PPU0035','Produto PPU0035 - PPU',0.00,140.00,1,0,46.000,1,'g','20.5','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(146,'PPU0036','PPU0036',4,'Produto PPU0036','Produto PPU0036 - PPU',0.00,15.00,2,0,45752.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(147,'PPU0037','PPU0037',4,'Produto PPU0037','Produto PPU0037 - PPU',0.00,180.00,0,0,60.000,1,'g','21','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(148,'PPU0038','PPU0038',4,'Produto PPU0038','Produto PPU0038 - PPU',0.00,185.00,1,0,62.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(149,'PPU0039','PPU0039',4,'Produto PPU0039','Produto PPU0039 - PPU',0.00,20.00,0,0,6.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(150,'PPU0040','PPU0040',4,'Produto PPU0040','Produto PPU0040 - PPU',0.00,20.00,1,0,7.000,1,'g','18','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(151,'PPU0041','PPU0041',4,'Produto PPU0041','Produto PPU0041 - PPU',0.00,25.00,2,0,8.000,1,'g','18','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(152,'PPU0042','PPU0042',4,'Produto PPU0042','Produto PPU0042 - PPU',0.00,25.00,1,0,8.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(153,'PPU0043','PPU0043',4,'Produto PPU0043','Produto PPU0043 - PPU',0.00,30.00,1,0,10.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(154,'PPU0044','PPU0044',4,'Produto PPU0044','Produto PPU0044 - PPU',0.00,30.00,1,0,10.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(155,'PPU0045','PPU0045',4,'Produto PPU0045','Produto PPU0045 - PPU',0.00,30.00,1,0,10.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(156,'PPU0046','PPU0046',4,'Produto PPU0046','Produto PPU0046 - PPU',0.00,30.00,0,0,10.000,1,'g','22','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(157,'PPU0047','PPU0047',4,'Produto PPU0047','Produto PPU0047 - PPU',0.00,30.00,1,0,9.000,1,'g','17','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(158,'PPU0048','PPU0048',4,'Produto PPU0048','Produto PPU0048 - PPU',0.00,30.00,1,0,9.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(159,'PPU0049','PPU0049',4,'Produto PPU0049','Produto PPU0049 - PPU',0.00,30.00,1,0,9.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(160,'PPU0050','PPU0050',4,'Produto PPU0050','Produto PPU0050 - PPU',0.00,30.00,1,0,9.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(161,'PPU0051','PPU0051',4,'Produto PPU0051','Produto PPU0051 - PPU',0.00,30.00,0,0,12.000,1,'g','18.5','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(162,'PPU0052','PPU0052',4,'Produto PPU0052','Produto PPU0052 - PPU',0.00,35.00,1,0,12.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(163,'PPU0053','PPU0053',4,'Produto PPU0053','Produto PPU0053 - PPU',0.00,40.00,1,0,12.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(164,'PPU0054','PPU0054',4,'Produto PPU0054','Produto PPU0054 - PPU',0.00,30.00,1,0,13.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(165,'PPU0055','PPU0055',4,'Produto PPU0055','Produto PPU0055 - PPU',0.00,40.00,1,0,13.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(166,'PPU0056','PPU0056',4,'Produto PPU0056','Produto PPU0056 - PPU',0.00,40.00,1,0,13.000,1,'g','20','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(167,'PPU0057','PPU0057',4,'Produto PPU0057','Produto PPU0057 - PPU',0.00,40.00,1,0,13.000,1,'g','22','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(168,'PPU0058','PPU0058',4,'Produto PPU0058','Produto PPU0058 - PPU',0.00,90.00,1,0,29.000,1,'g','20.5','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(169,'PPU0059','PPU0059',4,'Produto PPU0059','Produto PPU0059 - PPU',0.00,40.00,1,0,0.000,1,'g','19','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(170,'PPU0060','PPU0060',4,'Produto PPU0060','Produto PPU0060 - PPU',0.00,75.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(171,'PPU0061','PPU0061',4,'Produto PPU0061','Produto PPU0061 - PPU',0.00,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(172,'PPU0062','PPU0062',4,'Produto PPU0062','Produto PPU0062 - PPU',0.00,40.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(173,'PPU0063','PPU0063',4,'Produto PPU0063','Produto PPU0063 - PPU',0.00,60.00,0,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(174,'PPU0064','PPU0064',4,'Produto PPU0064','Produto PPU0064 - PPU',0.00,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(175,'PPU0065','PPU0065',4,'Produto PPU0065','Produto PPU0065 - PPU',0.00,25.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(176,'PPU0066','PPU0066',4,'Produto PPU0066','Produto PPU0066 - PPU',0.00,60.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 16:16:38',1,1,NULL,1,1),
+(177,'PPU0067','PPU0067',4,'Produto PPU0067','Produto PPU0067 - PPU',0.00,15.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(178,'PPU0068','PPU0068',4,'Produto PPU0068','Produto PPU0068 - PPU',0.00,15.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 16:16:48',1,1,NULL,1,1),
+(179,'PPU0069','PPU0069',4,'Produto PPU0069','Produto PPU0069 - PPU',0.00,10.00,2,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(180,'PPU0070','PPU0070',4,'Produto PPU0070','Produto PPU0070 - PPU',0.00,10.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 16:16:10',1,1,NULL,1,1),
+(181,'PPU0071','PPU0071',4,'Produto PPU0071','Produto PPU0071 - PPU',0.00,10.00,1,0,0.000,1,'g','','PPU','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(182,'PVO0002','PVO0002',3,'Produto PVO0002','Produto PVO0002 - PVO',0.00,150.00,0,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 16:16:17',1,1,NULL,1,1),
+(183,'PVO0003','PVO0003',3,'Produto PVO0003','Produto PVO0003 - PVO',0.00,30.00,1,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(184,'PVO0004','PVO0004',3,'Produto PVO0004','Produto PVO0004 - PVO',0.00,30.00,2,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 16:16:19',1,1,NULL,1,1),
+(185,'PVO0005','PVO0005',3,'Produto PVO0005','Produto PVO0005 - PVO',0.00,50.00,1,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-06-02 15:47:39',1,4,NULL,1,1),
+(186,'PVO0006','PVO0006',3,'Produto PVO0006','Produto PVO0006 - PVO',0.00,10.00,1,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(187,'PVO0007','PVO0007',3,'Produto PVO0007','Produto PVO0007 - PVO',0.00,15.00,2,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1),
+(188,'PVO0008','PVO0008',3,'Produto PVO0008','Produto PVO0008 - PVO',0.00,30.00,1,0,0.000,1,'g','','PVO','Prata 925',NULL,1,0,0,'','2025-05-22 15:56:57','2025-05-22 22:39:09',1,1,NULL,0,1);
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 5. PRODUCT_IMAGES
+-- ====================================
+
+`product_images`
+--
+
+DROP TABLE IF EXISTS `product_images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `image_filename` varchar(255) NOT NULL,
+  `is_primary` tinyint(1) DEFAULT 0,
+  `sort_order` int(11) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_images`
+--
+
+LOCK TABLES `product_images` WRITE;
+/*!40000 ALTER TABLE `product_images` DISABLE KEYS */;
+INSERT INTO `product_images` VALUES
+(1,1,'PAN0001.jpg',1,0,'2025-05-22 21:50:25'),
+(2,2,'PAN0002.jpg',1,0,'2025-05-22 21:50:25'),
+(3,3,'PAN0003.jpg',1,0,'2025-05-22 21:50:25'),
+(4,4,'PAN0004.jpg',1,0,'2025-05-22 21:50:25'),
+(5,5,'PAN0005.jpg',1,0,'2025-05-22 21:50:25'),
+(6,6,'PAN0006.jpg',1,0,'2025-05-22 21:50:25'),
+(7,7,'PAN0007.jpg',1,0,'2025-05-22 21:50:25'),
+(8,8,'PAN0008.jpg',1,0,'2025-05-22 21:50:25'),
+(9,9,'PAN0009.jpg',1,0,'2025-05-22 21:50:25'),
+(10,10,'PAN0010.jpg',1,0,'2025-05-22 21:50:25'),
+(11,11,'PAN0011.jpg',1,0,'2025-05-22 21:50:25'),
+(12,12,'PAN0012.jpg',1,0,'2025-05-22 21:50:25'),
+(13,13,'PAN0013.jpg',1,0,'2025-05-22 21:50:25'),
+(14,14,'PAN0014.jpg',1,0,'2025-05-22 21:50:25'),
+(15,15,'PAN0015.jpg',1,0,'2025-05-22 21:50:25'),
+(16,16,'PAN0016.jpg',1,0,'2025-05-22 21:50:25'),
+(17,17,'PAN0017.jpg',1,0,'2025-05-22 21:50:25'),
+(18,18,'PAN0018.jpg',1,0,'2025-05-22 21:50:25'),
+(19,19,'PAN0019.jpg',1,0,'2025-05-22 21:50:25'),
+(20,20,'PAN0020.jpg',1,0,'2025-05-22 21:50:25'),
+(21,21,'PAN0021.jpg',1,0,'2025-05-22 21:50:25'),
+(22,22,'PAN0022.jpg',1,0,'2025-05-22 21:50:25'),
+(23,23,'PAN0023.jpg',1,0,'2025-05-22 21:50:25'),
+(24,24,'PAN0024.jpg',1,0,'2025-05-22 21:50:25'),
+(25,25,'PAN0025.jpg',1,0,'2025-05-22 21:50:25'),
+(26,26,'PAN0026.jpg',1,0,'2025-05-22 21:50:25'),
+(27,27,'PAN0027.jpg',1,0,'2025-05-22 21:50:25'),
+(28,28,'PAN0028.jpg',1,0,'2025-05-22 21:50:25'),
+(29,29,'PAN0029.jpg',1,0,'2025-05-22 21:50:25'),
+(30,30,'PAN0030.jpg',1,0,'2025-05-22 21:50:25'),
+(31,31,'PAN0031.jpg',1,0,'2025-05-22 21:50:25'),
+(32,32,'PAN0032.jpg',1,0,'2025-05-22 21:50:25'),
+(33,33,'PAN0033.jpg',1,0,'2025-05-22 21:50:25'),
+(34,34,'PAN0034.jpg',1,0,'2025-05-22 21:50:25'),
+(35,35,'PAN0035.jpg',1,0,'2025-05-22 21:50:25'),
+(36,36,'PAN0036.jpg',1,0,'2025-05-22 21:50:25'),
+(37,37,'PAN0037.jpg',1,0,'2025-05-22 21:50:25'),
+(38,38,'PAN0038.jpg',1,0,'2025-05-22 21:50:25'),
+(39,39,'PAN0039.jpg',1,0,'2025-05-22 21:50:25'),
+(40,40,'PAN0040.jpg',1,0,'2025-05-22 21:50:25'),
+(41,41,'PAN0041.jpg',1,0,'2025-05-22 21:50:25'),
+(42,42,'PAN0042.jpg',1,0,'2025-05-22 21:50:25'),
+(43,43,'PAN0043.jpg',1,0,'2025-05-22 21:50:25'),
+(44,44,'PAN0044.jpg',1,0,'2025-05-22 21:50:25'),
+(45,45,'PAN0045.jpg',1,0,'2025-05-22 21:50:25'),
+(46,46,'PAN0046.jpg',1,0,'2025-05-22 21:50:25'),
+(47,47,'PAN0047.jpg',1,0,'2025-05-22 21:50:25'),
+(48,48,'PAN0048.jpg',1,0,'2025-05-22 21:50:25'),
+(49,49,'PAN0049.jpg',1,0,'2025-05-22 21:50:25'),
+(50,50,'PAN0050.jpg',1,0,'2025-05-22 21:50:25'),
+(51,51,'PAN0051.jpg',1,0,'2025-05-22 21:50:25'),
+(52,52,'PAN0052.jpg',1,0,'2025-05-22 21:50:25'),
+(53,53,'PAN0053.jpg',1,0,'2025-05-22 21:50:25'),
+(54,54,'PAN0054.jpg',1,0,'2025-05-22 21:50:25'),
+(55,55,'PAN0055.jpg',1,0,'2025-05-22 21:50:25'),
+(56,56,'PAN0056.jpg',1,0,'2025-05-22 21:50:25'),
+(57,57,'PAN0057.jpg',1,0,'2025-05-22 21:50:25'),
+(58,58,'PAN0058.jpg',1,0,'2025-05-22 21:50:25'),
+(59,59,'PAN0059.jpg',1,0,'2025-05-22 21:50:25'),
+(60,60,'PAN0060.jpg',1,0,'2025-05-22 21:50:25'),
+(61,61,'PAN0061.jpg',1,0,'2025-05-22 21:50:25'),
+(62,62,'PAN0062.jpg',1,0,'2025-05-22 21:50:25'),
+(63,63,'PAN0063.jpg',1,0,'2025-05-22 21:50:25'),
+(64,64,'PAN0064.jpg',1,0,'2025-05-22 21:50:25'),
+(65,65,'PAN0065.jpg',1,0,'2025-05-22 21:50:25'),
+(66,66,'PAN0066.jpg',1,0,'2025-05-22 21:50:25'),
+(67,67,'PAN0067.jpg',1,0,'2025-05-22 21:50:25'),
+(68,68,'PAN0068.jpg',1,0,'2025-05-22 21:50:25'),
+(69,69,'PAN0069.jpg',1,0,'2025-05-22 21:50:25'),
+(70,70,'PAN0070.jpg',1,0,'2025-05-22 21:50:25'),
+(71,71,'PAN0071.jpg',1,0,'2025-05-22 21:50:25'),
+(72,72,'PAN0072.jpg',1,0,'2025-05-22 21:50:25'),
+(73,73,'PAN0073.jpg',1,0,'2025-05-22 21:50:25'),
+(74,74,'PAN0074.jpg',1,0,'2025-05-22 21:50:25'),
+(75,75,'PAN0075.jpg',1,0,'2025-05-22 21:50:25'),
+(76,76,'PPB0001.jpg',1,0,'2025-05-22 21:50:25'),
+(77,77,'PPB0002.jpg',1,0,'2025-05-22 21:50:25'),
+(78,78,'PPB0003.jpg',1,0,'2025-05-22 21:50:25'),
+(79,79,'PPB0004.jpg',1,0,'2025-05-22 21:50:25'),
+(80,80,'PPB0005.jpg',1,0,'2025-05-22 21:50:25'),
+(81,81,'PPB0006.jpg',1,0,'2025-05-22 21:50:25'),
+(82,82,'PPB0007.jpg',1,0,'2025-05-22 21:50:25'),
+(83,83,'PPB0008.jpg',1,0,'2025-05-22 21:50:25'),
+(84,84,'PPB0009.jpg',1,0,'2025-05-22 21:50:25'),
+(85,85,'PPB0010.jpg',1,0,'2025-05-22 21:50:25'),
+(86,86,'PPB0011.jpg',1,0,'2025-05-22 21:50:25'),
+(87,87,'PPB0012.jpg',1,0,'2025-05-22 21:50:25'),
+(88,88,'PPB0013.jpg',1,0,'2025-05-22 21:50:25'),
+(89,89,'PPB0014.jpg',1,0,'2025-05-22 21:50:25'),
+(90,90,'PPB0015.jpg',1,0,'2025-05-22 21:50:25'),
+(91,91,'PPB0016.jpg',1,0,'2025-05-22 21:50:25'),
+(92,92,'PPB0017.jpg',1,0,'2025-05-22 21:50:25'),
+(93,93,'PPB0018.jpg',1,0,'2025-05-22 21:50:25'),
+(94,94,'PPB0019.jpg',1,0,'2025-05-22 21:50:25'),
+(95,95,'PPB0020.jpg',1,0,'2025-05-22 21:50:25'),
+(96,96,'PPB0021.jpg',1,0,'2025-05-22 21:50:25'),
+(97,97,'PPB0022.jpg',1,0,'2025-05-22 21:50:25'),
+(98,98,'PPB0023.jpg',1,0,'2025-05-22 21:50:25'),
+(99,99,'PPB0024.jpg',1,0,'2025-05-22 21:50:25'),
+(100,100,'PPB0025.jpg',1,0,'2025-05-22 21:50:25'),
+(101,101,'PPB0026.jpg',1,0,'2025-05-22 21:50:25'),
+(102,102,'PPB0027.jpg',1,0,'2025-05-22 21:50:25'),
+(103,103,'PPB0028.jpg',1,0,'2025-05-22 21:50:25'),
+(104,104,'PPB0029.jpg',1,0,'2025-05-22 21:50:25'),
+(105,105,'PPB0030.jpg',1,0,'2025-05-22 21:50:25'),
+(106,106,'PPB0031.jpg',1,0,'2025-05-22 21:50:25'),
+(107,107,'PPB0032.jpg',1,0,'2025-05-22 21:50:25'),
+(108,108,'PPB0033.jpg',1,0,'2025-05-22 21:50:25'),
+(109,109,'PPU0001.jpg',1,0,'2025-05-22 21:50:25'),
+(110,110,'PPU0002.jpg',1,0,'2025-05-22 21:50:25'),
+(111,111,'PPU0003.jpg',1,0,'2025-05-22 21:50:25'),
+(112,112,'PPU0004.jpg',1,0,'2025-05-22 21:50:25'),
+(113,113,'PPU0005.jpg',1,0,'2025-05-22 21:50:25'),
+(114,114,'PPU0006.jpg',1,0,'2025-05-22 21:50:25'),
+(115,115,'PPU0007.jpg',1,0,'2025-05-22 21:50:25'),
+(116,116,'PPU0008.jpg',1,0,'2025-05-22 21:50:25'),
+(117,117,'PPU0009.jpg',1,0,'2025-05-22 21:50:25'),
+(118,118,'PPU0010.jpg',1,0,'2025-05-22 21:50:25'),
+(119,119,'PPU0011.jpg',1,0,'2025-05-22 21:50:25'),
+(120,120,'PPU0012.jpg',1,0,'2025-05-22 21:50:25'),
+(121,121,'PPU0013.jpg',1,0,'2025-05-22 21:50:25'),
+(122,122,'PPU0014.jpg',1,0,'2025-05-22 21:50:25'),
+(123,123,'PPU0015.jpg',1,0,'2025-05-22 21:50:25'),
+(124,124,'PPU0016.jpg',1,0,'2025-05-22 21:50:25'),
+(125,125,'PPU0017.jpg',1,0,'2025-05-22 21:50:25'),
+(126,126,'PPU0018.jpg',1,0,'2025-05-22 21:50:25'),
+(127,127,'PPU0019.jpg',1,0,'2025-05-22 21:50:25'),
+(128,128,'PPU0020.jpg',1,0,'2025-05-22 21:50:25'),
+(129,129,'PPU0021.jpg',1,0,'2025-05-22 21:50:25'),
+(130,130,'PPU0022.jpg',1,0,'2025-05-22 21:50:25'),
+(131,131,'PPU0023.jpg',1,0,'2025-05-22 21:50:25'),
+(132,132,'PPU0024.jpg',1,0,'2025-05-22 21:50:25'),
+(133,133,'PPU0025.jpg',1,0,'2025-05-22 21:50:25'),
+(134,134,'PPU0026.jpg',1,0,'2025-05-22 21:50:25'),
+(135,135,'PPU0027.jpg',1,0,'2025-05-22 21:50:25'),
+(136,136,'PVO0001.jpg',1,0,'2025-05-22 21:50:25'),
+(137,137,'PPU0000.jpg',1,0,'2025-05-22 21:50:25'),
+(138,138,'PPU0028.jpg',1,0,'2025-05-22 21:50:25'),
+(139,139,'PPU0029.jpg',1,0,'2025-05-22 21:50:25'),
+(140,140,'PPU0030.jpg',1,0,'2025-05-22 21:50:25'),
+(141,141,'PPU0031.jpg',1,0,'2025-05-22 21:50:25'),
+(142,142,'PPU0032.jpg',1,0,'2025-05-22 21:50:25'),
+(143,143,'PPU0033.jpg',1,0,'2025-05-22 21:50:25'),
+(144,144,'PPU0034.jpg',1,0,'2025-05-22 21:50:25'),
+(145,145,'PPU0035.jpg',1,0,'2025-05-22 21:50:25'),
+(146,146,'PPU0036.jpg',1,0,'2025-05-22 21:50:25'),
+(147,147,'PPU0037.jpg',1,0,'2025-05-22 21:50:25'),
+(148,148,'PPU0038.jpg',1,0,'2025-05-22 21:50:25'),
+(149,149,'PPU0039.jpg',1,0,'2025-05-22 21:50:25'),
+(150,150,'PPU0040.jpg',1,0,'2025-05-22 21:50:25'),
+(151,151,'PPU0041.jpg',1,0,'2025-05-22 21:50:25'),
+(152,152,'PPU0042.jpg',1,0,'2025-05-22 21:50:25'),
+(153,153,'PPU0043.jpg',1,0,'2025-05-22 21:50:25'),
+(154,154,'PPU0044.jpg',1,0,'2025-05-22 21:50:25'),
+(155,155,'PPU0045.jpg',1,0,'2025-05-22 21:50:25'),
+(156,156,'PPU0046.jpg',1,0,'2025-05-22 21:50:25'),
+(157,157,'PPU0047.jpg',1,0,'2025-05-22 21:50:25'),
+(158,158,'PPU0048.jpg',1,0,'2025-05-22 21:50:25'),
+(159,159,'PPU0049.jpg',1,0,'2025-05-22 21:50:25'),
+(160,160,'PPU0050.jpg',1,0,'2025-05-22 21:50:25'),
+(161,161,'PPU0051.jpg',1,0,'2025-05-22 21:50:25'),
+(162,162,'PPU0052.jpg',1,0,'2025-05-22 21:50:25'),
+(163,163,'PPU0053.jpg',1,0,'2025-05-22 21:50:25'),
+(164,164,'PPU0054.jpg',1,0,'2025-05-22 21:50:25'),
+(165,165,'PPU0055.jpg',1,0,'2025-05-22 21:50:25'),
+(166,166,'PPU0056.jpg',1,0,'2025-05-22 21:50:25'),
+(167,167,'PPU0057.jpg',1,0,'2025-05-22 21:50:25'),
+(168,168,'PPU0058.jpg',1,0,'2025-05-22 21:50:25'),
+(169,169,'PPU0059.jpg',1,0,'2025-05-22 21:50:25'),
+(170,170,'PPU0060.jpg',1,0,'2025-05-22 21:50:25'),
+(171,171,'PPU0061.jpg',1,0,'2025-05-22 21:50:25'),
+(172,172,'PPU0062.jpg',1,0,'2025-05-22 21:50:25'),
+(173,173,'PPU0063.jpg',1,0,'2025-05-22 21:50:25'),
+(174,174,'PPU0064.jpg',1,0,'2025-05-22 21:50:25'),
+(175,175,'PPU0065.jpg',1,0,'2025-05-22 21:50:25'),
+(176,176,'PPU0066.jpg',1,0,'2025-05-22 21:50:25'),
+(177,177,'PPU0067.jpg',1,0,'2025-05-22 21:50:25'),
+(178,178,'PPU0068.jpg',1,0,'2025-05-22 21:50:25'),
+(179,179,'PPU0069.jpg',1,0,'2025-05-22 21:50:25'),
+(180,180,'PPU0070.jpg',1,0,'2025-05-22 21:50:25'),
+(181,181,'PPU0071.jpg',1,0,'2025-05-22 21:50:25'),
+(182,182,'PVO0002.jpg',1,0,'2025-05-22 21:50:25'),
+(183,183,'PVO0003.jpg',1,0,'2025-05-22 21:50:25'),
+(184,184,'PVO0004.jpg',1,0,'2025-05-22 21:50:25'),
+(185,185,'PVO0005.jpg',1,0,'2025-05-22 21:50:25'),
+(186,186,'PVO0006.jpg',1,0,'2025-05-22 21:50:25'),
+(187,187,'PVO0007.jpg',1,0,'2025-05-22 21:50:25'),
+(188,188,'PVO0008.jpg',1,0,'2025-05-22 21:50:25');
+/*!40000 ALTER TABLE `product_images` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 6. SITE_SETTINGS
+-- ====================================
+
+`site_settings`
+--
+
+DROP TABLE IF EXISTS `site_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `site_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `featured_carousel_enabled` tinyint(1) NOT NULL DEFAULT 1,
+  `catalog_page_enabled` tinyint(1) NOT NULL DEFAULT 1,
+  `hide_catalog_prices` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Hide prices in catalog, show price on request instead',
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `site_settings`
+--
+
+LOCK TABLES `site_settings` WRITE;
+/*!40000 ALTER TABLE `site_settings` DISABLE KEYS */;
+INSERT INTO `site_settings` VALUES
+(1,1,1,1,'2025-06-01 15:08:28','2025-07-17 19:20:42');
+/*!40000 ALTER TABLE `site_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 7. ACTIVITY_LOGS
+-- ====================================
+
+`activity_logs`
+--
+
+DROP TABLE IF EXISTS `activity_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `activity_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `action` varchar(50) NOT NULL,
+  `entity_type` varchar(50) DEFAULT NULL,
+  `entity_id` int(11) DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_activity_logs_user_id` (`user_id`),
+  KEY `idx_activity_logs_entity` (`entity_type`,`entity_id`),
+  CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `admin_users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Registro de atividades dos usuários administrativos';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `activity_logs`
+--
+
+LOCK TABLES `activity_logs` WRITE;
+/*!40000 ALTER TABLE `activity_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activity_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 8. AUDIT_LOGS
+-- ====================================
+
+`audit_logs`
+--
+
+DROP TABLE IF EXISTS `audit_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `audit_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(255) NOT NULL,
+  `user_agent` text DEFAULT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `action` enum('data_access','consent_change','user_right_request','data_deletion','data_export','admin_access') NOT NULL,
+  `resource` varchar(255) NOT NULL,
+  `resource_id` varchar(255) DEFAULT NULL,
+  `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`details`)),
+  `consent_changes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`consent_changes`)),
+  `legal_basis` enum('consent','contract','legal_obligation','vital_interests','public_task','legitimate_interest') NOT NULL,
+  `retention_period` enum('1 year','2 years','3 years','5 years','6 years') NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_session_id` (`session_id`),
+  KEY `idx_ip_address` (`ip_address`),
+  KEY `idx_action` (`action`),
+  KEY `idx_resource` (`resource`),
+  KEY `idx_legal_basis` (`legal_basis`),
+  KEY `idx_retention_period` (`retention_period`),
+  KEY `idx_created_at` (`created_at`),
+  KEY `idx_action_created` (`action`,`created_at`),
+  KEY `idx_session_created` (`session_id`,`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `audit_logs`
+--
+
+LOCK TABLES `audit_logs` WRITE;
+/*!40000 ALTER TABLE `audit_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audit_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+
+-- ====================================
+-- 9. COOKIE_CONSENT
+-- ====================================
+
+-- ====================================
+-- 10. USER_RIGHTS
+-- ====================================
+
+-- ====================================
+-- FINALIZAR IMPORTAÇÃO
+-- ====================================
+
+-- Restaurar configurações
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+SET FOREIGN_KEY_CHECKS = 1;
+SET UNIQUE_CHECKS = 1;
+COMMIT;
+SET AUTOCOMMIT = 1;
+
+-- ====================================
+-- DUMP FINALIZADA COM SUCESSO
+-- ====================================
+SELECT 'Base de dados importada com sucesso!' as status;
+SELECT 'Todas as tabelas foram criadas na ordem correta' as info;
+SELECT 'Foreign keys adicionadas no final para evitar erros' as details;

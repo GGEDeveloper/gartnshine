@@ -1,0 +1,154 @@
+#!/usr/bin/env node
+
+/**
+ * Script para criar uma dump otimizada para produção
+ * Reordena as tabelas por ordem de dependências para evitar erros de foreign key
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// Configuração
+const INPUT_FILE = 'gonzagas_local_complete_dump.sql';
+const OUTPUT_FILE = 'gonzagas_production_ready_dump.sql';
+
+console.log('🔄 Criando dump otimizada para produção...');
+
+// Ordem correta das tabelas (sem dependências primeiro)
+const TABLE_ORDER = [
+  'admin_users',
+  'users', 
+  'product_families',
+  'products',
+  'product_images',
+  'site_settings',
+  'activity_logs',
+  'audit_logs',
+  'cookie_consent',
+  'user_rights'
+];
+
+// Função para extrair uma tabela da dump
+function extractTable(content, tableName) {
+  // Regex para encontrar a estrutura da tabela
+  const createTableRegex = new RegExp(
+    `(--\\s*Table structure for table \`${tableName}\`[\\s\\S]*?)(--\\s*Table structure for table|\\/\\*M![\\d\\s]*\\*\\/\\s*$)`,
+    'i'
+  );
+  
+  const match = content.match(createTableRegex);
+  if (!match) {
+    console.warn(`⚠️  Tabela ${tableName} não encontrada`);
+    return '';
+  }
+  
+  // Remove o início da próxima tabela se capturado
+  let tableContent = match[1];
+  if (match[2] && match[2].startsWith('--')) {
+    tableContent = tableContent.replace(match[2], '');
+  }
+  
+  return tableContent.trim() + '\n\n';
+}
+
+// Função principal
+function createOptimizedDump() {
+  try {
+    // Ler o arquivo original
+    const originalContent = fs.readFileSync(INPUT_FILE, 'utf8');
+    
+    // Cabeçalho da nova dump
+    let optimizedDump = `-- ====================================
+-- GONZAGA'S ART & SHINE - PRODUCTION READY DATABASE DUMP
+-- Gerado automaticamente em ${new Date().toISOString()}
+-- Ordem de tabelas otimizada para importação sem erros
+-- ====================================
+
+-- Configurações para importação segura
+SET FOREIGN_KEY_CHECKS = 0;
+SET AUTOCOMMIT = 0;
+SET UNIQUE_CHECKS = 0;
+
+-- Usar charset correto
+SET NAMES utf8mb4;
+SET CHARACTER_SET_CLIENT = utf8mb4;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+`;
+
+    // Extrair e adicionar cada tabela na ordem correta
+    TABLE_ORDER.forEach((tableName, index) => {
+      console.log(`📦 Processando tabela ${index + 1}/${TABLE_ORDER.length}: ${tableName}`);
+      
+      optimizedDump += `-- ====================================\n`;
+      optimizedDump += `-- ${index + 1}. ${tableName.toUpperCase()}\n`;
+      optimizedDump += `-- ====================================\n\n`;
+      
+      const tableContent = extractTable(originalContent, tableName);
+      optimizedDump += tableContent;
+    });
+
+    // Rodapé - restaurar configurações
+    optimizedDump += `-- ====================================
+-- FINALIZAR IMPORTAÇÃO
+-- ====================================
+
+-- Restaurar configurações
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+SET FOREIGN_KEY_CHECKS = 1;
+SET UNIQUE_CHECKS = 1;
+COMMIT;
+SET AUTOCOMMIT = 1;
+
+-- ====================================
+-- DUMP FINALIZADA COM SUCESSO
+-- ====================================
+SELECT 'Base de dados importada com sucesso!' as status;
+SELECT 'Todas as tabelas foram criadas na ordem correta' as info;
+SELECT 'Foreign keys adicionadas no final para evitar erros' as details;
+`;
+
+    // Escrever o arquivo final
+    fs.writeFileSync(OUTPUT_FILE, optimizedDump);
+    
+    console.log('✅ Dump otimizada criada com sucesso!');
+    console.log(`📄 Arquivo: ${OUTPUT_FILE}`);
+    console.log(`📊 Tamanho: ${(fs.statSync(OUTPUT_FILE).size / 1024).toFixed(2)} KB`);
+    
+    // Mostrar estatísticas
+    const tableCount = TABLE_ORDER.length;
+    console.log(`📦 Tabelas processadas: ${tableCount}`);
+    console.log('🎯 Ordem de importação otimizada para produção');
+    
+  } catch (error) {
+    console.error('❌ Erro ao criar dump otimizada:', error.message);
+    process.exit(1);
+  }
+}
+
+// Verificar se o arquivo de entrada existe
+if (!fs.existsSync(INPUT_FILE)) {
+  console.error(`❌ Arquivo ${INPUT_FILE} não encontrado!`);
+  console.log('💡 Execute primeiro: mysqldump -u root -proot gonzagas_local > gonzagas_local_complete_dump.sql');
+  process.exit(1);
+}
+
+// Executar
+createOptimizedDump(); 

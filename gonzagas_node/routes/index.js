@@ -83,6 +83,7 @@ router.get('/', async (req, res) => {
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
       title: 'Home',
+      layout: 'layouts/main',
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
@@ -148,6 +149,7 @@ router.get('/collections', async (req, res) => {
     
     res.render('collections', {
       title: 'Gallery',
+      layout: 'layouts/main',
       images: imageFiles,
       user: req.user || null,
       success_msg: req.flash('success_msg'),
