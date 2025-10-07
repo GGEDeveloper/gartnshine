@@ -271,6 +271,65 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
   }
 });
 
+// Product Detail V2 - Modern enhanced view
+router.get('/catalog/product-v2/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { pool } = require('../config/database');
+    
+    const [results] = await pool.execute(`
+      SELECT p.*, pf.name as family_name,
+             GROUP_CONCAT(pi.image_filename ORDER BY pi.is_primary DESC) as images
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      LEFT JOIN product_images pi ON p.id = pi.product_id
+      WHERE p.id = ? AND p.is_active = 1
+      GROUP BY p.id
+    `, [id]);
+    
+    if (results.length === 0) {
+      return res.status(404).render('error', { message: 'Produto não encontrado' });
+    }
+    
+    const product = results[0];
+    product.images = product.images ? product.images.split(',') : [];
+    
+    // WhatsApp message
+    const whatsappMessage = `Olá! Gostaria de informações sobre:
+
+*${product.name}*
+Referência: ${product.reference}
+${product.sale_price ? `Preço: €${parseFloat(product.sale_price).toFixed(2)}` : 'Preço sob consulta'}
+
+Ver produto: ${req.protocol}://${req.get('host')}/catalog/product-v2/${id}`;
+
+    const whatsappData = {
+      number: process.env.WHATSAPP_NUMBER || '351920000000',
+      message: encodeURIComponent(whatsappMessage),
+      url: `https://wa.me/${process.env.WHATSAPP_NUMBER || '351920000000'}?text=${encodeURIComponent(whatsappMessage)}`
+    };
+    
+    // Additional data for V2 template
+    product.specifications = {
+      material: product.material || 'Prata 925',
+      style: product.style || 'Artesanal',
+      stock: product.current_stock,
+      reference: product.reference
+    };
+    
+    res.render('catalog/product-detail-v2', { 
+      product, 
+      whatsappData,
+      title: `${product.name} - Gonzaga's Art & Shine`,
+      siteTitle: 'Gonzaga\'s Art & Shine'
+    });
+    
+  } catch (error) {
+    console.error('Product V2 error:', error);
+    res.status(500).render('error', { message: 'Erro interno' });
+  }
+});
+
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
