@@ -13,7 +13,10 @@
     "db:test": "node -e 'require(\"./config/database\").testConnection().then(console.log).catch(console.error)'",
     "db:create-cookie-table": "node scripts/create-cookie-table.js",
     "db:create-user-rights-table": "node scripts/create-user-rights-table.js",
-    "db:create-audit-logs-table": "node scripts/create-audit-logs-table.js"
+    "db:create-audit-logs-table": "node scripts/create-audit-logs-table.js",
+    "backup": "node scripts/backup-system.js backup",
+    "backup:list": "node scripts/backup-system.js list",
+    "backup:restore": "node scripts/backup-system.js restore"
   },
   "keywords": [
     "jewelry",

@@ -439,6 +439,12 @@ const cookieConsentRouter = require('./routes/cookie-consent');
 app.use(cookieConsentRouter);
 const userRightsRouter = require('./routes/user-rights');
 app.use(userRightsRouter);
+const seoRouter = require('./routes/seo');
+app.use(seoRouter);
+
+// API routes
+const apiRouter = require('./routes/api');
+app.use('/api', apiRouter);
 
 // Tratamento de erros 404 (deve ficar APÓS todos os routers)
 app.use((req, res, next) => {
