@@ -39,67 +39,49 @@ router.get('/families', async (req, res) => {
   }
 });
 
-// Search endpoint
+// Test endpoint for debugging
+router.get('/test-db', async (req, res) => {
+  try {
+    const { pool } = require('../config/database');
+    const [rows] = await pool.execute('SELECT COUNT(*) as count FROM products WHERE is_active = 1');
+    res.json({ success: true, active_products: rows[0].count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Search endpoint - REWRITTEN
 router.get('/search', async (req, res) => {
   try {
-    const { q, limit = 8, family_id } = req.query;
+    const q = req.query.q;
+    const limit = parseInt(req.query.limit) || 8;
     
-    if (!q || q.length < 2) {
+    // Return empty array for short queries
+    if (!q || q.trim().length < 2) {
       return res.json([]);
     }
     
-    const { pool } = require('../config/database');
+    const db = require('../config/database');
+    const searchPattern = `%${q.trim()}%`;
     
-    let searchQuery = `
-      SELECT p.id, p.reference, p.name, p.sale_price, p.current_stock,
-             pi.image_filename as main_image,
-             pf.name as family_name
-      FROM products p
-      LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
-      LEFT JOIN product_families pf ON p.family_id = pf.id
-      WHERE p.is_active = 1 
-      AND (p.name LIKE ? OR p.reference LIKE ? OR p.description LIKE ?)
-    `;
+    const sql = 'SELECT id, reference, name, sale_price, current_stock FROM products WHERE is_active = 1 AND (name LIKE ? OR reference LIKE ?) ORDER BY featured DESC LIMIT ?';
+    const [rows] = await db.pool.query(sql, [searchPattern, searchPattern, limit]);
     
-    const params = [`%${q}%`, `%${q}%`, `%${q}%`];
-    
-    if (family_id && !isNaN(family_id)) {
-      searchQuery += ` AND p.family_id = ?`;
-      params.push(parseInt(family_id));
-    }
-    
-    searchQuery += `
-      ORDER BY 
-        CASE 
-          WHEN p.name LIKE ? THEN 1
-          WHEN p.reference LIKE ? THEN 2
-          ELSE 3
-        END,
-        p.featured DESC
-      LIMIT ?
-    `;
-    
-    params.push(`${q}%`, `${q}%`, parseInt(limit));
-    
-    const [results] = await pool.execute(searchQuery, params);
-    
-    // Format results
-    const formattedResults = results.map(product => ({
-      id: product.id,
-      name: product.name,
-      reference: product.reference,
-      price_formatted: `€${parseFloat(product.sale_price || 0).toFixed(2)}`,
-      family_name: product.family_name,
-      image_url: product.main_image ? `/uploads/products/${product.main_image}` : '/images/placeholder.jpg',
-      url: `/catalog/product/${product.id}`,
-      in_stock: product.current_stock > 0
+    const results = rows.map(p => ({
+      id: p.id,
+      name: p.name,
+      reference: p.reference,
+      price_formatted: `€${parseFloat(p.sale_price || 0).toFixed(2)}`,
+      image_url: '/images/placeholder.jpg',
+      url: `/catalog/product/${p.id}`,
+      in_stock: p.current_stock > 0
     }));
     
-    res.json(formattedResults);
+    return res.json(results);
     
-  } catch (error) {
-    console.error('Search API error:', error);
-    res.status(500).json({ error: 'Search failed' });
+  } catch (err) {
+    console.error('Search error:', err.message);
+    return res.status(500).json({ error: 'Search failed' });
   }
 });
 

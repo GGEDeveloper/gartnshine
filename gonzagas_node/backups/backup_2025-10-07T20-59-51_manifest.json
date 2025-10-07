@@ -1,0 +1,19 @@
+{
+  "name": "backup_2025-10-07T20-59-51",
+  "created": "2025-10-07T20:59:54.054Z",
+  "version": "1.0.0",
+  "environment": "development",
+  "database": {
+    "file": "backup_2025-10-07T20-59-51_database.sql",
+    "size": 168070
+  },
+  "files": {
+    "file": "backup_2025-10-07T20-59-51_files.tar.gz",
+    "size": 82150787
+  },
+  "system": {
+    "nodeVersion": "v20.19.5",
+    "platform": "linux",
+    "arch": "x64"
+  }
+}
