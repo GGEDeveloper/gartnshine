@@ -446,6 +446,10 @@ app.use(seoRouter);
 const apiRouter = require('./routes/api');
 app.use('/api', apiRouter);
 
+// === FASE 5: MEDIA ROUTES ===
+const mediaRoutes = require('./routes/admin/media');
+app.use('/admin', mediaRoutes);
+
 // Tratamento de erros 404 (deve ficar APÓS todos os routers)
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - 404 Not Found: ${req.url}`);

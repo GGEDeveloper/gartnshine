@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Library - Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/admin-v2.css">
+    <link rel="stylesheet" href="/css/media-library.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Drag & Drop Styles -->
+    <style>
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .dropzone.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body class="admin-layout">
+    <!-- Admin Header -->
+    <%- include('../partials/admin-header') %>
+    
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Sidebar -->
+        <%- include('../partials/admin-sidebar') %>
+        
+        <!-- Content Area -->
+        <div class="admin-content">
+            <div class="content-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-images"></i> Media Library</h1>
+                    <p>Gere todas as suas imagens e ficheiros de media</p>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="toggleViewMode">
+                        <i class="fas fa-th-large"></i>
+                        <span>Grelha</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="openBulkActions()">
+                        <i class="fas fa-tasks"></i>
+                        <span>Ações em Lote</span>
+                    </button>
+                    
+                    <div class="upload-actions">
+                        <label class="btn btn-primary" for="fileInput">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Upload</span>
+                        </label>
+                        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                        
+                        <button class="btn btn-primary" onclick="openCameraCapture()">
+                            <i class="fas fa-camera"></i>
+                            <span>Câmara</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filters & Search -->
+            <div class="media-toolbar">
+                <div class="toolbar-left">
+                    <!-- Folder Navigation -->
+                    <div class="folder-nav">
+                        <select id="folderSelect" class="form-select">
+                            <option value="/">Todas as Pastas</option>
+                            <% folders.forEach(folder => { %>
+                                <option value="<%= folder.path %>" 
+                                        data-color="<%= folder.color %>">
+                                    <% for(let i = 0; i < (folder.path.split('/').length - 2); i++) { %>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <% } %>
+                                    📁 <%= folder.name %> (<%= folder.file_count %>)
+                                </option>
+                            <% }); %>
+                        </select>
+                        
+                        <button class="btn btn-sm btn-outline" onclick="createNewFolder()">
+                            <i class="fas fa-folder-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Tag Filter -->
+                    <div class="tag-filter">
+                        <select id="tagSelect" class="form-select" multiple>
+                            <% tags.forEach(tag => { %>
+                                <option value="<%= tag.slug %>" 
+                                        data-color="<%= tag.color %>">
+                                    <%= tag.name %> (<%= tag.usage_count %>)
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="toolbar-center">
+                    <!-- Search -->
+                    <div class="search-box">
+                        <input type="text" 
+                               id="mediaSearch" 
+                               placeholder="Pesquisar ficheiros..." 
+                               class="search-input">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="toolbar-right">
+                    <!-- Sort Options -->
+                    <select id="sortSelect" class="form-select">
+                        <option value="created_at:desc">Mais Recentes</option>
+                        <option value="created_at:asc">Mais Antigos</option>
+                        <option value="filename:asc">Nome A-Z</option>
+                        <option value="filename:desc">Nome Z-A</option>
+                        <option value="file_size:desc">Maior Tamanho</option>
+                        <option value="file_size:asc">Menor Tamanho</option>
+                    </select>
+                    
+                    <!-- Results per page -->
+                    <select id="limitSelect" class="form-select">
+                        <option value="24">24 por página</option>
+                        <option value="48">48 por página</option>
+                        <option value="96">96 por página</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Upload Drop Zone -->
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-content">
+                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                    <h3>Arraste ficheiros aqui para fazer upload</h3>
+                    <p>ou clique no botão Upload acima</p>
+                    <div class="supported-formats">
+                        <small>Suportado: JPG, PNG, WebP, GIF (máx. 10MB por ficheiro)</small>
+                    </div>
+                </div>
+                
+                <!-- Upload Progress -->
+                <div class="upload-progress-container" style="display: none;">
+                    <div class="upload-progress-items" id="uploadProgressItems">
+                        <!-- Dynamic upload progress items -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Media Grid -->
+            <div class="media-grid-container">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="media-grid loading">
+                        <% for(let i = 0; i < 12; i++) { %>
+                            <div class="media-skeleton">
+                                <div class="skeleton-image"></div>
+                                <div class="skeleton-info">
+                                    <div class="skeleton-line"></div>
+                                    <div class="skeleton-line short"></div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <!-- Media Grid -->
+                <div class="media-grid" id="mediaGrid">
+                    <!-- Dynamic content loaded via JavaScript -->
+                </div>
+                
+                <!-- No Results State -->
+                <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results-icon">
+                        <i class="fas fa-search fa-3x"></i>
+                    </div>
+                    <h3>Nenhum ficheiro encontrado</h3>
+                    <p>Tente ajustar os filtros ou fazer upload de novos ficheiros.</p>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    <span id="paginationInfo">Mostrando 1-24 de 156 ficheiros</span>
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Dynamic pagination -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Media Detail Modal -->
+    <div class="modal" id="mediaDetailModal">
+        <div class="modal-backdrop" onclick="closeMediaDetail()"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Detalhes do Ficheiro</h3>
+                <button class="modal-close" onclick="closeMediaDetail()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body" id="mediaDetailContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Media Modal -->
+    <div class="modal" id="editMediaModal">
+        <div class="modal-backdrop" onclick="closeEditMedia()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Ficheiro</h3>
+                <button class="modal-close" onclick="closeEditMedia()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="editMediaForm">
+                    <input type="hidden" id="editMediaId">
+                    
+                    <div class="form-group">
+                        <label for="editTitle">Título</label>
+                        <input type="text" id="editTitle" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editAltText">Texto Alternativo</label>
+                        <input type="text" id="editAltText" class="form-control">
+                        <small class="form-help">Para acessibilidade e SEO</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editDescription">Descrição</label>
+                        <textarea id="editDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editFolder">Pasta</label>
+                        <select id="editFolder" class="form-select">
+                            <% folders.forEach(folder => { %>
+                                <option value="<%= folder.path %>"><%= folder.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTags">Tags</label>
+                        <div class="tags-input-container">
+                            <input type="text" 
+                                   id="editTags" 
+                                   class="tags-input"
+                                   placeholder="Adicionar tags (separadas por vírgula)">
+                            <div class="tags-suggestions" id="tagsSuggestions">
+                                <!-- Dynamic tag suggestions -->
+                            </div>
+                        </div>
+                        <div class="selected-tags" id="selectedTags">
+                            <!-- Selected tags display -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEditMedia()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveMediaEdit()">Guardar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Camera Capture Modal (Mobile) -->
+    <div class="modal fullscreen" id="cameraModal">
+        <div class="modal-content camera">
+            <div class="camera-interface">
+                <div class="camera-header">
+                    <button class="btn-camera-close" onclick="closeCameraCapture()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h3>Capturar Imagem</h3>
+                </div>
+                
+                <div class="camera-preview">
+                    <video id="cameraVideo" autoplay playsinline></video>
+                    <canvas id="cameraCanvas" style="display: none;"></canvas>
+                    
+                    <div class="camera-overlay">
+                        <div class="capture-frame"></div>
+                    </div>
+                </div>
+                
+                <div class="camera-controls">
+                    <button class="btn-camera-switch" onclick="switchCamera()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    
+                    <button class="btn-capture" onclick="captureImage()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    
+                    <button class="btn-gallery" onclick="openGallery()">
+                        <i class="fas fa-images"></i>
+                    </button>
+                </div>
+                
+                <div class="captured-images" id="capturedImages">
+                    <!-- Captured images display -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="/js/media-library.js"></script>
+    <script src="/js/media-camera.js"></script>
+    <script src="/js/media-upload.js"></script>
+    
+    <!-- Initialize -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize media library
+            window.mediaLibrary = new MediaLibrary({
+                apiEndpoint: '/admin/api/media',
+                uploadEndpoint: '/admin/api/media/upload',
+                maxFileSize: 10 * 1024 * 1024, // 10MB
+                allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+            });
+        });
+    </script>
+</body>
+</html>
+
