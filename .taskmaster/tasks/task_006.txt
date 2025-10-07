@@ -1,0 +1,11 @@
+# Task ID: 6
+# Title: Implement Automatic Image Variant Generation
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Generate thumbnail, medium, and large variants for each uploaded image.
+# Details:
+On upload, use server-side Sharp (if available) or client-side Canvas API to create 200x200px (crop), 800px, and 1600px variants. Apply naming convention (filename_thumb.jpg, etc.) and store in same directory.
+
+# Test Strategy:
+Validate creation of all variants, correct sizing/cropping, and fallback to original if variant generation fails.

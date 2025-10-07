@@ -1,0 +1,11 @@
+# Task ID: 13
+# Title: Optimize Image Upload and Gallery Performance
+# Status: pending
+# Dependencies: 3, 5, 6, 10
+# Priority: medium
+# Description: Ensure fast image upload, camera activation, and gallery loading per performance targets.
+# Details:
+Profile and optimize upload pipeline, camera activation (<500ms), and gallery load (<1s for 50 thumbnails). Apply compression and pagination as needed.
+
+# Test Strategy:
+Measure upload, activation, and gallery load times. Validate against performance targets and optimize bottlenecks.

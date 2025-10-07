@@ -1,0 +1,11 @@
+# Task ID: 8
+# Title: Design Media Library Modal for Image Selection
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Allow admin to select existing images from a modal overlay in product forms.
+# Details:
+Create modal overlay with grid of images, search/filter by filename, and single/multiple selection modes. Integrate with product forms for image selection.
+
+# Test Strategy:
+Test modal opening, image selection, search/filter functionality, and integration with product forms.

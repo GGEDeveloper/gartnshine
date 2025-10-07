@@ -1,0 +1,11 @@
+# Task ID: 16
+# Title: Apply Mobile-First and Bali/Boho Design Enhancements
+# Status: pending
+# Dependencies: 1, 5, 8, 11
+# Priority: medium
+# Description: Ensure all new UI components follow dark mode, gold accents, touch targets, spacing, and typography requirements.
+# Details:
+Update CSS for dark backgrounds (#1a1a1a), gold accents (#c0a080), Poppins/Inter fonts, FontAwesome icons, and generous spacing. Ensure touch targets >=44x44px and immediate visual feedback.
+
+# Test Strategy:
+Review UI on mobile and desktop for design consistency, accessibility, and feedback. Validate touch target sizes and color usage.

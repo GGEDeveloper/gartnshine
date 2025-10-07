@@ -1,0 +1,11 @@
+# Task ID: 17
+# Title: Document API Endpoints and Media Management Workflows
+# Status: pending
+# Dependencies: 1, 5, 15
+# Priority: medium
+# Description: Provide developer documentation for new endpoints, database schema, camera capture, and image processing pipeline.
+# Details:
+Write API docs for media endpoints, describe database changes, and provide implementation guides for camera and image processing. Include troubleshooting and best practices.
+
+# Test Strategy:
+Review documentation for completeness, clarity, and accuracy. Validate with developer feedback.

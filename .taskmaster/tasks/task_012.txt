@@ -1,0 +1,11 @@
+# Task ID: 12
+# Title: Enable Bulk Media Operations
+# Status: pending
+# Dependencies: 5, 9
+# Priority: medium
+# Description: Allow admins to select multiple images and perform batch actions.
+# Details:
+Add checkbox selection UI, 'Select All' toggle, bulk actions (delete, move, tag), and confirmation modal for destructive actions. Provide feedback for success/error.
+
+# Test Strategy:
+Test selection, bulk action execution, confirmation modal, and feedback messages for all operations.

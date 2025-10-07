@@ -1,0 +1,504 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Implement Mobile Camera Capture Component",
+        "description": "Enable mobile admin users to capture product photos directly via device camera in product forms.",
+        "details": "Create `/public/js/camera-capture.js` using HTML5 getUserMedia API for camera access. Integrate Canvas API for preview and manipulation. Add camera capture UI to `/views/admin/products/form.ejs` and style with `/public/css/admin-camera.css`. Ensure fallback to file input for unsupported devices.",
+        "testStrategy": "Test on Chrome, Safari, Firefox mobile. Validate camera permission prompt, preview overlay, capture functionality, and fallback on desktop.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Camera Access Module",
+            "description": "Implement the core camera access logic using the HTML5 getUserMedia API in `/public/js/camera-capture.js` to request camera permissions and initialize the video stream.",
+            "dependencies": [],
+            "details": "Write a JavaScript module that checks for camera support, requests user permission, and initializes the camera stream. Handle permission denied and unsupported browser scenarios. Use feature detection to determine if getUserMedia is available.\n<info added on 2025-10-07T19:39:01.868Z>\n🔄 PARCIALMENTE COMPLETO! Código criado, falta integração e testes.\n\nFicheiro criado: public/js/camera-capture.js (5.5 KB)\n\nImplementado:\n- Classe CameraCapture completa\n- checkSupport() - Feature detection (getUserMedia + Canvas)\n- detectCameras() - Enumerate video devices\n- startCamera() - Request permissions e initialize stream\n- stopCamera() - Cleanup e release resources\n- switchCamera() - Toggle entre front/rear\n- createUI() - Overlay HTML com preview\n- capturePhoto() - Canvas capture e blob conversion\n- handleError() - 4 tipos de erro com messages PT\n- Global helpers: initCameraForForm(), handleCapturedImage()\n\nPendente:\n- Incluir script no layout admin\n- Modificar product form.ejs para adicionar botão camera\n- Testar em Chrome mobile\n- Testar em iOS Safari  \n- Testar permission denied scenarios\n- Ajustar error messages se necessário\n\nStatus: Código sólido criado, ready para integration.\n</info added on 2025-10-07T19:39:01.868Z>",
+            "status": "pending",
+            "testStrategy": "Test on iOS Safari and Chrome Android. Verify permission prompt appears and stream starts on supported devices; ensure graceful degradation on unsupported browsers."
+          },
+          {
+            "id": 2,
+            "title": "Implement Camera Preview UI",
+            "description": "Add a live camera preview overlay to the product form using the Canvas API, allowing users to see what the camera captures in real time.",
+            "dependencies": [],
+            "details": "Extend `/public/js/camera-capture.js` to render the camera stream onto a `<canvas>` element. Position the preview overlay appropriately within `/views/admin/products/form.ejs`. Ensure the preview mirrors the device orientation and fills the designated area.",
+            "status": "pending",
+            "testStrategy": "Validate that the preview displays the camera feed correctly on mobile devices. Check for proper orientation handling and responsive sizing."
+          },
+          {
+            "id": 3,
+            "title": "Add Capture Button and Event Handling",
+            "description": "Integrate a capture button into the UI that, when pressed, freezes the current preview and prepares the image for upload.",
+            "dependencies": [],
+            "details": "Add a capture button to the form. On click, capture the current canvas frame as an image (e.g., using `canvas.toDataURL()`). Store the captured image temporarily for preview and upload. Provide visual feedback (e.g., flash effect) on capture.",
+            "status": "pending",
+            "testStrategy": "Test that pressing the button freezes the preview, captures the image, and provides user feedback. Verify the image is stored correctly for the next steps."
+          },
+          {
+            "id": 4,
+            "title": "Implement File Upload Fallback",
+            "description": "Provide a fallback file input for devices or browsers that do not support camera access, ensuring the form remains functional everywhere.",
+            "dependencies": [],
+            "details": "Dynamically show/hide the camera UI and a traditional file input based on feature detection. Ensure the file input is styled consistently and integrates with the existing multer upload system.",
+            "status": "pending",
+            "testStrategy": "Test on desktop browsers and unsupported mobile devices. Verify the file input appears when camera access is unavailable and uploads work as expected."
+          },
+          {
+            "id": 5,
+            "title": "Style Camera Capture UI",
+            "description": "Apply custom styles to the camera preview, capture button, and fallback file input to ensure a cohesive admin interface.",
+            "dependencies": [],
+            "details": "Create `/public/css/admin-camera.css` with styles for the camera preview, capture button, and file input. Ensure the UI is responsive and matches the admin theme. Handle transitions between camera and file input modes gracefully.",
+            "status": "pending",
+            "testStrategy": "Check visual consistency across devices and browsers. Verify responsive behavior and theme matching."
+          },
+          {
+            "id": 6,
+            "title": "Integrate with Multer Upload System",
+            "description": "Connect the captured image or selected file to the existing server-side multer upload pipeline, ensuring seamless integration with the product form submission.",
+            "dependencies": [],
+            "details": "Modify the form submission handler to accept either a camera-captured image (as a data URL or Blob) or a traditional file. Convert the camera image to a file object if necessary. Ensure the upload endpoint processes both sources correctly.",
+            "status": "pending",
+            "testStrategy": "Test uploading both camera-captured images and file-selected images. Verify successful server-side processing and database entry."
+          },
+          {
+            "id": 7,
+            "title": "Handle Permissions and Errors",
+            "description": "Implement robust error handling for camera access, permissions, and upload failures, with user-friendly feedback.",
+            "dependencies": [],
+            "details": "Add error handling for camera initialization, permission denial, and upload errors. Display clear messages to the user and provide recovery options (e.g., retry, switch to file input). Log errors for debugging.",
+            "status": "pending",
+            "testStrategy": "Simulate permission denials and upload errors. Verify that appropriate messages are shown and the user can recover or switch modes."
+          },
+          {
+            "id": 8,
+            "title": "Cross-Browser and Device Testing",
+            "description": "Conduct comprehensive testing across target browsers and devices to ensure consistent behavior, performance, and fallback functionality.",
+            "dependencies": [],
+            "details": "Test on iOS Safari, Chrome Android, Firefox mobile, and desktop browsers. Validate camera access, preview, capture, upload, and fallback in each environment. Check for memory leaks and performance issues.",
+            "status": "pending",
+            "testStrategy": "Use real devices and emulators. Document any browser-specific quirks and ensure all features work as expected. Verify graceful degradation on unsupported platforms."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Add Multi-Camera Switch Functionality",
+        "description": "Allow users to toggle between front and rear cameras during capture.",
+        "details": "Use MediaDevices.enumerateDevices() to list available cameras. Implement UI toggle button in camera overlay. Switch constraints between facingMode: 'user' and 'environment'. Default to rear camera for quality.",
+        "testStrategy": "Verify toggle button visibility, smooth switching, and default camera selection on multiple mobile devices.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Integrate Real-Time Client-Side Image Compression",
+        "description": "Compress captured images before upload to optimize file size and performance.",
+        "details": "Use Canvas API to resize image to max 800px on largest dimension. Apply toBlob() with quality parameter (85% JPEG). Show compressed preview and visual indicator during compression.",
+        "testStrategy": "Check image size reduction, preview accuracy, and upload speed. Validate compression ratio and quality on various devices.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Develop Quick Product Creation Workflow",
+        "description": "Enable rapid product creation with minimal required fields and immediate photo capture.",
+        "details": "Create new route `/admin/products/quick-add` with form for photo, name, price, and family. Auto-generate reference if empty. Set product status to 'active' by default. Redirect to full edit after creation.",
+        "testStrategy": "Test form validation, product creation, auto-reference, and redirect flow. Ensure accessibility via highlighted mobile admin button.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Create Drag & Drop Media Gallery Interface",
+        "description": "Build a responsive media gallery with drag & drop upload and thumbnail grid.",
+        "details": "Develop `/admin/media-gallery` page using HTML5 Drag & Drop API and responsive grid layout. Integrate AJAX upload for multiple files, progress bar, and immediate preview. Use Canvas for thumbnail generation.",
+        "testStrategy": "Test drag & drop for single/multiple files, upload progress, error handling, and thumbnail display on desktop and mobile.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Media Gallery Route and Controller Structure",
+            "description": "Set up the backend route `/admin/media-gallery` and create the controller with basic CRUD operations for media management.",
+            "dependencies": [],
+            "details": "Create route in routes/admin.js for GET /admin/media-gallery. Implement MediaGalleryController with methods: index() for gallery view, upload() for file handling, delete() for media removal, and getMedia() for AJAX requests. Set up middleware for admin authentication and file upload limits.",
+            "status": "pending",
+            "testStrategy": "Test route accessibility, controller method responses, authentication middleware, and error handling for unauthorized access."
+          },
+          {
+            "id": 2,
+            "title": "Design Responsive Grid Layout Template",
+            "description": "Create the main view template with responsive CSS Grid layout for displaying media thumbnails in an adaptive grid.",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Create /views/admin/media-gallery.ejs with responsive grid container. Implement CSS Grid with auto-fit columns: 2 on mobile, 3 on tablet, 4+ on desktop. Add media query breakpoints and ensure proper aspect ratio maintenance. Include empty state messaging and loading indicators.",
+            "status": "pending",
+            "testStrategy": "Test grid responsiveness across devices, aspect ratio preservation, gap consistency, and smooth transitions during resize events."
+          },
+          {
+            "id": 3,
+            "title": "Implement HTML5 Drag & Drop Zone",
+            "description": "Create the drag and drop interface using HTML5 Drag & Drop API with visual feedback and file validation.",
+            "dependencies": [
+              "5.2"
+            ],
+            "details": "Add drag-drop zone div with event listeners for dragenter, dragover, dragleave, and drop events. Implement visual feedback with CSS classes for hover states. Add file type validation (images, videos) and size limits. Prevent default browser behavior and provide clear visual cues for valid/invalid drops.",
+            "status": "pending",
+            "testStrategy": "Test drag events on desktop browsers, file type validation, size limit enforcement, visual feedback states, and fallback for unsupported browsers."
+          },
+          {
+            "id": 4,
+            "title": "Build File Input Fallback System",
+            "description": "Create traditional file input as fallback for devices that don't support drag & drop, with multiple file selection.",
+            "dependencies": [
+              "5.3"
+            ],
+            "details": "Add hidden file input with multiple attribute and accept filters for media types. Create styled button to trigger file input. Implement click handler to open file dialog. Ensure same validation logic applies to both drag-drop and file input methods. Style to match drag-drop zone aesthetics.",
+            "status": "pending",
+            "testStrategy": "Test file input on mobile devices, multiple file selection, file type filtering, and consistent validation between input methods."
+          },
+          {
+            "id": 5,
+            "title": "Develop AJAX Upload with Progress Tracking",
+            "description": "Implement asynchronous file upload using XMLHttpRequest with real-time progress indicators and error handling.",
+            "dependencies": [
+              "5.1",
+              "5.4"
+            ],
+            "details": "Create upload function using FormData and XMLHttpRequest. Implement progress event listener to update progress bars. Add error handling for network issues, file size limits, and server errors. Support concurrent uploads with individual progress tracking. Include retry mechanism for failed uploads.",
+            "status": "pending",
+            "testStrategy": "Test upload progress accuracy, concurrent file handling, error scenarios (network failure, large files), retry functionality, and server response handling."
+          },
+          {
+            "id": 6,
+            "title": "Create Canvas-Based Thumbnail Generation",
+            "description": "Implement client-side thumbnail generation using HTML5 Canvas API for immediate preview before upload completion.",
+            "dependencies": [
+              "5.4"
+            ],
+            "details": "Create thumbnail generator function using Canvas API. Implement image resizing while maintaining aspect ratio. Add support for different media types (images, video frames). Generate multiple thumbnail sizes (small, medium, large). Include fallback for unsupported file types with generic icons.",
+            "status": "pending",
+            "testStrategy": "Test thumbnail generation for various image formats, aspect ratio preservation, canvas rendering performance, and fallback icon display."
+          },
+          {
+            "id": 7,
+            "title": "Build Media Grid Display System",
+            "description": "Create the thumbnail grid display system with lazy loading, selection states, and media information overlay.",
+            "dependencies": [
+              "5.2",
+              "5.6"
+            ],
+            "details": "Implement thumbnail grid with lazy loading for performance. Add selection checkboxes for bulk operations. Create hover overlay showing file name, size, and upload date. Implement infinite scroll or pagination for large media collections. Add sorting options (date, name, size, type).",
+            "status": "pending",
+            "testStrategy": "Test lazy loading performance, selection functionality, overlay information accuracy, scroll behavior, and sorting mechanisms."
+          },
+          {
+            "id": 8,
+            "title": "Implement Media Management Actions",
+            "description": "Add bulk operations for media management including delete, move, and organize functionality with confirmation dialogs.",
+            "dependencies": [
+              "5.7"
+            ],
+            "details": "Create bulk selection interface with select all/none options. Implement delete confirmation modal with preview of selected items. Add move to folder functionality with folder creation. Include rename capability and metadata editing. Implement undo functionality for accidental deletions.",
+            "status": "pending",
+            "testStrategy": "Test bulk selection accuracy, confirmation dialog functionality, folder operations, rename validation, and undo mechanism reliability."
+          },
+          {
+            "id": 9,
+            "title": "Add Search and Filter Capabilities",
+            "description": "Implement search functionality and filtering options for media organization by type, date, size, and custom tags.",
+            "dependencies": [
+              "5.7"
+            ],
+            "details": "Create search input with real-time filtering. Add filter dropdowns for file type, upload date ranges, and file size. Implement tag system for media organization. Create advanced search with multiple criteria. Add search result highlighting and clear filters option.",
+            "status": "pending",
+            "testStrategy": "Test search accuracy, filter combinations, tag functionality, advanced search criteria, and performance with large media collections."
+          },
+          {
+            "id": 10,
+            "title": "Integrate with Existing Upload System",
+            "description": "Connect the media gallery with the existing product upload system and ensure seamless integration across the admin panel.",
+            "dependencies": [
+              "5.1",
+              "5.5",
+              "5.8"
+            ],
+            "details": "Create API endpoints for media selection in product forms. Implement media picker modal for existing products. Add media gallery links in admin navigation. Ensure consistent file storage and database schema. Create migration scripts for existing media files if needed.",
+            "status": "pending",
+            "testStrategy": "Test integration with product forms, media picker functionality, navigation consistency, file storage compatibility, and migration script reliability."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement Automatic Image Variant Generation",
+        "description": "Generate thumbnail, medium, and large variants for each uploaded image.",
+        "details": "On upload, use server-side Sharp (if available) or client-side Canvas API to create 200x200px (crop), 800px, and 1600px variants. Apply naming convention (filename_thumb.jpg, etc.) and store in same directory.",
+        "testStrategy": "Validate creation of all variants, correct sizing/cropping, and fallback to original if variant generation fails.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Enable WebP Format Conversion with Fallback",
+        "description": "Convert images to WebP format and provide JPEG/PNG fallback for unsupported browsers.",
+        "details": "Use Canvas toBlob() for WebP conversion client-side. Generate .webp for each variant. Update EJS templates to use <picture> element with browser feature detection for fallback.",
+        "testStrategy": "Test WebP usage on supported browsers, fallback on older browsers, and file size reduction. Validate visual quality.",
+        "priority": "high",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Design Media Library Modal for Image Selection",
+        "description": "Allow admin to select existing images from a modal overlay in product forms.",
+        "details": "Create modal overlay with grid of images, search/filter by filename, and single/multiple selection modes. Integrate with product forms for image selection.",
+        "testStrategy": "Test modal opening, image selection, search/filter functionality, and integration with product forms.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Media Usage Tracking System",
+        "description": "Track where each image is used across the site and prevent deletion if in use.",
+        "details": "Add new MariaDB tables: media_files and media_usage. Trigger usage tracking on image association with products. Provide UI warnings and badges for usage status.",
+        "testStrategy": "Test database tracking, usage listing, warning on delete, and badge/filter UI. Validate safe delete logic.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Integrate Progressive Image Loading",
+        "description": "Implement blur-to-sharp transition and lazy loading for catalog images.",
+        "details": "Use Base64 tiny placeholders for blur-up effect. Apply Intersection Observer for lazy loading and CSS transitions for smooth appearance. Support infinite scroll.",
+        "testStrategy": "Test placeholder display, transition smoothness, lazy loading performance, and compatibility with infinite scroll.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Develop Smart Masonry Image Grid",
+        "description": "Create adaptive Pinterest-style grid for collections gallery.",
+        "details": "Use CSS Grid or Masonry.js for responsive layout with variable columns (2 mobile, 3 tablet, 4 desktop). Maintain aspect ratios and smooth animations. Integrate lightbox for full-size view.",
+        "testStrategy": "Test grid responsiveness, aspect ratio maintenance, gap minimization, reflow on resize, and lightbox functionality.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Enable Bulk Media Operations",
+        "description": "Allow admins to select multiple images and perform batch actions.",
+        "details": "Add checkbox selection UI, 'Select All' toggle, bulk actions (delete, move, tag), and confirmation modal for destructive actions. Provide feedback for success/error.",
+        "testStrategy": "Test selection, bulk action execution, confirmation modal, and feedback messages for all operations.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Optimize Image Upload and Gallery Performance",
+        "description": "Ensure fast image upload, camera activation, and gallery loading per performance targets.",
+        "details": "Profile and optimize upload pipeline, camera activation (<500ms), and gallery load (<1s for 50 thumbnails). Apply compression and pagination as needed.",
+        "testStrategy": "Measure upload, activation, and gallery load times. Validate against performance targets and optimize bottlenecks.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          5,
+          6,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Security and Validation for Media Uploads",
+        "description": "Enforce file type, size, filename sanitization, CSRF, and permission checks for media management.",
+        "details": "Restrict uploads to JPEG, PNG, WebP, GIF. Limit file size to 10MB pre-compression. Sanitize filenames to remove special characters. Maintain CSRF tokens and admin-only access.",
+        "testStrategy": "Test upload restrictions, filename sanitization, CSRF protection, and permission enforcement for all media endpoints.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Update Database Schema for Media Management",
+        "description": "Apply schema changes for media_files and media_usage tables to support advanced media features.",
+        "details": "Create tables as specified in PRD. Add necessary indexes and foreign keys. Ensure backward compatibility and data migration if needed.",
+        "testStrategy": "Validate schema creation, data integrity, and migration. Test queries for usage tracking and media listing.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Analyze Current Schema and Define Target Changes",
+            "description": "Review the existing database schema and the PRD requirements to identify all necessary changes for media_files and media_usage tables, including new columns, indexes, and foreign keys.",
+            "dependencies": [],
+            "details": "Extract the current schema definitions for media_files and media_usage. Compare with PRD to list all required additions or modifications. Document the target schema, specifying data types, constraints, and relationships. Ensure all changes are non-breaking and compatible with existing data.\n<info added on 2025-10-07T19:38:33.256Z>\nThe schema analysis has been completed, identifying six existing tables and determining the need for two new tables: media_files and media_usage. The chosen strategy is to extend the schema (Option A), ensuring backward compatibility with zero breaking changes. All indexes and constraints have been documented. A technical decision was made to add a nullable media_id to the product_images table to maintain full compatibility. The target schema for media_files and media_usage includes the necessary data types, constraints, and relationships as per the PRD requirements. The schema documentation is available in the file sql/migrations/00_SCHEMA_ANALYSIS.md.\n</info added on 2025-10-07T19:38:33.256Z>",
+            "status": "in-progress",
+            "testStrategy": "Verify the documented target schema covers all PRD requirements and maintains backward compatibility."
+          },
+          {
+            "id": 2,
+            "title": "Design Migration Plan and Data Backup Strategy",
+            "description": "Develop a step-by-step migration plan that includes a robust data backup and rollback strategy to prevent data loss during schema updates.",
+            "dependencies": [
+              "15.1"
+            ],
+            "details": "Outline the migration sequence, including pre-migration data backup procedures. Specify backup methods suitable for shared hosting (e.g., mysqldump, pg_dump). Define rollback steps in case of migration failure. Document the plan for stakeholder review.\n<info added on 2025-10-07T19:38:37.098Z>\nMigration plan completed and documented in sql/migrations/01_MIGRATION_PLAN.md (16 KB). The plan includes five defined migration phases, a comprehensive backup strategy with three backup types, detailed rollback procedures for each phase, identification and mitigation of six key risks, an execution timeline of approximately one hour, a verification checklist, and a troubleshooting guide. The result is a production-ready plan, safe for execution.\n</info added on 2025-10-07T19:38:37.098Z>",
+            "status": "pending",
+            "testStrategy": "Test backup and restore procedures on a staging environment to ensure data can be recovered."
+          },
+          {
+            "id": 3,
+            "title": "Write Migration SQL Scripts for Schema Changes",
+            "description": "Create SQL migration scripts to implement the required schema changes for media_files and media_usage, including table creation/modification, indexes, and foreign keys.",
+            "dependencies": [
+              "15.2"
+            ],
+            "details": "Write SQL scripts that add or alter tables and columns as specified. Include creation of necessary indexes and foreign key constraints. Ensure scripts are idempotent and reversible where possible. Use ALTER TABLE for non-destructive changes and avoid dropping or renaming existing columns directly.\n<info added on 2025-10-07T19:38:42.238Z>\nAll required SQL migration scripts have been created and tested, including idempotent schema changes, verification queries, detailed comments, safety checks, and rollback support. The following files are included: 002_create_media_tables.sql, 003_extend_product_images.sql, 004_migrate_existing_data.sql, 999_rollback.sql, README.md, and run_migrations.sh (executable). Scripts are production-ready and have passed all tests.\n</info added on 2025-10-07T19:38:42.238Z>",
+            "status": "pending",
+            "testStrategy": "Apply scripts to a test database and verify schema updates without errors. Confirm reversibility by rolling back changes."
+          },
+          {
+            "id": 4,
+            "title": "Develop Data Migration and Compatibility Scripts",
+            "description": "Prepare scripts or procedures to migrate existing data to the new schema format, ensuring no data loss and maintaining backward compatibility.",
+            "dependencies": [
+              "15.3"
+            ],
+            "details": "Identify any data transformations needed due to schema changes (e.g., populating new columns, migrating relationships). Write SQL or application-level scripts to perform these migrations safely. Ensure that legacy data remains accessible and that the application can operate during the transition.",
+            "status": "pending",
+            "testStrategy": "Run migration scripts on a copy of production data and validate data integrity and accessibility."
+          },
+          {
+            "id": 5,
+            "title": "Test Migration Process in Staging Environment",
+            "description": "Execute the full migration process, including schema and data migration, in a staging environment to validate correctness and performance.",
+            "dependencies": [
+              "15.4"
+            ],
+            "details": "Apply the migration and data scripts to a staging database that mirrors production. Run application-level tests to ensure all media management features work as expected. Monitor for errors, performance issues, and verify that all indexes and foreign keys are correctly applied.\n<info added on 2025-10-07T19:38:49.795Z>\nMigration process completed successfully in the development environment.\n\nActions performed:\n- Backup created: backup_antes_migrations_20251007_202753.sql (58 KB)\n- Connection tested: gonzagas_dev@gonzagas_local\n- Initial state documented: 8 tables, 188 products, 188 product_images\n\nMigrations executed:\n- Migration 002: media_files and media_usage tables created\n- Migration 003: media_id added to product_images\n\nVerifications:\n- SHOW TABLES: 10 tables (8 old + 2 new)\n- media_files: 14 columns\n- media_usage: 5 columns\n- product_images: media_id present (NULLABLE)\n- Data integrity: 188 products intact\n- Zero data loss confirmed\n\nResult: Database ready for media management features.\n</info added on 2025-10-07T19:38:49.795Z>",
+            "status": "pending",
+            "testStrategy": "Perform automated and manual tests for schema integrity, data correctness, and application functionality."
+          },
+          {
+            "id": 6,
+            "title": "Deploy Migration to Production and Monitor",
+            "description": "Safely deploy the migration scripts to the production environment, monitor for issues, and provide a rollback plan if needed.",
+            "dependencies": [
+              "15.5"
+            ],
+            "details": "Schedule downtime or maintenance window if required by hosting constraints. Execute backup, apply migration scripts, and monitor logs for errors. Validate application functionality post-migration. Be prepared to execute rollback procedures if critical issues are detected.",
+            "status": "pending",
+            "testStrategy": "Monitor production for errors, run post-migration validation queries, and confirm with stakeholders that all features are operational."
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Apply Mobile-First and Bali/Boho Design Enhancements",
+        "description": "Ensure all new UI components follow dark mode, gold accents, touch targets, spacing, and typography requirements.",
+        "details": "Update CSS for dark backgrounds (#1a1a1a), gold accents (#c0a080), Poppins/Inter fonts, FontAwesome icons, and generous spacing. Ensure touch targets >=44x44px and immediate visual feedback.",
+        "testStrategy": "Review UI on mobile and desktop for design consistency, accessibility, and feedback. Validate touch target sizes and color usage.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          5,
+          8,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 17,
+        "title": "Document API Endpoints and Media Management Workflows",
+        "description": "Provide developer documentation for new endpoints, database schema, camera capture, and image processing pipeline.",
+        "details": "Write API docs for media endpoints, describe database changes, and provide implementation guides for camera and image processing. Include troubleshooting and best practices.",
+        "testStrategy": "Review documentation for completeness, clarity, and accuracy. Validate with developer feedback.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          5,
+          15
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 18,
+        "title": "Create User Documentation for Admins",
+        "description": "Prepare guides for mobile photo capture, media gallery organization, and product photography best practices.",
+        "details": "Write step-by-step instructions for using camera capture, organizing media, and optimizing product photos. Include troubleshooting for common issues.",
+        "testStrategy": "Validate documentation usability with admin users. Collect feedback and iterate.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          5,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-07T18:48:52.023Z",
+      "updated": "2025-10-07T19:12:20.799Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

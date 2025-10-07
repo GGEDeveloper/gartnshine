@@ -1,0 +1,11 @@
+# Task ID: 9
+# Title: Implement Media Usage Tracking System
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Track where each image is used across the site and prevent deletion if in use.
+# Details:
+Add new MariaDB tables: media_files and media_usage. Trigger usage tracking on image association with products. Provide UI warnings and badges for usage status.
+
+# Test Strategy:
+Test database tracking, usage listing, warning on delete, and badge/filter UI. Validate safe delete logic.

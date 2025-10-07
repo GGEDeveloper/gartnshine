@@ -1,0 +1,11 @@
+# Task ID: 11
+# Title: Develop Smart Masonry Image Grid
+# Status: pending
+# Dependencies: 5, 6
+# Priority: medium
+# Description: Create adaptive Pinterest-style grid for collections gallery.
+# Details:
+Use CSS Grid or Masonry.js for responsive layout with variable columns (2 mobile, 3 tablet, 4 desktop). Maintain aspect ratios and smooth animations. Integrate lightbox for full-size view.
+
+# Test Strategy:
+Test grid responsiveness, aspect ratio maintenance, gap minimization, reflow on resize, and lightbox functionality.

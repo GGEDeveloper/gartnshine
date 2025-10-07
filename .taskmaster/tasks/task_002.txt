@@ -1,0 +1,11 @@
+# Task ID: 2
+# Title: Add Multi-Camera Switch Functionality
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Allow users to toggle between front and rear cameras during capture.
+# Details:
+Use MediaDevices.enumerateDevices() to list available cameras. Implement UI toggle button in camera overlay. Switch constraints between facingMode: 'user' and 'environment'. Default to rear camera for quality.
+
+# Test Strategy:
+Verify toggle button visibility, smooth switching, and default camera selection on multiple mobile devices.

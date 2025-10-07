@@ -1,0 +1,73 @@
+# Task ID: 5
+# Title: Create Drag & Drop Media Gallery Interface
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Build a responsive media gallery with drag & drop upload and thumbnail grid.
+# Details:
+Develop `/admin/media-gallery` page using HTML5 Drag & Drop API and responsive grid layout. Integrate AJAX upload for multiple files, progress bar, and immediate preview. Use Canvas for thumbnail generation.
+
+# Test Strategy:
+Test drag & drop for single/multiple files, upload progress, error handling, and thumbnail display on desktop and mobile.
+
+# Subtasks:
+## 1. Create Media Gallery Route and Controller Structure [pending]
+### Dependencies: None
+### Description: Set up the backend route `/admin/media-gallery` and create the controller with basic CRUD operations for media management.
+### Details:
+Create route in routes/admin.js for GET /admin/media-gallery. Implement MediaGalleryController with methods: index() for gallery view, upload() for file handling, delete() for media removal, and getMedia() for AJAX requests. Set up middleware for admin authentication and file upload limits.
+
+## 2. Design Responsive Grid Layout Template [pending]
+### Dependencies: 5.1
+### Description: Create the main view template with responsive CSS Grid layout for displaying media thumbnails in an adaptive grid.
+### Details:
+Create /views/admin/media-gallery.ejs with responsive grid container. Implement CSS Grid with auto-fit columns: 2 on mobile, 3 on tablet, 4+ on desktop. Add media query breakpoints and ensure proper aspect ratio maintenance. Include empty state messaging and loading indicators.
+
+## 3. Implement HTML5 Drag & Drop Zone [pending]
+### Dependencies: 5.2
+### Description: Create the drag and drop interface using HTML5 Drag & Drop API with visual feedback and file validation.
+### Details:
+Add drag-drop zone div with event listeners for dragenter, dragover, dragleave, and drop events. Implement visual feedback with CSS classes for hover states. Add file type validation (images, videos) and size limits. Prevent default browser behavior and provide clear visual cues for valid/invalid drops.
+
+## 4. Build File Input Fallback System [pending]
+### Dependencies: 5.3
+### Description: Create traditional file input as fallback for devices that don't support drag & drop, with multiple file selection.
+### Details:
+Add hidden file input with multiple attribute and accept filters for media types. Create styled button to trigger file input. Implement click handler to open file dialog. Ensure same validation logic applies to both drag-drop and file input methods. Style to match drag-drop zone aesthetics.
+
+## 5. Develop AJAX Upload with Progress Tracking [pending]
+### Dependencies: 5.1, 5.4
+### Description: Implement asynchronous file upload using XMLHttpRequest with real-time progress indicators and error handling.
+### Details:
+Create upload function using FormData and XMLHttpRequest. Implement progress event listener to update progress bars. Add error handling for network issues, file size limits, and server errors. Support concurrent uploads with individual progress tracking. Include retry mechanism for failed uploads.
+
+## 6. Create Canvas-Based Thumbnail Generation [pending]
+### Dependencies: 5.4
+### Description: Implement client-side thumbnail generation using HTML5 Canvas API for immediate preview before upload completion.
+### Details:
+Create thumbnail generator function using Canvas API. Implement image resizing while maintaining aspect ratio. Add support for different media types (images, video frames). Generate multiple thumbnail sizes (small, medium, large). Include fallback for unsupported file types with generic icons.
+
+## 7. Build Media Grid Display System [pending]
+### Dependencies: 5.2, 5.6
+### Description: Create the thumbnail grid display system with lazy loading, selection states, and media information overlay.
+### Details:
+Implement thumbnail grid with lazy loading for performance. Add selection checkboxes for bulk operations. Create hover overlay showing file name, size, and upload date. Implement infinite scroll or pagination for large media collections. Add sorting options (date, name, size, type).
+
+## 8. Implement Media Management Actions [pending]
+### Dependencies: 5.7
+### Description: Add bulk operations for media management including delete, move, and organize functionality with confirmation dialogs.
+### Details:
+Create bulk selection interface with select all/none options. Implement delete confirmation modal with preview of selected items. Add move to folder functionality with folder creation. Include rename capability and metadata editing. Implement undo functionality for accidental deletions.
+
+## 9. Add Search and Filter Capabilities [pending]
+### Dependencies: 5.7
+### Description: Implement search functionality and filtering options for media organization by type, date, size, and custom tags.
+### Details:
+Create search input with real-time filtering. Add filter dropdowns for file type, upload date ranges, and file size. Implement tag system for media organization. Create advanced search with multiple criteria. Add search result highlighting and clear filters option.
+
+## 10. Integrate with Existing Upload System [pending]
+### Dependencies: 5.1, 5.5, 5.8
+### Description: Connect the media gallery with the existing product upload system and ensure seamless integration across the admin panel.
+### Details:
+Create API endpoints for media selection in product forms. Implement media picker modal for existing products. Add media gallery links in admin navigation. Ensure consistent file storage and database schema. Create migration scripts for existing media files if needed.
+

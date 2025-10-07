@@ -1,0 +1,551 @@
+# PRD: Mobile Camera & Media Management Enhancement
+## Gonzaga's Art & Shine - Sistema de Catálogo Online
+
+---
+
+## 📋 VISÃO GERAL
+
+### Contexto
+Sistema web existente para catálogo de joalharia em prata 925 com inspiração Bali/Boho. Stack: Node.js + Express + MariaDB + EJS templates. Atualmente funcional com gestão de produtos, stock e catálogo público.
+
+### Objetivo
+Adicionar funcionalidades mobile-first de captura de imagens e gestão avançada de media para otimizar o workflow do administrador e melhorar a experiência visual do catálogo.
+
+### Scope
+- **INCLUÍDO:** Mobile camera integration, media management avançado, image optimization
+- **EXCLUÍDO:** E-commerce completo, analytics avançado, AI features
+
+---
+
+## 🎯 PROBLEMAS A RESOLVER
+
+### Problema 1: Workflow Ineficiente de Adicionar Produtos
+**Situação Atual:** Admin está na loja física → vê produto novo → tira foto no telemóvel → transfere para computador → faz upload no admin → adiciona produto.
+
+**Impacto:** Demora muito tempo, produtos não são adicionados rapidamente, oportunidades de venda perdidas.
+
+**Solução Desejada:** Admin tira foto diretamente no admin mobile → produto criado imediatamente com foto otimizada.
+
+### Problema 2: Imagens Pesadas Afetam Performance
+**Situação Atual:** Uploads diretos de fotos de telemóvel (3-5MB cada), sem otimização, carregamento lento em shared hosting.
+
+**Impacto:** Site lento, experiência ruim, custos de bandwidth, limites de storage atingidos.
+
+**Solução Desejada:** Compressão automática, múltiplas variantes (thumbnail/medium/large), formato WebP com fallback.
+
+### Problema 3: Gestão de Media Difícil
+**Situação Atual:** Pasta /media com imagens, sem organização, difícil encontrar/reutilizar imagens, não sabe quais estão em uso.
+
+**Impacto:** Uploads duplicados, storage desperdiçado, dificuldade em manter organização.
+
+**Solução Desejada:** Interface visual drag & drop, tracking de uso, media library reutilizável, smart organization.
+
+---
+
+## 👥 PERSONAS & USER STORIES
+
+### Persona 1: Gonzaga (Administrador/Owner)
+**Contexto:** Está na loja física, recebe produtos novos, precisa adicionar ao catálogo rapidamente.
+
+**User Stories:**
+1. Como admin mobile, quero tirar foto diretamente no formulário de produto para não perder tempo com transferências
+2. Como admin, quero que as fotos sejam automaticamente otimizadas para não preocupar com tamanho/formato
+3. Como admin, quero alternar entre câmara frontal/traseira para usar a melhor qualidade
+4. Como admin, quero ver preview da foto antes de confirmar para garantir que ficou boa
+5. Como admin, quero criar produto rapidamente com informações mínimas e adicionar detalhes depois
+
+### Persona 2: Gonzaga (Gestor de Conteúdo)
+**Contexto:** Gere a galeria de imagens (/collections), organiza media, mantém o site atualizado.
+
+**User Stories:**
+1. Como gestor, quero interface visual para ver todas as imagens de uma vez
+2. Como gestor, quero fazer drag & drop de múltiplas imagens em vez de uploads individuais
+3. Como gestor, quero reutilizar imagens existentes sem fazer upload duplicado
+4. Como gestor, quero saber quais imagens estão sendo usadas antes de deletar
+5. Como gestor, quero organizar imagens por categorias/tags para encontrar facilmente
+
+### Persona 3: Cliente Final (Visitante Mobile)
+**Contexto:** Visita o site no telemóvel, quer ver produtos e galeria de imagens.
+
+**User Stories:**
+1. Como visitante mobile, quero que as imagens carreguem rápido mesmo com conexão lenta
+2. Como visitante, quero ver imagens em alta qualidade quando faço zoom
+3. Como visitante, quero navegação suave na galeria sem reloads constantes
+4. Como visitante, quero layout bonito que aproveite bem o espaço da tela
+
+---
+
+## 🚀 FUNCIONALIDADES REQUERIDAS
+
+## SPRINT 1: Mobile Camera Admin (PRIORIDADE MÁXIMA)
+
+### Feature 1.1: Mobile Camera Capture
+**Descrição:** Botão "Tirar Foto" nos formulários de produto (criar/editar) que ativa a câmara do dispositivo.
+
+**Requisitos Técnicos:**
+- HTML5 getUserMedia API para acesso à câmara
+- Canvas API para preview e manipulação
+- Fallback para input file tradicional em desktop
+- Compatibilidade: Chrome/Safari/Firefox mobile
+
+**Acceptance Criteria:**
+- [ ] Botão "Tirar Foto" visível apenas em dispositivos mobile
+- [ ] Ao clicar, solicita permissão de câmara ao utilizador
+- [ ] Stream de vídeo aparece em preview overlay
+- [ ] Botão "Capturar" tira a foto e fecha o overlay
+- [ ] Foto aparece como preview no formulário
+- [ ] Possível retomar foto se não gostar
+- [ ] Fallback para upload tradicional funciona
+
+**Implementação Sugerida:**
+- Criar `/public/js/camera-capture.js`
+- Adicionar componente em `/views/admin/products/form.ejs`
+- CSS específico em `/public/css/admin-camera.css`
+
+### Feature 1.2: Multi-Camera Switch
+**Descrição:** Alternar entre câmara frontal e traseira do dispositivo.
+
+**Requisitos Técnicos:**
+- MediaDevices.enumerateDevices() para listar câmaras
+- Constraints switching entre facingMode: 'user' e 'environment'
+- UI toggle button no camera overlay
+
+**Acceptance Criteria:**
+- [ ] Botão toggle câmara visível durante captura
+- [ ] Alterna suavemente entre câmaras sem crash
+- [ ] Mantém settings (zoom, etc) ao alternar se possível
+- [ ] Default para câmara traseira (melhor qualidade)
+
+### Feature 1.3: Real-time Image Compression
+**Descrição:** Comprimir imagem client-side antes de enviar ao servidor.
+
+**Requisitos Técnicos:**
+- Canvas API para resize
+- toBlob() com quality parameter
+- Target: reduzir 3-5MB para ~500KB
+- Manter aspect ratio original
+
+**Acceptance Criteria:**
+- [ ] Imagem capturada é automaticamente comprimida
+- [ ] Target size: máx 800px na maior dimensão
+- [ ] Quality: 85% JPEG
+- [ ] Preview mostra imagem já comprimida
+- [ ] Indicador visual de "Comprimindo..." durante processo
+- [ ] Upload mais rápido que sem compressão
+
+### Feature 1.4: Quick Product Creation Workflow
+**Descrição:** Formulário simplificado para criar produto rapidamente com foto.
+
+**Requisitos Técnicos:**
+- Nova rota `/admin/products/quick-add`
+- Campos obrigatórios mínimos: foto + nome + preço
+- Auto-gerar referência se vazio
+- Redirect para edição completa após criar
+
+**Acceptance Criteria:**
+- [ ] Formulário quick-add com apenas 4 campos: foto, nome, preço venda, família
+- [ ] Validação mínima (apenas obrigatórios)
+- [ ] Produto criado com status "active" por default
+- [ ] Após salvar, redirect para edição completa com mensagem "Adicione mais detalhes"
+- [ ] Acessível via botão destacado no admin mobile
+
+---
+
+## SPRINT 2: Advanced Media Management (ALTA PRIORIDADE)
+
+### Feature 2.1: Drag & Drop Gallery Interface
+**Descrição:** Interface visual moderna para gerir a pasta /media com drag & drop.
+
+**Requisitos Técnicos:**
+- HTML5 Drag & Drop API
+- Grid layout responsivo
+- Thumbnail generation via Canvas
+- AJAX upload sem page reload
+
+**Acceptance Criteria:**
+- [ ] Página `/admin/media-gallery` criada
+- [ ] Grid de thumbnails mostra todas as imagens de /media
+- [ ] Drag & drop de ficheiros para área designada funciona
+- [ ] Upload progress bar visível
+- [ ] Múltiplas imagens podem ser arrastadas de uma vez
+- [ ] Preview imediato após upload bem-sucedido
+- [ ] Mensagem de erro clara se upload falhar
+
+### Feature 2.2: Automatic Image Variants
+**Descrição:** Criar automaticamente 3 versões de cada imagem: thumbnail (200px), medium (800px), large (1600px).
+
+**Requisitos Técnicos:**
+- Server-side: Sharp library (se viável) ou Canvas API
+- Client-side fallback: Canvas API
+- Naming convention: filename_thumb.jpg, filename_medium.jpg, filename_large.jpg
+- Storage: mesmo diretório da original
+
+**Acceptance Criteria:**
+- [ ] Ao fazer upload, 3 versões são criadas automaticamente
+- [ ] Thumbnail: 200x200px (crop square)
+- [ ] Medium: 800px maior lado, aspect ratio mantido
+- [ ] Large: 1600px maior lado, aspect ratio mantido
+- [ ] Original também é mantida
+- [ ] Processo é invisível ao user (automático)
+- [ ] Se falhar, ainda salva a original
+
+### Feature 2.3: WebP Format Conversion
+**Descrição:** Converter automaticamente imagens para WebP com fallback para JPEG/PNG.
+
+**Requisitos Técnicos:**
+- Canvas toBlob() com type 'image/webp'
+- Criar versão .webp de cada variante
+- HTML <picture> element com fallback
+- Browser feature detection
+
+**Acceptance Criteria:**
+- [ ] Para cada imagem, versão .webp é criada
+- [ ] Templates EJS usam <picture> com source webp + fallback
+- [ ] WebP usado em browsers que suportam
+- [ ] JPEG/PNG usado automaticamente em browsers antigos
+- [ ] File size reduzido em ~30-50% vs JPEG
+- [ ] Qualidade visual mantida
+
+### Feature 2.4: Media Library Modal
+**Descrição:** Pop-up modal para selecionar imagens existentes em vez de fazer novo upload.
+
+**Requisitos Técnicos:**
+- Modal overlay com grid de imagens
+- Filtro/search por nome
+- Single/multiple selection mode
+- Integration com product forms
+
+**Acceptance Criteria:**
+- [ ] Botão "Escolher da Biblioteca" em product forms
+- [ ] Modal abre com todas as imagens da media library
+- [ ] Grid responsivo com thumbnails
+- [ ] Search box filtra por nome do ficheiro
+- [ ] Click seleciona imagem e fecha modal
+- [ ] Imagem selecionada aparece no form
+- [ ] Possível selecionar múltiplas imagens (checkboxes)
+
+### Feature 2.5: Media Usage Tracking
+**Descrição:** Sistema para saber onde cada imagem é usada no site.
+
+**Requisitos Técnicos:**
+- Nova tabela: media_usage (id, image_filename, used_in_table, used_in_id)
+- Trigger ao associar imagem a produto
+- Query para listar usos de uma imagem
+- UI warning ao tentar deletar imagem em uso
+
+**Acceptance Criteria:**
+- [ ] Database tracking de onde imagens são usadas
+- [ ] Ao deletar imagem, warning se está em uso
+- [ ] Lista "Usado em: Produto X, Galeria Y"
+- [ ] Badge "Em uso" vs "Não usado" nos thumbnails
+- [ ] Filter "Mostrar apenas não usadas" para cleanup
+- [ ] Safe delete: só permite se não estiver em uso
+
+---
+
+## SPRINT 3: UX Enhancements (MÉDIA PRIORIDADE)
+
+### Feature 3.1: Progressive Image Loading
+**Descrição:** Loading blur-to-sharp transition para imagens no catálogo.
+
+**Requisitos Técnicos:**
+- Base64 tiny placeholder (blur-up)
+- Intersection Observer para lazy loading
+- CSS transition smooth
+- Low Quality Image Placeholder (LQIP) technique
+
+**Acceptance Criteria:**
+- [ ] Placeholder blur aparece imediatamente
+- [ ] Full image carrega quando entra no viewport
+- [ ] Transition suave de blur para sharp
+- [ ] Performance melhorada (loading on-demand)
+- [ ] Works com infinite scroll
+
+### Feature 3.2: Smart Image Grid (Masonry)
+**Descrição:** Layout tipo Pinterest/Masonry para a galeria de collections.
+
+**Requisitos Técnicos:**
+- CSS Grid ou Masonry.js
+- Responsive breakpoints
+- Maintain aspect ratios
+- Smooth animations
+
+**Acceptance Criteria:**
+- [ ] Grid adaptativo com colunas variáveis (mobile: 2, tablet: 3, desktop: 4)
+- [ ] Imagens mantêm aspect ratio original
+- [ ] Sem gaps grandes entre imagens
+- [ ] Smooth reflow ao resize window
+- [ ] Click abre lightbox com imagem full size
+
+### Feature 3.3: Bulk Media Operations
+**Descrição:** Selecionar múltiplas imagens e aplicar operações em lote.
+
+**Requisitos Técnicos:**
+- Checkbox selection UI
+- "Select All" toggle
+- Bulk actions: Delete, Move to folder, Add tags
+- Confirmation modal para ações destrutivas
+
+**Acceptance Criteria:**
+- [ ] Checkbox em cada thumbnail
+- [ ] "Selecionar Todas" button
+- [ ] Counter "X selecionadas"
+- [ ] Dropdown "Ações em lote"
+- [ ] Delete: confirmation modal
+- [ ] Ações aplicadas a todas selecionadas
+- [ ] Success/error feedback claro
+
+---
+
+## 🎨 DESIGN REQUIREMENTS
+
+### Visual Style
+- **Tema:** Dark mode existente, manter identidade Bali/Boho
+- **Cores:** Acentos dourados (#c0a080), fundo escuro (#1a1a1a)
+- **Tipografia:** Poppins (headings), Inter (body) - manter existente
+- **Ícones:** FontAwesome 6 (já em uso)
+
+### Mobile UI Guidelines
+- **Touch targets:** Mínimo 44x44px
+- **Spacing:** Generoso para evitar miss-clicks
+- **Buttons:** Large, high contrast, clear labels
+- **Feedback:** Visual imediato em todas as ações
+- **Loading states:** Sempre visível durante processing
+
+### Camera Interface Design
+```
+┌─────────────────────────┐
+│  [x] Close    [🔄] Flip │
+│                         │
+│                         │
+│   CAMERA PREVIEW        │
+│                         │
+│                         │
+│     [ 📷 Capturar ]     │
+└─────────────────────────┘
+```
+
+### Media Gallery Interface Design
+```
+┌─────────────────────────────────┐
+│ Media Gallery       [+ Upload]  │
+├─────────────────────────────────┤
+│ [Search...] [Filter▼] [Grid▼]  │
+├─────────────────────────────────┤
+│ ┌───┐ ┌───┐ ┌───┐ ┌───┐       │
+│ │img│ │img│ │img│ │img│       │
+│ └───┘ └───┘ └───┘ └───┘       │
+│ ┌───┐ ┌───┐ ┌───┐ ┌───┐       │
+│ │img│ │img│ │img│ │img│       │
+│ └───┘ └───┘ └───┘ └───┘       │
+└─────────────────────────────────┘
+```
+
+---
+
+## 🔧 TECHNICAL REQUIREMENTS
+
+### Stack Constraints
+- **Manter:** Node.js + Express + MariaDB + EJS
+- **Adicionar:** Sharp (optional, server-side image processing)
+- **Browser APIs:** getUserMedia, Canvas, Drag&Drop, IntersectionObserver
+- **No frameworks pesados:** Vanilla JS ou bibliotecas leves
+
+### Performance Targets
+- **Image upload:** < 2 segundos para foto comprimida
+- **Camera activation:** < 500ms
+- **Gallery load:** < 1 segundo para 50 thumbnails
+- **Compression ratio:** 80-90% size reduction
+- **WebP savings:** 30-50% vs JPEG
+
+### Compatibility Requirements
+- **Mobile:** iOS Safari 14+, Chrome Android 90+
+- **Desktop:** Chrome 90+, Firefox 88+, Safari 14+
+- **Graceful degradation:** Fallback para upload tradicional
+- **Progressive enhancement:** Funcionalidades avançadas se disponíveis
+
+### Security Requirements
+- **File validation:** Apenas imagens (JPEG, PNG, WebP, GIF)
+- **File size limit:** Máx 10MB antes compressão
+- **Sanitize filenames:** Remove caracteres especiais
+- **CSRF protection:** Manter tokens existentes
+- **Permission checks:** Admin only para media management
+
+### Database Changes
+```sql
+-- Nova tabela para tracking de media
+CREATE TABLE media_files (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    filename VARCHAR(255) UNIQUE NOT NULL,
+    original_filename VARCHAR(255),
+    file_size INT,
+    mime_type VARCHAR(100),
+    width INT,
+    height INT,
+    has_thumbnail BOOLEAN DEFAULT 0,
+    has_medium BOOLEAN DEFAULT 0,
+    has_large BOOLEAN DEFAULT 0,
+    has_webp BOOLEAN DEFAULT 0,
+    uploaded_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (uploaded_by) REFERENCES users(id)
+);
+
+CREATE TABLE media_usage (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    media_id INT NOT NULL,
+    used_in_table VARCHAR(100) NOT NULL,
+    used_in_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (media_id) REFERENCES media_files(id) ON DELETE CASCADE,
+    INDEX idx_media_id (media_id),
+    INDEX idx_usage (used_in_table, used_in_id)
+);
+```
+
+---
+
+## 📊 SUCCESS METRICS
+
+### Performance Metrics
+- [ ] Page load time reduzido em 40%
+- [ ] Image file sizes reduzidos em 60%
+- [ ] Upload speed aumentado em 50%
+- [ ] Storage usage otimizado em 30%
+
+### User Experience Metrics
+- [ ] Tempo para adicionar produto reduzido de 5min para 1min
+- [ ] 90% dos uploads feitos via mobile camera
+- [ ] Zero uploads duplicados
+- [ ] 100% das imagens com múltiplas variantes
+
+### Business Metrics
+- [ ] Mais produtos adicionados por semana (+200%)
+- [ ] Catálogo sempre atualizado (lag < 24h)
+- [ ] Bounce rate reduzido (imagens carregam rápido)
+- [ ] Engagement aumentado na galeria
+
+---
+
+## 🚧 CONSTRAINTS & DEPENDENCIES
+
+### Technical Constraints
+- **Shared hosting:** Recursos limitados (CPU, RAM, storage)
+- **No Node.js modules pesados:** Evitar Sharp se possível, usar Canvas API
+- **Backward compatibility:** Não quebrar funcionalidades existentes
+- **Mobile-first:** Mas desktop também deve funcionar
+
+### Dependencies
+- Multer já instalado (file uploads)
+- Express session já configurado
+- Middleware de auth já existe
+- Sistema de notificações já implementado
+
+### Risks & Mitigations
+| Risco | Impacto | Probabilidade | Mitigação |
+|-------|---------|---------------|-----------|
+| Browser não suporta getUserMedia | Alto | Baixa | Fallback para upload tradicional |
+| Sharp não funciona em shared hosting | Médio | Média | Client-side Canvas fallback |
+| Storage limits atingidos | Alto | Média | Cleanup de imagens não usadas, compression |
+| Performance issues com muitas imagens | Médio | Média | Pagination, lazy loading, thumbnails |
+
+---
+
+## 📅 IMPLEMENTATION PHASES
+
+### Phase 1: Foundation (SPRINT 1)
+**Objetivo:** Camera capture funcional em mobile admin
+**Duração:** 2 semanas
+**Entregáveis:**
+- Camera capture component
+- Multi-camera switch
+- Real-time compression
+- Quick product creation
+
+### Phase 2: Media Management (SPRINT 2)
+**Objetivo:** Advanced media management system
+**Duração:** 2 semanas
+**Entregáveis:**
+- Drag & drop gallery
+- Automatic image variants
+- WebP conversion
+- Media library modal
+- Usage tracking
+
+### Phase 3: UX Polish (SPRINT 3)
+**Objetivo:** Enhanced user experience
+**Duração:** 1 semana
+**Entregáveis:**
+- Progressive image loading
+- Masonry grid layout
+- Bulk operations
+- Performance optimization
+
+---
+
+## ✅ ACCEPTANCE CRITERIA (GLOBAL)
+
+### Must Have (P0)
+- [ ] Camera capture funciona em iOS e Android
+- [ ] Imagens são automaticamente comprimidas
+- [ ] Múltiplas variantes criadas (thumb/medium/large)
+- [ ] Media gallery com drag & drop funcional
+- [ ] Tracking de uso de imagens implementado
+- [ ] WebP com fallback funciona
+
+### Should Have (P1)
+- [ ] Multi-camera switch
+- [ ] Progressive image loading
+- [ ] Masonry grid layout
+- [ ] Bulk operations
+
+### Nice to Have (P2)
+- [ ] Image annotations
+- [ ] Storage analytics dashboard
+- [ ] Auto-tagging por content
+- [ ] Duplicate detection
+
+---
+
+## 📚 DOCUMENTATION NEEDS
+
+### Developer Documentation
+- API endpoints para media management
+- Database schema changes
+- Camera capture implementation guide
+- Image processing pipeline documentation
+
+### User Documentation
+- Como tirar fotos no admin mobile
+- Como organizar a media gallery
+- Melhores práticas para fotografia de produtos
+- Troubleshooting common issues
+
+---
+
+## 🔍 OUT OF SCOPE
+
+Claramente **NÃO** incluído neste PRD:
+- ❌ E-commerce completo (orders, payments)
+- ❌ Shopping cart system
+- ❌ AI image analysis/tagging
+- ❌ Advanced analytics dashboard
+- ❌ Video processing
+- ❌ Social media auto-posting
+- ❌ Email marketing integration
+- ❌ Multi-language support
+- ❌ Customer reviews system
+
+---
+
+## 📞 STAKEHOLDER SIGN-OFF
+
+**Project Owner:** Gonzaga (Gonzaga's Art & Shine)
+**Technical Lead:** [Development Team]
+**Priority Level:** HIGH
+**Target Launch:** Q2 2025
+
+**Approved:** _______________  
+**Date:** _______________
+
