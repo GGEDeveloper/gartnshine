@@ -1,0 +1,269 @@
+<header class="header-v2">
+    <nav class="navbar-v2" role="navigation" aria-label="Navegação principal">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="/" class="brand-logo" aria-label="Gonzaga's Art & Shine - Página inicial">
+                <div class="logo-image">
+                    <img src="/images/logo.svg" alt="Gonzaga's Art & Shine" width="40" height="40">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Gonzaga's</span>
+                    <span class="brand-tagline">Art & Shine</span>
+                </div>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-desktop" aria-label="Menu principal">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item dropdown" role="none">
+                        <a href="/catalog" 
+                           class="nav-link dropdown-trigger" 
+                           role="menuitem" 
+                           aria-haspopup="true" 
+                           aria-expanded="false"
+                           id="catalog-menu-trigger">
+                            <span>Coleção</span>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </a>
+                        
+                        <!-- Mega Menu -->
+                        <div class="dropdown-menu mega-menu" 
+                             role="menu" 
+                             aria-labelledby="catalog-menu-trigger">
+                            <div class="mega-menu-content">
+                                <div class="menu-section">
+                                    <h4>Por Categoria</h4>
+                                    <ul class="menu-list" role="menu">
+                                        <li role="none">
+                                            <a href="/catalog?category=1" role="menuitem">Anéis</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/catalog?category=2" role="menuitem">Brincos</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/catalog?category=3" role="menuitem">Colares</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/catalog?category=4" role="menuitem">Pulseiras</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/catalog" role="menuitem">Ver Todas</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="menu-section">
+                                    <h4>Em Destaque</h4>
+                                    <div class="featured-mini" id="navFeaturedProducts">
+                                        <!-- Dynamic content loaded via JavaScript -->
+                                    </div>
+                                </div>
+                                
+                                <div class="menu-section">
+                                    <h4>Sobre Nós</h4>
+                                    <ul class="menu-list" role="menu">
+                                        <li role="none">
+                                            <a href="/sobre" role="menuitem">Nossa História</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/artesanal" role="menuitem">Processo Artesanal</a>
+                                        </li>
+                                        <li role="none">
+                                            <a href="/contactos" role="menuitem">Contactos</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item" role="none">
+                        <a href="/sobre" class="nav-link" role="menuitem">Sobre Nós</a>
+                    </li>
+                    
+                    <li class="nav-item" role="none">
+                        <a href="/contactos" class="nav-link" role="menuitem">Contactos</a>
+                    </li>
+                </ul>
+                
+                <!-- Search Bar -->
+                <div class="nav-search" role="search">
+                    <div class="search-container-nav">
+                        <input type="text" 
+                               class="search-input-v2" 
+                               placeholder="Pesquisar joias..." 
+                               autocomplete="off"
+                               aria-label="Pesquisar produtos"
+                               id="nav-search-input">
+                        <button class="search-btn" 
+                                type="button" 
+                                aria-label="Pesquisar">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                        
+                        <!-- Search Results Dropdown -->
+                        <div class="search-results-nav" 
+                             id="navSearchResults" 
+                             role="listbox" 
+                             aria-label="Resultados da pesquisa">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="nav-actions">
+                    <a href="https://wa.me/351XXXXXXXXX?text=Olá! Gostaria de saber mais sobre as vossas joias." 
+                       class="btn-nav-whatsapp" 
+                       target="_blank"
+                       aria-label="Contactar via WhatsApp">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span class="btn-text">WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-nav-toggle" 
+                    type="button"
+                    aria-label="Abrir menu de navegação"
+                    aria-expanded="false"
+                    aria-controls="mobile-nav-overlay">
+                <span class="hamburger-line" aria-hidden="true"></span>
+                <span class="hamburger-line" aria-hidden="true"></span>
+                <span class="hamburger-line" aria-hidden="true"></span>
+                <span class="sr-only">Menu</span>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-nav-overlay" 
+             id="mobile-nav-overlay"
+             role="dialog" 
+             aria-label="Menu de navegação móvel"
+             aria-hidden="true">
+            <div class="mobile-nav-content">
+                <!-- Mobile Search -->
+                <div class="mobile-search" role="search">
+                    <div class="search-container-mobile">
+                        <input type="text" 
+                               class="search-input-mobile" 
+                               placeholder="Pesquisar produtos..."
+                               aria-label="Pesquisar produtos">
+                        <button class="search-btn-mobile" 
+                                type="button" 
+                                aria-label="Pesquisar">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <nav class="mobile-menu" role="navigation" aria-label="Menu principal móvel">
+                    <ul class="mobile-menu-list" role="menu">
+                        <li class="mobile-menu-item" role="none">
+                            <a href="/" class="mobile-menu-link" role="menuitem">
+                                <i class="fas fa-home" aria-hidden="true"></i>
+                                <span>Início</span>
+                            </a>
+                        </li>
+                        
+                        <li class="mobile-menu-item expandable" role="none">
+                            <button class="mobile-menu-trigger" 
+                                    type="button"
+                                    aria-expanded="false"
+                                    aria-controls="mobile-catalog-submenu">
+                                <i class="fas fa-gem" aria-hidden="true"></i>
+                                <span>Coleção</span>
+                                <i class="fas fa-chevron-down expand-icon" aria-hidden="true"></i>
+                            </button>
+                            
+                            <ul class="mobile-submenu" id="mobile-catalog-submenu" role="menu">
+                                <li role="none">
+                                    <a href="/catalog" class="mobile-submenu-link" role="menuitem">
+                                        Todas as Peças
+                                    </a>
+                                </li>
+                                <li role="none">
+                                    <a href="/catalog?category=1" class="mobile-submenu-link" role="menuitem">
+                                        Anéis
+                                    </a>
+                                </li>
+                                <li role="none">
+                                    <a href="/catalog?category=2" class="mobile-submenu-link" role="menuitem">
+                                        Brincos
+                                    </a>
+                                </li>
+                                <li role="none">
+                                    <a href="/catalog?category=3" class="mobile-submenu-link" role="menuitem">
+                                        Colares
+                                    </a>
+                                </li>
+                                <li role="none">
+                                    <a href="/catalog?category=4" class="mobile-submenu-link" role="menuitem">
+                                        Pulseiras
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <li class="mobile-menu-item" role="none">
+                            <a href="/sobre" class="mobile-menu-link" role="menuitem">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <span>Sobre Nós</span>
+                            </a>
+                        </li>
+                        
+                        <li class="mobile-menu-item" role="none">
+                            <a href="/contactos" class="mobile-menu-link" role="menuitem">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                                <span>Contactos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Contact -->
+                <div class="mobile-contact">
+                    <h4>Contactos Diretos</h4>
+                    
+                    <a href="tel:+351XXXXXXXXX" class="contact-item">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        <div class="contact-info">
+                            <span class="contact-label">Telefone</span>
+                            <span class="contact-value">+351 XXX XXX XXX</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://wa.me/351XXXXXXXXX" 
+                       class="contact-item whatsapp" 
+                       target="_blank">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <div class="contact-info">
+                            <span class="contact-label">WhatsApp</span>
+                            <span class="contact-value">Mensagem direta</span>
+                        </div>
+                    </a>
+                    
+                    <a href="mailto:info@gonzagasartshine.com" class="contact-item">
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                        <div class="contact-info">
+                            <span class="contact-label">Email</span>
+                            <span class="contact-value">info@gonzagasartshine.com</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Close Button -->
+                <button class="mobile-nav-close" 
+                        type="button"
+                        aria-label="Fechar menu">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Progress Bar (optional) -->
+    <div class="reading-progress" role="progressbar" aria-label="Progresso da página"></div>
+</header>

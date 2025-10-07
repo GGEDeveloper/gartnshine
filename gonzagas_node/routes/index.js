@@ -453,6 +453,48 @@ router.get('/search', async (req, res) => {
   }
 });
 
+// Homepage V2 route
+router.get('/index-v2', async (req, res) => {
+  try {
+    res.render('index-v2', {
+      title: 'Gonzaga\'s Art & Shine - Joias de Prata 925 Únicas',
+      page: 'homepage-v2'
+    });
+  } catch (error) {
+    console.error('Homepage V2 error:', error);
+    res.status(500).render('error', { 
+      message: 'Erro ao carregar página inicial' 
+    });
+  }
+});
+
+// API endpoint for navigation featured products
+router.get('/api/nav-featured', async (req, res) => {
+  try {
+    const { pool } = require('../config/database');
+    const [featured] = await pool.query(`
+      SELECT p.id, p.reference, p.name, p.sale_price,
+             (SELECT pi.image_filename FROM product_images pi 
+              WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image
+      FROM products p
+      WHERE p.is_active = 1 AND p.featured = 1
+      ORDER BY p.created_at DESC
+      LIMIT 3
+    `);
+    
+    res.json({
+      success: true,
+      data: featured
+    });
+  } catch (error) {
+    console.error('Nav featured API error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to load navigation featured products'
+    });
+  }
+});
+
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
