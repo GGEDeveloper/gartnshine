@@ -205,7 +205,7 @@ router.post('/api/media/upload', upload.array('file', 10), [
         } = req.body;
         
         const uploadedFiles = [];
-        const errors = [];
+        const uploadErrors = [];
         
         for (const file of req.files) {
             try {
@@ -223,7 +223,7 @@ router.post('/api/media/upload', upload.array('file', 10), [
                 
             } catch (uploadError) {
                 console.error(`Upload error for ${file.originalname}:`, uploadError);
-                errors.push({
+                uploadErrors.push({
                     filename: file.originalname,
                     error: uploadError.message
                 });
@@ -234,7 +234,7 @@ router.post('/api/media/upload', upload.array('file', 10), [
             return res.status(400).json({
                 success: false,
                 message: 'Falha no upload de todos os ficheiros',
-                errors
+                errors: uploadErrors
             });
         }
         
@@ -244,9 +244,9 @@ router.post('/api/media/upload', upload.array('file', 10), [
             media: uploadedFiles
         };
         
-        if (errors.length > 0) {
+        if (uploadErrors.length > 0) {
             response.partial = true;
-            response.errors = errors;
+            response.errors = uploadErrors;
         }
         
         res.json(response);
