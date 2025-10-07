@@ -310,6 +310,44 @@ router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyC
 
 // Product Management Routes
 router.get('/products', adminSessionRequired, ProductController.index);
+
+// Products V2 - Modern Cards View
+router.get('/products-v2', adminSessionRequired, async (req, res) => {
+  try {
+    const { search = '' } = req.query;
+    const { pool } = require('../config/database');
+    
+    // Get products with images
+    const [products] = await pool.query(`
+      SELECT p.*, pf.name as family_name,
+             (SELECT pi.image_filename FROM product_images pi 
+              WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE p.is_active = 1
+      ${search ? 'AND (p.name LIKE ? OR p.reference LIKE ?)' : ''}
+      ORDER BY p.created_at DESC
+      LIMIT 100
+    `, search ? [`%${search}%`, `%${search}%`] : []);
+    
+    // Get categories
+    const [categories] = await pool.query(`
+      SELECT id, name FROM product_families ORDER BY name
+    `);
+    
+    res.render('admin/products-v2', {
+      title: 'Produtos V2 - Admin',
+      user: req.session.user,
+      products: products,
+      categories: categories,
+      searchQuery: search
+    });
+  } catch (error) {
+    console.error('Products V2 error:', error);
+    res.status(500).send('Error loading products V2');
+  }
+});
+
 router.get('/products/add', adminSessionRequired, ProductController.create);
 router.post('/products/create', 
   adminSessionRequired, 
