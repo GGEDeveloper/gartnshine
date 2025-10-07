@@ -220,6 +220,57 @@ router.get('/product/:id/details-uc', ProductController.showProductDetailUnderCo
 // Product detail page
 router.get('/product/:id', ProductController.showProductDetailUnderConstruction);
 
+// Product detail route for WhatsApp
+router.get('/catalog/product/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { pool } = require('../config/database');
+    
+    const [results] = await pool.execute(`
+      SELECT p.*, pf.name as family_name,
+             GROUP_CONCAT(pi.image_filename ORDER BY pi.is_primary DESC) as images
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      LEFT JOIN product_images pi ON p.id = pi.product_id
+      WHERE p.id = ? AND p.is_active = 1
+      GROUP BY p.id
+    `, [id]);
+    
+    if (results.length === 0) {
+      return res.status(404).render('error', { message: 'Produto não encontrado' });
+    }
+    
+    const product = results[0];
+    product.images = product.images ? product.images.split(',') : [];
+    
+    // WhatsApp message
+    const whatsappMessage = `Olá! Gostaria de informações sobre:
+
+*${product.name}*
+Referência: ${product.reference}
+${product.sale_price ? `Preço: €${parseFloat(product.sale_price).toFixed(2)}` : 'Preço sob consulta'}
+
+Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
+    
+    const whatsappData = {
+      number: process.env.WHATSAPP_NUMBER || '351XXXXXXXXX',
+      encodedMessage: encodeURIComponent(whatsappMessage)
+    };
+    
+    res.render('catalog/product-detail', { 
+      product, 
+      whatsappData,
+      layout: 'layouts/main',
+      title: `${product.name} - Gonzaga's Art & Shine`,
+      siteTitle: 'Gonzaga\'s Art & Shine'
+    });
+    
+  } catch (error) {
+    console.error('Product error:', error);
+    res.status(500).render('error', { message: 'Erro interno' });
+  }
+});
+
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
