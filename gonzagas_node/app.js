@@ -450,6 +450,24 @@ app.use('/api', apiRouter);
 const mediaRoutes = require('./routes/admin/media');
 app.use('/admin', mediaRoutes);
 
+// === FASE 6: ANALYTICS ROUTES ===
+const analyticsRoutes = require('./routes/admin/analytics');
+app.use('/admin', analyticsRoutes);
+
+// === ANALYTICS CRON JOB (Daily Stats) ===
+const cron = require('node-cron');
+const Analytics = require('./models/Analytics');
+
+// Run daily at midnight (00:00)
+cron.schedule('0 0 * * *', async () => {
+    try {
+        await Analytics.generateDailyStats();
+        console.log(`✅ Daily stats generated: ${new Date().toISOString()}`);
+    } catch (error) {
+        console.error('❌ Error generating daily stats:', error);
+    }
+});
+
 // Tratamento de erros 404 (deve ficar APÓS todos os routers)
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - 404 Not Found: ${req.url}`);
