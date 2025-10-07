@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const expressLayouts = require('express-ejs-layouts');
 const { pool } = require('./config/database');
 const SiteSettings = require('./models/SiteSettings'); // Added for site settings
@@ -48,6 +50,62 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// 1. Compression middleware (PRIMEIRO)
+app.use(compression({
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  },
+  level: 6, // Balanço entre CPU e compressão
+  threshold: 1024 // Só comprimir files > 1KB
+}));
+
+// 2. Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://cdn.jsdelivr.net", "https://code.jquery.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    }
+  },
+  crossOriginEmbedderPolicy: false // Para compatibilidade
+}));
+
+// 3. Rate limiting global
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: (req) => {
+    // Diferentes limits baseado no tipo de request
+    if (req.path.startsWith('/admin')) {
+      return 200; // Admin precisa mais requests
+    }
+    if (req.path.startsWith('/api')) {
+      return 100; // API mais restritivo
+    }
+    return 300; // Público mais generoso
+  },
+  message: {
+    error: 'Demasiados pedidos, tente novamente em 15 minutos',
+    retryAfter: 15 * 60
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // SKIP certas rotas essenciais
+  skip: (req) => {
+    return req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2)$/);
+  }
+});
+
+app.use(globalLimiter);
 
 // Middleware básico
 app.use(express.json());
@@ -250,8 +308,11 @@ app.use(cors({
   credentials: true
 }));
 
-// Serve static files with proper headers and MIME types
+// Serve static files with proper headers, MIME types, and caching
 app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: process.env.NODE_ENV === 'production' ? '7d' : '1h',
+  etag: true,
+  lastModified: true,
   setHeaders: function (res, filePathString, stat) { 
     // Set CORP header for all static files
     res.header('Cross-Origin-Resource-Policy', 'same-site');
@@ -268,19 +329,36 @@ app.use(express.static(path.join(__dirname, 'public'), {
       '.jpg': 'image/jpg',
       '.jpeg': 'image/jpeg',
       '.gif': 'image/gif',
+      '.webp': 'image/webp',
       '.svg': 'image/svg+xml',
       '.wav': 'audio/wav',
       '.mp4': 'video/mp4',
       '.woff': 'application/font-woff',
+      '.woff2': 'font/woff2',
       '.ttf': 'application/font-ttf',
       '.eot': 'application/vnd.ms-fontobject',
       '.otf': 'application/font-otf',
       '.wasm': 'application/wasm',
-      '.ico': 'image/x-icon' // MIME type for favicon.ico
+      '.ico': 'image/x-icon'
     };
     
     // Set the Content-Type header
     res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+    
+    // Caching específico por tipo de arquivo
+    if (ext.match(/\.(css|js)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable'); // 1 semana
+    } else if (ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 dias
+    } else if (ext.match(/\.(woff|woff2|eot|ttf)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1 ano
+    }
+    
+    // Adicionar header de compressão para tipos específicos
+    const contentType = res.getHeader('content-type');
+    if (contentType && /text|javascript|json|css|xml|svg/.test(contentType)) {
+      res.setHeader('Vary', 'Accept-Encoding');
+    }
   }
 }));
 
@@ -289,7 +367,15 @@ app.use(['/css/*', '/js/*', '/*.ico', '/*.png', '/*.jpg', '/*.jpeg', '/*.gif', '
   console.error(`Static file not found: ${req.originalUrl}`);
   res.status(404).send('File not found');
 });
-app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'products')));
+// Uploads path com proteção e caching
+app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'products'), {
+  maxAge: '30d',
+  etag: true,
+  setHeaders: (res, path, stat) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'public, max-age=2592000');
+  }
+}));
 
 // Set up view engine
 app.set('view engine', 'ejs');
