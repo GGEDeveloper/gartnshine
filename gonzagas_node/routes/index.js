@@ -330,6 +330,129 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product-v2/${id}`;
   }
 });
 
+// Search Results Page
+router.get('/search', async (req, res) => {
+  try {
+    const { 
+      q: query = '', 
+      page = 1, 
+      sort = 'relevance',
+      categories = '',
+      inStock,
+      priceMin,
+      priceMax
+    } = req.query;
+    
+    const { pool } = require('../config/database');
+    const limit = 12;
+    const offset = (parseInt(page) - 1) * limit;
+    
+    // Build WHERE conditions
+    let whereConditions = ['p.is_active = 1'];
+    let params = [];
+    
+    // Search query
+    if (query && query.trim()) {
+      whereConditions.push('(p.name LIKE ? OR p.reference LIKE ? OR p.description LIKE ?)');
+      const searchTerm = `%${query.trim()}%`;
+      params.push(searchTerm, searchTerm, searchTerm);
+    }
+    
+    // Category filter
+    if (categories) {
+      const categoryIds = categories.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
+      if (categoryIds.length > 0) {
+        whereConditions.push(`p.family_id IN (${categoryIds.join(',')})`);
+      }
+    }
+    
+    // Stock filter
+    if (inStock) {
+      whereConditions.push('p.current_stock > 0');
+    }
+    
+    // Price filter
+    if (priceMin && !isNaN(priceMin)) {
+      whereConditions.push('p.sale_price >= ?');
+      params.push(parseFloat(priceMin));
+    }
+    if (priceMax && !isNaN(priceMax)) {
+      whereConditions.push('p.sale_price <= ?');
+      params.push(parseFloat(priceMax));
+    }
+    
+    // Build ORDER BY
+    let orderBy = 'p.featured DESC, p.created_at DESC';
+    switch (sort) {
+      case 'price_asc':
+        orderBy = 'p.sale_price ASC';
+        break;
+      case 'price_desc':
+        orderBy = 'p.sale_price DESC';
+        break;
+      case 'name_asc':
+        orderBy = 'p.name ASC';
+        break;
+      case 'newest':
+        orderBy = 'p.created_at DESC';
+        break;
+    }
+    
+    const whereClause = whereConditions.join(' AND ');
+    
+    // Get total count
+    const [countResult] = await pool.query(
+      `SELECT COUNT(*) as total FROM products p WHERE ${whereClause}`,
+      params
+    );
+    const totalResults = countResult[0].total;
+    const totalPages = Math.ceil(totalResults / limit);
+    
+    // Get products
+    const [products] = await pool.query(`
+      SELECT p.*, pf.name as family_name,
+             (SELECT pi.image_filename FROM product_images pi 
+              WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image,
+             p.current_stock > 0 as in_stock
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE ${whereClause}
+      ORDER BY ${orderBy}
+      LIMIT ? OFFSET ?
+    `, [...params, limit, offset]);
+    
+    // Get categories for filters
+    const [categoriesData] = await pool.query(`
+      SELECT pf.id, pf.name, COUNT(p.id) as count
+      FROM product_families pf
+      LEFT JOIN products p ON p.family_id = pf.id AND p.is_active = 1
+      GROUP BY pf.id, pf.name
+      HAVING count > 0
+      ORDER BY pf.name
+    `);
+    
+    res.render('catalog/search-results', {
+      query: query,
+      products: products,
+      totalResults: totalResults,
+      currentPage: parseInt(page),
+      totalPages: totalPages,
+      sortBy: sort,
+      categories: categoriesData,
+      selectedCategories: categories ? categories.split(',') : [],
+      inStock: !!inStock,
+      priceMin: priceMin,
+      priceMax: priceMax,
+      title: `Pesquisa: ${query || 'Todos os produtos'}`,
+      layout: 'layouts/main'
+    });
+    
+  } catch (error) {
+    console.error('Search results error:', error);
+    res.status(500).render('error', { message: 'Erro ao carregar resultados' });
+  }
+});
+
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
