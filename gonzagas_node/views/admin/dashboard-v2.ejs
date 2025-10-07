@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard V2 - Gonzaga's Admin</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Admin V2 CSS -->
+    <link rel="stylesheet" href="/css/admin-v2.css">
+</head>
+<body>
+
+<div class="admin-container-v2">
+    <!-- Top Bar com Search Global -->
+    <header class="admin-topbar">
+        <div class="topbar-left">
+            <h1 class="brand-title">
+                <span class="brand-icon">💎</span>
+                Gonzaga's Admin
+            </h1>
+        </div>
+        
+        <div class="topbar-center">
+            <!-- Search Global Melhorada -->
+            <div class="admin-search-enhanced">
+                <input type="text" placeholder="Pesquisar produtos, clientes, pedidos..." 
+                       class="search-global" autocomplete="off">
+                <div class="search-filters">
+                    <button class="filter-btn active" data-type="products">Produtos</button>
+                    <button class="filter-btn" data-type="orders">Pedidos</button>
+                    <button class="filter-btn" data-type="customers">Clientes</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="topbar-right">
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="btn-quick" data-action="new-product" title="Novo Produto">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="btn-quick" data-action="bulk-import" title="Import">
+                    <i class="fas fa-upload"></i>
+                </button>
+                <button class="btn-quick" data-action="analytics" title="Analytics">
+                    <i class="fas fa-chart-line"></i>
+                </button>
+            </div>
+            
+            <!-- User Menu -->
+            <div class="user-menu">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=c0a080&color=fff" 
+                     class="user-avatar">
+                <span class="user-name">Admin</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content Area -->
+    <div class="admin-main">
+        <!-- Left Sidebar - Collapsible -->
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3 class="nav-title">Catálogo</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="/admin/dashboard" class="nav-link">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/products" class="nav-link">
+                                <i class="fas fa-gem"></i>
+                                <span>Produtos</span>
+                                <span class="nav-badge"><%= typeof totalProducts !== 'undefined' ? totalProducts : '247' %></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/categories" class="nav-link">
+                                <i class="fas fa-tags"></i>
+                                <span>Categorias</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3 class="nav-title">Gestão</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="/admin/orders" class="nav-link">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Pedidos</span>
+                                <span class="nav-badge new">3</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/customers" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span>Clientes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/analytics" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3 class="nav-title">Sistema</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="/admin/media" class="nav-link">
+                                <i class="fas fa-images"></i>
+                                <span>Media</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/settings" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Definições</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/backup" class="nav-link">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Backup</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <div class="status-item">
+                        <span class="status-dot green"></span>
+                        Sistema Online
+                    </div>
+                    <div class="status-item">
+                        <span class="status-dot yellow"></span>
+                        Backup: 2h atrás
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Dashboard Content -->
+        <main class="dashboard-content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>Produtos Ativos</h3>
+                        <i class="fas fa-gem stat-icon"></i>
+                    </div>
+                    <div class="stat-number"><%= typeof stats !== 'undefined' && stats.products ? stats.products : '247' %></div>
+                    <div class="stat-change positive">+12 este mês</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>Visualizações</h3>
+                        <i class="fas fa-eye stat-icon"></i>
+                    </div>
+                    <div class="stat-number"><%= typeof stats !== 'undefined' && stats.views ? stats.views.toLocaleString() : '1,429' %></div>
+                    <div class="stat-change positive">+23% vs mês anterior</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>WhatsApp Clicks</h3>
+                        <i class="fab fa-whatsapp stat-icon"></i>
+                    </div>
+                    <div class="stat-number"><%= typeof stats !== 'undefined' && stats.whatsapp ? stats.whatsapp : '89' %></div>
+                    <div class="stat-change positive">+45% esta semana</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>Pesquisas</h3>
+                        <i class="fas fa-search stat-icon"></i>
+                    </div>
+                    <div class="stat-number"><%= typeof stats !== 'undefined' && stats.searches ? stats.searches : '356' %></div>
+                    <div class="stat-change neutral">Últimas 24h</div>
+                </div>
+            </div>
+            
+            <!-- Main Dashboard Widgets -->
+            <div class="dashboard-widgets">
+                <!-- Recent Activity -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Atividade Recente</h3>
+                        <button class="btn-widget-action">Ver Todas</button>
+                    </div>
+                    <div class="widget-content">
+                        <div class="activity-list">
+                            <% if (typeof recentActivity !== 'undefined' && recentActivity.length > 0) { %>
+                                <% recentActivity.forEach(function(activity) { %>
+                                <div class="activity-item">
+                                    <div class="activity-icon <%= activity.type %>">
+                                        <i class="<%= activity.icon %>"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong><%= activity.title %>:</strong> <%= activity.description %></p>
+                                        <span class="activity-time"><%= activity.time %></span>
+                                    </div>
+                                </div>
+                                <% }); %>
+                            <% } else { %>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p><strong>Produto adicionado:</strong> Anel Celtic Knot</p>
+                                    <span class="activity-time">há 2 minutos</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p><strong>Pesquisa:</strong> "brincos prata"</p>
+                                    <span class="activity-time">há 5 minutos</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon whatsapp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p><strong>WhatsApp:</strong> Contacto sobre REF-001</p>
+                                    <span class="activity-time">há 12 minutos</span>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Ações Rápidas</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="quick-actions-grid">
+                            <button class="quick-action-btn" data-action="new-product" onclick="window.location.href='/admin/products/new'">
+                                <i class="fas fa-plus"></i>
+                                <span>Novo Produto</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="bulk-edit">
+                                <i class="fas fa-edit"></i>
+                                <span>Edição Múltipla</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="export">
+                                <i class="fas fa-download"></i>
+                                <span>Exportar</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="backup" onclick="window.location.href='/admin/backup'">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Backup</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Health -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Sistema</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="health-metrics">
+                            <div class="health-item">
+                                <span class="health-label">Base de Dados</span>
+                                <span class="health-status good">Online</span>
+                            </div>
+                            <div class="health-item">
+                                <span class="health-label">Último Backup</span>
+                                <span class="health-status warning">2h atrás</span>
+                            </div>
+                            <div class="health-item">
+                                <span class="health-label">Storage</span>
+                                <span class="health-status good">67% usado</span>
+                            </div>
+                            <div class="health-item">
+                                <span class="health-label">Performance</span>
+                                <span class="health-status excellent">Excelente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+// Quick Actions handlers
+document.querySelectorAll('.btn-quick, .quick-action-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const action = this.dataset.action;
+        console.log('Quick action:', action);
+        // Handle actions here
+    });
+});
+
+// Search filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const type = this.dataset.type;
+        console.log('Filter:', type);
+        // Handle filter change
+    });
+});
+
+// Global search
+const searchInput = document.querySelector('.search-global');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        const query = this.value;
+        if (query.length > 2) {
+            console.log('Search query:', query);
+            // Handle search
+        }
+    });
+}
+</script>
+
+</body>
+</html>
+

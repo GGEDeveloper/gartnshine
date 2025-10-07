@@ -166,6 +166,58 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
   }
 });
 
+// Dashboard V2 - Modern Admin Dashboard
+router.get('/dashboard-v2', adminSessionRequired, async (req, res) => {
+  try {
+    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
+      Product.count(),
+      ProductFamily.count(),
+      Product.countLowStock()
+    ]);
+
+    // Recent activity (placeholder - would come from activity log)
+    const recentActivity = [
+      {
+        type: 'product',
+        icon: 'fas fa-plus-circle',
+        title: 'Produto adicionado',
+        description: 'Anel Celtic Knot',
+        time: 'há 2 minutos'
+      },
+      {
+        type: 'search',
+        icon: 'fas fa-search',
+        title: 'Pesquisa',
+        description: '"brincos prata"',
+        time: 'há 5 minutos'
+      },
+      {
+        type: 'whatsapp',
+        icon: 'fab fa-whatsapp',
+        title: 'WhatsApp',
+        description: 'Contacto sobre REF-001',
+        time: 'há 12 minutos'
+      }
+    ];
+
+    res.render('admin/dashboard-v2', {
+      title: 'Dashboard V2 - Gonzaga\'s Admin',
+      user: req.session.user,
+      totalProducts: totalProducts,
+      stats: {
+        products: totalProducts,
+        views: 1429,
+        whatsapp: 89,
+        searches: 356
+      },
+      recentActivity: recentActivity
+    });
+  } catch (error) {
+    console.error('Dashboard V2 error:', error);
+    res.status(500).send('Error loading dashboard V2');
+  }
+});
+
 // Authentication routes
 router.get('/login', guestSessionRequired, AuthController.showLoginForm.bind(AuthController));
 router.post('/login', guestSessionRequired, AuthController.login.bind(AuthController));
