@@ -83,19 +83,12 @@ router.get('/', async (req, res) => {
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
       title: 'Home',
-      layout: 'layouts/main',
+      layout: false, // index.ejs is standalone (has own <html>, <head>, <body>)
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
       siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra',
-      theme: {
-        colorPrimary: '#1e1e1e',
-        colorSecondary: '#4a3c2d', 
-        colorAccent: '#6a8c69',
-        colorText: '#f0f0f0',
-        colorHighlight: '#b19cd9'
-      }
+      siteDescription: 'Elegância que nasce da terra'
     });
   } catch (error) {
     console.error('Error loading home page:', error);
