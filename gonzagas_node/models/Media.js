@@ -3,7 +3,7 @@
  * Handles all media-related database operations
  */
 
-const pool = require('../config/database');
+const { pool } = require('../config/database');
 const path = require('path');
 const fs = require('fs').promises;
 const sharp = require('sharp');
@@ -53,7 +53,7 @@ class Media {
             const tagList = Array.isArray(tags) ? tags : [tags];
             const tagPlaceholders = tagList.map(() => '?').join(',');
             whereClause += ` AND mf.id IN (
-                SELECT DISTINCT mft.media_file_id 
+                SELECT DISTINCT mft.file_id 
                 FROM media_file_tags mft 
                 JOIN media_tags mt ON mft.tag_id = mt.id 
                 WHERE mt.slug IN (${tagPlaceholders})
@@ -72,7 +72,7 @@ class Media {
                 COUNT(DISTINCT mu.id) as usage_count
             FROM media_files mf
             LEFT JOIN media_folders mf2 ON mf.folder_path = mf2.path
-            LEFT JOIN media_file_tags mft ON mf.id = mft.media_file_id
+            LEFT JOIN media_file_tags mft ON mf.id = mft.file_id
             LEFT JOIN media_tags mt ON mft.tag_id = mt.id
             LEFT JOIN media_usage mu ON mf.id = mu.media_id
             ${whereClause}
