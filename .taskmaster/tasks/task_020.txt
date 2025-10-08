@@ -1,0 +1,43 @@
+# Task ID: 20
+# Title: Develop Main Layout and Core EJS Partials
+# Status: pending
+# Dependencies: 19
+# Priority: high
+# Description: Implement main-dark.ejs layout and reusable partials for header, footer, product card, and filters.
+# Details:
+Create views/layouts/main-dark.ejs with Google Fonts and CSS links. Build views/partials/header-dark.ejs (navigation with links for stone types), footer-dark.ejs (3 responsive columns), card-produto.ejs (reusable product card with image, title, price, and metal/stone info), filtros.ejs (UI for filtering by stone and metal). Ensure all partials use BEM classes and are responsive.
+
+# Test Strategy:
+Render each partial in isolation and within main-dark.ejs. Check navigation, card display, and filter UI on all breakpoints. Validate accessibility (semantic HTML, ARIA labels).
+
+# Subtasks:
+## 1. Create main-dark.ejs layout with Google Fonts and CSS links [pending]
+### Dependencies: None
+### Description: Develop the main layout file (main-dark.ejs) including Google Fonts, CSS links, and EJS content placeholder.
+### Details:
+Implement views/layouts/main-dark.ejs. Add <head> section with Google Fonts and CSS links. Ensure a <body> with EJS content placeholder (<%- body %>). Use BEM class naming for layout elements. Make layout responsive using CSS grid/flexbox.
+
+## 2. Develop header-dark.ejs partial with navigation for stone types [pending]
+### Dependencies: 20.1
+### Description: Build a reusable header partial featuring navigation links for different stone types.
+### Details:
+Create views/partials/header-dark.ejs. Implement navigation bar with links for each stone type. Use BEM classes for structure and styling. Ensure accessibility with semantic HTML and ARIA labels. Make navigation responsive for mobile and desktop.
+
+## 3. Build footer-dark.ejs partial with three responsive columns [pending]
+### Dependencies: 20.1
+### Description: Create a footer partial with three columns, ensuring responsiveness and accessibility.
+### Details:
+Develop views/partials/footer-dark.ejs. Structure footer into three columns (e.g., contact, links, social). Use BEM classes for layout. Ensure columns stack on small screens. Add semantic HTML and ARIA labels for accessibility.
+
+## 4. Implement card-produto.ejs partial for reusable product cards [pending]
+### Dependencies: 20.1
+### Description: Create a product card partial displaying image, title, price, and metal/stone info.
+### Details:
+Build views/partials/card-produto.ejs. Display product image, title, price, metal type, and stone info. Use BEM classes for styling. Ensure card is responsive and visually consistent. Support dynamic data via EJS variables.
+
+## 5. Create filtros.ejs partial for filtering UI by stone and metal [pending]
+### Dependencies: 20.1
+### Description: Develop a filter UI partial allowing users to filter products by stone and metal.
+### Details:
+Implement views/partials/filtros.ejs. Add dropdowns or checkboxes for stone and metal filtering. Use BEM classes for UI elements. Ensure filter controls are accessible (labels, ARIA attributes) and responsive. Prepare for integration with filtering logic.
+

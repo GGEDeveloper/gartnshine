@@ -2,502 +2,637 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
-        "title": "Implement Mobile Camera Capture Component",
-        "description": "Enable mobile admin users to capture product photos directly via device camera in product forms.",
-        "details": "Create `/public/js/camera-capture.js` using HTML5 getUserMedia API for camera access. Integrate Canvas API for preview and manipulation. Add camera capture UI to `/views/admin/products/form.ejs` and style with `/public/css/admin-camera.css`. Ensure fallback to file input for unsupported devices.",
-        "testStrategy": "Test on Chrome, Safari, Firefox mobile. Validate camera permission prompt, preview overlay, capture functionality, and fallback on desktop.",
+        "id": 19,
+        "title": "Create and Integrate CSS Architecture for Dark Nature Theme",
+        "description": "Set up new CSS files (tokens.css, base.css, components.css, pages.css) following BEM methodology and approved design tokens.",
+        "details": "Create the following files in gonzagas_node/public/css: tokens.css (define all color variables as per palette), base.css (reset, typography with Cinzel and Source Sans 3, grid system), components.css (header, footer, cards, buttons, filters), pages.css (home, catalog, PDP, vendors). Use BEM for class naming. Link all CSS files in EJS layouts. Ensure Google Fonts are loaded with font-display: swap and preload.",
+        "testStrategy": "Validate that all pages render with correct colors, typography, and layout. Use browser dev tools to check CSS variables and BEM classes. Test font loading and fallback. Confirm visual compliance with approved identity.",
         "priority": "high",
         "dependencies": [],
         "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Create Camera Access Module",
-            "description": "Implement the core camera access logic using the HTML5 getUserMedia API in `/public/js/camera-capture.js` to request camera permissions and initialize the video stream.",
+            "title": "Define and Implement Design Tokens in tokens.css",
+            "description": "Create tokens.css and define all color variables and design tokens according to the approved Dark Nature palette.",
             "dependencies": [],
-            "details": "Write a JavaScript module that checks for camera support, requests user permission, and initializes the camera stream. Handle permission denied and unsupported browser scenarios. Use feature detection to determine if getUserMedia is available.\n<info added on 2025-10-07T19:39:01.868Z>\n🔄 PARCIALMENTE COMPLETO! Código criado, falta integração e testes.\n\nFicheiro criado: public/js/camera-capture.js (5.5 KB)\n\nImplementado:\n- Classe CameraCapture completa\n- checkSupport() - Feature detection (getUserMedia + Canvas)\n- detectCameras() - Enumerate video devices\n- startCamera() - Request permissions e initialize stream\n- stopCamera() - Cleanup e release resources\n- switchCamera() - Toggle entre front/rear\n- createUI() - Overlay HTML com preview\n- capturePhoto() - Canvas capture e blob conversion\n- handleError() - 4 tipos de erro com messages PT\n- Global helpers: initCameraForForm(), handleCapturedImage()\n\nPendente:\n- Incluir script no layout admin\n- Modificar product form.ejs para adicionar botão camera\n- Testar em Chrome mobile\n- Testar em iOS Safari  \n- Testar permission denied scenarios\n- Ajustar error messages se necessário\n\nStatus: Código sólido criado, ready para integration.\n</info added on 2025-10-07T19:39:01.868Z>",
+            "details": "Set up tokens.css in gonzagas_node/public/css. Include CSS custom properties for colors, spacing, font sizes, and other design tokens. Ensure variables are named clearly and consistently for easy reference throughout the architecture.",
             "status": "pending",
-            "testStrategy": "Test on iOS Safari and Chrome Android. Verify permission prompt appears and stream starts on supported devices; ensure graceful degradation on unsupported browsers."
+            "testStrategy": "Verify that all variables are present and match the approved palette. Use browser dev tools to inspect variable values on sample elements."
           },
           {
             "id": 2,
-            "title": "Implement Camera Preview UI",
-            "description": "Add a live camera preview overlay to the product form using the Canvas API, allowing users to see what the camera captures in real time.",
-            "dependencies": [],
-            "details": "Extend `/public/js/camera-capture.js` to render the camera stream onto a `<canvas>` element. Position the preview overlay appropriately within `/views/admin/products/form.ejs`. Ensure the preview mirrors the device orientation and fills the designated area.",
+            "title": "Establish Base Styles and Typography in base.css",
+            "description": "Create base.css with CSS reset, typography rules using Cinzel and Source Sans 3, and a responsive grid system.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a CSS reset to normalize styles. Set up font-face rules for Cinzel and Source Sans 3, ensuring Google Fonts are loaded with font-display: swap and preload. Define base typography (headings, paragraphs, links) and a grid system using CSS Grid or Flexbox. Reference design tokens for colors and spacing.",
             "status": "pending",
-            "testStrategy": "Validate that the preview displays the camera feed correctly on mobile devices. Check for proper orientation handling and responsive sizing."
+            "testStrategy": "Check that all base elements render with correct fonts and spacing. Validate grid responsiveness across breakpoints. Confirm font loading and fallback behavior."
           },
           {
             "id": 3,
-            "title": "Add Capture Button and Event Handling",
-            "description": "Integrate a capture button into the UI that, when pressed, freezes the current preview and prepares the image for upload.",
-            "dependencies": [],
-            "details": "Add a capture button to the form. On click, capture the current canvas frame as an image (e.g., using `canvas.toDataURL()`). Store the captured image temporarily for preview and upload. Provide visual feedback (e.g., flash effect) on capture.",
+            "title": "Develop Component Styles in components.css Using BEM",
+            "description": "Create components.css and implement styles for header, footer, cards, buttons, and filters using BEM class naming.",
+            "dependencies": [
+              2
+            ],
+            "details": "Define BEM blocks for each component (e.g., .header, .footer, .card, .button, .filter) and their elements/modifiers. Use design tokens for colors and spacing. Ensure each component is modular and follows single responsibility principle. Avoid ID and tag selectors, minimize nesting, and keep selectors at single specificity level[1][2].",
             "status": "pending",
-            "testStrategy": "Test that pressing the button freezes the preview, captures the image, and provides user feedback. Verify the image is stored correctly for the next steps."
+            "testStrategy": "Inspect rendered components for correct BEM class structure. Use browser dev tools to verify modularity and absence of specificity conflicts. Test component reusability on multiple pages."
           },
           {
             "id": 4,
-            "title": "Implement File Upload Fallback",
-            "description": "Provide a fallback file input for devices or browsers that do not support camera access, ensuring the form remains functional everywhere.",
-            "dependencies": [],
-            "details": "Dynamically show/hide the camera UI and a traditional file input based on feature detection. Ensure the file input is styled consistently and integrates with the existing multer upload system.",
+            "title": "Implement Page-Specific Styles in pages.css Using BEM",
+            "description": "Create pages.css and add styles for home, catalog, product detail (PDP), and vendors pages using BEM methodology.",
+            "dependencies": [
+              3
+            ],
+            "details": "Define BEM blocks for each page (e.g., .home, .catalog, .pdp, .vendors) and their unique elements/modifiers. Reference components and design tokens for consistency. Ensure page styles are scoped and do not conflict with global/component styles.",
             "status": "pending",
-            "testStrategy": "Test on desktop browsers and unsupported mobile devices. Verify the file input appears when camera access is unavailable and uploads work as expected."
+            "testStrategy": "Render each page and verify correct application of page-specific styles. Check for visual consistency and absence of style leakage between pages."
           },
           {
             "id": 5,
-            "title": "Style Camera Capture UI",
-            "description": "Apply custom styles to the camera preview, capture button, and fallback file input to ensure a cohesive admin interface.",
-            "dependencies": [],
-            "details": "Create `/public/css/admin-camera.css` with styles for the camera preview, capture button, and file input. Ensure the UI is responsive and matches the admin theme. Handle transitions between camera and file input modes gracefully.",
+            "title": "Integrate and Link CSS Files in EJS Layouts with Font Optimization",
+            "description": "Link all CSS files (tokens.css, base.css, components.css, pages.css) in EJS layouts and ensure Google Fonts are optimized.",
+            "dependencies": [
+              4
+            ],
+            "details": "Edit EJS layout templates to include all CSS files in the correct order. Add <link rel='preload'> and font-display: swap for Google Fonts. Confirm that all pages load the CSS and fonts efficiently, with no blocking or FOUC (Flash of Unstyled Content).",
             "status": "pending",
-            "testStrategy": "Check visual consistency across devices and browsers. Verify responsive behavior and theme matching."
-          },
-          {
-            "id": 6,
-            "title": "Integrate with Multer Upload System",
-            "description": "Connect the captured image or selected file to the existing server-side multer upload pipeline, ensuring seamless integration with the product form submission.",
-            "dependencies": [],
-            "details": "Modify the form submission handler to accept either a camera-captured image (as a data URL or Blob) or a traditional file. Convert the camera image to a file object if necessary. Ensure the upload endpoint processes both sources correctly.",
-            "status": "pending",
-            "testStrategy": "Test uploading both camera-captured images and file-selected images. Verify successful server-side processing and database entry."
-          },
-          {
-            "id": 7,
-            "title": "Handle Permissions and Errors",
-            "description": "Implement robust error handling for camera access, permissions, and upload failures, with user-friendly feedback.",
-            "dependencies": [],
-            "details": "Add error handling for camera initialization, permission denial, and upload errors. Display clear messages to the user and provide recovery options (e.g., retry, switch to file input). Log errors for debugging.",
-            "status": "pending",
-            "testStrategy": "Simulate permission denials and upload errors. Verify that appropriate messages are shown and the user can recover or switch modes."
-          },
-          {
-            "id": 8,
-            "title": "Cross-Browser and Device Testing",
-            "description": "Conduct comprehensive testing across target browsers and devices to ensure consistent behavior, performance, and fallback functionality.",
-            "dependencies": [],
-            "details": "Test on iOS Safari, Chrome Android, Firefox mobile, and desktop browsers. Validate camera access, preview, capture, upload, and fallback in each environment. Check for memory leaks and performance issues.",
-            "status": "pending",
-            "testStrategy": "Use real devices and emulators. Document any browser-specific quirks and ensure all features work as expected. Verify graceful degradation on unsupported platforms."
+            "testStrategy": "Load each page and check for correct CSS and font application. Use browser dev tools to confirm font preloading and swap behavior. Test for performance and visual compliance."
           }
         ]
       },
       {
-        "id": 2,
-        "title": "Add Multi-Camera Switch Functionality",
-        "description": "Allow users to toggle between front and rear cameras during capture.",
-        "details": "Use MediaDevices.enumerateDevices() to list available cameras. Implement UI toggle button in camera overlay. Switch constraints between facingMode: 'user' and 'environment'. Default to rear camera for quality.",
-        "testStrategy": "Verify toggle button visibility, smooth switching, and default camera selection on multiple mobile devices.",
+        "id": 20,
+        "title": "Develop Main Layout and Core EJS Partials",
+        "description": "Implement main-dark.ejs layout and reusable partials for header, footer, product card, and filters.",
+        "details": "Create views/layouts/main-dark.ejs with Google Fonts and CSS links. Build views/partials/header-dark.ejs (navigation with links for stone types), footer-dark.ejs (3 responsive columns), card-produto.ejs (reusable product card with image, title, price, and metal/stone info), filtros.ejs (UI for filtering by stone and metal). Ensure all partials use BEM classes and are responsive.",
+        "testStrategy": "Render each partial in isolation and within main-dark.ejs. Check navigation, card display, and filter UI on all breakpoints. Validate accessibility (semantic HTML, ARIA labels).",
         "priority": "high",
         "dependencies": [
-          1
+          19
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create main-dark.ejs layout with Google Fonts and CSS links",
+            "description": "Develop the main layout file (main-dark.ejs) including Google Fonts, CSS links, and EJS content placeholder.",
+            "dependencies": [],
+            "details": "Implement views/layouts/main-dark.ejs. Add <head> section with Google Fonts and CSS links. Ensure a <body> with EJS content placeholder (<%- body %>). Use BEM class naming for layout elements. Make layout responsive using CSS grid/flexbox.",
+            "status": "pending",
+            "testStrategy": "Render a sample page using main-dark.ejs and verify font loading, CSS application, and responsiveness on multiple devices."
+          },
+          {
+            "id": 2,
+            "title": "Develop header-dark.ejs partial with navigation for stone types",
+            "description": "Build a reusable header partial featuring navigation links for different stone types.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create views/partials/header-dark.ejs. Implement navigation bar with links for each stone type. Use BEM classes for structure and styling. Ensure accessibility with semantic HTML and ARIA labels. Make navigation responsive for mobile and desktop.",
+            "status": "pending",
+            "testStrategy": "Include header-dark.ejs in main-dark.ejs. Test navigation links, responsiveness, and accessibility (keyboard navigation, ARIA labels)."
+          },
+          {
+            "id": 3,
+            "title": "Build footer-dark.ejs partial with three responsive columns",
+            "description": "Create a footer partial with three columns, ensuring responsiveness and accessibility.",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop views/partials/footer-dark.ejs. Structure footer into three columns (e.g., contact, links, social). Use BEM classes for layout. Ensure columns stack on small screens. Add semantic HTML and ARIA labels for accessibility.",
+            "status": "pending",
+            "testStrategy": "Include footer-dark.ejs in main-dark.ejs. Test column layout on various screen sizes and validate accessibility."
+          },
+          {
+            "id": 4,
+            "title": "Implement card-produto.ejs partial for reusable product cards",
+            "description": "Create a product card partial displaying image, title, price, and metal/stone info.",
+            "dependencies": [
+              1
+            ],
+            "details": "Build views/partials/card-produto.ejs. Display product image, title, price, metal type, and stone info. Use BEM classes for styling. Ensure card is responsive and visually consistent. Support dynamic data via EJS variables.",
+            "status": "pending",
+            "testStrategy": "Render multiple card-produto.ejs instances in a sample page. Check layout, data binding, responsiveness, and accessibility (alt text, semantic tags)."
+          },
+          {
+            "id": 5,
+            "title": "Create filtros.ejs partial for filtering UI by stone and metal",
+            "description": "Develop a filter UI partial allowing users to filter products by stone and metal.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement views/partials/filtros.ejs. Add dropdowns or checkboxes for stone and metal filtering. Use BEM classes for UI elements. Ensure filter controls are accessible (labels, ARIA attributes) and responsive. Prepare for integration with filtering logic.",
+            "status": "pending",
+            "testStrategy": "Include filtros.ejs in main-dark.ejs. Test filter UI on all breakpoints, validate accessibility, and ensure controls are functional for future integration."
+          }
+        ]
       },
       {
-        "id": 3,
-        "title": "Integrate Real-Time Client-Side Image Compression",
-        "description": "Compress captured images before upload to optimize file size and performance.",
-        "details": "Use Canvas API to resize image to max 800px on largest dimension. Apply toBlob() with quality parameter (85% JPEG). Show compressed preview and visual indicator during compression.",
-        "testStrategy": "Check image size reduction, preview accuracy, and upload speed. Validate compression ratio and quality on various devices.",
+        "id": 21,
+        "title": "Implement Home Page with Dual Hero Sections",
+        "description": "Create home-dark.ejs with two hero sections for Ónix and Olho-de-tigre, using approved backgrounds and responsive grid.",
+        "details": "Design views/pages/home-dark.ejs with two visually distinct hero sections, each featuring background textures (ardósia, madeira negra, botânica escura), product highlights, and CTA buttons styled per palette. Ensure mobile-first grid adapts to 4/3/2 columns. Use background-attachment: scroll for mobile compatibility.",
+        "testStrategy": "Test rendering on mobile, tablet, desktop. Validate hero backgrounds, grid responsiveness, and CTA visibility. Check accessibility and print styles.",
         "priority": "high",
         "dependencies": [
-          1
+          20
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Wireframes for Dual Hero Sections",
+            "description": "Create wireframes for the home-dark.ejs page, clearly outlining two visually distinct hero sections for Ónix and Olho-de-tigre, each with unique backgrounds and layout.",
+            "dependencies": [],
+            "details": "Produce low- and high-fidelity wireframes showing placement of headlines, subheadings, product highlights, CTA buttons, and background textures (ardósia, madeira negra, botânica escura). Ensure both desktop and mobile layouts are represented, with a focus on mobile-first grid structure.",
+            "status": "pending",
+            "testStrategy": "Review wireframes with stakeholders for approval and alignment with brand guidelines."
+          },
+          {
+            "id": 2,
+            "title": "Implement Responsive Grid Layout in home-dark.ejs",
+            "description": "Develop the responsive grid system in home-dark.ejs to support 4/3/2 columns adapting to desktop, tablet, and mobile.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use CSS Grid or Flexbox to create a mobile-first layout that adapts to 4 columns (desktop), 3 columns (tablet), and 2 columns (mobile). Ensure grid supports hero content and product highlights. Test with various screen sizes.",
+            "status": "pending",
+            "testStrategy": "Test grid responsiveness in browser dev tools across breakpoints; validate column count and content alignment."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Approved Background Textures and Visual Styles",
+            "description": "Apply the approved background textures (ardósia, madeira negra, botânica escura) and ensure visual distinction between the two hero sections.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add background images/textures to each hero section using CSS. Ensure backgrounds are optimized for performance and use background-attachment: scroll for mobile compatibility. Apply palette-specific styles for each section.",
+            "status": "pending",
+            "testStrategy": "Check background rendering on all devices; verify visual distinction and performance (no layout jank or slow loads)."
+          },
+          {
+            "id": 4,
+            "title": "Develop Hero Content: Headlines, Product Highlights, and CTA Buttons",
+            "description": "Implement content for each hero section, including bold headlines, product highlights, and visually prominent CTA buttons styled per palette.",
+            "dependencies": [
+              3
+            ],
+            "details": "Insert and style headline, subheading, product highlights, and CTA buttons for Ónix and Olho-de-tigre. Use bold typography and contrasting colors for readability. Ensure CTAs are accessible and visually distinct.",
+            "status": "pending",
+            "testStrategy": "Validate content visibility, contrast, and CTA accessibility on all devices. Confirm correct palette usage."
+          },
+          {
+            "id": 5,
+            "title": "Test and Validate Responsiveness, Accessibility, and Print Styles",
+            "description": "Perform comprehensive testing of the home-dark.ejs page for responsiveness, accessibility, and print compatibility.",
+            "dependencies": [
+              4
+            ],
+            "details": "Test rendering on mobile, tablet, and desktop. Validate hero backgrounds, grid responsiveness, and CTA visibility. Check accessibility (contrast, alt text, keyboard navigation) and print styles. Address any issues found.",
+            "status": "pending",
+            "testStrategy": "Use browser dev tools, accessibility checkers (axe), and manual testing to confirm all requirements are met."
+          }
+        ]
       },
       {
-        "id": 4,
-        "title": "Develop Quick Product Creation Workflow",
-        "description": "Enable rapid product creation with minimal required fields and immediate photo capture.",
-        "details": "Create new route `/admin/products/quick-add` with form for photo, name, price, and family. Auto-generate reference if empty. Set product status to 'active' by default. Redirect to full edit after creation.",
-        "testStrategy": "Test form validation, product creation, auto-reference, and redirect flow. Ensure accessibility via highlighted mobile admin button.",
-        "priority": "high",
-        "dependencies": [
-          1,
-          3
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 5,
-        "title": "Create Drag & Drop Media Gallery Interface",
-        "description": "Build a responsive media gallery with drag & drop upload and thumbnail grid.",
-        "details": "Develop `/admin/media-gallery` page using HTML5 Drag & Drop API and responsive grid layout. Integrate AJAX upload for multiple files, progress bar, and immediate preview. Use Canvas for thumbnail generation.",
-        "testStrategy": "Test drag & drop for single/multiple files, upload progress, error handling, and thumbnail display on desktop and mobile.",
+        "id": 22,
+        "title": "Extend Database Schema for Product Attributes and Indexes",
+        "description": "Add new fields to produtos table and create performance indexes as specified.",
+        "details": "Alter produtos table to add: stone_type (ENUM), stone_origin (VARCHAR), metal_finish (ENUM), metal_purity (VARCHAR), artisan_name (VARCHAR), crafting_technique (VARCHAR), care_instructions (TEXT). Create indexes: idx_produtos_stone_type, idx_produtos_metal_finish, idx_produtos_stone_metal (composite). Use migration scripts and prepared statements for safety.",
+        "testStrategy": "Run migration on test DB, verify schema changes and index creation. Insert sample data and validate queries using new fields and indexes. Check rollback capability.",
         "priority": "high",
         "dependencies": [],
         "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Create Media Gallery Route and Controller Structure",
-            "description": "Set up the backend route `/admin/media-gallery` and create the controller with basic CRUD operations for media management.",
+            "title": "Design New Product Attribute Fields for produtos Table",
+            "description": "Specify the data types and constraints for each new field to be added to the produtos table.",
             "dependencies": [],
-            "details": "Create route in routes/admin.js for GET /admin/media-gallery. Implement MediaGalleryController with methods: index() for gallery view, upload() for file handling, delete() for media removal, and getMedia() for AJAX requests. Set up middleware for admin authentication and file upload limits.",
+            "details": "Define the following fields: stone_type (ENUM), stone_origin (VARCHAR), metal_finish (ENUM), metal_purity (VARCHAR), artisan_name (VARCHAR), crafting_technique (VARCHAR), care_instructions (TEXT). Ensure ENUM values are well-documented and VARCHAR lengths are appropriate. Confirm naming conventions follow SQL best practices (lowercase, underscores)[2].",
             "status": "pending",
-            "testStrategy": "Test route accessibility, controller method responses, authentication middleware, and error handling for unauthorized access."
+            "testStrategy": "Review field definitions for correctness and adherence to naming conventions. Validate with sample CREATE TABLE statements."
           },
           {
             "id": 2,
-            "title": "Design Responsive Grid Layout Template",
-            "description": "Create the main view template with responsive CSS Grid layout for displaying media thumbnails in an adaptive grid.",
+            "title": "Create Migration Script to Alter produtos Table",
+            "description": "Develop a safe migration script to add the new fields to the produtos table using prepared statements.",
             "dependencies": [
-              "5.1"
+              1
             ],
-            "details": "Create /views/admin/media-gallery.ejs with responsive grid container. Implement CSS Grid with auto-fit columns: 2 on mobile, 3 on tablet, 4+ on desktop. Add media query breakpoints and ensure proper aspect ratio maintenance. Include empty state messaging and loading indicators.",
+            "details": "Write a SQL migration script that uses ALTER TABLE to add each new column. Use prepared statements to prevent SQL injection and ensure transactional safety. Include comments for rollback instructions and versioning.",
             "status": "pending",
-            "testStrategy": "Test grid responsiveness across devices, aspect ratio preservation, gap consistency, and smooth transitions during resize events."
+            "testStrategy": "Run migration on a test database, verify schema changes, and check rollback capability."
           },
           {
             "id": 3,
-            "title": "Implement HTML5 Drag & Drop Zone",
-            "description": "Create the drag and drop interface using HTML5 Drag & Drop API with visual feedback and file validation.",
+            "title": "Implement Indexes for Performance Optimization",
+            "description": "Create the specified indexes on the produtos table to improve query performance.",
             "dependencies": [
-              "5.2"
+              2
             ],
-            "details": "Add drag-drop zone div with event listeners for dragenter, dragover, dragleave, and drop events. Implement visual feedback with CSS classes for hover states. Add file type validation (images, videos) and size limits. Prevent default browser behavior and provide clear visual cues for valid/invalid drops.",
+            "details": "Add single-column indexes: idx_produtos_stone_type (on stone_type), idx_produtos_metal_finish (on metal_finish), and a composite index idx_produtos_stone_metal (on stone_type, metal_finish). Ensure index names follow conventions and avoid redundancy[1].",
             "status": "pending",
-            "testStrategy": "Test drag events on desktop browsers, file type validation, size limit enforcement, visual feedback states, and fallback for unsupported browsers."
+            "testStrategy": "Verify index creation via database metadata queries. Benchmark query performance before and after index addition."
           },
           {
             "id": 4,
-            "title": "Build File Input Fallback System",
-            "description": "Create traditional file input as fallback for devices that don't support drag & drop, with multiple file selection.",
+            "title": "Validate Schema and Index Changes with Sample Data",
+            "description": "Insert representative sample data and test queries to ensure new fields and indexes function as intended.",
             "dependencies": [
-              "5.3"
+              3
             ],
-            "details": "Add hidden file input with multiple attribute and accept filters for media types. Create styled button to trigger file input. Implement click handler to open file dialog. Ensure same validation logic applies to both drag-drop and file input methods. Style to match drag-drop zone aesthetics.",
+            "details": "Populate produtos table with sample records using new fields. Execute queries filtering and sorting by new attributes. Confirm indexes are utilized by examining query execution plans.",
             "status": "pending",
-            "testStrategy": "Test file input on mobile devices, multiple file selection, file type filtering, and consistent validation between input methods."
+            "testStrategy": "Use EXPLAIN plans to confirm index usage. Validate data integrity and query results."
           },
           {
             "id": 5,
-            "title": "Develop AJAX Upload with Progress Tracking",
-            "description": "Implement asynchronous file upload using XMLHttpRequest with real-time progress indicators and error handling.",
+            "title": "Document Migration, Indexes, and Rollback Procedures",
+            "description": "Prepare comprehensive documentation covering schema changes, index creation, and rollback steps.",
             "dependencies": [
-              "5.1",
-              "5.4"
+              4
             ],
-            "details": "Create upload function using FormData and XMLHttpRequest. Implement progress event listener to update progress bars. Add error handling for network issues, file size limits, and server errors. Support concurrent uploads with individual progress tracking. Include retry mechanism for failed uploads.",
+            "details": "Write documentation detailing the new fields, their data types, ENUM values, index definitions, and migration steps. Include rollback instructions and testing outcomes. Ensure documentation is clear for future maintenance.",
             "status": "pending",
-            "testStrategy": "Test upload progress accuracy, concurrent file handling, error scenarios (network failure, large files), retry functionality, and server response handling."
-          },
-          {
-            "id": 6,
-            "title": "Create Canvas-Based Thumbnail Generation",
-            "description": "Implement client-side thumbnail generation using HTML5 Canvas API for immediate preview before upload completion.",
-            "dependencies": [
-              "5.4"
-            ],
-            "details": "Create thumbnail generator function using Canvas API. Implement image resizing while maintaining aspect ratio. Add support for different media types (images, video frames). Generate multiple thumbnail sizes (small, medium, large). Include fallback for unsupported file types with generic icons.",
-            "status": "pending",
-            "testStrategy": "Test thumbnail generation for various image formats, aspect ratio preservation, canvas rendering performance, and fallback icon display."
-          },
-          {
-            "id": 7,
-            "title": "Build Media Grid Display System",
-            "description": "Create the thumbnail grid display system with lazy loading, selection states, and media information overlay.",
-            "dependencies": [
-              "5.2",
-              "5.6"
-            ],
-            "details": "Implement thumbnail grid with lazy loading for performance. Add selection checkboxes for bulk operations. Create hover overlay showing file name, size, and upload date. Implement infinite scroll or pagination for large media collections. Add sorting options (date, name, size, type).",
-            "status": "pending",
-            "testStrategy": "Test lazy loading performance, selection functionality, overlay information accuracy, scroll behavior, and sorting mechanisms."
-          },
-          {
-            "id": 8,
-            "title": "Implement Media Management Actions",
-            "description": "Add bulk operations for media management including delete, move, and organize functionality with confirmation dialogs.",
-            "dependencies": [
-              "5.7"
-            ],
-            "details": "Create bulk selection interface with select all/none options. Implement delete confirmation modal with preview of selected items. Add move to folder functionality with folder creation. Include rename capability and metadata editing. Implement undo functionality for accidental deletions.",
-            "status": "pending",
-            "testStrategy": "Test bulk selection accuracy, confirmation dialog functionality, folder operations, rename validation, and undo mechanism reliability."
-          },
-          {
-            "id": 9,
-            "title": "Add Search and Filter Capabilities",
-            "description": "Implement search functionality and filtering options for media organization by type, date, size, and custom tags.",
-            "dependencies": [
-              "5.7"
-            ],
-            "details": "Create search input with real-time filtering. Add filter dropdowns for file type, upload date ranges, and file size. Implement tag system for media organization. Create advanced search with multiple criteria. Add search result highlighting and clear filters option.",
-            "status": "pending",
-            "testStrategy": "Test search accuracy, filter combinations, tag functionality, advanced search criteria, and performance with large media collections."
-          },
-          {
-            "id": 10,
-            "title": "Integrate with Existing Upload System",
-            "description": "Connect the media gallery with the existing product upload system and ensure seamless integration across the admin panel.",
-            "dependencies": [
-              "5.1",
-              "5.5",
-              "5.8"
-            ],
-            "details": "Create API endpoints for media selection in product forms. Implement media picker modal for existing products. Add media gallery links in admin navigation. Ensure consistent file storage and database schema. Create migration scripts for existing media files if needed.",
-            "status": "pending",
-            "testStrategy": "Test integration with product forms, media picker functionality, navigation consistency, file storage compatibility, and migration script reliability."
+            "testStrategy": "Review documentation for completeness and clarity. Validate rollback steps on a test database."
           }
         ]
       },
       {
-        "id": 6,
-        "title": "Implement Automatic Image Variant Generation",
-        "description": "Generate thumbnail, medium, and large variants for each uploaded image.",
-        "details": "On upload, use server-side Sharp (if available) or client-side Canvas API to create 200x200px (crop), 800px, and 1600px variants. Apply naming convention (filename_thumb.jpg, etc.) and store in same directory.",
-        "testStrategy": "Validate creation of all variants, correct sizing/cropping, and fallback to original if variant generation fails.",
+        "id": 23,
+        "title": "Develop Catalog Controller and Filtering Logic",
+        "description": "Create catalogoController.js to handle product listing, filtering, sorting, and pagination.",
+        "details": "Implement catalogoController.js with Express route handlers for GET /catalogo. Parse query params for pedra, metal, ordenar, and page. Build SQL queries using prepared statements for filtering and sorting. Implement pagination (12 products/page). Ensure modular code structure (controllers, routes, models).",
+        "testStrategy": "Unit test controller methods for all filter/sort/pagination combinations. Validate SQL queries for correctness and performance. Test error handling and edge cases.",
         "priority": "high",
         "dependencies": [
-          5
+          22
         ],
         "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 7,
-        "title": "Enable WebP Format Conversion with Fallback",
-        "description": "Convert images to WebP format and provide JPEG/PNG fallback for unsupported browsers.",
-        "details": "Use Canvas toBlob() for WebP conversion client-side. Generate .webp for each variant. Update EJS templates to use <picture> element with browser feature detection for fallback.",
-        "testStrategy": "Test WebP usage on supported browsers, fallback on older browsers, and file size reduction. Validate visual quality.",
-        "priority": "high",
-        "dependencies": [
-          6
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 8,
-        "title": "Design Media Library Modal for Image Selection",
-        "description": "Allow admin to select existing images from a modal overlay in product forms.",
-        "details": "Create modal overlay with grid of images, search/filter by filename, and single/multiple selection modes. Integrate with product forms for image selection.",
-        "testStrategy": "Test modal opening, image selection, search/filter functionality, and integration with product forms.",
-        "priority": "high",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 9,
-        "title": "Implement Media Usage Tracking System",
-        "description": "Track where each image is used across the site and prevent deletion if in use.",
-        "details": "Add new MariaDB tables: media_files and media_usage. Trigger usage tracking on image association with products. Provide UI warnings and badges for usage status.",
-        "testStrategy": "Test database tracking, usage listing, warning on delete, and badge/filter UI. Validate safe delete logic.",
-        "priority": "high",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 10,
-        "title": "Integrate Progressive Image Loading",
-        "description": "Implement blur-to-sharp transition and lazy loading for catalog images.",
-        "details": "Use Base64 tiny placeholders for blur-up effect. Apply Intersection Observer for lazy loading and CSS transitions for smooth appearance. Support infinite scroll.",
-        "testStrategy": "Test placeholder display, transition smoothness, lazy loading performance, and compatibility with infinite scroll.",
-        "priority": "medium",
-        "dependencies": [
-          6,
-          7
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 11,
-        "title": "Develop Smart Masonry Image Grid",
-        "description": "Create adaptive Pinterest-style grid for collections gallery.",
-        "details": "Use CSS Grid or Masonry.js for responsive layout with variable columns (2 mobile, 3 tablet, 4 desktop). Maintain aspect ratios and smooth animations. Integrate lightbox for full-size view.",
-        "testStrategy": "Test grid responsiveness, aspect ratio maintenance, gap minimization, reflow on resize, and lightbox functionality.",
-        "priority": "medium",
-        "dependencies": [
-          5,
-          6
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 12,
-        "title": "Enable Bulk Media Operations",
-        "description": "Allow admins to select multiple images and perform batch actions.",
-        "details": "Add checkbox selection UI, 'Select All' toggle, bulk actions (delete, move, tag), and confirmation modal for destructive actions. Provide feedback for success/error.",
-        "testStrategy": "Test selection, bulk action execution, confirmation modal, and feedback messages for all operations.",
-        "priority": "medium",
-        "dependencies": [
-          5,
-          9
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 13,
-        "title": "Optimize Image Upload and Gallery Performance",
-        "description": "Ensure fast image upload, camera activation, and gallery loading per performance targets.",
-        "details": "Profile and optimize upload pipeline, camera activation (<500ms), and gallery load (<1s for 50 thumbnails). Apply compression and pagination as needed.",
-        "testStrategy": "Measure upload, activation, and gallery load times. Validate against performance targets and optimize bottlenecks.",
-        "priority": "medium",
-        "dependencies": [
-          3,
-          5,
-          6,
-          10
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 14,
-        "title": "Implement Security and Validation for Media Uploads",
-        "description": "Enforce file type, size, filename sanitization, CSRF, and permission checks for media management.",
-        "details": "Restrict uploads to JPEG, PNG, WebP, GIF. Limit file size to 10MB pre-compression. Sanitize filenames to remove special characters. Maintain CSRF tokens and admin-only access.",
-        "testStrategy": "Test upload restrictions, filename sanitization, CSRF protection, and permission enforcement for all media endpoints.",
-        "priority": "high",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 15,
-        "title": "Update Database Schema for Media Management",
-        "description": "Apply schema changes for media_files and media_usage tables to support advanced media features.",
-        "details": "Create tables as specified in PRD. Add necessary indexes and foreign keys. Ensure backward compatibility and data migration if needed.",
-        "testStrategy": "Validate schema creation, data integrity, and migration. Test queries for usage tracking and media listing.",
-        "priority": "high",
-        "dependencies": [],
-        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
-            "title": "Analyze Current Schema and Define Target Changes",
-            "description": "Review the existing database schema and the PRD requirements to identify all necessary changes for media_files and media_usage tables, including new columns, indexes, and foreign keys.",
+            "title": "Set Up catalogoController.js and Express Route Handler",
+            "description": "Create the catalogoController.js file and define the Express route handler for GET /catalogo.",
             "dependencies": [],
-            "details": "Extract the current schema definitions for media_files and media_usage. Compare with PRD to list all required additions or modifications. Document the target schema, specifying data types, constraints, and relationships. Ensure all changes are non-breaking and compatible with existing data.\n<info added on 2025-10-07T19:38:33.256Z>\nThe schema analysis has been completed, identifying six existing tables and determining the need for two new tables: media_files and media_usage. The chosen strategy is to extend the schema (Option A), ensuring backward compatibility with zero breaking changes. All indexes and constraints have been documented. A technical decision was made to add a nullable media_id to the product_images table to maintain full compatibility. The target schema for media_files and media_usage includes the necessary data types, constraints, and relationships as per the PRD requirements. The schema documentation is available in the file sql/migrations/00_SCHEMA_ANALYSIS.md.\n</info added on 2025-10-07T19:38:33.256Z>",
-            "status": "in-progress",
-            "testStrategy": "Verify the documented target schema covers all PRD requirements and maintains backward compatibility."
+            "details": "Create catalogoController.js in the controllers directory. In this file, export a function to handle GET requests to /catalogo. In the routes file, import this controller and set up the route using Express Router. Ensure the controller is modular and follows Express best practices for separation of concerns.",
+            "status": "pending",
+            "testStrategy": "Verify that GET /catalogo returns a response and the controller is correctly invoked by the route."
           },
           {
             "id": 2,
-            "title": "Design Migration Plan and Data Backup Strategy",
-            "description": "Develop a step-by-step migration plan that includes a robust data backup and rollback strategy to prevent data loss during schema updates.",
+            "title": "Implement Filtering, Sorting, and Pagination Logic",
+            "description": "Parse query parameters (pedra, metal, ordenar, page) and build SQL queries using prepared statements for filtering, sorting, and pagination.",
             "dependencies": [
-              "15.1"
+              1
             ],
-            "details": "Outline the migration sequence, including pre-migration data backup procedures. Specify backup methods suitable for shared hosting (e.g., mysqldump, pg_dump). Define rollback steps in case of migration failure. Document the plan for stakeholder review.\n<info added on 2025-10-07T19:38:37.098Z>\nMigration plan completed and documented in sql/migrations/01_MIGRATION_PLAN.md (16 KB). The plan includes five defined migration phases, a comprehensive backup strategy with three backup types, detailed rollback procedures for each phase, identification and mitigation of six key risks, an execution timeline of approximately one hour, a verification checklist, and a troubleshooting guide. The result is a production-ready plan, safe for execution.\n</info added on 2025-10-07T19:38:37.098Z>",
+            "details": "Within the controller, extract query parameters from req.query. Construct SQL queries using prepared statements to filter by pedra and metal, sort by the ordenar parameter, and paginate results (12 products per page). Use a model layer to interact with the database, ensuring all queries are secure and efficient.",
             "status": "pending",
-            "testStrategy": "Test backup and restore procedures on a staging environment to ensure data can be recovered."
+            "testStrategy": "Unit test the controller with various combinations of query parameters. Validate that the correct SQL is generated and the expected products are returned for each scenario."
           },
           {
             "id": 3,
-            "title": "Write Migration SQL Scripts for Schema Changes",
-            "description": "Create SQL migration scripts to implement the required schema changes for media_files and media_usage, including table creation/modification, indexes, and foreign keys.",
+            "title": "Ensure Modular Code Structure and Error Handling",
+            "description": "Refactor code to maintain a modular structure (controllers, routes, models) and implement robust error handling.",
             "dependencies": [
-              "15.2"
+              2
             ],
-            "details": "Write SQL scripts that add or alter tables and columns as specified. Include creation of necessary indexes and foreign key constraints. Ensure scripts are idempotent and reversible where possible. Use ALTER TABLE for non-destructive changes and avoid dropping or renaming existing columns directly.\n<info added on 2025-10-07T19:38:42.238Z>\nAll required SQL migration scripts have been created and tested, including idempotent schema changes, verification queries, detailed comments, safety checks, and rollback support. The following files are included: 002_create_media_tables.sql, 003_extend_product_images.sql, 004_migrate_existing_data.sql, 999_rollback.sql, README.md, and run_migrations.sh (executable). Scripts are production-ready and have passed all tests.\n</info added on 2025-10-07T19:38:42.238Z>",
+            "details": "Organize code so that business logic resides in the controller, database access in the model, and routing in the routes file. Add error handling for invalid parameters, database errors, and edge cases. Ensure the controller returns appropriate HTTP status codes and error messages.",
             "status": "pending",
-            "testStrategy": "Apply scripts to a test database and verify schema updates without errors. Confirm reversibility by rolling back changes."
-          },
-          {
-            "id": 4,
-            "title": "Develop Data Migration and Compatibility Scripts",
-            "description": "Prepare scripts or procedures to migrate existing data to the new schema format, ensuring no data loss and maintaining backward compatibility.",
-            "dependencies": [
-              "15.3"
-            ],
-            "details": "Identify any data transformations needed due to schema changes (e.g., populating new columns, migrating relationships). Write SQL or application-level scripts to perform these migrations safely. Ensure that legacy data remains accessible and that the application can operate during the transition.",
-            "status": "pending",
-            "testStrategy": "Run migration scripts on a copy of production data and validate data integrity and accessibility."
-          },
-          {
-            "id": 5,
-            "title": "Test Migration Process in Staging Environment",
-            "description": "Execute the full migration process, including schema and data migration, in a staging environment to validate correctness and performance.",
-            "dependencies": [
-              "15.4"
-            ],
-            "details": "Apply the migration and data scripts to a staging database that mirrors production. Run application-level tests to ensure all media management features work as expected. Monitor for errors, performance issues, and verify that all indexes and foreign keys are correctly applied.\n<info added on 2025-10-07T19:38:49.795Z>\nMigration process completed successfully in the development environment.\n\nActions performed:\n- Backup created: backup_antes_migrations_20251007_202753.sql (58 KB)\n- Connection tested: gonzagas_dev@gonzagas_local\n- Initial state documented: 8 tables, 188 products, 188 product_images\n\nMigrations executed:\n- Migration 002: media_files and media_usage tables created\n- Migration 003: media_id added to product_images\n\nVerifications:\n- SHOW TABLES: 10 tables (8 old + 2 new)\n- media_files: 14 columns\n- media_usage: 5 columns\n- product_images: media_id present (NULLABLE)\n- Data integrity: 188 products intact\n- Zero data loss confirmed\n\nResult: Database ready for media management features.\n</info added on 2025-10-07T19:38:49.795Z>",
-            "status": "pending",
-            "testStrategy": "Perform automated and manual tests for schema integrity, data correctness, and application functionality."
-          },
-          {
-            "id": 6,
-            "title": "Deploy Migration to Production and Monitor",
-            "description": "Safely deploy the migration scripts to the production environment, monitor for issues, and provide a rollback plan if needed.",
-            "dependencies": [
-              "15.5"
-            ],
-            "details": "Schedule downtime or maintenance window if required by hosting constraints. Execute backup, apply migration scripts, and monitor logs for errors. Validate application functionality post-migration. Be prepared to execute rollback procedures if critical issues are detected.",
-            "status": "pending",
-            "testStrategy": "Monitor production for errors, run post-migration validation queries, and confirm with stakeholders that all features are operational."
+            "testStrategy": "Test error scenarios such as invalid query parameters, database failures, and empty result sets. Confirm that errors are handled gracefully and the API responds with correct status codes and messages."
           }
         ]
       },
       {
-        "id": 16,
-        "title": "Apply Mobile-First and Bali/Boho Design Enhancements",
-        "description": "Ensure all new UI components follow dark mode, gold accents, touch targets, spacing, and typography requirements.",
-        "details": "Update CSS for dark backgrounds (#1a1a1a), gold accents (#c0a080), Poppins/Inter fonts, FontAwesome icons, and generous spacing. Ensure touch targets >=44x44px and immediate visual feedback.",
-        "testStrategy": "Review UI on mobile and desktop for design consistency, accessibility, and feedback. Validate touch target sizes and color usage.",
-        "priority": "medium",
+        "id": 24,
+        "title": "Implement Catalog Page with Functional Filters and Pagination",
+        "description": "Build catalogo-dark.ejs with product grid, filter UI, and pagination controls.",
+        "details": "Design views/pages/catalogo-dark.ejs to display products in a responsive grid. Integrate filtros.ejs for filtering by stone and metal. Add sorting dropdown and pagination controls. Ensure query params are preserved in URLs. Use card-produto.ejs for product display.",
+        "testStrategy": "Test filtering, sorting, and pagination in browser. Validate URL query params and navigation. Check grid responsiveness and accessibility.",
+        "priority": "high",
         "dependencies": [
-          1,
-          5,
-          8,
-          11
+          23,
+          20
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Responsive Product Grid in catalogo-dark.ejs",
+            "description": "Create a responsive grid layout in catalogo-dark.ejs to display products using card-produto.ejs for each item, ensuring the grid adapts to different screen sizes.",
+            "dependencies": [],
+            "details": "Implement a CSS grid or flexbox layout in catalogo-dark.ejs that dynamically adjusts the number of columns based on viewport width. Integrate card-produto.ejs as the template for each product card, ensuring consistent styling and accessibility. Test across mobile, tablet, and desktop breakpoints.",
+            "status": "pending",
+            "testStrategy": "Verify grid responsiveness by resizing the browser window and checking on multiple devices. Ensure product cards render correctly and maintain alignment."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Filter UI with filtros.ejs for Stone and Metal",
+            "description": "Embed the filtros.ejs component into catalogo-dark.ejs to enable filtering products by stone and metal attributes.",
+            "dependencies": [],
+            "details": "Include filtros.ejs within catalogo-dark.ejs, ensuring the filter controls are visually cohesive with the page design. Connect the filter UI to the product data so selections dynamically update the displayed products. Preserve filter state in the URL query parameters for shareable links.",
+            "status": "pending",
+            "testStrategy": "Test each filter option to confirm only matching products are shown. Check that filter state is reflected and preserved in the URL. Verify that page reloads restore the correct filtered view."
+          },
+          {
+            "id": 3,
+            "title": "Add Product Sorting Dropdown Control",
+            "description": "Implement a dropdown UI element in catalogo-dark.ejs that allows users to sort products by relevant criteria (e.g., price, name).",
+            "dependencies": [],
+            "details": "Design and integrate a sorting dropdown that triggers client-side reordering of the product grid. Ensure the selected sort option is included in the URL query parameters for consistent navigation. Update the product grid instantly upon sort selection.",
+            "status": "pending",
+            "testStrategy": "Test each sort option to confirm the product grid updates correctly. Validate that the sort parameter is preserved in the URL and survives page reloads."
+          },
+          {
+            "id": 4,
+            "title": "Implement Pagination Controls with Preserved Query Params",
+            "description": "Add pagination controls to catalogo-dark.ejs, allowing users to navigate through product pages while maintaining all active filters and sort options in the URL.",
+            "dependencies": [],
+            "details": "Develop pagination UI (previous/next buttons, page numbers) that updates the product grid without full page reloads where possible. Ensure all active filters, sort options, and the current page are encoded in the URL query parameters. Handle edge cases (e.g., empty result sets, last page).",
+            "status": "pending",
+            "testStrategy": "Navigate through pagination controls to verify products update correctly. Check that URL query params reflect the current page and all active filters/sorts. Test behavior with filtered or sorted results."
+          },
+          {
+            "id": 5,
+            "title": "Ensure URL Query Param Consistency Across All Interactions",
+            "description": "Guarantee that every user interaction (filtering, sorting, pagination) updates and preserves the correct URL query parameters for shareable, bookmarkable, and reload-safe catalog views.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Implement logic to synchronize the URL query parameters with the current catalog state after any filter, sort, or pagination action. Ensure the page can be reloaded or shared with others while retaining the exact product view. Use JavaScript to manage URL updates without unnecessary page reloads where possible.",
+            "status": "pending",
+            "testStrategy": "After each interaction (filter, sort, paginate), check that the URL updates correctly. Reload the page or copy the URL to another browser tab to confirm the catalog state is restored accurately. Test with various combinations of filters, sorts, and pages."
+          }
+        ]
       },
       {
-        "id": 17,
-        "title": "Document API Endpoints and Media Management Workflows",
-        "description": "Provide developer documentation for new endpoints, database schema, camera capture, and image processing pipeline.",
-        "details": "Write API docs for media endpoints, describe database changes, and provide implementation guides for camera and image processing. Include troubleshooting and best practices.",
-        "testStrategy": "Review documentation for completeness, clarity, and accuracy. Validate with developer feedback.",
-        "priority": "medium",
+        "id": 25,
+        "title": "Create Product Detail Page with Storytelling and Gallery",
+        "description": "Implement produto-dark.ejs to show product details, gallery, and 'Origem da Matéria' storytelling.",
+        "details": "Build views/pages/produto-dark.ejs to display product info: stone scientific name, origin, metal type/purity, artisan name, crafting technique, care instructions. Add image gallery with thumbnails and lazy loading. Use Open Graph meta tags and SEO best practices.",
+        "testStrategy": "Test rendering for products with/without all fields. Validate gallery functionality, lazy loading, and meta tags. Check accessibility and print styles.",
+        "priority": "high",
         "dependencies": [
-          1,
-          5,
-          15
+          22,
+          20
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design EJS Template Structure for Product Detail Page",
+            "description": "Create the initial produto-dark.ejs file structure to display all required product fields and sections.",
+            "dependencies": [],
+            "details": "Set up views/pages/produto-dark.ejs with placeholders for stone scientific name, origin, metal type/purity, artisan name, crafting technique, care instructions, and 'Origem da Matéria' storytelling. Use semantic HTML and ensure logical sectioning for accessibility.",
+            "status": "pending",
+            "testStrategy": "Render the template with mock data to verify all sections appear and are structured correctly."
+          },
+          {
+            "id": 2,
+            "title": "Implement Dynamic Data Rendering in EJS Template",
+            "description": "Integrate EJS logic to render product details dynamically based on data passed from the controller.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use EJS scriptlet tags to output product fields and conditionally render sections if data is missing. Ensure all product attributes are displayed using EJS syntax and handle cases where some fields may be undefined.",
+            "status": "pending",
+            "testStrategy": "Test with products having full and partial data. Confirm correct rendering and absence of errors for missing fields."
+          },
+          {
+            "id": 3,
+            "title": "Develop Image Gallery with Thumbnails and Lazy Loading",
+            "description": "Add an interactive image gallery to the template, supporting thumbnails and lazy loading for performance.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a gallery section using HTML and JavaScript. Display main image and clickable thumbnails. Use the 'loading=\"lazy\"' attribute for images. Ensure gallery is accessible and works on mobile and desktop.",
+            "status": "pending",
+            "testStrategy": "Verify gallery displays all images, thumbnails switch main image, and lazy loading works by monitoring network requests."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Storytelling Section ('Origem da Matéria')",
+            "description": "Implement the storytelling section to narrate the origin and crafting story of the product.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add a dedicated section in the template for 'Origem da Matéria', rendering narrative content from product data. Style for readability and ensure it fits the overall page design.",
+            "status": "pending",
+            "testStrategy": "Check that the storytelling section displays correctly for products with and without narrative content."
+          },
+          {
+            "id": 5,
+            "title": "Add Open Graph Meta Tags and SEO Enhancements",
+            "description": "Implement Open Graph meta tags and other SEO best practices in the EJS template.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Insert dynamic meta tags for title, description, and images using EJS. Ensure meta tags reflect product details and gallery images. Add semantic HTML, alt attributes, and check for accessibility and print styles.",
+            "status": "pending",
+            "testStrategy": "Use browser dev tools and SEO analyzers to verify meta tags, accessibility, and print styles. Confirm Open Graph tags populate correctly for each product."
+          }
+        ]
       },
       {
-        "id": 18,
-        "title": "Create User Documentation for Admins",
-        "description": "Prepare guides for mobile photo capture, media gallery organization, and product photography best practices.",
-        "details": "Write step-by-step instructions for using camera capture, organizing media, and optimizing product photos. Include troubleshooting for common issues.",
-        "testStrategy": "Validate documentation usability with admin users. Collect feedback and iterate.",
+        "id": 26,
+        "title": "Prepare Multi-Vendor Page and Base Controller",
+        "description": "Create vendedores.ejs and baseController.js for future multi-vendor support and shared view data.",
+        "details": "Design views/pages/vendedor.ejs with placeholder vendor info and responsive layout. Implement baseController.js to provide common data (site identity, navigation, etc.) to all views. Ensure extensibility for future multi-vendor features.",
+        "testStrategy": "Render vendedores.ejs and validate layout. Test baseController.js data injection in multiple views. Check for future extensibility.",
         "priority": "medium",
         "dependencies": [
-          1,
-          5,
-          8
+          20
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design vendedores.ejs with Placeholder Vendor Information",
+            "description": "Create the initial vendedores.ejs template with placeholder data for a single vendor, ensuring a responsive layout.",
+            "dependencies": [],
+            "details": "Develop views/pages/vendedores.ejs using EJS. Include sections for vendor name, description, and sample product listings. Use placeholder data and ensure the layout adapts to different screen sizes. Structure the template for easy extension to multiple vendors in the future.",
+            "status": "pending",
+            "testStrategy": "Render vendedores.ejs in the browser and verify that all placeholder data displays correctly and the layout is responsive on desktop and mobile."
+          },
+          {
+            "id": 2,
+            "title": "Implement baseController.js for Shared View Data",
+            "description": "Create baseController.js to inject common data (site identity, navigation, etc.) into all views.",
+            "dependencies": [],
+            "details": "Develop controllers/baseController.js to provide shared data such as site title, navigation links, and branding. Use middleware to attach this data to res.locals for access in all EJS templates. Follow modular and extensible coding practices.",
+            "status": "pending",
+            "testStrategy": "Unit test baseController.js to ensure it correctly attaches shared data to res.locals. Render multiple views and confirm shared data is available."
+          },
+          {
+            "id": 3,
+            "title": "Integrate baseController.js with Express Routing",
+            "description": "Apply baseController.js middleware to relevant Express routes to ensure shared data is available in all views.",
+            "dependencies": [
+              2
+            ],
+            "details": "Update the Express app configuration to use baseController.js as middleware for all routes rendering EJS views. Ensure that any new or existing routes for vendor pages utilize this middleware.",
+            "status": "pending",
+            "testStrategy": "Access various routes and verify that shared data from baseController.js appears in the rendered views."
+          },
+          {
+            "id": 4,
+            "title": "Prepare vendedores.ejs for Future Multi-Vendor Support",
+            "description": "Refactor vendedores.ejs to support dynamic rendering of multiple vendors using an array of vendor data.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Modify vendedores.ejs to iterate over a vendors array and render each vendor's information. Update the controller logic to pass a sample array of vendor objects to the view. Ensure the template structure is flexible for future enhancements.",
+            "status": "pending",
+            "testStrategy": "Pass multiple vendor objects to vendedores.ejs and verify that all vendors are rendered correctly and the layout remains responsive."
+          },
+          {
+            "id": 5,
+            "title": "Document Extensibility and Usage for Future Multi-Vendor Features",
+            "description": "Write documentation explaining how to extend vendedores.ejs and baseController.js for future multi-vendor features.",
+            "dependencies": [
+              4
+            ],
+            "details": "Create a markdown file or code comments detailing how to add new vendor fields, extend shared data in baseController.js, and integrate additional multi-vendor logic. Include examples and best practices for maintainability.",
+            "status": "pending",
+            "testStrategy": "Review documentation for clarity and completeness. Have another developer follow the instructions to verify they can extend the functionality as described."
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "title": "Optimize Performance, SEO, and Accessibility",
+        "description": "Implement lazy loading, compression, cache headers, meta tags, Open Graph, and accessibility improvements.",
+        "details": "Add loading=\"lazy\" to all images. Integrate middleware compression (gzip/brotli) in Express. Set cache headers for static assets (7d for CSS, 30d for images). Add meta tags and Open Graph tags in EJS layouts. Ensure AA contrast, semantic labels, alt text, reduce motion, and keyboard navigation. Preload critical fonts.",
+        "testStrategy": "Use GTmetrix and PageSpeed Insights for performance. Validate meta tags and Open Graph with browser tools. Test accessibility with axe and manual checks. Confirm cache headers via network inspector.",
+        "priority": "high",
+        "dependencies": [
+          21,
+          24,
+          25
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Performance Optimizations",
+            "description": "Apply technical optimizations to improve page load speed, reduce bandwidth usage, and enhance user experience.",
+            "dependencies": [],
+            "details": "Add loading='lazy' to all images to defer offscreen image loading. Integrate Express middleware for gzip and Brotli compression to reduce transfer size. Set cache headers for static assets: 7 days for CSS, 30 days for images. Preload critical fonts using <link rel='preload'>. Minimize and combine CSS/JS files, and remove unused code. Use CDN for global asset delivery if not already in place. Test with GTmetrix and PageSpeed Insights for performance metrics and identify bottlenecks.",
+            "status": "pending",
+            "testStrategy": "Use GTmetrix and PageSpeed Insights to measure load times and identify optimization opportunities. Verify cache headers and compression via browser network inspector. Confirm font preloading and lazy loading behavior."
+          },
+          {
+            "id": 2,
+            "title": "Enhance SEO and Social Sharing",
+            "description": "Improve search engine visibility and social media sharing by adding and optimizing meta tags and Open Graph markup.",
+            "dependencies": [
+              21,
+              24
+            ],
+            "details": "Add comprehensive meta tags (title, description, keywords, viewport) and Open Graph tags (og:title, og:description, og:image, etc.) in EJS layout files. Ensure all pages have unique, descriptive titles and descriptions. Validate markup with browser developer tools and social media debuggers. Consider schema.org markup for rich snippets if relevant. Keep URLs clean and semantic, especially for catalog filters and pagination.",
+            "status": "pending",
+            "testStrategy": "Validate meta and Open Graph tags using browser dev tools and Facebook/Twitter sharing debuggers. Check for uniqueness and accuracy across pages. Test URL structure for SEO-friendliness."
+          },
+          {
+            "id": 3,
+            "title": "Upgrade Accessibility Compliance",
+            "description": "Ensure the website meets AA contrast standards, is fully navigable by keyboard, and provides a robust experience for users with disabilities.",
+            "dependencies": [
+              21,
+              24
+            ],
+            "details": "Audit and enforce AA color contrast ratios for all text and interactive elements. Use semantic HTML5 elements and ARIA labels where appropriate. Ensure all images have descriptive alt text. Implement 'prefers-reduced-motion' media queries to respect user motion preferences. Test and fix keyboard navigation for all interactive elements, including filters and pagination. Remove or fix any accessibility violations identified by automated and manual testing.",
+            "status": "pending",
+            "testStrategy": "Test with axe-core and manual checks for WCAG AA compliance. Verify keyboard navigation and screen reader compatibility. Check color contrast with tools like WebAIM Contrast Checker. Confirm reduced-motion support and proper alt text on images."
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "title": "Deploy to Production and Final Validation",
+        "description": "Deploy refactored site to Dominios.pt, validate on real devices, and document changes.",
+        "details": "Deploy incrementally to cPanel/Dominios.pt after client approval. Test site on Android/iOS devices for responsiveness and performance. Validate HTML/CSS with W3C validator. Update README with deployment steps and changes. Ensure rollback plan and client sign-off.",
+        "testStrategy": "Perform smoke tests on production. Validate on multiple devices and browsers. Check deployment logs and rollback capability. Confirm documentation completeness.",
+        "priority": "high",
+        "dependencies": [
+          27
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Obtain Client Approval for Deployment",
+            "description": "Secure explicit sign-off from the client before initiating any deployment to production.",
+            "dependencies": [],
+            "details": "Communicate deployment plan and schedule to the client. Confirm all changes are reviewed and approved. Document approval (e.g., email confirmation).",
+            "status": "pending",
+            "testStrategy": null
+          },
+          {
+            "id": 2,
+            "title": "Incremental Deployment to cPanel/Dominios.pt",
+            "description": "Deploy the refactored site incrementally to the production environment.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use cPanel to upload and replace site files in batches. Monitor deployment logs for errors. Ensure database updates (if any) are applied safely. Maintain a rollback plan with clear steps to revert if issues arise.",
+            "status": "pending",
+            "testStrategy": "Perform smoke tests on production after each deployment batch. Verify critical user journeys. Check deployment logs for errors."
+          },
+          {
+            "id": 3,
+            "title": "Cross-Device and Cross-Browser Validation",
+            "description": "Test the deployed site on real Android and iOS devices, and major browsers.",
+            "dependencies": [
+              2
+            ],
+            "details": "Access the live site on a range of devices (phones, tablets) and browsers (Chrome, Safari, Firefox, Edge). Check for responsiveness, layout integrity, touch interactions, and performance. Document any device-specific issues.",
+            "status": "pending",
+            "testStrategy": "Validate rendering, navigation, and core functionality across all target devices and browsers. Note discrepancies and prioritize fixes."
+          },
+          {
+            "id": 4,
+            "title": "W3C HTML/CSS Validation and Accessibility Check",
+            "description": "Validate all pages using the W3C Markup and CSS Validators to ensure standards compliance.",
+            "dependencies": [
+              2
+            ],
+            "details": "Submit the production site URL to the W3C HTML and CSS validators. Review all errors and warnings. Fix markup issues (e.g., unclosed tags, missing alt attributes) and CSS errors. Ensure semantic HTML and ARIA labels are used correctly for accessibility.",
+            "status": "pending",
+            "testStrategy": "Revalidate after each fix. Confirm zero critical errors. Spot-check accessibility with screen readers if possible."
+          },
+          {
+            "id": 5,
+            "title": "Update Documentation and Finalize Rollback Plan",
+            "description": "Document deployment steps, changes, and ensure a tested rollback procedure is in place.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Update the project README with detailed deployment instructions, notable changes, and any post-deployment notes. Finalize and test the rollback plan. Obtain final client sign-off confirming the site is live and validated.",
+            "status": "pending",
+            "testStrategy": "Review documentation for completeness and accuracy. Simulate rollback to confirm it works as expected. Confirm client acceptance."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-10-07T18:48:52.023Z",
-      "updated": "2025-10-07T19:12:20.799Z",
+      "updated": "2025-10-08T22:50:38.526Z",
       "description": "Tasks for master context"
     }
   }

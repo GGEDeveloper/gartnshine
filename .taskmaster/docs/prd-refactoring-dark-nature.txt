@@ -1,0 +1,304 @@
+# PRD - Gonzaga Art & Shine: Refactoring Dark Nature Theme
+
+## Contexto do Projeto
+Sistema Node.js + Express + EJS + MySQL existente em produção para joalharia alternativa.
+Branch de trabalho: feature/planning-fase1-fase2
+Ambiente: WSL em Windows 11, deploy em cPanel/Dominios.pt
+
+## Objetivo da Refatoração
+Aplicar identidade visual "Gothic Natural" ao sistema existente SEM MIGRAÇÃO de plataforma, mantendo toda a funcionalidade atual e adicionando:
+- Tema Dark Nature completo (Ónix + Olho-de-tigre)
+- Filtros funcionais por pedra natural e metal
+- Storytelling "Origem da Matéria" nas páginas de produto
+- Base preparada para sistema multi-vendedor (futuro)
+- Performance otimizada para hosting partilhado
+
+## Especificações Visuais APROVADAS
+
+### Identidade
+- Conceito: Gothic Natural - elegância que nasce da terra
+- Slogan: "Elegância que nasce da terra"
+- Tipografia: Títulos em Cinzel (600), corpo em Source Sans 3 (400/600)
+- Pedras prioritárias: Ónix (negro profundo) e Olho-de-tigre (dourado)
+- Metais UI: Prata e dourado equilibrados (50/50)
+- SEM azulejos portugueses, SEM selo "Gonzaga Approved"
+
+### Paleta de Cores (Design Token)
+```
+--black: #0B0D0C (fundo principal)
+--moss: #0F2E20 (elementos secundários)
+--forest: #123524 (hover states)
+--earth: #3A2C22 (cards escuros)
+--gold-old: #B08D57 (CTA primário, preços)
+--silver-matte: #C7CACE (CTA secundário)
+--slate: #6E6B65 (texto muted)
+--ivory: #E7E1D6 (texto principal)
+--accent-onyx: #111111 (ónix)
+--accent-tiger: #6B4A1B (olho-de-tigre)
+```
+
+## Requisitos Técnicos
+
+### Estrutura de Arquivos CSS (Novos)
+- gonzagas_node/public/css/tokens.css (variáveis CSS)
+- gonzagas_node/public/css/base.css (reset, tipografia, grid)
+- gonzagas_node/public/css/components.css (header, footer, cards, botões, filtros)
+- gonzagas_node/public/css/pages.css (home, catálogo, PDP, vendedores)
+- Todos os arquivos devem seguir metodologia BEM ou similar
+
+### Views EJS (Novas/Modificadas)
+- views/layouts/main-dark.ejs (layout principal com fontes Google)
+- views/partials/header-dark.ejs (navegação com links pedras)
+- views/partials/footer-dark.ejs (3 colunas responsivas)
+- views/partials/card-produto.ejs (componente reutilizável)
+- views/partials/filtros.ejs (filtros por pedra e metal)
+- views/pages/home-dark.ejs (2 heros: Ónix + Olho-de-tigre)
+- views/pages/catalogo-dark.ejs (grid com filtros funcionais)
+- views/pages/produto-dark.ejs (PDP com galeria + storytelling)
+- views/pages/vendedor.ejs (preparação multi-vendedor)
+
+### Alterações Base de Dados
+Adicionar campos à tabela `produtos`:
+- stone_type ENUM('onix', 'olho-de-tigre', 'outros')
+- stone_origin VARCHAR(120) - origem geográfica
+- metal_finish ENUM('prata_925', 'prata_com_ouro', 'outros')
+- metal_purity VARCHAR(50) - ex: 925, 18k
+- artisan_name VARCHAR(100) - nome do artesão
+- crafting_technique VARCHAR(150) - técnica de fabricação
+- care_instructions TEXT - instruções de cuidado
+
+Criar índices para performance:
+- idx_produtos_stone_type
+- idx_produtos_metal_finish
+- idx_produtos_stone_metal (composto)
+
+### Controllers e Rotas
+- controllers/catalogoController.js (novo - filtros, ordenação, paginação)
+- controllers/baseController.js (dados comuns para todas as views)
+- Atualizar routes/site.js com novas rotas:
+  * GET / - home-dark
+  * GET /catalogo?pedra=&metal=&ordenar= - catálogo filtrado
+  * GET /produto/:slug - PDP com storytelling
+  * GET /vendedores - página artesãos
+  * GET /manifesto - origem e cuidados
+
+### Assets Necessários
+- Texturas de background (ardósia, madeira negra, botânica escura)
+- Ícones SVG para metais (prata, ouro)
+- Favicon SVG + fallback ICO
+- Placeholder para produtos sem imagem
+
+## Funcionalidades Principais
+
+### 1. Filtros de Catálogo
+- Por tipo de pedra (Ónix, Olho-de-tigre, Todas)
+- Por acabamento metal (Prata 925, Prata com ouro, Todos)
+- Ordenação (Mais recentes, Preço crescente/decrescente, Nome A-Z)
+- Paginação (12 produtos por página)
+- URL query params preservados (?pedra=onix&metal=prata_925)
+
+### 2. Storytelling "Origem da Matéria"
+Cada página de produto deve exibir:
+- Pedra natural: nome científico + origem geográfica
+- Metal: tipo + pureza
+- Artesão: nome (se disponível)
+- Técnica de fabricação
+- Instruções específicas de cuidado por tipo de pedra/metal
+
+### 3. Performance e SEO
+- Lazy loading nativo em imagens (loading="lazy")
+- Compressão gzip/brotli para CSS/JS
+- Cache headers para assets estáticos (7d CSS, 30d imagens)
+- Meta tags SEO em todas as páginas
+- Open Graph para redes sociais
+- Preload de fontes críticas (Cinzel, Source Sans 3)
+
+### 4. Responsividade
+- Mobile-first approach
+- Breakpoints: 720px (tablet), 1024px (desktop)
+- Grid responsivo: 4 cols desktop → 3 tablet → 2 mobile
+- Menu mobile (toggle button visually-hidden por padrão)
+- Hero com background-attachment: scroll no mobile (fix iOS)
+
+### 5. Acessibilidade
+- Contrastes AA em todos os textos
+- Reduce motion para prefers-reduced-motion
+- Labels semânticos em formulários
+- Alt text descritivo em imagens
+- Print styles (ocultar nav/footer/botões)
+
+## Fases de Implementação
+
+### FASE 1: Fundação Visual (Semana 1)
+**Objetivo**: Estrutura CSS completa + Layout base funcionando
+
+Tarefas:
+1. Criar todos os arquivos CSS (tokens, base, components, pages)
+2. Implementar layout main-dark.ejs com fontes Google Fonts
+3. Criar partials (header-dark, footer-dark, card-produto, filtros)
+4. Implementar home-dark.ejs com 2 sections hero (Ónix + Olho-de-tigre)
+5. Testar responsividade em mobile/tablet/desktop
+6. Validar aplicação da paleta Dark Nature em todo o site
+7. Implementar modo de impressão e reduce-motion
+
+Entregáveis:
+- Todos os CSS criados e linkados no layout
+- Home page visualmente completa
+- Header/Footer com navegação funcional
+- Site responsivo em 3 breakpoints
+
+### FASE 2: Catálogo e Filtros (Semana 2)
+**Objetivo**: Catálogo funcional + Filtros dinâmicos + PDP com storytelling
+
+Tarefas:
+1. Executar migração SQL (adicionar campos stone_type, metal_finish, etc)
+2. Criar catalogoController.js com lógica de filtros
+3. Implementar catalogo-dark.ejs com grid de produtos
+4. Implementar filtros funcionais (pedra, metal, ordenação)
+5. Criar baseController.js para dados comuns
+6. Implementar produto-dark.ejs (PDP) com galeria + storytelling
+7. Adicionar produtos exemplo no banco (3 Ónix + 3 Olho-de-tigre)
+8. Criar página vendedores.ejs (preparação multi-vendedor)
+9. Testar todos os filtros e navegação entre páginas
+10. Implementar paginação no catálogo
+
+Entregáveis:
+- Banco de dados com novos campos e índices
+- Catálogo funcional com filtros
+- PDP completo com "Origem da Matéria"
+- 6 produtos exemplo cadastrados
+
+### FASE 3: Otimização e Deploy (Final)
+**Objetivo**: Site otimizado, acessível e em produção
+
+Tarefas:
+1. Implementar lazy loading de imagens com fallback
+2. Configurar compressão (middleware compression)
+3. Configurar cache headers para assets estáticos
+4. Otimizar consultas SQL (usar prepared statements)
+5. Adicionar meta tags SEO em todas as páginas
+6. Implementar Open Graph tags
+7. Testar acessibilidade (contrastes, aria-labels)
+8. Testar performance (GTmetrix, PageSpeed Insights)
+9. Validar HTML/CSS (W3C validator)
+10. Deploy no ambiente de produção (Dominios.pt)
+11. Testes finais em dispositivos reais (Android, iOS)
+12. Documentar alterações no README
+
+Entregáveis:
+- Site otimizado (LCP < 2.5s)
+- Contrastes AA validados
+- Deploy em produção funcional
+- Documentação de deployment atualizada
+
+## Critérios de Aceitação
+
+### Visual
+- ✅ Todas as cores seguem a paleta Dark Nature exatamente
+- ✅ Tipografia Cinzel aplicada em todos os títulos
+- ✅ Metais UI equilibrados (50% prata, 50% dourado)
+- ✅ Sem azulejos portugueses, sem selo "Gonzaga Approved"
+- ✅ Responsivo perfeito em mobile/tablet/desktop
+
+### Funcional
+- ✅ Filtros por pedra funcionais (Ónix, Olho-de-tigre, Todas)
+- ✅ Filtros por metal funcionais (Prata 925, Prata com ouro, Todos)
+- ✅ Ordenação funcional (Recentes, Preço, Nome)
+- ✅ Paginação funcional (12 produtos/página)
+- ✅ Storytelling "Origem da Matéria" em todas as PDPs
+- ✅ Galeria de imagens com thumbnails funcionando
+
+### Performance
+- ✅ LCP (Largest Contentful Paint) < 2.5s
+- ✅ FID (First Input Delay) < 100ms
+- ✅ CLS (Cumulative Layout Shift) < 0.1
+- ✅ Imagens com lazy loading
+- ✅ CSS/JS comprimidos
+- ✅ Cache headers configurados
+
+### Acessibilidade
+- ✅ Contraste AA em todos os textos
+- ✅ Alt text em todas as imagens
+- ✅ Labels em todos os formulários
+- ✅ Reduce motion implementado
+- ✅ Navegação por teclado funcional
+
+### SEO
+- ✅ Meta tags title/description em todas as páginas
+- ✅ Open Graph tags configuradas
+- ✅ URLs amigáveis (/catalogo?pedra=onix)
+- ✅ Sitemap XML atualizado
+- ✅ Robots.txt configurado
+
+## Restrições e Dependências
+
+### Restrições
+- NÃO migrar de Node.js/Express/EJS
+- NÃO alterar lógica de negócio existente
+- NÃO remover funcionalidades atuais
+- NÃO fazer deploy sem aprovação explícita do cliente
+- NÃO adicionar dependências NPM desnecessárias
+
+### Dependências Técnicas
+- Node.js 16+ (já instalado)
+- MySQL 8.0+ (já configurado)
+- Express + EJS (já implementados)
+- Fontes Google (Cinzel, Source Sans 3) - carregamento externo OK
+- Middleware compression (adicionar se não existir)
+
+### Aprovações Necessárias
+- Cliente deve aprovar antes de cada deploy
+- Cliente deve validar cada fase antes de prosseguir
+- Qualquer desvio das especificações DEVE ser aprovado
+- Adição de novas funcionalidades DEVE ser aprovada
+
+## Métricas de Sucesso
+
+### Quantitativas
+- Performance: LCP < 2.5s em 3G
+- Bounce rate < 40%
+- Tempo médio na página PDP > 2min
+- Taxa de conversão (se houver e-commerce) +15%
+
+### Qualitativas
+- Cliente satisfeito com identidade visual
+- Usuários conseguem filtrar produtos facilmente
+- Storytelling transmite autenticidade
+- Site transmite elegância e conexão com a natureza
+
+## Timeline e Recursos
+
+### Estimativa Total: 10-14 dias úteis
+- Fase 1: 3-4 dias
+- Fase 2: 4-5 dias
+- Fase 3: 3-5 dias
+
+### Recursos Necessários
+- 1 Desenvolvedor Full-Stack (Node.js + Frontend)
+- Acesso ao servidor de produção (cPanel)
+- Acesso ao banco de dados MySQL
+- Imagens de produtos (fornecidas pelo cliente)
+- Texturas de background (buscar ou gerar)
+
+## Riscos e Mitigações
+
+### Risco 1: Performance em hosting partilhado
+Mitigação: Otimização agressiva, cache headers, lazy loading
+
+### Risco 2: Compatibilidade com sistema existente
+Mitigação: Testar em ambiente local idêntico antes de deploy
+
+### Risco 3: Fontes Google Fonts causando FOUT
+Mitigação: Usar font-display: swap + preload
+
+### Risco 4: Imagens grandes causando LCP alto
+Mitigação: Lazy loading + WebP + compressão
+
+## Notas Finais
+
+Este PRD deve ser seguido ESTRITAMENTE. Qualquer alteração, adição ou remoção de funcionalidades DEVE ser aprovada explicitamente pelo cliente (Hugo Gonzaga Gomes) antes da implementação.
+
+O sistema existente DEVE permanecer funcional durante toda a refatoração. Deploy incremental preferível a big bang.
+
+Manter branch feature/planning-fase1-fase2 como base, criar sub-branches para cada fase se necessário.
+

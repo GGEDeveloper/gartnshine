@@ -1,0 +1,43 @@
+# Task ID: 21
+# Title: Implement Home Page with Dual Hero Sections
+# Status: pending
+# Dependencies: 20
+# Priority: high
+# Description: Create home-dark.ejs with two hero sections for Ónix and Olho-de-tigre, using approved backgrounds and responsive grid.
+# Details:
+Design views/pages/home-dark.ejs with two visually distinct hero sections, each featuring background textures (ardósia, madeira negra, botânica escura), product highlights, and CTA buttons styled per palette. Ensure mobile-first grid adapts to 4/3/2 columns. Use background-attachment: scroll for mobile compatibility.
+
+# Test Strategy:
+Test rendering on mobile, tablet, desktop. Validate hero backgrounds, grid responsiveness, and CTA visibility. Check accessibility and print styles.
+
+# Subtasks:
+## 1. Design Wireframes for Dual Hero Sections [pending]
+### Dependencies: None
+### Description: Create wireframes for the home-dark.ejs page, clearly outlining two visually distinct hero sections for Ónix and Olho-de-tigre, each with unique backgrounds and layout.
+### Details:
+Produce low- and high-fidelity wireframes showing placement of headlines, subheadings, product highlights, CTA buttons, and background textures (ardósia, madeira negra, botânica escura). Ensure both desktop and mobile layouts are represented, with a focus on mobile-first grid structure.
+
+## 2. Implement Responsive Grid Layout in home-dark.ejs [pending]
+### Dependencies: 21.1
+### Description: Develop the responsive grid system in home-dark.ejs to support 4/3/2 columns adapting to desktop, tablet, and mobile.
+### Details:
+Use CSS Grid or Flexbox to create a mobile-first layout that adapts to 4 columns (desktop), 3 columns (tablet), and 2 columns (mobile). Ensure grid supports hero content and product highlights. Test with various screen sizes.
+
+## 3. Integrate Approved Background Textures and Visual Styles [pending]
+### Dependencies: 21.2
+### Description: Apply the approved background textures (ardósia, madeira negra, botânica escura) and ensure visual distinction between the two hero sections.
+### Details:
+Add background images/textures to each hero section using CSS. Ensure backgrounds are optimized for performance and use background-attachment: scroll for mobile compatibility. Apply palette-specific styles for each section.
+
+## 4. Develop Hero Content: Headlines, Product Highlights, and CTA Buttons [pending]
+### Dependencies: 21.3
+### Description: Implement content for each hero section, including bold headlines, product highlights, and visually prominent CTA buttons styled per palette.
+### Details:
+Insert and style headline, subheading, product highlights, and CTA buttons for Ónix and Olho-de-tigre. Use bold typography and contrasting colors for readability. Ensure CTAs are accessible and visually distinct.
+
+## 5. Test and Validate Responsiveness, Accessibility, and Print Styles [pending]
+### Dependencies: 21.4
+### Description: Perform comprehensive testing of the home-dark.ejs page for responsiveness, accessibility, and print compatibility.
+### Details:
+Test rendering on mobile, tablet, and desktop. Validate hero backgrounds, grid responsiveness, and CTA visibility. Check accessibility (contrast, alt text, keyboard navigation) and print styles. Address any issues found.
+

@@ -1,0 +1,43 @@
+# Task ID: 25
+# Title: Create Product Detail Page with Storytelling and Gallery
+# Status: pending
+# Dependencies: 22, 20
+# Priority: high
+# Description: Implement produto-dark.ejs to show product details, gallery, and 'Origem da Matéria' storytelling.
+# Details:
+Build views/pages/produto-dark.ejs to display product info: stone scientific name, origin, metal type/purity, artisan name, crafting technique, care instructions. Add image gallery with thumbnails and lazy loading. Use Open Graph meta tags and SEO best practices.
+
+# Test Strategy:
+Test rendering for products with/without all fields. Validate gallery functionality, lazy loading, and meta tags. Check accessibility and print styles.
+
+# Subtasks:
+## 1. Design EJS Template Structure for Product Detail Page [pending]
+### Dependencies: None
+### Description: Create the initial produto-dark.ejs file structure to display all required product fields and sections.
+### Details:
+Set up views/pages/produto-dark.ejs with placeholders for stone scientific name, origin, metal type/purity, artisan name, crafting technique, care instructions, and 'Origem da Matéria' storytelling. Use semantic HTML and ensure logical sectioning for accessibility.
+
+## 2. Implement Dynamic Data Rendering in EJS Template [pending]
+### Dependencies: 25.1
+### Description: Integrate EJS logic to render product details dynamically based on data passed from the controller.
+### Details:
+Use EJS scriptlet tags to output product fields and conditionally render sections if data is missing. Ensure all product attributes are displayed using EJS syntax and handle cases where some fields may be undefined.
+
+## 3. Develop Image Gallery with Thumbnails and Lazy Loading [pending]
+### Dependencies: 25.1
+### Description: Add an interactive image gallery to the template, supporting thumbnails and lazy loading for performance.
+### Details:
+Implement a gallery section using HTML and JavaScript. Display main image and clickable thumbnails. Use the 'loading="lazy"' attribute for images. Ensure gallery is accessible and works on mobile and desktop.
+
+## 4. Integrate Storytelling Section ('Origem da Matéria') [pending]
+### Dependencies: 25.2
+### Description: Implement the storytelling section to narrate the origin and crafting story of the product.
+### Details:
+Add a dedicated section in the template for 'Origem da Matéria', rendering narrative content from product data. Style for readability and ensure it fits the overall page design.
+
+## 5. Add Open Graph Meta Tags and SEO Enhancements [pending]
+### Dependencies: 25.2, 25.3, 25.4
+### Description: Implement Open Graph meta tags and other SEO best practices in the EJS template.
+### Details:
+Insert dynamic meta tags for title, description, and images using EJS. Ensure meta tags reflect product details and gallery images. Add semantic HTML, alt attributes, and check for accessibility and print styles.
+

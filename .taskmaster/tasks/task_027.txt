@@ -1,0 +1,31 @@
+# Task ID: 27
+# Title: Optimize Performance, SEO, and Accessibility
+# Status: pending
+# Dependencies: 21, 24, 25
+# Priority: high
+# Description: Implement lazy loading, compression, cache headers, meta tags, Open Graph, and accessibility improvements.
+# Details:
+Add loading="lazy" to all images. Integrate middleware compression (gzip/brotli) in Express. Set cache headers for static assets (7d for CSS, 30d for images). Add meta tags and Open Graph tags in EJS layouts. Ensure AA contrast, semantic labels, alt text, reduce motion, and keyboard navigation. Preload critical fonts.
+
+# Test Strategy:
+Use GTmetrix and PageSpeed Insights for performance. Validate meta tags and Open Graph with browser tools. Test accessibility with axe and manual checks. Confirm cache headers via network inspector.
+
+# Subtasks:
+## 1. Implement Performance Optimizations [pending]
+### Dependencies: None
+### Description: Apply technical optimizations to improve page load speed, reduce bandwidth usage, and enhance user experience.
+### Details:
+Add loading='lazy' to all images to defer offscreen image loading. Integrate Express middleware for gzip and Brotli compression to reduce transfer size. Set cache headers for static assets: 7 days for CSS, 30 days for images. Preload critical fonts using <link rel='preload'>. Minimize and combine CSS/JS files, and remove unused code. Use CDN for global asset delivery if not already in place. Test with GTmetrix and PageSpeed Insights for performance metrics and identify bottlenecks.
+
+## 2. Enhance SEO and Social Sharing [pending]
+### Dependencies: 27.21, 27.24
+### Description: Improve search engine visibility and social media sharing by adding and optimizing meta tags and Open Graph markup.
+### Details:
+Add comprehensive meta tags (title, description, keywords, viewport) and Open Graph tags (og:title, og:description, og:image, etc.) in EJS layout files. Ensure all pages have unique, descriptive titles and descriptions. Validate markup with browser developer tools and social media debuggers. Consider schema.org markup for rich snippets if relevant. Keep URLs clean and semantic, especially for catalog filters and pagination.
+
+## 3. Upgrade Accessibility Compliance [pending]
+### Dependencies: 27.21, 27.24
+### Description: Ensure the website meets AA contrast standards, is fully navigable by keyboard, and provides a robust experience for users with disabilities.
+### Details:
+Audit and enforce AA color contrast ratios for all text and interactive elements. Use semantic HTML5 elements and ARIA labels where appropriate. Ensure all images have descriptive alt text. Implement 'prefers-reduced-motion' media queries to respect user motion preferences. Test and fix keyboard navigation for all interactive elements, including filters and pagination. Remove or fix any accessibility violations identified by automated and manual testing.
+

@@ -1,0 +1,43 @@
+# Task ID: 19
+# Title: Create and Integrate CSS Architecture for Dark Nature Theme
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Set up new CSS files (tokens.css, base.css, components.css, pages.css) following BEM methodology and approved design tokens.
+# Details:
+Create the following files in gonzagas_node/public/css: tokens.css (define all color variables as per palette), base.css (reset, typography with Cinzel and Source Sans 3, grid system), components.css (header, footer, cards, buttons, filters), pages.css (home, catalog, PDP, vendors). Use BEM for class naming. Link all CSS files in EJS layouts. Ensure Google Fonts are loaded with font-display: swap and preload.
+
+# Test Strategy:
+Validate that all pages render with correct colors, typography, and layout. Use browser dev tools to check CSS variables and BEM classes. Test font loading and fallback. Confirm visual compliance with approved identity.
+
+# Subtasks:
+## 1. Define and Implement Design Tokens in tokens.css [pending]
+### Dependencies: None
+### Description: Create tokens.css and define all color variables and design tokens according to the approved Dark Nature palette.
+### Details:
+Set up tokens.css in gonzagas_node/public/css. Include CSS custom properties for colors, spacing, font sizes, and other design tokens. Ensure variables are named clearly and consistently for easy reference throughout the architecture.
+
+## 2. Establish Base Styles and Typography in base.css [pending]
+### Dependencies: 19.1
+### Description: Create base.css with CSS reset, typography rules using Cinzel and Source Sans 3, and a responsive grid system.
+### Details:
+Implement a CSS reset to normalize styles. Set up font-face rules for Cinzel and Source Sans 3, ensuring Google Fonts are loaded with font-display: swap and preload. Define base typography (headings, paragraphs, links) and a grid system using CSS Grid or Flexbox. Reference design tokens for colors and spacing.
+
+## 3. Develop Component Styles in components.css Using BEM [pending]
+### Dependencies: 19.2
+### Description: Create components.css and implement styles for header, footer, cards, buttons, and filters using BEM class naming.
+### Details:
+Define BEM blocks for each component (e.g., .header, .footer, .card, .button, .filter) and their elements/modifiers. Use design tokens for colors and spacing. Ensure each component is modular and follows single responsibility principle. Avoid ID and tag selectors, minimize nesting, and keep selectors at single specificity level[1][2].
+
+## 4. Implement Page-Specific Styles in pages.css Using BEM [pending]
+### Dependencies: 19.3
+### Description: Create pages.css and add styles for home, catalog, product detail (PDP), and vendors pages using BEM methodology.
+### Details:
+Define BEM blocks for each page (e.g., .home, .catalog, .pdp, .vendors) and their unique elements/modifiers. Reference components and design tokens for consistency. Ensure page styles are scoped and do not conflict with global/component styles.
+
+## 5. Integrate and Link CSS Files in EJS Layouts with Font Optimization [pending]
+### Dependencies: 19.4
+### Description: Link all CSS files (tokens.css, base.css, components.css, pages.css) in EJS layouts and ensure Google Fonts are optimized.
+### Details:
+Edit EJS layout templates to include all CSS files in the correct order. Add <link rel='preload'> and font-display: swap for Google Fonts. Confirm that all pages load the CSS and fonts efficiently, with no blocking or FOUC (Flash of Unstyled Content).
+

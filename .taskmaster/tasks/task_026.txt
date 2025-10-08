@@ -1,0 +1,43 @@
+# Task ID: 26
+# Title: Prepare Multi-Vendor Page and Base Controller
+# Status: pending
+# Dependencies: 20
+# Priority: medium
+# Description: Create vendedores.ejs and baseController.js for future multi-vendor support and shared view data.
+# Details:
+Design views/pages/vendedor.ejs with placeholder vendor info and responsive layout. Implement baseController.js to provide common data (site identity, navigation, etc.) to all views. Ensure extensibility for future multi-vendor features.
+
+# Test Strategy:
+Render vendedores.ejs and validate layout. Test baseController.js data injection in multiple views. Check for future extensibility.
+
+# Subtasks:
+## 1. Design vendedores.ejs with Placeholder Vendor Information [pending]
+### Dependencies: None
+### Description: Create the initial vendedores.ejs template with placeholder data for a single vendor, ensuring a responsive layout.
+### Details:
+Develop views/pages/vendedores.ejs using EJS. Include sections for vendor name, description, and sample product listings. Use placeholder data and ensure the layout adapts to different screen sizes. Structure the template for easy extension to multiple vendors in the future.
+
+## 2. Implement baseController.js for Shared View Data [pending]
+### Dependencies: None
+### Description: Create baseController.js to inject common data (site identity, navigation, etc.) into all views.
+### Details:
+Develop controllers/baseController.js to provide shared data such as site title, navigation links, and branding. Use middleware to attach this data to res.locals for access in all EJS templates. Follow modular and extensible coding practices.
+
+## 3. Integrate baseController.js with Express Routing [pending]
+### Dependencies: 26.2
+### Description: Apply baseController.js middleware to relevant Express routes to ensure shared data is available in all views.
+### Details:
+Update the Express app configuration to use baseController.js as middleware for all routes rendering EJS views. Ensure that any new or existing routes for vendor pages utilize this middleware.
+
+## 4. Prepare vendedores.ejs for Future Multi-Vendor Support [pending]
+### Dependencies: 26.1, 26.2, 26.3
+### Description: Refactor vendedores.ejs to support dynamic rendering of multiple vendors using an array of vendor data.
+### Details:
+Modify vendedores.ejs to iterate over a vendors array and render each vendor's information. Update the controller logic to pass a sample array of vendor objects to the view. Ensure the template structure is flexible for future enhancements.
+
+## 5. Document Extensibility and Usage for Future Multi-Vendor Features [pending]
+### Dependencies: 26.4
+### Description: Write documentation explaining how to extend vendedores.ejs and baseController.js for future multi-vendor features.
+### Details:
+Create a markdown file or code comments detailing how to add new vendor fields, extend shared data in baseController.js, and integrate additional multi-vendor logic. Include examples and best practices for maintainability.
+

@@ -1,0 +1,43 @@
+# Task ID: 24
+# Title: Implement Catalog Page with Functional Filters and Pagination
+# Status: pending
+# Dependencies: 23, 20
+# Priority: high
+# Description: Build catalogo-dark.ejs with product grid, filter UI, and pagination controls.
+# Details:
+Design views/pages/catalogo-dark.ejs to display products in a responsive grid. Integrate filtros.ejs for filtering by stone and metal. Add sorting dropdown and pagination controls. Ensure query params are preserved in URLs. Use card-produto.ejs for product display.
+
+# Test Strategy:
+Test filtering, sorting, and pagination in browser. Validate URL query params and navigation. Check grid responsiveness and accessibility.
+
+# Subtasks:
+## 1. Design Responsive Product Grid in catalogo-dark.ejs [pending]
+### Dependencies: None
+### Description: Create a responsive grid layout in catalogo-dark.ejs to display products using card-produto.ejs for each item, ensuring the grid adapts to different screen sizes.
+### Details:
+Implement a CSS grid or flexbox layout in catalogo-dark.ejs that dynamically adjusts the number of columns based on viewport width. Integrate card-produto.ejs as the template for each product card, ensuring consistent styling and accessibility. Test across mobile, tablet, and desktop breakpoints.
+
+## 2. Integrate Filter UI with filtros.ejs for Stone and Metal [pending]
+### Dependencies: None
+### Description: Embed the filtros.ejs component into catalogo-dark.ejs to enable filtering products by stone and metal attributes.
+### Details:
+Include filtros.ejs within catalogo-dark.ejs, ensuring the filter controls are visually cohesive with the page design. Connect the filter UI to the product data so selections dynamically update the displayed products. Preserve filter state in the URL query parameters for shareable links.
+
+## 3. Add Product Sorting Dropdown Control [pending]
+### Dependencies: None
+### Description: Implement a dropdown UI element in catalogo-dark.ejs that allows users to sort products by relevant criteria (e.g., price, name).
+### Details:
+Design and integrate a sorting dropdown that triggers client-side reordering of the product grid. Ensure the selected sort option is included in the URL query parameters for consistent navigation. Update the product grid instantly upon sort selection.
+
+## 4. Implement Pagination Controls with Preserved Query Params [pending]
+### Dependencies: None
+### Description: Add pagination controls to catalogo-dark.ejs, allowing users to navigate through product pages while maintaining all active filters and sort options in the URL.
+### Details:
+Develop pagination UI (previous/next buttons, page numbers) that updates the product grid without full page reloads where possible. Ensure all active filters, sort options, and the current page are encoded in the URL query parameters. Handle edge cases (e.g., empty result sets, last page).
+
+## 5. Ensure URL Query Param Consistency Across All Interactions [pending]
+### Dependencies: 24.2, 24.3, 24.4
+### Description: Guarantee that every user interaction (filtering, sorting, pagination) updates and preserves the correct URL query parameters for shareable, bookmarkable, and reload-safe catalog views.
+### Details:
+Implement logic to synchronize the URL query parameters with the current catalog state after any filter, sort, or pagination action. Ensure the page can be reloaded or shared with others while retaining the exact product view. Use JavaScript to manage URL updates without unnecessary page reloads where possible.
+

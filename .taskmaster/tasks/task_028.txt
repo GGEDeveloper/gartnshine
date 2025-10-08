@@ -1,0 +1,43 @@
+# Task ID: 28
+# Title: Deploy to Production and Final Validation
+# Status: pending
+# Dependencies: 27
+# Priority: high
+# Description: Deploy refactored site to Dominios.pt, validate on real devices, and document changes.
+# Details:
+Deploy incrementally to cPanel/Dominios.pt after client approval. Test site on Android/iOS devices for responsiveness and performance. Validate HTML/CSS with W3C validator. Update README with deployment steps and changes. Ensure rollback plan and client sign-off.
+
+# Test Strategy:
+Perform smoke tests on production. Validate on multiple devices and browsers. Check deployment logs and rollback capability. Confirm documentation completeness.
+
+# Subtasks:
+## 1. Obtain Client Approval for Deployment [pending]
+### Dependencies: None
+### Description: Secure explicit sign-off from the client before initiating any deployment to production.
+### Details:
+Communicate deployment plan and schedule to the client. Confirm all changes are reviewed and approved. Document approval (e.g., email confirmation).
+
+## 2. Incremental Deployment to cPanel/Dominios.pt [pending]
+### Dependencies: 28.1
+### Description: Deploy the refactored site incrementally to the production environment.
+### Details:
+Use cPanel to upload and replace site files in batches. Monitor deployment logs for errors. Ensure database updates (if any) are applied safely. Maintain a rollback plan with clear steps to revert if issues arise.
+
+## 3. Cross-Device and Cross-Browser Validation [pending]
+### Dependencies: 28.2
+### Description: Test the deployed site on real Android and iOS devices, and major browsers.
+### Details:
+Access the live site on a range of devices (phones, tablets) and browsers (Chrome, Safari, Firefox, Edge). Check for responsiveness, layout integrity, touch interactions, and performance. Document any device-specific issues.
+
+## 4. W3C HTML/CSS Validation and Accessibility Check [pending]
+### Dependencies: 28.2
+### Description: Validate all pages using the W3C Markup and CSS Validators to ensure standards compliance.
+### Details:
+Submit the production site URL to the W3C HTML and CSS validators. Review all errors and warnings. Fix markup issues (e.g., unclosed tags, missing alt attributes) and CSS errors. Ensure semantic HTML and ARIA labels are used correctly for accessibility.
+
+## 5. Update Documentation and Finalize Rollback Plan [pending]
+### Dependencies: 28.2, 28.3, 28.4
+### Description: Document deployment steps, changes, and ensure a tested rollback procedure is in place.
+### Details:
+Update the project README with detailed deployment instructions, notable changes, and any post-deployment notes. Finalize and test the rollback plan. Obtain final client sign-off confirming the site is live and validated.
+

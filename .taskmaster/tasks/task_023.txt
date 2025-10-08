@@ -1,0 +1,31 @@
+# Task ID: 23
+# Title: Develop Catalog Controller and Filtering Logic
+# Status: pending
+# Dependencies: 22
+# Priority: high
+# Description: Create catalogoController.js to handle product listing, filtering, sorting, and pagination.
+# Details:
+Implement catalogoController.js with Express route handlers for GET /catalogo. Parse query params for pedra, metal, ordenar, and page. Build SQL queries using prepared statements for filtering and sorting. Implement pagination (12 products/page). Ensure modular code structure (controllers, routes, models).
+
+# Test Strategy:
+Unit test controller methods for all filter/sort/pagination combinations. Validate SQL queries for correctness and performance. Test error handling and edge cases.
+
+# Subtasks:
+## 1. Set Up catalogoController.js and Express Route Handler [pending]
+### Dependencies: None
+### Description: Create the catalogoController.js file and define the Express route handler for GET /catalogo.
+### Details:
+Create catalogoController.js in the controllers directory. In this file, export a function to handle GET requests to /catalogo. In the routes file, import this controller and set up the route using Express Router. Ensure the controller is modular and follows Express best practices for separation of concerns.
+
+## 2. Implement Filtering, Sorting, and Pagination Logic [pending]
+### Dependencies: 23.1
+### Description: Parse query parameters (pedra, metal, ordenar, page) and build SQL queries using prepared statements for filtering, sorting, and pagination.
+### Details:
+Within the controller, extract query parameters from req.query. Construct SQL queries using prepared statements to filter by pedra and metal, sort by the ordenar parameter, and paginate results (12 products per page). Use a model layer to interact with the database, ensuring all queries are secure and efficient.
+
+## 3. Ensure Modular Code Structure and Error Handling [pending]
+### Dependencies: 23.2
+### Description: Refactor code to maintain a modular structure (controllers, routes, models) and implement robust error handling.
+### Details:
+Organize code so that business logic resides in the controller, database access in the model, and routing in the routes file. Add error handling for invalid parameters, database errors, and edge cases. Ensure the controller returns appropriate HTTP status codes and error messages.
+

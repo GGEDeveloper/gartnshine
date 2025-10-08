@@ -1,0 +1,43 @@
+# Task ID: 22
+# Title: Extend Database Schema for Product Attributes and Indexes
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Add new fields to produtos table and create performance indexes as specified.
+# Details:
+Alter produtos table to add: stone_type (ENUM), stone_origin (VARCHAR), metal_finish (ENUM), metal_purity (VARCHAR), artisan_name (VARCHAR), crafting_technique (VARCHAR), care_instructions (TEXT). Create indexes: idx_produtos_stone_type, idx_produtos_metal_finish, idx_produtos_stone_metal (composite). Use migration scripts and prepared statements for safety.
+
+# Test Strategy:
+Run migration on test DB, verify schema changes and index creation. Insert sample data and validate queries using new fields and indexes. Check rollback capability.
+
+# Subtasks:
+## 1. Design New Product Attribute Fields for produtos Table [pending]
+### Dependencies: None
+### Description: Specify the data types and constraints for each new field to be added to the produtos table.
+### Details:
+Define the following fields: stone_type (ENUM), stone_origin (VARCHAR), metal_finish (ENUM), metal_purity (VARCHAR), artisan_name (VARCHAR), crafting_technique (VARCHAR), care_instructions (TEXT). Ensure ENUM values are well-documented and VARCHAR lengths are appropriate. Confirm naming conventions follow SQL best practices (lowercase, underscores)[2].
+
+## 2. Create Migration Script to Alter produtos Table [pending]
+### Dependencies: 22.1
+### Description: Develop a safe migration script to add the new fields to the produtos table using prepared statements.
+### Details:
+Write a SQL migration script that uses ALTER TABLE to add each new column. Use prepared statements to prevent SQL injection and ensure transactional safety. Include comments for rollback instructions and versioning.
+
+## 3. Implement Indexes for Performance Optimization [pending]
+### Dependencies: 22.2
+### Description: Create the specified indexes on the produtos table to improve query performance.
+### Details:
+Add single-column indexes: idx_produtos_stone_type (on stone_type), idx_produtos_metal_finish (on metal_finish), and a composite index idx_produtos_stone_metal (on stone_type, metal_finish). Ensure index names follow conventions and avoid redundancy[1].
+
+## 4. Validate Schema and Index Changes with Sample Data [pending]
+### Dependencies: 22.3
+### Description: Insert representative sample data and test queries to ensure new fields and indexes function as intended.
+### Details:
+Populate produtos table with sample records using new fields. Execute queries filtering and sorting by new attributes. Confirm indexes are utilized by examining query execution plans.
+
+## 5. Document Migration, Indexes, and Rollback Procedures [pending]
+### Dependencies: 22.4
+### Description: Prepare comprehensive documentation covering schema changes, index creation, and rollback steps.
+### Details:
+Write documentation detailing the new fields, their data types, ENUM values, index definitions, and migration steps. Include rollback instructions and testing outcomes. Ensure documentation is clear for future maintenance.
+
