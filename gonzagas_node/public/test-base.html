@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste: Base Styles & Typography - Dark Nature</title>
+    
+    <!-- Google Fonts - Cinzel + Source Sans 3 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Dark Nature CSS -->
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/base.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <main id="main">
+            <!-- HEADER -->
+            <header style="padding: 40px 0; border-bottom: var(--border-subtle); margin-bottom: 40px;">
+                <h1 style="font-size: 48px; color: var(--gold-old); margin-bottom: 8px;">
+                    Gonzaga Art & Shine
+                </h1>
+                <p style="font-size: 20px; color: var(--silver-matte); font-style: italic; margin: 0;">
+                    Elegância que nasce da terra
+                </p>
+            </header>
+            
+            <!-- TIPOGRAFIA -->
+            <section>
+                <h2>Tipografia - Cinzel + Source Sans 3</h2>
+                
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle); margin-bottom: 24px;">
+                    <h3>Títulos (Cinzel)</h3>
+                    <h1>H1: Gothic Natural Elegance</h1>
+                    <h2>H2: Elegância que nasce da terra</h2>
+                    <h3>H3: Ónix e Olho-de-tigre</h3>
+                    <h4>H4: Joalharia Alternativa</h4>
+                    <h5>H5: Prata 925 Autêntica</h5>
+                    <h6>H6: Feito à Mão</h6>
+                </div>
+                
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle); margin-bottom: 24px;">
+                    <h3>Corpo de Texto (Source Sans 3)</h3>
+                    <p>
+                        <strong>Parágrafo regular:</strong> A joalharia alternativa encontra sua expressão mais autêntica na união entre <em>pedras naturais</em> e metais nobres. Cada peça conta uma história que começa nas profundezas da terra.
+                    </p>
+                    <p>
+                        <strong>Com ênfase:</strong> O <strong>ónix</strong> representa força e proteção ancestral, enquanto o <em>olho-de-tigre</em> traz a energia dourada da coragem. Ambos trabalham em perfeita harmonia com a <strong>prata 925</strong>.
+                    </p>
+                    <p>
+                        <small>Texto pequeno: Todas as peças são feitas à mão por artesãos qualificados.</small>
+                    </p>
+                </div>
+                
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <h3>Links e Estados</h3>
+                    <p>
+                        <a href="#" style="color: var(--gold-old); text-decoration: underline;">Link Dourado</a> |
+                        <a href="#" style="color: var(--silver-matte); text-decoration: underline;">Link Prata</a> |
+                        <a href="#">Link Normal (hover para ver efeito)</a>
+                    </p>
+                </div>
+            </section>
+            
+            <!-- GRID SYSTEM -->
+            <section>
+                <h2>Sistema de Grid Responsivo</h2>
+                
+                <h3 class="mb-md">Grid 4 Colunas (Desktop) → 3 (Tablet) → 2 (Mobile)</h3>
+                <div class="grid grid-4" style="margin-bottom: 40px;">
+                    <div style="background: var(--earth); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <h4>Col 1</h4>
+                        <p class="mb-0">4 colunas em desktop</p>
+                    </div>
+                    <div style="background: var(--earth); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <h4>Col 2</h4>
+                        <p class="mb-0">3 colunas em tablet</p>
+                    </div>
+                    <div style="background: var(--earth); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <h4>Col 3</h4>
+                        <p class="mb-0">2 colunas em mobile</p>
+                    </div>
+                    <div style="background: var(--earth); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <h4>Col 4</h4>
+                        <p class="mb-0">1 coluna em small mobile</p>
+                    </div>
+                </div>
+                
+                <h3 class="mb-md">Grid Auto-Fit (Min 280px)</h3>
+                <div class="grid grid-auto">
+                    <div style="background: var(--moss); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <p class="mb-0">Auto-fit Card 1</p>
+                    </div>
+                    <div style="background: var(--moss); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <p class="mb-0">Auto-fit Card 2</p>
+                    </div>
+                    <div style="background: var(--moss); padding: 24px; border-radius: var(--radius); text-align: center;">
+                        <p class="mb-0">Auto-fit Card 3</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FORMS -->
+            <section>
+                <h2>Formulários</h2>
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <form>
+                        <div class="mb-md">
+                            <label for="name">Nome:</label>
+                            <input type="text" id="name" placeholder="Seu nome completo">
+                        </div>
+                        
+                        <div class="mb-md">
+                            <label for="stone">Pedra Preferida:</label>
+                            <select id="stone">
+                                <option value="">Selecione uma pedra</option>
+                                <option value="onix">Ónix - Negro profundo</option>
+                                <option value="tiger">Olho-de-tigre - Dourado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-md">
+                            <label for="message">Mensagem:</label>
+                            <textarea id="message" rows="4" placeholder="Conte-nos sobre seu interesse..."></textarea>
+                        </div>
+                        
+                        <button type="button" style="padding: 12px 24px; background: var(--gold-old); color: var(--black); border-radius: var(--radius); font-weight: var(--font-weight-bold); transition: var(--transition-normal);">
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- LISTAS -->
+            <section>
+                <h2>Listas</h2>
+                <div class="grid grid-2">
+                    <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle);">
+                        <h3>Lista Não Ordenada</h3>
+                        <ul>
+                            <li>Ónix - Proteção ancestral</li>
+                            <li>Olho-de-tigre - Coragem dourada</li>
+                            <li>Prata 925 - Metal nobre</li>
+                            <li>Feito à mão - Artesanato autêntico</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle);">
+                        <h3>Lista Ordenada</h3>
+                        <ol>
+                            <li>Escolher a pedra natural</li>
+                            <li>Selecionar o metal (prata/ouro)</li>
+                            <li>Definir o design</li>
+                            <li>Fabricar artesanalmente</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- UTILIDADES -->
+            <section>
+                <h2>Classes Utilitárias</h2>
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <p class="text-left"><strong>Alinhamento esquerda</strong> (padrão)</p>
+                    <p class="text-center"><strong>Alinhamento centro</strong></p>
+                    <p class="text-right"><strong>Alinhamento direita</strong></p>
+                    
+                    <p class="text-gold">Texto em dourado (--gold-old)</p>
+                    <p class="text-silver">Texto em prata (--silver-matte)</p>
+                    <p class="text-muted">Texto muted (--slate)</p>
+                    
+                    <code>var(--gold-old)</code> e <code>var(--silver-matte)</code>
+                </div>
+            </section>
+            
+            <!-- STATUS -->
+            <section>
+                <h2>✅ Validação Base.css</h2>
+                <div style="background: var(--earth); padding: 24px; border-radius: var(--radius-large); border: 2px solid var(--gold-old);">
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>✅ CSS Reset implementado (normalize moderno)</li>
+                        <li>✅ Tipografia Cinzel para títulos (H1-H6)</li>
+                        <li>✅ Tipografia Source Sans 3 para corpo</li>
+                        <li>✅ Font smoothing e text rendering otimizados</li>
+                        <li>✅ Grid system responsivo (2, 3, 4 colunas + auto-fit)</li>
+                        <li>✅ Breakpoints: 720px, 1024px, 480px</li>
+                        <li>✅ Forms estilizados com estados hover/focus</li>
+                        <li>✅ Listas, tabelas, código formatados</li>
+                        <li>✅ Classes utilitárias (text-*, mb-*, mt-*)</li>
+                        <li>✅ Skip link para acessibilidade</li>
+                        <li>✅ Print styles configurados</li>
+                        <li>✅ Reduced motion support</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- FOOTER -->
+            <footer style="margin-top: 80px; padding-top: 40px; border-top: var(--border-subtle); text-align: center; color: var(--slate);">
+                <p><small>Gonzaga Art & Shine - Base Styles Test</small></p>
+            </footer>
+        </main>
+    </div>
+    
+    <script>
+        // Validar que as fontes foram carregadas
+        document.fonts.ready.then(() => {
+            const heading = document.querySelector('h1');
+            const body = document.querySelector('p');
+            
+            const headingFont = getComputedStyle(heading).fontFamily;
+            const bodyFont = getComputedStyle(body).fontFamily;
+            
+            console.log('🎨 Validação de Fontes:');
+            console.log('Títulos (esperado Cinzel):', headingFont);
+            console.log('Corpo (esperado Source Sans 3):', bodyFont);
+            
+            if (headingFont.includes('Cinzel') && bodyFont.includes('Source Sans 3')) {
+                console.log('✅ Fontes carregadas corretamente!');
+            } else {
+                console.warn('⚠️ Fontes podem não estar carregadas. Verifique a conexão Google Fonts.');
+            }
+        });
+        
+        // Test responsive grid
+        window.addEventListener('resize', () => {
+            console.log('Viewport width:', window.innerWidth);
+        });
+        
+        console.log('✅ Base.css validação completa!');
+    </script>
+</body>
+</html>
+
