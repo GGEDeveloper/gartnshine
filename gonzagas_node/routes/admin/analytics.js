@@ -11,6 +11,7 @@ const router = express.Router();
 router.get('/analytics/dashboard', (req, res) => {
     res.render('admin/analytics/dashboard', {
         title: 'Analytics Dashboard',
+        user: req.session?.user || {},
         page: 'analytics'
     });
 });

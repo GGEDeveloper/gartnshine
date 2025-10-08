@@ -38,6 +38,7 @@ router.get('/media/library', async (req, res) => {
         
         res.render('admin/media/library', {
             title: 'Media Library',
+            user: req.session?.user || {},
             folders,
             tags,
             page: 'media-library'
@@ -132,6 +133,50 @@ router.get('/api/media', [
             success: false,
             message: 'Erro ao carregar ficheiros de media',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+/**
+ * GET /admin/api/media/folders
+ * Get all media folders
+ */
+router.get('/api/media/folders', async (req, res) => {
+    try {
+        const folders = await Media.getAllFolders();
+        
+        res.json({
+            success: true,
+            folders
+        });
+        
+    } catch (error) {
+        console.error('Get folders API error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro ao carregar pastas'
+        });
+    }
+});
+
+/**
+ * GET /admin/api/media/tags
+ * Get all media tags
+ */
+router.get('/api/media/tags', async (req, res) => {
+    try {
+        const tags = await Media.getAllTags();
+        
+        res.json({
+            success: true,
+            tags
+        });
+        
+    } catch (error) {
+        console.error('Get tags API error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro ao carregar tags'
         });
     }
 });
@@ -364,50 +409,6 @@ router.delete('/api/media/:id', [
         res.status(500).json({
             success: false,
             message: 'Erro ao eliminar ficheiro'
-        });
-    }
-});
-
-/**
- * GET /admin/api/media/folders
- * Get all media folders
- */
-router.get('/api/media/folders', async (req, res) => {
-    try {
-        const folders = await Media.getAllFolders();
-        
-        res.json({
-            success: true,
-            folders
-        });
-        
-    } catch (error) {
-        console.error('Get folders API error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro ao carregar pastas'
-        });
-    }
-});
-
-/**
- * GET /admin/api/media/tags
- * Get all media tags
- */
-router.get('/api/media/tags', async (req, res) => {
-    try {
-        const tags = await Media.getAllTags();
-        
-        res.json({
-            success: true,
-            tags
-        });
-        
-    } catch (error) {
-        console.error('Get tags API error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro ao carregar tags'
         });
     }
 });

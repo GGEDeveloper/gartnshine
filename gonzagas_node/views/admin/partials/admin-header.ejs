@@ -1,0 +1,72 @@
+<!-- Admin Header / Topbar -->
+<header class="admin-topbar">
+    <div class="topbar-left">
+        <h1 class="brand-title">
+            <span class="brand-icon">💎</span>
+            Gonzaga's Admin
+        </h1>
+    </div>
+    
+    <div class="topbar-center">
+        <!-- Search Global -->
+        <div class="admin-search-enhanced">
+            <input type="text" placeholder="Pesquisar produtos, clientes..." 
+                   class="search-global" autocomplete="off">
+        </div>
+    </div>
+    
+    <div class="topbar-right">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="btn-quick" data-action="new-product" title="Novo Produto">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="btn-quick" data-action="analytics" title="Analytics">
+                <i class="fas fa-chart-line"></i>
+            </button>
+        </div>
+        
+        <!-- User Menu -->
+        <div class="user-menu">
+            <button class="user-avatar" id="userMenuToggle">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff" 
+                     alt="Admin">
+                <span>Admin</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="user-dropdown" id="userDropdown" style="display: none;">
+                <div class="dropdown-header">
+                    <strong><%= user?.name || 'Admin' %></strong>
+                    <small><%= user?.email || 'admin@gonzagas.pt' %></small>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="/admin/settings" class="dropdown-item">
+                    <i class="fas fa-cog"></i> Definições
+                </a>
+                <a href="/" class="dropdown-item" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Ver Site
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/admin/logout" class="dropdown-item logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    // User menu toggle
+    document.getElementById('userMenuToggle')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    document.addEventListener('click', () => {
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown) dropdown.style.display = 'none';
+    });
+</script>
+

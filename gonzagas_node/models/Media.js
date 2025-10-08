@@ -381,7 +381,7 @@ class Media {
         const query = `
             SELECT 
                 mt.*,
-                COUNT(mft.media_file_id) as usage_count
+                COUNT(mft.file_id) as usage_count
             FROM media_tags mt
             LEFT JOIN media_file_tags mft ON mt.id = mft.tag_id
             GROUP BY mt.id
@@ -389,11 +389,13 @@ class Media {
         `;
         
         try {
+            console.log('📊 [Media.getAllTags] Fetching tags...');
             const [rows] = await pool.query(query);
+            console.log('✅ [Media.getAllTags] Tags fetched:', rows.length);
             return rows;
         } catch (error) {
-            console.error('Error getting tags:', error);
-            throw new Error('Failed to fetch tags');
+            console.error('❌ [Media.getAllTags] Error:', error.message);
+            throw new Error('Failed to fetch tags: ' + error.message);
         }
     }
     

@@ -1,0 +1,64 @@
+<!-- Admin Sidebar / Navigation -->
+<aside class="admin-sidebar-v2">
+    <nav class="sidebar-nav">
+        <!-- Overview Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">OVERVIEW</div>
+            <a href="/admin" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/analytics/dashboard" class="nav-item <%= page === 'analytics' ? 'active' : '' %>">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </a>
+        </div>
+        
+        <!-- Products Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">PRODUTOS</div>
+            <a href="/admin/products" class="nav-item <%= page === 'products' ? 'active' : '' %>">
+                <i class="fas fa-gem"></i>
+                <span>Produtos</span>
+                <span class="nav-badge">188</span>
+            </a>
+            <a href="/admin/product-families" class="nav-item <%= page === 'families' ? 'active' : '' %>">
+                <i class="fas fa-folder-open"></i>
+                <span>Categorias</span>
+                <span class="nav-badge">5</span>
+            </a>
+            <a href="/admin/inventory" class="nav-item <%= page === 'inventory' ? 'active' : '' %>">
+                <i class="fas fa-boxes"></i>
+                <span>Inventário</span>
+            </a>
+        </div>
+        
+        <!-- Media Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">MEDIA</div>
+            <a href="/admin/media/library" class="nav-item <%= page === 'media-library' ? 'active' : '' %>">
+                <i class="fas fa-images"></i>
+                <span>Biblioteca</span>
+            </a>
+        </div>
+        
+        <!-- System Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">SISTEMA</div>
+            <a href="/admin/checkpoints" class="nav-item <%= page === 'checkpoints' ? 'active' : '' %>">
+                <i class="fas fa-save"></i>
+                <span>Checkpoints</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- System Health (bottom of sidebar) -->
+    <div class="sidebar-footer">
+        <div class="system-health">
+            <div class="health-indicator online"></div>
+            <span>Sistema Online</span>
+        </div>
+        <div class="version">v1.0.0</div>
+    </div>
+</aside>
+
