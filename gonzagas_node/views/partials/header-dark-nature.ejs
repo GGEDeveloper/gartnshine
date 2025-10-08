@@ -1,0 +1,385 @@
+<!-- =============================================
+     GONZAGA ART & SHINE - HEADER DARK NATURE
+     Gothic Natural Navigation
+     ============================================= -->
+
+<header class="site-header" role="banner">
+    <nav class="site-header__nav container" role="navigation" aria-label="Navegação principal">
+        
+        <!-- Brand/Logo -->
+        <div class="site-header__brand">
+            <a href="/" class="site-header__brand-link" aria-label="Gonzaga Art & Shine - Página inicial">
+                <span class="site-header__brand-text">Gonzaga Art & Shine</span>
+                <span class="site-header__brand-tagline" aria-hidden="true">Elegância que nasce da terra</span>
+            </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <ul class="site-header__menu" role="menubar">
+            <li class="site-header__menu-item" role="none">
+                <a href="/catalogo" 
+                   class="site-header__menu-link <%= currentPage === 'catalogo' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   <% if (currentPage === 'catalogo') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">Catálogo</span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
+                <a href="/catalogo?pedra=onix" 
+                   class="site-header__menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'onix') ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   data-stone="onix">
+                    <span class="site-header__menu-text">Ónix</span>
+                    <span class="site-header__menu-accent" aria-hidden="true" data-accent="onyx"></span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
+                <a href="/catalogo?pedra=olho-de-tigre" 
+                   class="site-header__menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'olho-de-tigre') ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   data-stone="tiger-eye">
+                    <span class="site-header__menu-text">Olho-de-tigre</span>
+                    <span class="site-header__menu-accent" aria-hidden="true" data-accent="tiger"></span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item" role="none">
+                <a href="/vendedores" 
+                   class="site-header__menu-link <%= currentPage === 'vendedores' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   <% if (currentPage === 'vendedores') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">Artesãos</span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item" role="none">
+                <a href="/manifesto" 
+                   class="site-header__menu-link <%= currentPage === 'manifesto' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   <% if (currentPage === 'manifesto') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">Manifesto</span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item" role="none">
+                <a href="/contacto" 
+                   class="site-header__menu-link <%= currentPage === 'contacto' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   <% if (currentPage === 'contacto') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">Contacto</span>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="site-header__mobile-toggle" 
+                type="button"
+                aria-label="Abrir menu de navegação"
+                aria-expanded="false"
+                aria-controls="mobile-menu"
+                data-mobile-toggle>
+            <span class="site-header__mobile-toggle-icon">
+                <span class="site-header__mobile-toggle-line"></span>
+                <span class="site-header__mobile-toggle-line"></span>
+                <span class="site-header__mobile-toggle-line"></span>
+            </span>
+            <span class="visually-hidden">Menu</span>
+        </button>
+        
+    </nav>
+    
+    <!-- Mobile Menu Drawer -->
+    <div class="site-header__mobile-menu" 
+         id="mobile-menu"
+         aria-hidden="true"
+         data-mobile-menu>
+        
+        <div class="site-header__mobile-menu-content">
+            <div class="site-header__mobile-menu-header">
+                <span class="site-header__mobile-brand">Gonzaga Art & Shine</span>
+                <button class="site-header__mobile-close" 
+                        type="button"
+                        aria-label="Fechar menu"
+                        data-mobile-close>
+                    <span class="site-header__mobile-close-icon" aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+            <nav class="site-header__mobile-nav" role="navigation" aria-label="Menu móvel">
+                <ul class="site-header__mobile-menu-list" role="menu">
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/" 
+                           class="site-header__mobile-menu-link <%= currentPage === 'home' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">🏠</span>
+                            <span class="site-header__mobile-menu-text">Início</span>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/catalogo" 
+                           class="site-header__mobile-menu-link <%= currentPage === 'catalogo' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">💎</span>
+                            <span class="site-header__mobile-menu-text">Catálogo Completo</span>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item site-header__mobile-menu-item--separator" role="none">
+                        <span class="site-header__mobile-menu-separator">Coleções por Pedra</span>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/catalogo?pedra=onix" 
+                           class="site-header__mobile-menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'onix') ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem"
+                           data-stone="onyx">
+                            <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--onyx" aria-hidden="true">⚫</span>
+                            <div class="site-header__mobile-menu-content">
+                                <span class="site-header__mobile-menu-text">Coleção Ónix</span>
+                                <span class="site-header__mobile-menu-subtitle">Força em negro profundo</span>
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/catalogo?pedra=olho-de-tigre" 
+                           class="site-header__mobile-menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'olho-de-tigre') ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem"
+                           data-stone="tiger-eye">
+                            <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--tiger" aria-hidden="true">🔶</span>
+                            <div class="site-header__mobile-menu-content">
+                                <span class="site-header__mobile-menu-text">Coleção Olho-de-tigre</span>
+                                <span class="site-header__mobile-menu-subtitle">Poder dourado da terra</span>
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item site-header__mobile-menu-item--separator" role="none">
+                        <span class="site-header__mobile-menu-separator">Sobre Nós</span>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/vendedores" 
+                           class="site-header__mobile-menu-link <%= currentPage === 'vendedores' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">🧑‍🎨</span>
+                            <span class="site-header__mobile-menu-text">Nossos Artesãos</span>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/manifesto" 
+                           class="site-header__mobile-menu-link <%= currentPage === 'manifesto' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">🌱</span>
+                            <span class="site-header__mobile-menu-text">Nosso Manifesto</span>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/contacto" 
+                           class="site-header__mobile-menu-link <%= currentPage === 'contacto' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">✉️</span>
+                            <span class="site-header__mobile-menu-text">Contacto</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Mobile CTA -->
+                <div class="site-header__mobile-cta">
+                    <a href="/catalogo" class="btn btn--gold btn--large">
+                        <span class="btn__text">Explorar Coleção</span>
+                        <span class="btn__icon" aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="site-header__mobile-overlay" data-mobile-overlay></div>
+    </div>
+</header>
+
+<!-- JavaScript para Mobile Menu -->
+<script>
+(function() {
+    'use strict';
+    
+    // Elementos do DOM
+    const mobileToggle = document.querySelector('[data-mobile-toggle]');
+    const mobileMenu = document.querySelector('[data-mobile-menu]');
+    const mobileClose = document.querySelector('[data-mobile-close]');
+    const mobileOverlay = document.querySelector('[data-mobile-overlay]');
+    const body = document.body;
+    
+    // Estado do menu
+    let isMenuOpen = false;
+    
+    // Funções de controlo
+    function openMenu() {
+        isMenuOpen = true;
+        mobileToggle.setAttribute('aria-expanded', 'true');
+        mobileToggle.setAttribute('aria-label', 'Fechar menu de navegação');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileMenu.classList.add('site-header__mobile-menu--open');
+        body.classList.add('mobile-menu-open');
+        
+        // Focus no primeiro item do menu
+        const firstMenuItem = mobileMenu.querySelector('.site-header__mobile-menu-link');
+        if (firstMenuItem) {
+            setTimeout(() => firstMenuItem.focus(), 100);
+        }
+    }
+    
+    function closeMenu() {
+        isMenuOpen = false;
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenu.classList.remove('site-header__mobile-menu--open');
+        body.classList.remove('mobile-menu-open');
+        
+        // Retornar focus ao botão toggle
+        mobileToggle.focus();
+    }
+    
+    function toggleMenu() {
+        isMenuOpen ? closeMenu() : openMenu();
+    }
+    
+    // Event Listeners
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', toggleMenu);
+    }
+    
+    if (mobileClose) {
+        mobileClose.addEventListener('click', closeMenu);
+    }
+    
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMenu);
+    }
+    
+    // Fechar menu com ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMenu();
+        }
+    });
+    
+    // Fechar menu ao clicar em links (mobile)
+    const mobileMenuLinks = document.querySelectorAll('.site-header__mobile-menu-link');
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Delay para permitir navegação
+            setTimeout(closeMenu, 100);
+        });
+    });
+    
+    // Gerir focus dentro do menu mobile
+    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    
+    document.addEventListener('keydown', function(e) {
+        if (!isMenuOpen) return;
+        
+        if (e.key === 'Tab') {
+            const focusable = Array.from(mobileMenu.querySelectorAll(focusableElements))
+                .filter(el => el.offsetParent !== null); // Apenas elementos visíveis
+            
+            const firstFocusable = focusable[0];
+            const lastFocusable = focusable[focusable.length - 1];
+            
+            if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                    lastFocusable.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === lastFocusable) {
+                    firstFocusable.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    });
+    
+    // Fechar menu em resize para desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024 && isMenuOpen) {
+            closeMenu();
+        }
+    });
+    
+    // Analytics - Menu Interaction Tracking
+    function trackMenuInteraction(action, item) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'menu_interaction', {
+                menu_action: action,
+                menu_item: item,
+                device_type: window.innerWidth >= 1024 ? 'desktop' : 'mobile'
+            });
+        }
+    }
+    
+    // Track desktop menu clicks
+    document.querySelectorAll('.site-header__menu-link').forEach(link => {
+        link.addEventListener('click', function() {
+            const menuText = this.querySelector('.site-header__menu-text').textContent;
+            trackMenuInteraction('click', menuText);
+        });
+    });
+    
+    // Track mobile menu clicks
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const menuText = this.querySelector('.site-header__mobile-menu-text').textContent;
+            trackMenuInteraction('mobile_click', menuText);
+        });
+    });
+    
+})();
+</script>
+
+<!-- =============================================
+     CSS INLINE CRÍTICO PARA HEADER
+     (Será movido para components-dark-nature.css)
+     ============================================= -->
+<style>
+/* Prevent FOUC */
+.site-header { opacity: 1; }
+.mobile-menu-open { overflow: hidden; }
+
+/* Basic mobile menu styles */
+.site-header__mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--black);
+    transform: translateX(-100%);
+    transition: transform var(--duration-normal) var(--ease-out);
+    z-index: var(--z-modal);
+}
+
+.site-header__mobile-menu--open {
+    transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+    .site-header__mobile-toggle,
+    .site-header__mobile-menu {
+        display: none;
+    }
+}
+
+@media (max-width: 1023px) {
+    .site-header__menu {
+        display: none;
+    }
+}
+</style>
