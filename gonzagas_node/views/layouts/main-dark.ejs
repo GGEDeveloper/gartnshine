@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title><%= title || 'Gonzaga Art & Shine - Elegância que nasce da terra' %></title>
+    <meta name="description" content="<%= description || 'Joalharia alternativa em prata 925 com pedras naturais. Ónix e olho-de-tigre, elegância autêntica que nasce da terra.' %>">
+    <meta name="keywords" content="joalharia alternativa, prata 925, ónix, olho-de-tigre, pedras naturais, artesanato, Gothic Natural">
+    <meta name="author" content="Gonzaga Art & Shine">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= typeof url !== 'undefined' ? url : 'https://gonzagaartshine.com' %>">
+    <meta property="og:title" content="<%= title || 'Gonzaga Art & Shine' %>">
+    <meta property="og:description" content="<%= description || 'Elegância que nasce da terra' %>">
+    <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '/images/og-image.jpg' %>">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<%= typeof url !== 'undefined' ? url : 'https://gonzagaartshine.com' %>">
+    <meta property="twitter:title" content="<%= title || 'Gonzaga Art & Shine' %>">
+    <meta property="twitter:description" content="<%= description || 'Elegância que nasce da terra' %>">
+    <meta property="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '/images/og-image.jpg' %>">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload Critical Fonts - Cinzel + Source Sans 3 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" as="style">
+    
+    <!-- Google Fonts - Dark Nature Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Dark Nature CSS Architecture -->
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components-dark.css">
+    <link rel="stylesheet" href="/css/pages-dark.css">
+    
+    <!-- Additional Page-Specific CSS (if provided) -->
+    <% if (locals.additionalCSS) { %>
+        <%- additionalCSS %>
+    <% } %>
+    
+    <!-- Inline Critical CSS (optional for above-the-fold) -->
+    <% if (locals.criticalCSS) { %>
+        <style>
+            <%- criticalCSS %>
+        </style>
+    <% } %>
+    
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <% if (locals.structuredData) { %>
+        <script type="application/ld+json">
+            <%- JSON.stringify(structuredData) %>
+        </script>
+    <% } %>
+</head>
+<body class="<%= bodyClass || '' %>">
+    <!-- Skip to Main Content (Accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <%- include('../partials/header-dark') %>
+    
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <%- body %>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('../partials/footer-dark') %>
+    
+    <!-- Additional Page-Specific JavaScript (if provided) -->
+    <% if (locals.additionalJS) { %>
+        <%- additionalJS %>
+    <% } %>
+    
+    <!-- Analytics Scripts (optional) -->
+    <% if (locals.enableAnalytics && process.env.NODE_ENV === 'production') { %>
+        <!-- Google Analytics -->
+        <% if (locals.gaTrackingId) { %>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=<%= gaTrackingId %>"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '<%= gaTrackingId %>');
+            </script>
+        <% } %>
+        
+        <!-- Facebook Pixel (if needed) -->
+        <% if (locals.fbPixelId) { %>
+            <script>
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '<%= fbPixelId %>');
+                fbq('track', 'PageView');
+            </script>
+            <noscript>
+                <img height="1" width="1" style="display:none"
+                     src="https://www.facebook.com/tr?id=<%= fbPixelId %>&ev=PageView&noscript=1"/>
+            </noscript>
+        <% } %>
+    <% } %>
+    
+    <!-- Font Loading Optimization Script -->
+    <script>
+        // Optimize font loading
+        if ('fonts' in document) {
+            Promise.all([
+                document.fonts.load('600 1em Cinzel'),
+                document.fonts.load('400 1em "Source Sans 3"')
+            ]).then(function() {
+                document.documentElement.classList.add('fonts-loaded');
+            }).catch(function(error) {
+                console.warn('Font loading failed:', error);
+            });
+        }
+    </script>
+    
+    <!-- Service Worker Registration (PWA - optional) -->
+    <% if (locals.enablePWA && process.env.NODE_ENV === 'production') { %>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registered:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            }
+        </script>
+    <% } %>
+</body>
+</html>
+

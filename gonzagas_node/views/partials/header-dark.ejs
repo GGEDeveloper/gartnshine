@@ -1,0 +1,106 @@
+<header class="site-header">
+    <div class="container site-header__container">
+        <!-- Brand/Logo -->
+        <a href="/" class="site-header__brand">
+            Gonzaga Art & Shine
+        </a>
+        
+        <!-- Main Navigation (Desktop) -->
+        <nav class="site-header__nav" aria-label="Main navigation">
+            <ul class="site-header__menu">
+                <li class="site-header__menu-item">
+                    <a href="/catalogo" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'catalog' ? 'site-header__link--active' : '' %>">
+                        Catálogo
+                    </a>
+                </li>
+                <li class="site-header__menu-item">
+                    <a href="/catalogo?pedra=onix" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'onix' ? 'site-header__link--active' : '' %>">
+                        Ónix
+                    </a>
+                </li>
+                <li class="site-header__menu-item">
+                    <a href="/catalogo?pedra=olho-de-tigre" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'tiger' ? 'site-header__link--active' : '' %>">
+                        Olho-de-tigre
+                    </a>
+                </li>
+                <li class="site-header__menu-item">
+                    <a href="/vendedores" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'vendors' ? 'site-header__link--active' : '' %>">
+                        Artesãos
+                    </a>
+                </li>
+                <li class="site-header__menu-item">
+                    <a href="/manifesto" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'manifesto' ? 'site-header__link--active' : '' %>">
+                        Manifesto
+                    </a>
+                </li>
+                <li class="site-header__menu-item">
+                    <a href="/contacto" class="site-header__link <%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'site-header__link--active' : '' %>">
+                        Contacto
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="site-header__mobile-toggle" 
+                aria-label="Open mobile menu" 
+                aria-expanded="false"
+                data-mobile-menu-toggle>
+            ☰
+        </button>
+    </div>
+</header>
+
+<!-- Mobile Menu (hidden by default, shown via JS) -->
+<div class="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label="Mobile navigation">
+        <ul class="mobile-menu__list">
+            <li class="mobile-menu__item">
+                <a href="/catalogo" class="mobile-menu__link">Catálogo</a>
+            </li>
+            <li class="mobile-menu__item">
+                <a href="/catalogo?pedra=onix" class="mobile-menu__link">Ónix</a>
+            </li>
+            <li class="mobile-menu__item">
+                <a href="/catalogo?pedra=olho-de-tigre" class="mobile-menu__link">Olho-de-tigre</a>
+            </li>
+            <li class="mobile-menu__item">
+                <a href="/vendedores" class="mobile-menu__link">Artesãos</a>
+            </li>
+            <li class="mobile-menu__item">
+                <a href="/manifesto" class="mobile-menu__link">Manifesto</a>
+            </li>
+            <li class="mobile-menu__item">
+                <a href="/contacto" class="mobile-menu__link">Contacto</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+// Simple mobile menu toggle (can be moved to external JS file)
+(function() {
+    const toggle = document.querySelector('[data-mobile-menu-toggle]');
+    const menu = document.querySelector('[data-mobile-menu]');
+    
+    if (toggle && menu) {
+        toggle.addEventListener('click', function() {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', !isExpanded);
+            menu.hidden = isExpanded;
+            document.body.style.overflow = isExpanded ? '' : 'hidden';
+        });
+        
+        // Close menu on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !menu.hidden) {
+                toggle.setAttribute('aria-expanded', 'false');
+                menu.hidden = true;
+                document.body.style.overflow = '';
+                toggle.focus();
+            }
+        });
+    }
+})();
+</script>
+

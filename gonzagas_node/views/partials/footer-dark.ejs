@@ -1,0 +1,90 @@
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <!-- Main Footer Content -->
+        <div class="site-footer__content">
+            <!-- Brand Section -->
+            <div class="site-footer__section">
+                <span class="site-footer__brand">Gonzaga Art & Shine</span>
+                <span class="site-footer__slogan">Elegância que nasce da terra</span>
+                <p class="site-footer__text">
+                    Joalharia alternativa em prata 925 com pedras naturais autênticas. 
+                    Cada peça conta a história da sua origem. Ónix e olho-de-tigre, 
+                    elegância gótica natural que nasce da terra.
+                </p>
+            </div>
+            
+            <!-- Explore Links -->
+            <div class="site-footer__section">
+                <h4 class="site-footer__title">Explorar</h4>
+                <ul class="site-footer__list">
+                    <li class="site-footer__list-item">
+                        <a href="/catalogo" class="site-footer__link">Catálogo Completo</a>
+                    </li>
+                    <li class="site-footer__list-item">
+                        <a href="/catalogo?pedra=onix" class="site-footer__link">Coleção Ónix</a>
+                    </li>
+                    <li class="site-footer__list-item">
+                        <a href="/catalogo?pedra=olho-de-tigre" class="site-footer__link">Coleção Olho-de-tigre</a>
+                    </li>
+                    <li class="site-footer__list-item">
+                        <a href="/vendedores" class="site-footer__link">Nossos Artesãos</a>
+                    </li>
+                    <li class="site-footer__list-item">
+                        <a href="/manifesto" class="site-footer__link">Origem e Cuidados</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Contact & Info -->
+            <div class="site-footer__section">
+                <h4 class="site-footer__title">Contacto</h4>
+                <p class="site-footer__text">
+                    <strong>Email:</strong><br>
+                    <a href="mailto:info@gonzagaartshine.com" class="site-footer__link">
+                        info@gonzagaartshine.com
+                    </a>
+                </p>
+                <p class="site-footer__text">
+                    <strong>Redes Sociais:</strong><br>
+                    <a href="https://www.instagram.com/gonzagaartnshine/" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="site-footer__link"
+                       aria-label="Instagram do Gonzaga Art & Shine (abre em nova janela)">
+                        Instagram
+                    </a>
+                    •
+                    <a href="https://www.facebook.com/profile.php?id=61573519807731" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="site-footer__link"
+                       aria-label="Facebook do Gonzaga Art & Shine (abre em nova janela)">
+                        Facebook
+                    </a>
+                </p>
+                <p class="site-footer__text">
+                    Encontre-nos em festivais e feiras de artesanato.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Bottom Bar -->
+        <div class="site-footer__bottom">
+            <p>
+                © <%= new Date().getFullYear() %> Gonzaga Art & Shine. Todos os direitos reservados.
+                <% if (locals.enableLegalLinks) { %>
+                    •
+                    <a href="/privacy-policy" class="site-footer__link">Política de Privacidade</a>
+                    •
+                    <a href="/terms-of-service" class="site-footer__link">Termos de Serviço</a>
+                <% } %>
+            </p>
+            <% if (process.env.NODE_ENV === 'development') { %>
+                <p style="margin-top: 8px; font-size: 12px; opacity: 0.7;">
+                    Environment: Development | Version: <%= typeof appVersion !== 'undefined' ? appVersion : '1.0.0' %>
+                </p>
+            <% } %>
+        </div>
+    </div>
+</footer>
+
