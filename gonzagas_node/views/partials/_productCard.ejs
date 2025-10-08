@@ -1,16 +1,16 @@
 <div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>">
   <div class="product-image">
     <% 
-      const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
+      const productLink = `/catalog/product/${product.id}`;
       const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/placeholder-image.png';
     %>
 
     <% if (typeof isCatalogPage !== 'undefined' && isCatalogPage) { %>
-      <a href="<%= imageUrl %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
+      <a href="<%= productLink %>" class="product-link d-block mb-2" aria-label="Ver detalhes de <%= product.name %>">
         <img src="<%= imageUrl %>" alt="<%= product.name %>" loading="lazy" class="img-fluid">
       </a>
     <% } else { %>
-      <a href="<%= catalogLink %>" class="d-block mb-2" aria-label="Ver produtos da categoria <%= product.family_name || 'Catálogo' %>">
+      <a href="<%= productLink %>" class="d-block mb-2" aria-label="Ver detalhes de <%= product.name %>">
         <img src="<%= imageUrl %>" alt="<%= product.name %>" loading="lazy" class="img-fluid">
       </a>
     <% } %>

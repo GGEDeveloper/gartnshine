@@ -28,10 +28,10 @@ router.get('/products/family/:familyId', async (req, res) => {
   }
 });
 
-// Get all product families
+// Get all product families with product count
 router.get('/families', async (req, res) => {
   try {
-    const families = await ProductFamily.getAll();
+    const families = await ProductFamily.getAllWithCount();
     res.json({ success: true, data: families });
   } catch (error) {
     console.error('API Error:', error);

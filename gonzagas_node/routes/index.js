@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
           null
       }));
 
-      families = await ProductFamily.getAll();
+      families = await ProductFamily.getAllWithCount();
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue without database data

@@ -17,6 +17,25 @@ class ProductFamily {
     }
   }
 
+  // Get all product families with product count
+  static async getAllWithCount() {
+    try {
+      const [rows] = await pool.query(`
+        SELECT 
+          pf.*,
+          COUNT(p.id) as product_count
+        FROM product_families pf
+        LEFT JOIN products p ON pf.id = p.family_id AND p.is_active = 1
+        GROUP BY pf.id
+        ORDER BY pf.name
+      `);
+      return rows;
+    } catch (error) {
+      console.error('Error getting product families with count:', error);
+      throw error;
+    }
+  }
+
   // Get product family by ID
   static async getById(id) {
     try {
