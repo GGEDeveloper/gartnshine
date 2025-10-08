@@ -1,0 +1,266 @@
+/* =============================================
+   GONZAGA ART & SHINE - DARK NATURE TOKENS
+   Gothic Natural Aesthetic System
+   "Elegância que nasce da terra"
+   ============================================= */
+
+:root {
+  /* ==========================================
+     PALETA DE CORES DARK NATURE
+     ========================================== */
+  
+  /* Cores Primárias - Natureza Escura */
+  --black: #0B0D0C;          /* Preto profundo - fundo principal */
+  --moss: #0F2E20;           /* Verde musgo - elementos secundários */
+  --forest: #123524;         /* Verde floresta - hover states */
+  --earth: #3A2C22;          /* Castanho terra - cards escuros */
+  
+  /* Metais - Equilibrio 50/50 Prata/Dourado */
+  --gold-old: #B08D57;       /* Dourado antigo - CTA primário */
+  --silver-matte: #C7CACE;   /* Prata fosca - CTA secundário */
+  --slate: #6E6B65;          /* Cinza xisto - texto muted */
+  
+  /* Neutro de Contraste */
+  --ivory: #E7E1D6;          /* Marfim suave - texto principal */
+  
+  /* Acentos por Pedra */
+  --accent-onyx: #111111;    /* Ónix - preto mais puro */
+  --accent-tiger: #6B4A1B;   /* Olho-de-tigre - castanho dourado */
+  
+  /* ==========================================
+     GRADIENTES E OVERLAYS
+     ========================================== */
+  
+  /* Gradientes para Heroes */
+  --gradient-hero: linear-gradient(180deg, rgba(11,13,12,0.35), rgba(11,13,12,0.75));
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  
+  /* Gradientes por Pedra */
+  --gradient-onyx: linear-gradient(135deg, var(--black), var(--accent-onyx));
+  --gradient-tiger: linear-gradient(135deg, var(--earth), var(--accent-tiger));
+  
+  /* ==========================================
+     SOMBRAS E PROFUNDIDADE
+     ========================================== */
+  
+  /* Sombras Naturais */
+  --shadow-subtle: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-soft: 0 4px 12px rgba(0,0,0,0.25);
+  --shadow-deep: 0 12px 24px rgba(0,0,0,0.35);
+  --shadow-elevated: 0 20px 40px rgba(0,0,0,0.4);
+  
+  /* Glows para Elementos Interativos */
+  --glow-gold: 0 0 20px rgba(176, 141, 87, 0.3);
+  --glow-silver: 0 0 20px rgba(199, 202, 206, 0.3);
+  
+  /* ==========================================
+     BORDAS E RAIOS
+     ========================================== */
+  
+  /* Raios de Borda */
+  --radius: 6px;             /* Elementos pequenos */
+  --radius-large: 12px;      /* Cards e componentes principais */
+  
+  /* Bordas Sutis */
+  --border-subtle: 1px solid rgba(255,255,255,0.06);
+  --border-medium: 1px solid rgba(255,255,255,0.12);
+  --border-strong: 1px solid rgba(255,255,255,0.2);
+  
+  /* ==========================================
+     TIPOGRAFIA GOTHIC NATURAL
+     ========================================== */
+  
+  /* Fontes */
+  --font-heading: "Cinzel", serif;              /* Títulos - elegância esculpida */
+  --font-body: "Source Sans 3", system-ui, sans-serif; /* Texto - legibilidade moderna */
+  
+  /* Pesos */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;   /* Títulos */
+  --line-height-normal: 1.5;  /* Texto normal */
+  --line-height-relaxed: 1.6; /* Texto longo */
+  
+  /* ==========================================
+     SISTEMA DE ESPAÇAMENTO 8PX
+     ========================================== */
+  
+  --space-xs: 4px;    /* 0.25rem */
+  --space-sm: 8px;    /* 0.5rem */
+  --space-md: 12px;   /* 0.75rem */
+  --space-lg: 16px;   /* 1rem */
+  --space-xl: 20px;   /* 1.25rem */
+  --space-2xl: 24px;  /* 1.5rem */
+  --space-3xl: 32px;  /* 2rem */
+  --space-4xl: 40px;  /* 2.5rem */
+  --space-5xl: 48px;  /* 3rem */
+  --space-6xl: 60px;  /* 3.75rem */
+  --space-7xl: 80px;  /* 5rem */
+  
+  /* ==========================================
+     TRANSIÇÕES E ANIMAÇÕES
+     ========================================== */
+  
+  /* Durações */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  
+  /* Easings Naturais */
+  --ease-linear: linear;
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ==========================================
+     BREAKPOINTS RESPONSIVOS
+     ========================================== */
+  
+  --breakpoint-sm: 480px;   /* Mobile pequeno */
+  --breakpoint-md: 720px;   /* Mobile/Tablet */
+  --breakpoint-lg: 1024px;  /* Tablet/Desktop */
+  --breakpoint-xl: 1200px;  /* Desktop largo */
+  
+  /* ==========================================
+     Z-INDEX SCALE
+     ========================================== */
+  
+  --z-base: 1;
+  --z-elevated: 10;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-notification: 500;
+  --z-tooltip: 600;
+  --z-debug: 700;
+}
+
+/* =============================================
+   MEDIA QUERIES DE APOIO
+   ============================================= */
+
+/* Support para Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}
+
+/* Print Mode - Ajustes para Impressão */
+@media print {
+  :root {
+    --black: #000000;
+    --ivory: #000000;
+    --slate: #333333;
+    --shadow-subtle: none;
+    --shadow-soft: none;
+    --shadow-deep: none;
+    --shadow-elevated: none;
+  }
+}
+
+/* =============================================
+   CUSTOM PROPERTIES POR TEMA DE PEDRA
+   ============================================= */
+
+/* Tema Ónix */
+[data-stone-theme="onyx"] {
+  --stone-primary: var(--accent-onyx);
+  --stone-gradient: var(--gradient-onyx);
+  --stone-texture-bg: url('/images/textures/slate-dark.jpg');
+}
+
+/* Tema Olho-de-tigre */
+[data-stone-theme="tiger-eye"] {
+  --stone-primary: var(--accent-tiger);
+  --stone-gradient: var(--gradient-tiger);
+  --stone-texture-bg: url('/images/textures/wood-dark.jpg');
+}
+
+/* =============================================
+   UTILIDADES DE COR PARA JS/SCSS
+   ============================================= */
+
+/* Exportar variáveis para JavaScript se necessário */
+.color-tokens {
+  --export-black: var(--black);
+  --export-gold-old: var(--gold-old);
+  --export-silver-matte: var(--silver-matte);
+  --export-ivory: var(--ivory);
+  display: none; /* Hidden utility class */
+}
+
+/* =============================================
+   VALIDAÇÃO VISUAL (DESENVOLVIMENTO)
+   ============================================= */
+
+/* Classe de debug para visualizar tokens */
+.debug-tokens {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--black);
+  border: var(--border-subtle);
+  border-radius: var(--radius-large);
+  padding: var(--space-lg);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  font-size: 12px;
+  z-index: var(--z-debug);
+  max-width: 300px;
+}
+
+.debug-tokens h4 {
+  font-family: var(--font-heading);
+  margin: 0 0 var(--space-sm);
+  color: var(--gold-old);
+}
+
+.debug-tokens .color-swatch {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius);
+  margin-right: var(--space-xs);
+  vertical-align: middle;
+}
+
+/* =============================================
+   COMENTÁRIOS DE IMPLEMENTAÇÃO
+   ============================================= */
+
+/*
+  IMPLEMENTAÇÃO:
+  1. Este arquivo deve ser o PRIMEIRO CSS a ser carregado
+  2. Todas as outras folhas de estilo devem usar estas variáveis
+  3. Para adicionar novos tokens, manter consistência com sistema 8px
+  4. Testar sempre em modo escuro e claro (se aplicável)
+  5. Validar contraste AA em todas as combinações de cor
+  
+  ESTRUTURA DE NOMENCLATURA:
+  --{categoria}-{variante}-{estado}
+  Exemplos: --color-primary-hover, --space-lg, --duration-normal
+  
+  CORES APROVADAS:
+  ✅ Paleta Dark Nature implementada
+  ✅ Metais equilibrados 50/50 prata/dourado  
+  ✅ Sem azulejos portugueses
+  ✅ Acentos por pedra (Ónix/Olho-de-tigre)
+  
+  TIPOGRAFIA APROVADA:
+  ✅ Cinzel para títulos (elegância esculpida)
+  ✅ Source Sans 3 para texto (legibilidade moderna)
+  
+  PRÓXIMOS PASSOS:
+  - Implementar base.css com reset e tipografia
+  - Criar components.css usando estes tokens
+  - Aplicar em pages.css para páginas específicas
+  - Integrar com views EJS existentes
+*/
