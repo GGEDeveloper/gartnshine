@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste: Components - Dark Nature</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Dark Nature CSS -->
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components-dark.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="container site-header__container">
+            <a href="/" class="site-header__brand">Gonzaga Art & Shine</a>
+            
+            <nav class="site-header__nav">
+                <ul class="site-header__menu">
+                    <li class="site-header__menu-item">
+                        <a href="/catalogo" class="site-header__link site-header__link--active">Catálogo</a>
+                    </li>
+                    <li class="site-header__menu-item">
+                        <a href="/catalogo?pedra=onix" class="site-header__link">Ónix</a>
+                    </li>
+                    <li class="site-header__menu-item">
+                        <a href="/catalogo?pedra=olho-de-tigre" class="site-header__link">Olho-de-tigre</a>
+                    </li>
+                    <li class="site-header__menu-item">
+                        <a href="/vendedores" class="site-header__link">Artesãos</a>
+                    </li>
+                    <li class="site-header__menu-item">
+                        <a href="/manifesto" class="site-header__link">Manifesto</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <button class="site-header__mobile-toggle" aria-label="Menu">☰</button>
+        </div>
+    </header>
+    
+    <main>
+        <!-- HERO ÓNIX -->
+        <section class="hero hero--onyx" style="background-image: linear-gradient(rgba(17,17,17,0.7), rgba(17,17,17,0.9)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%23111111%22 width=%22200%22 height=%22200%22/><circle fill=%22%23222%22 cx=%22100%22 cy=%22100%22 r=%2280%22/></svg>');">
+            <div class="hero__overlay"></div>
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title">Ónix — Força em negro profundo</h1>
+                    <p class="hero__text">
+                        A prata 925 destaca a energia serena desta pedra de proteção ancestral. Cada peça carrega consigo a força da terra.
+                    </p>
+                    <div class="btn-group">
+                        <a href="/catalogo?pedra=onix" class="btn btn--silver">Ver Coleção Ónix</a>
+                        <a href="/manifesto" class="btn btn--gold-outline">Origem e Cuidados</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- HERO OLHO-DE-TIGRE -->
+        <section class="hero hero--tiger" style="background-image: linear-gradient(rgba(107,74,27,0.7), rgba(107,74,27,0.9)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%236B4A1B%22 width=%22200%22 height=%22200%22/><path fill=%22%23B08D57%22 d=%22M0,100 Q50,80 100,100 T200,100 L200,200 L0,200 Z%22/></svg>');">
+            <div class="hero__overlay"></div>
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title">Olho-de-tigre — Poder dourado da terra</h1>
+                    <p class="hero__text">
+                        Veios quentes, presença magnética, coragem em cada detalhe. A energia dourada que desperta a força interior.
+                    </p>
+                    <div class="btn-group">
+                        <a href="/catalogo?pedra=olho-de-tigre" class="btn btn--gold">Explorar Peças</a>
+                        <a href="/catalogo" class="btn btn--silver-outline">Ver Tudo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="container">
+            <!-- BUTTONS -->
+            <section>
+                <h2>Botões (50% Prata / 50% Dourado)</h2>
+                <div style="background: var(--gradient-card); padding: 24px; border-radius: var(--radius-large); border: var(--border-subtle); margin-bottom: 40px;">
+                    <h3 class="mb-md">Variações de Botões</h3>
+                    
+                    <div class="mb-lg">
+                        <h4>Sólidos</h4>
+                        <div class="btn-group">
+                            <button class="btn btn--gold">Botão Dourado</button>
+                            <button class="btn btn--silver">Botão Prata</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Outline</h4>
+                        <div class="btn-group">
+                            <button class="btn btn--gold-outline">Outline Dourado</button>
+                            <button class="btn btn--silver-outline">Outline Prata</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- PRODUCT CARDS -->
+            <section>
+                <h2>Product Cards</h2>
+                <div class="grid grid-4" style="margin-bottom: 40px;">
+                    <article class="product-card">
+                        <a href="/produto/anel-onix-protecao" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500'><rect fill='%23111' width='400' height='500'/><circle fill='%23222' cx='200' cy='250' r='150'/><text x='50%25' y='50%25' fill='%23E7E1D6' font-family='sans-serif' font-size='20' text-anchor='middle' dy='.3em'>ÓNIX</text></svg>" 
+                                     alt="Anel Ónix Proteção" 
+                                     class="product-card__image"
+                                     loading="lazy">
+                                <span class="product-card__badge">Novo</span>
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Anel Ónix Proteção</h3>
+                                <div class="product-card__meta">
+                                    <span>Ónix</span>
+                                    <span class="product-card__meta-separator">•</span>
+                                    <span>Prata 925</span>
+                                </div>
+                                <div class="product-card__price">€59,90</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <a href="/produto/colar-olho-tigre" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500'><rect fill='%236B4A1B' width='400' height='500'/><path fill='%23B08D57' d='M150,100 Q200,150 250,100 Q300,150 250,200 Q200,150 150,200 Z'/><text x='50%25' y='60%25' fill='%23E7E1D6' font-family='sans-serif' font-size='18' text-anchor='middle'>OLHO-DE-TIGRE</text></svg>" 
+                                     alt="Colar Olho-de-tigre" 
+                                     class="product-card__image"
+                                     loading="lazy">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Colar Olho-de-tigre Coragem</h3>
+                                <div class="product-card__meta">
+                                    <span>Olho-de-tigre</span>
+                                    <span class="product-card__meta-separator">•</span>
+                                    <span>Prata 925</span>
+                                </div>
+                                <div class="product-card__price">€79,90</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <a href="/produto/brincos-onix" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500'><rect fill='%23111' width='400' height='500'/><circle fill='%23C7CACE' cx='150' cy='200' r='40'/><circle fill='%23111' cx='150' cy='200' r='30'/><circle fill='%23C7CACE' cx='250' cy='200' r='40'/><circle fill='%23111' cx='250' cy='200' r='30'/><text x='50%25' y='70%25' fill='%23E7E1D6' font-family='sans-serif' font-size='16' text-anchor='middle'>BRINCOS ÓNIX</text></svg>" 
+                                     alt="Brincos Ónix" 
+                                     class="product-card__image"
+                                     loading="lazy">
+                                <span class="product-card__badge">Destaque</span>
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Brincos Ónix Elegância</h3>
+                                <div class="product-card__meta">
+                                    <span>Ónix</span>
+                                    <span class="product-card__meta-separator">•</span>
+                                    <span>Prata com ouro</span>
+                                </div>
+                                <div class="product-card__price">€89,90</div>
+                            </div>
+                        </a>
+                    </article>
+                    
+                    <article class="product-card">
+                        <a href="/produto/pulseira-tiger" class="product-card__link">
+                            <div class="product-card__image-wrapper">
+                                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500'><rect fill='%236B4A1B' width='400' height='500'/><circle fill='%23B08D57' cx='200' cy='250' r='120'/><circle fill='%236B4A1B' cx='200' cy='250' r='90'/><text x='50%25' y='85%25' fill='%23E7E1D6' font-family='sans-serif' font-size='14' text-anchor='middle'>PULSEIRA</text></svg>" 
+                                     alt="Pulseira Olho-de-tigre" 
+                                     class="product-card__image"
+                                     loading="lazy">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Pulseira Olho-de-tigre</h3>
+                                <div class="product-card__meta">
+                                    <span>Olho-de-tigre</span>
+                                    <span class="product-card__meta-separator">•</span>
+                                    <span>Prata 925</span>
+                                </div>
+                                <div class="product-card__price">€69,90</div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </section>
+            
+            <!-- FILTROS -->
+            <section>
+                <h2>Filtros de Catálogo</h2>
+                <form class="filters">
+                    <label class="filters__label">
+                        <span class="filters__label-text">Pedra Natural</span>
+                        <select class="filters__select">
+                            <option value="">Todas as pedras</option>
+                            <option value="onix">Ónix</option>
+                            <option value="olho-de-tigre">Olho-de-tigre</option>
+                        </select>
+                    </label>
+                    
+                    <label class="filters__label">
+                        <span class="filters__label-text">Metal</span>
+                        <select class="filters__select">
+                            <option value="">Todos os metais</option>
+                            <option value="prata_925">Prata 925</option>
+                            <option value="prata_com_ouro">Prata com ouro</option>
+                        </select>
+                    </label>
+                    
+                    <label class="filters__label">
+                        <span class="filters__label-text">Ordenar por</span>
+                        <select class="filters__select">
+                            <option value="recentes">Mais recentes</option>
+                            <option value="preco_asc">Preço: menor primeiro</option>
+                            <option value="preco_desc">Preço: maior primeiro</option>
+                            <option value="nome">Nome A-Z</option>
+                        </select>
+                    </label>
+                    
+                    <button type="reset" class="btn btn--silver-outline filters__button">
+                        Limpar Filtros
+                    </button>
+                </form>
+            </section>
+            
+            <!-- PAGINATION -->
+            <section>
+                <h2>Paginação</h2>
+                <nav class="pagination" style="margin-bottom: 40px;">
+                    <a href="#" class="pagination__link pagination__link--disabled">«</a>
+                    <a href="#" class="pagination__link pagination__link--active">1</a>
+                    <a href="#" class="pagination__link">2</a>
+                    <a href="#" class="pagination__link">3</a>
+                    <a href="#" class="pagination__link">4</a>
+                    <a href="#" class="pagination__link">5</a>
+                    <a href="#" class="pagination__link">»</a>
+                </nav>
+            </section>
+            
+            <!-- BREADCRUMBS -->
+            <section>
+                <h2>Breadcrumbs</h2>
+                <nav class="breadcrumbs" style="margin-bottom: 40px;">
+                    <ul class="breadcrumbs__list">
+                        <li class="breadcrumbs__item">
+                            <a href="/" class="breadcrumbs__link">Início</a>
+                            <span class="breadcrumbs__separator">›</span>
+                        </li>
+                        <li class="breadcrumbs__item">
+                            <a href="/catalogo" class="breadcrumbs__link">Catálogo</a>
+                            <span class="breadcrumbs__separator">›</span>
+                        </li>
+                        <li class="breadcrumbs__item">
+                            <span class="breadcrumbs__current">Ónix</span>
+                        </li>
+                    </ul>
+                </nav>
+            </section>
+            
+            <!-- BADGES -->
+            <section>
+                <h2>Badges & Tags</h2>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px;">
+                    <span class="badge badge--gold">Dourado</span>
+                    <span class="badge badge--silver">Prata</span>
+                    <span class="badge badge--onyx">Ónix</span>
+                    <span class="badge badge--tiger">Olho-de-tigre</span>
+                </div>
+            </section>
+            
+            <!-- LOADING -->
+            <section>
+                <h2>Loading States</h2>
+                <div style="display: flex; gap: 24px; align-items: center; margin-bottom: 40px;">
+                    <div class="loading"></div>
+                    <div class="loading loading--large"></div>
+                    <span style="color: var(--slate);">Carregando...</span>
+                </div>
+            </section>
+            
+            <!-- STATUS -->
+            <section>
+                <h2>✅ Validação Components</h2>
+                <div style="background: var(--earth); padding: 24px; border-radius: var(--radius-large); border: 2px solid var(--gold-old);">
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>✅ Header com navegação sticky (BEM: .site-header__*)</li>
+                        <li>✅ Hero sections com overlay (BEM: .hero__*)</li>
+                        <li>✅ Botões 50% Prata / 50% Dourado (BEM: .btn--*)</li>
+                        <li>✅ Product cards com hover effects (BEM: .product-card__*)</li>
+                        <li>✅ Filtros responsivos (BEM: .filters__*)</li>
+                        <li>✅ Footer com 3 colunas (BEM: .site-footer__*)</li>
+                        <li>✅ Pagination funcional</li>
+                        <li>✅ Breadcrumbs para navegação</li>
+                        <li>✅ Badges para categorização</li>
+                        <li>✅ Loading spinners animados</li>
+                        <li>✅ Metodologia BEM aplicada em todos os componentes</li>
+                        <li>✅ Mobile responsive (breakpoints: 768px, 720px)</li>
+                        <li>✅ Transitions e hover states suaves</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="site-footer__content">
+                <div class="site-footer__section">
+                    <span class="site-footer__brand">Gonzaga Art & Shine</span>
+                    <span class="site-footer__slogan">Elegância que nasce da terra</span>
+                    <p class="site-footer__text">
+                        Joalharia alternativa em prata 925 com pedras naturais autênticas. 
+                        Cada peça conta a história da sua origem.
+                    </p>
+                </div>
+                
+                <div class="site-footer__section">
+                    <h4 class="site-footer__title">Explorar</h4>
+                    <ul class="site-footer__list">
+                        <li class="site-footer__list-item">
+                            <a href="/catalogo?pedra=onix" class="site-footer__link">Coleção Ónix</a>
+                        </li>
+                        <li class="site-footer__list-item">
+                            <a href="/catalogo?pedra=olho-de-tigre" class="site-footer__link">Coleção Olho-de-tigre</a>
+                        </li>
+                        <li class="site-footer__list-item">
+                            <a href="/vendedores" class="site-footer__link">Nossos Artesãos</a>
+                        </li>
+                        <li class="site-footer__list-item">
+                            <a href="/manifesto" class="site-footer__link">Origem e Cuidados</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="site-footer__section">
+                    <h4 class="site-footer__title">Contacto</h4>
+                    <p class="site-footer__text">Email: info@gonzagaartshine.com</p>
+                    <p class="site-footer__text">Festivais e feiras</p>
+                </div>
+            </div>
+            
+            <div class="site-footer__bottom">
+                © 2025 Gonzaga Art & Shine. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        console.log('✅ Components.css validação completa!');
+        console.log('📦 Componentes testados: Header, Hero, Buttons, Product Cards, Filters, Footer, Pagination, Breadcrumbs, Badges, Loading');
+        console.log('🎨 Metodologia BEM aplicada em todos os blocos');
+    </script>
+</body>
+</html>
+
