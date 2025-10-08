@@ -317,7 +317,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product-v2/${id}`;
       reference: product.reference
     };
     
-    res.render('catalog/product-detail-v2', { 
+    res.render('catalog/product-detail', { 
       product, 
       whatsappData,
       title: `${product.name} - Gonzaga's Art & Shine`,
@@ -450,21 +450,6 @@ router.get('/search', async (req, res) => {
   } catch (error) {
     console.error('Search results error:', error);
     res.status(500).render('error', { message: 'Erro ao carregar resultados' });
-  }
-});
-
-// Homepage V2 route
-router.get('/index-v2', async (req, res) => {
-  try {
-    res.render('index-v2', {
-      title: 'Gonzaga\'s Art & Shine - Joias de Prata 925 Únicas',
-      page: 'homepage-v2'
-    });
-  } catch (error) {
-    console.error('Homepage V2 error:', error);
-    res.status(500).render('error', { 
-      message: 'Erro ao carregar página inicial' 
-    });
   }
 });
 

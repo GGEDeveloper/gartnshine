@@ -1,0 +1,263 @@
+<!-- Page Content -->
+<div class="container-fluid py-4">
+  <!-- Stats Cards -->
+  <div class="row g-4">
+    <!-- Total Products -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Produtos</h6>
+              <h3 class="mb-0"><%= stats.products %></h3>
+            </div>
+            <div class="stat-icon bg-primary">
+              <i class="fas fa-box-open"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/products" class="btn btn-sm btn-outline-primary">Ver Produtos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Families -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Famílias</h6>
+              <h3 class="mb-0"><%= stats.families %></h3>
+            </div>
+            <div class="stat-icon bg-success">
+              <i class="fas fa-tags"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/product-families" class="btn btn-sm btn-outline-success">Ver Famílias</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Low Stock -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Baixo stock</h6>
+              <h3 class="mb-0"><%= stats.lowStock %></h3>
+            </div>
+            <div class="stat-icon bg-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/inventory?filter=low_stock" class="btn btn-sm btn-outline-warning">Ver Stock</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Out of Stock -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Sem stock</h6>
+              <h3 class="mb-0"><%= stats.outOfStock %></h3>
+            </div>
+            <div class="stat-icon bg-danger">
+              <i class="fas fa-ban"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/inventory?filter=out_of_stock" class="btn btn-sm btn-outline-danger">Ver Stock</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts and Recent Activity -->
+  <div class="row mt-4 g-4">
+    <!-- Recent Products -->
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="card-title mb-0">Produtos Recentes</h6>
+        </div>
+        <div class="card-body">
+          <% if (stats.recentProducts && stats.recentProducts.length > 0) { %>
+            <ul class="list-group list-group-flush">
+              <% stats.recentProducts.forEach(product => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <% if (product.image_url) { %>
+                      <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                    <% } else { %>
+                      <div class="text-center text-muted d-flex align-items-center justify-content-center" style="width: 100%; height: 100%; border: 1px dashed #ccc; border-radius: .25rem;">
+                        <small>Sem imagem</small>
+                      </div>
+                    <% } %>
+                    <div>
+                      <h6 class="mb-0"><%= product.name %></h6>
+                      <small class="text-muted">Ref: <%= product.reference %></small>
+                    </div>
+                  </div>
+                  <span class="badge bg-primary rounded-pill"><%= product.current_stock %></span>
+                </li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <div class="text-center py-4">
+              <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-0">Nenhum produto adicionado recentemente</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="card-title mb-0">Transações Recentes</h6>
+        </div>
+        <div class="card-body p-0">
+          <% if (stats.recentTransactions && stats.recentTransactions.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Detalhes</th>
+                    <th>Quantidade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% stats.recentTransactions.forEach(transaction => { %>
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <% if (transaction.product_image_url) { %>
+                            <img src="/media/products/<%= transaction.product_image_url %>" alt="<%= transaction.product_name %>" class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                          <% } else { %>
+                            <div class="bg-light d-flex align-items-center justify-content-center img-thumbnail me-2" style="width: 40px; height: 40px;">
+                              <i class="fas fa-box text-muted"></i>
+                            </div>
+                          <% } %>
+                          <div>
+                            <div class="fw-bold"><%= transaction.product_name %></div>
+                            <small class="text-muted">Ref: <%= transaction.product_reference %></small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <% if (transaction.type === 'in') { %>
+                          <span class="badge bg-success-soft text-success">Entrada</span>
+                        <% } else if (transaction.type === 'out') { %>
+                          <span class="badge bg-danger-soft text-danger">Saída</span>
+                        <% } else { %>
+                          <span class="badge bg-secondary-soft text-secondary"><%= transaction.type %></span>
+                        <% } %>
+                      </td>
+                      <td><%= transaction.quantity %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-0">Nenhuma transação recente</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stat-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+  }
+  
+  .stat-icon i {
+    line-height: 1;
+  }
+  
+  .bg-primary { background-color: #4e73df !important; }
+  .bg-success { background-color: #1cc88a !important; }
+  .bg-warning { background-color: #f6c23e !important; }
+  .bg-danger { background-color: #e74a3b !important; }
+  .bg-info { background-color: #36b9cc !important; }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 1rem 1.25rem;
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: #4e73df;
+    margin-bottom: 0;
+  }
+  
+  .table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: #5a5c69;
+    border-top: none;
+    padding: 1rem;
+  }
+  
+  .table td {
+    padding: 1rem;
+    vertical-align: middle;
+  }
+  
+  .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+  }
+</style>

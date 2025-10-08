@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <!-- Usar CSS existentes -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/catalog.css">
+    <style>
+        /* WhatsApp specific styles */
+        .btn-whatsapp {
+            display: block;
+            background: #25D366;
+            color: white;
+            padding: 16px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 16px 0;
+            text-align: center;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #20BA5A;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .product-detail {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .product-images img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .product-info h1 {
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .product-price {
+            font-size: 1.5em;
+            color: #c0a080;
+            font-weight: bold;
+            margin: 16px 0;
+        }
+        
+        .btn-copy {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .product-detail {
+                padding: 16px;
+            }
+            
+            .btn-whatsapp {
+                font-size: 18px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include existing header if needed -->
+    
+    <div class="product-detail">
+        <nav class="breadcrumbs" style="margin-bottom: 20px;">
+            <a href="/">Início</a> > 
+            <a href="/catalog">Catálogo</a> > 
+            <%= product.name %>
+        </nav>
+        
+        <div class="product-content">
+            <% if (product.images && product.images.length > 0) { %>
+                <div class="product-images">
+                    <img src="/uploads/products/<%= product.images[0] %>" alt="<%= product.name %>">
+                </div>
+            <% } %>
+            
+            <div class="product-info">
+                <h1><%= product.name %></h1>
+                
+                <p><strong>Referência:</strong> <%= product.reference %></p>
+                
+                <% if (product.family_name) { %>
+                    <p><strong>Categoria:</strong> <%= product.family_name %></p>
+                <% } %>
+                
+                <% if (product.sale_price) { %>
+                    <div class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></div>
+                <% } else { %>
+                    <div class="product-price">Preço sob consulta</div>
+                <% } %>
+                
+                <% if (product.current_stock > 0) { %>
+                    <p style="color: green;"><strong>✓ Em stock</strong> (<%= product.current_stock %> disponível)</p>
+                <% } else { %>
+                    <p style="color: orange;"><strong>⚠ Temporariamente esgotado</strong></p>
+                <% } %>
+                
+                <% if (product.description) { %>
+                    <div class="product-description">
+                        <h3>Descrição</h3>
+                        <p><%= product.description %></p>
+                    </div>
+                <% } %>
+                
+                <!-- WhatsApp Button -->
+                <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
+                   class="btn-whatsapp" 
+                   target="_blank"
+                   onclick="trackWhatsApp()">
+                    📱 Pedir Informações via WhatsApp
+                </a>
+                
+                <button onclick="copyInfo()" class="btn-copy">
+                    📋 Copiar Informações
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function copyInfo() {
+            const info = `<%= product.name %>\nReferência: <%= product.reference %>\n<% if (product.sale_price) { %>Preço: €<%= parseFloat(product.sale_price).toFixed(2) %><% } else { %>Preço sob consulta<% } %>\nVer: ${window.location.href}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(info).then(() => {
+                    alert('Informações copiadas!');
+                });
+            } else {
+                // Fallback
+                alert('Informações: ' + info);
+            }
+        }
+        
+        function trackWhatsApp() {
+            console.log('WhatsApp clicked for product:', '<%= product.id %>');
+        }
+    </script>
+</body>
+</html>
+

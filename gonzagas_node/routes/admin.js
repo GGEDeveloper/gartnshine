@@ -200,12 +200,14 @@ router.get('/dashboard-v2', adminSessionRequired, async (req, res) => {
       }
     ];
 
-    res.render('admin/dashboard-v2', {
-      title: 'Dashboard V2 - Gonzaga\'s Admin',
+    res.render('admin/dashboard', {
+      title: 'Dashboard - Gonzaga\'s Admin',
       user: req.session.user,
       totalProducts: totalProducts,
       stats: {
         products: totalProducts,
+        families: totalFamilies,
+        lowStock: lowStockProducts,
         views: 1429,
         whatsapp: 89,
         searches: 356
@@ -335,8 +337,8 @@ router.get('/products-v2', adminSessionRequired, async (req, res) => {
       SELECT id, name FROM product_families ORDER BY name
     `);
     
-    res.render('admin/products-v2', {
-      title: 'Produtos V2 - Admin',
+    res.render('admin/products', {
+      title: 'Produtos - Admin',
       user: req.session.user,
       products: products,
       categories: categories,

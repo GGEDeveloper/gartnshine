@@ -1,0 +1,358 @@
+<header class="main-header">
+  <div class="header-container">
+    <!-- Desktop Navigation -->
+    <nav class="main-nav desktop-nav">
+      <ul class="nav-menu">
+        <li><a href="/" class="<%= typeof title !== 'undefined' && title === 'Home' ? 'active' : '' %>">Home</a></li>
+        
+        <!-- Collections link -->
+        <li><a href="/collections" class="<%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">Gallery</a></li>
+        
+        <!-- Catalog link -->
+        <% if (typeof siteSettings !== 'undefined' && siteSettings.catalog_page_enabled) { %>
+        <li><a href="/catalog" class="<%= typeof title !== 'undefined' && title === 'Catalog' ? 'active' : '' %>">Catalog</a></li>
+        <% } %>
+        
+        <li><a href="/about" class="<%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">About</a></li>
+        
+        <% if (typeof user !== 'undefined' && user) { %>
+          <li class="dropdown admin-menu">
+            <a href="/admin" class="dropdown-toggle">Admin</a>
+            <ul class="dropdown-menu">
+              <li><a href="/admin/dashboard">Dashboard</a></li>
+              <li><a href="/admin/products">Products</a></li>
+              <li><a href="/admin/families">Categories</a></li>
+              <li><a href="/admin/inventory">Inventory</a></li>
+              <li><a href="/admin/checkpoints">Checkpoints</a></li>
+              <li><a href="/admin/settings">Settings</a></li>
+              <li><a href="/admin/logout">Logout</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <!-- Hidden admin link that only shows on hover, providing subtle access -->
+          <li class="admin-link"><a href="/admin/login">Admin</a></li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <!-- Search Box -->
+    <div class="header-search">
+      <input type="search" name="search" class="search-input" placeholder="Pesquisar produtos..." autocomplete="off" aria-label="Pesquisar produtos">
+    </div>
+
+    <!-- Logo -->
+    <div class="logo-container">
+      <a href="/" class="logo">
+        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
+      </a>
+    </div>
+    
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Abrir menu de navegação">
+      <div class="hamburger">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </div>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-content">
+    <!-- Mobile Nav Header -->
+    <div class="mobile-nav-header">
+      <div class="header-logo">
+        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
+      </div>
+      <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Fechar menu de navegação">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <!-- Mobile Navigation Links -->
+    <div class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link <%= typeof title !== 'undefined' && title === 'Home' ? 'active' : '' %>">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+      </a>
+      
+      <% if (typeof siteSettings !== 'undefined' && siteSettings.catalog_page_enabled) { %>
+      <a href="/catalog" class="mobile-nav-link <%= typeof title !== 'undefined' && title === 'Catalog' ? 'active' : '' %>">
+        <i class="fas fa-gem"></i>
+        <span>Catálogo</span>
+      </a>
+      <% } %>
+      
+      <a href="/collections" class="mobile-nav-link <%= typeof title !== 'undefined' && title === 'Collections' ? 'active' : '' %>">
+        <i class="fas fa-layer-group"></i>
+        <span>Coleções</span>
+      </a>
+      
+      <a href="/about" class="mobile-nav-link <%= typeof title !== 'undefined' && title === 'About Gonzaga\'s Art & Shine' ? 'active' : '' %>">
+        <i class="fas fa-info-circle"></i>
+        <span>Sobre Nós</span>
+      </a>
+      
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="/admin" class="mobile-nav-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Admin</span>
+        </a>
+      <% } else { %>
+        <a href="/admin/login" class="mobile-nav-link">
+          <i class="fas fa-user-shield"></i>
+          <span>Admin</span>
+        </a>
+      <% } %>
+    </div>
+    
+    <!-- Mobile Navigation Actions -->
+    <div class="mobile-nav-actions">
+      <!-- Social Links -->
+      <div class="mobile-nav-social">
+        <a href="https://www.instagram.com/gonzagaartnshine/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61573519807731" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </div>
+      
+      <!-- Contact Info -->
+      <div class="mobile-nav-contact">
+        <p>Entre em contacto:</p>
+        <p><a href="mailto:geral@artnshine.pt">geral@artnshine.pt</a></p>
+        <p><a href="https://artnshine.pt">artnshine.pt</a></p>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+/* Mobile Header Responsive */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-nav-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: none !important;
+    border: none !important;
+    color: #c0a080 !important;
+    font-size: 1.5rem !important;
+    cursor: pointer !important;
+    padding: 0.5rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    z-index: 1100 !important;
+  }
+  
+  .mobile-nav-toggle:hover {
+    background: rgba(192, 160, 128, 0.1) !important;
+    transform: scale(1.05) !important;
+  }
+  
+  .hamburger {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+  
+  .hamburger-line {
+    width: 24px !important;
+    height: 2px !important;
+    background: #c0a080 !important;
+    transition: all 0.3s ease !important;
+    border-radius: 1px !important;
+  }
+  
+  .mobile-nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.98), rgba(45, 45, 45, 0.98)) !important;
+    backdrop-filter: blur(20px) !important;
+    overflow-y: auto !important;
+  }
+  
+  .mobile-nav-content {
+    padding: 2rem 1rem !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-nav-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 2rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 1px solid rgba(192, 160, 128, 0.2) !important;
+  }
+  
+  .mobile-nav-header h1 {
+    color: #c0a080 !important;
+    font-size: 1.5rem !important;
+    margin: 0 !important;
+  }
+  
+  .mobile-nav-close {
+    background: none !important;
+    border: none !important;
+    color: #c0a080 !important;
+    font-size: 1.5rem !important;
+    cursor: pointer !important;
+    padding: 0.5rem !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .mobile-nav-close:hover {
+    background: rgba(192, 160, 128, 0.1) !important;
+  }
+  
+  .mobile-nav-links {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  .mobile-nav-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 1rem !important;
+    color: #e0e0e0 !important;
+    text-decoration: none !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+  
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: rgba(192, 160, 128, 0.15) !important;
+    color: #c0a080 !important;
+    transform: translateX(5px) !important;
+  }
+  
+  .mobile-nav-link i {
+    margin-right: 1rem !important;
+    font-size: 1.2rem !important;
+    color: #c0a080 !important;
+    width: 24px !important;
+    text-align: center !important;
+  }
+  
+  .mobile-nav-actions {
+    margin-top: 2rem !important;
+    padding-top: 2rem !important;
+    border-top: 1px solid rgba(192, 160, 128, 0.2) !important;
+  }
+  
+  .mobile-nav-social {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  .mobile-nav-social a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: rgba(192, 160, 128, 0.1) !important;
+    color: #c0a080 !important;
+    border-radius: 50% !important;
+    font-size: 1.5rem !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .mobile-nav-social a:hover {
+    background: rgba(192, 160, 128, 0.2) !important;
+    transform: scale(1.1) !important;
+  }
+  
+  .mobile-nav-contact {
+    text-align: center !important;
+    color: #888 !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .mobile-nav-contact a {
+    color: #c0a080 !important;
+    text-decoration: none !important;
+  }
+  
+  .mobile-nav-contact a:hover {
+    text-decoration: underline !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-nav-toggle,
+  .mobile-nav {
+    display: none !important;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle mobile menu
+  const menuToggleButton = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+
+  // console.log('[DEBUG DOMContentLoaded] Menu Toggle Button:', menuToggleButton);
+  // console.log('[DEBUG DOMContentLoaded] Nav Menu:', navMenu);
+
+  let isMenuOpen = false; // Standard: menu starts closed.
+
+  if (menuToggleButton && navMenu) {
+    // Initial sync: If JS assumes menu is open, but button is hamburger, make button active (X)
+    // However, the user describes the button starting as hamburger while panel is open.
+    // So, the first click should make isMenuOpen = false, remove active from panel (closing it),
+    // and remove active from button (keeping it hamburger, which is correct for closed state).
+
+    menuToggleButton.addEventListener('click', function() {
+      isMenuOpen = !isMenuOpen; // Toggle state
+
+      if (isMenuOpen) {
+        // This state means: Menu should be OPEN, Button should be X
+        navMenu.classList.add('active');
+        this.classList.add('active');
+        console.log('[DEBUG Click] State: OPEN. navMenu:', navMenu.classList.toString(), 'Button:', this.classList.toString());
+      } else {
+        // This state means: Menu should be CLOSED, Button should be Hamburger
+        navMenu.classList.remove('active');
+        this.classList.remove('active');
+        console.log('[DEBUG Click] State: CLOSED. navMenu:', navMenu.classList.toString(), 'Button:', this.classList.toString());
+      }
+    });
+  } else {
+    console.error('[DEBUG DOMContentLoaded] Menu toggle button or nav menu not found!');
+  }
+  
+  // Handle dropdowns
+  document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.parentNode.classList.toggle('open');
+    });
+  });
+});
+</script>

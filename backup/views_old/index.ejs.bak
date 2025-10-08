@@ -1,0 +1,105 @@
+<main>
+    <!-- Hero Section with Video Background -->
+    <section class="hero">
+      <div class="video-background-container"> 
+        <video autoplay muted loop playsinline class="video-background" poster="/images/placeholder-hero.jpg" data-poster-mobile="/images/placeholder-hero-mobile.jpg">
+          <source src="/videos/hero-background.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="hero-content">
+        <h1><%= siteTitle %></h1>
+        <p><%= siteDescription %></p>
+      </div>
+    </section>
+    
+    <!-- Featured Products -->
+    <% if (featured && featured.length > 0) { %>
+    <section class="featured-section">
+      <div class="section-header">
+        <h2>Featured Pieces</h2>
+        <div class="geometric-divider">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <!-- Slick Carousel -->
+      <div class="featured-carousel">
+        <% featured.forEach(product => { %>
+          <div class="slick-slide">
+            <%- include('partials/_productCard', {product: product, isCatalogPage: false}) %>
+          </div>
+        <% }); %>
+      </div>
+
+      <style>
+        .featured-carousel {
+          margin: 30px auto;
+          max-width: 1200px;
+          padding: 0 20px;
+        }
+        
+        .slick-slide {
+          padding: 0 15px;
+          box-sizing: border-box;
+        }
+        
+        .slick-prev:before,
+        .slick-next:before {
+          color: var(--color-accent);
+          font-size: 24px;
+        }
+        
+        .slick-dots li button:before {
+          font-size: 12px;
+          color: var(--color-accent);
+        }
+        
+        .slick-dots li.slick-active button:before {
+          color: var(--color-highlight);
+        }
+        
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+          .featured-carousel {
+            padding: 0 10px;
+            margin: 20px auto;
+          }
+          
+          .slick-slide {
+            padding: 0 8px;
+          }
+          
+          .slick-dots {
+            bottom: -50px;
+          }
+          
+          .slick-dots li {
+            margin: 0 3px;
+          }
+          
+          .slick-prev,
+          .slick-next {
+            display: none !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .featured-carousel {
+            padding: 0 5px;
+          }
+          
+          .slick-slide {
+            padding: 0 5px;
+          }
+        }
+      </style>
+
+
+    </section>
+    <% } %>
+    
+
+</main>

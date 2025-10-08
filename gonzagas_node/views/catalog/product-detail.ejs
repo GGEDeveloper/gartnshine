@@ -3,156 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%= product.name %> - Gonzaga's Art & Shine</title>
     
-    <!-- Usar CSS existentes -->
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/catalog.css">
-    <style>
-        /* WhatsApp specific styles */
-        .btn-whatsapp {
-            display: block;
-            background: #25D366;
-            color: white;
-            padding: 16px 24px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            margin: 16px 0;
-            text-align: center;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        
-        .btn-whatsapp:hover {
-            background: #20BA5A;
-            color: white;
-            text-decoration: none;
-        }
-        
-        .product-detail {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        
-        .product-images img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-        
-        .product-info h1 {
-            color: #333;
-            margin-bottom: 16px;
-        }
-        
-        .product-price {
-            font-size: 1.5em;
-            color: #c0a080;
-            font-weight: bold;
-            margin: 16px 0;
-        }
-        
-        .btn-copy {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 8px;
-        }
-        
-        @media (max-width: 768px) {
-            .product-detail {
-                padding: 16px;
-            }
-            
-            .btn-whatsapp {
-                font-size: 18px;
-                padding: 20px;
-            }
-        }
-    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Product Detail V2 CSS -->
+    <link rel="stylesheet" href="/css/product-detail-v2.css">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="<%= product.description %>">
+    <meta property="og:title" content="<%= product.name %>">
+    <meta property="og:description" content="<%= product.description %>">
+    <meta property="og:image" content="<%= product.images && product.images[0] ? '/uploads/products/' + product.images[0] : '/images/placeholder.jpg' %>">
 </head>
 <body>
-    <!-- Include existing header if needed -->
-    
-    <div class="product-detail">
-        <nav class="breadcrumbs" style="margin-bottom: 20px;">
-            <a href="/">Início</a> > 
-            <a href="/catalog">Catálogo</a> > 
-            <%= product.name %>
-        </nav>
-        
-        <div class="product-content">
-            <% if (product.images && product.images.length > 0) { %>
-                <div class="product-images">
-                    <img src="/uploads/products/<%= product.images[0] %>" alt="<%= product.name %>">
-                </div>
-            <% } %>
+<div class="product-detail-v2">
+    <!-- Hero Section -->
+    <section class="product-hero">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs-v2">
+                <a href="/" class="breadcrumb-item">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="/catalog" class="breadcrumb-item">Catálogo</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="/catalog/category/<%= product.family_id %>" class="breadcrumb-item">
+                    <%= product.family_name %>
+                </a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current"><%= product.name %></span>
+            </nav>
             
-            <div class="product-info">
-                <h1><%= product.name %></h1>
+            <!-- Product Media & Info Grid -->
+            <div class="product-main-grid">
+                <!-- Left: Image Gallery -->
+                <div class="product-gallery-v2">
+                    <div class="gallery-main">
+                        <img src="<%= product.images[0] ? '/uploads/products/' + product.images[0] : '/images/placeholder.jpg' %>" 
+                             alt="<%= product.name %>" 
+                             class="main-image" 
+                             id="mainProductImage">
+                        
+                        <!-- Image Controls Overlay -->
+                        <div class="image-controls">
+                            <button class="btn-zoom" onclick="openLightbox()">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn-fullscreen" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Indicators -->
+                        <% if (product.images && product.images.length > 1) { %>
+                        <div class="image-indicators">
+                            <% product.images.forEach((img, index) => { %>
+                            <span class="indicator <%= index === 0 ? 'active' : '' %>" 
+                                  data-index="<%= index %>"></span>
+                            <% }); %>
+                        </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Thumbnail Gallery -->
+                    <% if (product.images && product.images.length > 1) { %>
+                    <div class="gallery-thumbnails">
+                        <% product.images.forEach((img, index) => { %>
+                        <button class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+                                onclick="changeMainImage('<%= img %>', <%= index %>)">
+                            <img src="/uploads/products/<%= img %>" 
+                                 alt="<%= product.name %> - <%= index + 1 %>">
+                        </button>
+                        <% }); %>
+                    </div>
+                    <% } %>
+                </div>
                 
-                <p><strong>Referência:</strong> <%= product.reference %></p>
-                
-                <% if (product.family_name) { %>
-                    <p><strong>Categoria:</strong> <%= product.family_name %></p>
-                <% } %>
-                
-                <% if (product.sale_price) { %>
-                    <div class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></div>
-                <% } else { %>
-                    <div class="product-price">Preço sob consulta</div>
-                <% } %>
-                
-                <% if (product.current_stock > 0) { %>
-                    <p style="color: green;"><strong>✓ Em stock</strong> (<%= product.current_stock %> disponível)</p>
-                <% } else { %>
-                    <p style="color: orange;"><strong>⚠ Temporariamente esgotado</strong></p>
-                <% } %>
-                
-                <% if (product.description) { %>
+                <!-- Right: Product Information -->
+                <div class="product-info-v2">
+                    <!-- Product Header -->
+                    <div class="product-header">
+                        <div class="product-title-section">
+                            <h1 class="product-title"><%= product.name %></h1>
+                            <p class="product-reference">REF: <%= product.reference %></p>
+                        </div>
+                        
+                        <div class="product-actions-quick">
+                            <button class="btn-favorite" onclick="toggleFavorite()">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-share" onclick="shareProduct()">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Meta -->
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Categoria:</span>
+                            <a href="/catalog/category/<%= product.family_id %>" class="meta-value link">
+                                <%= product.family_name %>
+                            </a>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <span class="meta-label">Disponibilidade:</span>
+                            <span class="meta-value">
+                                <% if (product.current_stock > 0) { %>
+                                    <span class="stock-status in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        Em Stock (<%= product.current_stock %> unidades)
+                                    </span>
+                                <% } else { %>
+                                    <span class="stock-status out-stock">
+                                        <i class="fas fa-times-circle"></i>
+                                        Temporariamente Esgotado
+                                    </span>
+                                <% } %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Section -->
+                    <div class="price-section">
+                        <% if (product.sale_price) { %>
+                            <div class="price-main">
+                                €<%= parseFloat(product.sale_price).toFixed(2) %>
+                            </div>
+                            <% if (product.original_price && product.original_price > product.sale_price) { %>
+                            <div class="price-original">
+                                €<%= parseFloat(product.original_price).toFixed(2) %>
+                            </div>
+                            <div class="price-discount">
+                                -<%= Math.round((1 - product.sale_price/product.original_price) * 100) %>%
+                            </div>
+                            <% } %>
+                        <% } else { %>
+                            <div class="price-consultation">
+                                <i class="fas fa-tag"></i>
+                                Preço sob consulta
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Description -->
+                    <% if (product.description) { %>
                     <div class="product-description">
                         <h3>Descrição</h3>
-                        <p><%= product.description %></p>
+                        <div class="description-content">
+                            <%= product.description %>
+                        </div>
                     </div>
-                <% } %>
-                
-                <!-- WhatsApp Button -->
-                <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
-                   class="btn-whatsapp" 
-                   target="_blank"
-                   onclick="trackWhatsApp()">
-                    📱 Pedir Informações via WhatsApp
-                </a>
-                
-                <button onclick="copyInfo()" class="btn-copy">
-                    📋 Copiar Informações
-                </button>
+                    <% } %>
+                    
+                    <!-- Product Details -->
+                    <div class="product-details">
+                        <h3>Detalhes</h3>
+                        <div class="details-grid">
+                            <% if (product.material) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Material:</span>
+                                <span class="detail-value"><%= product.material %></span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.weight) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Peso:</span>
+                                <span class="detail-value"><%= product.weight %>g</span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.dimensions) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Dimensões:</span>
+                                <span class="detail-value"><%= product.dimensions %></span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.style) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Estilo:</span>
+                                <span class="detail-value"><%= product.style %></span>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <!-- Call to Action -->
+                    <div class="product-cta">
+                        <div class="cta-main">
+                            <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
+                               class="btn-whatsapp-v2" 
+                               target="_blank"
+                               onclick="trackWhatsAppClick()">
+                                <div class="btn-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="btn-content">
+                                    <span class="btn-title">Solicitar Informações</span>
+                                    <span class="btn-subtitle">Resposta rápida via WhatsApp</span>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="cta-secondary">
+                            <button class="btn-secondary" onclick="copyProductInfo()">
+                                <i class="fas fa-copy"></i>
+                                Copiar Link
+                            </button>
+                            
+                            <button class="btn-secondary" onclick="printProduct()">
+                                <i class="fas fa-print"></i>
+                                Imprimir
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
     
-    <script>
-        function copyInfo() {
-            const info = `<%= product.name %>\nReferência: <%= product.reference %>\n<% if (product.sale_price) { %>Preço: €<%= parseFloat(product.sale_price).toFixed(2) %><% } else { %>Preço sob consulta<% } %>\nVer: ${window.location.href}`;
+    <!-- Product Tabs -->
+    <section class="product-tabs-section">
+        <div class="container">
+            <div class="tabs-v2">
+                <nav class="tabs-nav">
+                    <button class="tab-btn active" data-tab="specifications">
+                        Especificações
+                    </button>
+                    <button class="tab-btn" data-tab="care">
+                        Cuidados
+                    </button>
+                    <button class="tab-btn" data-tab="shipping">
+                        Envio & Devoluções
+                    </button>
+                </nav>
+                
+                <div class="tabs-content">
+                    <div class="tab-panel active" id="tab-specifications">
+                        <div class="specifications-grid">
+                            <div class="spec-group">
+                                <h4>Características Gerais</h4>
+                                <ul class="spec-list">
+                                    <li>Material: <%= product.material || 'Prata 925' %></li>
+                                    <li>Peso: <%= product.weight || 'Variável' %>g</li>
+                                    <li>Origem: Handcrafted</li>
+                                    <li>Garantia: 2 anos</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="spec-group">
+                                <h4>Dimensões</h4>
+                                <ul class="spec-list">
+                                    <li>Dimensões: <%= product.dimensions || 'Ver descrição' %></li>
+                                    <li>Espessura: Variável</li>
+                                    <li>Acabamento: Polido</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-panel" id="tab-care">
+                        <div class="care-instructions">
+                            <div class="care-item">
+                                <i class="fas fa-hand-sparkles"></i>
+                                <div>
+                                    <h4>Limpeza</h4>
+                                    <p>Use um pano macio e produtos específicos para prata.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="care-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <h4>Armazenamento</h4>
+                                    <p>Guarde em local seco, preferencialmente em saco anti-oxidação.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="care-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <div>
+                                    <h4>Evite</h4>
+                                    <p>Contacto com perfumes, cremes e produtos químicos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-panel" id="tab-shipping">
+                        <div class="shipping-info">
+                            <div class="shipping-section">
+                                <h4>Envios</h4>
+                                <ul>
+                                    <li>Portugal Continental: 3-5 dias úteis</li>
+                                    <li>Ilhas: 5-7 dias úteis</li>
+                                    <li>Envio gratuito a partir de €50</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="shipping-section">
+                                <h4>Devoluções</h4>
+                                <ul>
+                                    <li>14 dias para devolução</li>
+                                    <li>Produto em estado original</li>
+                                    <li>Portes de devolução por conta do cliente</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Related Products -->
+    <section class="related-products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Produtos Relacionados</h2>
+                <p>Outros produtos que podem interessar</p>
+            </div>
             
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(info).then(() => {
-                    alert('Informações copiadas!');
-                });
-            } else {
-                // Fallback
-                alert('Informações: ' + info);
-            }
-        }
+            <div class="related-products-grid" id="relatedProductsGrid">
+                <!-- Dynamic content loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox-modal" id="imageLightbox">
+    <div class="lightbox-content">
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img src="" alt="" class="lightbox-image">
+        <div class="lightbox-nav">
+            <button class="lightbox-prev" onclick="previousImage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-next" onclick="nextImage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+// JavaScript para funcionalidade
+const productDetailJS = `
+<script>
+let currentImageIndex = 0;
+const productImages = <%= JSON.stringify(product.images || []) %>;
+
+function changeMainImage(imageName, index) {
+    const mainImage = document.getElementById('mainProductImage');
+    mainImage.src = '/uploads/products/' + imageName;
+    
+    // Update active thumbnail
+    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+    });
+    
+    // Update indicators
+    document.querySelectorAll('.indicator').forEach((indicator, i) => {
+        indicator.classList.toggle('active', i === index);
+    });
+    
+    currentImageIndex = index;
+}
+
+function openLightbox() {
+    const lightbox = document.getElementById('imageLightbox');
+    const lightboxImage = lightbox.querySelector('.lightbox-image');
+    
+    lightboxImage.src = document.getElementById('mainProductImage').src;
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('imageLightbox');
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function previousImage() {
+    if (productImages.length > 1) {
+        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+        changeMainImage(productImages[currentImageIndex], currentImageIndex);
+        document.querySelector('.lightbox-image').src = '/uploads/products/' + productImages[currentImageIndex];
+    }
+}
+
+function nextImage() {
+    if (productImages.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        changeMainImage(productImages[currentImageIndex], currentImageIndex);
+        document.querySelector('.lightbox-image').src = '/uploads/products/' + productImages[currentImageIndex];
+    }
+}
+
+function toggleFavorite() {
+    const btn = document.querySelector('.btn-favorite i');
+    const isFavorited = btn.classList.contains('fas');
+    
+    if (isFavorited) {
+        btn.className = 'far fa-heart';
+        showNotification('Removido dos favoritos', 'info');
+    } else {
+        btn.className = 'fas fa-heart';
+        showNotification('Adicionado aos favoritos', 'success');
+    }
+}
+
+function shareProduct() {
+    if (navigator.share) {
+        navigator.share({
+            title: '<%= product.name %>',
+            text: 'Vê este produto da Gonzaga\\'s Art & Shine',
+            url: window.location.href
+        });
+    } else {
+        copyProductInfo();
+    }
+}
+
+function copyProductInfo() {
+    const productInfo = \`<%= product.name %>
+REF: <%= product.reference %>
+<% if (product.sale_price) { %>Preço: €<%= parseFloat(product.sale_price).toFixed(2) %><% } else { %>Preço sob consulta<% } %>
+Ver: \${window.location.href}\
+
+    navigator.clipboard.writeText(productInfo).then(() => {
+        showNotification('Informações copiadas!', 'success');
+    });
+}
+
+function printProduct() {
+    window.print();
+}
+
+function trackWhatsAppClick() {
+    // Analytics tracking
+    console.log('WhatsApp clicked for product:', '<%= product.id %>');
+}
+
+// Tab functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
         
-        function trackWhatsApp() {
-            console.log('WhatsApp clicked for product:', '<%= product.id %>');
+        // Update active tab
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update active panel
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+    });
+});
+
+// Load related products
+async function loadRelatedProducts() {
+    try {
+        const response = await fetch('/api/products/family/<%= product.family_id %>?limit=4');
+        const data = await response.json();
+        
+        if (data.success) {
+            const grid = document.getElementById('relatedProductsGrid');
+            grid.innerHTML = data.data.filter(p => p.id !== <%= product.id %>).slice(0, 3).map(product => \`
+                <div class="related-product-card">
+                    <a href="/catalog/product/\${product.id}" class="product-link">
+                        <div class="product-image">
+                            <img src="\${product.main_image ? '/uploads/products/' + product.main_image : '/images/placeholder.jpg'}" 
+                                 alt="\${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h3>\${product.name}</h3>
+                            <p class="product-ref">\${product.reference}</p>
+                            <p class="product-price">
+                                \${product.sale_price ? '€' + parseFloat(product.sale_price).toFixed(2) : 'Preço sob consulta'}
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            \`).join('');
         }
-    </script>
+    } catch (error) {
+        console.error('Failed to load related products:', error);
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadRelatedProducts();
+});
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = \`notification notification-\${type}\
+    notification.innerHTML = \`
+        <div class="notification-content">
+            <i class="fas fa-\${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}-circle"></i>
+            <span>\${message}</span>
+        </div>
+    \
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto remove
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+</script>
+
+
 </body>
 </html>
-

@@ -1,105 +1,275 @@
-<main>
-    <!-- Hero Section with Video Background -->
-    <section class="hero">
-      <div class="video-background-container"> 
-        <video autoplay muted loop playsinline class="video-background" poster="/images/placeholder-hero.jpg" data-poster-mobile="/images/placeholder-hero-mobile.jpg">
-          <source src="/videos/hero-background.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="hero-content">
-        <h1><%= siteTitle %></h1>
-        <p><%= siteDescription %></p>
-      </div>
-    </section>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gonzaga's Art & Shine - Joias de Prata 925 Únicas</title>
     
-    <!-- Featured Products -->
-    <% if (featured && featured.length > 0) { %>
-    <section class="featured-section">
-      <div class="section-header">
-        <h2>Featured Pieces</h2>
-        <div class="geometric-divider">
-          <span></span>
-          <span></span>
-          <span></span>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Joias artesanais de prata 925. Cada peça é única, criada à mão com técnicas tradicionais e design contemporâneo. Descobra a elegância que nasce da terra.">
+    <meta name="keywords" content="joias prata 925, artesanal, handmade, brincos, anéis, colares, pulseiras, Portugal">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Gonzaga's Art & Shine - Joias de Prata 925">
+    <meta property="og:description" content="Elegância que nasce da terra. Joias únicas em prata 925.">
+    <meta property="og:image" content="/images/og-image.jpg">
+    <meta property="og:type" content="website">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/css/homepage-v2.css" as="style">
+    <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/homepage-v2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="homepage-v2">
+    
+    <!-- Navigation (Enhanced) -->
+    <%- include('partials/header-v2') %>
+    
+    <!-- Hero Section -->
+    <section class="hero-section-v2" id="heroSection">
+        <div class="hero-background">
+            <div class="hero-video-container">
+                <!-- Optional: Background video overlay -->
+                <div class="hero-gradient-overlay"></div>
+                <div class="hero-pattern-overlay"></div>
+            </div>
         </div>
-      </div>
-
-      <!-- Slick Carousel -->
-      <div class="featured-carousel">
-        <% featured.forEach(product => { %>
-          <div class="slick-slide">
-            <%- include('partials/_productCard', {product: product, isCatalogPage: false}) %>
-          </div>
-        <% }); %>
-      </div>
-
-      <style>
-        .featured-carousel {
-          margin: 30px auto;
-          max-width: 1200px;
-          padding: 0 20px;
-        }
         
-        .slick-slide {
-          padding: 0 15px;
-          box-sizing: border-box;
-        }
+        <div class="hero-content">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Left: Text Content -->
+                    <div class="hero-text">
+                        <div class="hero-text-inner">
+                            <span class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+                                Gonzaga's Art & Shine
+                            </span>
+                            
+                            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+                                <span class="title-line">Elegância que</span>
+                                <span class="title-line title-accent">nasce da terra</span>
+                            </h1>
+                            
+                            <p class="hero-description" data-aos="fade-up" data-aos-delay="300">
+                                Joias únicas em prata 925, criadas à mão com técnicas tradicionais 
+                                e design contemporâneo. Cada peça conta uma história de arte e sofisticação.
+                            </p>
+                            
+                            <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
+                                <a href="/catalog" class="btn-hero-primary">
+                                    <span class="btn-text">Explorar Coleção</span>
+                                    <span class="btn-icon">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                </a>
+                                
+                                <a href="#about" class="btn-hero-secondary">
+                                    <span>Nossa História</span>
+                                </a>
+                            </div>
+                            
+                            <!-- Trust Indicators -->
+                            <div class="hero-trust" data-aos="fade-up" data-aos-delay="500">
+                                <div class="trust-item">
+                                    <i class="fas fa-medal"></i>
+                                    <span>Prata 925 Autêntica</span>
+                                </div>
+                                <div class="trust-item">
+                                    <i class="fas fa-hands"></i>
+                                    <span>Feito à Mão</span>
+                                </div>
+                                <div class="trust-item">
+                                    <i class="fas fa-shipping-fast"></i>
+                                    <span>Envio Portugal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Visual Showcase -->
+                    <div class="hero-visual" data-aos="fade-left" data-aos-delay="600">
+                        <div class="hero-showcase">
+                            <!-- Featured Product Carousel -->
+                            <div class="featured-carousel-container">
+                                <div class="swiper featured-swiper">
+                                    <div class="swiper-wrapper" id="featuredProductsWrapper">
+                                        <!-- Dynamic content loaded via JavaScript -->
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Floating Elements -->
+                            <div class="floating-elements">
+                                <div class="floating-circle circle-1"></div>
+                                <div class="floating-circle circle-2"></div>
+                                <div class="floating-circle circle-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        .slick-prev:before,
-        .slick-next:before {
-          color: var(--color-accent);
-          font-size: 24px;
-        }
-        
-        .slick-dots li button:before {
-          font-size: 12px;
-          color: var(--color-accent);
-        }
-        
-        .slick-dots li.slick-active button:before {
-          color: var(--color-highlight);
-        }
-        
-        /* Mobile specific styles */
-        @media (max-width: 768px) {
-          .featured-carousel {
-            padding: 0 10px;
-            margin: 20px auto;
-          }
-          
-          .slick-slide {
-            padding: 0 8px;
-          }
-          
-          .slick-dots {
-            bottom: -50px;
-          }
-          
-          .slick-dots li {
-            margin: 0 3px;
-          }
-          
-          .slick-prev,
-          .slick-next {
-            display: none !important;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .featured-carousel {
-            padding: 0 5px;
-          }
-          
-          .slick-slide {
-            padding: 0 5px;
-          }
-        }
-      </style>
-
-
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="800">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span class="scroll-text">Descobre mais</span>
+        </div>
     </section>
-    <% } %>
     
-
-</main>
+    <!-- Featured Products Section -->
+    <section class="featured-products-v2" id="featuredProducts">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Coleção</span>
+                <h2 class="section-title">Peças em Destaque</h2>
+                <p class="section-description">
+                    As nossas criações mais populares e únicas, selecionadas especialmente para ti
+                </p>
+            </div>
+            
+            <div class="products-carousel-wrapper" data-aos="fade-up" data-aos-delay="200">
+                <div class="swiper products-swiper">
+                    <div class="swiper-wrapper" id="mainProductsWrapper">
+                        <!-- Dynamic content -->
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="swiper-button-prev products-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="swiper-button-next products-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="swiper-pagination products-pagination"></div>
+                </div>
+            </div>
+            
+            <div class="showcase-cta" data-aos="fade-up" data-aos-delay="400">
+                <a href="/catalog" class="btn-view-all">
+                    <span>Ver Toda a Coleção</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Trust & Values Section -->
+    <section class="trust-section" id="trust">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Garantias</span>
+                <h2 class="section-title">Porque Escolher-nos</h2>
+                <p class="section-description">
+                    Comprometemo-nos com a excelência em cada detalhe
+                </p>
+            </div>
+            
+            <div class="trust-grid">
+                <div class="trust-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="trust-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Prata 925 Autêntica</h3>
+                    <p>Garantia de qualidade e pureza em todas as peças. Certificação de autenticidade incluída.</p>
+                </div>
+                
+                <div class="trust-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="trust-icon">
+                        <i class="fas fa-hands"></i>
+                    </div>
+                    <h3>Artesanal Português</h3>
+                    <p>Cada joia é única, criada à mão com técnicas tradicionais portuguesas passadas de geração em geração.</p>
+                </div>
+                
+                <div class="trust-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="trust-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3>Atendimento Personalizado</h3>
+                    <p>Contacto direto via WhatsApp para esclarecimentos e atendimento personalizado a cada cliente.</p>
+                </div>
+                
+                <div class="trust-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="trust-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Envio Seguro Portugal</h3>
+                    <p>Entregas rápidas e seguras em todo o Portugal continental e ilhas, com embalagem cuidada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Categories Showcase -->
+    <section class="categories-showcase" id="categories">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Descobre</span>
+                <h2 class="section-title">Nossas Categorias</h2>
+                <p class="section-description">
+                    Explora diferentes estilos e encontra a peça perfeita para cada ocasião
+                </p>
+            </div>
+            
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Dynamic content loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <div class="cta-text">
+                    <h2>Pronta para descobrir a tua próxima joia favorita?</h2>
+                    <p>Explora a nossa coleção completa ou contacta-nos para criações personalizadas</p>
+                </div>
+                
+                <div class="cta-actions">
+                    <a href="/catalog" class="btn-cta-primary">
+                        <span>Explorar Coleção</span>
+                        <i class="fas fa-gem"></i>
+                    </a>
+                    
+                    <a href="https://wa.me/351XXXXXXXXX?text=Olá! Gostaria de saber mais sobre as vossas joias." 
+                       class="btn-cta-whatsapp" target="_blank">
+                        <span>Contactar WhatsApp</span>
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/js/homepage-v2.js"></script>
+    <script src="/js/swiper-setup.js"></script>
+    
+    <!-- AOS Animation Init -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out-cubic',
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
