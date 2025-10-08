@@ -1,0 +1,620 @@
+/* =============================================
+   GONZAGA ART & SHINE - BASE STYLES
+   Gothic Natural Foundation
+   "Elegância que nasce da terra"
+   ============================================= */
+
+/* ==========================================
+   CSS RESET MODERNO
+   ========================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset e configuração base */
+html {
+  font-size: 16px;
+  line-height: var(--line-height-normal);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-normal);
+  background-color: var(--black);
+  color: var(--ivory);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================
+   TIPOGRAFIA GOTHIC NATURAL
+   ========================================== */
+
+/* Headlines - Cinzel (Elegância Esculpida) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--ivory);
+  margin: 0 0 var(--space-lg);
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);     /* 32px - 48px */
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-xl);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem); /* 24px - 36px */
+  margin-bottom: var(--space-xl);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem); /* 20px - 28px */
+  margin-bottom: var(--space-lg);
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem); /* 18px - 22px */
+  margin-bottom: var(--space-md);
+}
+
+h5 {
+  font-size: 1.125rem; /* 18px */
+  margin-bottom: var(--space-md);
+}
+
+h6 {
+  font-size: 1rem; /* 16px */
+  margin-bottom: var(--space-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Body Text - Source Sans 3 (Legibilidade Moderna) */
+p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--ivory);
+  margin: 0 0 var(--space-lg);
+}
+
+p.lead {
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--silver-matte);
+}
+
+p.small {
+  font-size: 0.875rem;
+  color: var(--slate);
+}
+
+/* Links */
+a {
+  color: var(--gold-old);
+  text-decoration: none;
+  transition: color var(--duration-normal) var(--ease-out);
+}
+
+a:hover,
+a:focus {
+  color: var(--silver-matte);
+  text-decoration: underline;
+  text-decoration-color: var(--silver-matte);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--gold-old);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Listas */
+ul, ol {
+  margin: 0 0 var(--space-lg) var(--space-xl);
+  padding: 0;
+}
+
+li {
+  font-family: var(--font-body);
+  margin-bottom: var(--space-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+ul li {
+  list-style-type: none;
+  position: relative;
+}
+
+ul li::before {
+  content: "•";
+  color: var(--gold-old);
+  position: absolute;
+  left: -var(--space-lg);
+  font-weight: bold;
+}
+
+/* Listas sem estilo */
+.list-unstyled {
+  margin-left: 0;
+  list-style: none;
+}
+
+.list-unstyled li::before {
+  display: none;
+}
+
+/* ==========================================
+   ELEMENTOS DE CONTEÚdO
+   ========================================== */
+
+/* Blockquotes */
+blockquote {
+  margin: var(--space-2xl) 0;
+  padding: var(--space-xl);
+  border-left: 4px solid var(--gold-old);
+  background: rgba(176, 141, 87, 0.05);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+blockquote p {
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--silver-matte);
+  margin-bottom: var(--space-sm);
+}
+
+blockquote cite {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--slate);
+  font-style: normal;
+}
+
+blockquote cite::before {
+  content: "— ";
+}
+
+/* Código */
+code {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.875rem;
+  background: var(--earth);
+  color: var(--ivory);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
+  border: var(--border-subtle);
+}
+
+pre {
+  background: var(--earth);
+  color: var(--ivory);
+  padding: var(--space-xl);
+  border-radius: var(--radius-large);
+  border: var(--border-subtle);
+  overflow-x: auto;
+  margin: var(--space-xl) 0;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 0.875rem;
+}
+
+/* ==========================================
+   SISTEMA DE GRID RESPONSIVO
+   ========================================== */
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--breakpoint-xl);
+  margin: 0 auto;
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+/* Grid Base */
+.grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+/* Grid Variants */
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Grid Auto-fit (Responsivo) */
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .grid-4,
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid {
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-4,
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid {
+    gap: var(--space-md);
+  }
+}
+
+/* ==========================================
+   ELEMENTOS DE MEDIA
+   ========================================== */
+
+/* Imagens */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Figure */
+figure {
+  margin: var(--space-2xl) 0;
+}
+
+figcaption {
+  font-size: 0.875rem;
+  color: var(--slate);
+  text-align: center;
+  margin-top: var(--space-sm);
+  font-style: italic;
+}
+
+/* ==========================================
+   FORMULÁRIOS GOTHIC NATURAL
+   ========================================== */
+
+/* Form Groups */
+.form-group {
+  margin-bottom: var(--space-xl);
+}
+
+/* Labels */
+label {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-medium);
+  font-size: 0.875rem;
+  color: var(--silver-matte);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.01em;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--earth);
+  color: var(--ivory);
+  border: var(--border-medium);
+  border-radius: var(--radius);
+  transition: border-color var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--gold-old);
+  box-shadow: var(--glow-gold);
+}
+
+input:invalid,
+textarea:invalid {
+  border-color: #dc2626;
+}
+
+/* Select customizado */
+select {
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23C7CACE" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  background-size: 16px;
+  padding-right: var(--space-4xl);
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Textarea */
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Placeholder */
+input::placeholder,
+textarea::placeholder {
+  color: var(--slate);
+  opacity: 1;
+}
+
+/* ==========================================
+   TABELAS
+   ========================================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-2xl) 0;
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  border: var(--border-subtle);
+}
+
+th,
+td {
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  border-bottom: var(--border-subtle);
+}
+
+th {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  background: var(--moss);
+  color: var(--ivory);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+td {
+  font-family: var(--font-body);
+  background: var(--earth);
+  color: var(--ivory);
+}
+
+tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* ==========================================
+   UTILIDADES DE TEXTO
+   ========================================== */
+
+/* Alinhamento */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Cores de Texto */
+.text-gold { color: var(--gold-old); }
+.text-silver { color: var(--silver-matte); }
+.text-muted { color: var(--slate); }
+.text-ivory { color: var(--ivory); }
+
+/* Pesos de Fonte */
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* Famílias de Fonte */
+.font-heading { font-family: var(--font-heading); }
+.font-body { font-family: var(--font-body); }
+
+/* ==========================================
+   UTILIDADES DE ESPAÇAMENTO
+   ========================================== */
+
+/* Margins */
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.mb-xl { margin-bottom: var(--space-xl); }
+.mb-2xl { margin-bottom: var(--space-2xl); }
+
+.mt-xs { margin-top: var(--space-xs); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mt-xl { margin-top: var(--space-xl); }
+.mt-2xl { margin-top: var(--space-2xl); }
+
+/* ==========================================
+   ACESSIBILIDADE
+   ========================================== */
+
+/* Visually Hidden */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip Links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--gold-old);
+  color: var(--black);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold);
+  z-index: var(--z-tooltip);
+  transition: top var(--duration-normal) var(--ease-out);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus Visible */
+*:focus-visible {
+  outline: 2px solid var(--gold-old);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--gold-old);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+  
+  p, li {
+    orphans: 2;
+    widows: 2;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* =============================================
+   COMENTÁRIOS DE IMPLEMENTAÇÃO
+   ============================================= */
+
+/*
+  BASE STYLES - FUNDAMENTOS IMPLEMENTADOS:
+  
+  ✅ Reset CSS moderno com box-sizing
+  ✅ Tipografia Cinzel (títulos) + Source Sans 3 (corpo)
+  ✅ Cores da paleta Dark Nature aplicadas
+  ✅ Sistema de grid responsivo (2, 3, 4 colunas + auto)
+  ✅ Formulários estilizados com tema escuro
+  ✅ Tabelas consistentes com design system
+  ✅ Utilidades de texto e espaçamento
+  ✅ Acessibilidade (skip links, focus-visible)
+  ✅ Support para reduced motion
+  ✅ Print styles
+  
+  BREAKPOINTS:
+  - 480px: Mobile pequeno (1 coluna)
+  - 720px: Mobile/Tablet (2 colunas)
+  - 1024px: Tablet/Desktop (3-4 colunas)
+  - 1200px: Desktop largo
+  
+  TIPOGRAFIA SCALE:
+  - H1: 32-48px (Cinzel Bold)
+  - H2: 24-36px (Cinzel Semibold)
+  - H3: 20-28px (Cinzel Semibold)
+  - Body: 16px (Source Sans 3 Normal)
+  
+  PRÓXIMOS PASSOS:
+  1. Criar components-dark-nature.css
+  2. Implementar page-specific styles
+  3. Integrar com views EJS existentes
+  4. Testar responsividade em todos os breakpoints
+*/
