@@ -84,13 +84,19 @@ class Media {
         params.push(limit, offset);
         
         try {
+            console.log('📊 [Media.getAllMedia] Query:', query);
+            console.log('📊 [Media.getAllMedia] Params:', params);
+            
             const [rows] = await pool.query(query, params);
+            
+            console.log('📊 [Media.getAllMedia] Rows returned:', rows.length);
             
             // Process the results
             return rows.map(this.formatMediaFile.bind(this));
         } catch (error) {
-            console.error('Error getting media files:', error);
-            throw new Error('Failed to fetch media files');
+            console.error('❌ [Media.getAllMedia] Error:', error.message);
+            console.error('❌ [Media.getAllMedia] Stack:', error.stack);
+            throw new Error('Failed to fetch media files: ' + error.message);
         }
     }
     
@@ -398,24 +404,62 @@ class Media {
         const formatted = {
             ...row,
             url: `/uploads/${row.filename}`,
-            variants: row.processed_variants ? JSON.parse(row.processed_variants) : {},
-            dimensions: row.dimensions ? JSON.parse(row.dimensions) : {},
+            variants: {},
+            dimensions: {},
             tags: []
         };
         
-        // Parse tags
-        if (row.tag_info) {
-            formatted.tags = row.tag_info.split(',').map(tagInfo => {
-                const [id, name, slug, color] = tagInfo.split(':');
-                return { id: parseInt(id), name, slug, color };
-            });
+        // Parse JSON fields safely
+        try {
+            if (row.processed_variants) {
+                formatted.variants = typeof row.processed_variants === 'string' 
+                    ? JSON.parse(row.processed_variants) 
+                    : row.processed_variants;
+            }
+        } catch (e) {
+            console.warn('Failed to parse processed_variants:', e.message);
+        }
+        
+        try {
+            if (row.dimensions) {
+                formatted.dimensions = typeof row.dimensions === 'string' 
+                    ? JSON.parse(row.dimensions) 
+                    : row.dimensions;
+            }
+        } catch (e) {
+            console.warn('Failed to parse dimensions:', e.message);
+        }
+        
+        // Parse tags from concatenated fields
+        if (row.tag_names) {
+            const names = row.tag_names ? row.tag_names.split(',') : [];
+            const slugs = row.tag_slugs ? row.tag_slugs.split(',') : [];
+            const colors = row.tag_colors ? row.tag_colors.split(',') : [];
+            
+            formatted.tags = names.map((name, i) => ({
+                name: name,
+                slug: slugs[i] || '',
+                color: colors[i] || '#667eea'
+            }));
+        }
+        
+        // Parse tag_info format (for getMediaById)
+        if (row.tag_info && !row.tag_names) {
+            try {
+                formatted.tags = row.tag_info.split(',').map(tagInfo => {
+                    const [id, name, slug, color] = tagInfo.split(':');
+                    return { id: parseInt(id), name, slug, color };
+                });
+            } catch (e) {
+                console.warn('Failed to parse tag_info:', e.message);
+            }
         }
         
         // Format file size
-        formatted.file_size_formatted = this.formatFileSize(row.file_size);
+        formatted.file_size_formatted = this.formatFileSize(row.file_size || 0);
         
         // Calculate age
-        formatted.created_ago = this.timeAgo(row.created_at);
+        formatted.created_ago = row.created_at ? this.timeAgo(row.created_at) : 'Unknown';
         
         return formatted;
     }

@@ -65,8 +65,11 @@ router.get('/api/media', [
     query('sort').optional().isString()
 ], async (req, res) => {
     try {
+        console.log('🔍 [Media API] Request received:', req.query);
+        
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log('❌ [Media API] Validation errors:', errors.array());
             return res.status(400).json({
                 success: false,
                 message: 'Invalid parameters',
@@ -98,10 +101,14 @@ router.get('/api/media', [
             sortOrder: sortOrder?.toUpperCase() || 'DESC'
         };
         
+        console.log('📊 [Media API] Calling Media.getAllMedia with options:', options);
+        
         const media = await Media.getAllMedia(options);
         
+        console.log('✅ [Media API] Media retrieved:', media.length, 'items');
+        
         // Get total count for pagination
-        const totalOptions = { ...options, limit: null, offset: null };
+        const totalOptions = { ...options, limit: 999999, offset: 0 };
         const totalMedia = await Media.getAllMedia(totalOptions);
         const total = totalMedia.length;
         const totalPages = Math.ceil(total / limit);
@@ -119,10 +126,12 @@ router.get('/api/media', [
         });
         
     } catch (error) {
-        console.error('Get media API error:', error);
+        console.error('❌ [Media API] Error:', error.message);
+        console.error('❌ [Media API] Stack:', error.stack);
         res.status(500).json({
             success: false,
-            message: 'Erro ao carregar ficheiros de media'
+            message: 'Erro ao carregar ficheiros de media',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });

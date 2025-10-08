@@ -257,10 +257,15 @@ class Analytics {
      */
     async getDashboardData(days = 30) {
         try {
+            console.log('📊 [Analytics.getDashboardData] Starting with days:', days);
+            
             const startDate = new Date();
             startDate.setDate(startDate.getDate() - days);
             
+            console.log('📊 [Analytics.getDashboardData] Start date:', startDate);
+            
             // Get overview metrics
+            console.log('📊 [Analytics.getDashboardData] Fetching overview metrics...');
             const [overview] = await pool.query(`
                 SELECT 
                     COUNT(DISTINCT s.id) as total_sessions,
@@ -363,19 +368,67 @@ class Analytics {
                 ORDER BY conversions DESC
             `, [startDate]);
             
-            return {
-                overview: overview[0] || {},
-                dailyStats,
-                deviceStats,
-                trafficSources,
-                topPages,
-                topProducts,
-                conversionFunnel
+            const result = {
+                stats: {
+                    totalSessions: overview[0]?.total_sessions || 0,
+                    uniqueVisitors: overview[0]?.total_sessions || 0,
+                    pageViews: overview[0]?.total_page_views || 0,
+                    whatsappClicks: 0,
+                    sessionsChange: 0,
+                    visitorsChange: 0,
+                    pageViewsChange: 0,
+                    whatsappChange: 0
+                },
+                traffic: dailyStats || [],
+                devices: {
+                    desktop: deviceStats.find(d => d.device_type === 'desktop')?.sessions || 0,
+                    mobile: deviceStats.find(d => d.device_type === 'mobile')?.sessions || 0,
+                    tablet: deviceStats.find(d => d.device_type === 'tablet')?.sessions || 0
+                },
+                sources: trafficSources.reduce((acc, s) => {
+                    acc[s.source] = s.sessions;
+                    return acc;
+                }, {}),
+                topPages: topPages.map(p => ({
+                    path: p.page_url,
+                    views: p.views,
+                    avgTime: p.avg_time_on_page || 0
+                })),
+                topProducts: topProducts.map(p => ({
+                    name: p.name,
+                    views: p.views,
+                    whatsappClicks: p.whatsapp_clicks || 0
+                })),
+                funnel: conversionFunnel[0] || {}
             };
             
+            console.log('✅ [Analytics.getDashboardData] Result:', JSON.stringify(result, null, 2).substring(0, 500));
+            
+            return result;
+            
         } catch (error) {
-            console.error('Get dashboard data error:', error);
-            throw error;
+            console.error('❌ [Analytics.getDashboardData] Error:', error.message);
+            console.error('❌ [Analytics.getDashboardData] Stack:', error.stack);
+            
+            // Return empty structure instead of throwing
+            return {
+                stats: {
+                    totalSessions: 0,
+                    uniqueVisitors: 0,
+                    pageViews: 0,
+                    whatsappClicks: 0,
+                    sessionsChange: 0,
+                    visitorsChange: 0,
+                    pageViewsChange: 0,
+                    whatsappChange: 0
+                },
+                traffic: [],
+                devices: { desktop: 0, mobile: 0, tablet: 0 },
+                sources: {},
+                topPages: [],
+                topProducts: [],
+                funnel: {}
+            };
         }
     }
     
