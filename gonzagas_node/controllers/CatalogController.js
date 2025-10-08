@@ -15,7 +15,7 @@ class CatalogController {
         return res.status(200).render('public/catalog', { 
           title: 'Catálogo em Construção',
           currentPath: '/catalog', 
-          layout: 'layouts/main'
+          layout: 'layouts/main-v2'
         });
       }
 
@@ -61,7 +61,7 @@ class CatalogController {
       res.render('public/catalog', {
         title: 'Catálogo',
         currentPath: '/catalog',
-        layout: 'layouts/main',
+        layout: 'layouts/main-v2',
         products: products,
         families: families,
         selectedFamilyIds: selectedFamilyIds,

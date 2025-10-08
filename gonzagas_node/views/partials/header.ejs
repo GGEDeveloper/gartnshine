@@ -113,7 +113,7 @@
                 
                 <!-- Action Buttons -->
                 <div class="nav-actions">
-                    <a href="https://wa.me/351XXXXXXXXX?text=Olá! Gostaria de saber mais sobre as vossas joias." 
+                    <a href="<%= getWhatsAppUrl('Olá! Gostaria de saber mais sobre as vossas joias.') %>" 
                        class="btn-nav-whatsapp" 
                        target="_blank"
                        aria-label="Contactar via WhatsApp">
@@ -227,7 +227,7 @@
                 <div class="mobile-contact">
                     <h4>Contactos Diretos</h4>
                     
-                    <a href="tel:+351XXXXXXXXX" class="contact-item">
+                    <a href="tel:<%= site.contact.phone %>" class="contact-item">
                         <i class="fas fa-phone" aria-hidden="true"></i>
                         <div class="contact-info">
                             <span class="contact-label">Telefone</span>
@@ -235,7 +235,7 @@
                         </div>
                     </a>
                     
-                    <a href="https://wa.me/351XXXXXXXXX" 
+                    <a href="<%= getWhatsAppUrl() %>" 
                        class="contact-item whatsapp" 
                        target="_blank">
                         <i class="fab fa-whatsapp" aria-hidden="true"></i>

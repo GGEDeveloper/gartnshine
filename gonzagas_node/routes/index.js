@@ -81,9 +81,9 @@ router.get('/', async (req, res) => {
     
     console.log(`Rendering index with ${mediaFiles.length} media files`);
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
-    res.render('index', { 
+    res.render('index-content', { 
       title: 'Home',
-      layout: false, // index.ejs is standalone (has own <html>, <head>, <body>)
+      layout: 'layouts/main-v2', // UNIFIED LAYOUT V2
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
@@ -149,7 +149,7 @@ router.get('/collections', async (req, res) => {
     
     res.render('collections', {
       title: 'Gallery',
-      layout: 'layouts/main',
+      layout: 'layouts/main-v2',
       images: imageFiles,
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
@@ -250,10 +250,10 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       encodedMessage: encodeURIComponent(whatsappMessage)
     };
     
-    res.render('catalog/product-detail', { 
+    res.render('catalog/product-detail-content', { 
       product, 
       whatsappData,
-      layout: 'layouts/main',
+      layout: 'layouts/main-v2',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine'
     });
@@ -310,9 +310,10 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product-v2/${id}`;
       reference: product.reference
     };
     
-    res.render('catalog/product-detail', { 
+    res.render('catalog/product-detail-content', { 
       product, 
       whatsappData,
+      layout: 'layouts/main-v2',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine'
     });
@@ -476,7 +477,8 @@ router.get('/api/nav-featured', async (req, res) => {
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
-    title: 'About Gonzaga\'s Art & Shine'
+    title: 'About Gonzaga\'s Art & Shine',
+    layout: 'layouts/main-v2'
   });
 });
 

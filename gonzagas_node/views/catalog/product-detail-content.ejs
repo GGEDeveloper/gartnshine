@@ -1,0 +1,335 @@
+    <section class="product-hero">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs-v2">
+                <a href="/" class="breadcrumb-item">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="/catalog" class="breadcrumb-item">Catálogo</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="/catalog/category/<%= product.family_id %>" class="breadcrumb-item">
+                    <%= product.family_name %>
+                </a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current"><%= product.name %></span>
+            </nav>
+            
+            <!-- Product Media & Info Grid -->
+            <div class="product-main-grid">
+                <!-- Left: Image Gallery -->
+                <div class="product-gallery-v2">
+                    <div class="gallery-main">
+                        <img src="<%= product.images[0] ? '/uploads/products/' + product.images[0] : '/images/placeholder.jpg' %>" 
+                             alt="<%= product.name %>" 
+                             class="main-image" 
+                             id="mainProductImage">
+                        
+                        <!-- Image Controls Overlay -->
+                        <div class="image-controls">
+                            <button class="btn-zoom" onclick="openLightbox()">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn-fullscreen" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Indicators -->
+                        <% if (product.images && product.images.length > 1) { %>
+                        <div class="image-indicators">
+                            <% product.images.forEach((img, index) => { %>
+                            <span class="indicator <%= index === 0 ? 'active' : '' %>" 
+                                  data-index="<%= index %>"></span>
+                            <% }); %>
+                        </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Thumbnail Gallery -->
+                    <% if (product.images && product.images.length > 1) { %>
+                    <div class="gallery-thumbnails">
+                        <% product.images.forEach((img, index) => { %>
+                        <button class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+                                onclick="changeMainImage('<%= img %>', <%= index %>)">
+                            <img src="/uploads/products/<%= img %>" 
+                                 alt="<%= product.name %> - <%= index + 1 %>">
+                        </button>
+                        <% }); %>
+                    </div>
+                    <% } %>
+                </div>
+                
+                <!-- Right: Product Information -->
+                <div class="product-info-v2">
+                    <!-- Product Header -->
+                    <div class="product-header">
+                        <div class="product-title-section">
+                            <h1 class="product-title"><%= product.name %></h1>
+                            <p class="product-reference">REF: <%= product.reference %></p>
+                        </div>
+                        
+                        <div class="product-actions-quick">
+                            <button class="btn-favorite" onclick="toggleFavorite()">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-share" onclick="shareProduct()">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Meta -->
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Categoria:</span>
+                            <a href="/catalog/category/<%= product.family_id %>" class="meta-value link">
+                                <%= product.family_name %>
+                            </a>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <span class="meta-label">Disponibilidade:</span>
+                            <span class="meta-value">
+                                <% if (product.current_stock > 0) { %>
+                                    <span class="stock-status in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        Em Stock (<%= product.current_stock %> unidades)
+                                    </span>
+                                <% } else { %>
+                                    <span class="stock-status out-stock">
+                                        <i class="fas fa-times-circle"></i>
+                                        Temporariamente Esgotado
+                                    </span>
+                                <% } %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Section -->
+                    <div class="price-section">
+                        <% if (product.sale_price) { %>
+                            <div class="price-main">
+                                €<%= parseFloat(product.sale_price).toFixed(2) %>
+                            </div>
+                            <% if (product.original_price && product.original_price > product.sale_price) { %>
+                            <div class="price-original">
+                                €<%= parseFloat(product.original_price).toFixed(2) %>
+                            </div>
+                            <div class="price-discount">
+                                -<%= Math.round((1 - product.sale_price/product.original_price) * 100) %>%
+                            </div>
+                            <% } %>
+                        <% } else { %>
+                            <div class="price-consultation">
+                                <i class="fas fa-tag"></i>
+                                Preço sob consulta
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Description -->
+                    <% if (product.description) { %>
+                    <div class="product-description">
+                        <h3>Descrição</h3>
+                        <div class="description-content">
+                            <%= product.description %>
+                        </div>
+                    </div>
+                    <% } %>
+                    
+                    <!-- Product Details -->
+                    <div class="product-details">
+                        <h3>Detalhes</h3>
+                        <div class="details-grid">
+                            <% if (product.material) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Material:</span>
+                                <span class="detail-value"><%= product.material %></span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.weight) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Peso:</span>
+                                <span class="detail-value"><%= product.weight %>g</span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.dimensions) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Dimensões:</span>
+                                <span class="detail-value"><%= product.dimensions %></span>
+                            </div>
+                            <% } %>
+                            
+                            <% if (product.style) { %>
+                            <div class="detail-item">
+                                <span class="detail-label">Estilo:</span>
+                                <span class="detail-value"><%= product.style %></span>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <!-- Call to Action -->
+                    <div class="product-cta">
+                        <div class="cta-main">
+                            <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
+                               class="btn-whatsapp-v2" 
+                               target="_blank"
+                               onclick="trackWhatsAppClick()">
+                                <div class="btn-icon">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="btn-content">
+                                    <span class="btn-title">Solicitar Informações</span>
+                                    <span class="btn-subtitle">Resposta rápida via WhatsApp</span>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="cta-secondary">
+                            <button class="btn-secondary" onclick="copyProductInfo()">
+                                <i class="fas fa-copy"></i>
+                                Copiar Link
+                            </button>
+                            
+                            <button class="btn-secondary" onclick="printProduct()">
+                                <i class="fas fa-print"></i>
+                                Imprimir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Product Tabs -->
+    <section class="product-tabs-section">
+        <div class="container">
+            <div class="tabs-v2">
+                <nav class="tabs-nav">
+                    <button class="tab-btn active" data-tab="specifications">
+                        Especificações
+                    </button>
+                    <button class="tab-btn" data-tab="care">
+                        Cuidados
+                    </button>
+                    <button class="tab-btn" data-tab="shipping">
+                        Envio & Devoluções
+                    </button>
+                </nav>
+                
+                <div class="tabs-content">
+                    <div class="tab-panel active" id="tab-specifications">
+                        <div class="specifications-grid">
+                            <div class="spec-group">
+                                <h4>Características Gerais</h4>
+                                <ul class="spec-list">
+                                    <li>Material: <%= product.material || 'Prata 925' %></li>
+                                    <li>Peso: <%= product.weight || 'Variável' %>g</li>
+                                    <li>Origem: Handcrafted</li>
+                                    <li>Garantia: 2 anos</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="spec-group">
+                                <h4>Dimensões</h4>
+                                <ul class="spec-list">
+                                    <li>Dimensões: <%= product.dimensions || 'Ver descrição' %></li>
+                                    <li>Espessura: Variável</li>
+                                    <li>Acabamento: Polido</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-panel" id="tab-care">
+                        <div class="care-instructions">
+                            <div class="care-item">
+                                <i class="fas fa-hand-sparkles"></i>
+                                <div>
+                                    <h4>Limpeza</h4>
+                                    <p>Use um pano macio e produtos específicos para prata.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="care-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <h4>Armazenamento</h4>
+                                    <p>Guarde em local seco, preferencialmente em saco anti-oxidação.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="care-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <div>
+                                    <h4>Evite</h4>
+                                    <p>Contacto com perfumes, cremes e produtos químicos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-panel" id="tab-shipping">
+                        <div class="shipping-info">
+                            <div class="shipping-section">
+                                <h4>Envios</h4>
+                                <ul>
+                                    <li>Portugal Continental: 3-5 dias úteis</li>
+                                    <li>Ilhas: 5-7 dias úteis</li>
+                                    <li>Envio gratuito a partir de €50</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="shipping-section">
+                                <h4>Devoluções</h4>
+                                <ul>
+                                    <li>14 dias para devolução</li>
+                                    <li>Produto em estado original</li>
+                                    <li>Portes de devolução por conta do cliente</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Related Products -->
+    <section class="related-products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Produtos Relacionados</h2>
+                <p>Outros produtos que podem interessar</p>
+            </div>
+            
+            <div class="related-products-grid" id="relatedProductsGrid">
+                <!-- Dynamic content loaded via JavaScript -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox-modal" id="imageLightbox">
+    <div class="lightbox-content">
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img src="" alt="" class="lightbox-image">
+        <div class="lightbox-nav">
+            <button class="lightbox-prev" onclick="previousImage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-next" onclick="nextImage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

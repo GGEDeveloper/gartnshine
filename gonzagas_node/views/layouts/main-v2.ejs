@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="<%= getMetaDescription(typeof metaDescription !== 'undefined' ? metaDescription : null) %>">
+    <meta name="keywords" content="<%= site.seo.keywords %>">
+    <meta name="author" content="<%= site.seo.author %>">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= getPageTitle(title) %>">
+    <meta property="og:description" content="<%= getMetaDescription(typeof metaDescription !== 'undefined' ? metaDescription : null) %>">
+    <meta property="og:image" content="<%= site.seo.ogImage %>">
+    <meta property="og:type" content="<%= site.seo.ogType %>">
+    <meta property="og:url" content="<%= `${site.brand.name}` %>">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="<%= site.seo.twitterCard %>">
+    <meta name="twitter:title" content="<%= getPageTitle(title) %>">
+    <meta name="twitter:description" content="<%= getMetaDescription(typeof metaDescription !== 'undefined' ? metaDescription : null) %>">
+    <meta name="twitter:image" content="<%= site.seo.ogImage %>">
+    
+    <title><%= getPageTitle(title) %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="<%= site.brand.favicon %>">
+    <link rel="icon" type="image/svg+xml" href="<%= site.brand.logo %>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main CSS Files V2 (Modern Design ONLY) -->
+    <link rel="stylesheet" href="/css/navigation-v2.css">
+    <link rel="stylesheet" href="/css/homepage-v2.css">
+    <link rel="stylesheet" href="/css/catalog-v2.css">
+    <link rel="stylesheet" href="/css/product-detail-v2.css">
+    <link rel="stylesheet" href="/css/loading-states.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <link rel="stylesheet" href="/css/notifications.css">
+    
+    <!-- AOS (Scroll Animations) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Swiper (Carousels) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <!-- GLightbox (Image Lightbox) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    
+    <!-- Page-specific styles -->
+    <%- typeof style !== 'undefined' ? style : '' %>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
+    
+    <!-- Header V2 (Unified) -->
+    <%- include('../partials/header-v2') %>
+    
+    <!-- Page Progress Bar -->
+    <div class="page-progress" role="progressbar" aria-label="Progresso da página"></div>
+    
+    <!-- Main Content -->
+    <main id="main-content">
+        <%- body %>
+    </main>
+    
+    <!-- Footer (Unified) -->
+    <%- include('../partials/footer') %>
+    
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- Core JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- AOS (Animations) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Swiper (Carousels) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- GLightbox (Image Lightbox) -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    
+    <!-- Site JavaScript V2 -->
+    <script src="/js/advanced-search.js"></script>
+    <script src="/js/image-optimization.js"></script>
+    <script src="/js/mobile-navigation.js"></script>
+    <script src="/js/swiper-setup.js"></script>
+    <script src="/js/homepage-v2.js"></script>
+    <script src="/js/catalog-v2.js"></script>
+    
+    <!-- Analytics Tracking (Client-Side) -->
+    <% if (isFeatureEnabled('enableAnalytics')) { %>
+    <script src="/js/analytics-tracking.js"></script>
+    <% } %>
+    
+    <!-- Notifications -->
+    <script src="/js/notifications.js"></script>
+    
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+    
+    <!-- Back to Top Button Logic -->
+    <script>
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+    
+    <!-- Page-specific scripts -->
+    <%- typeof script !== 'undefined' ? script : '' %>
+</body>
+</html>
+

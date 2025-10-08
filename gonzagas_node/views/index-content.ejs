@@ -1,37 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gonzaga's Art & Shine - Joias de Prata 925 Únicas</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Joias artesanais de prata 925. Cada peça é única, criada à mão com técnicas tradicionais e design contemporâneo. Descobra a elegância que nasce da terra.">
-    <meta name="keywords" content="joias prata 925, artesanal, handmade, brincos, anéis, colares, pulseiras, Portugal">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Gonzaga's Art & Shine - Joias de Prata 925">
-    <meta property="og:description" content="Elegância que nasce da terra. Joias únicas em prata 925.">
-    <meta property="og:image" content="/images/og-image.jpg">
-    <meta property="og:type" content="website">
-    
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="/css/homepage-v2.css" as="style">
-    <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/css/navigation-v2.css">
-    <link rel="stylesheet" href="/css/homepage-v2.css">
-    <link rel="stylesheet" href="/css/loading-states.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-</head>
-<body class="homepage-v2">
-    
-    <!-- Navigation (Enhanced) -->
-    <%- include('partials/header-v2') %>
-    
     <!-- Hero Section -->
     <section class="hero-section-v2" id="heroSection">
         <div class="hero-background">
@@ -254,24 +220,3 @@
             </div>
         </div>
     </section>
-    
-    <!-- Footer -->
-    <%- include('partials/footer') %>
-    
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="/js/homepage-v2.js"></script>
-    <script src="/js/swiper-setup.js"></script>
-    
-    <!-- AOS Animation Init -->
-    <script>
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out-cubic',
-            once: true,
-            offset: 100
-        });
-    </script>
-</body>
-</html>

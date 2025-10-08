@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
+<html lang="pt">
 <head>
   <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,20 +34,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     
-    <!-- Theme Variables -->
-    <style>
-      :root {
-        --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#1e1e1e' %>;
-        --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#4a3c2d' %>;
-        --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#6a8c69' %>;
-        --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f0f0f0' %>;
-        --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#b19cd9' %>;
-      }
-    </style>
-    
     <%- style %>
 </head>
-<body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
+<body>
     
   <%- include('../partials/header') %>
   
