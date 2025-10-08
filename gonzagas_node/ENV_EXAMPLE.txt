@@ -1,0 +1,23 @@
+# ==========================================
+# Gonzaga's Art & Shine - Environment Variables
+# ==========================================
+# Copy this file to .env and fill in your values
+# DO NOT commit .env to git!
+
+# DATABASE
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=gonzagas_local
+
+# SITE CONFIGURATION
+WHATSAPP_NUMBER=351912345678
+CONTACT_EMAIL=geral@artnshine.pt
+CONTACT_PHONE=+351 912 345 678
+
+# SERVER
+NODE_ENV=development
+PORT=3000
+SESSION_SECRET=your_secret_key_here
+

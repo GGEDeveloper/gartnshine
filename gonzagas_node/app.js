@@ -381,6 +381,12 @@ app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'prod
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// ========================================
+// SITE CONFIGURATION MIDDLEWARE
+// ========================================
+const siteConfigMiddleware = require('./middleware/siteConfig');
+app.use(siteConfigMiddleware);
+
 // Global app variables
 app.locals.siteTitle = 'Gonzaga\'s Art & Shine';
 app.locals.siteDescription = 'Elegância que nasce da terra';
