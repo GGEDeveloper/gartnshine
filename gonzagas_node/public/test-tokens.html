@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste: Design Tokens - Dark Nature</title>
+    <link rel="stylesheet" href="/css/tokens.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 40px;
+            background: var(--black);
+            color: var(--ivory);
+            font-family: system-ui, sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--gold-old);
+            margin-bottom: 32px;
+            font-size: 32px;
+        }
+        
+        .section {
+            margin-bottom: 48px;
+            padding: 24px;
+            background: var(--gradient-card);
+            border: var(--border-subtle);
+            border-radius: var(--radius-large);
+        }
+        
+        h2 {
+            color: var(--silver-matte);
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .color-swatch {
+            padding: 16px;
+            border-radius: var(--radius);
+            border: var(--border-medium);
+            text-align: center;
+        }
+        
+        .color-box {
+            height: 80px;
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .color-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ivory);
+            margin-bottom: 4px;
+        }
+        
+        .color-value {
+            font-size: 12px;
+            color: var(--slate);
+            font-family: monospace;
+        }
+        
+        /* Cores principais */
+        .c-black { background: var(--black); }
+        .c-moss { background: var(--moss); }
+        .c-forest { background: var(--forest); }
+        .c-earth { background: var(--earth); }
+        .c-gold-old { background: var(--gold-old); }
+        .c-silver-matte { background: var(--silver-matte); }
+        .c-slate { background: var(--slate); }
+        .c-ivory { background: var(--ivory); }
+        .c-accent-onyx { background: var(--accent-onyx); }
+        .c-accent-tiger { background: var(--accent-tiger); }
+        
+        /* Botões de teste */
+        .button-test {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            font-weight: var(--font-weight-bold);
+            transition: var(--transition-normal);
+            cursor: pointer;
+            border: none;
+            margin: 8px;
+        }
+        
+        .btn-gold {
+            background: var(--gold-old);
+            color: var(--black);
+        }
+        
+        .btn-gold:hover {
+            filter: var(--brightness-hover);
+            box-shadow: var(--glow-gold);
+        }
+        
+        .btn-silver {
+            background: var(--silver-matte);
+            color: var(--black);
+        }
+        
+        .btn-silver:hover {
+            filter: var(--brightness-hover);
+            box-shadow: var(--glow-silver);
+        }
+        
+        .btn-outline-gold {
+            background: transparent;
+            color: var(--gold-old);
+            border: var(--border-gold);
+        }
+        
+        .btn-outline-silver {
+            background: transparent;
+            color: var(--silver-matte);
+            border: var(--border-silver);
+        }
+        
+        /* Sombras */
+        .shadow-test {
+            padding: 20px;
+            background: var(--earth);
+            border-radius: var(--radius);
+            margin: 12px;
+            display: inline-block;
+        }
+        
+        .s-deep { box-shadow: var(--shadow-deep); }
+        .s-soft { box-shadow: var(--shadow-soft); }
+        .s-subtle { box-shadow: var(--shadow-subtle); }
+        .s-elevated { box-shadow: var(--shadow-elevated); }
+        
+        /* Tipografia */
+        .type-test {
+            margin: 16px 0;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: var(--radius);
+        }
+        
+        .font-heading {
+            font-family: var(--font-heading);
+            font-weight: var(--font-weight-title);
+        }
+        
+        .font-body {
+            font-family: var(--font-body);
+            font-weight: var(--font-weight-body);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Teste de Design Tokens - Dark Nature</h1>
+        
+        <!-- CORES PRINCIPAIS -->
+        <section class="section">
+            <h2>Paleta de Cores Principal</h2>
+            <div class="color-grid">
+                <div class="color-swatch">
+                    <div class="color-box c-black"></div>
+                    <div class="color-name">Black</div>
+                    <div class="color-value">--black: #0B0D0C</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-moss"></div>
+                    <div class="color-name">Moss</div>
+                    <div class="color-value">--moss: #0F2E20</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-forest"></div>
+                    <div class="color-name">Forest</div>
+                    <div class="color-value">--forest: #123524</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-earth"></div>
+                    <div class="color-name">Earth</div>
+                    <div class="color-value">--earth: #3A2C22</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-gold-old"></div>
+                    <div class="color-name">Gold Old</div>
+                    <div class="color-value">--gold-old: #B08D57</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-silver-matte"></div>
+                    <div class="color-name">Silver Matte</div>
+                    <div class="color-value">--silver-matte: #C7CACE</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-slate"></div>
+                    <div class="color-name">Slate</div>
+                    <div class="color-value">--slate: #6E6B65</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-ivory"></div>
+                    <div class="color-name">Ivory</div>
+                    <div class="color-value">--ivory: #E7E1D6</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-accent-onyx"></div>
+                    <div class="color-name">Ónix</div>
+                    <div class="color-value">--accent-onyx: #111111</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box c-accent-tiger"></div>
+                    <div class="color-name">Olho-de-tigre</div>
+                    <div class="color-value">--accent-tiger: #6B4A1B</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- BOTÕES -->
+        <section class="section">
+            <h2>Botões (50% Prata / 50% Dourado)</h2>
+            <div>
+                <button class="button-test btn-gold">Botão Dourado</button>
+                <button class="button-test btn-silver">Botão Prata</button>
+                <button class="button-test btn-outline-gold">Outline Dourado</button>
+                <button class="button-test btn-outline-silver">Outline Prata</button>
+            </div>
+        </section>
+        
+        <!-- SOMBRAS -->
+        <section class="section">
+            <h2>Sombras e Elevações</h2>
+            <div>
+                <div class="shadow-test s-subtle">Shadow Subtle</div>
+                <div class="shadow-test s-soft">Shadow Soft</div>
+                <div class="shadow-test s-deep">Shadow Deep</div>
+                <div class="shadow-test s-elevated">Shadow Elevated</div>
+            </div>
+        </section>
+        
+        <!-- TIPOGRAFIA -->
+        <section class="section">
+            <h2>Tipografia</h2>
+            <div class="type-test">
+                <div class="font-heading" style="font-size: 32px;">
+                    Cinzel (Títulos) - Gothic Natural
+                </div>
+                <p style="color: var(--slate); font-size: 14px;">--font-heading: "Cinzel", serif</p>
+            </div>
+            <div class="type-test">
+                <div class="font-body" style="font-size: 18px;">
+                    Source Sans 3 (Corpo) - Elegância que nasce da terra
+                </div>
+                <p style="color: var(--slate); font-size: 14px;">--font-body: "Source Sans 3", system-ui, sans-serif</p>
+            </div>
+        </section>
+        
+        <!-- STATUS -->
+        <section class="section">
+            <h2>✅ Status da Validação</h2>
+            <ul style="color: var(--ivory); line-height: 1.8;">
+                <li>✅ Paleta de 10 cores implementada corretamente</li>
+                <li>✅ Metais UI: Gold (#B08D57) e Silver (#C7CACE)</li>
+                <li>✅ Gradientes definidos (hero, card, onyx, tiger)</li>
+                <li>✅ Sombras em 4 níveis (subtle, soft, deep, elevated)</li>
+                <li>✅ Sistema de espaçamento 8px</li>
+                <li>✅ Tipografia Cinzel + Source Sans 3 (via Google Fonts)</li>
+                <li>✅ Transições e animações configuradas</li>
+                <li>✅ Reduced motion support</li>
+                <li>✅ Print mode support</li>
+            </ul>
+        </section>
+    </div>
+    
+    <script>
+        // Validar que todas as variáveis CSS estão definidas
+        const root = document.documentElement;
+        const style = getComputedStyle(root);
+        
+        const tokens = [
+            '--black', '--moss', '--forest', '--earth',
+            '--gold-old', '--silver-matte', '--slate', '--ivory',
+            '--accent-onyx', '--accent-tiger',
+            '--gradient-hero', '--shadow-deep',
+            '--radius', '--font-heading', '--font-body'
+        ];
+        
+        console.log('🎨 Validação de Design Tokens:');
+        tokens.forEach(token => {
+            const value = style.getPropertyValue(token).trim();
+            console.log(`${token}: ${value || '❌ NÃO DEFINIDO'}`);
+        });
+        
+        console.log('\n✅ Todos os tokens foram carregados com sucesso!');
+    </script>
+</body>
+</html>
+

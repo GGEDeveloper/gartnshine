@@ -1,0 +1,258 @@
+/* ========================================
+   GONZAGA ART & SHINE - DARK NATURE TOKENS
+   Design System Variables
+   Gothic Natural - Elegância que nasce da terra
+   ======================================== */
+
+:root {
+  /* =====================================
+     CORES PRINCIPAIS - DARK NATURE PALETTE
+     ===================================== */
+  
+  /* Fundos */
+  --black: #0B0D0C;           /* Fundo principal - Negro profundo */
+  --moss: #0F2E20;            /* Elementos secundários - Musgo escuro */
+  --forest: #123524;          /* Hover states - Floresta profunda */
+  --earth: #3A2C22;           /* Cards escuros - Terra rica */
+  
+  /* Metais UI (50% prata / 50% dourado equilibrado) */
+  --gold-old: #B08D57;        /* CTA primário, preços - Dourado envelhecido */
+  --silver-matte: #C7CACE;    /* CTA secundário - Prata mate */
+  
+  /* Neutros e textos */
+  --slate: #6E6B65;           /* Texto muted, elementos desativados */
+  --ivory: #E7E1D6;           /* Texto principal - Marfim suave */
+  
+  /* Acentos por pedra natural */
+  --accent-onyx: #111111;     /* Ónix - Negro absoluto */
+  --accent-tiger: #6B4A1B;    /* Olho-de-tigre - Castanho dourado */
+  
+  
+  /* =====================================
+     GRADIENTES E SOBREPOSIÇÕES
+     ===================================== */
+  
+  --gradient-hero: linear-gradient(180deg, rgba(11,13,12,0.35), rgba(11,13,12,0.75));
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --gradient-onyx: linear-gradient(135deg, var(--accent-onyx), rgba(17,17,17,0.8));
+  --gradient-tiger: linear-gradient(135deg, var(--accent-tiger), rgba(107,74,27,0.8));
+  
+  /* Overlays */
+  --overlay-dark: rgba(11,13,12,0.85);
+  --overlay-light: rgba(255,255,255,0.05);
+  
+  
+  /* =====================================
+     SOMBRAS E ELEVAÇÕES
+     ===================================== */
+  
+  --shadow-deep: 0 12px 24px rgba(0,0,0,0.35);
+  --shadow-soft: 0 4px 12px rgba(0,0,0,0.25);
+  --shadow-subtle: 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-elevated: 0 20px 40px rgba(0,0,0,0.4);
+  
+  /* Glows para elementos interativos */
+  --glow-gold: 0 0 16px rgba(176,141,87,0.3);
+  --glow-silver: 0 0 16px rgba(199,202,206,0.2);
+  
+  
+  /* =====================================
+     BORDAS E RAIOS
+     ===================================== */
+  
+  --radius: 6px;
+  --radius-large: 12px;
+  --radius-full: 9999px;
+  
+  --border-subtle: 1px solid rgba(255,255,255,0.06);
+  --border-medium: 1px solid rgba(255,255,255,0.12);
+  --border-strong: 2px solid rgba(255,255,255,0.18);
+  
+  /* Bordas com cor */
+  --border-gold: 1px solid var(--gold-old);
+  --border-silver: 1px solid var(--silver-matte);
+  --border-onyx: 2px solid var(--accent-onyx);
+  --border-tiger: 2px solid var(--accent-tiger);
+  
+  
+  /* =====================================
+     TIPOGRAFIA
+     ===================================== */
+  
+  /* Font Families */
+  --font-heading: "Cinzel", serif;
+  --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  
+  /* Font Weights */
+  --font-weight-title: 600;
+  --font-weight-body: 400;
+  --font-weight-bold: 600;
+  --font-weight-light: 300;
+  
+  /* Font Sizes - Mobile First com clamp() */
+  --font-size-xs: clamp(12px, 2vw, 14px);
+  --font-size-sm: clamp(14px, 2.5vw, 16px);
+  --font-size-base: clamp(16px, 3vw, 18px);
+  --font-size-lg: clamp(18px, 3.5vw, 20px);
+  --font-size-xl: clamp(20px, 4vw, 24px);
+  --font-size-2xl: clamp(24px, 5vw, 32px);
+  --font-size-3xl: clamp(32px, 6vw, 48px);
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.8;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.05em;
+  
+  
+  /* =====================================
+     ESPAÇAMENTO - SISTEMA 8px
+     ===================================== */
+  
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+  --space-5xl: 80px;
+  
+  /* Gaps específicos */
+  --gap-grid: 18px;
+  --gap-card: 12px;
+  --gap-inline: 8px;
+  
+  
+  /* =====================================
+     TRANSIÇÕES E ANIMAÇÕES
+     ===================================== */
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  --transition-very-slow: 0.4s ease;
+  
+  /* Easing functions customizadas */
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  
+  /* =====================================
+     DIMENSÕES E LIMITES
+     ===================================== */
+  
+  --max-width-container: 1200px;
+  --max-width-prose: 65ch;
+  --max-width-reading: 70ch;
+  
+  --min-touch-target: 44px;
+  
+  /* Header e footer */
+  --header-height: 80px;
+  --footer-padding: 40px;
+  
+  
+  /* =====================================
+     BREAKPOINTS (para uso em JS ou clamp())
+     ===================================== */
+  
+  --breakpoint-mobile: 720px;
+  --breakpoint-tablet: 1024px;
+  --breakpoint-desktop: 1440px;
+  
+  
+  /* =====================================
+     Z-INDEX SCALE
+     ===================================== */
+  
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  
+  
+  /* =====================================
+     ESTADOS INTERATIVOS
+     ===================================== */
+  
+  /* Opacidades */
+  --opacity-disabled: 0.5;
+  --opacity-hover: 0.8;
+  --opacity-active: 0.9;
+  
+  /* Cores de estado */
+  --color-success: #2E7D32;
+  --color-warning: #F57C00;
+  --color-error: #C62828;
+  --color-info: #1976D2;
+  
+  
+  /* =====================================
+     FILTROS E EFEITOS
+     ===================================== */
+  
+  --blur-backdrop: blur(8px);
+  --blur-subtle: blur(4px);
+  
+  --brightness-hover: brightness(1.1);
+  --brightness-active: brightness(0.9);
+  
+  
+  /* =====================================
+     CUSTOM PROPERTIES PARA TEXTURAS
+     (URLs definidos em base.css após assets)
+     ===================================== */
+  
+  --texture-slate: url('/images/backgrounds/slate-texture.jpg');
+  --texture-wood: url('/images/backgrounds/wood-dark.jpg');
+  --texture-forest: url('/images/backgrounds/forest-noir.jpg');
+}
+
+
+/* =====================================
+   DARK MODE SUPPORT (futuro)
+   ===================================== */
+
+@media (prefers-color-scheme: light) {
+  /* Se no futuro houver light mode, 
+     os tokens podem ser redefinidos aqui */
+}
+
+
+/* =====================================
+   PRINT MODE
+   ===================================== */
+
+@media print {
+  :root {
+    --black: #ffffff;
+    --ivory: #000000;
+    /* Inverter cores para impressão */
+  }
+}
+
+
+/* =====================================
+   REDUCED MOTION
+   ===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0.01ms;
+    --transition-normal: 0.01ms;
+    --transition-slow: 0.01ms;
+    --transition-very-slow: 0.01ms;
+  }
+}
+
