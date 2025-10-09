@@ -202,7 +202,68 @@ router.get('/collection/:familyId', async (req, res) => {
   }
 });
 
-// Catalog page
+// ==========================================
+// PORTUGUESE CATALOG ROUTE - Dark Nature
+// Filters by stone_type (onix, olho-de-tigre, ametista, turquesa)
+// ==========================================
+router.get('/catalogo', async (req, res) => {
+  try {
+    console.log('[Catalogo PT] Query params:', req.query);
+    
+    // Get all active products
+    let products = await Product.getActiveForCatalog(1000, 0);
+    
+    // Filter by stone type if specified
+    if (req.query.pedra) {
+      const stoneName = req.query.pedra; // onix, olho-de-tigre, ametista, turquesa
+      products = products.filter(p => p.stone_type === stoneName);
+      console.log(`[Catalogo PT] Filtering by stone: ${stoneName}, found ${products.length} products`);
+    }
+    
+    // Get all families for filter UI
+    let families = await ProductFamily.getAll();
+    
+    // Format prices for display
+    products = products.map(product => ({
+      ...product,
+      formatted_sale_price: product.sale_price ? 
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+        null,
+      formatted_purchase_price: product.purchase_price ?
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+        null
+    }));
+
+    // Render Dark Nature catalog
+    res.render('pages/catalogo-dark-nature', {
+      title: 'Catálogo - Joias Artesanais em Prata 925 | Gonzaga Art & Shine',
+      currentPath: '/catalogo',
+      currentPage: 'catalogo',
+      layout: false,
+      produtos: products,
+      products: products,
+      families: families,
+      query: req.query,
+      selectedFamilyIds: [],
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteDescription: 'Elegância que nasce da terra',
+      helpers: {
+        isFamilySelected: function(familyId) {
+          return '';
+        }
+      }
+    });
+    
+  } catch (error) {
+    console.error('[Catalogo PT] Error:', error);
+    res.status(500).render('error', { 
+      error: 'Erro ao carregar catálogo',
+      layout: false
+    });
+  }
+});
+
+// Catalog page (English - families system)
 router.get('/catalog', CatalogController.displayCatalog);
 
 // Product detail under construction page
