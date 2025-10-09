@@ -883,6 +883,101 @@ router.get('/artesaos', (req, res) => {
   }
 });
 
+// ==========================================
+// SUPPORT PAGES (DAY 2 - E-commerce Completion)
+// ==========================================
+
+// Cuidados Page (Stone care guide)
+router.get('/cuidados', (req, res) => {
+  try {
+    res.render('pages/cuidados-dark-nature', {
+      currentPage: 'cuidados',
+      title: 'Cuidados com Pedras Sagradas - Gonzaga Art & Shine'
+    });
+  } catch (error) {
+    console.error('Cuidados route error:', error);
+    res.status(500).send('Erro ao carregar página de cuidados');
+  }
+});
+
+// FAQ Page
+router.get('/faq', (req, res) => {
+  try {
+    res.render('pages/faq-dark-nature', {
+      currentPage: 'faq',
+      title: 'Perguntas Frequentes - Gonzaga Art & Shine'
+    });
+  } catch (error) {
+    console.error('FAQ route error:', error);
+    res.status(500).send('Erro ao carregar FAQ');
+  }
+});
+
+// Envios & Devoluções Page
+router.get('/envios', (req, res) => {
+  try {
+    res.render('pages/envios-dark-nature', {
+      currentPage: 'envios',
+      title: 'Envios & Devoluções - Gonzaga Art & Shine'
+    });
+  } catch (error) {
+    console.error('Envios route error:', error);
+    res.status(500).send('Erro ao carregar página de envios');
+  }
+});
+
+// Contacto Enhanced Page
+router.get('/contacto', (req, res) => {
+  try {
+    res.render('pages/contacto-enhanced-dark-nature', {
+      currentPage: 'contacto',
+      title: 'Contacto - Gonzaga Art & Shine'
+    });
+  } catch (error) {
+    console.error('Contacto route error:', error);
+    res.status(500).send('Erro ao carregar página de contacto');
+  }
+});
+
+// Contact Form Submission API
+router.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, phone, subject, message } = req.body;
+    
+    // Validate
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({
+        success: false,
+        error: 'Por favor preencha todos os campos obrigatórios'
+      });
+    }
+    
+    // TODO: Implement email sending (nodemailer)
+    console.log('📧 Contact form submission:', { name, email, subject });
+    
+    // Log activity
+    if (req.logActivity) {
+      req.logActivity('contact_form', 'contact', null, `Contact from ${email}`);
+    }
+    
+    res.json({
+      success: true,
+      message: 'Mensagem enviada com sucesso!'
+    });
+    
+  } catch (error) {
+    console.error('Contact form error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao enviar mensagem'
+    });
+  }
+});
+
+// ==========================================
+// CART & CHECKOUT ROUTES (E-commerce)
+// ==========================================
+
 // Shopping Cart Page
 router.get('/cart', (req, res) => {
   try {
