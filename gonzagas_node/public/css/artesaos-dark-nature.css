@@ -1,0 +1,547 @@
+/* ==========================================
+   ARTESÃOS DARK NATURE - MESTRES DAS PEDRAS
+   Usa assets Lote 1 existentes
+   ========================================== */
+
+/* Page Base */
+.artesaos-dark-nature-page {
+    background: var(--black);
+    color: var(--ivory);
+    font-family: var(--font-body);
+    line-height: var(--line-height-normal);
+}
+
+/* ===================
+   Hero Artesãos
+   =================== */
+.artesaos-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: 
+        linear-gradient(135deg, rgba(11,13,12,0.92) 0%, rgba(11,13,12,0.78) 50%, rgba(11,13,12,0.95) 100%),
+        url('/gallery/dark-nature/transformacao/bancada-artesao-penumbra.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.hero-overlay-artesaos {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.75) 100%),
+        linear-gradient(135deg, rgba(11,13,12,0.9) 0%, rgba(11,13,12,0.65) 40%, rgba(11,13,12,0.88) 100%);
+}
+
+.artesaos-hero-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    z-index: 1;
+    position: relative;
+    padding: var(--space-2xl);
+}
+
+.artesaos-kicker {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--gold-old);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: var(--space-lg);
+    font-weight: 500;
+}
+
+.artesaos-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-xl);
+    
+    background: linear-gradient(135deg, 
+        var(--ivory) 0%, 
+        rgba(231,225,214,0.9) 40%,
+        var(--silver-matte) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    text-shadow: 0 8px 32px rgba(0,0,0,0.8);
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.6));
+}
+
+.title-line {
+    display: block;
+}
+
+.title-line.accent {
+    color: var(--gold-old);
+    text-shadow: 0 0 30px rgba(176,141,87,0.5);
+}
+
+.artesaos-intro {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    color: rgba(231,225,214,0.95);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.artesaos-nota {
+    font-size: 1rem;
+    color: var(--gold-old);
+    font-style: italic;
+    margin-top: var(--space-md);
+}
+
+/* ===================
+   Valores Section
+   =================== */
+.artesaos-valores {
+    padding: var(--space-6xl) 0;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--ivory);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    letter-spacing: -0.01em;
+}
+
+.valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+}
+
+.valor-card {
+    text-align: center;
+    padding: var(--space-xl);
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 8px 24px rgba(0,0,0,0.2);
+    
+    transition: all 0.3s ease;
+}
+
+.valor-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(176,141,87,0.25);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 16px 32px rgba(0,0,0,0.3);
+}
+
+.valor-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-lg);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.valor-titulo {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+}
+
+.valor-descricao {
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ===================
+   Processo Timeline
+   =================== */
+.artesaos-processo {
+    padding: var(--space-6xl) 0;
+    background: rgba(255,255,255,0.01);
+}
+
+.processo-timeline {
+    max-width: 800px;
+    margin: var(--space-2xl) auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.processo-etapa {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 8px 24px rgba(0,0,0,0.2);
+    
+    transition: all 0.3s ease;
+}
+
+.processo-etapa:hover {
+    border-color: rgba(176,141,87,0.25);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 12px 32px rgba(0,0,0,0.3);
+}
+
+.etapa-numero {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold-old);
+    opacity: 0.7;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.etapa-content {
+    flex: 1;
+}
+
+.etapa-nome {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-sm);
+}
+
+.etapa-descricao {
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ===================
+   Pedras Artesãos
+   =================== */
+.artesaos-pedras {
+    padding: var(--space-6xl) 0;
+}
+
+.pedras-artesaos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+}
+
+.pedra-artesao-card {
+    padding: var(--space-2xl);
+    background: 
+        linear-gradient(145deg, rgba(11,13,12,0.95) 0%, rgba(11,13,12,0.9) 100%),
+        radial-gradient(circle at top right, rgba(176,141,87,0.04) 0%, transparent 50%);
+    border: 1px solid rgba(110,107,101,0.2);
+    border-radius: var(--radius-large);
+    
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 8px 32px rgba(0,0,0,0.3);
+    
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pedra-artesao-card:hover {
+    transform: translateY(-12px);
+    border-color: rgba(176,141,87,0.3);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Stone-specific glows */
+.pedra-card--onix:hover {
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(17,17,17,0.4),
+        0 0 30px rgba(17,17,17,0.2);
+}
+
+.pedra-card--olho_de_tigre:hover {
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(107,74,27,0.4),
+        0 0 30px rgba(107,74,27,0.2);
+}
+
+.pedra-card--ametista:hover {
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(45,27,61,0.4),
+        0 0 30px rgba(45,27,61,0.2);
+}
+
+.pedra-card--turquesa:hover {
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 20px 40px rgba(27,58,61,0.4),
+        0 0 30px rgba(27,58,61,0.2);
+}
+
+.pedra-artesao-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.pedra-artesao-icon {
+    font-size: 3rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.pedra-artesao-titles {
+    text-align: left;
+    flex: 1;
+}
+
+.pedra-artesao-nome {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-xs);
+}
+
+.pedra-artesao-especialidade {
+    font-size: 0.85rem;
+    color: var(--gold-old);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.pedra-artesao-descricao {
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-lg);
+}
+
+.pedra-artesao-tecnicas {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    border: 1px solid rgba(110,107,101,0.1);
+}
+
+.tecnicas-label {
+    display: block;
+    font-weight: 600;
+    color: var(--gold-old);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+}
+
+.tecnicas-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tecnica-item {
+    color: var(--slate);
+    font-size: 0.9rem;
+    line-height: var(--line-height-relaxed);
+    padding: var(--space-xs) 0;
+    padding-left: var(--space-md);
+    position: relative;
+}
+
+.tecnica-item::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--gold-old);
+    font-weight: 600;
+}
+
+.pedra-artesao-actions {
+    margin-top: var(--space-lg);
+}
+
+.pedra-artesao-link {
+    color: var(--silver-matte);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.pedra-artesao-link:hover {
+    color: var(--gold-old);
+}
+
+/* ===================
+   CTA Section
+   =================== */
+.artesaos-cta {
+    padding: var(--space-6xl) 0;
+    text-align: center;
+    background: 
+        linear-gradient(135deg, rgba(11,13,12,0.98) 0%, rgba(11,13,12,0.93) 100%),
+        url('/gallery/dark-nature/transformacao/prata-abracando-onix.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    border-top: 1px solid rgba(110,107,101,0.1);
+    position: relative;
+}
+
+.artesaos-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.85) 100%);
+}
+
+.cta-artesaos-content {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-artesaos-titulo {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: var(--space-lg);
+}
+
+.cta-artesaos-texto {
+    font-size: 1.2rem;
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-2xl);
+}
+
+.cta-artesaos-actions {
+    display: flex;
+    gap: var(--space-lg);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ===================
+   Mobile Optimizations
+   =================== */
+@media (max-width: 768px) {
+    .artesaos-hero {
+        min-height: 80vh;
+        background-attachment: scroll;
+    }
+    
+    .artesaos-hero-content {
+        padding: var(--space-xl);
+    }
+    
+    .artesaos-title {
+        font-size: clamp(2.5rem, 7vw, 4rem);
+    }
+    
+    .valores-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .processo-etapa {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .etapa-numero {
+        font-size: 2.5rem;
+    }
+    
+    .pedras-artesaos-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .pedra-artesao-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pedra-artesao-titles {
+        text-align: center;
+    }
+    
+    .cta-artesaos-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .artesaos-cta {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 480px) {
+    .valor-icon {
+        font-size: 2.5rem;
+    }
+    
+    .pedra-artesao-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* ===================
+   Performance
+   =================== */
+@media (prefers-reduced-motion: reduce) {
+    .valor-card,
+    .processo-etapa,
+    .pedra-artesao-card {
+        transition: none;
+    }
+    
+    .valor-card:hover,
+    .pedra-artesao-card:hover {
+        transform: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .artesaos-hero,
+    .artesaos-cta {
+        background-attachment: scroll;
+        min-height: auto;
+    }
+    
+    .valor-card,
+    .processo-etapa,
+    .pedra-artesao-card {
+        box-shadow: none;
+        border: 1px solid #333;
+        page-break-inside: avoid;
+    }
+}
+

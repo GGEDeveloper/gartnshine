@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <meta name="description" content="<%= meta.description %>">
+    <meta name="keywords" content="<%= meta.keywords %>">
+    <link rel="canonical" href="<%= meta.canonical %>">
+    
+    <!-- OG Meta Tags -->
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= meta.description %>">
+    <meta property="og:image" content="/gallery/dark-nature/transformacao/bancada-artesao-penumbra.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= meta.canonical %>">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Dark Nature CSS Stack -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/artesaos-dark-nature.css">
+    
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+</head>
+<body class="artesaos-dark-nature-page" data-page="artesaos">
+    
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
+    
+    <!-- Header Dark Nature -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main id="main-content" class="artesaos-main">
+        <!-- Hero Artesãos -->
+        <section class="artesaos-hero">
+            <div class="hero-overlay-artesaos"></div>
+            <div class="container">
+                <div class="artesaos-hero-content" data-aos="fade-up" data-aos-duration="1200">
+                    <span class="artesaos-kicker">Artesanato Português Ancestral</span>
+                    <h1 class="artesaos-title">
+                        <span class="title-line">Mestres das</span>
+                        <span class="title-line accent">4 Pedras Sagradas</span>
+                    </h1>
+                    <p class="artesaos-intro">
+                        <%= artesaosData.intro.descricao %>
+                    </p>
+                    <p class="artesaos-nota">
+                        <em><%= artesaosData.intro.nota %></em>
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Valores -->
+        <section class="artesaos-valores">
+            <div class="container">
+                <h2 class="section-title">Os Nossos Valores</h2>
+                
+                <div class="valores-grid">
+                    <% artesaosData.valores.forEach((valor, index) => { %>
+                    <div class="valor-card" data-aos="fade-up" data-aos-delay="<%= index * 150 %>">
+                        <div class="valor-icon"><%= valor.icon %></div>
+                        <h3 class="valor-titulo"><%= valor.titulo %></h3>
+                        <p class="valor-descricao"><%= valor.descricao %></p>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Processo Artesanal -->
+        <section class="artesaos-processo">
+            <div class="container">
+                <h2 class="section-title"><%= artesaosData.processo.titulo %></h2>
+                
+                <div class="processo-timeline">
+                    <% artesaosData.processo.etapas.forEach((etapa, index) => { %>
+                    <div class="processo-etapa" data-aos="fade-up" data-aos-delay="<%= index * 200 %>">
+                        <div class="etapa-numero"><%= etapa.numero %></div>
+                        <div class="etapa-content">
+                            <h3 class="etapa-nome"><%= etapa.nome %></h3>
+                            <p class="etapa-descricao"><%= etapa.descricao %></p>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Especialistas por Pedra -->
+        <section class="artesaos-pedras">
+            <div class="container">
+                <h2 class="section-title">Especialistas por Pedra Sagrada</h2>
+                
+                <div class="pedras-artesaos-grid">
+                    <% artesaosData.pedras.forEach((pedraInfo, index) => { %>
+                    <article class="pedra-artesao-card pedra-card--<%= pedraInfo.pedra.replace('-', '_') %>" 
+                             data-aos="zoom-in" 
+                             data-aos-delay="<%= index * 200 %>">
+                        <div class="pedra-artesao-header">
+                            <div class="pedra-artesao-icon">
+                                <% if (pedraInfo.pedra === 'onix') { %>⚫<% } %>
+                                <% if (pedraInfo.pedra === 'olho-de-tigre') { %>🟤<% } %>
+                                <% if (pedraInfo.pedra === 'ametista') { %>🟣<% } %>
+                                <% if (pedraInfo.pedra === 'turquesa') { %>🔵<% } %>
+                            </div>
+                            <div class="pedra-artesao-titles">
+                                <h3 class="pedra-artesao-nome"><%= pedraInfo.nome %></h3>
+                                <span class="pedra-artesao-especialidade"><%= pedraInfo.especialidade %></span>
+                            </div>
+                        </div>
+                        
+                        <p class="pedra-artesao-descricao"><%= pedraInfo.descricao %></p>
+                        
+                        <div class="pedra-artesao-tecnicas">
+                            <span class="tecnicas-label">Técnicas Especializadas:</span>
+                            <ul class="tecnicas-lista">
+                                <% pedraInfo.tecnicas.forEach(tecnica => { %>
+                                <li class="tecnica-item"><%= tecnica %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                        
+                        <div class="pedra-artesao-actions">
+                            <a href="/catalogo?pedra=<%= pedraInfo.pedra %>" class="pedra-artesao-link">
+                                Ver Coleção <%= pedraInfo.nome %> →
+                            </a>
+                        </div>
+                    </article>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Call to Action -->
+        <section class="artesaos-cta">
+            <div class="container">
+                <div class="cta-artesaos-content">
+                    <h2 class="cta-artesaos-titulo">Descubra o Trabalho Artesanal</h2>
+                    <p class="cta-artesaos-texto">
+                        Cada peça no nosso catálogo é fruto de técnicas centenárias e dedicação artesanal. 
+                        Explore a coleção e encontre a joia que ressoa com a sua essência.
+                    </p>
+                    <div class="cta-artesaos-actions">
+                        <a href="/catalogo" class="btn btn--gold btn--large">
+                            <span class="btn-text">Explorar Todas as Peças</span>
+                            <span class="btn-icon">💎</span>
+                        </a>
+                        <a href="/manifesto" class="btn btn--silver-outline btn--large">
+                            <span class="btn-text">Ler Nossa Filosofia</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer Dark Nature -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1200,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+        
+        // Analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Artesãos Dark Nature',
+                page_location: window.location.href,
+                content_group1: 'artesaos_page',
+                content_group2: 'brand_content'
+            });
+        }
+    </script>
+</body>
+</html>
+

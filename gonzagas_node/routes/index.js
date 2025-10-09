@@ -670,6 +670,204 @@ router.get('/produto/:slug', async (req, res) => {
 });
 
 // Galeria Autêntica Dark Nature - Mineral Journey
+// Manifesto Dark Nature - Brand Philosophy
+router.get('/manifesto', (req, res) => {
+  try {
+    const manifestoData = {
+      hero: {
+        kicker: 'Manifesto Dark Nature',
+        titulo: 'Elegância que Nasce da Terra',
+        essencia: 'Cada joia carrega consigo milhões de anos de história terrestre e gerações de sabedoria artesanal portuguesa. Não criamos apenas acessórios - revelamos a alma ancestral dos minerais.'
+      },
+      filosofia: {
+        principios: [
+          {
+            numero: '01',
+            titulo: 'Autenticidade Absoluta',
+            descricao: 'Zero elementos sintéticos. Cada pedra é genuína, cada processo é real, cada história é verdadeira. Não inventamos origens - honramos a verdade mineral.'
+          },
+          {
+            numero: '02', 
+            titulo: 'Origem Rastreável',
+            descricao: 'Sabemos exatamente onde cada mineral nasceu. Das minas do Brasil às montanhas do Tibete - transparência total do caminho da terra às suas mãos.'
+          },
+          {
+            numero: '03',
+            titulo: 'Tradição Artesanal',
+            descricao: 'Técnicas portuguesas centenárias passadas de geração em geração. Ferramentas que contam histórias. Mestres que honram o conhecimento ancestral.'
+          },
+          {
+            numero: '04',
+            titulo: 'Harmonia Natural',
+            descricao: 'Respeitamos o tempo da terra e o ritmo do artesão. Beleza que emerge organicamente do encontro entre mineral e mestre, nunca forçada.'
+          }
+        ]
+      },
+      pedras: {
+        quaternario: 'As 4 Pedras Sagradas representam os elementos fundamentais da existência: Terra (Ónix), Fogo (Olho-de-Tigre), Éter (Ametista), Água (Turquesa). Cada uma carrega propriedades únicas e uma história milenar.',
+        colecoes: [
+          {
+            pedra: 'onix',
+            nome: 'Ónix',
+            essencia: 'Força primordial das profundezas vulcânicas',
+            elemento: 'Terra',
+            propriedades: 'Proteção ancestral, grounding, força interior'
+          },
+          {
+            pedra: 'olho-de-tigre',
+            nome: 'Olho-de-Tigre', 
+            essencia: 'Coragem dourada capturada em fibra mineral',
+            elemento: 'Fogo',
+            propriedades: 'Clareza mental, decisão, proteção'
+          },
+          {
+            pedra: 'ametista',
+            nome: 'Ametista',
+            essencia: 'Sabedoria cristalina dos geodas ancestrais',
+            elemento: 'Éter',
+            propriedades: 'Transmutação, intuição, serenidade'
+          },
+          {
+            pedra: 'turquesa',
+            nome: 'Turquesa',
+            essencia: 'Proteção milenar dos oceanos antigos',
+            elemento: 'Água',
+            propriedades: 'Comunicação autêntica, cura emocional'
+          }
+        ]
+      },
+      tradicao: {
+        heranca: 'Mais de 200 anos de tradição joalheira portuguesa',
+        mestres: 'Cada artesão especializa-se numa pedra sagrada durante toda a vida',
+        compromisso: 'Zero produção em massa. Cada peça é única como o mineral que a originou.',
+        oficinas: 'Ateliers tradicionais no Norte de Portugal, onde o tempo ainda tem outro ritmo'
+      }
+    };
+    
+    res.render('pages/manifesto-dark-nature', {
+      currentPage: 'manifesto',
+      title: 'Manifesto Dark Nature - Elegância que Nasce da Terra | Gonzaga Art & Shine',
+      manifestoData,
+      meta: {
+        description: 'O manifesto da filosofia Dark Nature. Elegância que nasce da terra através de 4 pedras sagradas e artesanato português ancestral com mais de 200 anos de tradição.',
+        keywords: 'manifesto dark nature, filosofia joias artesanais, elegância terra, 4 pedras sagradas, artesanato português, tradição familiar',
+        canonical: `${req.protocol}://${req.get('host')}/manifesto`
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error loading manifesto:', error);
+    res.status(500).render('error', { error: 'Erro ao carregar manifesto' });
+  }
+});
+
+// Artesãos Dark Nature - Mestres das Pedras
+router.get('/artesaos', (req, res) => {
+  try {
+    const artesaosData = {
+      intro: {
+        titulo: 'Artesãos Tradicionais Portugueses',
+        descricao: 'Trabalhamos com oficinas tradicionais do Norte de Portugal que preservam técnicas centenárias de joalharia. Cada artesão desenvolve uma especialização profunda com as pedras sagradas, honrando a tradição familiar e o conhecimento ancestral.',
+        nota: 'Profiles individuais completos dos mestres em breve'
+      },
+      valores: [
+        {
+          icon: '🏛️',
+          titulo: 'Tradição Familiar',
+          descricao: 'Oficinas com mais de 200 anos de história joalheira portuguesa'
+        },
+        {
+          icon: '⚒️',
+          titulo: 'Técnicas Centenárias',
+          descricao: 'Métodos artesanais passados de geração em geração'
+        },
+        {
+          icon: '💎',
+          titulo: 'Especialização Profunda',
+          descricao: 'Cada artesão dedica-se a uma pedra sagrada durante toda a vida'
+        },
+        {
+          icon: '🤝',
+          titulo: 'Compromisso Autêntico',
+          descricao: 'Zero produção em massa - cada peça é única e assinada'
+        }
+      ],
+      processo: {
+        titulo: 'O Processo Artesanal',
+        etapas: [
+          {
+            numero: '01',
+            nome: 'Seleção Mineral',
+            descricao: 'Cada pedra é escolhida pela sua energia, veios únicos e história geológica'
+          },
+          {
+            numero: '02',
+            nome: 'Lapidação Manual',
+            descricao: 'Revelação cuidadosa da beleza interior do mineral com ferramentas tradicionais'
+          },
+          {
+            numero: '03',
+            nome: 'Fundição Prata 925',
+            descricao: 'Alquimia ancestral transformando metal puro em base para a pedra'
+          },
+          {
+            numero: '04',
+            nome: 'União Sagrada',
+            descricao: 'Montagem que honra tanto o mineral quanto o metal, criando harmonia perfeita'
+          }
+        ]
+      },
+      pedras: [
+        {
+          pedra: 'onix',
+          nome: 'Ónix',
+          especialidade: 'Especialistas em Ónix Negro',
+          descricao: 'Ateliers especializados em revelar a força primordial do ónix vulcânico através de técnicas que preservam os veios naturais únicos de cada pedra.',
+          tecnicas: ['Cravação protetora', 'Lapidação preservando veios', 'Polimento espelhado ancestral']
+        },
+        {
+          pedra: 'olho-de-tigre',
+          nome: 'Olho-de-Tigre',
+          especialidade: 'Mestres da Chatoyância',
+          descricao: 'Oficinas dedicadas a revelar os veios dourados capturados na fibra mineral, seguindo a direção natural da chatoyância sem forçar o brilho.',
+          tecnicas: ['Corte direccional de fibras', 'Enhancement natural chatoyância', 'Preservação matriz crocidolite']
+        },
+        {
+          pedra: 'ametista',
+          nome: 'Ametista',
+          especialidade: 'Artesãos de Cristais',
+          descricao: 'Mestres que trabalham em harmonia com a geometria sagrada hexagonal dos cristais, respeitando a transparência e pureza violeta de cada geodo.',
+          tecnicas: ['Facetação hexagonal tradicional', 'Clarity natural', 'Cravação preservando transparência']
+        },
+        {
+          pedra: 'turquesa',
+          nome: 'Turquesa',
+          especialidade: 'Guardiões da Matrix',
+          descricao: 'Oficinas especializadas em preservar a rocha-mãe natural da turquesa, honrando imperfeições como marcas de autenticidade mineral milenar.',
+          tecnicas: ['Matrix preservation', 'Estabilização natural', 'Montagem honrando imperfeições']
+        }
+      ]
+    };
+    
+    res.render('pages/artesaos-dark-nature', {
+      currentPage: 'artesaos',
+      title: 'Nossos Artesãos - Mestres das 4 Pedras Sagradas | Gonzaga Art & Shine',
+      artesaosData,
+      meta: {
+        description: 'Conheça os artesãos tradicionais portugueses especializados nas 4 pedras sagradas: Ónix, Olho-de-Tigre, Ametista, Turquesa. Técnicas centenárias e tradição familiar com mais de 200 anos.',
+        keywords: 'artesãos portugueses, mestres joalheria, tradição artesanal portugal, técnicas centenárias, oficinas tradicionais, ónix olho-de-tigre ametista turquesa',
+        canonical: `${req.protocol}://${req.get('host')}/artesaos`
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error loading artesãos:', error);
+    res.status(500).render('error', { 
+      error: 'Erro ao carregar artesãos'
+    });
+  }
+});
+
 // Galeria Dark Nature - Showcase jornada mineral (Lote 1)
 router.get('/galeria', async (req, res) => {
   try {

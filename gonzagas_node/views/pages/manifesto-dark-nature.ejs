@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <meta name="description" content="<%= meta.description %>">
+    <meta name="keywords" content="<%= meta.keywords %>">
+    <link rel="canonical" href="<%= meta.canonical %>">
+    
+    <!-- OG Meta Tags -->
+    <meta property="og:title" content="Manifesto Dark Nature - Elegância que Nasce da Terra">
+    <meta property="og:description" content="<%= meta.description %>">
+    <meta property="og:image" content="/gallery/dark-nature/hero/caverna-primordial-hero.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= meta.canonical %>">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Dark Nature CSS Stack -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/manifesto-dark-nature.css">
+    
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Manifesto Dark Nature",
+        "description": "<%= meta.description %>",
+        "url": "<%= meta.canonical %>",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Gonzaga Art & Shine",
+            "url": "https://gonzagas.pt"
+        }
+    }
+    </script>
+</head>
+<body class="manifesto-dark-nature-page" data-page="manifesto">
+    
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
+    
+    <!-- Header Dark Nature -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main id="main-content" class="manifesto-main">
+        <!-- Hero Manifesto -->
+        <section class="manifesto-hero">
+            <div class="hero-overlay-manifesto"></div>
+            <div class="container">
+                <div class="manifesto-hero-content" data-aos="fade-up" data-aos-duration="1200">
+                    <span class="manifesto-kicker"><%= manifestoData.hero.kicker %></span>
+                    <h1 class="manifesto-title">
+                        <span class="title-line">Elegância que</span>
+                        <span class="title-line accent">Nasce da Terra</span>
+                    </h1>
+                    <p class="manifesto-essence">
+                        <%= manifestoData.hero.essencia %>
+                    </p>
+                    
+                    <div class="manifesto-hero-nav">
+                        <a href="#filosofia" class="manifesto-nav-link">Nossa Filosofia</a>
+                        <a href="#pedras" class="manifesto-nav-link">4 Pedras Sagradas</a>
+                        <a href="#tradicao" class="manifesto-nav-link">Tradição Artesanal</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Filosofia Principios -->
+        <section class="manifesto-filosofia" id="filosofia">
+            <div class="container">
+                <h2 class="section-title">Os Nossos 4 Pilares Fundamentais</h2>
+                
+                <div class="principios-grid">
+                    <% manifestoData.filosofia.principios.forEach((principio, index) => { %>
+                    <article class="principio-card" data-aos="fade-up" data-aos-delay="<%= index * 150 %>">
+                        <div class="principio-header">
+                            <div class="principio-numero"><%= principio.numero %></div>
+                            <h3 class="principio-titulo"><%= principio.titulo %></h3>
+                        </div>
+                        <p class="principio-descricao"><%= principio.descricao %></p>
+                    </article>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 4 Pedras Sagradas -->
+        <section class="manifesto-pedras" id="pedras">
+            <div class="container">
+                <h2 class="section-title">As 4 Pedras Sagradas</h2>
+                
+                <div class="quaternario-intro">
+                    <p class="quaternario-descricao">
+                        <%= manifestoData.pedras.quaternario %>
+                    </p>
+                </div>
+                
+                <div class="pedras-manifesto-grid">
+                    <% manifestoData.pedras.colecoes.forEach((pedra, index) => { %>
+                    <article class="pedra-manifesto-card pedra-card--<%= pedra.pedra.replace('-', '_') %>" 
+                             data-aos="zoom-in" 
+                             data-aos-delay="<%= index * 200 %>">
+                        <div class="pedra-manifesto-header">
+                            <div class="pedra-manifesto-icon">
+                                <% if (pedra.pedra === 'onix') { %>⚫<% } %>
+                                <% if (pedra.pedra === 'olho-de-tigre') { %>🟤<% } %>
+                                <% if (pedra.pedra === 'ametista') { %>🟣<% } %>
+                                <% if (pedra.pedra === 'turquesa') { %>🔵<% } %>
+                            </div>
+                            <div class="pedra-manifesto-titles">
+                                <h3 class="pedra-manifesto-nome"><%= pedra.nome %></h3>
+                                <span class="pedra-manifesto-elemento">Elemento <%= pedra.elemento %></span>
+                            </div>
+                        </div>
+                        
+                        <p class="pedra-manifesto-essencia"><%= pedra.essencia %></p>
+                        
+                        <div class="pedra-manifesto-propriedades">
+                            <span class="propriedades-label">Propriedades:</span>
+                            <span class="propriedades-texto"><%= pedra.propriedades %></span>
+                        </div>
+                        
+                        <div class="pedra-manifesto-actions">
+                            <a href="/catalogo?pedra=<%= pedra.pedra %>" 
+                               class="pedra-manifesto-link">
+                                Explorar Coleção <%= pedra.nome %> →
+                            </a>
+                        </div>
+                    </article>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tradição Artesanal -->
+        <section class="manifesto-tradicao" id="tradicao">
+            <div class="container">
+                <h2 class="section-title">Tradição que Atravessa Gerações</h2>
+                
+                <div class="tradicao-content">
+                    <div class="tradicao-grid">
+                        <div class="tradicao-item" data-aos="fade-up">
+                            <div class="tradicao-icon">🏛️</div>
+                            <h3 class="tradicao-item-titulo">Herança Centenária</h3>
+                            <p class="tradicao-item-texto"><%= manifestoData.tradicao.heranca %></p>
+                        </div>
+                        
+                        <div class="tradicao-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="tradicao-icon">👥</div>
+                            <h3 class="tradicao-item-titulo">Mestres Especializados</h3>
+                            <p class="tradicao-item-texto"><%= manifestoData.tradicao.mestres %></p>
+                        </div>
+                        
+                        <div class="tradicao-item" data-aos="fade-up" data-aos-delay="400">
+                            <div class="tradicao-icon">⚒️</div>
+                            <h3 class="tradicao-item-titulo">Compromisso Artesanal</h3>
+                            <p class="tradicao-item-texto"><%= manifestoData.tradicao.compromisso %></p>
+                        </div>
+                        
+                        <div class="tradicao-item" data-aos="fade-up" data-aos-delay="600">
+                            <div class="tradicao-icon">🏔️</div>
+                            <h3 class="tradicao-item-titulo">Ateliers Autênticos</h3>
+                            <p class="tradicao-item-texto"><%= manifestoData.tradicao.oficinas %></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tradicao-cta" data-aos="fade-up">
+                    <a href="/artesaos" class="btn btn--gold btn--large">
+                        <span class="btn-text">Conhecer os Nossos Artesãos</span>
+                        <span class="btn-icon">👨‍🎨</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Manifesto Call to Action -->
+        <section class="manifesto-cta">
+            <div class="container">
+                <div class="cta-manifesto-content">
+                    <h2 class="cta-manifesto-titulo">Viva a Filosofia Dark Nature</h2>
+                    <p class="cta-manifesto-texto">
+                        Cada peça é um manifesto pessoal. Descubra qual das 4 pedras sagradas 
+                        ressoa com a sua essência e comece a sua própria jornada de elegância natural.
+                    </p>
+                    <div class="cta-manifesto-actions">
+                        <a href="/catalogo" class="btn btn--gold btn--large">
+                            <span class="btn-text">Explorar Coleção Completa</span>
+                            <span class="btn-icon">💎</span>
+                        </a>
+                        <a href="/galeria" class="btn btn--silver-outline btn--large">
+                            <span class="btn-text">Ver Jornada Visual</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer Dark Nature -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1200,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.manifesto-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Manifesto Dark Nature',
+                page_location: window.location.href,
+                content_group1: 'manifesto_page',
+                content_group2: 'brand_content'
+            });
+        }
+    </script>
+</body>
+</html>
+
