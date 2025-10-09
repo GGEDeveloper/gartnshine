@@ -1,269 +1,514 @@
-<header class="header-v2">
-    <nav class="navbar-v2" role="navigation" aria-label="Navegação principal">
-        <div class="nav-container">
-            <!-- Logo -->
-            <a href="/" class="brand-logo" aria-label="Gonzaga's Art & Shine - Página inicial">
-                <div class="logo-image">
-                    <img src="/images/logo.svg" alt="Gonzaga's Art & Shine" width="40" height="40">
-                </div>
-                <div class="brand-text">
-                    <span class="brand-name">Gonzaga's</span>
-                    <span class="brand-tagline">Art & Shine</span>
-                </div>
-            </a>
-            
-            <!-- Desktop Navigation -->
-            <div class="nav-desktop" aria-label="Menu principal">
-                <ul class="nav-menu" role="menubar">
-                    <li class="nav-item dropdown" role="none">
-                        <a href="/catalog" 
-                           class="nav-link dropdown-trigger" 
-                           role="menuitem" 
-                           aria-haspopup="true" 
-                           aria-expanded="false"
-                           id="catalog-menu-trigger">
-                            <span>Coleção</span>
-                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </a>
-                        
-                        <!-- Mega Menu -->
-                        <div class="dropdown-menu mega-menu" 
-                             role="menu" 
-                             aria-labelledby="catalog-menu-trigger">
-                            <div class="mega-menu-content">
-                                <div class="menu-section">
-                                    <h4>Por Categoria</h4>
-                                    <ul class="menu-list" role="menu">
-                                        <li role="none">
-                                            <a href="/catalog?category=1" role="menuitem">Anéis</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/catalog?category=2" role="menuitem">Brincos</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/catalog?category=3" role="menuitem">Colares</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/catalog?category=4" role="menuitem">Pulseiras</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/catalog" role="menuitem">Ver Todas</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="menu-section">
-                                    <h4>Em Destaque</h4>
-                                    <div class="featured-mini" id="navFeaturedProducts">
-                                        <!-- Dynamic content loaded via JavaScript -->
-                                    </div>
-                                </div>
-                                
-                                <div class="menu-section">
-                                    <h4>Sobre Nós</h4>
-                                    <ul class="menu-list" role="menu">
-                                        <li role="none">
-                                            <a href="/sobre" role="menuitem">Nossa História</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/artesanal" role="menuitem">Processo Artesanal</a>
-                                        </li>
-                                        <li role="none">
-                                            <a href="/contactos" role="menuitem">Contactos</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="nav-item" role="none">
-                        <a href="/sobre" class="nav-link" role="menuitem">Sobre Nós</a>
-                    </li>
-                    
-                    <li class="nav-item" role="none">
-                        <a href="/contactos" class="nav-link" role="menuitem">Contactos</a>
-                    </li>
-                </ul>
+<!-- =============================================
+     GONZAGA ART & SHINE - HEADER DARK NATURE
+     Gothic Natural Navigation System
+     ============================================= -->
+
+<header class="site-header" role="banner">
+    <nav class="main-nav" role="navigation" aria-label="Navegação principal">
+        <div class="container">
+            <div class="nav-content">
                 
-                <!-- Search Bar -->
-                <div class="nav-search" role="search">
-                    <div class="search-container-nav">
-                        <input type="text" 
-                               class="search-input-v2" 
-                               placeholder="Pesquisar joias..." 
-                               autocomplete="off"
-                               aria-label="Pesquisar produtos"
-                               id="nav-search-input">
-                        <button class="search-btn" 
-                                type="button" 
-                                aria-label="Pesquisar">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </button>
-                        
-                        <!-- Search Results Dropdown -->
-                        <div class="search-results-nav" 
-                             id="navSearchResults" 
-                             role="listbox" 
-                             aria-label="Resultados da pesquisa">
-                            <!-- Dynamic content -->
+                <!-- Brand -->
+                <div class="nav-brand">
+                    <a href="/" class="brand-link" aria-label="Gonzaga Art & Shine - Página inicial">
+                        <div class="brand-logo">
+                            <img src="/images/logo-dark.svg" alt="Gonzaga Art & Shine" width="42" height="42" loading="eager">
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="nav-actions">
-                    <a href="<%= getWhatsAppUrl('Olá! Gostaria de saber mais sobre as vossas joias.') %>" 
-                       class="btn-nav-whatsapp" 
-                       target="_blank"
-                       aria-label="Contactar via WhatsApp">
-                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                        <span class="btn-text">WhatsApp</span>
+                        <div class="brand-text">
+                            <span class="brand-name">Gonzaga</span>
+                            <span class="brand-tagline">Art & Shine</span>
+                        </div>
                     </a>
                 </div>
-            </div>
-            
-            <!-- Mobile Menu Toggle -->
-            <button class="mobile-nav-toggle" 
-                    type="button"
-                    aria-label="Abrir menu de navegação"
-                    aria-expanded="false"
-                    aria-controls="mobile-nav-overlay">
-                <span class="hamburger-line" aria-hidden="true"></span>
-                <span class="hamburger-line" aria-hidden="true"></span>
-                <span class="hamburger-line" aria-hidden="true"></span>
-                <span class="sr-only">Menu</span>
-            </button>
-        </div>
-        
-        <!-- Mobile Navigation Overlay -->
-        <div class="mobile-nav-overlay" 
-             id="mobile-nav-overlay"
-             role="dialog" 
-             aria-label="Menu de navegação móvel"
-             aria-hidden="true">
-            <div class="mobile-nav-content">
-                <!-- Mobile Search -->
-                <div class="mobile-search" role="search">
-                    <div class="search-container-mobile">
-                        <input type="text" 
-                               class="search-input-mobile" 
-                               placeholder="Pesquisar produtos..."
-                               aria-label="Pesquisar produtos">
-                        <button class="search-btn-mobile" 
-                                type="button" 
-                                aria-label="Pesquisar">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
                 
-                <!-- Mobile Menu -->
-                <nav class="mobile-menu" role="navigation" aria-label="Menu principal móvel">
-                    <ul class="mobile-menu-list" role="menu">
-                        <li class="mobile-menu-item" role="none">
-                            <a href="/" class="mobile-menu-link" role="menuitem">
-                                <i class="fas fa-home" aria-hidden="true"></i>
-                                <span>Início</span>
+                <!-- Desktop Navigation -->
+                <div class="nav-desktop">
+                    <ul class="nav-menu" role="menubar">
+                        <li class="nav-item nav-item--dropdown" role="none">
+                            <a href="/catalogo" class="nav-link nav-link--dropdown" 
+                               role="menuitem" aria-haspopup="true" aria-expanded="false"
+                               id="stone-menu-trigger">
+                                <span class="nav-link__text">Por Pedra</span>
+                                <span class="nav-link__icon" aria-hidden="true">⌄</span>
                             </a>
-                        </li>
-                        
-                        <li class="mobile-menu-item expandable" role="none">
-                            <button class="mobile-menu-trigger" 
-                                    type="button"
-                                    aria-expanded="false"
-                                    aria-controls="mobile-catalog-submenu">
-                                <i class="fas fa-gem" aria-hidden="true"></i>
-                                <span>Coleção</span>
-                                <i class="fas fa-chevron-down expand-icon" aria-hidden="true"></i>
-                            </button>
                             
-                            <ul class="mobile-submenu" id="mobile-catalog-submenu" role="menu">
-                                <li role="none">
-                                    <a href="/catalog" class="mobile-submenu-link" role="menuitem">
-                                        Todas as Peças
-                                    </a>
-                                </li>
-                                <li role="none">
-                                    <a href="/catalog?category=1" class="mobile-submenu-link" role="menuitem">
-                                        Anéis
-                                    </a>
-                                </li>
-                                <li role="none">
-                                    <a href="/catalog?category=2" class="mobile-submenu-link" role="menuitem">
-                                        Brincos
-                                    </a>
-                                </li>
-                                <li role="none">
-                                    <a href="/catalog?category=3" class="mobile-submenu-link" role="menuitem">
-                                        Colares
-                                    </a>
-                                </li>
-                                <li role="none">
-                                    <a href="/catalog?category=4" class="mobile-submenu-link" role="menuitem">
-                                        Pulseiras
-                                    </a>
-                                </li>
-                            </ul>
+                            <!-- Stone Collections Dropdown -->
+                            <div class="nav-dropdown" role="menu" aria-labelledby="stone-menu-trigger">
+                                <div class="nav-dropdown__content">
+                                    <div class="dropdown-section">
+                                        <h4 class="dropdown-section__title">Coleções Principais</h4>
+                                        <ul class="dropdown-links" role="menu">
+                                            <li role="none">
+                                                <a href="/catalogo?pedra=onix" class="dropdown-link dropdown-link--onyx" role="menuitem">
+                                                    <span class="badge-onyx">Ónix</span>
+                                                    <div class="dropdown-link__content">
+                                                        <span class="dropdown-link__title">Força em negro profundo</span>
+                                                        <span class="dropdown-link__desc">Proteção ancestral</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li role="none">
+                                                <a href="/catalogo?pedra=olho-de-tigre" class="dropdown-link dropdown-link--tiger" role="menuitem">
+                                                    <span class="badge-tiger">Olho-de-tigre</span>
+                                                    <div class="dropdown-link__content">
+                                                        <span class="dropdown-link__title">Poder dourado da terra</span>
+                                                        <span class="dropdown-link__desc">Coragem natural</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="dropdown-section">
+                                        <h4 class="dropdown-section__title">Explorar</h4>
+                                        <ul class="dropdown-links" role="menu">
+                                            <li role="none">
+                                                <a href="/catalogo" class="dropdown-link" role="menuitem">
+                                                    <span class="dropdown-link__icon" aria-hidden="true">💎</span>
+                                                    <span class="dropdown-link__title">Catálogo Completo</span>
+                                                </a>
+                                            </li>
+                                            <li role="none">
+                                                <a href="/manifesto" class="dropdown-link" role="menuitem">
+                                                    <span class="dropdown-link__icon" aria-hidden="true">🌱</span>
+                                                    <span class="dropdown-link__title">Origem e Cuidados</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         
-                        <li class="mobile-menu-item" role="none">
-                            <a href="/sobre" class="mobile-menu-link" role="menuitem">
-                                <i class="fas fa-info-circle" aria-hidden="true"></i>
-                                <span>Sobre Nós</span>
+                        <li class="nav-item nav-item--dropdown" role="none">
+                            <a href="/sobre" class="nav-link nav-link--dropdown" 
+                               role="menuitem" aria-haspopup="true" aria-expanded="false"
+                               id="about-menu-trigger">
+                                <span class="nav-link__text">Sobre</span>
+                                <span class="nav-link__icon" aria-hidden="true">⌄</span>
                             </a>
+                            
+                            <!-- About Dropdown -->
+                            <div class="nav-dropdown" role="menu" aria-labelledby="about-menu-trigger">
+                                <div class="nav-dropdown__content">
+                                    <div class="dropdown-section">
+                                        <h4 class="dropdown-section__title">Nossa História</h4>
+                                        <ul class="dropdown-links" role="menu">
+                                            <li role="none">
+                                                <a href="/manifesto" class="dropdown-link" role="menuitem">
+                                                    <span class="dropdown-link__icon" aria-hidden="true">📜</span>
+                                                    <span class="dropdown-link__title">Manifesto</span>
+                                                </a>
+                                            </li>
+                                            <li role="none">
+                                                <a href="/artesaos" class="dropdown-link" role="menuitem">
+                                                    <span class="dropdown-link__icon" aria-hidden="true">🧑‍🎨</span>
+                                                    <span class="dropdown-link__title">Nossos Artesãos</span>
+                                                </a>
+                                            </li>
+                                            <li role="none">
+                                                <a href="/festivais" class="dropdown-link" role="menuitem">
+                                                    <span class="dropdown-link__icon" aria-hidden="true">🎪</span>
+                                                    <span class="dropdown-link__title">Festivais e Feiras</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         
-                        <li class="mobile-menu-item" role="none">
-                            <a href="/contactos" class="mobile-menu-link" role="menuitem">
-                                <i class="fas fa-envelope" aria-hidden="true"></i>
-                                <span>Contactos</span>
+                        <li class="nav-item" role="none">
+                            <a href="/contacto" class="nav-link" role="menuitem">
+                                <span class="nav-link__text">Contacto</span>
                             </a>
                         </li>
                     </ul>
-                </nav>
+                </div>
                 
-                <!-- Mobile Contact -->
-                <div class="mobile-contact">
-                    <h4>Contactos Diretos</h4>
-                    
-                    <a href="tel:<%= site.contact.phone %>" class="contact-item">
-                        <i class="fas fa-phone" aria-hidden="true"></i>
-                        <div class="contact-info">
-                            <span class="contact-label">Telefone</span>
-                            <span class="contact-value">+351 XXX XXX XXX</span>
+                <!-- Actions -->
+                <div class="nav-actions">
+                    <!-- Search -->
+                    <div class="nav-search" role="search">
+                        <button class="search-trigger" type="button" aria-label="Abrir pesquisa" aria-expanded="false">
+                            <span class="search-trigger__icon" aria-hidden="true">🔍</span>
+                        </button>
+                        
+                        <div class="search-overlay" role="dialog" aria-label="Pesquisa de produtos">
+                            <div class="search-container">
+                                <form class="search-form" role="search" action="/pesquisar" method="get">
+                                    <div class="search-input-group">
+                                        <input type="text" name="q" class="search-input" 
+                                               placeholder="Pesquisar joias..." 
+                                               autocomplete="off" 
+                                               aria-label="Pesquisar produtos">
+                                        <button type="submit" class="search-submit" aria-label="Pesquisar">
+                                            <span aria-hidden="true">🔍</span>
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div class="search-suggestions">
+                                    <div class="suggestion-group">
+                                        <h4 class="suggestion-group__title">Sugestões Populares</h4>
+                                        <ul class="suggestion-list">
+                                            <li><a href="/catalogo?pedra=onix">Anel ónix</a></li>
+                                            <li><a href="/catalogo?pedra=olho-de-tigre">Colar olho-de-tigre</a></li>
+                                            <li><a href="/catalogo?categoria=brincos">Brincos prata 925</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <button class="search-close" type="button" aria-label="Fechar pesquisa">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                     
-                    <a href="<%= getWhatsAppUrl() %>" 
-                       class="contact-item whatsapp" 
-                       target="_blank">
-                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                        <div class="contact-info">
-                            <span class="contact-label">WhatsApp</span>
-                            <span class="contact-value">Mensagem direta</span>
-                        </div>
-                    </a>
-                    
-                    <a href="mailto:info@gonzagasartshine.com" class="contact-item">
-                        <i class="fas fa-envelope" aria-hidden="true"></i>
-                        <div class="contact-info">
-                            <span class="contact-label">Email</span>
-                            <span class="contact-value">info@gonzagasartshine.com</span>
-                        </div>
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/351912345678?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20as%20vossas%20joias." 
+                       class="btn btn--whatsapp btn--small" 
+                       target="_blank" rel="noopener"
+                       aria-label="Contactar via WhatsApp">
+                        <span class="btn__icon" aria-hidden="true">📱</span>
+                        <span class="btn__text">WhatsApp</span>
                     </a>
                 </div>
                 
-                <!-- Close Button -->
-                <button class="mobile-nav-close" 
-                        type="button"
-                        aria-label="Fechar menu">
-                    <i class="fas fa-times" aria-hidden="true"></i>
+                <!-- Mobile Toggle -->
+                <button class="mobile-nav-toggle" type="button" 
+                        aria-label="Abrir menu móvel" 
+                        aria-expanded="false"
+                        aria-controls="mobile-nav">
+                    <span class="mobile-nav-toggle__line"></span>
+                    <span class="mobile-nav-toggle__line"></span>
+                    <span class="mobile-nav-toggle__line"></span>
                 </button>
             </div>
         </div>
     </nav>
     
-    <!-- Progress Bar (optional) -->
-    <div class="reading-progress" role="progressbar" aria-label="Progresso da página"></div>
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav" role="dialog" aria-label="Menu de navegação móvel" aria-hidden="true">
+        <div class="mobile-nav__overlay"></div>
+        <div class="mobile-nav__content">
+            <!-- Mobile Header -->
+            <div class="mobile-nav__header">
+                <div class="mobile-nav__brand">
+                    <img src="/images/logo-dark.svg" alt="Gonzaga Art & Shine" width="32" height="32">
+                    <span class="mobile-nav__brand-text">Menu</span>
+                </div>
+                <button class="mobile-nav__close" type="button" aria-label="Fechar menu">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <nav class="mobile-menu" role="navigation" aria-label="Menu principal móvel">
+                <ul class="mobile-menu__list">
+                    <li class="mobile-menu__item">
+                        <a href="/" class="mobile-menu__link">
+                            <span class="mobile-menu__icon" aria-hidden="true">🏠</span>
+                            <span class="mobile-menu__text">Início</span>
+                        </a>
+                    </li>
+                    
+                    <li class="mobile-menu__item mobile-menu__item--expandable">
+                        <button class="mobile-menu__trigger" type="button" 
+                                aria-expanded="false" aria-controls="mobile-stones-submenu">
+                            <span class="mobile-menu__icon" aria-hidden="true">💎</span>
+                            <span class="mobile-menu__text">Por Pedra</span>
+                            <span class="mobile-menu__expand" aria-hidden="true">⌄</span>
+                        </button>
+                        
+                        <ul class="mobile-submenu" id="mobile-stones-submenu" role="menu">
+                            <li role="none">
+                                <a href="/catalogo?pedra=onix" class="mobile-submenu__link" role="menuitem">
+                                    <span class="badge-onyx">Ónix</span>
+                                    <span>Força em negro profundo</span>
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="/catalogo?pedra=olho-de-tigre" class="mobile-submenu__link" role="menuitem">
+                                    <span class="badge-tiger">Olho-de-tigre</span>
+                                    <span>Poder dourado da terra</span>
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="/catalogo" class="mobile-submenu__link" role="menuitem">
+                                    <span>💎</span>
+                                    <span>Ver Catálogo Completo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="mobile-menu__item mobile-menu__item--expandable">
+                        <button class="mobile-menu__trigger" type="button" 
+                                aria-expanded="false" aria-controls="mobile-about-submenu">
+                            <span class="mobile-menu__icon" aria-hidden="true">ℹ️</span>
+                            <span class="mobile-menu__text">Sobre</span>
+                            <span class="mobile-menu__expand" aria-hidden="true">⌄</span>
+                        </button>
+                        
+                        <ul class="mobile-submenu" id="mobile-about-submenu" role="menu">
+                            <li role="none">
+                                <a href="/manifesto" class="mobile-submenu__link" role="menuitem">
+                                    <span>📜</span>
+                                    <span>Manifesto</span>
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="/artesaos" class="mobile-submenu__link" role="menuitem">
+                                    <span>🧑‍🎨</span>
+                                    <span>Nossos Artesãos</span>
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="/festivais" class="mobile-submenu__link" role="menuitem">
+                                    <span>🎪</span>
+                                    <span>Festivais e Feiras</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="mobile-menu__item">
+                        <a href="/contacto" class="mobile-menu__link">
+                            <span class="mobile-menu__icon" aria-hidden="true">✉️</span>
+                            <span class="mobile-menu__text">Contacto</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Contact -->
+            <div class="mobile-contact">
+                <h4 class="mobile-contact__title">Contacto Direto</h4>
+                
+                <div class="mobile-contact__items">
+                    <a href="https://wa.me/351912345678" class="mobile-contact__item mobile-contact__item--whatsapp" 
+                       target="_blank" rel="noopener">
+                        <span class="mobile-contact__icon" aria-hidden="true">📱</span>
+                        <div class="mobile-contact__info">
+                            <span class="mobile-contact__label">WhatsApp</span>
+                            <span class="mobile-contact__value">+351 912 345 678</span>
+                        </div>
+                    </a>
+                    
+                    <a href="mailto:info@gonzagaartshine.com" class="mobile-contact__item">
+                        <span class="mobile-contact__icon" aria-hidden="true">✉️</span>
+                        <div class="mobile-contact__info">
+                            <span class="mobile-contact__label">Email</span>
+                            <span class="mobile-contact__value">info@gonzagaartshine.com</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Social -->
+            <div class="mobile-social">
+                <h4 class="mobile-social__title">Segue-nos</h4>
+                <div class="mobile-social__links">
+                    <a href="https://instagram.com/gonzagaartshine" class="mobile-social__link" 
+                       target="_blank" rel="noopener" aria-label="Instagram">
+                        <span aria-hidden="true">📷</span>
+                    </a>
+                    <a href="https://facebook.com/gonzagaartshine" class="mobile-social__link" 
+                       target="_blank" rel="noopener" aria-label="Facebook">
+                        <span aria-hidden="true">📘</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
+
+<!-- JavaScript para Navigation -->
+<script>
+(function() {
+    'use strict';
+    
+    // Navigation state
+    let isSearchOpen = false;
+    let isMobileNavOpen = false;
+    
+    // DOM Elements
+    const searchTrigger = document.querySelector('.search-trigger');
+    const searchOverlay = document.querySelector('.search-overlay');
+    const searchClose = document.querySelector('.search-close');
+    const searchInput = document.querySelector('.search-input');
+    
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const mobileNav = document.querySelector('.mobile-nav');
+    const mobileNavClose = document.querySelector('.mobile-nav__close');
+    const mobileNavOverlay = document.querySelector('.mobile-nav__overlay');
+    
+    // Search functionality
+    function openSearch() {
+        isSearchOpen = true;
+        searchOverlay.classList.add('search-overlay--active');
+        searchTrigger.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('search-open');
+        
+        // Focus search input
+        setTimeout(() => {
+            searchInput.focus();
+        }, 300);
+        
+        // Analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'search_opened', {
+                event_category: 'navigation'
+            });
+        }
+    }
+    
+    function closeSearch() {
+        isSearchOpen = false;
+        searchOverlay.classList.remove('search-overlay--active');
+        searchTrigger.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('search-open');
+    }
+    
+    // Mobile navigation
+    function openMobileNav() {
+        isMobileNavOpen = true;
+        mobileNav.classList.add('mobile-nav--active');
+        mobileNavToggle.setAttribute('aria-expanded', 'true');
+        mobileNav.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('mobile-nav-open');
+    }
+    
+    function closeMobileNav() {
+        isMobileNavOpen = false;
+        mobileNav.classList.remove('mobile-nav--active');
+        mobileNavToggle.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('mobile-nav-open');
+    }
+    
+    // Event Listeners
+    if (searchTrigger) {
+        searchTrigger.addEventListener('click', openSearch);
+    }
+    
+    if (searchClose) {
+        searchClose.addEventListener('click', closeSearch);
+    }
+    
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', () => {
+            isMobileNavOpen ? closeMobileNav() : openMobileNav();
+        });
+    }
+    
+    if (mobileNavClose) {
+        mobileNavClose.addEventListener('click', closeMobileNav);
+    }
+    
+    if (mobileNavOverlay) {
+        mobileNavOverlay.addEventListener('click', closeMobileNav);
+    }
+    
+    // Dropdown functionality
+    document.querySelectorAll('.nav-link--dropdown').forEach(trigger => {
+        const dropdown = trigger.nextElementSibling;
+        let timeoutId;
+        
+        trigger.addEventListener('mouseenter', () => {
+            clearTimeout(timeoutId);
+            dropdown.classList.add('nav-dropdown--active');
+            trigger.setAttribute('aria-expanded', 'true');
+        });
+        
+        trigger.parentElement.addEventListener('mouseleave', () => {
+            timeoutId = setTimeout(() => {
+                dropdown.classList.remove('nav-dropdown--active');
+                trigger.setAttribute('aria-expanded', 'false');
+            }, 300);
+        });
+    });
+    
+    // Mobile submenu toggles
+    document.querySelectorAll('.mobile-menu__trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const submenu = trigger.nextElementSibling;
+            const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+            
+            // Close other submenus
+            document.querySelectorAll('.mobile-menu__trigger').forEach(otherTrigger => {
+                if (otherTrigger !== trigger) {
+                    otherTrigger.setAttribute('aria-expanded', 'false');
+                    otherTrigger.nextElementSibling.classList.remove('mobile-submenu--active');
+                }
+            });
+            
+            // Toggle current submenu
+            trigger.setAttribute('aria-expanded', !isExpanded);
+            submenu.classList.toggle('mobile-submenu--active');
+        });
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (isSearchOpen) {
+                closeSearch();
+            }
+            if (isMobileNavOpen) {
+                closeMobileNav();
+            }
+        }
+        
+        // Search shortcut (Ctrl/Cmd + K)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            openSearch();
+        }
+    });
+    
+    // Analytics tracking for navigation clicks
+    document.querySelectorAll('.nav-link, .dropdown-link, .mobile-menu__link, .mobile-submenu__link').forEach(link => {
+        link.addEventListener('click', () => {
+            const linkText = link.textContent.trim();
+            const linkUrl = link.href;
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'navigation_click', {
+                    link_text: linkText,
+                    link_url: linkUrl,
+                    location: link.closest('.mobile-nav') ? 'mobile' : 'desktop'
+                });
+            }
+        });
+    });
+    
+    // Scroll-based header styling
+    let lastScrollY = 0;
+    const header = document.querySelector('.site-header');
+    
+    function updateHeaderOnScroll() {
+        const scrollY = window.scrollY;
+        
+        if (scrollY > 100) {
+            header.classList.add('site-header--scrolled');
+        } else {
+            header.classList.remove('site-header--scrolled');
+        }
+        
+        // Hide/show header on scroll
+        if (scrollY > lastScrollY && scrollY > 200) {
+            header.classList.add('site-header--hidden');
+        } else {
+            header.classList.remove('site-header--hidden');
+        }
+        
+        lastScrollY = scrollY;
+    }
+    
+    window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+    
+})();
+</script>
