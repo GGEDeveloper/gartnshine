@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic Title based on Filters -->
+    <% if (locals.query && query.pedra === 'onix') { %>
+        <title>Ónix - Força em Negro Profundo | Gonzaga Art & Shine</title>
+        <meta name="description" content="Coleção Ónix em prata 925. Joias de proteção ancestral com a força da terra. Cada peça é única e carrega a energia do ónix autêntico.">
+        <meta name="keywords" content="joias ónix, anel ónix prata 925, colar ónix, brincos ónix, proteção ancestral, joalharia alternativa">
+    <% } else if (locals.query && query.pedra === 'olho-de-tigre') { %>
+        <title>Olho-de-tigre - Poder Dourado da Terra | Gonzaga Art & Shine</title>
+        <meta name="description" content="Coleção Olho-de-tigre em prata 925. Joias de coragem e clareza com veios dourados naturais. Energia autêntica da África do Sul.">
+        <meta name="keywords" content="joias olho-de-tigre, anel olho tigre prata, colar olho-de-tigre, coragem natural, joalharia artesanal">
+    <% } else { %>
+        <title>Catálogo - Joias Artesanais em Prata 925 | Gonzaga Art & Shine</title>
+        <meta name="description" content="Catálogo completo de joias artesanais em prata 925 com pedras naturais. Ónix, olho-de-tigre e outras pedras autênticas. Elegância que nasce da terra.">
+        <meta name="keywords" content="joias artesanais prata 925, catálogo joias, pedras naturais, joalharia alternativa, ónix, olho-de-tigre">
+    <% } %>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= locals.query && query.pedra === 'onix' ? 'Ónix - Força em Negro Profundo' : (locals.query && query.pedra === 'olho-de-tigre' ? 'Olho-de-tigre - Poder Dourado da Terra' : 'Catálogo - Joias Artesanais') %> | Gonzaga Art & Shine">
+    <meta property="og:description" content="Elegância que nasce da terra. Joias únicas em prata 925 com pedras naturais autênticas.">
+    <meta property="og:image" content="/images/og-catalog-<%= locals.query && query.pedra ? query.pedra : 'geral' %>.jpg">
+    <meta property="og:type" content="website">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dark Nature -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= locals.canonicalUrl || 'https://gonzagaartshine.com/catalogo' %>">
+</head>
+<body class="catalog-dark-nature" data-stone-theme="<%= locals.query && query.pedra ? query.pedra : 'general' %>">
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
+    
+    <!-- Navigation -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container catalog">
+            
+            <!-- Catalog Header -->
+            <header class="catalog__header">
+                <div class="catalog__header-content">
+                    <h1 class="catalog__title">
+                        <% if (locals.query && query.pedra === 'onix') { %>
+                            <span class="badge-onyx">Ónix</span>
+                            Força em Negro Profundo
+                        <% } else if (locals.query && query.pedra === 'olho-de-tigre') { %>
+                            <span class="badge-tiger">Olho-de-tigre</span>
+                            Poder Dourado da Terra
+                        <% } else { %>
+                            Catálogo Completo
+                            <span style="display: block; font-size: 0.6em; color: var(--gold-old); margin-top: var(--space-xs); font-weight: normal;">Elegância que nasce da terra</span>
+                        <% } %>
+                    </h1>
+                    
+                    <div class="catalog__count">
+                        <% if (locals.produtos && produtos.length > 0) { %>
+                            <%= produtos.length %> <%= produtos.length === 1 ? 'peça encontrada' : 'peças encontradas' %>
+                        <% } else { %>
+                            Nenhuma peça encontrada
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Hero specific da pedra -->
+                <% if (locals.query && query.pedra === 'onix') { %>
+                    <div class="catalog__hero catalog__hero--onyx" 
+                         style="background: var(--gradient-onyx); padding: var(--space-xl); border-radius: var(--radius-large); margin: var(--space-xl) 0; color: var(--ivory);">
+                        <p style="font-size: 1.125rem; line-height: 1.6; margin: 0; text-align: center;">
+                            Cada ónix carrega a <strong>força ancestral da terra</strong>. Formado nas profundezas vulcânicas, 
+                            é símbolo de proteção e estabilidade. Descubra peças únicas que conectam 
+                            o poder da natureza ao design contemporâneo.
+                        </p>
+                    </div>
+                <% } else if (locals.query && query.pedra === 'olho-de-tigre') { %>
+                    <div class="catalog__hero catalog__hero--tiger" 
+                         style="background: var(--gradient-tiger); padding: var(--space-xl); border-radius: var(--radius-large); margin: var(--space-xl) 0; color: var(--ivory);">
+                        <p style="font-size: 1.125rem; line-height: 1.6; margin: 0; text-align: center;">
+                            Os <strong>veios dourados do olho-de-tigre</strong> capturam a luz como coragem solidificada. 
+                            Originário da África do Sul, cada peça possui padrões únicos que despertam 
+                            a força interior e a clareza mental.
+                        </p>
+                    </div>
+                <% } %>
+            </header>
+
+            <!-- Filtros Funcionais -->
+            <form class="filters" method="get" action="/catalogo" id="catalog-filters" role="search">
+                <div class="filters__group">
+                    <label for="filter-pedra" class="filter-label">Pedra Natural:</label>
+                    <select name="pedra" id="filter-pedra" class="filter-select" onchange="this.form.submit()" aria-describedby="filter-pedra-help">
+                        <option value="">Todas as pedras</option>
+                        <option value="onix" <%= (locals.query && query.pedra === 'onix') ? 'selected' : '' %>>Ónix - Força ancestral</option>
+                        <option value="olho-de-tigre" <%= (locals.query && query.pedra === 'olho-de-tigre') ? 'selected' : '' %>>Olho-de-tigre - Poder dourado</option>
+                    </select>
+                    <small id="filter-pedra-help" class="visually-hidden">Filtrar produtos por tipo de pedra natural</small>
+                </div>
+                
+                <div class="filters__group">
+                    <label for="filter-metal" class="filter-label">Metal:</label>
+                    <select name="metal" id="filter-metal" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Todos os metais</option>
+                        <option value="prata_925" <%= (locals.query && query.metal === 'prata_925') ? 'selected' : '' %>>Prata 925</option>
+                        <option value="prata_com_ouro" <%= (locals.query && query.metal === 'prata_com_ouro') ? 'selected' : '' %>>Prata com ouro</option>
+                    </select>
+                </div>
+                
+                <div class="filters__group">
+                    <label for="filter-preco" class="filter-label">Preço:</label>
+                    <select name="preco" id="filter-preco" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Todos os preços</option>
+                        <option value="0-50" <%= (locals.query && query.preco === '0-50') ? 'selected' : '' %>>Até €50</option>
+                        <option value="50-100" <%= (locals.query && query.preco === '50-100') ? 'selected' : '' %>>€50 - €100</option>
+                        <option value="100-200" <%= (locals.query && query.preco === '100-200') ? 'selected' : '' %>>€100 - €200</option>
+                        <option value="200+" <%= (locals.query && query.preco === '200+') ? 'selected' : '' %>>Mais de €200</option>
+                    </select>
+                </div>
+                
+                <div class="filters__group">
+                    <label for="filter-ordenar" class="filter-label">Ordenar:</label>
+                    <select name="ordenar" id="filter-ordenar" class="filter-select" onchange="this.form.submit()">
+                        <option value="recentes" <%= (!locals.query || !query.ordenar || query.ordenar === 'recentes') ? 'selected' : '' %>>Mais recentes</option>
+                        <option value="preco_asc" <%= (locals.query && query.ordenar === 'preco_asc') ? 'selected' : '' %>>Preço: menor primeiro</option>
+                        <option value="preco_desc" <%= (locals.query && query.ordenar === 'preco_desc') ? 'selected' : '' %>>Preço: maior primeiro</option>
+                        <option value="nome" <%= (locals.query && query.ordenar === 'nome') ? 'selected' : '' %>>Nome A-Z</option>
+                        <option value="popularidade" <%= (locals.query && query.ordenar === 'popularidade') ? 'selected' : '' %>>Mais populares</option>
+                    </select>
+                </div>
+                
+                <!-- Reset Filters -->
+                <button type="button" class="btn btn--silver filters__reset" onclick="resetFilters()" aria-label="Limpar todos os filtros">
+                    <span class="btn__text">Limpar Filtros</span>
+                    <span class="btn__icon" aria-hidden="true">❌</span>
+                </button>
+            </form>
+
+            <!-- Grid de Produtos -->
+            <% if (locals.produtos && produtos.length > 0) { %>
+                <div class="catalog__grid grid grid-auto" role="region" aria-label="Lista de produtos">
+                    <% produtos.forEach((produto, index) => { %>
+                        <%- include('../partials/product-card-dark', { produto, showQuickActions: true }) %>
+                    <% }) %>
+                </div>
+                
+                <!-- Pagination (placeholder) -->
+                <% if (locals.totalPages && totalPages > 1) { %>
+                    <nav class="pagination" role="navigation" aria-label="Navegação de páginas" style="margin-top: var(--space-4xl);">
+                        <div class="pagination__info" style="text-align: center; margin-bottom: var(--space-lg); color: var(--slate);">
+                            Página <%= currentPage || 1 %> de <%= totalPages %>
+                        </div>
+                        
+                        <div class="pagination__controls" style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+                            <% if (currentPage > 1) { %>
+                                <a href="?page=<%= currentPage - 1 %><%= locals.queryString ? '&' + queryString : '' %>" class="btn btn--silver-outline">Anterior</a>
+                            <% } %>
+                            
+                            <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                                <a href="?page=<%= i %><%= locals.queryString ? '&' + queryString : '' %>" 
+                                   class="btn <%= i === currentPage ? 'btn--gold' : 'btn--silver-outline' %>">
+                                    <%= i %>
+                                </a>
+                            <% } %>
+                            
+                            <% if (currentPage < totalPages) { %>
+                                <a href="?page=<%= currentPage + 1 %><%= locals.queryString ? '&' + queryString : '' %>" class="btn btn--silver-outline">Próxima</a>
+                            <% } %>
+                        </div>
+                    </nav>
+                <% } %>
+                
+            <% } else { %>
+                <!-- Empty State -->
+                <div class="catalog__empty" style="text-align: center; padding: var(--space-6xl) var(--space-xl);">
+                    <div style="font-size: 4rem; margin-bottom: var(--space-xl); opacity: 0.3;">🔍</div>
+                    <h3 style="color: var(--ivory); margin-bottom: var(--space-md);">Nenhuma peça encontrada</h3>
+                    <p style="color: var(--slate); margin-bottom: var(--space-xl);">
+                        Não encontrámos peças que correspondam aos filtros selecionados.
+                    </p>
+                    
+                    <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                        <button onclick="resetFilters()" class="btn btn--gold">
+                            <span class="btn__text">Ver Todas as Peças</span>
+                            <span class="btn__icon" aria-hidden="true">💎</span>
+                        </button>
+                        
+                        <a href="/" class="btn btn--silver-outline">
+                            <span class="btn__text">Voltar à Página Inicial</span>
+                        </a>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Storytelling por pedra -->
+            <% if (locals.query && query.pedra === 'onix') { %>
+                <section class="catalog__story" style="margin-top: var(--space-6xl); padding: var(--space-4xl); background: rgba(17,17,17,0.3); border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <h2 style="color: var(--ivory); text-align: center; margin-bottom: var(--space-xl);">A Origem do Ónix</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4xl); align-items: center;">
+                        <div>
+                            <p style="color: var(--silver-matte); line-height: 1.6; margin-bottom: var(--space-lg);">
+                                Formado nas <strong>profundezas vulcânicas</strong> através de processos milenares, 
+                                o ónix representa força e proteção ancestral. Cada peça Gonzaga em ónix 
+                                é cuidadosamente selecionada pelos seus veios únicos e energia profunda.
+                            </p>
+                            
+                            <ul style="color: var(--slate); list-style: none; margin-left: 0;">
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">🌋 <strong style="color: var(--gold-old);">Origem vulcânica</strong> - Formado em cavernas de lava</li>
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">🛡️ <strong style="color: var(--gold-old);">Proteção</strong> - Absorve energias negativas</li>
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">⚖️ <strong style="color: var(--gold-old);">Equilíbrio</strong> - Promove estabilidade emocional</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="background: var(--accent-onyx); width: 120px; height: 120px; border-radius: 50%; margin: 0 auto var(--space-lg); display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid var(--silver-matte);">
+                                ⚫
+                            </div>
+                            <p style="color: var(--slate); font-size: 0.875rem; font-style: italic;">"Negro profundo, força eterna"</p>
+                        </div>
+                    </div>
+                </section>
+            <% } else if (locals.query && query.pedra === 'olho-de-tigre') { %>
+                <section class="catalog__story" style="margin-top: var(--space-6xl); padding: var(--space-4xl); background: rgba(107,74,27,0.2); border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <h2 style="color: var(--ivory); text-align: center; margin-bottom: var(--space-xl);">A Origem do Olho-de-tigre</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4xl); align-items: center;">
+                        <div style="text-align: center;">
+                            <div style="background: var(--accent-tiger); width: 120px; height: 120px; border-radius: 50%; margin: 0 auto var(--space-lg); display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid var(--gold-old);">
+                                🔶
+                            </div>
+                            <p style="color: var(--slate); font-size: 0.875rem; font-style: italic;">"Veios dourados, coragem natural"</p>
+                        </div>
+                        
+                        <div>
+                            <p style="color: var(--silver-matte); line-height: 1.6; margin-bottom: var(--space-lg);">
+                                Com seus <strong>veios dourados</strong> que capturam e refletem a luz, 
+                                o olho-de-tigre é a pedra da coragem e determinação. Extraído principalmente 
+                                da África do Sul, cada exemplar possui padrões únicos da natureza.
+                            </p>
+                            
+                            <ul style="color: var(--slate); list-style: none; margin-left: 0;">
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">🌍 <strong style="color: var(--gold-old);">África do Sul</strong> - Northern Cape region</li>
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">💪 <strong style="color: var(--gold-old);">Coragem</strong> - Desperta força interior</li>
+                                <li style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">👁️ <strong style="color: var(--gold-old);">Clareza</strong> - Promove foco mental</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            <% } %>
+
+            <!-- Call to Action -->
+            <% if (locals.produtos && produtos.length > 0) { %>
+                <section class="catalog__cta" style="text-align: center; margin-top: var(--space-6xl); padding: var(--space-4xl); background: var(--gradient-card); border-radius: var(--radius-large); border: var(--border-subtle);">
+                    <h2 style="color: var(--ivory); margin-bottom: var(--space-lg);">Não encontrou o que procurava?</h2>
+                    <p style="color: var(--slate); margin-bottom: var(--space-xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+                        Cada peça Gonzaga é única. Se tem uma visão específica, falemos sobre 
+                        criações personalizadas que reflitam a sua personalidade.
+                    </p>
+                    
+                    <div style="display: flex; gap: var(--space-lg); justify-content: center; flex-wrap: wrap;">
+                        <a href="/contacto" class="btn btn--gold btn--large">
+                            <span class="btn__text">Criar Peça Personalizada</span>
+                            <span class="btn__icon" aria-hidden="true">✨</span>
+                        </a>
+                        
+                        <a href="/artesaos" class="btn btn--silver-outline btn--large">
+                            <span class="btn__text">Conhecer Artesãos</span>
+                        </a>
+                    </div>
+                </section>
+            <% } %>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- JavaScript -->
+    <script>
+        // Reset filters function
+        function resetFilters() {
+            window.location.href = '/catalogo';
+        }
+        
+        // Analytics - Catalog view tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view_item_list', {
+                    item_list_id: 'catalog',
+                    item_list_name: 'Product Catalog',
+                    items: [
+                        <% if (locals.produtos && produtos.length > 0) { %>
+                            <% produtos.forEach((produto, index) => { %>
+                                {
+                                    item_id: '<%= produto.id %>',
+                                    item_name: '<%= produto.nome %>',
+                                    item_category: 'Joias',
+                                    item_category2: '<%= produto.stone_type === "onix" ? "Ónix" : (produto.stone_type === "olho-de-tigre" ? "Olho-de-tigre" : "Outras") %>',
+                                    price: <%= produto.preco || 0 %>,
+                                    index: <%= index + 1 %>
+                                }<%= index < produtos.length - 1 ? ',' : '' %>
+                            <% }) %>
+                        <% } %>
+                    ]
+                });
+            }
+            
+            // Filter usage tracking
+            document.querySelectorAll('.filter-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'filter_used', {
+                            filter_type: this.name,
+                            filter_value: this.value
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Search functionality (if needed)
+        function searchProducts(query) {
+            const url = new URL(window.location);
+            url.searchParams.set('q', query);
+            window.location.href = url.toString();
+        }
+        
+        // Keyboard navigation for filters
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement.classList.contains('filter-select')) {
+                    activeElement.blur();
+                }
+            }
+        });
+    </script>
+    
+    <!-- CSS Responsive -->
+    <style>
+        @media (max-width: 720px) {
+            .catalog__story div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+                gap: var(--space-xl) !important;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+                gap: var(--space-md);
+            }
+            
+            .filters__group {
+                min-width: auto;
+            }
+            
+            .filters__reset {
+                margin-left: 0;
+                margin-top: var(--space-md);
+            }
+            
+            .pagination__controls {
+                justify-content: center !important;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</body>
+</html>
