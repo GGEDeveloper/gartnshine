@@ -479,6 +479,135 @@ router.get('/api/nav-featured', async (req, res) => {
   }
 });
 
+// Product Detail Page Dark Nature (Nova rota principal para produtos)
+router.get('/produto/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { pool } = require('../config/database');
+    
+    console.log('[PDP] Accessing product with slug:', slug);
+    
+    // Buscar produto por slug (ou ID como fallback) - Query simplificada primeiro
+    const [results] = await pool.execute(`
+      SELECT p.*, 
+             pf.name as family_name,
+             (SELECT GROUP_CONCAT(pi.image_filename ORDER BY pi.is_primary DESC) 
+              FROM product_images pi 
+              WHERE pi.product_id = p.id) as images
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE (p.slug = ? OR p.id = ?) AND p.is_active = 1
+      LIMIT 1
+    `, [slug, slug]);
+    
+    console.log('[PDP] Query results:', results.length, 'products found');
+    
+    if (results.length === 0) {
+      return res.status(404).render('error-404', { 
+        message: 'Produto não encontrado',
+        layout: false
+      });
+    }
+    
+    const produto = results[0];
+    
+    // Processar imagens
+    const allImages = produto.images ? produto.images.split(',') : [];
+    produto.imagem_principal = allImages.length > 0 ? `/uploads/${allImages[0]}` : '/images/placeholder-produto-dark.jpg';
+    produto.imagens_galeria = allImages.slice(1).map(img => `/uploads/${img}`);
+    
+    // Mapear campos do DB para o formato esperado pela view
+    produto.nome = produto.name;
+    produto.preco = produto.sale_price;
+    produto.preco_formatado = produto.sale_price ? 
+      new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(produto.sale_price)) : 
+      null;
+    produto.descricao = produto.description;
+    produto.slug = produto.slug || produto.id;
+    
+    // Stone data (se disponível no DB, senão usar defaults)
+    produto.stone_type = produto.stone_type || 'natural';
+    produto.pedra_nome = produto.stone_name || 'Pedra Natural';
+    produto.stone_origin = produto.stone_origin || null;
+    produto.stone_properties = produto.stone_properties || null;
+    
+    // Metal data
+    produto.metal_nome = produto.metal_name || 'Prata 925';
+    produto.metal_finish = produto.metal_finish || 'prata_925';
+    produto.metal_purity = produto.metal_purity || '925';
+    
+    // Artisan data (se disponível)
+    produto.artisan_name = produto.artisan_name || null;
+    produto.artisan_workshop = produto.artisan_workshop || null;
+    produto.artisan_specialty = produto.artisan_specialty || null;
+    produto.crafting_technique = produto.crafting_technique || null;
+    
+    // Additional specs
+    produto.peso = produto.weight || null;
+    produto.dimensoes = produto.dimensions || null;
+    produto.disponibilidade = produto.current_stock > 0 ? 'Em stock' : 'Esgotado';
+    
+    // SEO
+    produto.meta_title = produto.meta_title || `${produto.nome} - Gonzaga Art & Shine`;
+    produto.meta_description = produto.meta_description || produto.descricao;
+    
+    // Buscar produtos relacionados (mesma pedra ou mesmo metal)
+    const [relatedResults] = await pool.execute(`
+      SELECT p.*, pf.name as family_name,
+             (SELECT pi.image_filename FROM product_images pi 
+              WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE p.is_active = 1 
+        AND p.id != ?
+        AND (p.stone_type = ? OR p.metal_finish = ?)
+      ORDER BY p.featured DESC, RAND()
+      LIMIT 4
+    `, [produto.id, produto.stone_type, produto.metal_finish]);
+    
+    // Format related products
+    const produtosRelacionados = relatedResults.map(p => ({
+      ...p,
+      nome: p.name,
+      preco: p.sale_price,
+      preco_formatado: p.sale_price ? 
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(p.sale_price)) : 
+        null,
+      imagem_principal: p.main_image ? `/uploads/${p.main_image}` : '/images/placeholder-produto-dark.jpg',
+      pedra_nome: p.stone_name || 'Pedra Natural',
+      metal_nome: p.metal_name || 'Prata 925',
+      slug: p.slug || p.id
+    }));
+    
+    // Increment product views (optional analytics)
+    await pool.execute('UPDATE products SET views = views + 1 WHERE id = ?', [produto.id]);
+    
+    // Render PDP Dark Nature
+    res.render('pages/produto-dark-nature', {
+      layout: false, // Standalone page
+      currentPage: 'produto',
+      title: produto.meta_title,
+      produto: produto,
+      produtosRelacionados: produtosRelacionados,
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteDescription: 'Elegância que nasce da terra',
+      canonicalUrl: `${req.protocol}://${req.get('host')}/produto/${produto.slug}`
+    });
+    
+  } catch (error) {
+    console.error('[PDP ERROR] Full error:', error);
+    console.error('[PDP ERROR] Stack:', error.stack);
+    
+    // Render error page with more details in development
+    res.status(500).render('error', {
+      title: 'Erro',
+      message: 'Erro ao carregar detalhes do produto',
+      error: process.env.NODE_ENV === 'development' ? error : {},
+      layout: 'layout'
+    });
+  }
+});
+
 // About page (usando layout Dark Nature)
 router.get('/about', (req, res) => {
   res.render('about', { 

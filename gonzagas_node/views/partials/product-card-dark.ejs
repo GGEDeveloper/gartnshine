@@ -21,7 +21,7 @@ const produtoReferencia = produto.referencia || produto.reference;
          data-product-id="<%= produto.id %>"
          itemscope itemtype="https://schema.org/Product">
     
-    <a href="/product/<%= produtoSlug %>" 
+    <a href="/produto/<%= produtoSlug %>" 
        class="product-card__link"
        onclick="trackProductClick('<%= produto.id %>', '<%= produtoNome %>', '<%= produto.stone_type %>')">
         
@@ -428,5 +428,5 @@ document.addEventListener('DOMContentLoaded', function() {
   - Loading states: Shimmer animation
   
   USO:
-  <%- include('partials/product-card-dark', { produto: produtoData, showQuickActions: true }) %>
+  Incluir com: include('../partials/product-card-dark', { produto: produtoData, showQuickActions: true })
 -->

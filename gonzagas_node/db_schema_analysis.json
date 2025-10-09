@@ -1,0 +1,3917 @@
+{
+  "timestamp": "2025-10-09T09:25:39.134Z",
+  "database": "gonzagas_local",
+  "tables": {
+    "activity_logs": {
+      "row_count": 0,
+      "created_at": "2025-10-07T16:32:55.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "user_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "action",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "entity_type",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "entity_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "details",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "idx_activity_logs_user_id",
+          "column": "user_id",
+          "unique": false
+        },
+        {
+          "name": "idx_activity_logs_entity",
+          "column": "entity_type",
+          "unique": false
+        },
+        {
+          "name": "idx_activity_logs_entity",
+          "column": "entity_id",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "activity_logs_ibfk_1",
+          "column": "user_id",
+          "references": "admin_users.id"
+        }
+      ]
+    },
+    "admin_users": {
+      "row_count": 1,
+      "created_at": "2025-10-07T16:32:54.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "username",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "full_name",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "last_login",
+          "type": "datetime",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "username",
+          "column": "username",
+          "unique": true
+        },
+        {
+          "name": "email",
+          "column": "email",
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    },
+    "analytics_conversions": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:48.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "session_id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_id",
+          "type": "bigint",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_type",
+          "type": "enum",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_value",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "product_category",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "funnel_stage",
+          "type": "enum",
+          "nullable": true,
+          "default": "interest",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "first_touch_source",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "last_touch_source",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "session_id",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "event_id",
+          "column": "event_id",
+          "unique": false
+        },
+        {
+          "name": "idx_conversions_type",
+          "column": "conversion_type",
+          "unique": false
+        },
+        {
+          "name": "idx_conversions_product",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_conversions_created",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "analytics_conversions_ibfk_1",
+          "column": "session_id",
+          "references": "analytics_sessions.id"
+        },
+        {
+          "constraint": "analytics_conversions_ibfk_2",
+          "column": "event_id",
+          "references": "analytics_events.id"
+        },
+        {
+          "constraint": "analytics_conversions_ibfk_3",
+          "column": "product_id",
+          "references": "products.id"
+        }
+      ]
+    },
+    "analytics_daily_stats": {
+      "row_count": 7,
+      "created_at": "2025-10-08T08:16:49.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "total_sessions",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "unique_visitors",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_views",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "bounce_rate",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "avg_session_duration",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "desktop_sessions",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "mobile_sessions",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "tablet_sessions",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "total_conversions",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "whatsapp_clicks",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "phone_calls",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_rate",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "top_pages",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "top_products",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "search_queries",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "traffic_sources",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "date",
+          "column": "date",
+          "unique": true
+        },
+        {
+          "name": "idx_daily_stats_date",
+          "column": "date",
+          "unique": false
+        }
+      ],
+      "foreign_keys": []
+    },
+    "analytics_events": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:48.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "session_id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "user_id",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_type",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_category",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_action",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_label",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "event_value",
+          "type": "decimal",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_url",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "device_type",
+          "type": "enum",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "browser",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "os",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "screen_resolution",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "country",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "region",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "city",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "product_category",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "idx_events_session",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "idx_events_type",
+          "column": "event_type",
+          "unique": false
+        },
+        {
+          "name": "idx_events_category",
+          "column": "event_category",
+          "unique": false
+        },
+        {
+          "name": "idx_events_product",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_events_created",
+          "column": "created_at",
+          "unique": false
+        },
+        {
+          "name": "idx_events_device",
+          "column": "device_type",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "analytics_events_ibfk_1",
+          "column": "product_id",
+          "references": "products.id"
+        }
+      ]
+    },
+    "analytics_page_views": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:48.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "session_id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_url",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_title",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_type",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "category_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "time_on_page",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "bounce",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "exit_page",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "max_scroll_percentage",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "category_id",
+          "column": "category_id",
+          "unique": false
+        },
+        {
+          "name": "idx_page_views_session",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "idx_page_views_product",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_page_views_type",
+          "column": "page_type",
+          "unique": false
+        },
+        {
+          "name": "idx_page_views_created",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "analytics_page_views_ibfk_1",
+          "column": "session_id",
+          "references": "analytics_sessions.id"
+        },
+        {
+          "constraint": "analytics_page_views_ibfk_2",
+          "column": "product_id",
+          "references": "products.id"
+        },
+        {
+          "constraint": "analytics_page_views_ibfk_3",
+          "column": "category_id",
+          "references": "product_families.id"
+        }
+      ]
+    },
+    "analytics_product_performance": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:49.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_views",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "unique_views",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "avg_time_on_page",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "bounce_rate",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "whatsapp_clicks",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "image_views",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "share_clicks",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "search_appearances",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "search_clicks",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "avg_search_position",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_rate",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "unique_product_date",
+          "column": "product_id",
+          "unique": true
+        },
+        {
+          "name": "unique_product_date",
+          "column": "date",
+          "unique": true
+        },
+        {
+          "name": "idx_product_perf_date",
+          "column": "date",
+          "unique": false
+        },
+        {
+          "name": "idx_product_perf_views",
+          "column": "page_views",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "analytics_product_performance_ibfk_1",
+          "column": "product_id",
+          "references": "products.id"
+        }
+      ]
+    },
+    "analytics_search_queries": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:48.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "session_id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "query_text",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "results_count",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "clicked_result_position",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "clicked_product_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "search_type",
+          "type": "enum",
+          "nullable": true,
+          "default": "catalog",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "filters_applied",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "clicked_product_id",
+          "column": "clicked_product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_search_queries_text",
+          "column": "query_text",
+          "unique": false
+        },
+        {
+          "name": "idx_search_queries_session",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "idx_search_queries_created",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "analytics_search_queries_ibfk_1",
+          "column": "session_id",
+          "references": "analytics_sessions.id"
+        },
+        {
+          "constraint": "analytics_search_queries_ibfk_2",
+          "column": "clicked_product_id",
+          "references": "products.id"
+        }
+      ]
+    },
+    "analytics_sessions": {
+      "row_count": 3,
+      "created_at": "2025-10-08T08:16:48.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "user_id",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "start_time",
+          "type": "timestamp",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "end_time",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "duration_seconds",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "page_views",
+          "type": "int",
+          "nullable": true,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "source",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "medium",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "campaign",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "keyword",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "referrer",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "device_type",
+          "type": "enum",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "browser",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "os",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "screen_resolution",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "country",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "region",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "city",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "converted",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_type",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "conversion_value",
+          "type": "decimal",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "idx_sessions_start",
+          "column": "start_time",
+          "unique": false
+        },
+        {
+          "name": "idx_sessions_device",
+          "column": "device_type",
+          "unique": false
+        },
+        {
+          "name": "idx_sessions_source",
+          "column": "source",
+          "unique": false
+        },
+        {
+          "name": "idx_sessions_converted",
+          "column": "converted",
+          "unique": false
+        }
+      ],
+      "foreign_keys": []
+    },
+    "audit_logs": {
+      "row_count": 0,
+      "created_at": "2025-10-07T16:32:54.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "session_id",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "action",
+          "type": "enum",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "resource",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "resource_id",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "details",
+          "type": "longtext",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "consent_changes",
+          "type": "longtext",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "legal_basis",
+          "type": "enum",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "retention_period",
+          "type": "enum",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "idx_session_id",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "idx_ip_address",
+          "column": "ip_address",
+          "unique": false
+        },
+        {
+          "name": "idx_action",
+          "column": "action",
+          "unique": false
+        },
+        {
+          "name": "idx_resource",
+          "column": "resource",
+          "unique": false
+        },
+        {
+          "name": "idx_legal_basis",
+          "column": "legal_basis",
+          "unique": false
+        },
+        {
+          "name": "idx_retention_period",
+          "column": "retention_period",
+          "unique": false
+        },
+        {
+          "name": "idx_created_at",
+          "column": "created_at",
+          "unique": false
+        },
+        {
+          "name": "idx_action_created",
+          "column": "action",
+          "unique": false
+        },
+        {
+          "name": "idx_action_created",
+          "column": "created_at",
+          "unique": false
+        },
+        {
+          "name": "idx_session_created",
+          "column": "session_id",
+          "unique": false
+        },
+        {
+          "name": "idx_session_created",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": []
+    },
+    "catalog_products_optimized": {
+      "row_count": null,
+      "created_at": "2025-10-07T20:13:07.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "reference",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "sale_price",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "style",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "material",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "featured",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "current_stock",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "family_name",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "family_id",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "main_image",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "image_count",
+          "type": "bigint",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        }
+      ],
+      "indexes": [],
+      "foreign_keys": []
+    },
+    "media_collection_items": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:24.000Z",
+      "columns": [
+        {
+          "name": "collection_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "file_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "position",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "added_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "collection_id",
+          "unique": true
+        },
+        {
+          "name": "PRIMARY",
+          "column": "file_id",
+          "unique": true
+        },
+        {
+          "name": "file_id",
+          "column": "file_id",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "media_collection_items_ibfk_1",
+          "column": "collection_id",
+          "references": "media_collections.id"
+        },
+        {
+          "constraint": "media_collection_items_ibfk_2",
+          "column": "file_id",
+          "references": "media_files.id"
+        }
+      ]
+    },
+    "media_collections": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:23.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "slug",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "cover_image_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_public",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_by",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "slug",
+          "column": "slug",
+          "unique": true
+        },
+        {
+          "name": "cover_image_id",
+          "column": "cover_image_id",
+          "unique": false
+        },
+        {
+          "name": "idx_slug",
+          "column": "slug",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "media_collections_ibfk_1",
+          "column": "cover_image_id",
+          "references": "media_files.id"
+        }
+      ]
+    },
+    "media_file_tags": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:23.000Z",
+      "columns": [
+        {
+          "name": "file_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "tag_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "file_id",
+          "unique": true
+        },
+        {
+          "name": "PRIMARY",
+          "column": "tag_id",
+          "unique": true
+        },
+        {
+          "name": "tag_id",
+          "column": "tag_id",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "media_file_tags_ibfk_1",
+          "column": "file_id",
+          "references": "media_files.id"
+        },
+        {
+          "constraint": "media_file_tags_ibfk_2",
+          "column": "tag_id",
+          "references": "media_tags.id"
+        }
+      ]
+    },
+    "media_files": {
+      "row_count": 2,
+      "created_at": "2025-10-08T08:16:41.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": "Primary key"
+        },
+        {
+          "name": "filename",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": "Unique filename stored on disk"
+        },
+        {
+          "name": "original_filename",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Original filename when uploaded"
+        },
+        {
+          "name": "file_size",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "File size in bytes"
+        },
+        {
+          "name": "mime_type",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": "MIME type (image/jpeg, image/png, etc)"
+        },
+        {
+          "name": "width",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Image width in pixels"
+        },
+        {
+          "name": "height",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Image height in pixels"
+        },
+        {
+          "name": "has_thumbnail",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has thumbnail variant (200x200)"
+        },
+        {
+          "name": "has_medium",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has medium variant (800px)"
+        },
+        {
+          "name": "has_large",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has large variant (1600px)"
+        },
+        {
+          "name": "has_webp",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has WebP format version"
+        },
+        {
+          "name": "uploaded_by",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": "User ID who uploaded (FK to users)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": "Upload timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": "Last modification"
+        },
+        {
+          "name": "folder_path",
+          "type": "varchar",
+          "nullable": true,
+          "default": "/",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "tags",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "alt_text",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "title",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "dominant_color",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "dimensions",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "file_hash",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "edit_history",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "upload_source",
+          "type": "enum",
+          "nullable": true,
+          "default": "web",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "processed_variants",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "seo_optimized",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "last_accessed_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "uk_filename",
+          "column": "filename",
+          "unique": true
+        },
+        {
+          "name": "idx_uploaded_by",
+          "column": "uploaded_by",
+          "unique": false
+        },
+        {
+          "name": "idx_mime_type",
+          "column": "mime_type",
+          "unique": false
+        },
+        {
+          "name": "idx_created_at",
+          "column": "created_at",
+          "unique": false
+        },
+        {
+          "name": "idx_media_files_folder",
+          "column": "folder_path",
+          "unique": false
+        },
+        {
+          "name": "idx_media_files_hash",
+          "column": "file_hash",
+          "unique": false
+        },
+        {
+          "name": "idx_media_files_source",
+          "column": "upload_source",
+          "unique": false
+        },
+        {
+          "name": "idx_media_files_accessed",
+          "column": "last_accessed_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "fk_media_uploaded_by",
+          "column": "uploaded_by",
+          "references": "users.id"
+        }
+      ]
+    },
+    "media_files_complete": {
+      "row_count": null,
+      "created_at": "2025-10-08T08:16:41.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Primary key"
+        },
+        {
+          "name": "filename",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Unique filename stored on disk"
+        },
+        {
+          "name": "original_filename",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Original filename when uploaded"
+        },
+        {
+          "name": "file_size",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "File size in bytes"
+        },
+        {
+          "name": "mime_type",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "MIME type (image/jpeg, image/png, etc)"
+        },
+        {
+          "name": "width",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Image width in pixels"
+        },
+        {
+          "name": "height",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Image height in pixels"
+        },
+        {
+          "name": "has_thumbnail",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has thumbnail variant (200x200)"
+        },
+        {
+          "name": "has_medium",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has medium variant (800px)"
+        },
+        {
+          "name": "has_large",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has large variant (1600px)"
+        },
+        {
+          "name": "has_webp",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Has WebP format version"
+        },
+        {
+          "name": "uploaded_by",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "User ID who uploaded (FK to users)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": "Upload timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": "Last modification"
+        },
+        {
+          "name": "folder_path",
+          "type": "varchar",
+          "nullable": true,
+          "default": "/",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "tags",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "alt_text",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "title",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "dominant_color",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "dimensions",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "file_hash",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "edit_history",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "upload_source",
+          "type": "enum",
+          "nullable": true,
+          "default": "web",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "processed_variants",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "seo_optimized",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "last_accessed_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "tag_names",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "folder_name",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "folder_color",
+          "type": "varchar",
+          "nullable": true,
+          "default": "#667eea",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        }
+      ],
+      "indexes": [],
+      "foreign_keys": []
+    },
+    "media_folders": {
+      "row_count": 4,
+      "created_at": "2025-10-08T08:16:23.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "path",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "parent_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "color",
+          "type": "varchar",
+          "nullable": true,
+          "default": "#667eea",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "icon",
+          "type": "varchar",
+          "nullable": true,
+          "default": "folder",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "path",
+          "column": "path",
+          "unique": true
+        },
+        {
+          "name": "idx_path",
+          "column": "path",
+          "unique": false
+        },
+        {
+          "name": "idx_parent",
+          "column": "parent_id",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "media_folders_ibfk_1",
+          "column": "parent_id",
+          "references": "media_folders.id"
+        }
+      ]
+    },
+    "media_processing_jobs": {
+      "row_count": 0,
+      "created_at": "2025-10-08T08:16:24.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "file_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "job_type",
+          "type": "enum",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "nullable": true,
+          "default": "pending",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "progress",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "metadata",
+          "type": "json",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "started_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "idx_status",
+          "column": "status",
+          "unique": false
+        },
+        {
+          "name": "idx_file",
+          "column": "file_id",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "media_processing_jobs_ibfk_1",
+          "column": "file_id",
+          "references": "media_files.id"
+        }
+      ]
+    },
+    "media_tags": {
+      "row_count": 5,
+      "created_at": "2025-10-08T08:16:23.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "slug",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "color",
+          "type": "varchar",
+          "nullable": true,
+          "default": "#4facfe",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "usage_count",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "name",
+          "column": "name",
+          "unique": true
+        },
+        {
+          "name": "slug",
+          "column": "slug",
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    },
+    "media_usage": {
+      "row_count": 0,
+      "created_at": "2025-10-07T19:28:18.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": "Primary key"
+        },
+        {
+          "name": "media_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": "FK to media_files"
+        },
+        {
+          "name": "used_in_table",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": "Table name where media is used (products, galleries, etc)"
+        },
+        {
+          "name": "used_in_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Record ID in the referenced table"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": "When usage was recorded"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "uk_usage",
+          "column": "media_id",
+          "unique": true
+        },
+        {
+          "name": "uk_usage",
+          "column": "used_in_table",
+          "unique": true
+        },
+        {
+          "name": "uk_usage",
+          "column": "used_in_id",
+          "unique": true
+        },
+        {
+          "name": "idx_media_id",
+          "column": "media_id",
+          "unique": false
+        },
+        {
+          "name": "idx_usage",
+          "column": "used_in_table",
+          "unique": false
+        },
+        {
+          "name": "idx_usage",
+          "column": "used_in_id",
+          "unique": false
+        },
+        {
+          "name": "idx_created_at",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "fk_usage_media",
+          "column": "media_id",
+          "references": "media_files.id"
+        }
+      ]
+    },
+    "product_families": {
+      "row_count": 5,
+      "created_at": "2025-10-07T20:13:07.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "code",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "code",
+          "column": "code",
+          "unique": true
+        },
+        {
+          "name": "idx_name",
+          "column": "name",
+          "unique": false
+        }
+      ],
+      "foreign_keys": []
+    },
+    "product_images": {
+      "row_count": 188,
+      "created_at": "2025-10-07T20:13:07.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "media_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": "FK to media_files for advanced media management"
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "image_filename",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_primary",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "sort_order",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "product_id",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_media_id",
+          "column": "media_id",
+          "unique": false
+        },
+        {
+          "name": "idx_product_primary",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_product_primary",
+          "column": "is_primary",
+          "unique": false
+        },
+        {
+          "name": "idx_product_sort",
+          "column": "product_id",
+          "unique": false
+        },
+        {
+          "name": "idx_product_sort",
+          "column": "sort_order",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "fk_product_image_media",
+          "column": "media_id",
+          "references": "media_files.id"
+        },
+        {
+          "constraint": "product_images_ibfk_1",
+          "column": "product_id",
+          "references": "products.id"
+        }
+      ]
+    },
+    "products": {
+      "row_count": 188,
+      "created_at": "2025-10-07T20:13:07.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "reference",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "barcode",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "family_id",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "purchase_price",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "sale_price",
+          "type": "decimal",
+          "nullable": false,
+          "default": "0.00",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "current_stock",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "min_stock",
+          "type": "int",
+          "nullable": true,
+          "default": "5",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "weight",
+          "type": "decimal",
+          "nullable": true,
+          "default": "0.000",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "active",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "weight_unit",
+          "type": "enum",
+          "nullable": true,
+          "default": "g",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "dimensions",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "LxAxP em mm"
+        },
+        {
+          "name": "style",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "material",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "1",
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "min_stock_level",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "max_stock_level",
+          "type": "int",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "location",
+          "type": "varchar",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": "Localização no armazém"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "MUL",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        },
+        {
+          "name": "created_by",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "updated_by",
+          "type": "int",
+          "nullable": true,
+          "default": null,
+          "key": "MUL",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "featured",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "is_catalog_visible",
+          "type": "tinyint",
+          "nullable": true,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": "Whether the product is visible in the public catalog"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "reference",
+          "column": "reference",
+          "unique": true
+        },
+        {
+          "name": "family_id",
+          "column": "family_id",
+          "unique": false
+        },
+        {
+          "name": "idx_products_created_by",
+          "column": "created_by",
+          "unique": false
+        },
+        {
+          "name": "idx_products_updated_by",
+          "column": "updated_by",
+          "unique": false
+        },
+        {
+          "name": "idx_products_reference",
+          "column": "reference",
+          "unique": false
+        },
+        {
+          "name": "idx_products_name",
+          "column": "name",
+          "unique": false
+        },
+        {
+          "name": "idx_active_featured",
+          "column": "is_active",
+          "unique": false
+        },
+        {
+          "name": "idx_active_featured",
+          "column": "featured",
+          "unique": false
+        },
+        {
+          "name": "idx_family_active",
+          "column": "family_id",
+          "unique": false
+        },
+        {
+          "name": "idx_family_active",
+          "column": "is_active",
+          "unique": false
+        },
+        {
+          "name": "idx_search_name",
+          "column": "name",
+          "unique": false
+        },
+        {
+          "name": "idx_search_reference",
+          "column": "reference",
+          "unique": false
+        },
+        {
+          "name": "idx_stock_status",
+          "column": "current_stock",
+          "unique": false
+        },
+        {
+          "name": "idx_stock_status",
+          "column": "is_active",
+          "unique": false
+        },
+        {
+          "name": "idx_created_date",
+          "column": "created_at",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint": "fk_products_created_by",
+          "column": "created_by",
+          "references": "users.id"
+        },
+        {
+          "constraint": "fk_products_updated_by",
+          "column": "updated_by",
+          "references": "users.id"
+        },
+        {
+          "constraint": "products_ibfk_1",
+          "column": "family_id",
+          "references": "product_families.id"
+        }
+      ]
+    },
+    "site_settings": {
+      "row_count": 1,
+      "created_at": "2025-10-07T16:32:55.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "featured_carousel_enabled",
+          "type": "tinyint",
+          "nullable": false,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "catalog_page_enabled",
+          "type": "tinyint",
+          "nullable": false,
+          "default": "1",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "hide_catalog_prices",
+          "type": "tinyint",
+          "nullable": false,
+          "default": "0",
+          "key": "",
+          "extra": "",
+          "comment": "Hide prices in catalog, show price on request instead"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    },
+    "users": {
+      "row_count": 4,
+      "created_at": "2025-10-07T16:32:55.000Z",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "default": null,
+          "key": "PRI",
+          "extra": "auto_increment",
+          "comment": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "UNI",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "password",
+          "type": "varchar",
+          "nullable": false,
+          "default": null,
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "nullable": true,
+          "default": "user",
+          "key": "",
+          "extra": "",
+          "comment": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "key": "",
+          "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "column": "id",
+          "unique": true
+        },
+        {
+          "name": "email",
+          "column": "email",
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    }
+  },
+  "pdp_analysis": {
+    "missing_columns": [
+      {
+        "name": "slug",
+        "type": "VARCHAR(255)",
+        "nullable": true,
+        "comment": "URL-friendly identifier"
+      },
+      {
+        "name": "stone_type",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "comment": "Type of stone (onix, olho-de-tigre, etc)"
+      },
+      {
+        "name": "stone_name",
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "comment": "Display name of stone"
+      },
+      {
+        "name": "stone_origin",
+        "type": "VARCHAR(255)",
+        "nullable": true,
+        "comment": "Geographic origin of stone"
+      },
+      {
+        "name": "stone_properties",
+        "type": "TEXT",
+        "nullable": true,
+        "comment": "Metaphysical properties"
+      },
+      {
+        "name": "metal_name",
+        "type": "VARCHAR(100)",
+        "nullable": true,
+        "default": "Prata 925",
+        "comment": "Display name of metal"
+      },
+      {
+        "name": "metal_finish",
+        "type": "VARCHAR(50)",
+        "nullable": true,
+        "default": "prata_925",
+        "comment": "Metal finish code"
+      },
+      {
+        "name": "metal_purity",
+        "type": "VARCHAR(20)",
+        "nullable": true,
+        "default": "925",
+        "comment": "Metal purity level"
+      },
+      {
+        "name": "artisan_name",
+        "type": "VARCHAR(255)",
+        "nullable": true,
+        "comment": "Artisan creator name"
+      },
+      {
+        "name": "artisan_workshop",
+        "type": "VARCHAR(255)",
+        "nullable": true,
+        "comment": "Workshop name"
+      },
+      {
+        "name": "artisan_specialty",
+        "type": "TEXT",
+        "nullable": true,
+        "comment": "Artisan specialty description"
+      },
+      {
+        "name": "crafting_technique",
+        "type": "TEXT",
+        "nullable": true,
+        "comment": "Crafting technique used"
+      },
+      {
+        "name": "meta_title",
+        "type": "VARCHAR(255)",
+        "nullable": true,
+        "comment": "SEO meta title"
+      },
+      {
+        "name": "meta_description",
+        "type": "TEXT",
+        "nullable": true,
+        "comment": "SEO meta description"
+      },
+      {
+        "name": "views",
+        "type": "INT",
+        "nullable": true,
+        "default": 0,
+        "comment": "Page view counter"
+      }
+    ],
+    "existing_columns": [
+      "weight",
+      "dimensions"
+    ],
+    "needs_creation": []
+  }
+}

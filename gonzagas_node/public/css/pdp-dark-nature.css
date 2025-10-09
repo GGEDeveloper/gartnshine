@@ -1,0 +1,746 @@
+/* =============================================
+   GONZAGA ART & SHINE - PDP DARK NATURE
+   Product Detail Page Specific Styles
+   ============================================= */
+
+/* =============================================
+   1. BREADCRUMB
+   ============================================= */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xl);
+    font-size: 0.875rem;
+    color: var(--slate);
+}
+
+.breadcrumb a {
+    color: var(--gold-old);
+    text-decoration: none;
+    transition: color var(--duration-fast);
+}
+
+.breadcrumb a:hover {
+    color: var(--ivory);
+}
+
+.breadcrumb span[aria-current="page"] {
+    color: var(--ivory);
+}
+
+/* =============================================
+   2. PRODUCT HERO LAYOUT
+   ============================================= */
+.product-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: var(--space-4xl);
+    margin-bottom: var(--space-6xl);
+}
+
+/* =============================================
+   3. PRODUCT GALLERY
+   ============================================= */
+.product-gallery {
+    position: relative;
+}
+
+.gallery__main {
+    position: relative;
+    background: var(--gradient-card);
+    border-radius: var(--radius-large);
+    border: var(--border-subtle);
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    margin-bottom: var(--space-lg);
+}
+
+.gallery__main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: transform var(--duration-slow) ease;
+}
+
+.gallery__main-img:hover {
+    transform: scale(1.05);
+}
+
+.gallery__badge {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    z-index: var(--z-elevated);
+}
+
+.gallery__zoom-hint {
+    position: absolute;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--ivory);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity var(--duration-fast);
+}
+
+.gallery__main:hover .gallery__zoom-hint {
+    opacity: 1;
+}
+
+/* Thumbnails */
+.gallery__thumbnails {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    padding: var(--space-xs) 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--slate) var(--black);
+}
+
+.gallery__thumb {
+    flex-shrink: 0;
+    width: 80px;
+    height: 100px;
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    background: var(--gradient-card);
+}
+
+.gallery__thumb:hover,
+.gallery__thumb--active {
+    border-color: var(--gold-old);
+    transform: translateY(-2px);
+}
+
+.gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =============================================
+   4. PRODUCT INFO
+   ============================================= */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.product-info__header {
+    padding-bottom: var(--space-lg);
+    border-bottom: var(--border-subtle);
+}
+
+.product-info__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+}
+
+.product-info__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.badge-artisan {
+    background: var(--forest);
+    color: var(--ivory);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badge-origin {
+    background: var(--earth);
+    color: var(--ivory);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Price Section */
+.product-info__price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-lg);
+    background: var(--gradient-card);
+    border-radius: var(--radius-large);
+    border: var(--border-subtle);
+}
+
+.product-info__price {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--gold-old);
+    font-weight: var(--font-weight-bold);
+}
+
+.availability {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold);
+}
+
+.availability--in-stock {
+    background: rgba(52, 211, 153, 0.1);
+    color: #34D399;
+}
+
+.availability--low {
+    background: rgba(251, 191, 36, 0.1);
+    color: #FBBF24;
+}
+
+.availability--out {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+/* Description */
+.product-info__description {
+    color: var(--silver-matte);
+    line-height: 1.6;
+}
+
+/* Specs */
+.product-info__specs {
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.spec-item__label {
+    color: var(--slate);
+    font-weight: var(--font-weight-medium);
+}
+
+.spec-item__value {
+    color: var(--ivory);
+}
+
+/* =============================================
+   5. QUANTITY SELECTOR & ACTIONS
+   ============================================= */
+.product-info__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.quantity-selector label {
+    color: var(--silver-matte);
+    font-weight: var(--font-weight-medium);
+}
+
+.quantity-selector__controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--black);
+    border: var(--border-subtle);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.quantity-selector__controls button {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: var(--ivory);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all var(--duration-fast);
+}
+
+.quantity-selector__controls button:hover {
+    background: var(--slate);
+}
+
+.quantity-selector__controls input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-left: var(--border-subtle);
+    border-right: var(--border-subtle);
+    color: var(--ivory);
+    font-weight: var(--font-weight-semibold);
+}
+
+.btn--add-to-cart {
+    width: 100%;
+    justify-content: center;
+}
+
+/* WhatsApp Section */
+.product-info__whatsapp {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.btn--whatsapp {
+    flex: 1;
+}
+
+.btn--wishlist {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =============================================
+   6. STONE STORY SECTION
+   ============================================= */
+.stone-story {
+    margin: var(--space-6xl) 0;
+    padding: var(--space-6xl) var(--space-xl);
+    border-radius: var(--radius-large);
+    position: relative;
+    overflow: hidden;
+}
+
+.stone-story[data-stone="onix"] {
+    background: var(--gradient-onyx);
+}
+
+.stone-story[data-stone="olho-de-tigre"] {
+    background: var(--gradient-tiger);
+}
+
+.stone-story__content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-4xl);
+    align-items: center;
+}
+
+.stone-story__text {
+    color: var(--ivory);
+}
+
+.stone-story__text .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-xl);
+    color: var(--silver-matte);
+}
+
+.stone-story__text h3 {
+    color: var(--gold-old);
+    margin: var(--space-xl) 0 var(--space-lg);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+}
+
+/* Stone Characteristics */
+.stone-characteristics {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+}
+
+.stone-characteristics li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.characteristic__icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stone-characteristics strong {
+    color: var(--gold-old);
+}
+
+/* Metaphysical Properties */
+.metaphysical-properties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.property-badge {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    color: var(--silver-matte);
+}
+
+/* Stone Symbol Visual */
+.stone-story__visual {
+    text-align: center;
+}
+
+.stone-symbol {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto var(--space-lg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.stone-symbol--onyx {
+    background: var(--accent-onyx);
+    border: 4px solid var(--silver-matte);
+    box-shadow: 0 0 40px rgba(17, 17, 17, 0.8);
+}
+
+.stone-symbol--tiger {
+    background: var(--accent-tiger);
+    border: 4px solid var(--gold-old);
+    box-shadow: 0 0 40px rgba(107, 74, 27, 0.8);
+}
+
+.stone-symbol__inner {
+    font-size: 4rem;
+}
+
+.stone-quote {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--slate);
+    font-style: italic;
+}
+
+/* =============================================
+   7. ORIGIN STORY SECTION
+   ============================================= */
+.origin-story {
+    margin: var(--space-6xl) 0;
+}
+
+.origin-story__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+}
+
+.origin-card {
+    padding: var(--space-xl);
+    background: var(--gradient-card);
+    border: var(--border-subtle);
+    border-radius: var(--radius-large);
+    text-align: center;
+    transition: all var(--duration-normal);
+}
+
+.origin-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-old);
+}
+
+.origin-card__icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.origin-card h3 {
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-display);
+}
+
+.origin-card p {
+    color: var(--silver-matte);
+    margin-bottom: var(--space-sm);
+}
+
+.origin-card__detail {
+    font-size: 0.875rem;
+    color: var(--slate);
+}
+
+/* =============================================
+   8. CARE INSTRUCTIONS SECTION
+   ============================================= */
+.care-instructions {
+    margin: var(--space-6xl) 0;
+    padding: var(--space-4xl) var(--space-xl);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-large);
+    border: var(--border-subtle);
+}
+
+.care-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+}
+
+.care-card {
+    padding: var(--space-xl);
+    background: var(--gradient-card);
+    border: var(--border-subtle);
+    border-radius: var(--radius);
+}
+
+.care-card__icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.care-card h3 {
+    color: var(--gold-old);
+    margin-bottom: var(--space-md);
+    font-size: 1.25rem;
+}
+
+.care-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.care-card li {
+    padding: var(--space-sm) 0;
+    color: var(--silver-matte);
+    position: relative;
+    padding-left: var(--space-lg);
+}
+
+.care-card li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--gold-old);
+    font-weight: bold;
+}
+
+.care-note {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid var(--gold-old);
+    border-radius: var(--radius);
+    color: var(--silver-matte);
+}
+
+.care-note strong {
+    color: var(--gold-old);
+}
+
+/* =============================================
+   9. RELATED PRODUCTS SECTION
+   ============================================= */
+.related-products {
+    margin: var(--space-6xl) 0;
+}
+
+/* =============================================
+   10. SECTION TITLE (REUSABLE)
+   ============================================= */
+.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--ivory);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+    padding-bottom: var(--space-md);
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: var(--gold-old);
+}
+
+.container-narrow {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+}
+
+/* =============================================
+   11. RESPONSIVE DESIGN
+   ============================================= */
+
+/* Tablet: 721px - 920px */
+@media (max-width: 920px) and (min-width: 721px) {
+    .product-hero {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .stone-story__content {
+        grid-template-columns: 1.5fr 1fr;
+        gap: var(--space-xl);
+    }
+}
+
+/* Mobile: ≤ 720px */
+@media (max-width: 720px) {
+    .product-hero {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .product-gallery {
+        order: 1;
+    }
+    
+    .product-info {
+        order: 2;
+    }
+    
+    .stone-story__content {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .stone-story__visual {
+        order: -1;
+    }
+    
+    .stone-symbol {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .stone-symbol__inner {
+        font-size: 3rem;
+    }
+    
+    .origin-story__grid,
+    .care-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .product-info__price-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-md);
+        text-align: center;
+    }
+    
+    .gallery__thumbnails {
+        gap: var(--space-sm);
+    }
+    
+    .gallery__thumb {
+        width: 60px;
+        height: 75px;
+    }
+    
+    .breadcrumb {
+        font-size: 0.75rem;
+        gap: var(--space-xs);
+    }
+}
+
+/* =============================================
+   12. LOADING STATES
+   ============================================= */
+.product-page.loading .product-gallery,
+.product-page.loading .product-info {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Add to cart animation */
+@keyframes cart-added {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.btn--add-to-cart.added {
+    animation: cart-added 0.3s ease;
+}
+
+/* =============================================
+   13. ACCESSIBILITY
+   ============================================= */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--gold-old);
+    color: var(--black);
+    padding: var(--space-sm) var(--space-md);
+    text-decoration: none;
+    z-index: var(--z-tooltip);
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Focus states */
+.gallery__thumb:focus,
+.quantity-selector__controls button:focus,
+button:focus,
+a:focus {
+    outline: 2px solid var(--gold-old);
+    outline-offset: 2px;
+}
+
+/* =============================================
+   END OF PDP DARK NATURE STYLES
+   ============================================= */
+

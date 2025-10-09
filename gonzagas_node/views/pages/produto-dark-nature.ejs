@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic Title & Meta -->
+    <title><%= produto.meta_title || (produto.nome + ' - Gonzaga Art & Shine') %></title>
+    <meta name="description" content="<%= produto.meta_description || (produto.descricao || 'Joia artesanal em prata 925 com pedras naturais autênticas') %>">
+    <meta name="keywords" content="<%= produto.stone_type %>, <%= produto.metal_nome %>, joias artesanais, <%= produto.artisan_name %>">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= produto.nome %> | Gonzaga Art & Shine">
+    <meta property="og:description" content="<%= produto.descricao || 'Elegância que nasce da terra' %>">
+    <meta property="og:image" content="<%= produto.imagem_principal || '/images/og-produto.jpg' %>">
+    <meta property="og:type" content="product">
+    <meta property="product:price:amount" content="<%= produto.preco || 0 %>">
+    <meta property="product:price:currency" content="EUR">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dark Nature -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/pdp-dark-nature.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= locals.canonicalUrl || ('https://gonzagaartshine.com/produto/' + produto.slug) %>">
+    
+    <!-- Schema.org Product -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "<%= produto.nome %>",
+      "image": "<%= produto.imagem_principal %>",
+      "description": "<%= produto.descricao || '' %>",
+      "brand": {
+        "@type": "Brand",
+        "name": "Gonzaga Art & Shine"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "<%= locals.canonicalUrl || ('https://gonzagaartshine.com/produto/' + produto.slug) %>",
+        "priceCurrency": "EUR",
+        "price": "<%= produto.preco || 0 %>",
+        "availability": "<%= produto.disponibilidade === 'Em stock' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' %>",
+        "seller": {
+          "@type": "Organization",
+          "name": "Gonzaga Art & Shine"
+        }
+      }
+    }
+    </script>
+</head>
+<body class="product-page" data-stone="<%= produto.stone_type || 'natural' %>">
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
+    
+    <!-- Navigation -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Início</a>
+                <span aria-hidden="true">›</span>
+                <a href="/catalogo">Catálogo</a>
+                <span aria-hidden="true">›</span>
+                <span aria-current="page"><%= produto.nome %></span>
+            </nav>
+            
+            <!-- Product Hero - 2 columns -->
+            <section class="product-hero">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="gallery__main">
+                        <img 
+                            id="main-image" 
+                            src="<%= produto.imagem_principal || '/images/placeholder-produto-dark.jpg' %>" 
+                            alt="<%= produto.nome %> - <%= produto.pedra_nome %>"
+                            class="gallery__main-img"
+                            data-zoom="<%= produto.imagem_principal || '/images/placeholder-produto-dark.jpg' %>">
+                        
+                        <!-- Stone Badge -->
+                        <% if (produto.stone_type === 'onix') { %>
+                            <span class="badge-onyx gallery__badge">Energia Ónix</span>
+                        <% } else if (produto.stone_type === 'olho-de-tigre') { %>
+                            <span class="badge-tiger gallery__badge">Poder Olho-de-tigre</span>
+                        <% } %>
+                        
+                        <!-- Zoom Hint -->
+                        <div class="gallery__zoom-hint">
+                            <span>🔍 Passe o rato para ampliar</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Thumbnails -->
+                    <% if (produto.imagens_galeria && produto.imagens_galeria.length > 0) { %>
+                    <div class="gallery__thumbnails">
+                        <button class="gallery__thumb gallery__thumb--active" 
+                                onclick="changeImage('<%= produto.imagem_principal %>', this)">
+                            <img src="<%= produto.imagem_principal %>" alt="<%= produto.nome %> - Vista principal">
+                        </button>
+                        <% produto.imagens_galeria.forEach((imagem, index) => { %>
+                        <button class="gallery__thumb" 
+                                onclick="changeImage('<%= imagem %>', this)">
+                            <img src="<%= imagem %>" alt="<%= produto.nome %> - Vista <%= index + 2 %>">
+                        </button>
+                        <% }) %>
+                    </div>
+                    <% } %>
+                </div>
+                
+                <!-- Product Info -->
+                <div class="product-info">
+                    <!-- Nome + Stone Badge -->
+                    <div class="product-info__header">
+                        <h1 class="product-info__title"><%= produto.nome %></h1>
+                        
+                        <div class="product-info__badges">
+                            <% if (produto.stone_type === 'onix') { %>
+                                <span class="badge-onyx">Ónix</span>
+                            <% } else if (produto.stone_type === 'olho-de-tigre') { %>
+                                <span class="badge-tiger">Olho-de-tigre</span>
+                            <% } %>
+                            
+                            <% if (produto.artisan_name) { %>
+                                <span class="badge-artisan">Artesanal Português</span>
+                            <% } %>
+                            
+                            <% if (produto.stone_origin) { %>
+                                <span class="badge-origin">Origem Rastreável</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço + Disponibilidade -->
+                    <div class="product-info__price-section">
+                        <div class="product-info__price">
+                            <%= produto.preco_formatado || ('€' + parseFloat(produto.preco).toFixed(2)) %>
+                        </div>
+                        
+                        <div class="product-info__availability">
+                            <% if (produto.disponibilidade === 'Em stock') { %>
+                                <span class="availability availability--in-stock">✓ Em stock</span>
+                            <% } else if (produto.disponibilidade === 'Últimas peças') { %>
+                                <span class="availability availability--low">⚠ Últimas peças</span>
+                            <% } else { %>
+                                <span class="availability availability--out">✗ Esgotado</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <!-- Descrição -->
+                    <div class="product-info__description">
+                        <p><%= produto.descricao || 'Joia artesanal única em prata 925 com pedras naturais autênticas.' %></p>
+                    </div>
+                    
+                    <!-- Detalhes Técnicos Quick -->
+                    <div class="product-info__specs">
+                        <div class="spec-item">
+                            <span class="spec-item__label">Pedra:</span>
+                            <span class="spec-item__value"><%= produto.pedra_nome || 'Natural' %></span>
+                        </div>
+                        
+                        <div class="spec-item">
+                            <span class="spec-item__label">Metal:</span>
+                            <span class="spec-item__value"><%= produto.metal_nome || 'Prata 925' %></span>
+                        </div>
+                        
+                        <% if (produto.peso) { %>
+                        <div class="spec-item">
+                            <span class="spec-item__label">Peso:</span>
+                            <span class="spec-item__value"><%= produto.peso %></span>
+                        </div>
+                        <% } %>
+                        
+                        <% if (produto.dimensoes) { %>
+                        <div class="spec-item">
+                            <span class="spec-item__label">Dimensões:</span>
+                            <span class="spec-item__value"><%= produto.dimensoes %></span>
+                        </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Quantity Selector + CTA -->
+                    <div class="product-info__actions">
+                        <div class="quantity-selector">
+                            <label for="quantity">Quantidade:</label>
+                            <div class="quantity-selector__controls">
+                                <button type="button" onclick="decrementQuantity()" aria-label="Diminuir quantidade">−</button>
+                                <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" readonly>
+                                <button type="button" onclick="incrementQuantity()" aria-label="Aumentar quantidade">+</button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn--gold btn--large btn--add-to-cart" 
+                                onclick="addToCart('<%= produto.id %>', '<%= produto.nome %>')"
+                                data-product-id="<%= produto.id %>">
+                            <span class="btn__text">Adicionar à Alma</span>
+                            <span class="btn__icon">🛍</span>
+                        </button>
+                    </div>
+                    
+                    <!-- WhatsApp CTA -->
+                    <div class="product-info__whatsapp">
+                        <a href="https://wa.me/351XXXXXXXXX?text=Olá! Tenho interesse no <%= produto.nome %> - <%= produto.stone_type %>%0APreço: <%= produto.preco_formatado %>%0ALink: <%= locals.canonicalUrl || ('https://gonzagaartshine.com/produto/' + produto.slug) %>"
+                           class="btn btn--silver-outline btn--whatsapp"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <span class="btn__text">Falar com o Artesão</span>
+                            <span class="btn__icon">📱</span>
+                        </a>
+                        
+                        <button class="btn btn--icon btn--wishlist" 
+                                onclick="toggleWishlist('<%= produto.id %>')"
+                                aria-label="Adicionar aos favoritos">
+                            <span class="btn__icon">❤️</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Stone Story - Storytelling da pedra -->
+            <% if (produto.stone_type === 'onix') { %>
+            <%- include('../partials/stone-story-onix', { produto }) %>
+            <% } else if (produto.stone_type === 'olho-de-tigre') { %>
+            <%- include('../partials/stone-story-tiger', { produto }) %>
+            <% } %>
+            
+            <!-- Origin Traceability -->
+            <% if (produto.stone_origin || produto.artisan_name) { %>
+            <section class="origin-story">
+                <h2 class="section-title">Origem Rastreável</h2>
+                
+                <div class="origin-story__grid">
+                    <% if (produto.stone_origin) { %>
+                    <div class="origin-card">
+                        <div class="origin-card__icon">🌍</div>
+                        <h3>Origem da Pedra</h3>
+                        <p><strong><%= produto.stone_origin %></strong></p>
+                        <p class="origin-card__detail">
+                            <%= produto.stone_properties || 'Pedra natural autêntica, cuidadosamente selecionada' %>
+                        </p>
+                    </div>
+                    <% } %>
+                    
+                    <% if (produto.artisan_name) { %>
+                    <div class="origin-card">
+                        <div class="origin-card__icon">🛠️</div>
+                        <h3>Artesão</h3>
+                        <p><strong><%= produto.artisan_name %></strong></p>
+                        <% if (produto.artisan_workshop) { %>
+                        <p class="origin-card__detail"><%= produto.artisan_workshop %></p>
+                        <% } %>
+                        <% if (produto.artisan_specialty) { %>
+                        <p class="origin-card__detail"><%= produto.artisan_specialty %></p>
+                        <% } %>
+                    </div>
+                    <% } %>
+                    
+                    <% if (produto.crafting_technique) { %>
+                    <div class="origin-card">
+                        <div class="origin-card__icon">✨</div>
+                        <h3>Técnica Artesanal</h3>
+                        <p><%= produto.crafting_technique %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </section>
+            <% } %>
+            
+            <!-- Care Instructions -->
+            <% if (produto.stone_type === 'onix' || produto.stone_type === 'olho-de-tigre') { %>
+            <%- include('../partials/care-instructions-' + produto.stone_type, { produto }) %>
+            <% } %>
+            
+            <!-- Related Products -->
+            <% if (locals.produtosRelacionados && produtosRelacionados.length > 0) { %>
+            <section class="related-products">
+                <h2 class="section-title">Peças que Harmonizam</h2>
+                
+                <div class="grid grid-auto">
+                    <% produtosRelacionados.forEach(produtoRel => { %>
+                        <%- include('../partials/product-card-dark', { produto: produtoRel, showQuickActions: false }) %>
+                    <% }) %>
+                </div>
+            </section>
+            <% } %>
+            
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- JavaScript -->
+    <script src="/js/product-dark-nature.js"></script>
+    
+    <!-- Analytics - View Item Event -->
+    <script>
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'view_item', {
+                currency: 'EUR',
+                value: <%= produto.preco || 0 %>,
+                items: [{
+                    item_id: '<%= produto.slug %>',
+                    item_name: '<%= produto.nome %>',
+                    item_category: 'Joias',
+                    item_category2: '<%= produto.stone_type %>',
+                    price: <%= produto.preco || 0 %>,
+                    quantity: 1
+                }]
+            });
+        }
+    </script>
+</body>
+</html>
+
