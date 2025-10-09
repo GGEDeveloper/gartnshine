@@ -1,98 +1,332 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | <%= siteTitle %></title>
+  <title><%= typeof title !== 'undefined' ? title : 'Gonzaga Art & Shine' %> | <%= typeof siteTitle !== 'undefined' ? siteTitle : 'Elegância que nasce da terra' %></title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Joias artesanais em prata 925 com pedras naturais. Ónix e olho-de-tigre, elegância gothic natural que nasce da terra.">
+  <meta name="keywords" content="joias prata 925, ónix, olho-de-tigre, artesanal, gothic natural, portugal">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'Gonzaga Art & Shine' %> | Elegância que nasce da terra">
+  <meta property="og:description" content="Joias únicas em prata 925 com ónix e olho-de-tigre. Elegância gothic natural autêntica.">
+  <meta property="og:image" content="/images/og-dark-nature.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gonzagaartshine.com">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'Gonzaga Art & Shine' %> | Elegância que nasce da terra">
+  <meta name="twitter:description" content="Joias gothic natural em prata 925 com pedras autênticas">
+  <meta name="twitter:image" content="/images/og-dark-nature.jpg">
   
   <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+  <link rel="alternate icon" href="/favicon-dark.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-dark.png">
+  <link rel="manifest" href="/manifest-dark.json">
   
-  <!-- Google Fonts -->
+  <!-- Preconnect para Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/main.css">
+  <!-- Google Fonts - Dark Nature Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- CSS Dark Nature - Ordem Crítica -->
+  <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+  <link rel="stylesheet" href="/css/base-dark-nature.css">
+  <link rel="stylesheet" href="/css/components-dark-nature.css">
+  
+  <!-- Cookie Consent CSS (compatibilidade) -->
   <link rel="stylesheet" href="/css/cookie-banner.css">
-        <link rel="stylesheet" href="/css/mobile/mobile-base.css">
-      <link rel="stylesheet" href="/css/mobile/mobile-header.css">
-      <link rel="stylesheet" href="/css/mobile/mobile-cards.css">
-      <link rel="stylesheet" href="/css/mobile/mobile-catalog.css">
-      <link rel="stylesheet" href="/css/mobile/mobile-admin.css">
+  
+  <!-- CSS Customizado Adicional (se houver) -->
   <% if (typeof customCss !== 'undefined' && customCss) { %>
     <link rel="stylesheet" href="/css/<%= customCss %>.css">
   <% } %>
   
-  <!-- Custom inline styles with theme colors -->
+  <!-- CSS Vars Dinâmicos (compatibilidade com sistema antigo) -->
   <style>
     :root {
-      --color-primary: <%= theme.colorPrimary %>;
-      --color-secondary: <%= theme.colorSecondary %>;
-      --color-accent: <%= theme.colorAccent %>;
-      --color-text: <%= theme.colorText %>;
-      --color-highlight: <%= theme.colorHighlight %>;
+      /* Dark Nature Palette */
+      --color-primary: #B08D57;
+      --color-secondary: #C7CACE;
+      --color-accent: #0B0D0C;
+      --color-text: #E7E1D6;
+      --color-highlight: #6B4A1B;
+      
+      /* Compatibilidade com tema antigo */
+      <% if (typeof theme !== 'undefined') { %>
+        --color-primary: <%= theme.colorPrimary || '#B08D57' %>;
+        --color-secondary: <%= theme.colorSecondary || '#C7CACE' %>;
+        --color-accent: <%= theme.colorAccent || '#0B0D0C' %>;
+        --color-text: <%= theme.colorText || '#E7E1D6' %>;
+        --color-highlight: <%= theme.colorHighlight || '#6B4A1B' %>;
+      <% } %>
     }
   </style>
-</head>
-<body>
-  <!-- Header -->
-  <%- include('partials/header') %>
   
-  <!-- Mobile Header -->
-  <%- include('partials/mobile-header') %>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Gonzaga Art & Shine",
+    "description": "Joias artesanais em prata 925 com pedras naturais. Elegância que nasce da terra.",
+    "url": "https://gonzagaartshine.com",
+    "logo": "https://gonzagaartshine.com/images/logo-dark.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+351-912-345-678",
+      "contactType": "Customer Service",
+      "availableLanguage": "Portuguese"
+    },
+    "sameAs": [
+      "https://instagram.com/gonzagaartshine",
+      "https://facebook.com/gonzagaartshine"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PT"
+    }
+  }
+  </script>
+</head>
+<body class="dark-nature-layout <%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
+  <!-- Skip Link para Acessibilidade -->
+  <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
+  
+  <!-- Header Dark Nature -->
+  <%- include('partials/header-dark-nature') %>
   
   <!-- Flash Messages -->
   <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
-    <div class="alert alert-success">
-      <%= success_msg %>
+    <div class="alert alert-success" role="alert" aria-live="polite">
+      <div class="container">
+        <span class="alert__icon" aria-hidden="true">✓</span>
+        <span class="alert__text"><%= success_msg %></span>
+        <button class="alert__close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Fechar mensagem">×</button>
+      </div>
     </div>
   <% } %>
   
   <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
-    <div class="alert alert-danger">
-      <%= error_msg %>
+    <div class="alert alert-error" role="alert" aria-live="assertive">
+      <div class="container">
+        <span class="alert__icon" aria-hidden="true">⚠</span>
+        <span class="alert__text"><%= error_msg %></span>
+        <button class="alert__close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Fechar mensagem">×</button>
+      </div>
+    </div>
+  <% } %>
+  
+  <% if(typeof info_msg !== 'undefined' && info_msg.length > 0) { %>
+    <div class="alert alert-info" role="alert" aria-live="polite">
+      <div class="container">
+        <span class="alert__icon" aria-hidden="true">ℹ</span>
+        <span class="alert__text"><%= info_msg %></span>
+        <button class="alert__close" onclick="this.parentElement.parentElement.style.display='none'" aria-label="Fechar mensagem">×</button>
+      </div>
     </div>
   <% } %>
   
   <!-- Main Content -->
-  <main class="container main-content">
+  <main id="main-content" class="main-content">
     <%- body %>
   </main>
   
-  <!-- Footer -->
-  <%- include('partials/footer') %>
+  <!-- Footer Dark Nature -->
+  <%- include('partials/footer-dark-nature') %>
   
-  <!-- Cookie Banner -->
+  <!-- Cookie Banner (compatibilidade) -->
   <%- include('partials/cookie-banner') %>
   
-  <!-- Configuration and Module System -->
+  <!-- Scripts Essenciais -->
+  <script>
+    // Dark Nature Configuration
+    window.GonzagaConfig = {
+      theme: 'dark-nature',
+      version: '2.0',
+      debug: <%= process.env.NODE_ENV === 'development' ? 'true' : 'false' %>,
+      api: {
+        baseUrl: '/api',
+        version: 'v1'
+      },
+      analytics: {
+        gtag: typeof gtag !== 'undefined'
+      }
+    };
+    
+    // Performance monitoring
+    if (typeof PerformanceObserver !== 'undefined') {
+      const observer = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if (entry.entryType === 'largest-contentful-paint') {
+            // Track LCP for Core Web Vitals
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'timing_complete', {
+                name: 'LCP',
+                value: Math.round(entry.startTime)
+              });
+            }
+          }
+        });
+      });
+      observer.observe({entryTypes: ['largest-contentful-paint']});
+    }
+    
+    // Error tracking
+    window.addEventListener('error', function(e) {
+      console.error('JavaScript Error:', e.error);
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'exception', {
+          description: e.error?.message || 'Unknown error',
+          fatal: false
+        });
+      }
+    });
+  </script>
+  
+  <!-- Compatibility Scripts (ordem mantida para compatibilidade) -->
   <script src="/js/config.js"></script>
   
-  <!-- Load modules first in correct order -->
-  <script src="/js/modules/utils.js"></script>
-  <script src="/js/modules/navigation.js"></script>
-  <script src="/js/modules/ui.js"></script>
-  <script src="/js/modules/carousel.js"></script>
+  <!-- Modules (se existirem) -->
+  <% if (typeof enableModules !== 'undefined' && enableModules) { %>
+    <script src="/js/modules/utils.js"></script>
+    <script src="/js/modules/navigation.js"></script>
+    <script src="/js/modules/ui.js"></script>
+  <% } %>
   
-  <!-- Main JavaScript (Module Manager) - Load AFTER modules -->
-  <script src="/js/main.js"></script>
-  
-  <!-- Legacy JavaScript files -->
-  <script src="/js/carousel.js"></script>
-  
-  <!-- Cookie Consent JavaScript -->
+  <!-- Cookie Consent (compatibilidade) -->
   <script src="/js/cookie-consent.js"></script>
   
-  <!-- Mobile Navigation JavaScript -->
-  <script src="/js/mobile-navigation.js"></script>
-  
-  <!-- Featured Carousel JavaScript -->
-  <script src="/js/featured-carousel.js"></script>
-  
+  <!-- Scripts Customizados -->
   <% if (typeof customJs !== 'undefined' && customJs) { %>
     <script src="/js/<%= customJs %>.js"></script>
   <% } %>
+  
+  <!-- Analytics (Google Analytics 4) -->
+  <% if (process.env.NODE_ENV === 'production' && process.env.GA_TRACKING_ID) { %>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.GA_TRACKING_ID %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<%= process.env.GA_TRACKING_ID %>', {
+        page_title: '<%= typeof title !== 'undefined' ? title : 'Gonzaga Art & Shine' %>',
+        custom_map: {
+          'stone_type': 'stone_type',
+          'metal_type': 'metal_type'
+        }
+      });
+    </script>
+  <% } %>
+  
+  <!-- Development Mode Indicators -->
+  <% if (process.env.NODE_ENV === 'development') { %>
+    <script>
+      console.log('%c🎨 Dark Nature Theme 2.0 \n%cGonzaga Art & Shine - Development Mode', 
+        'color: #B08D57; font-size: 16px; font-weight: bold;',
+        'color: #C7CACE; font-size: 12px;'
+      );
+      console.log('Theme loaded:', {
+        tokens: '/css/tokens-dark-nature.css',
+        base: '/css/base-dark-nature.css', 
+        components: '/css/components-dark-nature.css'
+      });
+    </script>
+    
+    <!-- Live Reload for Development (se estiver usando nodemon/similar) -->
+    <% if (typeof liveReload !== 'undefined' && liveReload) { %>
+      <script src="http://localhost:35729/livereload.js"></script>
+    <% } %>
+  <% } %>
+  
+  <!-- CSS para Alerts -->
+  <style>
+    .alert {
+      position: fixed;
+      top: var(--space-xl);
+      right: var(--space-xl);
+      z-index: var(--z-modal);
+      max-width: 400px;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-large);
+      box-shadow: var(--shadow-elevated);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      animation: slideIn 0.3s ease;
+    }
+    
+    .alert-success {
+      background: var(--forest);
+      border-left: 4px solid var(--gold-old);
+      color: var(--ivory);
+    }
+    
+    .alert-error {
+      background: #4a1e1e;
+      border-left: 4px solid #d73027;
+      color: var(--ivory);
+    }
+    
+    .alert-info {
+      background: var(--earth);
+      border-left: 4px solid var(--silver-matte);
+      color: var(--ivory);
+    }
+    
+    .alert__icon {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    
+    .alert__text {
+      flex: 1;
+      font-family: var(--font-body);
+    }
+    
+    .alert__close {
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: 1.5em;
+      cursor: pointer;
+      padding: var(--space-xs);
+      opacity: 0.7;
+      transition: opacity var(--duration-normal);
+    }
+    
+    .alert__close:hover {
+      opacity: 1;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @media (max-width: 720px) {
+      .alert {
+        top: var(--space-md);
+        right: var(--space-md);
+        left: var(--space-md);
+        max-width: none;
+      }
+    }
+  </style>
 </body>
 </html>
