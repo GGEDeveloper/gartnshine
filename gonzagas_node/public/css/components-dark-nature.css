@@ -1393,6 +1393,44 @@ img[loading="lazy"]:not([src*="placeholder"]) {
     }
 }
 
+/* ==========================================
+   CART BADGE IN HEADER
+   ========================================== */
+
+.cart-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 20px;
+    height: 20px;
+    background: #dc3545;
+    border: 2px solid var(--black);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    z-index: 10;
+}
+
+/* Mobile menu cart badge */
+.site-header__mobile-menu-link .cart-badge {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-left: auto;
+}
+
 /* Print Styles */
 @media print {
     .product-card {
@@ -1402,5 +1440,9 @@ img[loading="lazy"]:not([src*="placeholder"]) {
     
     .hero::after {
         display: none;
+    }
+    
+    .cart-badge {
+        display: none !important;
     }
 }

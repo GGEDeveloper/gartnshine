@@ -105,6 +105,17 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                     <span class="site-header__menu-text">Contacto</span>
                 </a>
             </li>
+            
+            <li class="site-header__menu-item" role="none">
+                <a href="/cart" 
+                   class="site-header__menu-link cart-link <%= currentPageValue === 'cart' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   aria-label="Ver carrinho de compras"
+                   <% if (currentPageValue === 'cart') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">🛒 Carrinho</span>
+                    <span class="cart-badge" style="display: none;">0</span>
+                </a>
+            </li>
         </ul>
         
         <!-- Mobile Menu Toggle -->
@@ -255,6 +266,17 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">✉️</span>
                             <span class="site-header__mobile-menu-text">Contacto</span>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/cart" 
+                           class="site-header__mobile-menu-link cart-link <%= currentPageValue === 'cart' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem"
+                           aria-label="Ver carrinho de compras">
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">🛒</span>
+                            <span class="site-header__mobile-menu-text">Carrinho</span>
+                            <span class="cart-badge" style="display: none;">0</span>
                         </a>
                     </li>
                 </ul>

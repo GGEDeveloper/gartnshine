@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <meta name="description" content="<%= meta.description %>">
+    <meta name="keywords" content="<%= meta.keywords %>">
+    
+    <!-- Dark Nature CSS -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/cart-dark-nature.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="cart-dark-nature-page cart-page" data-page="cart">
+    
+    <!-- Header -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main class="cart-main">
+        <div class="container">
+            <!-- Cart Header -->
+            <div class="cart-header">
+                <h1 class="cart-title">Carrinho de Compras</h1>
+                <p class="cart-subtitle">Reveja os seus produtos selecionados</p>
+            </div>
+            
+            <!-- Cart Empty State -->
+            <div class="cart-empty" id="cart-empty">
+                <div class="cart-empty-content">
+                    <div class="cart-empty-icon">🛍️</div>
+                    <h2 class="cart-empty-title">O seu carrinho está vazio</h2>
+                    <p class="cart-empty-text">
+                        Descubra as nossas peças únicas e adicione-as ao carrinho
+                    </p>
+                    <div class="cart-empty-actions">
+                        <a href="/catalogo" class="btn btn--gold btn--large">
+                            Explorar Catálogo
+                        </a>
+                        <a href="/galeria" class="btn btn--silver-outline btn--large">
+                            Ver Galeria
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cart Content -->
+            <div class="cart-content" id="cart-content">
+                <div class="cart-layout">
+                    <!-- Cart Items -->
+                    <div class="cart-items-section">
+                        <div class="cart-items-header">
+                            <h2>Produtos Selecionados</h2>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Cart Summary -->
+                    <div class="cart-summary">
+                        <div class="cart-summary-content">
+                            <h3 class="cart-summary-title">Resumo do Pedido</h3>
+                            
+                            <div class="cart-summary-line">
+                                <span>Subtotal:</span>
+                                <span id="cart-subtotal">€0.00</span>
+                            </div>
+                            
+                            <div class="cart-summary-line">
+                                <span>Envio:</span>
+                                <span id="cart-shipping" class="cart-shipping">€5.99</span>
+                            </div>
+                            
+                            <div class="free-shipping-progress" style="display: none;">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" style="width: 0%;"></div>
+                                </div>
+                                <p class="progress-text"></p>
+                            </div>
+                            
+                            <div class="cart-summary-divider"></div>
+                            
+                            <div class="cart-summary-total">
+                                <span>Total:</span>
+                                <span id="cart-total">€0.00</span>
+                            </div>
+                            
+                            <div class="cart-summary-actions">
+                                <a href="/checkout" class="btn btn--gold btn--large btn--full-width">
+                                    Proceder ao Checkout
+                                </a>
+                                <a href="/catalogo" class="btn btn--silver-outline btn--large btn--full-width">
+                                    Continuar Compras
+                                </a>
+                            </div>
+                            
+                            <div class="cart-trust-signals">
+                                <div class="trust-signal">
+                                    <span class="trust-icon">🔒</span>
+                                    <span>Pagamento Seguro</span>
+                                </div>
+                                <div class="trust-signal">
+                                    <span class="trust-icon">🚚</span>
+                                    <span>Envio Gratuito €75+</span>
+                                </div>
+                                <div class="trust-signal">
+                                    <span class="trust-icon">↩️</span>
+                                    <span>30 Dias Devolução</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- Scripts -->
+    <script src="/js/cart-dark-nature.js"></script>
+</body>
+</html>
+

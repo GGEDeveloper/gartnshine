@@ -868,6 +868,83 @@ router.get('/artesaos', (req, res) => {
   }
 });
 
+// Shopping Cart Page
+router.get('/cart', (req, res) => {
+  try {
+    res.render('pages/cart-dark-nature', {
+      currentPage: 'cart',
+      title: 'Carrinho de Compras - Gonzaga Art & Shine',
+      meta: {
+        description: 'Reveja os seus produtos selecionados e proceda ao checkout seguro.',
+        keywords: 'carrinho compras, checkout, joias artesanais portuguesas'
+      }
+    });
+  } catch (error) {
+    console.error('Error loading cart:', error);
+    res.status(500).render('error', { error: 'Erro ao carregar carrinho' });
+  }
+});
+
+// Add to cart API endpoint (for AJAX)
+router.post('/api/cart/add', (req, res) => {
+  try {
+    const { productId, quantity = 1 } = req.body;
+    
+    // Session-based cart (optional, além do localStorage)
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
+    
+    const existingItem = req.session.cart.find(item => item.productId === parseInt(productId));
+    
+    if (existingItem) {
+      existingItem.quantity += parseInt(quantity);
+    } else {
+      req.session.cart.push({
+        productId: parseInt(productId),
+        quantity: parseInt(quantity),
+        addedAt: new Date()
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      cartCount: req.session.cart.reduce((sum, item) => sum + item.quantity, 0)
+    });
+    
+  } catch (error) {
+    console.error('Add to cart error:', error);
+    res.status(500).json({ success: false, error: 'Erro ao adicionar ao carrinho' });
+  }
+});
+
+// Checkout Page (FASE 2 - Day 3-5)
+router.get('/checkout', (req, res) => {
+  try {
+    res.render('pages/checkout-dark-nature', {
+      currentPage: 'checkout',
+      title: 'Checkout Seguro - Gonzaga Art & Shine',
+      step: 1,
+      meta: {
+        description: 'Finalize a sua compra de forma segura com métodos de pagamento portugueses.',
+        keywords: 'checkout seguro, pagamento mb way, compra joias portugal'
+      }
+    });
+  } catch (error) {
+    console.error('Checkout error:', error);
+    res.status(500).render('error', { error: 'Erro no checkout' });
+  }
+});
+
+// Checkout steps (optional individual URLs)
+router.get('/checkout/shipping', (req, res) => {
+  res.redirect('/checkout#shipping');
+});
+
+router.get('/checkout/payment', (req, res) => {
+  res.redirect('/checkout#payment');
+});
+
 // Galeria Dark Nature - Showcase jornada mineral (Lote 1)
 router.get('/galeria', async (req, res) => {
   try {
