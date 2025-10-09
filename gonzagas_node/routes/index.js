@@ -513,7 +513,7 @@ router.get('/produto/:slug', async (req, res) => {
     
     // Processar imagens
     const allImages = produto.images ? produto.images.split(',') : [];
-    produto.imagem_principal = allImages.length > 0 ? `/uploads/products/${allImages[0]}` : '/images/placeholder-produto-dark.jpg';
+    produto.imagem_principal = allImages.length > 0 ? `/uploads/products/${allImages[0]}` : '/images/placeholders/product-dark.jpg';
     produto.imagens_galeria = allImages.slice(1).map(img => `/uploads/products/${img}`);
     
     // Mapear campos do DB para o formato esperado pela view
@@ -573,7 +573,7 @@ router.get('/produto/:slug', async (req, res) => {
       preco_formatado: p.sale_price ? 
         new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(p.sale_price)) : 
         null,
-      imagem_principal: p.main_image ? `/uploads/products/${p.main_image}` : '/images/placeholder-produto-dark.jpg',
+      imagem_principal: p.main_image ? `/uploads/products/${p.main_image}` : '/images/placeholders/product-dark.jpg',
       pedra_nome: p.stone_name || 'Pedra Natural',
       metal_nome: p.metal_name || 'Prata 925',
       slug: p.slug || p.id

@@ -90,10 +90,10 @@
                     <div class="gallery__main">
                         <img 
                             id="main-image" 
-                            src="<%= produto.imagem_principal || '/images/placeholder-produto-dark.jpg' %>" 
+                            src="<%= produto.imagem_principal || '/images/placeholders/product-dark.jpg' %>" 
                             alt="<%= produto.nome %> - <%= produto.pedra_nome %>"
                             class="gallery__main-img"
-                            data-zoom="<%= produto.imagem_principal || '/images/placeholder-produto-dark.jpg' %>">
+                            data-zoom="<%= produto.imagem_principal || '/images/placeholders/product-dark.jpg' %>">
                         
                         <!-- Stone Badge -->
                         <% if (produto.stone_type === 'onix') { %>

@@ -1,0 +1,67 @@
+---
+description: Never delete files - always archive to _archive or backup folders
+globs: **/*
+alwaysApply: true
+---
+
+# File Management Rules
+
+## **CRITICAL: Never Delete Files**
+
+- **❌ NEVER** use `rm`, `delete_file`, or any destructive commands
+- **✅ ALWAYS** move files to `_archive/` or `backup/` folders before replacing
+- **✅ ALWAYS** keep original files for rollback capability
+
+## **Archive Structure**
+
+```
+project/
+├── _archive/
+│   ├── YYYY-MM-DD_HH-MM_description/
+│   │   └── [archived files]
+│   └── old-implementation/
+│       └── [previous version]
+└── current files...
+```
+
+## **Best Practices**
+
+### **Before Replacing Files:**
+```bash
+# ✅ DO: Archive first
+mkdir -p _archive/$(date +%Y-%m-%d_%H-%M)_old-structure
+mv old-files/ _archive/$(date +%Y-%m-%d_%H-%M)_old-structure/
+
+# ❌ DON'T: Delete directly
+rm -rf old-files/  # NEVER!
+```
+
+### **For Images/Assets:**
+```bash
+# ✅ DO: Keep originals in aa-temporary or source folder
+cp aa-temporary/source/image.jpg public/destination/
+
+# ❌ DON'T: Move originals
+mv aa-temporary/source/image.jpg public/destination/  # NEVER!
+```
+
+## **Recovery Process**
+
+If files need to be restored:
+```bash
+cp _archive/YYYY-MM-DD_HH-MM_description/file.ext ./
+```
+
+## **Code Changes**
+
+When refactoring code that references files:
+1. Archive old code files
+2. Create new implementation
+3. Keep both until new version is validated
+4. Only after validation, old code can stay in _archive
+
+## **Git Integration**
+
+- Archive folders should be in `.gitignore` if very large
+- But keep structure documented in repository
+- Use Git history as additional backup layer
