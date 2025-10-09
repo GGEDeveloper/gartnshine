@@ -216,6 +216,203 @@
         .footer-contact a {
             color: var(--gold-old);
         }
+        
+        /* Timeline Styles */
+        .delivery-timeline {
+            position: relative;
+            padding-left: var(--space-3xl);
+        }
+        
+        .delivery-timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(176,141,87,0.5) 0%, rgba(176,141,87,0.1) 100%);
+        }
+        
+        .timeline-step {
+            position: relative;
+            margin-bottom: var(--space-2xl);
+            display: flex;
+            gap: var(--space-lg);
+        }
+        
+        .timeline-icon {
+            position: absolute;
+            left: -48px;
+            width: 40px;
+            height: 40px;
+            background: rgba(11,13,12,0.9);
+            border: 2px solid rgba(110,107,101,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            z-index: 2;
+        }
+        
+        .timeline-step--active .timeline-icon {
+            background: linear-gradient(135deg, var(--gold-old) 0%, rgba(176,141,87,0.9) 100%);
+            border-color: var(--gold-old);
+            box-shadow: 0 0 20px rgba(176,141,87,0.4);
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--ivory);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        
+        .timeline-date {
+            color: var(--gold-old);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .timeline-description {
+            color: var(--slate);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Detail Rows */
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(110,107,101,0.1);
+        }
+        
+        .detail-label {
+            color: var(--slate);
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            color: var(--ivory);
+            font-weight: 500;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-badge--success {
+            background: rgba(34,139,34,0.2);
+            color: rgba(34,139,34,1);
+            border: 1px solid rgba(34,139,34,0.4);
+        }
+        
+        .status-badge--pending {
+            background: rgba(255,165,0,0.2);
+            color: rgba(255,165,0,1);
+            border: 1px solid rgba(255,165,0,0.4);
+        }
+        
+        /* Payment Instructions */
+        .payment-instructions {
+            margin-top: var(--space-lg);
+            padding: var(--space-lg);
+            background: rgba(176,141,87,0.05);
+            border: 1px solid rgba(176,141,87,0.2);
+            border-radius: var(--radius);
+        }
+        
+        .iban-box {
+            background: rgba(11,13,12,0.8);
+            border: 1px solid rgba(176,141,87,0.3);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--gold-old);
+            text-align: center;
+            margin-top: var(--space-sm);
+            letter-spacing: 0.05em;
+        }
+        
+        /* Next Steps Grid */
+        .next-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+        }
+        
+        .next-step-item {
+            display: flex;
+            gap: var(--space-md);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gold-old) 0%, rgba(176,141,87,0.9) 100%);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--ivory);
+            margin-bottom: var(--space-xs);
+            font-size: 1rem;
+        }
+        
+        .step-text {
+            color: var(--slate);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .next-steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-info-card > div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .delivery-timeline {
+                padding-left: var(--space-2xl);
+            }
+            
+            .timeline-icon {
+                left: -42px;
+                width: 35px;
+                height: 35px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body class="order-confirmation-page" data-page="order-confirmation">
@@ -290,6 +487,190 @@
                         <span>Total:</span>
                         <span>€<%= parseFloat(order.total_amount).toFixed(2) %></span>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Delivery Timeline -->
+            <div class="order-info-card">
+                <h3 style="color: var(--gold-old); margin-bottom: var(--space-2xl); font-family: var(--font-heading); font-size: 1.4rem;">
+                    <span style="margin-right: var(--space-sm);">📍</span>
+                    Jornada da Sua Peça Sagrada
+                </h3>
+                
+                <div class="delivery-timeline">
+                    <div class="timeline-step timeline-step--active">
+                        <div class="timeline-icon">✅</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Pedido Confirmado</div>
+                            <div class="timeline-date">Hoje</div>
+                            <div class="timeline-description">Recebemos o seu pedido e iniciámos o processo de preparação artesanal.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-step">
+                        <div class="timeline-icon">⚒️</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Em Preparação</div>
+                            <div class="timeline-date">1-2 dias úteis</div>
+                            <div class="timeline-description">Os nossos artesãos preparam e embalam cuidadosamente a sua peça.</div>
+                        </div>
+                    </div>
+                    
+                    <% if (order.shipping_method === 'express') { %>
+                    <div class="timeline-step">
+                        <div class="timeline-icon">⚡</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Envio Expresso</div>
+                            <div class="timeline-date">1-2 dias úteis</div>
+                            <div class="timeline-description">Entrega prioritária através de transportadora certificada.</div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                    <div class="timeline-step">
+                        <div class="timeline-icon">📮</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Envio Standard</div>
+                            <div class="timeline-date">3-5 dias úteis</div>
+                            <div class="timeline-description">Envio seguro através dos CTT - Correios de Portugal.</div>
+                        </div>
+                    </div>
+                    <% } %>
+                    
+                    <div class="timeline-step">
+                        <div class="timeline-icon">🏠</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Entrega na Morada</div>
+                            <div class="timeline-date">
+                                <% if (order.shipping_method === 'express') { %>
+                                    Estimativa: 3-4 dias úteis
+                                <% } else { %>
+                                    Estimativa: 5-7 dias úteis
+                                <% } %>
+                            </div>
+                            <div class="timeline-description">A sua peça sagrada chega ao destino final com amor e cuidado.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment & Delivery Details -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); margin-bottom: var(--space-3xl);">
+                
+                <!-- Payment Details -->
+                <div class="order-info-card">
+                    <h4 style="color: var(--gold-old); margin-bottom: var(--space-lg); font-family: var(--font-heading);">
+                        <span style="margin-right: var(--space-sm);">💳</span>
+                        Detalhes de Pagamento
+                    </h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Método:</span>
+                        <span class="detail-value">
+                            <% if (order.payment_method === 'mbway') { %>
+                                MB Way
+                            <% } else if (order.payment_method === 'paypal') { %>
+                                PayPal
+                            <% } else { %>
+                                Transferência Bancária
+                            <% } %>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value">
+                            <% if (order.payment_status === 'completed') { %>
+                                <span class="status-badge status-badge--success">✓ Pago</span>
+                            <% } else if (order.payment_status === 'pending') { %>
+                                <span class="status-badge status-badge--pending">⏱ Pendente</span>
+                            <% } %>
+                        </span>
+                    </div>
+                    <% if (order.payment_method === 'transfer' && order.payment_status === 'pending') { %>
+                    <div class="payment-instructions">
+                        <strong>IBAN para Transferência:</strong>
+                        <div class="iban-box">PT50 0033 0000 0000 0000 0000 0</div>
+                        <small style="color: var(--slate); display: block; margin-top: var(--space-sm);">
+                            Utilize a referência <strong><%= order.order_number %></strong>
+                        </small>
+                    </div>
+                    <% } %>
+                </div>
+                
+                <!-- Delivery Details -->
+                <div class="order-info-card">
+                    <h4 style="color: var(--gold-old); margin-bottom: var(--space-lg); font-family: var(--font-heading);">
+                        <span style="margin-right: var(--space-sm);">📦</span>
+                        Informações de Envio
+                    </h4>
+                    <div class="detail-row">
+                        <span class="detail-label">Nome:</span>
+                        <span class="detail-value"><%= order.customer_name %></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Morada:</span>
+                        <span class="detail-value"><%= order.customer_address %></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cidade:</span>
+                        <span class="detail-value"><%= order.customer_city %></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Código Postal:</span>
+                        <span class="detail-value"><%= order.customer_postal_code %></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Telefone:</span>
+                        <span class="detail-value"><%= order.customer_phone || 'N/A' %></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="order-info-card next-steps-card">
+                <h3 style="color: var(--gold-old); margin-bottom: var(--space-xl); font-family: var(--font-heading); font-size: 1.4rem; text-align: center;">
+                    <span style="margin-right: var(--space-sm);">✨</span>
+                    Próximos Passos
+                </h3>
+                
+                <div class="next-steps-grid">
+                    <div class="next-step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5 class="step-title">Confirmação por Email</h5>
+                            <p class="step-text">Receberá um email de confirmação em <strong><%= order.customer_email %></strong> com todos os detalhes do seu pedido.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="next-step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5 class="step-title">Acompanhamento</h5>
+                            <p class="step-text">Aceda ao <a href="/order-tracking/<%= order.order_number %>" style="color: var(--gold-old); text-decoration: underline;">tracking do pedido</a> para ver o status em tempo real.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="next-step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5 class="step-title">Notificações de Envio</h5>
+                            <p class="step-text">Receberá SMS/email quando a sua peça for enviada, com código de tracking.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="next-step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5 class="step-title">Receba & Desfrute</h5>
+                            <p class="step-text">Desembale com cuidado e comece a jornada com a sua nova peça sagrada artesanal.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="help-section" style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid rgba(110,107,101,0.2); text-align: center;">
+                    <p style="color: var(--slate); margin-bottom: var(--space-md);">Precisa de ajuda ou tem alguma questão?</p>
+                    <a href="/contacto" class="btn btn--secondary">
+                        <span class="btn-icon">💬</span>
+                        <span class="btn-text">Contacte-nos</span>
+                    </a>
                 </div>
             </div>
             
