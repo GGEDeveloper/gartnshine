@@ -100,13 +100,13 @@ class Product extends BaseModel {
           p.id,
           p.name,
           p.reference,
-
           p.family_id,
-
           p.is_active,
           p.sale_price,
           p.purchase_price,
           p.description,
+          p.stone_type,
+          p.slug,
           f.name as family_name,
           (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
         FROM products p
