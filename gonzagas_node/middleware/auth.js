@@ -64,9 +64,13 @@ const optionalAuth = (req, res, next) => {
     next();
 };
 
+// Alias for backward compatibility with existing routes
+const isAuthenticated = requireAdmin;
+
 module.exports = {
     requireAuth,
     requireAdmin,
     checkPermission,
-    optionalAuth
+    optionalAuth,
+    isAuthenticated // For backward compatibility with routes/api.js
 };

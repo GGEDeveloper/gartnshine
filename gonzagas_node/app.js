@@ -42,10 +42,27 @@ app.set('layout extractMetas', true);
 
 // Middleware para definir o layout padrão com base na rota
 app.use((req, res, next) => {
-  // Se a rota começar com /admin, usa o layout do admin
+  // Dark Nature admin routes (standalone pages - no layout wrapper)
+  const darkNatureAdminRoutes = [
+    '/admin',
+    '/admin/login',
+    '/admin/logout'
+  ];
+  
+  const isDarkNatureAdmin = darkNatureAdminRoutes.includes(req.path) || 
+                            req.path.match(/^\/admin\/(orders|products|customers|analytics|settings|activities)/);
+  
+  // Se a rota começar com /admin
   if (req.path.startsWith('/admin')) {
-    res.locals.layout = viewConfig.layouts.admin.default;
+    if (isDarkNatureAdmin) {
+      // Dark Nature pages: NO LAYOUT (standalone HTML)
+      res.locals.layout = false;
+    } else {
+      // Old admin pages: use admin layout
+      res.locals.layout = viewConfig.layouts.admin.default;
+    }
   } else {
+    // Public pages: use public layout
     res.locals.layout = viewConfig.layouts.public.default;
   }
   next();

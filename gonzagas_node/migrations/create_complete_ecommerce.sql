@@ -220,9 +220,9 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- Update existing admin user with new password (covil) and role
--- Hash for 'covil': $2b$12$vNXqRBGp5qKxJPVF5QoLB.5yJ9Y9sWJ7P0nJ1M7KQzH8T9Y3F4mXi
+-- Hash for 'covil': $2b$12$Wdai.cHrDOv2ZlDCldgrJuuB2UFa4MieOKFcSDbmd6njeGcOId7dK
 UPDATE admin_users 
-SET password_hash = '$2b$12$vNXqRBGp5qKxJPVF5QoLB.5yJ9Y9sWJ7P0nJ1M7KQzH8T9Y3F4mXi',
+SET password_hash = '$2b$12$Wdai.cHrDOv2ZlDCldgrJuuB2UFa4MieOKFcSDbmd6njeGcOId7dK',
     role = 'master',
     permissions = '{"all": true}'
 WHERE username = 'gonzaga';

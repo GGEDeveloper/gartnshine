@@ -96,12 +96,15 @@ class AdminController {
         try {
             const dashboardData = await this.getDashboardData();
             
+            // Disable express-ejs-layouts for this route
+            res.locals.layout = false;
+            
             res.render('admin/dashboard-dark-nature', {
                 currentPage: 'admin-dashboard',
+                currentPath: req.path,
                 title: 'Dashboard Admin - Gonzaga Art & Shine',
                 dashboardData,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -327,8 +330,12 @@ class AdminController {
             const totalOrders = countRows[0].total;
             const totalPages = Math.ceil(totalOrders / limit);
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/orders-list-dark-nature', {
                 currentPage: 'admin-orders',
+                currentPath: req.path,
                 title: 'Gestão de Pedidos - Admin',
                 orders: ordersRows,
                 pagination: {
@@ -338,8 +345,7 @@ class AdminController {
                     hasPrev: page > 1
                 },
                 currentStatus: status,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -372,9 +378,9 @@ class AdminController {
             );
             
             if (orderRows.length === 0) {
+                res.locals.layout = false;
                 return res.status(404).render('error', {
-                    error: 'Pedido não encontrado',
-                    layout: false
+                    error: 'Pedido não encontrado'
                 });
             }
             
@@ -392,15 +398,18 @@ class AdminController {
                 };
             }) : [];
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/order-detail-dark-nature', {
                 currentPage: 'admin-orders',
+                currentPath: req.path,
                 title: `Pedido ${order.order_number} - Admin`,
                 order: {
                     ...order,
                     items
                 },
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -532,12 +541,15 @@ class AdminController {
                  LIMIT 50`
             );
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/products-list-dark-nature', {
                 currentPage: 'admin-products',
+                currentPath: req.path,
                 title: 'Gestão de Produtos - Admin',
                 products: productsRows,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -560,12 +572,15 @@ class AdminController {
                  LIMIT 50`
             );
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/customers-list-dark-nature', {
                 currentPage: 'admin-customers',
+                currentPath: req.path,
                 title: 'Gestão de Clientes - Admin',
                 customers: customersRows,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -590,9 +605,9 @@ class AdminController {
             );
             
             if (customerRows.length === 0) {
+                res.locals.layout = false;
                 return res.status(404).render('error', {
-                    error: 'Cliente não encontrado',
-                    layout: false
+                    error: 'Cliente não encontrado'
                 });
             }
             
@@ -604,13 +619,16 @@ class AdminController {
                 [customerRows[0].email]
             );
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/customer-detail-dark-nature', {
                 currentPage: 'admin-customers',
+                currentPath: req.path,
                 title: `Cliente ${customerRows[0].name} - Admin`,
                 customer: customerRows[0],
                 orders: ordersRows,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -630,12 +648,15 @@ class AdminController {
             // Get analytics data
             const dashboardData = await this.getDashboardData();
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/analytics-dark-nature', {
                 currentPage: 'admin-analytics',
+                currentPath: req.path,
                 title: 'Analytics - Admin',
                 analyticsData: dashboardData,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -656,12 +677,15 @@ class AdminController {
                 'SELECT * FROM ecommerce_settings ORDER BY category, setting_key'
             );
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/settings-dark-nature', {
                 currentPage: 'admin-settings',
+                currentPath: req.path,
                 title: 'Configurações - Admin',
                 settings: settingsRows,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
@@ -712,12 +736,15 @@ class AdminController {
                  LIMIT 100`
             );
             
+            // Disable express-ejs-layouts
+            res.locals.layout = false;
+            
             res.render('admin/activities-dark-nature', {
                 currentPage: 'admin-activities',
+                currentPath: req.path,
                 title: 'Registo de Atividades - Admin',
                 activities: activitiesRows,
-                adminUser: req.session.adminUser,
-                layout: false
+                adminUser: req.session.adminUser
             });
             
         } catch (error) {
