@@ -1,0 +1,729 @@
+/**
+ * Support Pages Dark Nature CSS
+ * Unified styling for: cuidados, FAQ, envios, contacto
+ */
+
+/* Support Page Base */
+.support-page {
+    background: var(--black);
+    color: var(--ivory);
+    font-family: var(--font-body);
+    min-height: 100vh;
+}
+
+/* Support Hero */
+.support-hero {
+    background: linear-gradient(145deg, rgba(11,13,12,0.98) 0%, rgba(11,13,12,0.92) 100%);
+    padding: var(--space-6xl) 0 var(--space-5xl) 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(110,107,101,0.2);
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--gold-old);
+    margin-bottom: var(--space-lg);
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--slate);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Section Title */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-3xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.title-icon {
+    font-size: 1.4em;
+}
+
+.section-intro {
+    font-size: 1rem;
+    color: var(--slate);
+    max-width: 800px;
+    margin-bottom: var(--space-3xl);
+    line-height: 1.6;
+}
+
+/* General Section Spacing */
+.care-section,
+.faq-section,
+.shipping-section,
+.returns-section,
+.packaging-section,
+.contact-section {
+    padding: var(--space-5xl) 0;
+}
+
+/* Care Tips Grid (cuidados page) */
+.care-tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-xl);
+}
+
+.care-tip-card {
+    background: linear-gradient(145deg, rgba(11,13,12,0.95) 0%, rgba(11,13,12,0.9) 100%);
+    border: 1px solid rgba(110,107,101,0.2);
+    border-radius: var(--radius-large);
+    padding: var(--space-2xl);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.care-tip-card:hover {
+    border-color: rgba(176,141,87,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.tip-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-lg);
+}
+
+.tip-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+    font-size: 1.1rem;
+}
+
+.tip-description {
+    color: var(--slate);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Stone Care Blocks */
+.stone-care-block {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    padding: var(--space-2xl);
+    margin-bottom: var(--space-xl);
+}
+
+.stone-care-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 2px solid rgba(110,107,101,0.2);
+}
+
+.stone-icon {
+    font-size: 2.5rem;
+}
+
+.stone-name {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--gold-old);
+}
+
+.stone-care-content h4 {
+    font-family: var(--font-heading);
+    color: var(--ivory);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-md);
+}
+
+.stone-care-content ul {
+    color: var(--slate);
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+}
+
+/* FAQ Accordion */
+.faq-category {
+    margin-bottom: var(--space-5xl);
+}
+
+.category-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-2xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.category-icon {
+    font-size: 1.5em;
+}
+
+.faq-accordion {
+    max-width: 900px;
+}
+
+.faq-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(176,141,87,0.3);
+}
+
+.faq-item.open {
+    border-color: var(--gold-old);
+    background: rgba(176,141,87,0.05);
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-xl);
+    background: transparent;
+    border: none;
+    color: var(--ivory);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+    color: var(--gold-old);
+}
+
+.question-text {
+    flex: 1;
+    padding-right: var(--space-lg);
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    color: var(--gold-old);
+    font-weight: 700;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(176,141,87,0.1);
+    border-radius: 50%;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 1000px;
+    padding: 0 var(--space-xl) var(--space-xl) var(--space-xl);
+}
+
+.faq-answer p {
+    color: var(--slate);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+}
+
+.faq-answer ul,
+.faq-answer ol {
+    color: var(--slate);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-xl);
+}
+
+.faq-answer a {
+    color: var(--gold-old);
+    text-decoration: underline;
+}
+
+/* Shipping Methods Grid */
+.shipping-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-4xl);
+}
+
+.shipping-method-card {
+    background: linear-gradient(145deg, rgba(11,13,12,0.95) 0%, rgba(11,13,12,0.9) 100%);
+    border: 2px solid rgba(110,107,101,0.2);
+    border-radius: var(--radius-large);
+    padding: var(--space-3xl);
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.shipping-method-card:hover {
+    border-color: rgba(176,141,87,0.5);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+.method-badge {
+    position: absolute;
+    top: -12px;
+    right: var(--space-lg);
+    background: rgba(34,139,34,0.2);
+    color: rgba(34,139,34,1);
+    border: 1px solid rgba(34,139,34,0.4);
+    padding: 4px 12px;
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.method-badge--premium {
+    background: rgba(176,141,87,0.2);
+    color: var(--gold-old);
+    border-color: var(--gold-old);
+}
+
+.method-icon {
+    font-size: 3.5rem;
+    margin-bottom: var(--space-lg);
+}
+
+.method-name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-md);
+}
+
+.method-price {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: var(--space-xl);
+}
+
+.method-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-lg);
+    text-align: left;
+}
+
+.method-features li {
+    color: var(--slate);
+    margin-bottom: var(--space-sm);
+    font-size: 0.95rem;
+}
+
+.method-note {
+    color: var(--gold-old);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(110,107,101,0.2);
+}
+
+/* Returns & Packaging */
+.returns-content,
+.silver-care-content {
+    max-width: 900px;
+}
+
+.returns-highlight,
+.returns-process,
+.returns-conditions,
+.care-method {
+    margin-bottom: var(--space-3xl);
+}
+
+.highlight-title,
+.process-title,
+.conditions-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-lg);
+}
+
+.highlight-description,
+.process-text {
+    color: var(--slate);
+    line-height: 1.6;
+}
+
+.process-steps {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.process-step {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--gold-old) 0%, rgba(176,141,87,0.9) 100%);
+    color: var(--black);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-xs);
+}
+
+.step-text {
+    color: var(--slate);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.conditions-list {
+    list-style: none;
+    padding: 0;
+    color: var(--slate);
+    line-height: 1.8;
+}
+
+.conditions-list li {
+    margin-bottom: var(--space-sm);
+}
+
+/* Contact Layout */
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-4xl);
+}
+
+/* Contact Form */
+.contact-form-container {
+    background: linear-gradient(145deg, rgba(11,13,12,0.95) 0%, rgba(11,13,12,0.9) 100%);
+    border: 1px solid rgba(110,107,101,0.2);
+    border-radius: var(--radius-large);
+    padding: var(--space-4xl);
+}
+
+.form-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-3xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.form-group {
+    margin-bottom: var(--space-xl);
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-sm);
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(11,13,12,0.7);
+    border: 1px solid rgba(110,107,101,0.3);
+    border-radius: var(--radius);
+    color: var(--ivory);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--gold-old);
+    background: rgba(11,13,12,0.9);
+    box-shadow: 0 0 0 2px rgba(176,141,87,0.2);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.form-note {
+    font-size: 0.85rem;
+    color: var(--slate);
+    font-style: italic;
+    text-align: center;
+    margin-top: var(--space-lg);
+}
+
+.btn--full {
+    width: 100%;
+}
+
+/* Contact Info Cards */
+.contact-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.info-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    padding: var(--space-2xl);
+}
+
+.info-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.info-icon {
+    font-size: 1.3em;
+}
+
+.info-item {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid rgba(110,107,101,0.1);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.item-icon {
+    font-size: 1.5rem;
+}
+
+.item-content {
+    flex: 1;
+}
+
+.item-label {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin-bottom: 4px;
+}
+
+.item-value {
+    color: var(--ivory);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.item-value:hover {
+    color: var(--gold-old);
+}
+
+.whatsapp-badge {
+    display: inline-block;
+    background: rgba(34,139,34,0.2);
+    color: rgba(34,139,34,1);
+    border: 1px solid rgba(34,139,34,0.4);
+    padding: 2px 8px;
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: var(--space-xs);
+}
+
+.business-hours {
+    margin-bottom: var(--space-lg);
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    color: var(--slate);
+}
+
+.hours-row--closed {
+    opacity: 0.5;
+}
+
+.hours-note {
+    font-size: 0.85rem;
+    color: var(--slate);
+    font-style: italic;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(110,107,101,0.1);
+}
+
+.address-info {
+    color: var(--slate);
+    font-style: normal;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius);
+    color: var(--ivory);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    border-color: var(--gold-old);
+    background: rgba(176,141,87,0.05);
+}
+
+.social-icon {
+    font-size: 1.5rem;
+}
+
+/* CTAs */
+.faq-cta,
+.shipping-cta,
+.cta-section {
+    padding: var(--space-5xl) 0;
+}
+
+.cta-card {
+    background: linear-gradient(145deg, rgba(11,13,12,0.98) 0%, rgba(11,13,12,0.92) 100%);
+    border: 2px solid rgba(176,141,87,0.3);
+    border-radius: var(--radius-large);
+    padding: var(--space-5xl) var(--space-3xl);
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.cta-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 600;
+    color: var(--gold-old);
+    margin-bottom: var(--space-lg);
+}
+
+.cta-description {
+    color: var(--slate);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto var(--space-3xl) auto;
+}
+
+.cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .support-hero {
+        padding: var(--space-4xl) 0 var(--space-3xl) 0;
+    }
+    
+    .care-tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .shipping-methods-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-form-container {
+        padding: var(--space-2xl);
+    }
+    
+    .cta-card {
+        padding: var(--space-3xl) var(--space-xl);
+    }
+    
+    .cta-actions {
+        flex-direction: column;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .care-tip-card,
+    .shipping-method-card,
+    .faq-answer {
+        transition: none;
+    }
+}
+

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perguntas Frequentes - Gonzaga Art & Shine</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Encontre respostas para as suas dúvidas sobre compras, envios, devoluções, autenticidade das pedras e cuidados com as joias artesanais.">
+    <meta name="keywords" content="FAQ joias portugal, perguntas frequentes pedras sagradas, ajuda compras online">
+    
+    <!-- Dark Nature CSS Stack -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/support-pages-dark-nature.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="support-page faq-page" data-page="faq">
+    
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main id="main-content">
+        
+        <!-- Hero -->
+        <section class="support-hero">
+            <div class="container">
+                <h1 class="hero-title">Perguntas Frequentes</h1>
+                <p class="hero-subtitle">
+                    Encontre respostas rápidas para as suas dúvidas sobre pedidos, envios, pedras sagradas e muito mais.
+                </p>
+            </div>
+        </section>
+        
+        <!-- FAQ Categories -->
+        <section class="faq-section">
+            <div class="container">
+                
+                <!-- Category: Pedidos & Pagamentos -->
+                <div class="faq-category">
+                    <h2 class="category-title">
+                        <span class="category-icon">🛒</span>
+                        Pedidos & Pagamentos
+                    </h2>
+                    
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Quais os métodos de pagamento disponíveis?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Aceitamos três métodos de pagamento seguros:</p>
+                                <ul>
+                                    <li><strong>MB Way</strong> - Pagamento instantâneo via telemóvel (recomendado)</li>
+                                    <li><strong>PayPal</strong> - Proteção internacional do comprador</li>
+                                    <li><strong>Transferência Bancária</strong> - IBAN fornecido após confirmação do pedido</li>
+                                </ul>
+                                <p>Todos os pagamentos são processados de forma segura e encriptada.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Posso cancelar ou alterar o meu pedido?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Pode cancelar ou alterar o seu pedido <strong>até 24 horas</strong> após a confirmação, desde que ainda não tenha sido enviado.</p>
+                                <p>Contacte-nos através de:</p>
+                                <ul>
+                                    <li>Email: <a href="mailto:pedidos@gonzagaartnshine.pt">pedidos@gonzagaartnshine.pt</a></li>
+                                    <li>Formulário de contacto no website</li>
+                                </ul>
+                                <p>Pedidos já em preparação ou enviados não podem ser cancelados, mas podem ser devolvidos dentro de 14 dias.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Recebo fatura?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sim! Todos os pedidos incluem fatura eletrónica enviada por email após confirmação do pagamento.</p>
+                                <p>Se necessitar de fatura com NIF, por favor indique no campo de notas durante o checkout.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Como posso acompanhar o meu pedido?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Após confirmação do pedido, receberá:</p>
+                                <ol>
+                                    <li>Email de confirmação com número de pedido</li>
+                                    <li>Notificação quando o pedido for enviado com código de tracking</li>
+                                    <li>Link para acompanhamento em tempo real</li>
+                                </ol>
+                                <p>Também pode aceder a <a href="/order-tracking">Acompanhamento de Pedidos</a> usando o seu número de pedido.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category: Envios & Entregas -->
+                <div class="faq-category">
+                    <h2 class="category-title">
+                        <span class="category-icon">📦</span>
+                        Envios & Entregas
+                    </h2>
+                    
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Quais os prazos de entrega?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Oferecemos dois tipos de envio:</p>
+                                <ul>
+                                    <li><strong>Standard (€5.99):</strong> 3-5 dias úteis</li>
+                                    <li><strong>Expresso (€12.99):</strong> 1-2 dias úteis</li>
+                                </ul>
+                                <p><strong>Envio gratuito</strong> em compras acima de €75!</p>
+                                <p><em>Nota: Prazos podem variar durante época festiva (Natal, Páscoa).</em></p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Fazem envios para fora de Portugal?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Atualmente enviamos para:</p>
+                                <ul>
+                                    <li>🇵🇹 Portugal Continental</li>
+                                    <li>🇪🇸 Espanha</li>
+                                    <li>🇫🇷 França</li>
+                                    <li>🇩🇪 Alemanha</li>
+                                    <li>🇮🇹 Itália</li>
+                                </ul>
+                                <p>Para outros destinos, contacte-nos para orçamento personalizado.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Como são embaladas as encomendas?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Cada peça é cuidadosamente embalada:</p>
+                                <ol>
+                                    <li>Bolsa de veludo premium com logótipo Gonzaga</li>
+                                    <li>Caixa rígida protegida com material acolchoado</li>
+                                    <li>Cartão de autenticidade e certificado artesanal</li>
+                                    <li>Instruções de cuidados personalizadas por pedra</li>
+                                </ol>
+                                <p>Perfeito para presente ou para si! ✨</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category: Devoluções & Trocas -->
+                <div class="faq-category">
+                    <h2 class="category-title">
+                        <span class="category-icon">↩️</span>
+                        Devoluções & Trocas
+                    </h2>
+                    
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Qual a política de devolução?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Oferecemos <strong>14 dias de garantia de devolução</strong> após receber o pedido.</p>
+                                <p><strong>Condições:</strong></p>
+                                <ul>
+                                    <li>Peça não usada e em estado original</li>
+                                    <li>Embalagem e certificados incluídos</li>
+                                    <li>Contactar-nos primeiro para autorização</li>
+                                </ul>
+                                <p>Reembolso processado em 5-7 dias úteis após recebermos a devolução.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Posso trocar por outra peça?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sim! Trocas são gratuitas dentro de 14 dias.</p>
+                                <p><strong>Como fazer:</strong></p>
+                                <ol>
+                                    <li>Contacte-nos indicando a peça desejada</li>
+                                    <li>Aguarde autorização e instruções de envio</li>
+                                    <li>Envie a peça original (portes por sua conta)</li>
+                                    <li>Receberá a nova peça sem custos de envio</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">E se a peça chegar danificada?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Embora seja raro devido ao nosso cuidado no envio:</p>
+                                <ul>
+                                    <li>Fotografe o dano imediatamente</li>
+                                    <li>Contacte-nos em 48h após receber</li>
+                                    <li>Providenciaremos substituição ou reembolso total</li>
+                                    <li>Portes de devolução por nossa conta</li>
+                                </ul>
+                                <p>A sua satisfação é a nossa prioridade máxima!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category: Pedras & Autenticidade -->
+                <div class="faq-category">
+                    <h2 class="category-title">
+                        <span class="category-icon">💎</span>
+                        Pedras & Autenticidade
+                    </h2>
+                    
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">As pedras são autênticas?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p><strong>100% autênticas e naturais!</strong></p>
+                                <p>Todas as nossas pedras sagradas são:</p>
+                                <ul>
+                                    <li>Minerais naturais extraídos eticamente</li>
+                                    <li>Sem tratamentos químicos ou artificiais</li>
+                                    <li>Acompanhadas de certificado de autenticidade</li>
+                                    <li>Verificadas por gemólogos portugueses</li>
+                                </ul>
+                                <p>Cada pedra tem variações naturais únicas - garantia de autenticidade!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">A prata é genuína 925?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sim! Toda a nossa prata é <strong>925 sterling</strong> (92.5% prata pura).</p>
+                                <p>Cada peça inclui:</p>
+                                <ul>
+                                    <li>Selo 925 gravado</li>
+                                    <li>Certificado de composição metálica</li>
+                                    <li>Garantia de qualidade artesanal portuguesa</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">As pedras têm propriedades místicas reais?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>As propriedades místicas das pedras são parte de tradições ancestrais milenares.</p>
+                                <p>Respeitamos estas crenças mas não fazemos alegações médicas ou científicas.</p>
+                                <p>Cada pessoa experiencia as energias de forma única e pessoal. As nossas descrições baseiam-se em:</p>
+                                <ul>
+                                    <li>Conhecimento tradicional português</li>
+                                    <li>Práticas espirituais ancestrais</li>
+                                    <li>Testemunhos de clientes ao longo dos anos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category: Artesanato & Criação -->
+                <div class="faq-category">
+                    <h2 class="category-title">
+                        <span class="category-icon">⚒️</span>
+                        Artesanato & Criação
+                    </h2>
+                    
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">As peças são feitas à mão?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sim! Cada peça Gonzaga Art & Shine é <strong>artesanato puro português</strong>:</p>
+                                <ul>
+                                    <li>Criada por ourives tradicionais portugueses</li>
+                                    <li>Técnicas transmitidas por gerações</li>
+                                    <li>Sem produção em massa ou industrial</li>
+                                    <li>Cada peça é única com pequenas variações naturais</li>
+                                </ul>
+                                <p>Conheça os nossos <a href="/artesaos">Artesãos</a>!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span class="question-text">Aceitam encomendas personalizadas?</span>
+                                <span class="toggle-icon">+</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sim! Oferecemos serviço de peças personalizadas:</p>
+                                <ul>
+                                    <li>Escolha da pedra sagrada</li>
+                                    <li>Design exclusivo adaptado às suas preferências</li>
+                                    <li>Gravações personalizadas (nomes, datas, símbolos)</li>
+                                    <li>Tamanhos customizados</li>
+                                </ul>
+                                <p><strong>Prazo:</strong> 3-4 semanas<br>
+                                <strong>Orçamento:</strong> <a href="/contacto">Contacte-nos</a> com a sua ideia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Still Have Questions -->
+                <div class="faq-cta">
+                    <h3 class="cta-title">Não encontrou a resposta?</h3>
+                    <p class="cta-description">A nossa equipa está disponível para ajudar com qualquer dúvida!</p>
+                    <div class="cta-actions">
+                        <a href="/contacto" class="btn btn--gold btn--large">
+                            <span class="btn-icon">💬</span>
+                            <span class="btn-text">Contactar Suporte</span>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+    </main>
+    
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <script>
+        // FAQ Accordion Toggle
+        function toggleFAQ(button) {
+            const faqItem = button.closest('.faq-item');
+            const isOpen = faqItem.classList.contains('open');
+            
+            // Close all other items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+                item.querySelector('.toggle-icon').textContent = '+';
+            });
+            
+            // Toggle current item
+            if (!isOpen) {
+                faqItem.classList.add('open');
+                button.querySelector('.toggle-icon').textContent = '−';
+            }
+            
+            // Scroll into view
+            if (!isOpen) {
+                setTimeout(() => {
+                    faqItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Gonzaga Art & Shine</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Entre em contacto com Gonzaga Art & Shine. Apoio ao cliente, encomendas personalizadas, visitas ao atelier e dúvidas sobre pedras sagradas.">
+    <meta name="keywords" content="contacto joias portugal, atelier ourivesaria, encomendas personalizadas, WhatsApp suporte">
+    
+    <!-- Dark Nature CSS Stack -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/support-pages-dark-nature.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="support-page contacto-page" data-page="contacto">
+    
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main id="main-content">
+        
+        <!-- Hero -->
+        <section class="support-hero">
+            <div class="container">
+                <h1 class="hero-title">Fale Connosco</h1>
+                <p class="hero-subtitle">
+                    Estamos aqui para ajudar com qualquer questão sobre as suas peças sagradas, encomendas ou visitas ao nosso atelier.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Contact Methods -->
+        <section class="contact-section">
+            <div class="container">
+                
+                <div class="contact-layout">
+                    
+                    <!-- Contact Form -->
+                    <div class="contact-form-container">
+                        <h2 class="form-title">
+                            <span class="title-icon">✉️</span>
+                            Envie-nos uma Mensagem
+                        </h2>
+                        
+                        <form class="contact-form" id="contactForm" method="POST" action="/api/contact">
+                            <div class="form-group">
+                                <label for="contact-name" class="form-label">Nome *</label>
+                                <input type="text" 
+                                       id="contact-name" 
+                                       name="name" 
+                                       class="form-input" 
+                                       placeholder="Hugo Gonzaga Gomes"
+                                       required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-email" class="form-label">Email *</label>
+                                <input type="email" 
+                                       id="contact-email" 
+                                       name="email" 
+                                       class="form-input" 
+                                       placeholder="email@exemplo.pt"
+                                       required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-phone" class="form-label">Telefone</label>
+                                <input type="tel" 
+                                       id="contact-phone" 
+                                       name="phone" 
+                                       class="form-input" 
+                                       placeholder="+351 912 345 678">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-subject" class="form-label">Assunto *</label>
+                                <select id="contact-subject" name="subject" class="form-input" required>
+                                    <option value="">Selecione um assunto</option>
+                                    <option value="order">Questão sobre Pedido</option>
+                                    <option value="custom">Encomenda Personalizada</option>
+                                    <option value="visit">Visita ao Atelier</option>
+                                    <option value="stones">Informações sobre Pedras</option>
+                                    <option value="repair">Reparação/Manutenção</option>
+                                    <option value="other">Outro Assunto</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-message" class="form-label">Mensagem *</label>
+                                <textarea id="contact-message" 
+                                          name="message" 
+                                          class="form-input form-textarea" 
+                                          rows="6" 
+                                          placeholder="Escreva a sua mensagem aqui..."
+                                          required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn--gold btn--large btn--full">
+                                <span class="btn-text">Enviar Mensagem</span>
+                                <span class="btn-icon">→</span>
+                            </button>
+                            
+                            <p class="form-note">Respondemos normalmente dentro de 24 horas (dias úteis)</p>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="contact-info-container">
+                        
+                        <!-- Quick Contact -->
+                        <div class="info-card">
+                            <h3 class="info-title">
+                                <span class="info-icon">💬</span>
+                                Contacto Direto
+                            </h3>
+                            
+                            <div class="info-item">
+                                <div class="item-icon">📧</div>
+                                <div class="item-content">
+                                    <div class="item-label">Email</div>
+                                    <a href="mailto:info@gonzagaartnshine.pt" class="item-value">info@gonzagaartnshine.pt</a>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="item-icon">📱</div>
+                                <div class="item-content">
+                                    <div class="item-label">WhatsApp</div>
+                                    <a href="https://wa.me/351912345678" target="_blank" class="item-value whatsapp-link">
+                                        +351 912 345 678
+                                        <span class="whatsapp-badge">Chat Direto</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="item-icon">📞</div>
+                                <div class="item-content">
+                                    <div class="item-label">Telefone</div>
+                                    <a href="tel:+351912345678" class="item-value">+351 912 345 678</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Business Hours -->
+                        <div class="info-card">
+                            <h3 class="info-title">
+                                <span class="info-icon">🕐</span>
+                                Horário de Atendimento
+                            </h3>
+                            
+                            <div class="business-hours">
+                                <div class="hours-row">
+                                    <span class="day">Segunda a Sexta</span>
+                                    <span class="time">10:00 - 18:00</span>
+                                </div>
+                                <div class="hours-row">
+                                    <span class="day">Sábado</span>
+                                    <span class="time">10:00 - 14:00</span>
+                                </div>
+                                <div class="hours-row hours-row--closed">
+                                    <span class="day">Domingo</span>
+                                    <span class="time">Encerrado</span>
+                                </div>
+                            </div>
+                            
+                            <p class="hours-note">
+                                <strong>Visitas ao Atelier:</strong> Por marcação prévia através de WhatsApp ou email.
+                            </p>
+                        </div>
+                        
+                        <!-- Location -->
+                        <div class="info-card">
+                            <h3 class="info-title">
+                                <span class="info-icon">📍</span>
+                                Localização
+                            </h3>
+                            
+                            <address class="address-info">
+                                <strong>Atelier Gonzaga Art & Shine</strong><br>
+                                Rua da Prata, nº 42<br>
+                                1100-420 Lisboa<br>
+                                Portugal
+                            </address>
+                            
+                            <a href="https://maps.google.com/?q=Lisboa+Portugal" target="_blank" class="btn btn--secondary btn--small">
+                                <span class="btn-icon">🗺️</span>
+                                <span class="btn-text">Ver no Mapa</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Social Links -->
+                        <div class="info-card">
+                            <h3 class="info-title">
+                                <span class="info-icon">✨</span>
+                                Redes Sociais
+                            </h3>
+                            
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/gonzagaartnshine/" target="_blank" class="social-link social-link--instagram">
+                                    <span class="social-icon">📷</span>
+                                    <span class="social-name">Instagram</span>
+                                </a>
+                                <a href="https://www.facebook.com/profile.php?id=61573519807731" target="_blank" class="social-link social-link--facebook">
+                                    <span class="social-icon">👥</span>
+                                    <span class="social-name">Facebook</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </section>
+        
+    </main>
+    
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <script>
+        // Contact Form Handling
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const button = form.querySelector('button[type="submit"]');
+            const buttonText = button.querySelector('.btn-text');
+            const originalText = buttonText.textContent;
+            
+            // Disable button
+            button.disabled = true;
+            buttonText.textContent = 'Enviando...';
+            
+            try {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Success
+                    form.reset();
+                    alert('✅ Mensagem enviada com sucesso! Responderemos em breve.');
+                } else {
+                    throw new Error(result.error || 'Erro ao enviar mensagem');
+                }
+                
+            } catch (error) {
+                console.error('Contact form error:', error);
+                alert('❌ Erro ao enviar mensagem. Por favor tente novamente ou contacte-nos directamente via WhatsApp/email.');
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                buttonText.textContent = originalText;
+            }
+        });
+    </script>
+</body>
+</html>
+
