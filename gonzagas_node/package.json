@@ -20,7 +20,11 @@
     "download-assets": "python3 scripts/download-dark-nature-assets.py",
     "optimize-images": "node scripts/optimize-4stones.js",
     "setup-dark-nature": "npm run download-assets && npm run optimize-images",
-    "validate-assets": "node scripts/validate-assets.js"
+    "validate-assets": "node scripts/validate-assets.js",
+    "download-gallery": "python3 scripts/download-gallery-authentic.py",
+    "optimize-gallery": "node scripts/optimize-4stones.js",
+    "setup-gallery": "npm run download-gallery && npm run optimize-gallery",
+    "test-gallery": "npm run dev && echo 'Test at: http://localhost:3000/galeria'"
   },
   "keywords": [
     "jewelry",

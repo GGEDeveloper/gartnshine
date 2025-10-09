@@ -608,6 +608,155 @@ router.get('/produto/:slug', async (req, res) => {
   }
 });
 
+// Galeria Autêntica Dark Nature - Mineral Journey
+router.get('/galeria', async (req, res) => {
+  try {
+    // Specimens minerais para showcase
+    const mineralSpecimens = {
+      onix: {
+        name: 'Ónix',
+        origin: 'Brasil - Formação Vulcânica',
+        properties: 'Proteção ancestral, força interior',
+        chakra: 'Raiz',
+        element: 'Terra'
+      },
+      'olho-de-tigre': {
+        name: 'Olho-de-tigre',
+        origin: 'África do Sul - Metamorfose Crocidolite', 
+        properties: 'Coragem, clareza mental, proteção',
+        chakra: 'Plexo Solar',
+        element: 'Fogo e Terra'
+      },
+      ametista: {
+        name: 'Ametista',
+        origin: 'Brasil - Cristalização em Geodas',
+        properties: 'Sabedoria, transmutação, serenidade',
+        chakra: 'Terceiro Olho', 
+        element: 'Éter'
+      },
+      turquesa: {
+        name: 'Turquesa',
+        origin: 'Tibete - Mineral Secundário',
+        properties: 'Proteção viajantes, comunicação autêntica',
+        chakra: 'Garganta',
+        element: 'Água e Terra'
+      }
+    };
+    
+    // Gallery specimens organizados por categoria
+    const gallerySpecimens = {
+      origem: [
+        {
+          id: 'onix-bruto',
+          src: '/gallery/authentic/onix-bruto-volcanico.jpg',
+          title: 'Ónix Vulcânico Bruto',
+          description: 'Specimen natural em formação vulcânica sedimentar',
+          mineral: 'onix',
+          technical: 'SiO₂ - Calcedónia bandada'
+        },
+        {
+          id: 'tiger-chatoyance', 
+          src: '/gallery/authentic/olho-tigre-chatoyancia-natural.jpg',
+          title: 'Chatoyância Natural',
+          description: 'Veios dourados em fibras de crocidolite transformada',
+          mineral: 'olho-de-tigre',
+          technical: 'Quartzo fibroso pseudomorfo'
+        },
+        {
+          id: 'amethyst-geode',
+          src: '/gallery/authentic/ametista-geodo-natural.jpg', 
+          title: 'Formação Cristalina',
+          description: 'Cristais hexagonais em geodo de quartzo',
+          mineral: 'ametista',
+          technical: 'SiO₂ com traços de ferro'
+        },
+        {
+          id: 'turquoise-matrix',
+          src: '/gallery/authentic/turquesa-matrix-natural.jpg',
+          title: 'Turquesa Matrix',
+          description: 'Mineral em rocha-mãe com oxidação cobre',
+          mineral: 'turquesa', 
+          technical: 'CuAl₆(PO₄)₄(OH)₈·4H₂O'
+        }
+      ],
+      transformacao: [
+        {
+          id: 'bancada-artesao',
+          src: '/gallery/authentic/bancada-artesao-portuguesa.jpg',
+          title: 'Bancada Ancestral',
+          description: 'Mesa de trabalho com ferramentas centenárias',
+          category: 'Artesanato',
+          tradition: 'Técnicas portuguesas tradicionais'
+        },
+        {
+          id: 'ferramentas-antigas',
+          src: '/gallery/authentic/ferramentas-centenarias.jpg',
+          title: 'Ferramentas do Tempo', 
+          description: 'Utensílios de ourivesaria com pátina histórica',
+          category: 'Tradição',
+          tradition: 'Herança artesanal portuguesa'
+        },
+        {
+          id: 'prata-processo',
+          src: '/gallery/authentic/prata-925-processo.jpg',
+          title: 'Alquimia da Prata',
+          description: 'Transformação do metal em estado líquido',
+          category: 'Processo',
+          tradition: 'Fundição artesanal'
+        },
+        {
+          id: 'lapidacao-manual',
+          src: '/gallery/authentic/lapidacao-manual.jpg',
+          title: 'Revelação Manual', 
+          description: 'Do bruto ao polido através da paciência',
+          category: 'Técnica',
+          tradition: 'Lapidação portuguesa'
+        }
+      ],
+      harmonia: [
+        {
+          id: 'flora-sombria',
+          src: '/gallery/authentic/musgos-liquenes-pedra.jpg',
+          title: 'Simbiose Mineral',
+          description: 'Vida que floresce na pedra ancestral',
+          ecosystem: 'Flora sombria natural',
+          elements: 'Musgos + Líquenes + Ardósia'
+        },
+        {
+          id: 'quaternario-sagrado',
+          src: '/gallery/authentic/quatro-pedras-musgo.jpg',
+          title: 'Quaternário Mineral',
+          description: 'Harmonia dos 4 elementos terrestres',
+          ecosystem: 'Disposição natural orgânica',
+          elements: 'Ónix + Olho-de-tigre + Ametista + Turquesa'
+        }
+      ]
+    };
+    
+    res.render('pages/galeria-authentic-dark-nature', {
+      layout: false,
+      currentPage: 'galeria',
+      title: 'Galeria Autêntica - Da Terra Nasce a Arte | Gonzaga Art & Shine',
+      mineralSpecimens,
+      gallerySpecimens,
+      meta: {
+        description: 'Explore a jornada autêntica dos minerais sagrados. Do specimen bruto ao artesanato português - sem artificiais, só natureza pura.',
+        keywords: 'galeria autêntica, minerais naturais, artesanato português, ónix olho-de-tigre ametista turquesa, processos reais',
+        ogImage: '/gallery/authentic/og-gallery-authentic.jpg'
+      },
+      protocol: req.protocol,
+      host: req.get('host')
+    });
+    
+  } catch (error) {
+    console.error('Error loading authentic gallery:', error);
+    res.status(500).render('error', { 
+      error,
+      layout: 'layout'
+    });
+  }
+});
+
 // About page (usando layout Dark Nature)
 router.get('/about', (req, res) => {
   res.render('about', { 

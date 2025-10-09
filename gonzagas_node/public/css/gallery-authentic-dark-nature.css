@@ -1,0 +1,808 @@
+/* ==========================================
+   GALERIA AUTÊNTICA DARK NATURE
+   Só elementos naturais e reais
+   Zero pessoas, zero artificiais
+   ========================================== */
+
+/* Reset Gallery Specific */
+.gallery-authentic-page {
+    background: var(--black);
+    color: var(--ivory);
+    font-family: var(--font-body);
+}
+
+/* Hero Caverna Primordial */
+.gallery-hero.caverna-primordial {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    color: var(--ivory);
+    overflow: hidden;
+}
+
+.hero-overlay-organic {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(11,13,12,0.8) 0%,
+        rgba(11,13,12,0.4) 40%,
+        rgba(11,13,12,0.6) 70%,
+        rgba(11,13,12,0.9) 100%
+    );
+    /* Organic texture overlay */
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(110,107,101,0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(176,141,87,0.01) 0%, transparent 50%);
+}
+
+.gallery-hero__content {
+    max-width: 800px;
+    text-align: center;
+    margin: 0 auto;
+    z-index: 1;
+    position: relative;
+}
+
+.gallery-hero__kicker {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--gold-old);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-lg);
+    font-weight: 500;
+}
+
+.gallery-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 700;
+    line-height: 0.85;
+    margin-bottom: var(--space-xl);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.title-word {
+    display: inline-block;
+    margin-right: 0.2em;
+}
+
+.title-word--accent {
+    color: var(--gold-old);
+    position: relative;
+}
+
+.title-word--primary {
+    color: var(--silver-matte);
+    font-weight: 800;
+}
+
+.gallery-hero__manifesto {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: rgba(231,225,214,0.95);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-2xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.gallery-hero__elements {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    margin-top: var(--space-xl);
+}
+
+.element-preview {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(11,13,12,0.7);
+    border: 1px solid rgba(176,141,87,0.2);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    color: var(--slate);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.element-preview:hover {
+    background: rgba(176,141,87,0.1);
+    border-color: rgba(176,141,87,0.4);
+    color: var(--gold-old);
+}
+
+/* Journey Navigation */
+.journey-navigation {
+    padding: var(--space-4xl) 0;
+    background: rgba(255,255,255,0.005);
+    border-top: 1px solid rgba(110,107,101,0.1);
+    border-bottom: 1px solid rgba(110,107,101,0.1);
+}
+
+.journey-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.journey-nav__btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-xl);
+    background: transparent;
+    border: 1px solid rgba(110,107,101,0.2);
+    border-radius: var(--radius-large);
+    color: var(--ivory);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.journey-nav__btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(176,141,87,0.02) 0%, 
+        rgba(199,202,206,0.01) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.journey-nav__btn:hover,
+.journey-nav__btn.active {
+    border-color: rgba(176,141,87,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+.journey-nav__btn:hover::before,
+.journey-nav__btn.active::before {
+    opacity: 1;
+}
+
+.journey-nav__icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+    filter: grayscale(0.2);
+}
+
+.journey-nav__title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--ivory);
+}
+
+.journey-nav__subtitle {
+    font-size: 0.85rem;
+    color: var(--slate);
+    font-style: italic;
+}
+
+/* Gallery Organic Main */
+.gallery-organic-main {
+    padding: var(--space-6xl) 0;
+}
+
+.specimens-masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-4xl);
+}
+
+/* Specimen Cards */
+.specimen-card {
+    position: relative;
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+}
+
+.specimen-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(176,141,87,0.3);
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.specimen-card--large {
+    grid-column: span 2;
+}
+
+.specimen-card__media {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+}
+
+.specimen-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.specimen-card:hover .specimen-image {
+    transform: scale(1.08);
+}
+
+.specimen-card__badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 2;
+}
+
+/* Mineral-specific badges */
+.mineral-badge--onix {
+    background: rgba(17,17,17,0.9);
+    color: var(--ivory);
+    border-color: rgba(17,17,17,0.5);
+}
+
+.mineral-badge--olho_de_tigre {
+    background: rgba(107,74,27,0.9);
+    color: var(--ivory);
+    border-color: rgba(107,74,27,0.5);
+}
+
+.mineral-badge--ametista {
+    background: rgba(45,27,61,0.9);
+    color: var(--ivory);
+    border-color: rgba(45,27,61,0.5);
+}
+
+.mineral-badge--turquesa {
+    background: rgba(27,58,61,0.9);
+    color: var(--ivory);
+    border-color: rgba(27,58,61,0.5);
+}
+
+.process-badge {
+    background: rgba(176,141,87,0.9);
+    color: var(--black);
+    border-color: rgba(176,141,87,0.5);
+}
+
+.harmony-badge {
+    background: rgba(110,107,101,0.9);
+    color: var(--ivory);
+    border-color: rgba(110,107,101,0.5);
+}
+
+/* Specimen Content */
+.specimen-card__content {
+    padding: var(--space-xl);
+}
+
+.specimen-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: var(--space-sm);
+    line-height: var(--line-height-tight);
+}
+
+.specimen-card__description {
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-lg);
+}
+
+.specimen-card__meta {
+    margin-bottom: var(--space-lg);
+}
+
+.meta-item,
+.tradition-item,
+.ecosystem-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-sm);
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid rgba(110,107,101,0.1);
+}
+
+.meta-label,
+.tradition-icon,
+.ecosystem-label {
+    font-weight: 600;
+    color: var(--gold-old);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-right: var(--space-md);
+}
+
+.meta-value,
+.tradition-text,
+.ecosystem-value {
+    color: var(--slate);
+    font-size: 0.85rem;
+    text-align: right;
+    line-height: var(--line-height-normal);
+}
+
+.specimen-card__actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.btn-specimen-zoom,
+.btn-specimen-collection {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+
+.btn-specimen-zoom {
+    background: rgba(176,141,87,0.1);
+    color: var(--gold-old);
+    border: 1px solid rgba(176,141,87,0.2);
+}
+
+.btn-specimen-zoom:hover {
+    background: rgba(176,141,87,0.2);
+    border-color: rgba(176,141,87,0.4);
+    transform: translateY(-1px);
+}
+
+.btn-specimen-collection {
+    color: var(--slate);
+    transition: color 0.3s ease;
+}
+
+.btn-specimen-collection:hover {
+    color: var(--silver-matte);
+}
+
+/* Mineral Knowledge Section */
+.mineral-knowledge {
+    padding: var(--space-6xl) 0;
+    background: rgba(255,255,255,0.008);
+}
+
+.knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+}
+
+.knowledge-card {
+    padding: var(--space-2xl);
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+    transition: all 0.3s ease;
+}
+
+.knowledge-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(176,141,87,0.2);
+}
+
+.knowledge-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.mineral-symbol {
+    font-size: 2.5rem;
+    filter: grayscale(0.1);
+}
+
+.knowledge-card__header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--ivory);
+    font-weight: 600;
+}
+
+.knowledge-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid rgba(110,107,101,0.08);
+}
+
+.knowledge-label {
+    font-weight: 600;
+    color: var(--gold-old);
+    font-size: 0.9rem;
+}
+
+.knowledge-value {
+    color: var(--slate);
+    font-size: 0.9rem;
+}
+
+.knowledge-properties {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(110,107,101,0.1);
+}
+
+.properties-label {
+    display: block;
+    font-weight: 600;
+    color: var(--gold-old);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-xs);
+}
+
+.properties-text {
+    color: var(--slate);
+    font-size: 0.9rem;
+    line-height: var(--line-height-relaxed);
+}
+
+.knowledge-card__footer {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(110,107,101,0.1);
+}
+
+.knowledge-link {
+    color: var(--silver-matte);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.knowledge-link:hover {
+    color: var(--gold-old);
+}
+
+/* Authentic CTA */
+.gallery-authentic-cta {
+    padding: var(--space-6xl) 0;
+    text-align: center;
+    background: 
+        linear-gradient(135deg, rgba(11,13,12,0.95) 0%, rgba(11,13,12,0.98) 100%),
+        url('/images/texture-organic-dark.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    border-top: 1px solid rgba(110,107,101,0.1);
+}
+
+.cta-authentic-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: var(--space-lg);
+}
+
+.cta-description {
+    font-size: 1.2rem;
+    color: var(--slate);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-2xl);
+}
+
+.cta-actions {
+    display: flex;
+    gap: var(--space-lg);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Lightbox Modal Specimen */
+.specimen-lightbox-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.specimen-lightbox-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-backdrop-organic {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(8px);
+}
+
+.lightbox-content-specimen {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: var(--black);
+    border-radius: var(--radius-large);
+    border: 1px solid rgba(110,107,101,0.2);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+}
+
+.specimen-lightbox__media {
+    position: relative;
+    background: var(--black);
+}
+
+.specimen-lightbox__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-height: 80vh;
+}
+
+.specimen-lightbox__controls {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-md);
+}
+
+.lightbox-nav {
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(176,141,87,0.3);
+    color: var(--ivory);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.lightbox-nav:hover {
+    background: rgba(176,141,87,0.8);
+    border-color: rgba(176,141,87,0.6);
+    transform: scale(1.1);
+}
+
+.specimen-lightbox__info {
+    padding: var(--space-2xl);
+    color: var(--ivory);
+    overflow-y: auto;
+}
+
+.specimen-lightbox__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-lg);
+}
+
+.specimen-lightbox__title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--ivory);
+}
+
+.specimen-lightbox__description {
+    color: var(--slate);
+    font-size: 1.1rem;
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-xl);
+}
+
+.specimen-lightbox__details {
+    margin-bottom: var(--space-2xl);
+}
+
+.specimen-lightbox__actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.specimen-action-btn {
+    padding: var(--space-md) var(--space-lg);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.specimen-action-btn--primary {
+    background: var(--gold-old);
+    color: var(--black);
+}
+
+.specimen-action-btn--primary:hover {
+    background: var(--silver-matte);
+    transform: translateY(-2px);
+}
+
+.specimen-action-btn--secondary {
+    background: transparent;
+    color: var(--silver-matte);
+    border: 1px solid rgba(199,202,206,0.3);
+}
+
+.specimen-action-btn--secondary:hover {
+    border-color: rgba(199,202,206,0.6);
+    background: rgba(199,202,206,0.05);
+}
+
+.specimen-lightbox__close {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(110,107,101,0.3);
+    color: var(--ivory);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.specimen-lightbox__close:hover {
+    background: rgba(176,141,87,0.8);
+    border-color: rgba(176,141,87,0.6);
+    transform: scale(1.1);
+}
+
+/* Responsive Adaptations */
+@media (max-width: 768px) {
+    .gallery-hero.caverna-primordial {
+        min-height: 70vh;
+        background-attachment: scroll;
+    }
+    
+    .journey-nav-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+    
+    .specimens-masonry {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .specimen-card--large {
+        grid-column: span 1;
+    }
+    
+    .knowledge-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .lightbox-content-specimen {
+        grid-template-columns: 1fr;
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .gallery-hero__elements {
+        gap: var(--space-md);
+    }
+    
+    .element-preview {
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .specimen-card,
+    .journey-nav__btn,
+    .knowledge-card {
+        transition: none;
+    }
+    
+    .specimen-card:hover {
+        transform: none;
+    }
+    
+    .journey-nav__btn:hover {
+        transform: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .specimen-card {
+        border: 2px solid var(--ivory);
+    }
+    
+    .journey-nav__btn {
+        border: 2px solid var(--ivory);
+    }
+    
+    .btn-specimen-zoom {
+        border: 2px solid var(--gold-old);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .specimen-card {
+        transform: none !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+    
+    .gallery-hero.caverna-primordial {
+        background: var(--black);
+        min-height: 30vh;
+    }
+    
+    .specimen-lightbox-modal {
+        display: none !important;
+    }
+}
+

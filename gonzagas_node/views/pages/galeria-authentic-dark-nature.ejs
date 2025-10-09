@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <meta name="description" content="<%= meta.description %>">
+    <meta name="keywords" content="<%= meta.keywords %>">
+    
+    <!-- OG Tags -->
+    <meta property="og:title" content="Galeria Autêntica Dark Nature - Minerais Puros">
+    <meta property="og:description" content="<%= meta.description %>">
+    <meta property="og:image" content="<%= meta.ogImage %>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= protocol %>://<%= host %>/galeria">
+    
+    <!-- CSS Dark Nature -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/gallery-authentic-dark-nature.css">
+    
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Fonts Cinzel + Source Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="<%= protocol %>://<%= host %>/galeria">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        "name": "Galeria Dark Nature Autêntica",
+        "description": "<%= meta.description %>",
+        "url": "<%= protocol %>://<%= host %>/galeria",
+        "creator": {
+            "@type": "Organization",
+            "name": "Gonzaga Art & Shine",
+            "url": "<%= protocol %>://<%= host %>"
+        }
+    }
+    </script>
+</head>
+<body class="gallery-authentic-page" data-page="galeria">
+    
+    <!-- Skip Navigation -->
+    <a href="#main-content" class="skip-link">Saltar para galeria</a>
+    
+    <!-- Header Dark Nature -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <!-- Main Gallery Content -->
+    <main id="main-content" class="gallery-authentic-main">
+        
+        <!-- Hero Caverna -->
+        <section class="gallery-hero caverna-primordial" 
+                 style="background-image: url('/gallery/authentic/caverna-cristalina-hero.jpg')">
+            <div class="hero-overlay-organic"></div>
+            <div class="container">
+                <div class="gallery-hero__content" data-aos="fade-up" data-aos-duration="1000">
+                    <span class="gallery-hero__kicker">Galeria Dark Nature Autêntica</span>
+                    <h1 class="gallery-hero__title">
+                        <span class="title-word">Da</span>
+                        <span class="title-word title-word--accent">Terra</span>
+                        <span class="title-word">Nasce a</span>
+                        <span class="title-word title-word--primary">Arte</span>
+                    </h1>
+                    <p class="gallery-hero__manifesto">
+                        A jornada autêntica dos 4 minerais sagrados desde as profundezas da terra 
+                        até ao artesanato português ancestral. Sem artifícios, só natureza pura.
+                    </p>
+                    <div class="gallery-hero__elements">
+                        <div class="element-preview" data-element="terra">🌑 Terra Vulcânica</div>
+                        <div class="element-preview" data-element="fogo">🟤 Energia Solar</div>
+                        <div class="element-preview" data-element="eter">🟣 Cristal Etéreo</div>
+                        <div class="element-preview" data-element="agua">🔵 Oceano Ancestral</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Journey Navigation -->
+        <section class="journey-navigation" data-aos="fade-up">
+            <div class="container">
+                <div class="journey-nav-grid">
+                    <button class="journey-nav__btn active" data-filter="all" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="journey-nav__icon">✨</div>
+                        <h3 class="journey-nav__title">Jornada Completa</h3>
+                        <p class="journey-nav__subtitle">Todos os estágios</p>
+                    </button>
+                    <button class="journey-nav__btn" data-filter="origem" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="journey-nav__icon">🪨</div>
+                        <h3 class="journey-nav__title">Origem Primordial</h3>
+                        <p class="journey-nav__subtitle">Minerais em estado bruto</p>
+                    </button>
+                    <button class="journey-nav__btn" data-filter="transformacao" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="journey-nav__icon">🔨</div>
+                        <h3 class="journey-nav__title">Transformação</h3>
+                        <p class="journey-nav__subtitle">Artesanato português</p>
+                    </button>
+                    <button class="journey-nav__btn" data-filter="harmonia" data-aos="zoom-in" data-aos-delay="400">
+                        <div class="journey-nav__icon">🍃</div>
+                        <h3 class="journey-nav__title">Harmonia Natural</h3>
+                        <p class="journey-nav__subtitle">Simbiose orgânica</p>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Gallery Organic Grid -->
+        <section class="gallery-organic-main">
+            <div class="container">
+                <div class="specimens-masonry" id="specimens-masonry">
+                    
+                    <!-- ORIGEM PRIMORDIAL -->
+                    <% gallerySpecimens.origem.forEach((specimen, index) => { %>
+                    <article class="specimen-card specimen-card--origem" 
+                             data-category="origem" 
+                             data-mineral="<%= specimen.mineral %>"
+                             data-aos="fade-up" 
+                             data-aos-delay="<%= index * 100 %>">
+                        <div class="specimen-card__media">
+                            <img src="<%= specimen.src %>" 
+                                 alt="<%= specimen.title %> - <%= specimen.description %>"
+                                 loading="lazy"
+                                 class="specimen-image">
+                            <div class="specimen-card__badge mineral-badge--<%= specimen.mineral.replace('-', '_') %>">
+                                <%= mineralSpecimens[specimen.mineral].name %>
+                            </div>
+                        </div>
+                        <div class="specimen-card__content">
+                            <h3 class="specimen-card__title"><%= specimen.title %></h3>
+                            <p class="specimen-card__description"><%= specimen.description %></p>
+                            <div class="specimen-card__meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">Origem:</span>
+                                    <span class="meta-value"><%= mineralSpecimens[specimen.mineral].origin %></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Composição:</span>
+                                    <span class="meta-value"><%= specimen.technical %></span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Propriedades:</span>
+                                    <span class="meta-value"><%= mineralSpecimens[specimen.mineral].properties %></span>
+                                </div>
+                            </div>
+                            <div class="specimen-card__actions">
+                                <button class="btn-specimen-zoom" data-specimen="<%= specimen.id %>">
+                                    <span class="btn-icon">🔍</span>
+                                    Examinar Espécimen
+                                </button>
+                                <a href="/catalogo?pedra=<%= specimen.mineral %>" class="btn-specimen-collection">
+                                    Ver Coleção →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                    <% }); %>
+                    
+                    <!-- TRANSFORMAÇÃO ARTESANAL -->
+                    <% gallerySpecimens.transformacao.forEach((process, index) => { %>
+                    <article class="specimen-card specimen-card--transformacao" 
+                             data-category="transformacao"
+                             data-aos="fade-up" 
+                             data-aos-delay="<%= (index + 4) * 100 %>">
+                        <div class="specimen-card__media">
+                            <img src="<%= process.src %>" 
+                                 alt="<%= process.title %> - <%= process.description %>"
+                                 loading="lazy"
+                                 class="specimen-image">
+                            <div class="specimen-card__badge process-badge">
+                                <%= process.category %>
+                            </div>
+                        </div>
+                        <div class="specimen-card__content">
+                            <h3 class="specimen-card__title"><%= process.title %></h3>
+                            <p class="specimen-card__description"><%= process.description %></p>
+                            <div class="specimen-card__tradition">
+                                <div class="tradition-item">
+                                    <span class="tradition-icon">🇵🇹</span>
+                                    <span class="tradition-text"><%= process.tradition %></span>
+                                </div>
+                            </div>
+                            <div class="specimen-card__actions">
+                                <button class="btn-specimen-zoom" data-specimen="<%= process.id %>">
+                                    <span class="btn-icon">🔍</span>
+                                    Ver Processo
+                                </button>
+                                <a href="/artesaos" class="btn-specimen-collection">
+                                    Conhecer Artesãos →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                    <% }); %>
+                    
+                    <!-- HARMONIA NATURAL -->
+                    <% gallerySpecimens.harmonia.forEach((harmony, index) => { %>
+                    <article class="specimen-card specimen-card--harmonia specimen-card--large" 
+                             data-category="harmonia"
+                             data-aos="zoom-in" 
+                             data-aos-delay="<%= (index + 8) * 150 %>">
+                        <div class="specimen-card__media">
+                            <img src="<%= harmony.src %>" 
+                                 alt="<%= harmony.title %> - <%= harmony.description %>"
+                                 loading="lazy"
+                                 class="specimen-image">
+                            <div class="specimen-card__badge harmony-badge">
+                                Harmonia
+                            </div>
+                        </div>
+                        <div class="specimen-card__content">
+                            <h3 class="specimen-card__title"><%= harmony.title %></h3>
+                            <p class="specimen-card__description"><%= harmony.description %></p>
+                            <div class="specimen-card__ecosystem">
+                                <div class="ecosystem-item">
+                                    <span class="ecosystem-label">Ecossistema:</span>
+                                    <span class="ecosystem-value"><%= harmony.ecosystem %></span>
+                                </div>
+                                <div class="ecosystem-item">
+                                    <span class="ecosystem-label">Elementos:</span>
+                                    <span class="ecosystem-value"><%= harmony.elements %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <% }); %>
+                    
+                </div>
+            </div>
+        </section>
+        
+        <!-- Mineral Knowledge Section -->
+        <section class="mineral-knowledge" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">Sabedoria Mineral</h2>
+                <div class="knowledge-grid">
+                    <% Object.entries(mineralSpecimens).forEach(([key, mineral]) => { %>
+                    <div class="knowledge-card knowledge-card--<%= key.replace('-', '_') %>">
+                        <div class="knowledge-card__header">
+                            <div class="mineral-symbol mineral-symbol--<%= key.replace('-', '_') %>">
+                                <% if (key === 'onix') { %>⚫<% } %>
+                                <% if (key === 'olho-de-tigre') { %>🟤<% } %>
+                                <% if (key === 'ametista') { %>🟣<% } %>
+                                <% if (key === 'turquesa') { %>🔵<% } %>
+                            </div>
+                            <h3><%= mineral.name %></h3>
+                        </div>
+                        <div class="knowledge-card__content">
+                            <div class="knowledge-item">
+                                <span class="knowledge-label">Origem:</span>
+                                <span class="knowledge-value"><%= mineral.origin %></span>
+                            </div>
+                            <div class="knowledge-item">
+                                <span class="knowledge-label">Chakra:</span>
+                                <span class="knowledge-value"><%= mineral.chakra %></span>
+                            </div>
+                            <div class="knowledge-item">
+                                <span class="knowledge-label">Elemento:</span>
+                                <span class="knowledge-value"><%= mineral.element %></span>
+                            </div>
+                            <div class="knowledge-properties">
+                                <span class="properties-label">Propriedades:</span>
+                                <p class="properties-text"><%= mineral.properties %></p>
+                            </div>
+                        </div>
+                        <div class="knowledge-card__footer">
+                            <a href="/catalogo?pedra=<%= key %>" class="knowledge-link">
+                                Explorar Coleção <%= mineral.name %> →
+                            </a>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Authentic Call-to-Action -->
+        <section class="gallery-authentic-cta" data-aos="fade-up">
+            <div class="container">
+                <div class="cta-authentic-content">
+                    <h2 class="cta-title">A Sua Jornada Mineral Espera</h2>
+                    <p class="cta-description">
+                        Cada peça carrega milhões de anos de história da Terra e gerações 
+                        de conhecimento artesanal português. Qual mineral ressoa consigo?
+                    </p>
+                    <div class="cta-actions">
+                        <a href="/catalogo" class="btn btn--gold btn--large cta-primary">
+                            <span class="btn__text">Descobrir Coleção Completa</span>
+                            <span class="btn__icon">💎</span>
+                        </a>
+                        <a href="/manifesto" class="btn btn--silver-outline btn--large cta-secondary">
+                            <span class="btn__text">Conhecer Nossa Filosofia</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer Dark Nature -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- Specimen Lightbox Modal -->
+    <div class="specimen-lightbox-modal" id="specimen-lightbox">
+        <div class="lightbox-backdrop-organic"></div>
+        <div class="lightbox-content-specimen">
+            <div class="specimen-lightbox__media">
+                <img src="" alt="" class="specimen-lightbox__image">
+                <div class="specimen-lightbox__controls">
+                    <button class="lightbox-nav lightbox-prev" aria-label="Espécimen anterior">‹</button>
+                    <button class="lightbox-nav lightbox-next" aria-label="Próximo espécimen">›</button>
+                </div>
+            </div>
+            <div class="specimen-lightbox__info">
+                <div class="specimen-lightbox__header">
+                    <h3 class="specimen-lightbox__title"></h3>
+                    <div class="specimen-lightbox__badge"></div>
+                </div>
+                <p class="specimen-lightbox__description"></p>
+                <div class="specimen-lightbox__details" id="specimen-details">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="specimen-lightbox__actions">
+                    <button class="specimen-action-btn specimen-action-btn--primary" id="view-collection">
+                        Ver na Coleção
+                    </button>
+                    <button class="specimen-action-btn specimen-action-btn--secondary" id="share-specimen">
+                        Partilhar Espécimen
+                    </button>
+                </div>
+            </div>
+            <button class="specimen-lightbox__close" aria-label="Fechar lightbox">&times;</button>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/js/gallery-authentic-dark-nature.js"></script>
+    <script>
+        // Initialize AOS with organic feeling
+        AOS.init({
+            duration: 1200,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50,
+            disable: 'mobile' // Simplify on mobile
+        });
+    </script>
+    
+    <!-- Analytics -->
+    <script>
+        // Enhanced tracking for authentic gallery
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Galeria Autêntica Dark Nature',
+                page_location: window.location.href,
+                content_group1: 'gallery_authentic',
+                content_group2: 'mineral_journey'
+            });
+        }
+    </script>
+</body>
+</html>
+
