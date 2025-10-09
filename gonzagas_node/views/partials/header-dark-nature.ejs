@@ -29,6 +29,16 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                 </a>
             </li>
             
+            <!-- Galeria Link -->
+            <li class="site-header__menu-item" role="none">
+                <a href="/galeria" 
+                   class="site-header__menu-link <%= currentPageValue === 'galeria' ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   <% if (currentPageValue === 'galeria') { %>aria-current="page"<% } %>>
+                    <span class="site-header__menu-text">Galeria</span>
+                </a>
+            </li>
+            
             <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
                 <a href="/catalogo?pedra=onix" 
                    class="site-header__menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'onix')) ? 'site-header__menu-link--active' : '' %>" 
@@ -148,6 +158,16 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">💎</span>
                             <span class="site-header__mobile-menu-text">Catálogo Completo</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Galeria Mobile Link -->
+                    <li class="site-header__mobile-menu-item">
+                        <a href="/galeria" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'galeria' ? 'site-header__mobile-menu-link--active' : '' %>"
+                           <% if (currentPageValue === 'galeria') { %>aria-current="page"<% } %>>
+                            <span class="site-header__mobile-menu-icon" aria-hidden="true">🖼️</span>
+                            <span class="site-header__mobile-menu-text">Galeria Dark Nature</span>
                         </a>
                     </li>
                     

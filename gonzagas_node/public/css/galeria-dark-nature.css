@@ -1,0 +1,350 @@
+/* ==========================================
+   GALERIA DARK NATURE - SIMBIÓTICA
+   Integração com sistema Dark Nature existente
+   ========================================== */
+
+/* Inherits from existing Dark Nature CSS */
+@import url('./base-dark-nature.css');
+@import url('./components-dark-nature.css');
+
+/* ===================
+   Galeria Hero
+   =================== */
+.galeria-hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    color: var(--ivory);
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(11,13,12,0.85) 0%,
+        rgba(11,13,12,0.6) 40%,
+        rgba(11,13,12,0.8) 100%
+    );
+}
+
+.galeria-hero-content {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    z-index: 1;
+    position: relative;
+}
+
+.galeria-kicker {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--gold-old);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-lg);
+}
+
+.galeria-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.8;
+    margin-bottom: var(--space-xl);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.title-word.accent {
+    color: var(--gold-old);
+}
+
+.title-word.primary {
+    color: var(--silver-matte);
+}
+
+.galeria-manifesto {
+    font-size: 1.1rem;
+    color: rgba(231,225,214,0.95);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-2xl);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.galeria-nav-stones {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.stone-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background: rgba(11,13,12,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    color: var(--ivory);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.stone-link:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--gold-old);
+    transform: translateY(-2px);
+}
+
+.stone-icon {
+    font-size: 1.5rem;
+}
+
+.stone-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ===================
+   Jornada Visual
+   =================== */
+.jornada-visual {
+    padding: var(--space-6xl) 0;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--ivory);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.jornada-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+}
+
+.jornada-card {
+    position: relative;
+    border-radius: var(--radius-large);
+    overflow: hidden;
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    transition: all 0.4s ease;
+}
+
+.jornada-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(176,141,87,0.3);
+    box-shadow: var(--shadow-elevated);
+}
+
+.jornada-card-media {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+}
+
+.jornada-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.jornada-card:hover .jornada-image {
+    transform: scale(1.05);
+}
+
+.jornada-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 60%,
+        rgba(0,0,0,0.8) 100%
+    );
+    display: flex;
+    align-items: end;
+    padding: var(--space-xl);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.jornada-card:hover .jornada-overlay {
+    opacity: 1;
+}
+
+.jornada-content {
+    color: var(--ivory);
+}
+
+.jornada-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.jornada-card-desc {
+    font-size: 0.9rem;
+    color: rgba(231,225,214,0.9);
+    margin-bottom: var(--space-md);
+    line-height: var(--line-height-relaxed);
+}
+
+.jornada-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--gold-old);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.jornada-link:hover {
+    color: var(--silver-matte);
+}
+
+/* ===================
+   Bridge Catálogo
+   =================== */
+.galeria-catalog-bridge {
+    padding: var(--space-6xl) 0;
+    background: rgba(255,255,255,0.01);
+    border-top: 1px solid rgba(110,107,101,0.1);
+    text-align: center;
+}
+
+.bridge-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.bridge-content h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--ivory);
+    margin-bottom: var(--space-md);
+}
+
+.bridge-content p {
+    font-size: 1.1rem;
+    color: var(--slate);
+    margin-bottom: var(--space-2xl);
+    line-height: var(--line-height-relaxed);
+}
+
+.bridge-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+}
+
+.stat-item {
+    text-align: center;
+    padding: var(--space-lg);
+    background: var(--gradient-card);
+    border: 1px solid rgba(110,107,101,0.15);
+    border-radius: var(--radius-large);
+}
+
+.stat-number {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold-old);
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--slate);
+    margin-bottom: var(--space-sm);
+}
+
+.stat-link {
+    color: var(--silver-matte);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.stat-link:hover {
+    color: var(--gold-old);
+}
+
+.bridge-actions {
+    display: flex;
+    gap: var(--space-lg);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ===================
+   Responsive
+   =================== */
+@media (max-width: 768px) {
+    .galeria-hero {
+        min-height: 70vh;
+        background-attachment: scroll;
+    }
+    
+    .jornada-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+    
+    .galeria-nav-stones {
+        gap: var(--space-md);
+    }
+    
+    .bridge-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .bridge-content h2 {
+        font-size: 2rem;
+    }
+    
+    .galeria-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-item {
+        padding: var(--space-md);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .galeria-nav-stones {
+        justify-content: space-around;
+    }
+    
+    .stone-link {
+        padding: var(--space-sm);
+        min-width: 70px;
+    }
+}
+

@@ -1,0 +1,148 @@
+<!-- Usar head padrão Dark Nature -->
+<%- include('../partials/head-dark-nature', {
+    title: title,
+    description: meta.description,
+    keywords: meta.keywords,
+    canonical: meta.canonical
+}) %>
+
+<!-- CSS específico da galeria -->
+<link rel="stylesheet" href="/css/galeria-dark-nature.css">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+<body class="galeria-dark-nature-page" data-page="galeria">
+    <!-- Header existente -->
+    <%- include('../partials/header-dark-nature') %>
+    
+    <main class="galeria-main">
+        <!-- Hero Galeria -->
+        <section class="galeria-hero" style="background-image: url('<%= galleryAssets.jornada[0].src %>')">
+            <div class="hero-overlay-dark"></div>
+            <div class="container">
+                <div class="galeria-hero-content" data-aos="fade-up">
+                    <span class="galeria-kicker">Galeria Dark Nature</span>
+                    <h1 class="galeria-title">
+                        <span class="title-word">Da</span>
+                        <span class="title-word accent">Terra</span>
+                        <br>
+                        <span class="title-word">Nasce a</span>
+                        <span class="title-word primary">Arte</span>
+                    </h1>
+                    <p class="galeria-manifesto">
+                        A jornada visual das 4 pedras sagradas desde as profundezas 
+                        minerais até ao artesanato português ancestral. Sem artifícios, 
+                        só autenticidade pura.
+                    </p>
+                    <div class="galeria-nav-stones">
+                        <% Object.entries(pedrasInfo).forEach(([key, pedra]) => { %>
+                        <a href="/catalogo?pedra=<%= key %>" class="stone-link stone-link--<%= key.replace('-', '_') %>">
+                            <span class="stone-icon">
+                                <% if (key === 'onix') { %>⚫<% } %>
+                                <% if (key === 'olho-de-tigre') { %>🟤<% } %>
+                                <% if (key === 'ametista') { %>🟣<% } %>
+                                <% if (key === 'turquesa') { %>🔵<% } %>
+                            </span>
+                            <span class="stone-name"><%= pedra.nome %></span>
+                        </a>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Jornada Visual -->
+        <section class="jornada-visual">
+            <div class="container">
+                <h2 class="section-title">A Jornada Visual</h2>
+                
+                <div class="jornada-grid">
+                    <% galleryAssets.jornada.slice(1).forEach((asset, index) => { %>
+                    <article class="jornada-card" data-categoria="<%= asset.categoria %>" data-aos="fade-up" data-aos-delay="<%= index * 200 %>">
+                        <div class="jornada-card-media">
+                            <img src="<%= asset.src %>" 
+                                 alt="<%= asset.titulo %> - <%= asset.descricao %>"
+                                 loading="lazy"
+                                 class="jornada-image">
+                            <div class="jornada-overlay">
+                                <div class="jornada-content">
+                                    <h3 class="jornada-card-title"><%= asset.titulo %></h3>
+                                    <p class="jornada-card-desc"><%= asset.descricao %></p>
+                                    <% if (asset.pedra) { %>
+                                    <a href="/catalogo?pedra=<%= asset.pedra %>" class="jornada-link">
+                                        Ver Coleção <%= pedrasInfo[asset.pedra].nome %> →
+                                    </a>
+                                    <% } else { %>
+                                    <a href="/catalogo" class="jornada-link">
+                                        Explorar Catálogo →
+                                    </a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Integração Catálogo -->
+        <section class="galeria-catalog-bridge">
+            <div class="container">
+                <div class="bridge-content">
+                    <h2>Descubra as Peças Reais</h2>
+                    <p>Cada imagem desta galeria representa peças reais no nosso catálogo. 
+                       Explore as <strong><%= catalogStats?.total || '16' %> peças</strong> 
+                       artesanais disponíveis.</p>
+                    
+                    <div class="bridge-stats">
+                        <% Object.entries(pedrasInfo).forEach(([key, pedra]) => { %>
+                        <div class="stat-item">
+                            <div class="stat-number"><%= catalogStats?.[key] || '4' %></div>
+                            <div class="stat-label">Peças <%= pedra.nome %></div>
+                            <a href="/catalogo?pedra=<%= key %>" class="stat-link">Ver Todas →</a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    
+                    <div class="bridge-actions">
+                        <a href="/catalogo" class="btn btn--gold btn--large">
+                            <span class="btn-text">Explorar Catálogo Completo</span>
+                            <span class="btn-icon">💎</span>
+                        </a>
+                        <a href="/about" class="btn btn--silver-outline btn--large">
+                            <span class="btn-text">Conhecer Nossa Filosofia</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer existente -->
+    <%- include('../partials/footer-dark-nature') %>
+    
+    <!-- Scripts existentes + específicos galeria -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/js/dark-nature.js"></script> <!-- existente -->
+    <script>
+        // AOS init
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+        
+        // Galeria tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Galeria Dark Nature',
+                page_location: window.location.href,
+                content_group1: 'galeria_showcase'
+            });
+        }
+    </script>
+</body>
+</html>
+

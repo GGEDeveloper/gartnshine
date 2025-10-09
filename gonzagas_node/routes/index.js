@@ -609,158 +609,116 @@ router.get('/produto/:slug', async (req, res) => {
 });
 
 // Galeria Autêntica Dark Nature - Mineral Journey
+// Galeria Dark Nature - Showcase jornada mineral (Lote 1)
 router.get('/galeria', async (req, res) => {
   try {
-    // Specimens minerais para showcase
-    const mineralSpecimens = {
+    // Dados das 4 pedras (usar sistema existente)
+    const pedrasInfo = {
       onix: {
-        name: 'Ónix',
-        origin: 'Brasil - Formação Vulcânica',
-        properties: 'Proteção ancestral, força interior',
+        nome: 'Ónix',
+        essencia: 'Força em Negro Profundo',
+        origem: 'Brasil - Formação Vulcânica',
         chakra: 'Raiz',
-        element: 'Terra'
+        propriedades: 'Proteção ancestral, força interior, grounding'
       },
       'olho-de-tigre': {
-        name: 'Olho-de-tigre',
-        origin: 'África do Sul - Metamorfose Crocidolite', 
-        properties: 'Coragem, clareza mental, proteção',
-        chakra: 'Plexo Solar',
-        element: 'Fogo e Terra'
+        nome: 'Olho-de-tigre', 
+        essencia: 'Poder Dourado da Terra',
+        origem: 'África do Sul - Metamorfose Crocidolite',
+        chakra: 'Plexo Solar', 
+        propriedades: 'Coragem, clareza mental, proteção'
       },
       ametista: {
-        name: 'Ametista',
-        origin: 'Brasil - Cristalização em Geodas',
-        properties: 'Sabedoria, transmutação, serenidade',
-        chakra: 'Terceiro Olho', 
-        element: 'Éter'
+        nome: 'Ametista',
+        essencia: 'Sabedoria do Crepúsculo', 
+        origem: 'Brasil - Cristalização em Geodas',
+        chakra: 'Terceiro Olho',
+        propriedades: 'Transmutação, intuição, serenidade'
       },
       turquesa: {
-        name: 'Turquesa',
-        origin: 'Tibete - Mineral Secundário',
-        properties: 'Proteção viajantes, comunicação autêntica',
+        nome: 'Turquesa',
+        essencia: 'Guardião dos Oceanos Antigos',
+        origem: 'Tibete - Mineral Secundário', 
         chakra: 'Garganta',
-        element: 'Água e Terra'
+        propriedades: 'Proteção viajantes, comunicação autêntica'
       }
     };
     
-    // Gallery specimens organizados por categoria
-    const gallerySpecimens = {
-      origem: [
+    // Assets da galeria (com os 4 que temos do Lote 1)
+    const galleryAssets = {
+      jornada: [
         {
-          id: 'onix-bruto',
-          src: '/gallery/authentic/onix-bruto-volcanico.jpg',
-          title: 'Ónix Vulcânico Bruto',
-          description: 'Specimen natural em formação vulcânica sedimentar',
-          mineral: 'onix',
-          technical: 'SiO₂ - Calcedónia bandada'
+          id: 'caverna-hero',
+          src: '/gallery/dark-nature/hero/caverna-primordial-hero.jpg',
+          titulo: 'Origem Primordial',
+          descricao: 'Nas profundezas da terra nascem os minerais sagrados',
+          categoria: 'origem'
         },
         {
-          id: 'tiger-chatoyance', 
-          src: '/gallery/authentic/olho-tigre-chatoyancia-natural.jpg',
-          title: 'Chatoyância Natural',
-          description: 'Veios dourados em fibras de crocidolite transformada',
-          mineral: 'olho-de-tigre',
-          technical: 'Quartzo fibroso pseudomorfo'
+          id: 'prata-onix',
+          src: '/gallery/dark-nature/transformacao/prata-abracando-onix.jpg', 
+          titulo: 'Alquimia Ancestral',
+          descricao: 'Prata 925 líquida abraça o ónix numa união sagrada',
+          categoria: 'transformacao',
+          pedra: 'onix'
         },
-        {
-          id: 'amethyst-geode',
-          src: '/gallery/authentic/ametista-geodo-natural.jpg', 
-          title: 'Formação Cristalina',
-          description: 'Cristais hexagonais em geodo de quartzo',
-          mineral: 'ametista',
-          technical: 'SiO₂ com traços de ferro'
-        },
-        {
-          id: 'turquoise-matrix',
-          src: '/gallery/authentic/turquesa-matrix-natural.jpg',
-          title: 'Turquesa Matrix',
-          description: 'Mineral em rocha-mãe com oxidação cobre',
-          mineral: 'turquesa', 
-          technical: 'CuAl₆(PO₄)₄(OH)₈·4H₂O'
-        }
-      ],
-      transformacao: [
         {
           id: 'bancada-artesao',
-          src: '/gallery/authentic/bancada-artesao-portuguesa.jpg',
-          title: 'Bancada Ancestral',
-          description: 'Mesa de trabalho com ferramentas centenárias',
-          category: 'Artesanato',
-          tradition: 'Técnicas portuguesas tradicionais'
+          src: '/gallery/dark-nature/transformacao/bancada-artesao-penumbra.jpg',
+          titulo: 'Tradição Portuguesa', 
+          descricao: 'Ferramentas centenárias nas mãos de mestres artesãos',
+          categoria: 'transformacao'
         },
         {
-          id: 'ferramentas-antigas',
-          src: '/gallery/authentic/ferramentas-centenarias.jpg',
-          title: 'Ferramentas do Tempo', 
-          description: 'Utensílios de ourivesaria com pátina histórica',
-          category: 'Tradição',
-          tradition: 'Herança artesanal portuguesa'
-        },
-        {
-          id: 'prata-processo',
-          src: '/gallery/authentic/prata-925-raw-process.jpg',
-          title: 'Alquimia da Prata',
-          description: 'Transformação do metal em estado líquido',
-          category: 'Processo',
-          tradition: 'Fundição artesanal'
-        },
-        {
-          id: 'lapidacao-manual',
-          src: '/gallery/authentic/lapidacao-progressao.jpg',
-          title: 'Revelação Manual', 
-          description: 'Do bruto ao polido através da paciência',
-          category: 'Técnica',
-          tradition: 'Lapidação portuguesa'
-        }
-      ],
-      harmonia: [
-        {
-          id: 'flora-sombria',
-          src: '/gallery/authentic/flora-dark-simbiose.jpg',
-          title: 'Simbiose Mineral',
-          description: 'Vida que floresce na pedra ancestral',
-          ecosystem: 'Flora sombria natural',
-          elements: 'Musgos + Líquenes + Ardósia'
-        },
-        {
-          id: 'quaternario-sagrado',
-          src: '/gallery/authentic/quaternario-sagrado.jpg',
-          title: 'Quaternário Mineral',
-          description: 'Harmonia dos 4 elementos terrestres',
-          ecosystem: 'Disposição natural orgânica',
-          elements: 'Ónix + Olho-de-tigre + Ametista + Turquesa'
-        },
-        {
-          id: 'macro-tigre',
-          src: '/gallery/authentic/macro-veios-tigre.jpg',
-          title: 'Veios Dourados',
-          description: 'Ultra close-up das fibras chatoyantes',
-          ecosystem: 'Detalhe mineral técnico',
-          elements: 'Olho-de-tigre - Chatoyância natural'
+          id: 'quaternario-natural',
+          src: '/gallery/dark-nature/natureza/quaternario-natural-organic.jpg',
+          titulo: 'Harmonia Quaternária',
+          descricao: 'As 4 pedras sagradas em equilíbrio natural',
+          categoria: 'harmonia'
         }
       ]
     };
     
-    res.render('pages/galeria-authentic-dark-nature', {
+    // Stats para mostrar integração com catálogo
+    let catalogStats = {};
+    try {
+      // Contar produtos por pedra
+      const [onixCount] = await Product.query('SELECT COUNT(*) as count FROM products WHERE stone_type = ? AND active = TRUE', ['onix']);
+      const [tigerCount] = await Product.query('SELECT COUNT(*) as count FROM products WHERE stone_type = ? AND active = TRUE', ['olho-de-tigre']);
+      const [amethystCount] = await Product.query('SELECT COUNT(*) as count FROM products WHERE stone_type = ? AND active = TRUE', ['ametista']);
+      const [turquoiseCount] = await Product.query('SELECT COUNT(*) as count FROM products WHERE stone_type = ? AND active = TRUE', ['turquesa']);
+      
+      catalogStats = {
+        onix: onixCount?.count || 4,
+        'olho-de-tigre': tigerCount?.count || 4,
+        ametista: amethystCount?.count || 4,
+        turquesa: turquoiseCount?.count || 4,
+        total: (onixCount?.count || 0) + (tigerCount?.count || 0) + (amethystCount?.count || 0) + (turquoiseCount?.count || 0) || 16
+      };
+    } catch (dbError) {
+      console.error('Error fetching catalog stats:', dbError);
+      catalogStats = { onix: 4, 'olho-de-tigre': 4, ametista: 4, turquesa: 4, total: 16 };
+    }
+    
+    res.render('pages/galeria-dark-nature', {
       layout: false,
       currentPage: 'galeria',
-      title: 'Galeria Autêntica - Da Terra Nasce a Arte | Gonzaga Art & Shine',
-      mineralSpecimens,
-      gallerySpecimens,
+      title: 'Galeria Dark Nature - Da Terra Nasce a Arte | Gonzaga Art & Shine',
+      pedrasInfo,
+      galleryAssets,
+      catalogStats,
       meta: {
-        description: 'Explore a jornada autêntica dos minerais sagrados. Do specimen bruto ao artesanato português - sem artificiais, só natureza pura.',
-        keywords: 'galeria autêntica, minerais naturais, artesanato português, ónix olho-de-tigre ametista turquesa, processos reais',
-        ogImage: '/gallery/authentic/og-gallery-authentic.jpg'
-      },
-      protocol: req.protocol,
-      host: req.get('host')
+        description: 'Explore a jornada visual das 4 pedras sagradas. Do mineral bruto ao artesanato português - autenticidade pura Dark Nature.',
+        keywords: 'galeria pedras naturais, artesanato português, ónix olho-de-tigre ametista turquesa, processo artesanal',
+        canonical: `${req.protocol}://${req.get('host')}/galeria`
+      }
     });
     
   } catch (error) {
-    console.error('Error loading authentic gallery:', error);
+    console.error('Erro na galeria:', error);
     res.status(500).render('error', { 
-      error,
-      layout: 'layout'
+      error: 'Erro ao carregar galeria',
+      layout: false
     });
   }
 });
