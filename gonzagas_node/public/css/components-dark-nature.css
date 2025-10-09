@@ -1026,3 +1026,113 @@ img[loading="lazy"]:not([src*="placeholder"]) {
     animation: none;
   }
 }
+
+/* ==========================================
+   4 PEDRAS SAGRADAS EXPANSION
+   ========================================== */
+
+/* === HEROES EXPANDIDOS === */
+
+.hero--onyx {
+  background-image: url('/images/backgrounds/onyx-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero--tiger-eye {
+  background-image: url('/images/backgrounds/tiger-eye-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero--amethyst {
+  background-image: url('/images/backgrounds/amethyst-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero--turquoise {
+  background-image: url('/images/backgrounds/turquoise-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* === BADGES EXPANDIDAS === */
+
+.badge-amethyst {
+  background: var(--accent-amethyst);
+  color: var(--ivory);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-turquoise {
+  background: var(--accent-turquoise);
+  color: var(--ivory);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* === NAVEGAÇÃO EXPANDIDA === */
+
+.nav-stone-amethyst:hover {
+  background: var(--accent-amethyst);
+  color: var(--ivory);
+  box-shadow: var(--glow-amethyst);
+}
+
+.nav-stone-turquoise:hover {
+  background: var(--accent-turquoise);
+  color: var(--ivory);
+  box-shadow: var(--glow-turquoise);
+}
+
+/* === PRODUCT PAGE THEMES === */
+
+.product-page[data-stone="ametista"] {
+  --stone-accent: var(--accent-amethyst);
+  --stone-bg: var(--gradient-amethyst);
+  --stone-text: var(--text-amethyst);
+}
+
+.product-page[data-stone="turquesa"] {
+  --stone-accent: var(--accent-turquoise);
+  --stone-bg: var(--gradient-turquoise);
+  --stone-text: var(--text-turquoise);
+}
+
+/* === STONE STORY THEMES === */
+
+.stone-story[data-stone="ametista"] {
+  background: var(--gradient-amethyst);
+  border-left: 4px solid var(--accent-amethyst);
+}
+
+.stone-story[data-stone="turquesa"] {
+  background: var(--gradient-turquoise);
+  border-left: 4px solid var(--accent-turquoise);
+}
+
+/* === MOBILE HEROES === */
+
+@media (max-width: 768px) {
+  .hero--onyx,
+  .hero--tiger-eye,
+  .hero--amethyst,
+  .hero--turquoise {
+    background-attachment: scroll; /* Fix mobile parallax */
+    min-height: 60vh;
+  }
+}

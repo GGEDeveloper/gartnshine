@@ -34,7 +34,7 @@ const produtoReferencia = produto.referencia || produto.reference;
                  itemprop="image"
                  onload="this.classList.add('loaded')">
             
-            <!-- Stone Badge -->
+            <!-- Stone Badge - 4 Pedras Sagradas -->
             <% if (produto.stone_type === 'onix') { %>
                 <span class="badge-onyx product-card__badge" title="Coleção Ónix - Força em negro profundo">
                     Ónix
@@ -42,6 +42,14 @@ const produtoReferencia = produto.referencia || produto.reference;
             <% } else if (produto.stone_type === 'olho-de-tigre') { %>
                 <span class="badge-tiger product-card__badge" title="Coleção Olho-de-tigre - Poder dourado da terra">
                     Olho-de-tigre
+                </span>
+            <% } else if (produto.stone_type === 'ametista') { %>
+                <span class="badge-amethyst product-card__badge" title="Coleção Ametista - Sabedoria em roxo místico">
+                    Ametista
+                </span>
+            <% } else if (produto.stone_type === 'turquesa') { %>
+                <span class="badge-turquoise product-card__badge" title="Coleção Turquesa - Proteção do céu antigo">
+                    Turquesa
                 </span>
             <% } else if (produto.stone_type && produto.pedra_nome) { %>
                 <span class="product-card__badge" 
@@ -183,7 +191,7 @@ function trackProductClick(productId, productName, stoneType) {
                 item_id: productId,
                 item_name: productName,
                 item_category: 'Joias',
-                item_category2: stoneType === 'onix' ? 'Ónix' : (stoneType === 'olho-de-tigre' ? 'Olho-de-tigre' : 'Outras'),
+                item_category2: stoneType === 'onix' ? 'Ónix' : (stoneType === 'olho-de-tigre' ? 'Olho-de-tigre' : (stoneType === 'ametista' ? 'Ametista' : (stoneType === 'turquesa' ? 'Turquesa' : 'Outras'))),
                 index: Array.from(document.querySelectorAll('.product-card')).findIndex(card => 
                     card.dataset.productId === productId
                 ) + 1
@@ -339,6 +347,14 @@ document.addEventListener('DOMContentLoaded', function() {
     border-color: rgba(107, 74, 27, 0.3);
 }
 
+.product-card[data-stone="ametista"]:hover {
+    border-color: rgba(45, 27, 61, 0.3);
+}
+
+.product-card[data-stone="turquesa"]:hover {
+    border-color: rgba(27, 58, 61, 0.3);
+}
+
 /* Quick actions hover */
 .product-card__actions {
     opacity: 0;
@@ -406,9 +422,11 @@ document.addEventListener('DOMContentLoaded', function() {
   ✅ Accessibility com alt texts e aria labels
   ✅ Performance otimizada
   
-  STONE BADGE LOGIC:
+  STONE BADGE LOGIC - 4 PEDRAS SAGRADAS:
   - onix: Badge preto "Ónix"
   - olho-de-tigre: Badge dourado "Olho-de-tigre"
+  - ametista: Badge roxo "Ametista"
+  - turquesa: Badge azul-verde "Turquesa"
   - other: Badge neutro com nome da pedra
   
   STORYTELLING:

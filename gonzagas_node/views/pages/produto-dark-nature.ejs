@@ -235,11 +235,15 @@
                 </div>
             </section>
             
-            <!-- Stone Story - Storytelling da pedra -->
+            <!-- Stone Story - Storytelling da pedra - 4 Pedras Sagradas -->
             <% if (produto.stone_type === 'onix') { %>
             <%- include('../partials/stone-story-onix', { produto }) %>
             <% } else if (produto.stone_type === 'olho-de-tigre') { %>
             <%- include('../partials/stone-story-tiger', { produto }) %>
+            <% } else if (produto.stone_type === 'ametista') { %>
+            <%- include('../partials/stone-story-amethyst', { produto }) %>
+            <% } else if (produto.stone_type === 'turquesa') { %>
+            <%- include('../partials/stone-story-turquoise', { produto }) %>
             <% } %>
             
             <!-- Origin Traceability -->
@@ -284,8 +288,8 @@
             </section>
             <% } %>
             
-            <!-- Care Instructions -->
-            <% if (produto.stone_type === 'onix' || produto.stone_type === 'olho-de-tigre') { %>
+            <!-- Care Instructions - 4 Pedras Sagradas -->
+            <% if (produto.stone_type === 'onix' || produto.stone_type === 'olho-de-tigre' || produto.stone_type === 'ametista' || produto.stone_type === 'turquesa') { %>
             <%- include('../partials/care-instructions-' + produto.stone_type, { produto }) %>
             <% } %>
             

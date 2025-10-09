@@ -49,6 +49,26 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                 </a>
             </li>
             
+            <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
+                <a href="/catalogo?pedra=ametista" 
+                   class="site-header__menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'ametista')) ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   data-stone="amethyst">
+                    <span class="site-header__menu-text">Ametista</span>
+                    <span class="site-header__menu-accent" aria-hidden="true" data-accent="amethyst"></span>
+                </a>
+            </li>
+            
+            <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
+                <a href="/catalogo?pedra=turquesa" 
+                   class="site-header__menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'turquesa')) ? 'site-header__menu-link--active' : '' %>" 
+                   role="menuitem"
+                   data-stone="turquoise">
+                    <span class="site-header__menu-text">Turquesa</span>
+                    <span class="site-header__menu-accent" aria-hidden="true" data-accent="turquoise"></span>
+                </a>
+            </li>
+            
             <li class="site-header__menu-item" role="none">
                 <a href="/vendedores" 
                    class="site-header__menu-link <%= currentPageValue === 'vendedores' ? 'site-header__menu-link--active' : '' %>" 
@@ -157,6 +177,32 @@ const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
                             <div class="site-header__mobile-menu-content">
                                 <span class="site-header__mobile-menu-text">Coleção Olho-de-tigre</span>
                                 <span class="site-header__mobile-menu-subtitle">Poder dourado da terra</span>
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/catalogo?pedra=ametista" 
+                           class="site-header__mobile-menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'ametista')) ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem"
+                           data-stone="amethyst">
+                            <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--amethyst" aria-hidden="true">💜</span>
+                            <div class="site-header__mobile-menu-content">
+                                <span class="site-header__mobile-menu-text">Coleção Ametista</span>
+                                <span class="site-header__mobile-menu-subtitle">Sabedoria em roxo místico</span>
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="site-header__mobile-menu-item" role="none">
+                        <a href="/catalogo?pedra=turquesa" 
+                           class="site-header__mobile-menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'turquesa')) ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           role="menuitem"
+                           data-stone="turquoise">
+                            <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--turquoise" aria-hidden="true">🔷</span>
+                            <div class="site-header__mobile-menu-content">
+                                <span class="site-header__mobile-menu-text">Coleção Turquesa</span>
+                                <span class="site-header__mobile-menu-subtitle">Proteção do céu antigo</span>
                             </div>
                         </a>
                     </li>

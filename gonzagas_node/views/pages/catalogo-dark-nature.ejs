@@ -13,14 +13,22 @@
         <title>Olho-de-tigre - Poder Dourado da Terra | Gonzaga Art & Shine</title>
         <meta name="description" content="Coleção Olho-de-tigre em prata 925. Joias de coragem e clareza com veios dourados naturais. Energia autêntica da África do Sul.">
         <meta name="keywords" content="joias olho-de-tigre, anel olho tigre prata, colar olho-de-tigre, coragem natural, joalharia artesanal">
+    <% } else if (locals.query && query.pedra === 'ametista') { %>
+        <title>Ametista - Sabedoria em Roxo Místico | Gonzaga Art & Shine</title>
+        <meta name="description" content="Coleção Ametista em prata 925. Joias de serenidade e consciência espiritual com cristais violeta profundos.">
+        <meta name="keywords" content="joias ametista, anel ametista prata 925, colar ametista, serenidade, joalharia espiritual">
+    <% } else if (locals.query && query.pedra === 'turquesa') { %>
+        <title>Turquesa - Proteção do Céu Antigo | Gonzaga Art & Shine</title>
+        <meta name="description" content="Coleção Turquesa em prata 925. Joias de proteção milenar com azul celestial autêntico. Amuleto sagrado dos viajantes.">
+        <meta name="keywords" content="joias turquesa, anel turquesa prata, colar turquesa, proteção milenar, joalharia ancestral">
     <% } else { %>
         <title>Catálogo - Joias Artesanais em Prata 925 | Gonzaga Art & Shine</title>
-        <meta name="description" content="Catálogo completo de joias artesanais em prata 925 com pedras naturais. Ónix, olho-de-tigre e outras pedras autênticas. Elegância que nasce da terra.">
-        <meta name="keywords" content="joias artesanais prata 925, catálogo joias, pedras naturais, joalharia alternativa, ónix, olho-de-tigre">
+        <meta name="description" content="Catálogo completo de joias artesanais em prata 925 com pedras naturais. Ónix, olho-de-tigre, ametista, turquesa e outras pedras autênticas. Elegância que nasce da terra.">
+        <meta name="keywords" content="joias artesanais prata 925, catálogo joias, pedras naturais, joalharia alternativa, ónix, olho-de-tigre, ametista, turquesa">
     <% } %>
     
     <!-- Open Graph -->
-    <meta property="og:title" content="<%= locals.query && query.pedra === 'onix' ? 'Ónix - Força em Negro Profundo' : (locals.query && query.pedra === 'olho-de-tigre' ? 'Olho-de-tigre - Poder Dourado da Terra' : 'Catálogo - Joias Artesanais') %> | Gonzaga Art & Shine">
+    <meta property="og:title" content="<%= locals.query && query.pedra === 'onix' ? 'Ónix - Força em Negro Profundo' : (locals.query && query.pedra === 'olho-de-tigre' ? 'Olho-de-tigre - Poder Dourado da Terra' : (locals.query && query.pedra === 'ametista' ? 'Ametista - Sabedoria em Roxo Místico' : (locals.query && query.pedra === 'turquesa' ? 'Turquesa - Proteção do Céu Antigo' : 'Catálogo - Joias Artesanais'))) %> | Gonzaga Art & Shine">
     <meta property="og:description" content="Elegância que nasce da terra. Joias únicas em prata 925 com pedras naturais autênticas.">
     <meta property="og:image" content="/images/og-catalog-<%= locals.query && query.pedra ? query.pedra : 'geral' %>.jpg">
     <meta property="og:type" content="website">
@@ -65,6 +73,12 @@
                         <% } else if (locals.query && query.pedra === 'olho-de-tigre') { %>
                             <span class="badge-tiger">Olho-de-tigre</span>
                             Poder Dourado da Terra
+                        <% } else if (locals.query && query.pedra === 'ametista') { %>
+                            <span class="badge-amethyst">Ametista</span>
+                            Sabedoria em Roxo Místico
+                        <% } else if (locals.query && query.pedra === 'turquesa') { %>
+                            <span class="badge-turquoise">Turquesa</span>
+                            Proteção do Céu Antigo
                         <% } else { %>
                             Catálogo Completo
                             <span style="display: block; font-size: 0.6em; color: var(--gold-old); margin-top: var(--space-xs); font-weight: normal;">Elegância que nasce da terra</span>
@@ -99,6 +113,24 @@
                             a força interior e a clareza mental.
                         </p>
                     </div>
+                <% } else if (locals.query && query.pedra === 'ametista') { %>
+                    <div class="catalog__hero catalog__hero--amethyst" 
+                         style="background: var(--gradient-amethyst); padding: var(--space-xl); border-radius: var(--radius-large); margin: var(--space-xl) 0; color: var(--ivory);">
+                        <p style="font-size: 1.125rem; line-height: 1.6; margin: 0; text-align: center;">
+                            O <strong>tom violeta profundo da ametista</strong> representa clareza interior e serenidade cristalina. 
+                            Originária do Brasil, cada cristal é uma ponte para a consciência espiritual, 
+                            acalmando a mente e despertando a sabedoria ancestral.
+                        </p>
+                    </div>
+                <% } else if (locals.query && query.pedra === 'turquesa') { %>
+                    <div class="catalog__hero catalog__hero--turquoise" 
+                         style="background: var(--gradient-turquoise); padding: var(--space-xl); border-radius: var(--radius-large); margin: var(--space-xl) 0; color: var(--ivory);">
+                        <p style="font-size: 1.125rem; line-height: 1.6; margin: 0; text-align: center;">
+                            O <strong>azul celestial da turquesa</strong> é um amuleto sagrado há milênios. 
+                            Originária da Turquia e Irão, protege os viajantes e conecta céu e terra, 
+                            trazendo consigo a história milenar das antigas civilizações.
+                        </p>
+                    </div>
                 <% } %>
             </header>
 
@@ -110,6 +142,8 @@
                         <option value="">Todas as pedras</option>
                         <option value="onix" <%= (locals.query && query.pedra === 'onix') ? 'selected' : '' %>>Ónix - Força ancestral</option>
                         <option value="olho-de-tigre" <%= (locals.query && query.pedra === 'olho-de-tigre') ? 'selected' : '' %>>Olho-de-tigre - Poder dourado</option>
+                        <option value="ametista" <%= (locals.query && query.pedra === 'ametista') ? 'selected' : '' %>>Ametista - Sabedoria mística</option>
+                        <option value="turquesa" <%= (locals.query && query.pedra === 'turquesa') ? 'selected' : '' %>>Turquesa - Proteção antiga</option>
                     </select>
                     <small id="filter-pedra-help" class="visually-hidden">Filtrar produtos por tipo de pedra natural</small>
                 </div>

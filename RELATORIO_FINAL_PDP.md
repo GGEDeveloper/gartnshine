@@ -1,7 +1,8 @@
 # 📋 RELATÓRIO FINAL - PDP DARK NATURE
 
-**Data:** 2025-10-09 12:02  
-**Status Final:** 🟢 **TOTALMENTE FUNCIONAL**
+**Data:** 2025-10-09 12:08  
+**Status Final:** 🟢 **TOTALMENTE FUNCIONAL E ORGANIZADO**  
+**Regra Criada:** `.cursor/rules/file-management.mdc` (Never delete, always archive)
 
 ---
 
@@ -178,24 +179,29 @@ URL: http://localhost:3000/produto/produto-pan0001
 
 ## 🎯 **RESUMO TÉCNICO**
 
-### **Caminhos de Imagens (Estrutura Final):**
+### **Estrutura Final (Best Practices Node/Express):**
 
 ```
 public/
-├── images/
-│   ├── produtos/
-│   │   ├── onix/
-│   │   │   └── anel-protecao-01.jpg ✅ (664KB)
-│   │   └── olho-de-tigre/
-│   │       └── colar-coragem-01.jpg ✅ (653KB)
-│   └── placeholder-produto-dark.jpg ✅ (520KB)
+├── uploads/
+│   └── products/                    ← ÚNICA pasta para produtos
+│       ├── PAN0001.jpg ✅ (37KB)    Produtos existentes (188)
+│       ├── ONIX-001.jpg ✅ (664KB)  Produto Ónix storytelling
+│       └── TIGER-001.jpg ✅ (653KB) Produto Tiger storytelling
 │
-└── uploads/
-    └── products/
-        ├── PAN0001.jpg ✅ (37KB - real)
-        ├── PAN0002.jpg ✅ (51KB - real)
-        ├── ONIX-001.jpg ✅ (symlink)
-        └── TIGER-001.jpg ✅ (symlink)
+└── images/
+    ├── placeholders/
+    │   └── product-dark.jpg ✅ (520KB) Fallback universal
+    ├── backgrounds/ (futuro)
+    ├── icons/ (futuro)
+    └── logos/ (futuro)
+```
+
+### **Originais Preservadas (aa-temporary):**
+```
+✅ aa-temporary/artnshine-branding/anel-protecao-01.jpg (664KB)
+✅ aa-temporary/artnshine-branding/colar-coragem-01.jpg (653KB)
+✅ aa-temporary/artnshine-branding/placeholder-produto-dark.jpg (520KB)
 ```
 
 ### **Código Atualizado:**
@@ -204,12 +210,17 @@ public/
 // routes/index.js (linha ~516)
 produto.imagem_principal = allImages.length > 0 
   ? `/uploads/products/${allImages[0]}` 
-  : '/images/placeholder-produto-dark.jpg';
+  : '/images/placeholders/product-dark.jpg';
 
 // Related products (linha ~576)
 imagem_principal: p.main_image 
   ? `/uploads/products/${p.main_image}` 
-  : '/images/placeholder-produto-dark.jpg'
+  : '/images/placeholders/product-dark.jpg';
+
+// product-card-dark.ejs (linha ~9)
+const produtoImagem = produto.imagem_principal 
+                   || produto.image_url 
+                   || '/images/placeholders/product-dark.jpg';
 ```
 
 ---
