@@ -1,11 +1,8 @@
 /* ==========================================
    GALERIA DARK NATURE - SIMBIÓTICA
    Integração com sistema Dark Nature existente
+   CSS específico da galeria (base/components já incluídos no HTML)
    ========================================== */
-
-/* Inherits from existing Dark Nature CSS */
-@import url('./base-dark-nature.css');
-@import url('./components-dark-nature.css');
 
 /* ===================
    Galeria Hero
