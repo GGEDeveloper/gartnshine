@@ -223,9 +223,13 @@ router.get('/catalogo', async (req, res) => {
     // Get all families for filter UI
     let families = await ProductFamily.getAll();
     
-    // Format prices for display
+    // Format prices and image paths for display
     products = products.map(product => ({
       ...product,
+      // Fix image path
+      image_url: product.image_url ? `/uploads/products/${product.image_url}` : '/images/placeholders/product-dark.jpg',
+      imagem_principal: product.imagem_principal ? `/uploads/products/${product.imagem_principal}` : '/images/placeholders/product-dark.jpg',
+      // Format prices
       formatted_sale_price: product.sale_price ? 
         new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
         null,
