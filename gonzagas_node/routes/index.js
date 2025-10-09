@@ -1134,7 +1134,7 @@ router.post('/admin/login', AdminController.login);
 router.get('/admin/logout', AdminController.logout);
 
 // Admin dashboard (protected)
-router.get('/admin', requireAdmin, AdminController.dashboard);
+router.get('/admin', requireAdmin, (req, res) => AdminController.dashboard(req, res));
 
 // Orders management
 router.get('/admin/orders', requireAdmin, AdminController.listOrders);

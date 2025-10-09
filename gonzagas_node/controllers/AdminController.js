@@ -5,6 +5,8 @@
 
 const { pool } = require('../config/database');
 const bcrypt = require('bcrypt');
+const ejs = require('ejs');
+const path = require('path');
 
 class AdminController {
     
@@ -96,10 +98,9 @@ class AdminController {
         try {
             const dashboardData = await this.getDashboardData();
             
-            // Disable express-ejs-layouts for this route
-            res.locals.layout = false;
-            
-            res.render('admin/dashboard-dark-nature', {
+            // Manual render to bypass express-ejs-layouts completely
+            const viewPath = path.join(__dirname, '../views/admin/dashboard-dark-nature.ejs');
+            const html = await ejs.renderFile(viewPath, {
                 currentPage: 'admin-dashboard',
                 currentPath: req.path,
                 title: 'Dashboard Admin - Gonzaga Art & Shine',
@@ -107,12 +108,11 @@ class AdminController {
                 adminUser: req.session.adminUser
             });
             
+            res.send(html);
+            
         } catch (error) {
             console.error('Dashboard error:', error);
-            res.status(500).render('error', {
-                error: 'Erro ao carregar dashboard',
-                layout: false
-            });
+            res.status(500).send(`<h1>Erro ao carregar dashboard</h1><pre>${error.message}\n${error.stack}</pre>`);
         }
     }
     
