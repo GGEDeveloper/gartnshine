@@ -1,0 +1,580 @@
+/**
+ * Admin Dark Nature CSS
+ * Professional admin interface with Dark Nature aesthetic
+ */
+
+/* Admin Theme Variables */
+html[data-theme="dark-nature-admin"] {
+    --admin-bg: #0B0D0C;
+    --admin-surface: rgba(11,13,12,0.95);
+    --admin-card: linear-gradient(145deg, rgba(11,13,12,0.98) 0%, rgba(11,13,12,0.92) 100%);
+    --admin-border: rgba(110,107,101,0.2);
+    --admin-text: #E7E1D6;
+    --admin-text-muted: #6E6B65;
+    --admin-accent: #CD853F;
+    --admin-primary: #B08D57;
+    --admin-success: #228B22;
+    --admin-warning: #FF8C00;
+    --admin-error: #DC143C;
+    --admin-info: #4682B4;
+}
+
+/* Page Base */
+.admin-dark-nature-page {
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+}
+
+/* Admin Header */
+.admin-header {
+    background: var(--admin-surface);
+    border-bottom: 1px solid var(--admin-border);
+    padding: var(--space-lg) 0;
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.admin-brand-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.admin-brand-link:hover {
+    transform: scale(1.02);
+}
+
+.admin-brand-link .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.admin-brand-link .brand-accent {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--admin-accent);
+    font-weight: 400;
+}
+
+/* Admin Navigation */
+.admin-nav-list {
+    display: flex;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-nav-link {
+    color: var(--admin-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+    color: var(--admin-accent);
+    background: rgba(205,133,63,0.1);
+}
+
+.admin-nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--admin-accent);
+}
+
+/* Admin User */
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    display: block;
+    font-weight: 600;
+    color: var(--admin-text);
+    font-size: 0.9rem;
+}
+
+.user-role {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    font-style: italic;
+}
+
+.user-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.user-action {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(205,133,63,0.1);
+    border: 1px solid rgba(205,133,63,0.2);
+    border-radius: var(--radius);
+    color: var(--admin-accent);
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.user-action:hover {
+    background: rgba(205,133,63,0.2);
+    border-color: rgba(205,133,63,0.4);
+    transform: scale(1.1);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4xl);
+    padding: var(--space-2xl) 0;
+}
+
+.admin-page-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--admin-text);
+    margin-bottom: var(--space-sm);
+    
+    background: linear-gradient(135deg, var(--admin-text) 0%, var(--admin-accent) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dashboard-subtitle {
+    color: var(--admin-text-muted);
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.dashboard-quick-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.quick-action--primary {
+    background: var(--admin-primary);
+    color: var(--admin-bg);
+}
+
+.quick-action--primary:hover {
+    background: var(--admin-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(176,141,87,0.3);
+}
+
+.quick-action--secondary {
+    background: transparent;
+    color: var(--admin-accent);
+    border: 1px solid var(--admin-accent);
+}
+
+.quick-action--secondary:hover {
+    background: rgba(205,133,63,0.1);
+    transform: translateY(-2px);
+}
+
+/* Sacred Metrics */
+.sacred-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-4xl);
+}
+
+.metric-card {
+    padding: var(--space-2xl);
+    background: var(--admin-card);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-large);
+    
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 8px 32px rgba(0,0,0,0.3);
+    
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(205,133,63,0.3);
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.metric-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.metric-period {
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.metric-value {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--admin-text);
+    margin-bottom: var(--space-xs);
+    line-height: 1;
+}
+
+.metric-label {
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Metric Variants */
+.metric-card--primary .metric-icon { color: var(--admin-primary); }
+.metric-card--secondary .metric-icon { color: var(--admin-accent); }
+.metric-card--accent .metric-icon { color: var(--admin-info); }
+.metric-card--special .metric-icon { color: var(--admin-warning); }
+
+/* Section */
+.dashboard-section {
+    margin-bottom: var(--space-4xl);
+}
+
+.admin-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--admin-accent);
+    margin-bottom: var(--space-xl);
+    position: relative;
+    padding-bottom: var(--space-sm);
+}
+
+.admin-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--admin-accent) 0%, transparent 100%);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.section-action {
+    color: var(--admin-accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.section-action:hover {
+    color: var(--admin-primary);
+}
+
+/* Stones Performance */
+.stones-performance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-xl);
+}
+
+.stone-performance {
+    padding: var(--space-xl);
+    background: var(--admin-card);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-large);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 6px 24px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.stone-performance:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 12px 40px rgba(0,0,0,0.3);
+}
+
+/* Stone borders */
+.stone-performance--onyx { border-left: 4px solid #2F2F2F; }
+.stone-performance--tiger { border-left: 4px solid #B8860B; }
+.stone-performance--amethyst { border-left: 4px solid #9370DB; }
+.stone-performance--turquoise { border-left: 4px solid #008B8B; }
+
+.stone-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.stone-symbol {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.stone-info {
+    flex: 1;
+}
+
+.stone-name {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--admin-text);
+    margin-bottom: 2px;
+}
+
+.stone-essence {
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    font-style: italic;
+}
+
+.stone-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.stone-metric {
+    text-align: center;
+    padding: var(--space-md);
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.stone-metric .metric-number {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--admin-text);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.stone-metric .metric-label {
+    font-size: 0.75rem;
+    color: var(--admin-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stone-trend {
+    margin-top: var(--space-md);
+}
+
+.trend-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: var(--space-xs);
+}
+
+.trend-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--admin-accent) 0%, var(--admin-primary) 100%);
+    transition: width 0.6s ease;
+}
+
+.trend-text {
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    text-align: center;
+}
+
+/* Activities Feed */
+.activities-feed {
+    background: var(--admin-card);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-xl);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 6px 24px rgba(0,0,0,0.2);
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-sm);
+    transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.activity-item:last-child {
+    margin-bottom: 0;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(205,133,63,0.1);
+    border: 1px solid rgba(205,133,63,0.2);
+    border-radius: var(--radius);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-message {
+    color: var(--admin-text);
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.activity-time {
+    color: var(--admin-text-muted);
+    font-size: 0.8rem;
+}
+
+/* Activity types */
+.activity-item--order .activity-icon {
+    background: rgba(34,139,34,0.1);
+    border-color: rgba(34,139,34,0.2);
+    color: var(--admin-success);
+}
+
+.activity-item--product .activity-icon {
+    background: rgba(255,140,0,0.1);
+    border-color: rgba(255,140,0,0.2);
+    color: var(--admin-warning);
+}
+
+.activity-item--customer .activity-icon {
+    background: rgba(70,130,180,0.1);
+    border-color: rgba(70,130,180,0.2);
+    color: var(--admin-info);
+}
+
+.empty-activities {
+    text-align: center;
+    padding: var(--space-2xl);
+    color: var(--admin-text-muted);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.5;
+}
+
+.empty-message {
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-header-content {
+        flex-wrap: wrap;
+    }
+    
+    .admin-nav-list {
+        flex-wrap: wrap;
+        gap: var(--space-md);
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: var(--space-lg);
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .sacred-metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    .stones-performance {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-user {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+

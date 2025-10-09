@@ -2,10 +2,20 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs').promises;
+
+// Models
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+
+// Controllers
 const CatalogController = require('../controllers/CatalogController');
-const ProductController = require('../controllers/ProductController'); // Added for product details UC page
+const ProductController = require('../controllers/ProductController');
+const OrderController = require('../controllers/OrderController');
+const AdminController = require('../controllers/AdminController');
+
+// Middleware
+const { requireAdmin } = require('../middleware/auth');
+const { logActivity } = require('../middleware/activity');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -1090,5 +1100,64 @@ router.get('/terms-of-service', (req, res) => {
     title: 'Termos de Serviço'
   });
 });
+
+// ==========================================
+// E-COMMERCE ENHANCED ROUTES
+// ==========================================
+
+// Apply activity logging to all routes (from this point forward)
+router.use(logActivity);
+
+// Order confirmation & tracking
+router.get('/order-confirmation/:orderNumber', OrderController.showConfirmation);
+router.get('/order-tracking/:orderNumber', OrderController.showTracking);
+
+// Checkout process endpoint
+router.post('/checkout/process', OrderController.processOrder);
+
+// ==========================================
+// ADMIN ROUTES
+// ==========================================
+
+// Admin authentication (public)
+router.get('/admin/login', (req, res) => {
+    if (req.session.adminUser) {
+        return res.redirect('/admin');
+    }
+    res.render('admin/login-dark-nature', {
+        title: 'Admin Login - Gonzaga Art & Shine',
+        layout: false
+    });
+});
+
+router.post('/admin/login', AdminController.login);
+router.get('/admin/logout', AdminController.logout);
+
+// Admin dashboard (protected)
+router.get('/admin', requireAdmin, AdminController.dashboard);
+
+// Orders management
+router.get('/admin/orders', requireAdmin, AdminController.listOrders);
+router.get('/admin/orders/:id', requireAdmin, AdminController.viewOrder);
+router.put('/admin/orders/:id/status', requireAdmin, AdminController.updateOrderStatus);
+router.post('/admin/orders/:id/notes', requireAdmin, AdminController.addOrderNote);
+
+// Products management (basic routes - detailed CRUD can be added later)
+router.get('/admin/products', requireAdmin, AdminController.listProducts);
+
+// Customers management
+router.get('/admin/customers', requireAdmin, AdminController.listCustomers);
+router.get('/admin/customers/:id', requireAdmin, AdminController.viewCustomer);
+
+// Analytics
+router.get('/admin/analytics', requireAdmin, AdminController.analytics);
+router.get('/admin/api/dashboard-updates', requireAdmin, AdminController.dashboardUpdates);
+
+// Settings
+router.get('/admin/settings', requireAdmin, AdminController.settings);
+router.put('/admin/settings', requireAdmin, AdminController.updateSettings);
+
+// Activity log
+router.get('/admin/activities', requireAdmin, AdminController.activities);
 
 module.exports = router; 

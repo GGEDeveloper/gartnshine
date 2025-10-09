@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark-nature-admin">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <!-- Dark Nature Admin CSS Stack -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    <link rel="stylesheet" href="/css/admin-dark-nature.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="admin-dark-nature-page" data-page="admin-dashboard">
+    
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-header-content">
+                <a href="/admin" class="admin-brand-link">
+                    <span class="brand-name">Gonzaga</span>
+                    <span class="brand-accent">Admin</span>
+                </a>
+                
+                <nav class="admin-nav">
+                    <ul class="admin-nav-list">
+                        <li><a href="/admin" class="admin-nav-link active">Dashboard</a></li>
+                        <li><a href="/admin/orders" class="admin-nav-link">Pedidos</a></li>
+                        <li><a href="/admin/products" class="admin-nav-link">Produtos</a></li>
+                        <li><a href="/admin/customers" class="admin-nav-link">Clientes</a></li>
+                        <li><a href="/admin/analytics" class="admin-nav-link">Analytics</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="admin-user">
+                    <div class="user-info">
+                        <span class="user-name"><%= adminUser.fullName %></span>
+                        <span class="user-role"><%= adminUser.role %></span>
+                    </div>
+                    <div class="user-actions">
+                        <a href="/" class="user-action" title="Ver site">🌐</a>
+                        <a href="/admin/logout" class="user-action" title="Sair">🚪</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="admin-main">
+        <div class="container">
+            
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="dashboard-title-section">
+                    <h1 class="admin-page-title">Dashboard Sagrado</h1>
+                    <p class="dashboard-subtitle">Visão geral das 4 pedras sagradas</p>
+                </div>
+                <div class="dashboard-quick-actions">
+                    <a href="/admin/orders" class="quick-action quick-action--primary">
+                        <span>📦</span>
+                        <span>Ver Pedidos</span>
+                    </a>
+                    <a href="/admin/products" class="quick-action quick-action--secondary">
+                        <span>💎</span>
+                        <span>Gerir Produtos</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Sacred Metrics -->
+            <section class="sacred-metrics">
+                <div class="metric-card metric-card--primary">
+                    <div class="metric-header">
+                        <span class="metric-icon">💰</span>
+                        <span class="metric-period">Hoje</span>
+                    </div>
+                    <div class="metric-value">€<%= dashboardData.todayRevenue %></div>
+                    <div class="metric-label">Receita Hoje</div>
+                </div>
+                
+                <div class="metric-card metric-card--secondary">
+                    <div class="metric-header">
+                        <span class="metric-icon">📦</span>
+                        <span class="metric-period">Este Mês</span>
+                    </div>
+                    <div class="metric-value"><%= dashboardData.monthlyOrders %></div>
+                    <div class="metric-label">Pedidos</div>
+                </div>
+                
+                <div class="metric-card metric-card--accent">
+                    <div class="metric-header">
+                        <span class="metric-icon">👥</span>
+                        <span class="metric-period">Total</span>
+                    </div>
+                    <div class="metric-value"><%= dashboardData.totalCustomers %></div>
+                    <div class="metric-label">Clientes</div>
+                </div>
+                
+                <div class="metric-card metric-card--special">
+                    <div class="metric-header">
+                        <span class="metric-icon">💎</span>
+                        <span class="metric-period">Stock</span>
+                    </div>
+                    <div class="metric-value"><%= dashboardData.availableProducts %></div>
+                    <div class="metric-label">Produtos Ativos</div>
+                </div>
+            </section>
+            
+            <!-- Stone Performance -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="admin-section-title">Performance das 4 Pedras Sagradas</h2>
+                    <a href="/admin/analytics" class="section-action">Ver Analytics Completo →</a>
+                </div>
+                
+                <div class="stones-performance">
+                    <div class="stone-performance stone-performance--onyx">
+                        <div class="stone-header">
+                            <span class="stone-symbol">⚫</span>
+                            <div class="stone-info">
+                                <h3 class="stone-name">Ónix</h3>
+                                <p class="stone-essence">Força ancestral</p>
+                            </div>
+                        </div>
+                        <div class="stone-metrics">
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.onyx?.sales || 0 %></span>
+                                <span class="metric-label">Vendas</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number">€<%= dashboardData.stones.onyx?.revenue || '0.00' %></span>
+                                <span class="metric-label">Receita</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.onyx?.stock || 0 %></span>
+                                <span class="metric-label">Stock</span>
+                            </div>
+                        </div>
+                        <div class="stone-trend">
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: <%= dashboardData.stones.onyx?.trendPercent || 0 %>%"></div>
+                            </div>
+                            <p class="trend-text">Performance global</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stone-performance stone-performance--tiger">
+                        <div class="stone-header">
+                            <span class="stone-symbol">🟤</span>
+                            <div class="stone-info">
+                                <h3 class="stone-name">Olho-de-Tigre</h3>
+                                <p class="stone-essence">Poder dourado</p>
+                            </div>
+                        </div>
+                        <div class="stone-metrics">
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.tiger?.sales || 0 %></span>
+                                <span class="metric-label">Vendas</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number">€<%= dashboardData.stones.tiger?.revenue || '0.00' %></span>
+                                <span class="metric-label">Receita</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.tiger?.stock || 0 %></span>
+                                <span class="metric-label">Stock</span>
+                            </div>
+                        </div>
+                        <div class="stone-trend">
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: <%= dashboardData.stones.tiger?.trendPercent || 0 %>%"></div>
+                            </div>
+                            <p class="trend-text">Performance global</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stone-performance stone-performance--amethyst">
+                        <div class="stone-header">
+                            <span class="stone-symbol">🟣</span>
+                            <div class="stone-info">
+                                <h3 class="stone-name">Ametista</h3>
+                                <p class="stone-essence">Sabedoria cristalina</p>
+                            </div>
+                        </div>
+                        <div class="stone-metrics">
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.amethyst?.sales || 0 %></span>
+                                <span class="metric-label">Vendas</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number">€<%= dashboardData.stones.amethyst?.revenue || '0.00' %></span>
+                                <span class="metric-label">Receita</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.amethyst?.stock || 0 %></span>
+                                <span class="metric-label">Stock</span>
+                            </div>
+                        </div>
+                        <div class="stone-trend">
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: <%= dashboardData.stones.amethyst?.trendPercent || 0 %>%"></div>
+                            </div>
+                            <p class="trend-text">Performance global</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stone-performance stone-performance--turquoise">
+                        <div class="stone-header">
+                            <span class="stone-symbol">🔵</span>
+                            <div class="stone-info">
+                                <h3 class="stone-name">Turquesa</h3>
+                                <p class="stone-essence">Proteção oceânica</p>
+                            </div>
+                        </div>
+                        <div class="stone-metrics">
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.turquoise?.sales || 0 %></span>
+                                <span class="metric-label">Vendas</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number">€<%= dashboardData.stones.turquoise?.revenue || '0.00' %></span>
+                                <span class="metric-label">Receita</span>
+                            </div>
+                            <div class="stone-metric">
+                                <span class="metric-number"><%= dashboardData.stones.turquoise?.stock || 0 %></span>
+                                <span class="metric-label">Stock</span>
+                            </div>
+                        </div>
+                        <div class="stone-trend">
+                            <div class="trend-bar">
+                                <div class="trend-fill" style="width: <%= dashboardData.stones.turquoise?.trendPercent || 0 %>%"></div>
+                            </div>
+                            <p class="trend-text">Performance global</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Recent Activities -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="admin-section-title">Atividades Recentes</h2>
+                    <a href="/admin/activities" class="section-action">Ver Todas →</a>
+                </div>
+                
+                <div class="activities-feed">
+                    <% if (dashboardData.recentActivities && dashboardData.recentActivities.length > 0) { %>
+                        <% dashboardData.recentActivities.forEach(activity => { %>
+                        <div class="activity-item activity-item--<%= activity.type %>">
+                            <div class="activity-icon"><%= activity.icon %></div>
+                            <div class="activity-content">
+                                <p class="activity-message"><%= activity.message %></p>
+                                <span class="activity-time"><%= activity.timeAgo %></span>
+                            </div>
+                        </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="empty-activities">
+                            <div class="empty-icon">📊</div>
+                            <p class="empty-message">Nenhuma atividade recente</p>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+    
+    <!-- Auto-refresh dashboard data -->
+    <script>
+        // Auto-refresh metrics every 30 seconds
+        setInterval(async () => {
+            try {
+                const response = await fetch('/admin/api/dashboard-updates');
+                const data = await response.json();
+                
+                // Update would go here - for now just log
+                console.log('Dashboard updated:', data);
+            } catch (error) {
+                console.error('Dashboard refresh error:', error);
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
+
