@@ -618,3 +618,105 @@ a:focus-visible {
   3. Integrar com views EJS existentes
   4. Testar responsividade em todos os breakpoints
 */
+
+/* === RESPONSIVE REFINEMENTS === */
+
+/* Enhanced Mobile Typography */
+@media (max-width: 480px) {
+    .hero__title {
+        font-size: clamp(1.8rem, 10vw, 2.5rem);
+        line-height: 0.9;
+        margin-bottom: var(--space-md);
+    }
+    
+    .hero__subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    .product-card {
+        margin-bottom: var(--space-lg);
+    }
+    
+    .product-card__content {
+        padding: var(--space-md);
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-lg);
+    }
+}
+
+/* Tablet Optimizations */
+@media (max-width: 768px) and (min-width: 481px) {
+    .hero__title {
+        font-size: clamp(2.2rem, 7vw, 3.2rem);
+    }
+    
+    .grid-auto {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--space-lg);
+    }
+}
+
+/* Large Desktop Enhancements */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+    
+    .hero__title {
+        font-size: 5rem;
+    }
+    
+    .hero__subtitle {
+        font-size: 1.6rem;
+    }
+    
+    .product-card {
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-24px) scale(1.03);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    /* Already implemented as default */
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .btn,
+    .nav-link {
+        transition: none;
+    }
+    
+    .product-card:hover {
+        transform: none;
+    }
+    
+    .hero::after {
+        animation: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .product-card {
+        border: 2px solid var(--ivory);
+    }
+    
+    .btn {
+        border: 2px solid currentColor;
+    }
+    
+    .nav-link:hover {
+        background: var(--ivory);
+        color: var(--black);
+    }
+}

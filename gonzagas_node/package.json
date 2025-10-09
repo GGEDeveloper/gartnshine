@@ -16,7 +16,11 @@
     "db:create-audit-logs-table": "node scripts/create-audit-logs-table.js",
     "backup": "node scripts/backup-system.js backup",
     "backup:list": "node scripts/backup-system.js list",
-    "backup:restore": "node scripts/backup-system.js restore"
+    "backup:restore": "node scripts/backup-system.js restore",
+    "download-assets": "python3 scripts/download-dark-nature-assets.py",
+    "optimize-images": "node scripts/optimize-4stones.js",
+    "setup-dark-nature": "npm run download-assets && npm run optimize-images",
+    "validate-assets": "node scripts/validate-assets.js"
   },
   "keywords": [
     "jewelry",

@@ -317,20 +317,100 @@
     
     <!-- Analytics - View Item Event -->
     <script>
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'view_item', {
-                currency: 'EUR',
-                value: <%= produto.preco || 0 %>,
-                items: [{
-                    item_id: '<%= produto.slug %>',
-                    item_name: '<%= produto.nome %>',
-                    item_category: 'Joias',
-                    item_category2: '<%= produto.stone_type %>',
-                    price: <%= produto.preco || 0 %>,
-                    quantity: 1
-                }]
+    // Enhanced Analytics Tracking
+    class DarkNatureAnalytics {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.trackPageView();
+            this.trackProductViews();
+            this.trackStoneInteractions();
+            this.trackScrollDepth();
+        }
+
+        trackPageView() {
+            if (typeof gtag !== 'undefined') {
+                gtag('config', 'GA_MEASUREMENT_ID', {
+                    page_title: document.title,
+                    page_location: window.location.href,
+                    content_group1: '<%= typeof produto !== "undefined" ? produto.stone_type : "catalog" %>',
+                    content_group2: 'dark_nature_theme'
+                });
+            }
+        }
+
+        trackProductViews() {
+            <% if (typeof produto !== 'undefined') { %>
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view_item', {
+                    currency: 'EUR',
+                    value: <%= produto.preco || 0 %>,
+                    items: [{
+                        item_id: '<%= produto.slug %>',
+                        item_name: '<%= produto.nome %>',
+                        category: '<%= produto.stone_type %>',
+                        brand: 'Gonzaga Art & Shine',
+                        quantity: 1,
+                        price: <%= produto.preco || 0 %>
+                    }]
+                });
+            }
+            <% } %>
+        }
+
+        trackStoneInteractions() {
+            document.querySelectorAll('[data-stone]').forEach(element => {
+                element.addEventListener('click', (e) => {
+                    const stoneType = element.dataset.stone;
+                    
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'stone_interaction', {
+                            event_category: 'engagement',
+                            event_label: stoneType,
+                            value: 1
+                        });
+                    }
+                });
             });
         }
+
+        trackScrollDepth() {
+            let maxScroll = 0;
+            const milestones = [25, 50, 75, 90, 100];
+            const tracked = new Set();
+
+            window.addEventListener('scroll', () => {
+                const scrollPercent = Math.round(
+                    (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+                );
+                
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                    
+                    milestones.forEach(milestone => {
+                        if (scrollPercent >= milestone && !tracked.has(milestone)) {
+                            tracked.add(milestone);
+                            
+                            if (typeof gtag !== 'undefined') {
+                                gtag('event', 'scroll_depth', {
+                                    event_category: 'engagement',
+                                    event_label: `${milestone}%`,
+                                    value: milestone
+                                });
+                            }
+                        }
+                    });
+                }
+            }, { passive: true });
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        new DarkNatureAnalytics();
+    });
     </script>
 </body>
 </html>
