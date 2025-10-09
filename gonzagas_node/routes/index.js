@@ -81,9 +81,10 @@ router.get('/', async (req, res) => {
     
     console.log(`Rendering index with ${mediaFiles.length} media files`);
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
-    res.render('index-content', { 
+    res.render('index', { 
       title: 'Home',
-      layout: 'layouts/main-v2', // UNIFIED LAYOUT V2
+      layout: false, // ✅ Desabilitar express-ejs-layouts (view standalone)
+      currentPage: 'home', // Para header Dark Nature
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
@@ -148,19 +149,13 @@ router.get('/collections', async (req, res) => {
     }));
     
     res.render('collections', {
-      title: 'Gallery',
-      layout: 'layouts/main-v2',
+      title: 'Galeria',
+      currentPage: 'collections',
+      layout: 'layout', // Dark Nature layout
       images: imageFiles,
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      theme: {
-        colorPrimary: '#1e1e1e',
-        colorSecondary: '#4a3c2d', 
-        colorAccent: '#6a8c69',
-        colorText: '#f0f0f0',
-        colorHighlight: '#b19cd9'
-      },
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });
@@ -191,9 +186,12 @@ router.get('/collection/:familyId', async (req, res) => {
     
     res.render('collection', {
       title: family.name,
+      currentPage: 'collection',
+      layout: 'layout', // Dark Nature layout
       family,
       products,
-      families
+      families,
+      siteTitle: 'Gonzaga\'s Art & Shine'
     });
   } catch (error) {
     console.error('Error loading collection:', error);
@@ -250,10 +248,13 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       encodedMessage: encodeURIComponent(whatsappMessage)
     };
     
+    // TEMPORÁRIO: Usando layout Dark Nature
+    // TODO: Criar view Dark Nature completa para detalhes de produto
     res.render('catalog/product-detail-content', { 
       product, 
       whatsappData,
-      layout: 'layouts/main-v2',
+      layout: 'layout', // Dark Nature layout (temporário)
+      currentPage: 'product',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine'
     });
@@ -310,10 +311,13 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product-v2/${id}`;
       reference: product.reference
     };
     
+    // TEMPORÁRIO: Usando layout Dark Nature
+    // TODO: Criar view Dark Nature completa para detalhes de produto v2
     res.render('catalog/product-detail-content', { 
       product, 
       whatsappData,
-      layout: 'layouts/main-v2',
+      layout: 'layout', // Dark Nature layout (temporário)
+      currentPage: 'product',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine'
     });
@@ -438,7 +442,8 @@ router.get('/search', async (req, res) => {
       priceMin: priceMin,
       priceMax: priceMax,
       title: `Pesquisa: ${query || 'Todos os produtos'}`,
-      layout: 'layouts/main'
+      layout: 'layout', // Dark Nature layout
+      siteTitle: 'Gonzaga\'s Art & Shine'
     });
     
   } catch (error) {
@@ -474,11 +479,14 @@ router.get('/api/nav-featured', async (req, res) => {
   }
 });
 
-// About page
+// About page (usando layout Dark Nature)
 router.get('/about', (req, res) => {
   res.render('about', { 
-    title: 'About Gonzaga\'s Art & Shine',
-    layout: 'layouts/main-v2'
+    title: 'Sobre Nós',
+    currentPage: 'about',
+    layout: 'layout', // Dark Nature layout
+    siteTitle: 'Gonzaga\'s Art & Shine',
+    siteDescription: 'Elegância que nasce da terra'
   });
 });
 

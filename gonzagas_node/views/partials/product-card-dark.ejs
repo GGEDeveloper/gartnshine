@@ -3,19 +3,32 @@
      Gothic Natural Product Display
      ============================================= -->
 
+<% 
+// Compatibilidade entre nomes PT e EN
+const produtoNome = produto.nome || produto.name;
+const produtoImagem = produto.imagem_principal || produto.image_url || '/images/placeholder-produto-dark.jpg';
+const produtoSlug = produto.slug || produto.id;
+const produtoPedra = produto.pedra_nome || produto.stone_name || 'Pedra natural';
+const produtoMetal = produto.metal_nome || produto.metal_name || 'Prata 925';
+const produtoPreco = produto.preco || produto.sale_price;
+const produtoPrecoFormatado = produto.preco_formatado || produto.formatted_sale_price;
+const produtoDescricao = produto.descricao || produto.description;
+const produtoDescricaoCurta = produto.descricao_curta || (produtoDescricao ? produtoDescricao.substring(0, 80) + '...' : '');
+const produtoReferencia = produto.referencia || produto.reference;
+%>
 <article class="product-card" 
          data-stone="<%= produto.stone_type || 'natural' %>"
          data-product-id="<%= produto.id %>"
          itemscope itemtype="https://schema.org/Product">
     
-    <a href="/produto/<%= produto.slug || produto.id %>" 
+    <a href="/product/<%= produtoSlug %>" 
        class="product-card__link"
-       onclick="trackProductClick('<%= produto.id %>', '<%= produto.nome %>', '<%= produto.stone_type %>')">
+       onclick="trackProductClick('<%= produto.id %>', '<%= produtoNome %>', '<%= produto.stone_type %>')">
         
         <!-- Product Image -->
         <div class="product-card__image">
-            <img src="<%= produto.imagem_principal || '/images/placeholder-produto-dark.jpg' %>" 
-                 alt="<%= produto.nome %> - <%= produto.pedra_nome || 'Pedra natural' %> em <%= produto.metal_nome || 'Prata 925' %>"
+            <img src="<%= produtoImagem %>" 
+                 alt="<%= produtoNome %> - <%= produtoPedra %> em <%= produtoMetal %>"
                  loading="lazy"
                  class="product-card__img"
                  itemprop="image"
@@ -56,37 +69,37 @@
         <!-- Product Content -->
         <div class="product-card__content">
             <h3 class="product-card__title" itemprop="name">
-                <%= produto.nome %>
+                <%= produtoNome %>
             </h3>
             
             <!-- Product Meta - Stone & Metal -->
             <div class="product-card__meta">
                 <span class="product-card__stone">
-                    <%= produto.pedra_nome || 'Pedra natural' %>
+                    <%= produtoPedra %>
                 </span>
                 <span class="meta-separator" aria-hidden="true">•</span>
                 <span class="product-card__metal">
-                    <%= produto.metal_nome || 'Prata 925' %>
+                    <%= produtoMetal %>
                 </span>
             </div>
             
             <!-- Product Description Preview -->
-            <% if (produto.descricao_curta || produto.descricao) { %>
+            <% if (produtoDescricaoCurta) { %>
                 <p class="product-card__description" style="font-size: 0.875rem; color: var(--slate); margin: var(--space-xs) 0 var(--space-sm); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                    <%= produto.descricao_curta || produto.descricao.substring(0, 80) + '...' %>
+                    <%= produtoDescricaoCurta %>
                 </p>
             <% } %>
             
             <!-- Price -->
             <div class="product-card__price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                <% if (produto.preco_formatado) { %>
-                    <span itemprop="price" content="<%= produto.preco || 0 %>">
-                        <%= produto.preco_formatado %>
+                <% if (produtoPrecoFormatado) { %>
+                    <span itemprop="price" content="<%= produtoPreco || 0 %>">
+                        <%= produtoPrecoFormatado %>
                     </span>
                     <meta itemprop="priceCurrency" content="EUR">
-                <% } else if (produto.preco) { %>
-                    <span itemprop="price" content="<%= produto.preco %>">
-                        €<%= produto.preco.toFixed(2) %>
+                <% } else if (produtoPreco) { %>
+                    <span itemprop="price" content="<%= produtoPreco %>">
+                        €<%= parseFloat(produtoPreco).toFixed(2) %>
                     </span>
                     <meta itemprop="priceCurrency" content="EUR">
                 <% } else { %>
@@ -125,7 +138,7 @@
                      style="margin-top: var(--space-md); display: flex; gap: var(--space-xs); justify-content: space-between;">
                     
                     <button class="btn btn--gold btn--small" 
-                            onclick="addToCartQuick(event, '<%= produto.id %>', '<%= produto.nome %>');"
+                            onclick="addToCartQuick(event, '<%= produto.id %>', '<%= produtoNome %>');"
                             style="flex: 1;">
                         <span class="btn__text">Adicionar</span>
                         <span class="btn__icon" aria-hidden="true">🛍</span>
@@ -142,7 +155,7 @@
             
             <!-- Schema.org Additional Data -->
             <div style="display: none;" itemprop="description">
-                <%= produto.descricao || produto.nome + ' - Joia artesanal em ' + (produto.metal_nome || 'prata 925') + ' com ' + (produto.pedra_nome || 'pedra natural') %>
+                <%= produtoDescricao || produtoNome + ' - Joia artesanal em ' + produtoMetal + ' com ' + produtoPedra %>
             </div>
             
             <% if (produto.categoria) { %>

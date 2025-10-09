@@ -2,6 +2,10 @@
      GONZAGA ART & SHINE - HEADER DARK NATURE
      Gothic Natural Navigation
      ============================================= -->
+<% 
+// Default values
+const currentPageValue = typeof currentPage !== 'undefined' ? currentPage : '';
+%>
 
 <header class="site-header" role="banner">
     <nav class="site-header__nav container" role="navigation" aria-label="Navegação principal">
@@ -18,16 +22,16 @@
         <ul class="site-header__menu" role="menubar">
             <li class="site-header__menu-item" role="none">
                 <a href="/catalogo" 
-                   class="site-header__menu-link <%= currentPage === 'catalogo' ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= currentPageValue === 'catalogo' ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
-                   <% if (currentPage === 'catalogo') { %>aria-current="page"<% } %>>
+                   <% if (currentPageValue === 'catalogo') { %>aria-current="page"<% } %>>
                     <span class="site-header__menu-text">Catálogo</span>
                 </a>
             </li>
             
             <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
                 <a href="/catalogo?pedra=onix" 
-                   class="site-header__menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'onix') ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'onix')) ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
                    data-stone="onix">
                     <span class="site-header__menu-text">Ónix</span>
@@ -37,7 +41,7 @@
             
             <li class="site-header__menu-item site-header__menu-item--has-dropdown" role="none">
                 <a href="/catalogo?pedra=olho-de-tigre" 
-                   class="site-header__menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'olho-de-tigre') ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'olho-de-tigre')) ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
                    data-stone="tiger-eye">
                     <span class="site-header__menu-text">Olho-de-tigre</span>
@@ -47,27 +51,27 @@
             
             <li class="site-header__menu-item" role="none">
                 <a href="/vendedores" 
-                   class="site-header__menu-link <%= currentPage === 'vendedores' ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= currentPageValue === 'vendedores' ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
-                   <% if (currentPage === 'vendedores') { %>aria-current="page"<% } %>>
+                   <% if (currentPageValue === 'vendedores') { %>aria-current="page"<% } %>>
                     <span class="site-header__menu-text">Artesãos</span>
                 </a>
             </li>
             
             <li class="site-header__menu-item" role="none">
                 <a href="/manifesto" 
-                   class="site-header__menu-link <%= currentPage === 'manifesto' ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= currentPageValue === 'manifesto' ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
-                   <% if (currentPage === 'manifesto') { %>aria-current="page"<% } %>>
+                   <% if (currentPageValue === 'manifesto') { %>aria-current="page"<% } %>>
                     <span class="site-header__menu-text">Manifesto</span>
                 </a>
             </li>
             
             <li class="site-header__menu-item" role="none">
                 <a href="/contacto" 
-                   class="site-header__menu-link <%= currentPage === 'contacto' ? 'site-header__menu-link--active' : '' %>" 
+                   class="site-header__menu-link <%= currentPageValue === 'contacto' ? 'site-header__menu-link--active' : '' %>" 
                    role="menuitem"
-                   <% if (currentPage === 'contacto') { %>aria-current="page"<% } %>>
+                   <% if (currentPageValue === 'contacto') { %>aria-current="page"<% } %>>
                     <span class="site-header__menu-text">Contacto</span>
                 </a>
             </li>
@@ -111,7 +115,7 @@
                 <ul class="site-header__mobile-menu-list" role="menu">
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/" 
-                           class="site-header__mobile-menu-link <%= currentPage === 'home' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'home' ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">🏠</span>
                             <span class="site-header__mobile-menu-text">Início</span>
@@ -120,7 +124,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/catalogo" 
-                           class="site-header__mobile-menu-link <%= currentPage === 'catalogo' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'catalogo' ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">💎</span>
                             <span class="site-header__mobile-menu-text">Catálogo Completo</span>
@@ -133,7 +137,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/catalogo?pedra=onix" 
-                           class="site-header__mobile-menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'onix') ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'onix')) ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem"
                            data-stone="onyx">
                             <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--onyx" aria-hidden="true">⚫</span>
@@ -146,7 +150,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/catalogo?pedra=olho-de-tigre" 
-                           class="site-header__mobile-menu-link <%= (currentPage === 'catalogo' && query?.pedra === 'olho-de-tigre') ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= (currentPageValue === 'catalogo' && (typeof query !== 'undefined' && query && query.pedra === 'olho-de-tigre')) ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem"
                            data-stone="tiger-eye">
                             <span class="site-header__mobile-menu-icon site-header__mobile-menu-icon--tiger" aria-hidden="true">🔶</span>
@@ -163,7 +167,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/vendedores" 
-                           class="site-header__mobile-menu-link <%= currentPage === 'vendedores' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'vendedores' ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">🧑‍🎨</span>
                             <span class="site-header__mobile-menu-text">Nossos Artesãos</span>
@@ -172,7 +176,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/manifesto" 
-                           class="site-header__mobile-menu-link <%= currentPage === 'manifesto' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'manifesto' ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">🌱</span>
                             <span class="site-header__mobile-menu-text">Nosso Manifesto</span>
@@ -181,7 +185,7 @@
                     
                     <li class="site-header__mobile-menu-item" role="none">
                         <a href="/contacto" 
-                           class="site-header__mobile-menu-link <%= currentPage === 'contacto' ? 'site-header__mobile-menu-link--active' : '' %>" 
+                           class="site-header__mobile-menu-link <%= currentPageValue === 'contacto' ? 'site-header__mobile-menu-link--active' : '' %>" 
                            role="menuitem">
                             <span class="site-header__mobile-menu-icon" aria-hidden="true">✉️</span>
                             <span class="site-header__mobile-menu-text">Contacto</span>

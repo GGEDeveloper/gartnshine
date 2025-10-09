@@ -7,9 +7,9 @@ module.exports = {
       default: 'admin/layouts/main',
       login: 'admin/layouts/auth'
     },
-    // Layout padrão para o site público
+    // Layout padrão para o site público (Dark Nature)
     public: {
-      default: 'layouts/main',
+      default: 'layout', // Dark Nature layout
       auth: 'layouts/auth'
     }
   },

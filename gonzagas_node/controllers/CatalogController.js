@@ -14,8 +14,9 @@ class CatalogController {
         console.log('[CatalogController] Catalog page is DISABLED. Rendering construction page.');
         return res.status(200).render('public/catalog', { 
           title: 'Catálogo em Construção',
-          currentPath: '/catalog', 
-          layout: 'layouts/main-v2'
+          currentPath: '/catalog',
+          currentPage: 'catalog',
+          layout: 'layout' // Dark Nature layout
         });
       }
 
@@ -57,23 +58,19 @@ class CatalogController {
           null
       }));
 
-      // Render the catalog page with the products and families
-      res.render('public/catalog', {
+      // Render the catalog page with the products and families (Dark Nature)
+      res.render('pages/catalogo-dark-nature', {
         title: 'Catálogo',
         currentPath: '/catalog',
-        layout: 'layouts/main-v2',
-        products: products,
+        currentPage: 'catalogo', // Para header Dark Nature
+        layout: false, // ✅ Desabilitar express-ejs-layouts (view standalone)
+        produtos: products, // Dark Nature usa 'produtos'
+        products: products, // Compatibilidade
         families: families,
+        query: req.query,   // Dark Nature usa req.query para filtros
         selectedFamilyIds: selectedFamilyIds,
         siteTitle: 'Gonzaga\'s Art & Shine',
         siteDescription: 'Elegância que nasce da terra',
-        theme: {
-          colorPrimary: '#1e1e1e',
-          colorSecondary: '#4a3c2d', 
-          colorAccent: '#6a8c69',
-          colorText: '#f0f0f0',
-          colorHighlight: '#b19cd9'
-        },
         helpers: {
           isFamilySelected: function(familyId) {
             return selectedFamilyIds.includes(familyId) ? 'checked' : '';
