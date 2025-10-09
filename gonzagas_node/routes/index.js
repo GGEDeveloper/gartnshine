@@ -751,6 +751,7 @@ router.get('/manifesto', (req, res) => {
     res.render('pages/manifesto-dark-nature', {
       currentPage: 'manifesto',
       title: 'Manifesto Dark Nature - Elegância que Nasce da Terra | Gonzaga Art & Shine',
+      layout: false, // ✅ Standalone page - disable express-ejs-layouts wrapper
       manifestoData,
       meta: {
         description: 'O manifesto da filosofia Dark Nature. Elegância que nasce da terra através de 4 pedras sagradas e artesanato português ancestral com mais de 200 anos de tradição.',
@@ -761,7 +762,7 @@ router.get('/manifesto', (req, res) => {
     
   } catch (error) {
     console.error('Error loading manifesto:', error);
-    res.status(500).render('error', { error: 'Erro ao carregar manifesto' });
+    res.status(500).render('error', { error: 'Erro ao carregar manifesto', layout: false });
   }
 });
 
@@ -878,6 +879,7 @@ router.get('/cart', (req, res) => {
     res.render('pages/cart-dark-nature', {
       currentPage: 'cart',
       title: 'Carrinho de Compras - Gonzaga Art & Shine',
+      layout: false, // ✅ Standalone page - disable express-ejs-layouts wrapper
       meta: {
         description: 'Reveja os seus produtos selecionados e proceda ao checkout seguro.',
         keywords: 'carrinho compras, checkout, joias artesanais portuguesas'
@@ -885,7 +887,7 @@ router.get('/cart', (req, res) => {
     });
   } catch (error) {
     console.error('Error loading cart:', error);
-    res.status(500).render('error', { error: 'Erro ao carregar carrinho' });
+    res.status(500).render('error', { error: 'Erro ao carregar carrinho', layout: false });
   }
 });
 
@@ -928,6 +930,7 @@ router.get('/checkout', (req, res) => {
     res.render('pages/checkout-dark-nature', {
       currentPage: 'checkout',
       title: 'Checkout Seguro - Gonzaga Art & Shine',
+      layout: false, // ✅ Standalone page - disable express-ejs-layouts wrapper
       step: 1,
       meta: {
         description: 'Finalize a sua compra de forma segura com métodos de pagamento portugueses.',
@@ -936,7 +939,7 @@ router.get('/checkout', (req, res) => {
     });
   } catch (error) {
     console.error('Checkout error:', error);
-    res.status(500).render('error', { error: 'Erro no checkout' });
+    res.status(500).render('error', { error: 'Erro no checkout', layout: false });
   }
 });
 
