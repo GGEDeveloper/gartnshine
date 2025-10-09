@@ -698,7 +698,7 @@ router.get('/galeria', async (req, res) => {
         },
         {
           id: 'prata-processo',
-          src: '/gallery/authentic/prata-925-processo.jpg',
+          src: '/gallery/authentic/prata-925-raw-process.jpg',
           title: 'Alquimia da Prata',
           description: 'Transformação do metal em estado líquido',
           category: 'Processo',
@@ -706,7 +706,7 @@ router.get('/galeria', async (req, res) => {
         },
         {
           id: 'lapidacao-manual',
-          src: '/gallery/authentic/lapidacao-manual.jpg',
+          src: '/gallery/authentic/lapidacao-progressao.jpg',
           title: 'Revelação Manual', 
           description: 'Do bruto ao polido através da paciência',
           category: 'Técnica',
@@ -716,7 +716,7 @@ router.get('/galeria', async (req, res) => {
       harmonia: [
         {
           id: 'flora-sombria',
-          src: '/gallery/authentic/musgos-liquenes-pedra.jpg',
+          src: '/gallery/authentic/flora-dark-simbiose.jpg',
           title: 'Simbiose Mineral',
           description: 'Vida que floresce na pedra ancestral',
           ecosystem: 'Flora sombria natural',
@@ -724,11 +724,19 @@ router.get('/galeria', async (req, res) => {
         },
         {
           id: 'quaternario-sagrado',
-          src: '/gallery/authentic/quatro-pedras-musgo.jpg',
+          src: '/gallery/authentic/quaternario-sagrado.jpg',
           title: 'Quaternário Mineral',
           description: 'Harmonia dos 4 elementos terrestres',
           ecosystem: 'Disposição natural orgânica',
           elements: 'Ónix + Olho-de-tigre + Ametista + Turquesa'
+        },
+        {
+          id: 'macro-tigre',
+          src: '/gallery/authentic/macro-veios-tigre.jpg',
+          title: 'Veios Dourados',
+          description: 'Ultra close-up das fibras chatoyantes',
+          ecosystem: 'Detalhe mineral técnico',
+          elements: 'Olho-de-tigre - Chatoyância natural'
         }
       ]
     };
