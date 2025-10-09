@@ -1,20 +1,53 @@
-<!-- Usar head padrão Dark Nature -->
-<%- include('../partials/head-dark-nature', {
-    title: title,
-    description: meta.description,
-    keywords: meta.keywords,
-    canonical: meta.canonical
-}) %>
-
-<!-- CSS específico da galeria -->
-<link rel="stylesheet" href="/css/galeria-dark-nature.css">
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Page Title & Meta -->
+    <title><%= title %></title>
+    <meta name="description" content="<%= meta.description %>">
+    <meta name="keywords" content="<%= meta.keywords %>">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= meta.description %>">
+    <meta property="og:image" content="/images/og-gallery-dark-nature.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= meta.canonical %>">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dark Nature Base -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
+    
+    <!-- CSS Galeria Específico -->
+    <link rel="stylesheet" href="/css/galeria-dark-nature.css">
+    
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg">
+    <link rel="alternate icon" href="/favicon-dark.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= meta.canonical %>">
+</head>
 <body class="galeria-dark-nature-page" data-page="galeria">
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Saltar para conteúdo principal</a>
     <!-- Header existente -->
     <%- include('../partials/header-dark-nature') %>
     
-    <main class="galeria-main">
+    <main id="main-content" class="galeria-main">
         <!-- Hero Galeria -->
         <section class="galeria-hero" style="background-image: url('<%= galleryAssets.jornada[0].src %>')">
             <div class="hero-overlay-dark"></div>
