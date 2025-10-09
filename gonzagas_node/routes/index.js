@@ -937,7 +937,7 @@ router.post('/api/cart/add', (req, res) => {
 // Checkout Page (FASE 2 - Day 3-5)
 router.get('/checkout', (req, res) => {
   try {
-    res.render('pages/checkout-dark-nature', {
+    res.render('pages/checkout-premium-dark-nature', {
       currentPage: 'checkout',
       title: 'Checkout Seguro - Gonzaga Art & Shine',
       layout: false, // ✅ Standalone page - disable express-ejs-layouts wrapper
