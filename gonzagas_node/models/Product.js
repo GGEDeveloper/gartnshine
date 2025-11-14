@@ -321,15 +321,16 @@ class Product extends BaseModel {
         'SELECT id, image_filename, is_primary, sort_order FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order ASC, id ASC',
         [id]
       );
-      product.images = imageRows.map(img => ({...img, url: `/media/${img.image_filename}`}) );
+      product.images = imageRows.map(img => ({...img, url: `/media/products/${img.image_filename}`}) );
       
       // Se não houver imagem primária, define a primeira imagem como primária (ou a primeira da lista)
       if (product.images.length > 0 && !product.images.some(img => img.is_primary)) {
         // product.images[0].is_primary = 1; // Não modificar o estado aqui, apenas para exibição
       }
       // Define a imagem principal do produto para fácil acesso no template
+      // image_url deve conter apenas o nome do arquivo (como está no banco), não o caminho completo
       const primaryImage = product.images.find(img => img.is_primary) || product.images[0];
-      product.image_url = primaryImage ? primaryImage.url : null; // '/media/products/no-image.jpg';
+      product.image_url = primaryImage ? primaryImage.image_filename : null;
 
       return product;
     } catch (error) {

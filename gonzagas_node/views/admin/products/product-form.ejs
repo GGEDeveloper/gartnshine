@@ -11,6 +11,8 @@
 
     <%- include('../partials/flash-messages') %>
 
+<% const formAction = isNew ? '/admin/products/create' : `/admin/products/edit/${product.id}`; %>
+
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -19,7 +21,7 @@
         </div>
         <div class="card-body">
             <form 
-                action="<%= product && product.id ? `/admin/products/${product.id}` : '/admin/products' %>" 
+                action="<%= formAction %>" 
                 method="POST" 
                 enctype="multipart/form-data"
                 class="needs-validation"
@@ -76,8 +78,8 @@
                             <label for="family_id" class="form-label">Família de Produtos</label>
                             <select class="form-control" id="family_id" name="family_id">
                         <option value="">Selecione uma família</option>
-                                <% if (families && families.length > 0) { %>
-                          <% families.forEach(family => { %>
+                                <% if (productFamilies && productFamilies.length > 0) { %>
+                          <% productFamilies.forEach(family => { %>
                                         <option 
                                             value="<%= family.id %>" 
                                             <%= product && product.family_id == family.id ? 'selected' : '' %>
@@ -232,6 +234,7 @@
                                 type="checkbox" 
                                 id="is_active" 
                                 name="is_active"
+                                value="1"
                                 <%= !product || product.is_active ? 'checked' : '' %>
                             >
                             <label class="form-check-label" for="is_active">
@@ -246,6 +249,7 @@
                                 type="checkbox" 
                                 id="is_catalog_visible" 
                                 name="is_catalog_visible"
+                                value="1"
                                 <%= !product || product.is_catalog_visible ? 'checked' : '' %>
                             >
                             <label class="form-check-label" for="is_catalog_visible">
@@ -260,6 +264,7 @@
                                 type="checkbox" 
                                 id="featured" 
                                 name="featured"
+                                value="1"
                                 <%= product && product.featured ? 'checked' : '' %>
                             >
                             <label class="form-check-label" for="featured">
@@ -269,23 +274,105 @@
                   </div>
                 </div>
 
-                <!-- Imagem -->
+                <!-- Gestão de Imagens -->
                 <div class="form-group mb-4">
-                    <label for="image" class="form-label">Imagem do Produto</label>
+                    <label class="form-label">Gestão de Imagens do Produto</label>
+                    
+                    <!-- Imagens Existentes -->
+                    <% if (product && product.images && product.images.length > 0) { %>
+                        <div class="mb-3">
+                            <h6 class="mb-2">Imagens Existentes</h6>
+                            <div class="row g-3" id="existingImagesContainer">
+                                <% product.images.forEach((img, index) => { %>
+                                    <div class="col-md-3 col-sm-4 col-6">
+                                        <div class="card h-100 <%= img.is_primary ? 'border-primary border-2' : '' %>" style="position: relative;">
+                                            <img src="/media/products/<%= img.image_filename %>" 
+                                                 class="card-img-top" 
+                                                 alt="Imagem <%= index + 1 %>" 
+                                                 style="height: 150px; object-fit: cover; cursor: pointer;"
+                                                 onclick="openImageModal('/media/products/<%= img.image_filename %>')">
+                                            <div class="card-body p-2">
+                                                <% if (img.is_primary) { %>
+                                                    <span class="badge bg-primary mb-2">
+                                                        <i class="fas fa-star"></i> Imagem Principal
+                                                    </span>
+                                                <% } else { %>
+                                                    <span class="badge bg-secondary mb-2">Secundária</span>
+                                                <% } %>
+                                                <div class="form-check">
+                                                    <input 
+                                                        class="form-check-input" 
+                                                        type="radio" 
+                                                        name="primary_image_id" 
+                                                        id="primaryImage<%= img.id %>" 
+                                                        value="<%= img.id %>"
+                                                        <%= img.is_primary ? 'checked' : '' %>
+                                                    >
+                                                    <label class="form-check-label small" for="primaryImage<%= img.id %>">
+                                                        Definir como Principal
+                                                    </label>
+                                                </div>
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-danger btn-sm mt-2 w-100"
+                                                    onclick="markImageForDeletion(<%= img.id %>, this)"
+                                                    title="Marcar para exclusão"
+                                                >
+                                                    <i class="fas fa-trash"></i> Remover
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <input type="hidden" name="imagesToDelete" id="imagesToDelete" value="">
+                        </div>
+                    <% } else if (product && product.image_url) { %>
+                        <!-- Fallback para produtos antigos que só têm image_url -->
+                        <div class="mb-3">
+                            <h6 class="mb-2">Imagem Atual</h6>
+                            <div class="card" style="max-width: 200px;">
+                                <img src="/media/products/<%= product.image_url %>" 
+                                     class="card-img-top" 
+                                     alt="<%= product.name %>" 
+                                     style="height: 150px; object-fit: cover; cursor: pointer;"
+                                     onclick="openImageModal('/media/products/<%= product.image_url %>')">
+                                <div class="card-body p-2">
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-star"></i> Imagem Principal
+                                    </span>
+                                    <p class="text-muted small mt-2 mb-0">Imagem atual: <%= product.image_url %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <!-- Upload de Novas Imagens -->
+                    <div class="mb-3">
+                        <label for="images" class="form-label">Adicionar Novas Imagens</label>
+                        <input 
+                            type="file" 
+                            class="form-control" 
+                            id="images" 
+                            name="images" 
+                            accept="image/*"
+                            multiple
+                        >
+                        <small class="form-text text-muted">Pode selecionar múltiplas imagens. A primeira será definida como principal por padrão.</small>
+                    </div>
+                    
+                    <!-- Preview de Novas Imagens -->
+                    <div id="newImagePreviews" class="row g-3 mb-3" style="display: none;"></div>
+                    
+                    <!-- Campo legado para compatibilidade -->
                     <input 
                         type="file" 
-                        class="form-control" 
+                        class="form-control d-none" 
                         id="image" 
                         name="image" 
                         accept="image/*"
                     >
-                    <% if (product && product.image_url) { %>
-                        <div class="mt-2">
-                            <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" style="max-width: 150px; height: auto;">
-                            <p class="text-muted mt-1">Imagem atual: <%= product.image_url %></p>
-                        </div>
-                      <% } %>
-          </div>
+                </div>
           
                 <!-- Botões -->
                 <div class="form-group d-flex justify-content-between">
@@ -321,6 +408,64 @@
 
 <% if (product && product.id) { %>
 <script>
+// Array para armazenar IDs de imagens marcadas para exclusão
+let imagesToDelete = [];
+
+function markImageForDeletion(imageId, button) {
+    const index = imagesToDelete.indexOf(imageId);
+    const card = button.closest('.card');
+    
+    if (index > -1) {
+        // Remover da lista (desfazer)
+        imagesToDelete.splice(index, 1);
+        button.classList.remove('btn-danger');
+        button.classList.add('btn-outline-danger');
+        button.innerHTML = '<i class="fas fa-trash"></i> Remover';
+        card.style.opacity = '1';
+        card.style.border = '';
+    } else {
+        // Adicionar à lista (marcar para exclusão)
+        imagesToDelete.push(imageId);
+        button.classList.remove('btn-outline-danger');
+        button.classList.add('btn-danger');
+        button.innerHTML = '<i class="fas fa-undo"></i> Desfazer';
+        card.style.opacity = '0.5';
+        card.style.border = '2px dashed #dc3545';
+    }
+    
+    // Atualizar campo hidden
+    document.getElementById('imagesToDelete').value = imagesToDelete.join(',');
+}
+
+function openImageModal(imageSrc) {
+    // Criar modal se não existir
+    let modal = document.getElementById('imageViewModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'imageViewModal';
+        modal.className = 'modal fade';
+        modal.innerHTML = `
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Visualizar Imagem</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body text-center p-0">
+                        <img id="modalImage" src="" alt="Imagem do produto" class="img-fluid" style="max-height: 70vh;">
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // Definir imagem e abrir modal
+    document.getElementById('modalImage').src = imageSrc;
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+}
+
 function confirmDelete(productId) {
     if (confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
         // Mostrar notificação de carregamento

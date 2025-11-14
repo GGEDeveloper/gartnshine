@@ -86,7 +86,18 @@
                       <td><%= product.id %></td>
                       <td>
                         <% if (product.image_url) { %>
-                          <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                          <div class="product-image-zoom-wrapper" style="position: relative; width: 50px; height: 50px; cursor: pointer;">
+                            <img src="/media/products/<%= product.image_url %>" 
+                                 alt="<%= product.name %>" 
+                                 class="img-thumbnail product-zoom-image" 
+                                 style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
+                                 data-zoom-src="/media/products/<%= product.image_url %>?quality=100&original=true"
+                                 data-product-name="<%= product.name %>"
+                                 loading="lazy">
+                            <div class="zoom-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem;">
+                              <i class="fas fa-search-plus text-white" style="font-size: 16px;"></i>
+                            </div>
+                          </div>
                         <% } else { %>
                           <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-box text-muted"></i>
@@ -193,32 +204,285 @@
   font-weight: 500;
   white-space: nowrap; /* Prevent labels from wrapping */
 }
+
+/* Product Image Zoom Styles */
+.product-image-zoom-wrapper {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.product-image-zoom-wrapper:hover .product-zoom-image {
+  transform: scale(2.5);
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.product-image-zoom-wrapper:hover .zoom-overlay {
+  opacity: 1;
+}
+
+/* Image Zoom Modal */
+.image-zoom-modal {
+  display: none !important;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  animation: fadeIn 0.3s ease;
+}
+
+.image-zoom-modal.active {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-zoom-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  margin: auto;
+  animation: zoomIn 0.3s ease;
+}
+
+.image-zoom-modal-content img {
+  width: auto;
+  height: auto;
+  max-width: 95vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: high-quality;
+}
+
+.image-zoom-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10001;
+}
+
+.image-zoom-modal-close:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.image-zoom-modal-title {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #f1f1f1;
+  font-size: 18px;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  padding: 10px 20px;
+  border-radius: 4px;
+  max-width: 80%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Prevent table overflow issues with zoom */
+.table-responsive {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Ensure zoomed images don't break table layout */
+.product-image-zoom-wrapper:hover {
+  position: relative;
+}
 </style>
 `); %>
 
-<% locals.scripts = locals.scripts || []; %>
-<% locals.scripts.push( `
 <script>
-  $(document).ready(function() {
-    console.log('Document ready. Initializing DataTables for products page...');
-    var table = $('.datatable').DataTable({
-      responsive: true,
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-      },
-      // Server-side processing is handled by page reloads with query parameters,
-      // so client-side searching/ordering is not strictly necessary here if pagination is also server-side.
-      // If you want to keep client-side sorting/searching on the CURRENTLY LOADED page data, keep these true.
-      // For full server-side behavior, these would be false and you'd use DataTables ajax options.
-      searching: true, // Keep client-side search on current page data
-      ordering: true   // Keep client-side ordering on current page data
-    });
-
-    if (table && table.settings) {
-      console.log('DataTables initialized successfully for products page.');
-    } else {
-      console.error('DataTables FAILED to initialize for products page.');
+(function() {
+  'use strict';
+  
+  // Image Zoom Modal Functionality
+  console.log('Setting up image zoom modal...');
+  
+  // Create modal HTML immediately
+  function createImageZoomModal() {
+    if (document.getElementById('imageZoomModal') === null) {
+      var modalHtml = '<div id="imageZoomModal" class="image-zoom-modal">' +
+        '<span class="image-zoom-modal-close">&times;</span>' +
+        '<div class="image-zoom-modal-content">' +
+        '<img id="zoomedImage" src="" alt="">' +
+        '<div class="image-zoom-modal-title" id="zoomedImageTitle"></div>' +
+        '</div>' +
+        '</div>';
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      console.log('Image zoom modal created');
     }
-  });
+  }
+  
+  // Global click handler - only register once
+  var imageZoomClickHandler = function(e) {
+    var wrapper = e.target.closest('.product-image-zoom-wrapper');
+    if (wrapper) {
+      console.log('Image clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      
+      var img = wrapper.querySelector('.product-zoom-image');
+      if (!img) {
+        console.error('Image not found in wrapper');
+        return;
+      }
+      
+      var imageSrc = img.getAttribute('data-zoom-src') || img.dataset.zoomSrc;
+      var productName = img.getAttribute('data-product-name') || img.dataset.productName;
+      
+      console.log('Image src:', imageSrc, 'Product name:', productName);
+      
+      if (imageSrc) {
+        // Remove query parameters to get original image
+        var originalSrc = imageSrc.split('?')[0];
+        console.log('Loading image:', originalSrc);
+        
+        // Set image source directly and show modal
+        var zoomedImg = document.getElementById('zoomedImage');
+        var zoomedTitle = document.getElementById('zoomedImageTitle');
+        var modal = document.getElementById('imageZoomModal');
+        
+        if (zoomedImg && modal) {
+          zoomedImg.src = originalSrc;
+          if (zoomedTitle) zoomedTitle.textContent = productName || '';
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          console.log('Modal opened');
+        } else {
+          console.error('Modal elements not found');
+        }
+      } else {
+        console.error('No image source found. Image element:', img);
+      }
+      return false;
+    }
+    
+    // Close modal
+    if (e.target.classList.contains('image-zoom-modal-close') || e.target.id === 'imageZoomModal') {
+      var modal = document.getElementById('imageZoomModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        console.log('Modal closed');
+      }
+    }
+    
+    // Don't close when clicking on the image itself
+    if (e.target.closest('.image-zoom-modal-content')) {
+      e.stopPropagation();
+    }
+  };
+  
+  // Global ESC key handler - only register once
+  var imageZoomKeyHandler = function(e) {
+    if (e.key === 'Escape') {
+      var modal = document.getElementById('imageZoomModal');
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+  };
+  
+  // Register event handlers - use vanilla JS for better compatibility
+  function setupImageZoomHandlers() {
+    // Remove old listeners and add new ones
+    document.removeEventListener('click', imageZoomClickHandler);
+    document.addEventListener('click', imageZoomClickHandler, true);
+    
+    document.removeEventListener('keydown', imageZoomKeyHandler);
+    document.addEventListener('keydown', imageZoomKeyHandler);
+    
+    console.log('Image zoom handlers registered');
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM ready. Setting up image zoom...');
+      createImageZoomModal();
+      setupImageZoomHandlers();
+      
+      // Try to initialize DataTables if available and not already initialized
+      if (typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined') {
+        try {
+          var $table = jQuery('.datatable');
+          if ($table.length && !jQuery.fn.DataTable.isDataTable('.datatable')) {
+            var table = $table.DataTable({
+              responsive: true,
+              language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+              },
+              searching: true,
+              ordering: true,
+              drawCallback: function(settings) {
+                console.log('DataTables drawCallback - re-setting up image zoom handlers');
+                setupImageZoomHandlers();
+              }
+            });
+            console.log('DataTables initialized successfully');
+          } else {
+            console.log('DataTables already initialized or table not found');
+            setupImageZoomHandlers();
+          }
+        } catch (err) {
+          console.warn('DataTables initialization failed:', err);
+        }
+      } else {
+        console.warn('DataTables not available, continuing without it');
+      }
+    });
+  } else {
+    // DOM already loaded
+    console.log('DOM already loaded. Setting up image zoom...');
+    createImageZoomModal();
+    setupImageZoomHandlers();
+    
+    if (typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined') {
+      try {
+        var $table = jQuery('.datatable');
+        if ($table.length && !jQuery.fn.DataTable.isDataTable('.datatable')) {
+          var table = $table.DataTable({
+            responsive: true,
+            language: {
+              url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+            },
+            searching: true,
+            ordering: true
+          });
+          console.log('DataTables initialized successfully');
+        } else {
+          console.log('DataTables already initialized or table not found');
+        }
+      } catch (err) {
+        console.warn('DataTables initialization failed:', err);
+      }
+    }
+  }
+})();
 </script>
-`); %>

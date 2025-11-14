@@ -367,8 +367,19 @@ app.use(['/css/*', '/js/*', '/*.ico', '/*.png', '/*.jpg', '/*.jpeg', '/*.gif', '
   console.error(`Static file not found: ${req.originalUrl}`);
   res.status(404).send('File not found');
 });
-// Uploads path com proteção e caching
-app.use('/media', express.static(path.join(__dirname, 'public', 'uploads', 'products'), {
+// Media files path com proteção e caching
+// Serve /media/products/* from public/media/products/
+app.use('/media/products', express.static(path.join(__dirname, 'public', 'media', 'products'), {
+  maxAge: '30d',
+  etag: true,
+  setHeaders: (res, path, stat) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'public, max-age=2592000');
+  }
+}));
+
+// Serve /media/* from public/media/ (for other media like gallery, content, etc)
+app.use('/media', express.static(path.join(__dirname, 'public', 'media'), {
   maxAge: '30d',
   etag: true,
   setHeaders: (res, path, stat) => {

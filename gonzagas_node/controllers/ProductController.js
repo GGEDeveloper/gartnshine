@@ -123,7 +123,7 @@ class ProductController extends BaseController {
       }
       productData.attributes = JSON.stringify(attributes);
 
-      const images = req.files && req.files.images ? req.files.images.map(file => ({
+      let images = req.files && req.files.images ? req.files.images.map(file => ({
         path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
         filename: file.filename,
         is_primary: false // Default to false, will be set by primary_image_id
@@ -185,7 +185,7 @@ class ProductController extends BaseController {
         return res.redirect('/admin/products');
       }
 
-      const product = await Product.findById(productId);
+      const product = await Product.findByIdWithDetails(productId);
 
       if (!product) {
         req.flash('error_msg', 'Product not found.');
@@ -193,6 +193,7 @@ class ProductController extends BaseController {
       }
       console.log('product.is_catalog_visible:', product.is_catalog_visible);
       console.log('typeof product.is_catalog_visible:', typeof product.is_catalog_visible);
+      console.log('product images:', product.images);
 
       const productFamilies = await ProductFamily.getAll();
       
@@ -241,6 +242,8 @@ class ProductController extends BaseController {
     }
 
     try {
+      const isTruthy = (value) => value === '1' || value === 'on' || value === true || value === 'true';
+
       const productData = {
         name: req.body.name,
         description: req.body.description,
@@ -255,21 +258,42 @@ class ProductController extends BaseController {
         tags: req.body.tags,
         weight: req.body.weight ? parseFloat(req.body.weight) : 0.000,
         dimensions: req.body.dimensions,
-        is_active: req.body.is_active === '1' || req.body.is_active === true,
-        featured: req.body.is_featured === '1' || req.body.is_featured === true,
-        is_catalog_visible: req.body.is_catalog_visible === '1' || req.body.is_catalog_visible === true,
+        is_active: isTruthy(req.body.is_active),
+        featured: isTruthy(req.body.featured),
+        is_catalog_visible: isTruthy(req.body.is_catalog_visible),
+        // Gestão de imagens
+        imagesToDelete: req.body.imagesToDelete ? req.body.imagesToDelete.split(',').filter(id => id.trim() !== '').map(id => parseInt(id.trim(), 10)) : [],
+        primary_image_id: req.body.primary_image_id ? parseInt(req.body.primary_image_id, 10) : null,
       };
 
       let allNewImages = [];
-      if (req.files && req.files.new_images) {
-        const newImagesInput = Array.isArray(req.files.new_images) ? req.files.new_images : [req.files.new_images];
-        allNewImages = newImagesInput
-          .filter(file => file && file.name && file.data && file.size > 0) // Ensure file is valid
-          .map(file => ({
-            originalname: file.name,
-            buffer: file.data,
-            mimetype: file.mimetype
-          }));
+
+      if (req.files && Array.isArray(req.files.images) && req.files.images.length > 0) {
+        allNewImages = req.files.images.map(file => ({
+          path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
+          filename: file.filename,
+          is_primary: false
+        }));
+      }
+
+      const mainImageUpload = req.files && Array.isArray(req.files.image) && req.files.image.length > 0
+        ? req.files.image[0]
+        : null;
+
+      if (mainImageUpload) {
+        allNewImages.unshift({
+          path: path.join('/media/products/', mainImageUpload.filename).replace(/\\/g, '/'),
+          filename: mainImageUpload.filename,
+          is_primary: true
+        });
+      }
+
+      const primaryImageFilename = req.body.primary_image_filename;
+      if (primaryImageFilename && allNewImages.length > 0) {
+        allNewImages = allNewImages.map(image => ({
+          ...image,
+          is_primary: image.filename === primaryImageFilename || image.is_primary
+        }));
       }
 
       const userId = req.user ? req.user.id : (req.session && req.session.user ? req.session.user.id : null);
