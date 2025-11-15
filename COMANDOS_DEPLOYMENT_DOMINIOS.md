@@ -5,13 +5,14 @@
 ### ⚠️ IMPORTANTE: Backup Antes de Prosseguir
 ```bash
 # 1. Fazer backup do estado atual (opcional mas recomendado)
-cd /home/artnshin/artnshine.pt/gonzagas_node
-cp -r . ../gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
+cd /home/artnshin/artnshine.pt
+cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
 ```
 
-### 🔄 Passo 1: Navegar para o Diretório do Projeto
+### 🔄 Passo 1: Navegar para a RAIZ do Repositório Git
 ```bash
-cd /home/artnshin/artnshine.pt/gonzagas_node
+# ⚠️ IMPORTANTE: O repositório git está na RAIZ, não dentro de gonzagas_node
+cd /home/artnshin/artnshine.pt
 ```
 
 ### 🔍 Passo 2: Verificar Estado Atual
@@ -24,6 +25,9 @@ git log --oneline -5
 
 # Ver status
 git status
+
+# Verificar estrutura (deve mostrar gonzagas_node/)
+ls -la
 ```
 
 ### 🔄 Passo 3: Atualizar do Repositório Remoto
@@ -52,19 +56,25 @@ git log --oneline -5
 
 ### ✅ Passo 5: Verificação Final
 ```bash
-# Confirmar que está no commit correto (deve ser 898f242)
+# Confirmar que está no commit correto (deve ser fbc1c3e ou mais recente)
 git rev-parse HEAD
 
 # Verificar que não há diferenças
 git status
 
-# Verificar arquivos importantes
-ls -la views/admin/products/index.ejs
-ls -la views/admin/layouts/main.ejs
+# Verificar estrutura do projeto
+ls -la gonzagas_node/
+
+# Verificar arquivos importantes dentro de gonzagas_node
+ls -la gonzagas_node/views/admin/products/index.ejs
+ls -la gonzagas_node/views/admin/layouts/main.ejs
 ```
 
 ### 🔧 Passo 6: Limpar e Preparar para Deployment
 ```bash
+# Navegar para dentro de gonzagas_node para limpeza
+cd gonzagas_node
+
 # Remover node_modules (CloudLinux requirement)
 rm -rf node_modules
 
@@ -72,12 +82,17 @@ rm -rf node_modules
 chmod 755 server.js
 chmod -R 755 public/
 chmod -R 755 views/
+
+# Voltar para a raiz
+cd ..
 ```
 
 ### 📝 Passo 7: Verificar Variáveis de Ambiente
 ```bash
-# Verificar se .env existe e tem as configurações corretas
+# Verificar se .env existe dentro de gonzagas_node e tem as configurações corretas
+cd gonzagas_node
 cat .env | grep -E "NODE_ENV|PORT|DB_|SESSION_SECRET" || echo "⚠️ .env não encontrado ou incompleto"
+cd ..
 ```
 
 ---
@@ -88,12 +103,12 @@ Se o passo 4 não funcionar e precisar forçar completamente:
 
 ```bash
 # ⚠️ CUIDADO: Este comando descarta TODAS as mudanças locais
-cd /home/artnshin/artnshine.pt/gonzagas_node
+cd /home/artnshin/artnshine.pt
 
 # Fazer backup primeiro
-cp -r . ../gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
+cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
 
-# Resetar completamente
+# Resetar completamente (na RAIZ do repositório)
 git fetch origin
 git checkout main
 git reset --hard origin/main
