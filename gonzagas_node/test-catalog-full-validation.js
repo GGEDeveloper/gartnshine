@@ -126,7 +126,7 @@ class CatalogFullValidation {
   async navigateToCatalog() {
     await this.page.goto(`${BASE_URL}/catalog`, { waitUntil: 'networkidle2' });
     await this.page.waitForSelector('#products-grid', { timeout: 10000 });
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for JS to initialize
+    await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for JS to initialize
   }
 
   async runAllTests() {
