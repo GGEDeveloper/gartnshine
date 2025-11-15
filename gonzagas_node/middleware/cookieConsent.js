@@ -10,7 +10,19 @@ const cookieConsentMiddleware = async (req, res, next) => {
     
     if (sessionId) {
       // Verificar se já existe consentimento para esta sessão
-      const existingConsent = await CookieConsent.getBySessionId(sessionId);
+      let existingConsent = null;
+      try {
+        existingConsent = await CookieConsent.getBySessionId(sessionId);
+      } catch (err) {
+        // Se a tabela não existir, apenas logar e continuar sem erro
+        if (err.code === 'ER_NO_SUCH_TABLE') {
+          console.warn('Cookie consent table does not exist. Skipping consent check.');
+          res.locals.cookieConsent = null;
+          res.locals.hasGivenConsent = false;
+          return next();
+        }
+        throw err;
+      }
       
       // Adicionar informações de consentimento às variáveis locais
       res.locals.cookieConsent = existingConsent;

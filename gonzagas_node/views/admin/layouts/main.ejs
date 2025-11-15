@@ -18,10 +18,14 @@
     <link href="/css/admin.css" rel="stylesheet">
     <link href="/css/admin-layout-fix-definitive.css" rel="stylesheet">
     <link href="/css/admin-tables-mobile.css" rel="stylesheet">
+    <link href="/css/admin-mobile.css" rel="stylesheet">
     <link href="/css/notifications.css" rel="stylesheet">
   
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- GLightbox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
     <%- style %>
 </head>
@@ -83,6 +87,9 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
   
+    <!-- GLightbox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  
     <!-- Custom scripts for all pages-->
     <script src="/js/admin.js"></script>
     <script src="/js/admin-mobile-complete-solution.js"></script>
@@ -140,7 +147,8 @@
         });
     </script>
 
-    <%- script %>
+    <%- typeof scripts !== 'undefined' && scripts ? scripts : '' %>
+    <%- typeof script !== 'undefined' && script ? script : '' %>
 
 </body>
 
