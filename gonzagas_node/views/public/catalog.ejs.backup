@@ -1,0 +1,613 @@
+<!-- Catalog Page - Modern Design with Fixed Sidebar Filters -->
+<main class="catalog-main">
+  <div class="catalog-container">
+    
+    <!-- Fixed Sidebar Filters (Desktop) -->
+    <aside class="catalog-sidebar" id="catalog-sidebar">
+      <div class="sidebar-header">
+        <h3 class="sidebar-title">
+          <i class="fas fa-filter me-2"></i>
+          Filtros
+        </h3>
+        <button class="sidebar-close d-lg-none" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="sidebar-content">
+        <form id="catalog-filters" method="GET" action="/catalog">
+          
+          <!-- Family Filters -->
+          <div class="filter-section">
+            <h4 class="filter-title">Famílias</h4>
+            <div class="filter-options">
+              <div class="filter-option">
+                <input type="checkbox" id="all-families" name="families" value="all" 
+                       class="filter-checkbox" <%= selectedFamilyIds.length === 0 ? 'checked' : '' %>>
+                <label for="all-families" class="filter-label">Todas as Famílias</label>
+              </div>
+              <% families.forEach(family => { %>
+                <div class="filter-option">
+                  <input type="checkbox" id="family-<%= family.id %>" name="families" 
+                         value="<%= family.id %>" class="filter-checkbox family-filter" 
+                         <%= selectedFamilyIds.includes(family.id) ? 'checked' : '' %>>
+                  <label for="family-<%= family.id %>" class="filter-label">
+                    <%= family.name %>
+                  </label>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+          
+          <!-- Price Range Filter -->
+          <div class="filter-section">
+            <h4 class="filter-title">Preço</h4>
+            <div class="filter-options">
+              <div class="filter-option">
+                <input type="radio" id="price-all" name="price_range" value="all" 
+                       class="filter-radio" checked>
+                <label for="price-all" class="filter-label">Todos</label>
+              </div>
+              <div class="filter-option">
+                <input type="radio" id="price-low" name="price_range" value="0-50" 
+                       class="filter-radio">
+                <label for="price-low" class="filter-label">Até €50</label>
+              </div>
+              <div class="filter-option">
+                <input type="radio" id="price-mid" name="price_range" value="50-100" 
+                       class="filter-radio">
+                <label for="price-mid" class="filter-label">€50 - €100</label>
+              </div>
+              <div class="filter-option">
+                <input type="radio" id="price-high" name="price_range" value="100+" 
+                       class="filter-radio">
+                <label for="price-high" class="filter-label">€100+</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Filter Actions -->
+          <div class="filter-actions">
+            <button type="submit" class="btn-filter-apply">
+              <i class="fas fa-check me-2"></i>
+              Aplicar Filtros
+            </button>
+            <a href="/catalog" class="btn-filter-clear">
+              <i class="fas fa-times me-2"></i>
+              Limpar Filtros
+            </a>
+          </div>
+          
+        </form>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <section class="catalog-content">
+      
+      <!-- Header with Mobile Filter Button -->
+      <div class="catalog-header">
+        <div class="header-left">
+          <h1 class="page-title">Catálogo de Produtos</h1>
+          <p class="page-subtitle">Descubra as nossas peças únicas</p>
+        </div>
+        <div class="header-right">
+          <button class="mobile-filter-btn d-lg-none" id="mobile-filter-btn">
+            <i class="fas fa-filter me-2"></i>
+            Filtros
+          </button>
+          <div class="results-count">
+            <span class="count-number"><%= products.length %></span>
+            <span class="count-text">produto<%= products.length !== 1 ? 's' : '' %></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Products Grid -->
+      <div class="products-container">
+        <% if (products && products.length > 0) { %>
+          <div class="products-grid" id="products-grid">
+            <% products.forEach((product, index) => { %>
+              <div class="product-item" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+                <%- include('../partials/_productCard', { product: product, isCatalogPage: true }) %>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="no-products">
+            <div class="no-products-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>Nenhum produto encontrado</h3>
+            <p>Tente ajustar os filtros ou <a href="/catalog">ver todos os produtos</a></p>
+          </div>
+        <% } %>
+      </div>
+      
+    </section>
+    
+  </div>
+</main>
+
+<!-- Mobile Sidebar Overlay -->
+<div class="sidebar-overlay d-lg-none" id="sidebar-overlay"></div>
+
+<!-- Catalog Styles -->
+<style>
+  /* ===== CATALOG MAIN LAYOUT ===== */
+  .catalog-main {
+    min-height: calc(100vh - 80px);
+    padding: 20px 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .catalog-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 30px;
+    position: relative;
+  }
+  
+  /* ===== FIXED SIDEBAR (Desktop) ===== */
+  .catalog-sidebar {
+    width: 280px;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--color-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-highlight);
+    margin: 0;
+  }
+  
+  .sidebar-close {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+  
+  .sidebar-close:hover {
+    background: var(--color-accent);
+    color: var(--color-primary);
+  }
+  
+  .sidebar-content {
+    padding: 20px;
+  }
+  
+  /* ===== FILTER SECTIONS ===== */
+  .filter-section {
+    margin-bottom: 30px;
+  }
+  
+  .filter-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(106, 140, 105, 0.3);
+  }
+  
+  .filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .filter-checkbox,
+  .filter-radio {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-highlight);
+    cursor: pointer;
+  }
+  
+  .filter-label {
+    color: var(--color-text);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+  
+  .filter-label:hover {
+    color: var(--color-highlight);
+  }
+  
+  /* ===== FILTER ACTIONS ===== */
+  .filter-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(106, 140, 105, 0.3);
+  }
+  
+  .btn-filter-apply,
+  .btn-filter-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .btn-filter-apply {
+    background: var(--color-highlight);
+    color: var(--color-primary);
+    border: none;
+  }
+  
+  .btn-filter-apply:hover {
+    background: var(--color-accent);
+    transform: translateY(-2px);
+  }
+  
+  .btn-filter-clear {
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-accent);
+  }
+  
+  .btn-filter-clear:hover {
+    background: var(--color-accent);
+    color: var(--color-primary);
+  }
+  
+  /* ===== MAIN CONTENT ===== */
+  .catalog-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    gap: 20px;
+  }
+  
+  .header-left h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .page-subtitle {
+    color: var(--color-accent);
+    font-size: 16px;
+    margin: 0;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .mobile-filter-btn {
+    background: var(--color-accent);
+    color: var(--color-primary);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-filter-btn:hover {
+    background: var(--color-highlight);
+    transform: translateY(-2px);
+  }
+  
+  .results-count {
+    text-align: center;
+    padding: 8px 12px;
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 8px;
+    border: 1px solid var(--color-accent);
+  }
+  
+  .count-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-highlight);
+    display: block;
+  }
+  
+  .count-text {
+    font-size: 12px;
+    color: var(--color-text);
+  }
+  
+  /* ===== PRODUCTS GRID ===== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 0;
+  }
+  
+  .product-item {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ===== NO PRODUCTS ===== */
+  .no-products {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text);
+  }
+  
+  .no-products-icon {
+    font-size: 48px;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+  }
+  
+  .no-products h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: var(--color-text);
+  }
+  
+  .no-products p {
+    font-size: 16px;
+    color: var(--color-accent);
+  }
+  
+  .no-products a {
+    color: var(--color-highlight);
+    text-decoration: none;
+  }
+  
+  .no-products a:hover {
+    text-decoration: underline;
+  }
+  
+  /* ===== MOBILE LAYOUT ===== */
+  @media (max-width: 991.98px) {
+    .catalog-container {
+      flex-direction: column;
+      padding: 0 15px;
+    }
+    
+    .catalog-sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 320px;
+      height: 100vh;
+      max-height: none;
+      z-index: 1050;
+      transition: left 0.3s ease;
+      border-radius: 0;
+      border-right: 1px solid var(--color-accent);
+      border-left: none;
+      border-top: none;
+      border-bottom: none;
+    }
+    
+    .catalog-sidebar.active {
+      left: 0;
+    }
+    
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1040;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .catalog-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 15px;
+    }
+    
+    .header-right {
+      justify-content: space-between;
+    }
+    
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .catalog-main {
+      padding: 15px 0;
+    }
+    
+    .catalog-container {
+      padding: 0 10px;
+    }
+    
+    .header-left h1 {
+      font-size: 24px;
+    }
+    
+    .products-grid {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .catalog-sidebar {
+      width: 100%;
+      left: -100%;
+    }
+  }
+  
+  /* ===== SCROLLBAR STYLING ===== */
+  .catalog-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .catalog-sidebar::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.5);
+  }
+  
+  .catalog-sidebar::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 3px;
+  }
+  
+  .catalog-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-highlight);
+  }
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🏪 Catalog: Initializing...');
+  
+  // Elements
+  const sidebar = document.getElementById('catalog-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+  const sidebarClose = document.getElementById('sidebar-close');
+  const form = document.getElementById('catalog-filters');
+  const allFamiliesCheckbox = document.getElementById('all-families');
+  const familyCheckboxes = document.querySelectorAll('.family-filter');
+  
+  // ===== MOBILE SIDEBAR TOGGLE =====
+  function showSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function hideSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  if (mobileFilterBtn) {
+    mobileFilterBtn.addEventListener('click', showSidebar);
+  }
+  
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', hideSidebar);
+  }
+  
+  if (overlay) {
+    overlay.addEventListener('click', hideSidebar);
+  }
+  
+  // ===== FILTER LOGIC =====
+  if (allFamiliesCheckbox) {
+    allFamiliesCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        familyCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        // Submit form to clear family filters
+        form.submit();
+      }
+    });
+  }
+  
+  familyCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      if (allFamiliesCheckbox) {
+        allFamiliesCheckbox.checked = false;
+      }
+      // Auto-submit on change
+      setTimeout(() => form.submit(), 100);
+    });
+  });
+  
+  // ===== SMOOTH ANIMATIONS =====
+  const productItems = document.querySelectorAll('.product-item');
+  productItems.forEach((item, index) => {
+    setTimeout(() => {
+      item.style.animationDelay = (index * 100) + 'ms';
+    }, 50);
+  });
+  
+  // ===== STICKY SIDEBAR ADJUSTMENT =====
+  function adjustSidebarPosition() {
+    if (window.innerWidth >= 992) {
+      const header = document.querySelector('.main-header');
+      const headerHeight = header ? header.offsetHeight : 80;
+      const sidebar = document.querySelector('.catalog-sidebar');
+      if (sidebar) {
+        sidebar.style.top = (headerHeight + 20) + 'px';
+      }
+    }
+  }
+  
+  window.addEventListener('scroll', adjustSidebarPosition);
+  window.addEventListener('resize', adjustSidebarPosition);
+  adjustSidebarPosition();
+  
+  console.log('✅ Catalog: Loaded successfully');
+});
+</script>

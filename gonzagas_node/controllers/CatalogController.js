@@ -57,6 +57,14 @@ class CatalogController {
           null
       }));
 
+      // Add flags for new/sale products (can be enhanced with date logic)
+      products = products.map(product => ({
+        ...product,
+        is_new: false, // Can be enhanced with date logic
+        on_sale: product.sale_price && product.purchase_price && 
+                 parseFloat(product.sale_price) < parseFloat(product.purchase_price)
+      }));
+
       // Render the catalog page with the products and families
       res.render('public/catalog', {
         title: 'Catálogo',
@@ -65,6 +73,7 @@ class CatalogController {
         products: products,
         families: families,
         selectedFamilyIds: selectedFamilyIds,
+        queryParams: req.query, // Pass query params for EJS
         siteTitle: 'Gonzaga\'s Art & Shine',
         siteDescription: 'Elegância que nasce da terra',
         theme: {

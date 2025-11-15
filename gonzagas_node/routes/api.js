@@ -113,6 +113,139 @@ router.get('/search/suggestions', async (req, res) => {
   }
 });
 
+// Catalog API endpoints (public)
+// Filter products endpoint
+router.get('/catalog/filter', async (req, res) => {
+  try {
+    const { families, price_range, search, page = 1, limit = 1000 } = req.query;
+    
+    // Get all active products visible in catalog
+    let products = await Product.getActiveForCatalog(parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
+    
+    // Filter by families
+    if (families) {
+      const familyIds = Array.isArray(families) 
+        ? families.map(id => parseInt(id))
+        : [parseInt(families)];
+      
+      if (familyIds.length > 0 && !familyIds.includes(NaN)) {
+        products = products.filter(product => 
+          familyIds.includes(product.family_id)
+        );
+      }
+    }
+    
+    // Filter by price range
+    if (price_range && price_range !== 'all') {
+      const [min, max] = price_range.split('-').map(v => v.replace('+', ''));
+      const minPrice = parseFloat(min) || 0;
+      const maxPrice = max ? parseFloat(max) : Infinity;
+      
+      products = products.filter(product => {
+        const price = parseFloat(product.sale_price) || 0;
+        return price >= minPrice && price <= maxPrice;
+      });
+    }
+    
+    // Filter by search term
+    if (search && search.trim().length >= 2) {
+      const searchTerm = search.trim().toLowerCase();
+      products = products.filter(product => {
+        const name = (product.name || '').toLowerCase();
+        const reference = (product.reference || '').toLowerCase();
+        const familyName = (product.family_name || '').toLowerCase();
+        return name.includes(searchTerm) || 
+               reference.includes(searchTerm) || 
+               familyName.includes(searchTerm);
+      });
+    }
+    
+    // Format prices
+    products = products.map(product => ({
+      ...product,
+      formatted_sale_price: product.sale_price ? 
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+        null,
+      formatted_purchase_price: product.purchase_price ?
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+        null,
+      is_new: false, // Can be enhanced with date logic
+      on_sale: product.sale_price && product.purchase_price && 
+               parseFloat(product.sale_price) < parseFloat(product.purchase_price)
+    }));
+    
+    // Get filter counts
+    const allProducts = await Product.getActiveForCatalog(10000, 0);
+    const filterCounts = {
+      families: {}
+    };
+    
+    // Count products per family
+    const allFamilies = await ProductFamily.getAll();
+    allFamilies.forEach(family => {
+      const count = allProducts.filter(p => p.family_id === family.id).length;
+      if (count > 0) {
+        filterCounts.families[family.id] = count;
+      }
+    });
+    
+    res.json({
+      success: true,
+      products: products,
+      count: products.length,
+      filterCounts: filterCounts,
+      hasMore: products.length === parseInt(limit)
+    });
+    
+  } catch (error) {
+    console.error('Catalog filter API error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to filter products',
+      products: [],
+      count: 0
+    });
+  }
+});
+
+// Get single product for quick view
+router.get('/catalog/product/:id', async (req, res) => {
+  try {
+    const productId = parseInt(req.params.id);
+    const product = await Product.getById(productId);
+    
+    if (!product || !product.is_active) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Product not found' 
+      });
+    }
+    
+    // Format prices
+    const formattedProduct = {
+      ...product,
+      formatted_sale_price: product.sale_price ? 
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+        null,
+      formatted_purchase_price: product.purchase_price ?
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+        null
+    };
+    
+    res.json({
+      success: true,
+      ...formattedProduct
+    });
+    
+  } catch (error) {
+    console.error('Catalog product API error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to get product' 
+    });
+  }
+});
+
 // Protected API routes (require admin authentication)
 router.use(isAuthenticated);
 
