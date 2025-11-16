@@ -72,17 +72,9 @@ class CatalogQuickView {
   }
 
   attachEventListeners() {
-    // Use event delegation for quick view buttons
-    document.addEventListener('click', (e) => {
-      const quickViewBtn = e.target.closest('.btn-quick-view');
-      if (quickViewBtn) {
-        e.preventDefault();
-        const productId = quickViewBtn.dataset.productId;
-        if (productId) {
-          this.open(productId);
-        }
-      }
-    });
+    // Note: Quick view buttons are now links that redirect directly to product detail page
+    // This event listener is kept for backward compatibility but won't intercept link clicks
+    // The modal can still be opened programmatically if needed
 
     // Close on backdrop click
     if (this.modal) {

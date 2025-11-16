@@ -27,14 +27,15 @@
 
       <!-- Slick Carousel -->
       <div class="featured-carousel">
-        <% featured.forEach(product => { %>
+        <% featured.forEach((product, index) => { %>
           <div class="slick-slide">
-            <%- include('partials/_productCard', {product: product, isCatalogPage: false}) %>
+            <%- include('partials/_productCardHomepage', {product: product, index: index}) %>
           </div>
         <% }); %>
       </div>
 
       <style>
+        /* Carousel styles only - product cards use modular catalog.css */
         .featured-carousel {
           margin: 30px auto;
           max-width: 1200px;
@@ -59,6 +60,28 @@
         
         .slick-dots li.slick-active button:before {
           color: var(--color-highlight);
+        }
+        
+        /* Ensure homepage product cards use catalog modular styles - exact same size */
+        .featured-section .product-item,
+        .featured-carousel .product-item,
+        .slick-slide .product-item {
+          width: 100%;
+          max-width: 250px !important;
+          margin: 0 auto;
+        }
+        
+        .featured-section .product-card,
+        .featured-carousel .product-card,
+        .slick-slide .product-card {
+          max-width: 250px !important;
+          width: 100%;
+        }
+        
+        .featured-section .product-image-container,
+        .featured-carousel .product-image-container,
+        .slick-slide .product-image-container {
+          max-width: 100%;
         }
         
         /* Mobile specific styles */

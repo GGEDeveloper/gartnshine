@@ -1,6 +1,7 @@
 /**
  * Utilities Module for Gonzaga's Art & Shine
  * Common utility functions and helpers
+ * Updated: 2025-11-15 - Added handleError and log functions
  */
 
 window.GonzagaUtils = (function() {
@@ -194,6 +195,32 @@ window.GonzagaUtils = (function() {
   }
 
   /**
+   * Handle and log errors with context
+   * @param {string} module - Module name
+   * @param {Error} error - Error object
+   * @param {string} context - Error context
+   */
+  function handleError(module, error, context = '') {
+    const message = context ? `${context}: ${error.message || error}` : (error.message || error);
+    console.error(`[Gonzaga ${module}] ERROR:`, message);
+    
+    if (window.GonzagaConfig?.debug) {
+      console.error('Stack trace:', error.stack || 'No stack trace available');
+    }
+  }
+
+  /**
+   * Log message with module prefix
+   * @param {string} module - Module name
+   * @param {string} message - Message to log
+   */
+  function log(module, message) {
+    if (window.GonzagaConfig?.debug) {
+      console.log(`[Gonzaga ${module}]`, message);
+    }
+  }
+
+  /**
    * Initialize utilities module
    */
   function init() {
@@ -251,7 +278,9 @@ window.GonzagaUtils = (function() {
     safeAddEventListener,
     getDeviceType,
     prefersReducedMotion,
-    showToast
+    showToast,
+    handleError,
+    log
   };
 
 })(); 

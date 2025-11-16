@@ -280,10 +280,10 @@
       if ($table.length) {
         if (!jQuery.fn.DataTable.isDataTable('.datatable')) {
           $table.DataTable({
-            responsive: true,
-            language: {
-              url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-            },
+      responsive: true,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+      },
             searching: true,
             ordering: true,
             drawCallback: function(settings) {
@@ -298,8 +298,8 @@
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initProductImageLightbox);
-  } else {
+    } else {
     initProductImageLightbox();
-  }
+    }
 })();
 </script>

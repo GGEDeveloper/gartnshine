@@ -232,18 +232,18 @@ class CatalogFilters {
       <div class="product-item" data-product-id="${product.id}" data-aos="fade-up" data-aos-delay="${index * 50}">
         <div class="product-card">
           <div class="product-image-container">
-            <a href="${imageUrl}" class="product-image-link glightbox" 
-               data-glightbox="type: image; title: ${this.escapeHtml(product.name)}"
-               data-gallery="product-gallery">
+            <a href="/catalog/product/${product.id}" class="product-image-link">
               <img src="${imageUrl}" 
                    alt="${this.escapeHtml(product.name)}" 
                    class="product-image lazy-load"
                    loading="lazy"
-                   data-src="${imageUrl}">
+                   data-src="${imageUrl}"
+                   style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
+                   onerror="this.src='/images/placeholder-image.png'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
               <div class="product-overlay">
-                <button class="btn-quick-view" data-product-id="${product.id}">
+                <a href="/catalog/product/${product.id}" class="btn-quick-view">
                   <i class="fas fa-eye"></i> Ver Detalhes
-                </button>
+                </a>
               </div>
             </a>
             ${product.is_new ? '<span class="product-badge badge-new">Novo</span>' : ''}

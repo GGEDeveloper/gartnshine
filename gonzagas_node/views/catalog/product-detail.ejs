@@ -1,131 +1,355 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+<style>
+    /* Product Detail Layout - Images Left, Details Right */
+    .product-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
     
-    <!-- Usar CSS existentes -->
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/catalog.css">
-    <style>
-        /* WhatsApp specific styles */
-        .btn-whatsapp {
-            display: block;
-            background: #25D366;
-            color: white;
-            padding: 16px 24px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            margin: 16px 0;
-            text-align: center;
-            font-size: 16px;
-            transition: background 0.3s;
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-top: 2rem;
+    }
+    
+    /* Left: Image Gallery */
+    .product-gallery-section {
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+    }
+    
+    .product-main-image {
+        position: relative;
+        width: 100%;
+        padding-top: 100%; /* Square aspect ratio */
+        background: rgba(20, 20, 20, 0.5);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-main-image:hover {
+        transform: scale(1.02);
+    }
+    
+    .product-main-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+    
+    .product-thumbnails {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .product-thumbnail {
+        position: relative;
+        width: 100%;
+        padding-top: 100%;
+        background: rgba(20, 20, 20, 0.5);
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .product-thumbnail:hover {
+        border-color: var(--color-highlight, #b19cd9);
+        transform: scale(1.05);
+    }
+    
+    .product-thumbnail.active {
+        border-color: var(--color-accent, #6a8c69);
+    }
+    
+    .product-thumbnail img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    /* Right: Product Info */
+    .product-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .product-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary, #f5f5f5);
+        margin-bottom: 0.5rem;
+    }
+    
+    .product-reference {
+        color: var(--color-text-secondary, #999);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-category {
+        color: var(--color-accent, #6a8c69);
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-price {
+        font-size: 2rem;
+        color: var(--color-highlight, #b19cd9);
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    
+    .product-availability {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        margin: 1rem 0;
+        display: inline-block;
+    }
+    
+    .product-availability.available {
+        background: rgba(106, 140, 105, 0.2);
+        color: #6a8c69;
+        border: 1px solid #6a8c69;
+    }
+    
+    .product-availability.on-order {
+        background: rgba(177, 156, 217, 0.2);
+        color: #b19cd9;
+        border: 1px solid #b19cd9;
+    }
+    
+    .product-description {
+        margin-top: 1.5rem;
+        line-height: 1.6;
+        color: var(--color-text, #ddd);
+    }
+    
+    .product-description h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-primary, #f5f5f5);
+    }
+    
+    .product-actions {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-whatsapp {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: #25D366;
+        color: white;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #20BA5A;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+    
+    .btn-copy {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(106, 140, 105, 0.3);
+        color: var(--color-text, #ddd);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-copy:hover {
+        background: rgba(106, 140, 105, 0.2);
+        border-color: #6a8c69;
+        transform: translateY(-2px);
+    }
+    
+    /* Breadcrumbs */
+    .breadcrumbs {
+        margin-bottom: 1.5rem;
+        color: var(--color-text-secondary, #999);
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumbs a {
+        color: var(--color-accent, #6a8c69);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumbs a:hover {
+        color: var(--color-highlight, #b19cd9);
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .product-detail-container {
+            padding: 1rem;
         }
         
-        .btn-whatsapp:hover {
-            background: #20BA5A;
-            color: white;
-            text-decoration: none;
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
         
-        .product-detail {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+        .product-gallery-section {
+            position: static;
         }
         
-        .product-images img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-        
-        .product-info h1 {
-            color: #333;
-            margin-bottom: 16px;
+        .product-title {
+            font-size: 1.5rem;
         }
         
         .product-price {
-            font-size: 1.5em;
-            color: #c0a080;
-            font-weight: bold;
-            margin: 16px 0;
+            font-size: 1.5rem;
         }
         
-        .btn-copy {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 8px;
+        .btn-whatsapp {
+            font-size: 1rem;
+            padding: 0.875rem 1.5rem;
         }
-        
-        @media (max-width: 768px) {
-            .product-detail {
-                padding: 16px;
-            }
-            
-            .btn-whatsapp {
-                font-size: 18px;
-                padding: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Include existing header if needed -->
+    }
+</style>
+
+<div class="product-detail-container">
+    <nav class="breadcrumbs">
+        <a href="/">Início</a> > 
+        <a href="/catalog">Catálogo</a> > 
+        <%= product.name %>
+    </nav>
     
-    <div class="product-detail">
-        <nav class="breadcrumbs" style="margin-bottom: 20px;">
-            <a href="/">Início</a> > 
-            <a href="/catalog">Catálogo</a> > 
-            <%= product.name %>
-        </nav>
+    <div class="product-detail-grid">
+        <!-- Left: Image Gallery -->
+        <div class="product-gallery-section">
+            <% 
+                // Get all product images
+                let allImages = [];
+                if (product.image_url) {
+                    allImages.push(product.image_url);
+                }
+                if (product.images && product.images.length > 0) {
+                    product.images.forEach(img => {
+                        if (img && !allImages.includes(img)) {
+                            allImages.push(img);
+                        }
+                    });
+                }
+                
+                // If no images, use placeholder
+                if (allImages.length === 0) {
+                    allImages.push('placeholder-image.png');
+                }
+                
+                const mainImage = allImages[0];
+            %>
+            
+            <div class="product-main-image">
+                <a href="/media/products/<%= mainImage %>" 
+                   class="glightbox product-image-link" 
+                   data-glightbox="type: image; title: <%= product.name %>"
+                   data-gallery="product-gallery">
+                    <img src="/media/products/<%= mainImage %>" 
+                         alt="<%= product.name %>" 
+                         id="mainProductImage"
+                         loading="eager">
+                </a>
+            </div>
+            
+            <% if (allImages.length > 1) { %>
+            <div class="product-thumbnails">
+                <% allImages.forEach((img, index) => { %>
+                <div class="product-thumbnail <%= index === 0 ? 'active' : '' %>" 
+                     data-image="/media/products/<%= img %>"
+                     data-index="<%= index %>">
+                    <a href="/media/products/<%= img %>" 
+                       class="glightbox product-thumbnail-link" 
+                       data-glightbox="type: image; title: <%= product.name %>"
+                       data-gallery="product-gallery">
+                        <img src="/media/products/<%= img %>" 
+                             alt="<%= product.name %> - Imagem <%= index + 1 %>" 
+                             loading="lazy">
+                    </a>
+                </div>
+                <% }); %>
+            </div>
+            <% } %>
+        </div>
         
-        <div class="product-content">
-            <% if (product.images && product.images.length > 0) { %>
-                <div class="product-images">
-                    <img src="/uploads/products/<%= product.images[0] %>" alt="<%= product.name %>">
+        <!-- Right: Product Info -->
+        <div class="product-info-section">
+            <div>
+                <h1 class="product-title"><%= product.name %></h1>
+                <p class="product-reference">Ref: <%= product.reference %></p>
+                
+                <% if (product.family_name) { %>
+                    <p class="product-category"><%= product.family_name %></p>
+                <% } %>
+            </div>
+            
+            <% if (product.sale_price) { %>
+                <div class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></div>
+            <% } else { %>
+                <div class="product-price">Preço sob consulta</div>
+            <% } %>
+            
+            <!-- Availability: Only "Disponível" or "Por Encomenda" -->
+            <% if (product.current_stock > 0) { %>
+                <div class="product-availability available">
+                    ✓ Disponível
+                </div>
+            <% } else { %>
+                <div class="product-availability on-order">
+                    📦 Por Encomenda
                 </div>
             <% } %>
             
-            <div class="product-info">
-                <h1><%= product.name %></h1>
-                
-                <p><strong>Referência:</strong> <%= product.reference %></p>
-                
-                <% if (product.family_name) { %>
-                    <p><strong>Categoria:</strong> <%= product.family_name %></p>
-                <% } %>
-                
-                <% if (product.sale_price) { %>
-                    <div class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></div>
-                <% } else { %>
-                    <div class="product-price">Preço sob consulta</div>
-                <% } %>
-                
-                <% if (product.current_stock > 0) { %>
-                    <p style="color: green;"><strong>✓ Em stock</strong> (<%= product.current_stock %> disponível)</p>
-                <% } else { %>
-                    <p style="color: orange;"><strong>⚠ Temporariamente esgotado</strong></p>
-                <% } %>
-                
-                <% if (product.description) { %>
-                    <div class="product-description">
-                        <h3>Descrição</h3>
-                        <p><%= product.description %></p>
-                    </div>
-                <% } %>
-                
+            <% if (product.description) { %>
+                <div class="product-description">
+                    <h3>Descrição</h3>
+                    <p><%= product.description %></p>
+                </div>
+            <% } %>
+            
+            <div class="product-actions">
                 <!-- WhatsApp Button -->
                 <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
                    class="btn-whatsapp" 
                    target="_blank"
                    onclick="trackWhatsApp()">
-                    📱 Pedir Informações via WhatsApp
+                    <i class="fab fa-whatsapp"></i>
+                    Pedir Informações via WhatsApp
                 </a>
                 
                 <button onclick="copyInfo()" class="btn-copy">
@@ -134,25 +358,85 @@
             </div>
         </div>
     </div>
-    
-    <script>
-        function copyInfo() {
-            const info = `<%= product.name %>\nReferência: <%= product.reference %>\n<% if (product.sale_price) { %>Preço: €<%= parseFloat(product.sale_price).toFixed(2) %><% } else { %>Preço sob consulta<% } %>\nVer: ${window.location.href}`;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(info).then(() => {
-                    alert('Informações copiadas!');
-                });
-            } else {
-                // Fallback
-                alert('Informações: ' + info);
-            }
+</div>
+
+<%- contentFor('scripts') %>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+    // Initialize GLightbox for product images
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof GLightbox !== 'undefined') {
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true,
+                zoomable: true,
+                draggable: true,
+                openEffect: 'zoom',
+                closeEffect: 'zoom',
+                slideEffect: 'slide',
+                closeButton: true,
+                touchFollowAxis: true,
+                keyboardNavigation: true,
+                closeOnOutsideClick: true
+            });
         }
         
-        function trackWhatsApp() {
-            console.log('WhatsApp clicked for product:', '<%= product.id %>');
+        // Thumbnail click handler to change main image
+        const thumbnails = document.querySelectorAll('.product-thumbnail');
+        const mainImage = document.getElementById('mainProductImage');
+        const mainImageLink = document.querySelector('.product-main-image .product-image-link');
+        
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function(e) {
+                e.preventDefault();
+                const imageUrl = this.dataset.image;
+                const imageIndex = parseInt(this.dataset.index);
+                
+                // Update main image
+                if (mainImage) {
+                    mainImage.src = imageUrl;
+                }
+                if (mainImageLink) {
+                    mainImageLink.href = imageUrl;
+                }
+                
+                // Update active thumbnail
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+    
+    function copyInfo() {
+        const productName = '<%= product.name %>';
+        const reference = '<%= product.reference %>';
+        const price = '<%= product.sale_price ? "€" + parseFloat(product.sale_price).toFixed(2) : "Preço sob consulta" %>';
+        const url = window.location.href;
+        
+        const info = `${productName}\nReferência: ${reference}\n${price}\nVer: ${url}`;
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(info).then(() => {
+                alert('Informações copiadas!');
+            }).catch(err => {
+                console.error('Error copying to clipboard:', err);
+                alert('Informações: ' + info);
+            });
+        } else {
+            alert('Informações: ' + info);
         }
-    </script>
-</body>
-</html>
-
+    }
+    
+    function trackWhatsApp() {
+        console.log('WhatsApp clicked for product:', '<%= product.id %>');
+        // Track WhatsApp click for analytics
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'whatsapp_click', {
+                'event_category': 'engagement',
+                'event_label': 'Product Detail',
+                'product_id': '<%= product.id %>'
+            });
+        }
+    }
+</script>

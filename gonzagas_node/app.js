@@ -310,10 +310,16 @@ app.use(cors({
 
 // Serve static files with proper headers, MIME types, and caching
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: process.env.NODE_ENV === 'production' ? '7d' : '1h',
+  maxAge: process.env.NODE_ENV === 'production' ? '7d' : '0', // No cache in development
   etag: true,
   lastModified: true,
   setHeaders: function (res, filePathString, stat) { 
+      // Disable cache for JS and CSS files in development
+      if (process.env.NODE_ENV !== 'production' && (filePathString.endsWith('.js') || filePathString.endsWith('.css'))) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+      }
     // Set CORP header for all static files
     res.header('Cross-Origin-Resource-Policy', 'same-site');
     
@@ -380,6 +386,16 @@ app.use('/media/products', express.static(path.join(__dirname, 'public', 'media'
 
 // Serve /media/* from public/media/ (for other media like gallery, content, etc)
 app.use('/media', express.static(path.join(__dirname, 'public', 'media'), {
+  maxAge: '30d',
+  etag: true,
+  setHeaders: (res, path, stat) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'public, max-age=2592000');
+  }
+}));
+
+// COMPATIBILIDADE: Serve /uploads/products/* from public/media/products/ (para arquivos antigos que ainda usam /uploads/products/)
+app.use('/uploads/products', express.static(path.join(__dirname, 'public', 'media', 'products'), {
   maxAge: '30d',
   etag: true,
   setHeaders: (res, path, stat) => {

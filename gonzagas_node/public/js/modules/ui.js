@@ -21,48 +21,73 @@ window.GonzagaUI = (function() {
       existingBtn.remove();
     }
 
-    // Create new button
+    // Create new button with enhanced SVG icon
     backToTopButton = document.createElement('button');
     backToTopButton.id = 'backToTopBtn';
-    backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    backToTopButton.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12" cy="5" r="2" fill="currentColor"/>
+      </svg>
+    `;
     backToTopButton.setAttribute('aria-label', 'Voltar ao topo');
     
-    // Apply styles
+    // Apply styles (CSS handles most styling, but ensure base styles)
+    backToTopButton.className = 'back-to-top';
     Object.assign(backToTopButton.style, {
       position: 'fixed',
-      bottom: '30px',
-      right: '30px',
-      width: '50px',
-      height: '50px',
-      background: 'linear-gradient(135deg, #d4af37, #f4e4a6)',
-      color: '#2c1810',
-      border: 'none',
+      bottom: window.innerWidth <= 768 ? '20px' : '30px',
+      right: window.innerWidth <= 768 ? '20px' : '30px',
+      width: window.innerWidth <= 768 ? '42px' : '45px',
+      height: window.innerWidth <= 768 ? '42px' : '45px',
+      background: 'linear-gradient(135deg, var(--color-highlight, #b19cd9), var(--color-accent, #6a8c69))',
+      color: 'var(--color-primary, #1e1e1e)',
+      border: '2px solid rgba(177, 156, 217, 0.3)',
       borderRadius: '50%',
-      fontSize: '18px',
+      padding: '0',
+      gap: '0',
       cursor: 'pointer',
       opacity: '0',
       visibility: 'hidden',
-      transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
-      zIndex: '1000',
-      boxShadow: '0 4px 20px rgba(212, 175, 55, 0.3)'
+      transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
+      zIndex: '1020',
+      boxShadow: '0 6px 25px rgba(177, 156, 217, 0.4), 0 0 0 0 rgba(177, 156, 217, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transform: 'translateY(20px) scale(0.8)',
+      overflow: 'hidden'
     });
 
     document.body.appendChild(backToTopButton);
 
-    // Add hover effects
+    // Hover effects are handled by CSS, but add smooth transitions
     backToTopButton.addEventListener('mouseenter', () => {
-      backToTopButton.style.transform = 'scale(1.1) translateY(-2px)';
-      backToTopButton.style.boxShadow = '0 8px 25px rgba(212, 175, 55, 0.4)';
+      backToTopButton.style.transform = 'translateY(-5px) scale(1.1)';
+      backToTopButton.style.boxShadow = '0 8px 30px rgba(177, 156, 217, 0.5), 0 0 0 8px rgba(177, 156, 217, 0.1)';
+      backToTopButton.style.borderColor = 'var(--color-highlight, #b19cd9)';
     });
 
     backToTopButton.addEventListener('mouseleave', () => {
-      backToTopButton.style.transform = 'scale(1) translateY(0)';
-      backToTopButton.style.boxShadow = '0 4px 20px rgba(212, 175, 55, 0.3)';
+      if (backToTopButton.classList.contains('visible')) {
+        backToTopButton.style.transform = 'translateY(0) scale(1)';
+      } else {
+        backToTopButton.style.transform = 'translateY(20px) scale(0.8)';
+      }
+      backToTopButton.style.boxShadow = '0 4px 20px rgba(177, 156, 217, 0.3), 0 0 0 0 rgba(177, 156, 217, 0.5)';
+      backToTopButton.style.borderColor = 'rgba(177, 156, 217, 0.3)';
     });
 
-    // Click event
+    // Click event with smooth scroll
     backToTopButton.addEventListener('click', () => {
-      GonzagaUtils.smoothScrollTo(document.body);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      // Add haptic feedback on mobile
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
     });
 
     // Scroll detection
@@ -70,11 +95,15 @@ window.GonzagaUI = (function() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       
       if (scrollTop > 300) {
+        backToTopButton.classList.add('visible');
         backToTopButton.style.opacity = '1';
         backToTopButton.style.visibility = 'visible';
+        backToTopButton.style.transform = 'translateY(0) scale(1)';
       } else {
+        backToTopButton.classList.remove('visible');
         backToTopButton.style.opacity = '0';
         backToTopButton.style.visibility = 'hidden';
+        backToTopButton.style.transform = 'translateY(20px) scale(0.8)';
       }
     }, 100);
 

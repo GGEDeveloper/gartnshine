@@ -243,6 +243,14 @@ router.get('/catalog/product/:id', async (req, res) => {
     const product = results[0];
     product.images = product.images ? product.images.split(',') : [];
     
+    // If product has image_url but no images in product_images, add it
+    if (product.image_url && (!product.images || product.images.length === 0)) {
+      product.images = [product.image_url];
+    } else if (product.image_url && product.images && !product.images.includes(product.image_url)) {
+      // Add image_url to the beginning if not already present
+      product.images.unshift(product.image_url);
+    }
+    
     // WhatsApp message
     const whatsappMessage = `Olá! Gostaria de informações sobre:
 

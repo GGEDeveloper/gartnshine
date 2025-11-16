@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/components.css">
-    <link rel="stylesheet" href="/css/catalog.css">
-    <link rel="stylesheet" href="/css/catalog-enhanced.css">
+    <link rel="stylesheet" href="/css/catalog.css?v=<%= Date.now() %>">
+    <link rel="stylesheet" href="/css/catalog-enhanced.css?v=<%= Date.now() %>">
     <link rel="stylesheet" href="/css/notifications.css">
     <link rel="stylesheet" href="/css/search.css">
     
@@ -67,8 +67,34 @@
     
     <!-- Gonzaga Modular System -->
     <script src="/js/config.js"></script>
-    <!-- Core modules in order -->
-    <script src="/js/utils.js"></script>
+    <!-- Core modules in order - utils.js must load and initialize first -->
+    <script src="/js/utils.js?v=<%= Date.now() %>"></script>
+    <script>
+      // Ensure utils.js is fully loaded and initialized before other modules
+      (function checkUtils() {
+        if (typeof GonzagaUtils !== 'undefined') {
+          if (typeof GonzagaUtils.init === 'function') {
+            GonzagaUtils.init();
+          }
+          // Verify handleError and log are available
+          if (typeof GonzagaUtils.handleError === 'undefined') {
+            console.error('[Layout] handleError not found in GonzagaUtils! Available methods:', Object.keys(GonzagaUtils));
+            // Retry after a short delay
+            setTimeout(checkUtils, 50);
+            return;
+          }
+          if (typeof GonzagaUtils.log === 'undefined') {
+            console.error('[Layout] log not found in GonzagaUtils!');
+            setTimeout(checkUtils, 50);
+            return;
+          }
+          console.log('[Layout] GonzagaUtils verified - handleError and log available');
+        } else {
+          console.error('[Layout] GonzagaUtils not loaded! Retrying...');
+          setTimeout(checkUtils, 50);
+        }
+      })();
+    </script>
     <script src="/js/modules/navigation.js"></script>
     <script src="/js/modules/ui.js"></script>
     <script src="/js/modules/carousel.js"></script>
