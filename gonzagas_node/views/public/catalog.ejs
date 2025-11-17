@@ -243,3 +243,65 @@
 <script src="/js/modules/catalog-search.js"></script>
 <script src="/js/catalog-enhanced.js"></script>
 
+<!-- Fix: Ensure all product images have proper height -->
+<script>
+(function() {
+  'use strict';
+  
+  function fixImageHeights() {
+    const containers = document.querySelectorAll('.product-image-container');
+    containers.forEach(container => {
+      const img = container.querySelector('.product-image');
+      if (img) {
+        const containerHeight = container.offsetHeight;
+        if (containerHeight > 0 && img.offsetHeight === 0) {
+          // Force image to have container's height
+          img.style.height = containerHeight + 'px';
+          img.style.minHeight = containerHeight + 'px';
+          img.style.maxHeight = containerHeight + 'px';
+        }
+      }
+    });
+  }
+  
+  // Run immediately
+  fixImageHeights();
+  
+  // Run after images load
+  window.addEventListener('load', fixImageHeights);
+  
+  // Run after lazy load
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(fixImageHeights, 100);
+    setTimeout(fixImageHeights, 500);
+    setTimeout(fixImageHeights, 1000);
+    
+    // Use MutationObserver to fix images as they load
+    const observer = new MutationObserver(function(mutations) {
+      fixImageHeights();
+    });
+    
+    const productsGrid = document.getElementById('products-grid');
+    if (productsGrid) {
+      observer.observe(productsGrid, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+      });
+    }
+    
+    // Also observe image load events
+    const images = document.querySelectorAll('.product-image');
+    images.forEach(img => {
+      if (img.complete) {
+        fixImageHeights();
+      } else {
+        img.addEventListener('load', fixImageHeights);
+        img.addEventListener('error', fixImageHeights);
+      }
+    });
+  });
+})();
+</script>
+

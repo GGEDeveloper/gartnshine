@@ -59,6 +59,26 @@
   margin: 0 !important;
 }
 
+/* CRITICAL FIX: Force all images to have proper height calculation */
+.product-image-container::after {
+  content: '';
+  display: block;
+  padding-top: 100%; /* Maintain aspect ratio */
+}
+
+.product-image-container img.product-image {
+  /* Ensure image fills the container created by padding-top */
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* Calculate height based on container's padding-top */
+  height: calc(100% - 0px) !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+}
+
 .product-image-container img.lazy-load {
   opacity: 1 !important;
   visibility: visible !important;

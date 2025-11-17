@@ -17,7 +17,8 @@
     "backup": "node scripts/backup-system.js backup",
     "backup:list": "node scripts/backup-system.js list",
     "backup:restore": "node scripts/backup-system.js restore",
-    "images:associate": "node scripts/associate-product-images.js"
+    "images:associate": "node scripts/associate-product-images.js",
+    "images:diagnose": "node scripts/diagnose-catalog-images.js"
   },
   "keywords": [
     "jewelry",
