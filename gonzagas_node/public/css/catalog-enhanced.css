@@ -179,10 +179,12 @@
 
 .product-info {
   padding: 20px;
-  flex: 1;
+  flex: 1 1 auto; /* Allow grow and shrink, but don't force expansion */
   display: flex;
   flex-direction: column;
   min-height: 0; /* Allow flex item to shrink */
+  max-height: none; /* Don't limit max height, but let content determine */
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .product-reference {
@@ -205,11 +207,13 @@
   margin-bottom: 12px;
   line-height: 1.4;
   flex: 0 1 auto; /* Don't grow, allow shrink */
-  overflow: hidden;
+  overflow: hidden !important;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limit to 2 lines */
-  -webkit-box-orient: vertical;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important; /* Limit to 2 lines */
+  -webkit-box-orient: vertical !important;
+  max-height: calc(1.4em * 2); /* Limit to exactly 2 lines (line-height * 2) */
+  word-wrap: break-word;
 }
 
 .product-price {
@@ -405,6 +409,7 @@
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+  max-height: 100% !important; /* Prevent card from exceeding parent height */
   background: rgba(30, 30, 30, 0.8) !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -418,7 +423,7 @@
 .products-grid:not(.list-view),
 .catalog-grid:not(.list-view) {
   align-items: stretch !important;
-  grid-auto-rows: 1fr !important; /* Force all rows to have same height */
+  grid-auto-rows: auto !important; /* Let rows size naturally based on content */
 }
 
 .products-grid:not(.list-view) .product-item,
@@ -427,6 +432,8 @@
   flex-direction: column !important;
   height: 100% !important;
   min-height: 0 !important; /* Allow flex item to shrink */
+  max-height: 100% !important; /* Prevent cards from exceeding row height */
+  overflow: hidden !important; /* Prevent content overflow */
 }
 
 .products-grid:not(.list-view) .product-card:hover,
