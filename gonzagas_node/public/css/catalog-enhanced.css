@@ -11,7 +11,6 @@
   transition: all 0.3s ease;
   border: 1px solid rgba(106, 140, 105, 0.2);
   height: 100%;
-  min-height: 400px !important; /* Ensure minimum height */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -201,7 +200,12 @@
   color: var(--color-text);
   margin-bottom: 12px;
   line-height: 1.4;
-  flex: 1;
+  flex: 0 1 auto; /* Don't grow, allow shrink */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
 }
 
 .product-price {
@@ -396,8 +400,6 @@
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
-  min-height: 400px !important; /* Ensure minimum height */
-  max-height: none !important; /* Allow content to determine height */
   background: rgba(30, 30, 30, 0.8) !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -405,6 +407,18 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
   border: 1px solid rgba(106, 140, 105, 0.2) !important;
   width: 100% !important; /* Ensure full width */
+}
+
+/* Ensure all cards in grid have same height */
+.products-grid:not(.list-view),
+.catalog-grid:not(.list-view) {
+  align-items: stretch !important;
+}
+
+.products-grid:not(.list-view) .product-item,
+.catalog-grid:not(.list-view) .product-item {
+  display: flex !important;
+  height: 100% !important;
 }
 
 .products-grid:not(.list-view) .product-card:hover,
