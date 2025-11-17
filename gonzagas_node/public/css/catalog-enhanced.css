@@ -61,6 +61,22 @@
   margin: 0 !important;
 }
 
+/* CRITICAL: Ensure images are always visible even when container uses padding-top */
+.product-image-container {
+  position: relative !important;
+}
+
+.product-image-container .product-image {
+  /* Force image to fill the space created by padding-top */
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* Use bottom: 0 to fill container created by padding-top */
+  bottom: 0 !important;
+}
+
 .product-image-container img.lazy-load {
   opacity: 1 !important;
   visibility: visible !important;

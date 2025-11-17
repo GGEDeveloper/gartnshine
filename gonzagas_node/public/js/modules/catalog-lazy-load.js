@@ -43,99 +43,35 @@ class CatalogLazyLoad {
   observeImages() {
     this.images = Array.from(document.querySelectorAll(this.imageSelector));
     
-    // Also get all product images as fallback
-    const allProductImages = Array.from(document.querySelectorAll('.product-image'));
+    // CRITICAL FIX: Load ALL images immediately, not just viewport ones
+    // This ensures all product images are visible from the start
+    console.log('Loading all', this.images.length, 'product images immediately...');
     
-    if (this.images.length === 0 && allProductImages.length > 0) {
-      console.log('No lazy-load images found, ensuring all images are visible');
-      allProductImages.forEach(img => {
-        // Ensure image is visible
-        if (img.src || img.dataset.src) {
-          const imageSrc = img.src || img.dataset.src;
-          if (imageSrc && !img.src) {
-            img.src = imageSrc;
-          }
-          img.style.opacity = '1';
-          img.style.visibility = 'visible';
-          img.style.display = 'block';
-          img.classList.add(this.loadedClass);
-        }
-      });
-      return;
-    }
-
-    // Load images that are already in viewport immediately
-    const viewportImages = this.images.filter(img => {
-      const rect = img.getBoundingClientRect();
-      return (
-        rect.top < window.innerHeight + 200 && // Increased margin
-        rect.bottom > -200 && // Increased margin
-        rect.left < window.innerWidth + 200 && // Increased margin
-        rect.right > -200 // Increased margin
-      );
-    });
-
-    // Load viewport images immediately
-    viewportImages.forEach(img => {
-      // Set src immediately if not set
-      if (img.dataset.src && !img.src) {
-        img.src = img.dataset.src;
-      }
-      // Ensure visibility and full container coverage IMMEDIATELY
-      img.style.cssText += `
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-width: 100% !important;
-        min-height: 100% !important;
-        max-width: 100% !important;
-        max-height: 100% !important;
-        object-fit: cover !important;
-        object-position: center center !important;
-        z-index: 2 !important;
-      `;
-      // Load the image
-      this.loadImage(img);
-    });
-
-    // Observe remaining images
     this.images.forEach(img => {
-      // Skip if already loaded
-      if (viewportImages.includes(img)) {
-        return;
-      }
-
-      // Ensure src is set immediately if data-src exists
+      // Set src immediately if using data-src
       if (img.dataset.src && !img.src) {
         img.src = img.dataset.src;
       }
       
-      // If image already loaded, skip skeleton
-      if (img.complete && img.naturalHeight !== 0) {
-        img.classList.add(this.loadedClass);
-        img.style.opacity = '1';
-        img.style.visibility = 'visible';
-        this.removeSkeleton(img);
-        return;
-      }
-      
-      // Ensure image is visible even while loading
+      // Ensure image is visible and properly styled
       img.style.opacity = '1';
       img.style.visibility = 'visible';
       img.style.display = 'block';
       
-      // Add skeleton placeholder
-      this.addSkeleton(img);
+      // If image already loaded, mark as loaded
+      if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add(this.loadedClass);
+        this.removeSkeleton(img);
+        return;
+      }
       
-      // Start observing
-      this.observer.observe(img);
+      // Load the image (this will handle the loading and styling)
+      this.loadImage(img);
+      
+      // Also observe for when it comes into view (for any additional processing)
+      if (this.observer) {
+        this.observer.observe(img);
+      }
     });
   }
 

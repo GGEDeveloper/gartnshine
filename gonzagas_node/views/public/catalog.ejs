@@ -168,8 +168,7 @@
                            class="product-image lazy-load"
                            loading="lazy"
                            data-src="<%= imageUrl %>"
-                           style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
-                           onerror="this.src='/images/placeholder-image.png'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
+                           onerror="this.src='/images/placeholder-image.png';">
                       <div class="product-overlay">
                         <a href="/catalog/product/<%= product.id %>" class="btn-quick-view">
                           <i class="fas fa-eye"></i> Ver Detalhes
@@ -243,149 +242,80 @@
 <script src="/js/modules/catalog-search.js"></script>
 <script src="/js/catalog-enhanced.js"></script>
 
-<!-- Fix: Ensure all product images display correctly -->
+<!-- Fix: Ensure ALL product images display correctly -->
 <script>
 (function() {
   'use strict';
   
-  function ensureImageVisibility() {
-    const containers = document.querySelectorAll('.product-image-container');
-    let fixedCount = 0;
-    let totalProcessed = 0;
+  // CRITICAL: Force all images to load and display immediately
+  function forceAllImagesVisible() {
+    const images = document.querySelectorAll('.product-image-container .product-image');
+    let fixed = 0;
     
-    containers.forEach(container => {
-      const img = container.querySelector('.product-image');
-      if (img) {
-        totalProcessed++;
-        
-        // Get container height - use padding-top calculation if offsetHeight is 0
-        let containerHeight = container.offsetHeight;
-        if (containerHeight === 0) {
-          const paddingTop = parseFloat(window.getComputedStyle(container).paddingTop);
-          const width = container.offsetWidth || container.clientWidth;
-          if (width > 0 && paddingTop > 0) {
-            containerHeight = paddingTop;
+    images.forEach(img => {
+      // Ensure src is set (critical for images with data-src)
+      if (img.dataset.src && !img.src) {
+        img.src = img.dataset.src;
+      }
+      
+      // Ensure image is visible
+      img.style.opacity = '1';
+      img.style.visibility = 'visible';
+      img.style.display = 'block';
+      
+      // Fix height if needed
+      if (img.offsetHeight === 0) {
+        const container = img.closest('.product-image-container');
+        if (container) {
+          const containerHeight = container.offsetHeight || container.clientHeight;
+          if (containerHeight > 0) {
+            img.style.height = containerHeight + 'px';
+            img.style.minHeight = containerHeight + 'px';
+            fixed++;
           }
-        }
-        
-        // If still no height, use width (square aspect ratio)
-        if (containerHeight === 0) {
-          const width = container.offsetWidth || container.clientWidth;
-          if (width > 0) {
-            containerHeight = width;
-          }
-        }
-        
-        // If still no height, try to get from computed style
-        if (containerHeight === 0) {
-          const computedHeight = parseFloat(window.getComputedStyle(container).height);
-          if (computedHeight > 0) {
-            containerHeight = computedHeight;
-          }
-        }
-        
-        // Always ensure image has proper dimensions - use 100% if we can't calculate
-        const targetHeight = containerHeight > 0 ? containerHeight + 'px' : '100%';
-        
-        // Check if image needs fixing
-        const currentHeight = img.offsetHeight;
-        const needsFix = currentHeight === 0 || (containerHeight > 0 && currentHeight < containerHeight * 0.9);
-        
-        if (needsFix) {
-          // Force image to fill container using absolute positioning
-          img.style.cssText = `
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100% !important;
-            height: ${targetHeight} !important;
-            min-height: ${targetHeight} !important;
-            max-height: ${targetHeight} !important;
-            object-fit: cover !important;
-            object-position: center center !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            display: block !important;
-            z-index: 2 !important;
-          `;
-          fixedCount++;
         }
       }
     });
     
-    if (fixedCount > 0) {
-      console.log('Fixed', fixedCount, 'of', totalProcessed, 'images');
+    if (fixed > 0) {
+      console.log('Fixed height for', fixed, 'images');
     }
   }
   
-  function initImageFix() {
-    ensureImageVisibility();
+  // Run immediately
+  function init() {
+    // Force all images to load
+    forceAllImagesVisible();
     
-    // Observe image load events
+    // Also handle image load events
     const images = document.querySelectorAll('.product-image');
     images.forEach(img => {
       if (img.complete) {
-        ensureImageVisibility();
+        forceAllImagesVisible();
       } else {
-        img.addEventListener('load', function() {
-          ensureImageVisibility();
-        }, { once: true });
-        img.addEventListener('error', function() {
-          ensureImageVisibility();
-        }, { once: true });
+        img.addEventListener('load', forceAllImagesVisible, { once: true });
+        img.addEventListener('error', forceAllImagesVisible, { once: true });
       }
     });
-    
-    // Use IntersectionObserver to fix images as they come into view
-    if ('IntersectionObserver' in window) {
-      const containers = document.querySelectorAll('.product-image-container');
-      const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            ensureImageVisibility();
-          }
-        });
-      }, { rootMargin: '100px' });
-      
-      containers.forEach(container => {
-        observer.observe(container);
-      });
-    }
   }
   
-  // Run immediately if DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      initImageFix();
-      // Multiple attempts to catch all images
-      setTimeout(ensureImageVisibility, 50);
-      setTimeout(ensureImageVisibility, 200);
-      setTimeout(ensureImageVisibility, 500);
-      setTimeout(ensureImageVisibility, 1000);
-    });
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initImageFix();
-    setTimeout(ensureImageVisibility, 50);
-    setTimeout(ensureImageVisibility, 200);
-    setTimeout(ensureImageVisibility, 500);
-    setTimeout(ensureImageVisibility, 1000);
+    init();
   }
   
-  // Run after all images load
+  // Run after window load
   window.addEventListener('load', function() {
-    ensureImageVisibility();
-    setTimeout(ensureImageVisibility, 100);
-    setTimeout(ensureImageVisibility, 500);
+    forceAllImagesVisible();
+    setTimeout(forceAllImagesVisible, 100);
+    setTimeout(forceAllImagesVisible, 500);
   });
   
-  // Also run on scroll to fix images as they come into view
-  let scrollTimeout;
-  window.addEventListener('scroll', function() {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(ensureImageVisibility, 100);
-  }, { passive: true });
+  // Also run periodically to catch any missed images
+  setTimeout(forceAllImagesVisible, 200);
+  setTimeout(forceAllImagesVisible, 1000);
+  setTimeout(forceAllImagesVisible, 2000);
 })();
 </script>
 
