@@ -251,10 +251,13 @@
   function ensureImageVisibility() {
     const containers = document.querySelectorAll('.product-image-container');
     let fixedCount = 0;
+    let totalProcessed = 0;
     
     containers.forEach(container => {
       const img = container.querySelector('.product-image');
       if (img) {
+        totalProcessed++;
+        
         // Get container height - use padding-top calculation if offsetHeight is 0
         let containerHeight = container.offsetHeight;
         if (containerHeight === 0) {
@@ -273,36 +276,47 @@
           }
         }
         
+        // If still no height, try to get from computed style
+        if (containerHeight === 0) {
+          const computedHeight = parseFloat(window.getComputedStyle(container).height);
+          if (computedHeight > 0) {
+            containerHeight = computedHeight;
+          }
+        }
+        
         // Always ensure image has proper dimensions - use 100% if we can't calculate
         const targetHeight = containerHeight > 0 ? containerHeight + 'px' : '100%';
         
-        // Force image to fill container using absolute positioning
-        img.style.cssText = `
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          bottom: 0 !important;
-          width: 100% !important;
-          height: ${targetHeight} !important;
-          min-height: ${targetHeight} !important;
-          max-height: ${targetHeight} !important;
-          object-fit: cover !important;
-          object-position: center center !important;
-          opacity: 1 !important;
-          visibility: visible !important;
-          display: block !important;
-          z-index: 2 !important;
-        `;
+        // Check if image needs fixing
+        const currentHeight = img.offsetHeight;
+        const needsFix = currentHeight === 0 || (containerHeight > 0 && currentHeight < containerHeight * 0.9);
         
-        if (img.offsetHeight === 0 && containerHeight > 0) {
+        if (needsFix) {
+          // Force image to fill container using absolute positioning
+          img.style.cssText = `
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: ${targetHeight} !important;
+            min-height: ${targetHeight} !important;
+            max-height: ${targetHeight} !important;
+            object-fit: cover !important;
+            object-position: center center !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+            z-index: 2 !important;
+          `;
           fixedCount++;
         }
       }
     });
     
     if (fixedCount > 0) {
-      console.log('Fixed', fixedCount, 'images with zero height');
+      console.log('Fixed', fixedCount, 'of', totalProcessed, 'images');
     }
   }
   

@@ -24,7 +24,9 @@
         <p class="product-family"><small class="text-highlight"><%= product.family_name %></small></p>
       <% } %>
       <p class="product-price">
-        <% if (product.formatted_sale_price) { %>
+        <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+          <span class="text-muted fst-italic">Preço sob consulta</span>
+        <% } else if (product.formatted_sale_price) { %>
           <span class="sale-price"><%= product.formatted_sale_price %></span>
         <% } else { %>
           <span class="text-muted fst-italic">Preço sob consulta</span>

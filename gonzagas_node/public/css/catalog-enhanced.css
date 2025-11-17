@@ -11,9 +11,11 @@
   transition: all 0.3s ease;
   border: 1px solid rgba(106, 140, 105, 0.2);
   height: 100%;
+  min-height: 400px !important; /* Ensure minimum height */
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100% !important; /* Ensure full width */
 }
 
 .product-card:hover {
