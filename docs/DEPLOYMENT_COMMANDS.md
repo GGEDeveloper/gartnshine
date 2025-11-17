@@ -17,6 +17,9 @@ cd /home/artnshin/artnshine.pt
 # Criar backup (RECOMENDADO)
 cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
 
+# Descartar todas as alterações locais (IMPORTANTE)
+git checkout -- .
+
 # Atualizar repositório
 git fetch origin
 git checkout main
@@ -31,7 +34,7 @@ chmod 755 server.js
 chmod -R 755 public/ views/ controllers/ models/
 cd ..
 
-# Verificar estado
+# Verificar estado (deve estar limpo agora)
 git status
 ```
 
@@ -64,7 +67,23 @@ source /home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/bin/activate
 ## ⚡ Comando Único (Copy-Paste)
 
 ```bash
-cd /home/artnshin/artnshine.pt && cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S) && git fetch origin && git checkout main && git reset --hard origin/main && git log --oneline -1 && cd gonzagas_node && chmod 755 server.js && chmod -R 755 public/ views/ controllers/ models/ && cd .. && git status
+cd /home/artnshin/artnshine.pt && cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S) && git checkout -- . && git fetch origin && git checkout main && git reset --hard origin/main && git log --oneline -1 && cd gonzagas_node && chmod 755 server.js && chmod -R 755 public/ views/ controllers/ models/ && cd .. && git status
+```
+
+## 🔧 Resolver Alterações Locais Não Desejadas
+
+Se houver muitos ficheiros modificados que não devem estar modificados:
+
+```bash
+# Descartar TODAS as alterações locais
+cd /home/artnshin/artnshine.pt
+git checkout -- .
+
+# Ou descartar apenas ficheiros específicos
+git checkout -- gonzagas_node/public/css/catalog-enhanced.css
+
+# Depois fazer o reset normal
+git reset --hard origin/main
 ```
 
 ---
