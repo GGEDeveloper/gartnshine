@@ -130,35 +130,19 @@ class CatalogLazyLoad {
       img.src = imageSrc;
     }
 
-    // Ensure image is visible and on top - force full container coverage
-    img.style.cssText += `
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: block !important;
-      z-index: 2 !important;
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      min-width: 100% !important;
-      min-height: 100% !important;
-      max-width: 100% !important;
-      max-height: 100% !important;
-      object-fit: cover !important;
-      object-position: center center !important;
-    `;
+    // Ensure image is visible immediately
+    img.style.opacity = '1';
+    img.style.visibility = 'visible';
+    img.style.display = 'block';
 
-    // If image already loaded, just remove skeleton
+    // If image already loaded, just remove skeleton and mark as loaded
     if (img.complete && img.naturalHeight !== 0) {
       img.classList.add(this.loadedClass);
       this.removeSkeleton(img);
       return;
     }
 
-    // Create new image to preload
+    // Create new image to preload (for better error handling)
     const newImg = new Image();
 
     newImg.onload = () => {
@@ -167,31 +151,12 @@ class CatalogLazyLoad {
         img.src = imageSrc;
       }
       img.classList.add(this.loadedClass);
-
-      // Remove skeleton
       this.removeSkeleton(img);
-
-      // Force full container coverage with !important
-      const existingStyle = img.getAttribute('style') || '';
-      img.setAttribute('style', existingStyle + `
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        z-index: 2 !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-width: 100% !important;
-        min-height: 100% !important;
-        max-width: 100% !important;
-        max-height: 100% !important;
-        object-fit: cover !important;
-        object-position: center center !important;
-      `);
+      
+      // Ensure visibility
+      img.style.opacity = '1';
+      img.style.visibility = 'visible';
+      img.style.display = 'block';
     };
 
     newImg.onerror = () => {
@@ -202,20 +167,6 @@ class CatalogLazyLoad {
       img.style.opacity = '1';
       img.style.visibility = 'visible';
       img.style.display = 'block';
-      img.style.zIndex = '2';
-      img.style.position = 'absolute';
-      img.style.top = '0';
-      img.style.left = '0';
-      img.style.right = '0';
-      img.style.bottom = '0';
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.minWidth = '100%';
-      img.style.minHeight = '100%';
-      img.style.maxWidth = '100%';
-      img.style.maxHeight = '100%';
-      img.style.objectFit = 'cover';
-      img.style.objectPosition = 'center center';
     };
 
     newImg.src = imageSrc;
