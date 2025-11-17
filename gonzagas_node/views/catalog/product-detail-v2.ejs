@@ -131,7 +131,12 @@
                     
                     <!-- Price Section -->
                     <div class="price-section">
-                        <% if (product.sale_price) { %>
+                        <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+                            <div class="price-consultation">
+                                <i class="fas fa-tag"></i>
+                                Preço sob consulta
+                            </div>
+                        <% } else if (product.sale_price) { %>
                             <div class="price-main">
                                 €<%= parseFloat(product.sale_price).toFixed(2) %>
                             </div>
