@@ -29,7 +29,7 @@
   overflow: hidden !important;
   background: rgba(20, 20, 20, 0.5) !important;
   display: block !important;
-  height: 0 !important; /* Force container to use padding-top for height - CRITICAL */
+  height: 0 !important; /* Force container to use padding-top for height */
 }
 
 /* Override main.css conflicts - ensure image is visible */
@@ -57,26 +57,6 @@
   pointer-events: none !important; /* Allow clicks to pass through to link */
   padding: 0 !important; /* Override main.css padding-bottom */
   margin: 0 !important;
-}
-
-/* CRITICAL FIX: Force all images to have proper height calculation */
-.product-image-container::after {
-  content: '';
-  display: block;
-  padding-top: 100%; /* Maintain aspect ratio */
-}
-
-.product-image-container img.product-image {
-  /* Ensure image fills the container created by padding-top */
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  /* Calculate height based on container's padding-top */
-  height: calc(100% - 0px) !important;
-  min-height: 100% !important;
-  max-height: 100% !important;
 }
 
 .product-image-container img.lazy-load {
