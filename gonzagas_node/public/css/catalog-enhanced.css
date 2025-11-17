@@ -380,12 +380,15 @@
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+  min-height: 400px !important; /* Ensure minimum height */
+  max-height: none !important; /* Allow content to determine height */
   background: rgba(30, 30, 30, 0.8) !important;
   border-radius: 12px !important;
   overflow: hidden !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
   border: 1px solid rgba(106, 140, 105, 0.2) !important;
+  width: 100% !important; /* Ensure full width */
 }
 
 .products-grid:not(.list-view) .product-card:hover,
