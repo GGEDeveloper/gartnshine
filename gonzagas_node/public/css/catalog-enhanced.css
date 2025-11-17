@@ -31,6 +31,7 @@
   background: rgba(20, 20, 20, 0.5) !important;
   display: block !important;
   height: 0 !important; /* Force container to use padding-top for height */
+  flex-shrink: 0 !important; /* Don't shrink image container */
 }
 
 /* Override main.css conflicts - ensure image is visible */
@@ -189,10 +190,12 @@
   color: var(--color-accent);
   margin-bottom: 8px;
   font-weight: 500;
+  flex-shrink: 0; /* Don't shrink reference */
 }
 
 .product-family {
   margin-bottom: 8px;
+  flex-shrink: 0; /* Don't shrink family */
 }
 
 .product-title {
@@ -214,6 +217,7 @@
   font-weight: 700;
   color: var(--color-highlight);
   margin-top: auto;
+  flex-shrink: 0; /* Don't shrink price */
 }
 
 /* ===== LAZY LOADING SKELETON ===== */
@@ -414,12 +418,15 @@
 .products-grid:not(.list-view),
 .catalog-grid:not(.list-view) {
   align-items: stretch !important;
+  grid-auto-rows: 1fr !important; /* Force all rows to have same height */
 }
 
 .products-grid:not(.list-view) .product-item,
 .catalog-grid:not(.list-view) .product-item {
   display: flex !important;
+  flex-direction: column !important;
   height: 100% !important;
+  min-height: 0 !important; /* Allow flex item to shrink */
 }
 
 .products-grid:not(.list-view) .product-card:hover,
