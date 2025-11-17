@@ -16,7 +16,8 @@
     "db:create-audit-logs-table": "node scripts/create-audit-logs-table.js",
     "backup": "node scripts/backup-system.js backup",
     "backup:list": "node scripts/backup-system.js list",
-    "backup:restore": "node scripts/backup-system.js restore"
+    "backup:restore": "node scripts/backup-system.js restore",
+    "images:associate": "node scripts/associate-product-images.js"
   },
   "keywords": [
     "jewelry",
