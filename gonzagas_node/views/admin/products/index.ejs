@@ -122,7 +122,23 @@
                       </td>
                       <td class="text-end">
                         <div class="btn-group">
-                          <a href="/admin/products/edit/<%= product.id %>" class="btn btn-sm btn-outline-primary">
+                          <% 
+                            // Preservar query params no link de editar
+                            let editUrl = '/admin/products/edit/' + product.id;
+                            if (typeof queryParams !== 'undefined' && queryParams) {
+                              const params = [];
+                              if (queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference));
+                              if (queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category));
+                              if (queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status));
+                              if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status));
+                              if (queryParams.page) params.push('page=' + encodeURIComponent(queryParams.page));
+                              if (queryParams.limit) params.push('limit=' + encodeURIComponent(queryParams.limit));
+                              if (params.length > 0) {
+                                editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&'));
+                              }
+                            }
+                          %>
+                          <a href="<%= editUrl %>" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i>
                           </a>
                           <a href="/admin/products/delete/<%= product.id %>" 
@@ -139,23 +155,47 @@
             </div>
 
             <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+              <% 
+                // Helper function to build query string preserving filters
+                function buildQueryString(page, limit, queryParams) {
+                  const params = [];
+                  params.push('page=' + encodeURIComponent(page));
+                  params.push('limit=' + encodeURIComponent(limit));
+                  
+                  // Preserve filter parameters
+                  if (queryParams && queryParams.reference) {
+                    params.push('reference=' + encodeURIComponent(queryParams.reference));
+                  }
+                  if (queryParams && queryParams.category) {
+                    params.push('category=' + encodeURIComponent(queryParams.category));
+                  }
+                  if (queryParams && queryParams.status) {
+                    params.push('status=' + encodeURIComponent(queryParams.status));
+                  }
+                  if (queryParams && queryParams.stock_status) {
+                    params.push('stock_status=' + encodeURIComponent(queryParams.stock_status));
+                  }
+                  
+                  return params.join('&');
+                }
+              %>
               <nav class="mt-3">
                 <ul class="pagination justify-content-center">
                   <% if (currentPage > 1) { %>
                     <li class="page-item">
-                      <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">Anterior</a>
+                      <a class="page-link" href="?<%= buildQueryString(currentPage - 1, limit, queryParams) %>">Anterior</a>
                     </li>
                   <% } %>
                   
                   <% for (let i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                      <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                      <a class="page-link" href="?<%= buildQueryString(i, limit, queryParams) %>"><%= i %></a>
                     </li>
                   <% } %>
                   
                   <% if (currentPage < totalPages) { %>
                     <li class="page-item">
-                      <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">Próximo</a>
+                      <a class="page-link" href="?<%= buildQueryString(currentPage + 1, limit, queryParams) %>">Próximo</a>
                     </li>
                   <% } %>
                 </ul>
@@ -235,12 +275,65 @@
   max-height: 90vh !important;
   object-fit: contain !important;
 }
+
+/* Esconder completamente qualquer paginação do DataTables */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_paginate *,
+.dataTables_wrapper .dataTables_info * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Remover espaçamento que pode ficar */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
+/* Garantir que apenas nossa paginação server-side seja visível */
+.pagination {
+  display: flex !important;
+}
 </style>
 `); %>
 
 <script>
 (function() {
   'use strict';
+  
+  // Ensure filters persist when form is submitted
+  function setupFilterPersistence() {
+    const filterForm = document.getElementById('product-filters');
+    if (!filterForm) return;
+    
+    // When form is submitted, ensure page is reset to 1 but filters are preserved
+    filterForm.addEventListener('submit', function(e) {
+      // Add hidden input for page=1 to ensure we start from page 1 when filters change
+      // Remove any existing page input first
+      const existingPageInput = filterForm.querySelector('input[name="page"]');
+      if (existingPageInput) {
+        existingPageInput.remove();
+      }
+      
+      // Add page=1 input
+      const pageInput = document.createElement('input');
+      pageInput.type = 'hidden';
+      pageInput.name = 'page';
+      pageInput.value = '1';
+      filterForm.appendChild(pageInput);
+      
+      // Form will submit normally with all fields including page=1
+    });
+  }
   
   // Initialize GLightbox for product images
   console.log('Setting up GLightbox for product images...');
@@ -274,32 +367,144 @@
     
     console.log('GLightbox initialized successfully for product images');
     
-    // Re-initialize after DataTables redraws
+    // Initialize DataTables with server-side pagination disabled
+    // Since we're using server-side pagination, DataTables should only handle sorting/searching on current page
     if (typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined') {
       var $table = jQuery('.datatable');
       if ($table.length) {
-        if (!jQuery.fn.DataTable.isDataTable('.datatable')) {
+        // Function to remove DataTables pagination/info
+        function removeDataTablesPagination() {
+          jQuery('.dataTables_wrapper .dataTables_paginate, .dataTables_wrapper .dataTables_info').each(function() {
+            jQuery(this).remove();
+          });
+          // Also remove by class directly
+          jQuery('.dataTables_paginate, .dataTables_info').remove();
+        }
+        
+        // Check if DataTable is already initialized (by admin.js or datatables-config.js)
+        // Wait a bit to ensure admin.js has finished initializing
+        setTimeout(function() {
+          if (jQuery.fn.DataTable.isDataTable('.datatable')) {
+            // Destroy existing DataTable instance
+            console.log('Destroying existing DataTable instance to reconfigure...');
+            try {
+              var dt = $table.DataTable();
+              // Don't clear data, just destroy to preserve table rows
+              dt.destroy(false); // false = keep table in DOM, just remove DataTable functionality
+              $table.removeClass('dataTable');
+              // Remove any existing pagination/info elements
+              removeDataTablesPagination();
+            } catch(e) {
+              console.error('Error destroying DataTable:', e);
+              // Force remove wrapper if it exists, but keep table content
+              var wrapper = $table.closest('.dataTables_wrapper');
+              if (wrapper.length) {
+                // Unwrap but keep table content
+                wrapper.contents().unwrap();
+              }
+            }
+          }
+          
+          // Re-initialize with correct settings (always re-initialize after destroy)
+          console.log('Re-initializing DataTable with correct settings...');
+          // Get fresh reference to table after potential DOM changes
+          $table = jQuery('.datatable');
+          // Check if table has rows before initializing
+          var rowCount = $table.find('tbody tr').length;
+          console.log('Table rows before DataTable init:', rowCount);
+          
+          if ($table.length && !jQuery.fn.DataTable.isDataTable('.datatable')) {
+            // Only initialize if table has data
+            if (rowCount > 0) {
+              initializeDataTable();
+            } else {
+              console.warn('Table has no rows, skipping DataTable initialization');
+            }
+          }
+        }, 100);
+        
+        function initializeDataTable() {
+          // Initialize with correct settings
           $table.DataTable({
-      responsive: true,
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
-      },
-            searching: true,
-            ordering: true,
+            responsive: true,
+            language: {
+              url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+            },
+            searching: true,  // Client-side search only on current page
+            ordering: true,    // Client-side ordering only on current page
+            paging: false,     // Disable DataTables pagination - we use server-side pagination
+            info: false,       // Disable DataTables info - we have our own pagination
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                 "<'row'<'col-sm-12'tr>>",  // Remove 'i' (info) and 'p' (pagination) from DOM
+            initComplete: function(settings, json) {
+              // Remove immediately after initialization
+              removeDataTablesPagination();
+            },
             drawCallback: function(settings) {
               console.log('DataTables drawCallback - GLightbox should auto-detect new images');
+              
+              // Force remove any DataTables pagination/info elements that might appear
+              removeDataTablesPagination();
+              
+              // Re-initialize GLightbox after table redraw
+              if (typeof GLightbox !== 'undefined') {
+                GLightbox();
+              }
             }
           });
+          
+          // Remove pagination/info elements immediately after initialization (multiple attempts)
+          setTimeout(function() {
+            removeDataTablesPagination();
+          }, 50);
+          
+          setTimeout(function() {
+            removeDataTablesPagination();
+          }, 100);
+          
+          setTimeout(function() {
+            removeDataTablesPagination();
+          }, 200);
+          
+          setTimeout(function() {
+            removeDataTablesPagination();
+          }, 500);
+          
+          // Use MutationObserver to remove any DataTables pagination/info elements that appear dynamically
+          if (typeof MutationObserver !== 'undefined') {
+            const observer = new MutationObserver(function(mutations) {
+              removeDataTablesPagination();
+            });
+            
+            const tableWrapper = $table.closest('.dataTables_wrapper')[0];
+            if (tableWrapper) {
+              observer.observe(tableWrapper, {
+                childList: true,
+                subtree: true
+              });
+            }
+            
+            // Also observe the document body in case elements are added elsewhere
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true
+            });
+          }
         }
       }
     }
   }
   
   // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProductImageLightbox);
-    } else {
+  function init() {
+    setupFilterPersistence();
     initProductImageLightbox();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+    } else {
+    init();
     }
 })();
 </script>

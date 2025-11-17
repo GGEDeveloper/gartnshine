@@ -376,7 +376,7 @@
           
                 <!-- Botões -->
                 <div class="form-group d-flex justify-content-between">
-                    <a href="/admin/products" class="btn btn-secondary">
+                    <a href="<%= typeof backUrl !== 'undefined' ? backUrl : '/admin/products' %>" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </a>
                     <div>
