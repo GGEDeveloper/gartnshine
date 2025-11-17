@@ -68,6 +68,12 @@ class CatalogGrid {
     this.container.classList.remove('masonry-grid');
     this.container.style.gridAutoRows = '';
     this.container.style.gridAutoFlow = '';
+    
+    // Remove any grid-row spans that were applied
+    const items = this.container.querySelectorAll('.product-item');
+    items.forEach(item => {
+      item.style.gridRow = '';
+    });
   }
 
   adjustMasonryItems() {
@@ -106,12 +112,19 @@ class CatalogGrid {
     // More advanced positioning can be added if needed
     const items = this.container.querySelectorAll('.product-item');
     items.forEach((item, index) => {
-      const img = item.querySelector('.product-image');
-      if (img && img.complete) {
-        const aspectRatio = img.naturalHeight / img.naturalWidth;
-        if (aspectRatio > 1.2) {
-          // Tall images span 2 rows
-          item.style.gridRow = 'span 2';
+      // Remove any grid-row span that might have been set previously
+      item.style.gridRow = '';
+      
+      // Only apply masonry span if masonry is explicitly enabled
+      // and we're in masonry mode
+      if (this.masonryEnabled && this.container.classList.contains('masonry-grid')) {
+        const img = item.querySelector('.product-image');
+        if (img && img.complete) {
+          const aspectRatio = img.naturalHeight / img.naturalWidth;
+          // Only span 2 rows for very tall images in masonry mode
+          if (aspectRatio > 1.5) {
+            item.style.gridRow = 'span 2';
+          }
         }
       }
     });
