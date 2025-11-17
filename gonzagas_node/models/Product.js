@@ -484,7 +484,8 @@ class Product extends BaseModel {
       await connection.beginTransaction();
 
       // Mapear campos permitidos para atualização
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'min_stock', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes'];
+      // Nota: max_stock não existe na tabela, usar max_stock_level se necessário
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes'];
       const fieldsToUpdate = {};
 
       // Filtrar e converter campos
@@ -493,6 +494,10 @@ class Product extends BaseModel {
           // Converter strings vazias para NULL para campos numéricos
           if ((field === 'family_id' || field === 'min_stock') && productData[field] === '') {
             fieldsToUpdate[field] = null;
+          }
+          // Converter current_stock para inteiro
+          else if (field === 'current_stock') {
+            fieldsToUpdate[field] = productData[field] !== undefined && productData[field] !== '' ? parseInt(productData[field], 10) : 0;
           } 
           // Converter strings vazias para NULL para campos decimais
           else if ((field === 'sale_price' || field === 'purchase_price' || field === 'weight') && productData[field] === '') {

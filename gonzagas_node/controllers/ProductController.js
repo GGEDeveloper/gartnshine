@@ -195,7 +195,58 @@ class ProductController extends BaseController {
       console.log('typeof product.is_catalog_visible:', typeof product.is_catalog_visible);
       console.log('product images:', product.images);
 
+      // Guardar query params do referer ou returnUrl para preservar filtros/página após update
+      const returnUrl = req.query.returnUrl || '';
+      const referer = req.get('referer') || '';
+      
+      // Priorizar returnUrl se fornecido
+      if (returnUrl && returnUrl.includes('/admin/products')) {
+        try {
+          const url = new URL(returnUrl, `http://${req.get('host') || 'localhost'}`);
+          const queryParams = url.searchParams.toString();
+          if (queryParams) {
+            req.session.productListQueryParams = queryParams;
+            console.log('Saved query params from returnUrl:', queryParams);
+          }
+        } catch (error) {
+          console.error('Error parsing returnUrl:', error);
+        }
+      } else if (referer.includes('/admin/products')) {
+        try {
+          // Se o referer for absoluto, usar URL diretamente
+          // Se for relativo, construir URL completo
+          let refererUrl;
+          if (referer.startsWith('http://') || referer.startsWith('https://')) {
+            refererUrl = new URL(referer);
+          } else {
+            const protocol = req.protocol || 'http';
+            const host = req.get('host') || 'localhost';
+            refererUrl = new URL(referer, `${protocol}://${host}`);
+          }
+          const queryParams = refererUrl.searchParams.toString();
+          if (queryParams) {
+            req.session.productListQueryParams = queryParams;
+            console.log('Saved query params from referer:', queryParams);
+          }
+        } catch (error) {
+          console.error('Error parsing referer URL:', error);
+          // Se falhar, tentar extrair query string manualmente
+          const queryMatch = referer.match(/\?([^#]+)/);
+          if (queryMatch && queryMatch[1]) {
+            req.session.productListQueryParams = queryMatch[1];
+          }
+        }
+      }
+
       const productFamilies = await ProductFamily.getAll();
+      
+      // Get returnUrl from query or session for back button (returnUrl already declared above)
+      let backUrl = '/admin/products';
+      if (returnUrl && returnUrl.includes('/admin/products')) {
+        backUrl = returnUrl;
+      } else if (req.session.productListQueryParams) {
+        backUrl = '/admin/products?' + req.session.productListQueryParams;
+      }
       
       res.render('admin/products/product-form', {
         layout: 'admin/layouts/main',
@@ -203,6 +254,7 @@ class ProductController extends BaseController {
         product,
         productFamilies,
         isNew: false, 
+        backUrl: backUrl, // Pass backUrl to view
         breadcrumbs: res.locals.breadcrumb,
         user: req.user,
         csrfToken: req.csrfToken ? req.csrfToken() : null,
@@ -306,14 +358,23 @@ class ProductController extends BaseController {
         console.log(`Attempting to update product ${productId} with userId: ${userId}`);
         await Product.updateProductWithImages(productId, productData, allNewImages, userId);
         req.flash('success_msg', 'Product updated successfully!');
-        res.redirect('/admin/products');
+        
+        // Preservar filtros e página após update
+        const queryParams = req.session.productListQueryParams || '';
+        const redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+        delete req.session.productListQueryParams; // Limpar após usar
+        res.redirect(redirectUrl);
       } catch (error) {
         if (error.code === 'ER_NO_REFERENCED_ROW_2' && error.sqlMessage && error.sqlMessage.includes('CONSTRAINT `fk_products_updated_by`')) {
           console.warn(`Update failed for product ${productId} due to invalid updated_by user ID: ${userId}. Attempting to save product with updated_by set to NULL.`);
           try {
             await Product.updateProductWithImages(productId, productData, allNewImages, null); // Retry with userId = null
             req.flash('warning_msg', `Product updated. However, the 'updated by' user (ID ${userId}) was not found, so this information was not recorded for this update.`);
-            res.redirect('/admin/products');
+            // Preservar filtros e página após update
+            const queryParams = req.session.productListQueryParams || '';
+            const redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+            delete req.session.productListQueryParams;
+            res.redirect(redirectUrl);
           } catch (retryError) {
             console.error(`Error updating product ${productId} even after attempting with updated_by = NULL:`, retryError);
             req.flash('error_msg', `Product update failed. User ID ${userId} may be invalid. (Details: ${retryError.message})`);
