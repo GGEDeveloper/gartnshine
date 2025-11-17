@@ -250,32 +250,60 @@
   
   function ensureImageVisibility() {
     const containers = document.querySelectorAll('.product-image-container');
+    let fixedCount = 0;
+    
     containers.forEach(container => {
       const img = container.querySelector('.product-image');
       if (img) {
-        const containerHeight = container.offsetHeight;
+        // Get container height - use padding-top calculation if offsetHeight is 0
+        let containerHeight = container.offsetHeight;
+        if (containerHeight === 0) {
+          const paddingTop = parseFloat(window.getComputedStyle(container).paddingTop);
+          const width = container.offsetWidth || container.clientWidth;
+          if (width > 0 && paddingTop > 0) {
+            containerHeight = paddingTop;
+          }
+        }
         
-        // Always ensure image has proper dimensions
-        if (containerHeight > 0) {
-          // Force image to fill container using absolute positioning
-          img.style.cssText = `
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: ${containerHeight}px !important;
-            min-height: ${containerHeight}px !important;
-            max-height: ${containerHeight}px !important;
-            object-fit: cover !important;
-            object-position: center center !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            display: block !important;
-            z-index: 2 !important;
-          `;
+        // If still no height, use width (square aspect ratio)
+        if (containerHeight === 0) {
+          const width = container.offsetWidth || container.clientWidth;
+          if (width > 0) {
+            containerHeight = width;
+          }
+        }
+        
+        // Always ensure image has proper dimensions - use 100% if we can't calculate
+        const targetHeight = containerHeight > 0 ? containerHeight + 'px' : '100%';
+        
+        // Force image to fill container using absolute positioning
+        img.style.cssText = `
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100% !important;
+          height: ${targetHeight} !important;
+          min-height: ${targetHeight} !important;
+          max-height: ${targetHeight} !important;
+          object-fit: cover !important;
+          object-position: center center !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          display: block !important;
+          z-index: 2 !important;
+        `;
+        
+        if (img.offsetHeight === 0 && containerHeight > 0) {
+          fixedCount++;
         }
       }
     });
+    
+    if (fixedCount > 0) {
+      console.log('Fixed', fixedCount, 'images with zero height');
+    }
   }
   
   function initImageFix() {
@@ -287,8 +315,12 @@
       if (img.complete) {
         ensureImageVisibility();
       } else {
-        img.addEventListener('load', ensureImageVisibility, { once: true });
-        img.addEventListener('error', ensureImageVisibility, { once: true });
+        img.addEventListener('load', function() {
+          ensureImageVisibility();
+        }, { once: true });
+        img.addEventListener('error', function() {
+          ensureImageVisibility();
+        }, { once: true });
       }
     });
     
@@ -301,7 +333,7 @@
             ensureImageVisibility();
           }
         });
-      }, { rootMargin: '50px' });
+      }, { rootMargin: '100px' });
       
       containers.forEach(container => {
         observer.observe(container);
@@ -309,24 +341,37 @@
     }
   }
   
-  // Run when DOM is ready
+  // Run immediately if DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initImageFix();
-      setTimeout(ensureImageVisibility, 100);
+      // Multiple attempts to catch all images
+      setTimeout(ensureImageVisibility, 50);
+      setTimeout(ensureImageVisibility, 200);
       setTimeout(ensureImageVisibility, 500);
+      setTimeout(ensureImageVisibility, 1000);
     });
   } else {
     initImageFix();
-    setTimeout(ensureImageVisibility, 100);
+    setTimeout(ensureImageVisibility, 50);
+    setTimeout(ensureImageVisibility, 200);
     setTimeout(ensureImageVisibility, 500);
+    setTimeout(ensureImageVisibility, 1000);
   }
   
   // Run after all images load
   window.addEventListener('load', function() {
     ensureImageVisibility();
     setTimeout(ensureImageVisibility, 100);
+    setTimeout(ensureImageVisibility, 500);
   });
+  
+  // Also run on scroll to fix images as they come into view
+  let scrollTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(ensureImageVisibility, 100);
+  }, { passive: true });
 })();
 </script>
 
