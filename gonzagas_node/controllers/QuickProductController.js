@@ -88,13 +88,18 @@ class QuickProductController {
       };
 
       let images = [];
-      if (req.files?.images && Array.isArray(req.files.images)) {
-        images = req.files.images.map((file, i) => ({
-          filename: file.filename,
+      const filesImages = req.files?.images;
+      if (filesImages) {
+        const arr = Array.isArray(filesImages) ? filesImages : [filesImages];
+        images = arr.map((file, i) => ({
+          filename: file?.filename || file,
           is_primary: i === 0
-        }));
-      } else if (req.files?.image && req.files.image[0]) {
-        images = [{ filename: req.files.image[0].filename, is_primary: true }];
+        })).filter(img => img.filename);
+      } else if (req.files?.image) {
+        const imgFile = Array.isArray(req.files.image) ? req.files.image[0] : req.files.image;
+        if (imgFile?.filename) {
+          images = [{ filename: imgFile.filename, is_primary: true }];
+        }
       }
 
       const productId = await Product.createProductWithImages(productData, images, userId);

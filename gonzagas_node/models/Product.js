@@ -446,26 +446,22 @@ class Product extends BaseModel {
       await connection.beginTransaction();
 
       // Mapear campos permitidos para inserção
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'attributes', 'color'];
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'location', 'style', 'material', 'color', 'notes', 'attributes', 'is_active', 'is_catalog_visible', 'featured', 'barcode'];
       const fieldsToInsert = {};
 
       // Filtrar e converter campos
       productFields.forEach(field => {
         if (productData[field] !== undefined) {
-          // Converter strings vazias para NULL para campos numéricos
           if ((field === 'family_id' || field === 'current_stock' || field === 'min_stock') && productData[field] === '') {
             fieldsToInsert[field] = null;
-          } 
-          // Converter strings vazias para NULL para campos decimais
-          else if ((field === 'sale_price' || field === 'purchase_price' || field === 'weight') && productData[field] === '') {
+          } else if ((field === 'sale_price' || field === 'purchase_price' || field === 'weight' || field === 'tax_rate') && productData[field] === '') {
             fieldsToInsert[field] = null;
-          }
-          // Converter strings booleanas para 0/1
-          else if (field === 'is_active' || field === 'is_catalog_visible' || field === 'featured') {
+          } else if (field === 'is_active' || field === 'is_catalog_visible' || field === 'featured') {
             fieldsToInsert[field] = productData[field] === 'true' || productData[field] === true ? 1 : 0;
-          }
-          // Manter outros campos como estão
-          else {
+          } else if (field === 'attributes') {
+            if (typeof productData[field] === 'object') fieldsToInsert[field] = JSON.stringify(productData[field]);
+            else if (productData[field]) fieldsToInsert[field] = productData[field];
+          } else {
             fieldsToInsert[field] = productData[field];
           }
         }
@@ -528,8 +524,7 @@ class Product extends BaseModel {
       await connection.beginTransaction();
 
       // Mapear campos permitidos para atualização
-      // Nota: max_stock não existe na tabela, usar max_stock_level se necessário
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'color'];
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'location', 'style', 'material', 'color', 'notes', 'attributes', 'is_active', 'is_catalog_visible', 'featured', 'barcode'];
       const fieldsToUpdate = {};
 
       // Filtrar e converter campos
@@ -543,11 +538,13 @@ class Product extends BaseModel {
           else if (field === 'current_stock') {
             fieldsToUpdate[field] = productData[field] !== undefined && productData[field] !== '' ? parseInt(productData[field], 10) : 0;
           } 
-          // Converter strings vazias para NULL para campos decimais
-          else if ((field === 'sale_price' || field === 'purchase_price' || field === 'weight') && productData[field] === '') {
+          else if ((field === 'sale_price' || field === 'purchase_price' || field === 'weight' || field === 'tax_rate') && productData[field] === '') {
             fieldsToUpdate[field] = null;
           }
-          // Converter strings booleanas para 0/1
+          else if (field === 'attributes') {
+            if (typeof productData[field] === 'object') fieldsToUpdate[field] = JSON.stringify(productData[field]);
+            else if (productData[field]) fieldsToUpdate[field] = productData[field];
+          }
           else if (field === 'is_active' || field === 'is_catalog_visible' || field === 'featured') {
             fieldsToUpdate[field] = productData[field] === 'true' || productData[field] === true ? 1 : 0;
           }

@@ -13,6 +13,7 @@
 - **002_create_media_tables.sql** - Creates media_files and media_usage tables
 - **003_extend_product_images.sql** - Adds media_id to product_images
 - **004_migrate_existing_data.sql** - OPTIONAL: Migrates existing data
+- **005_extend_products_inventory.sql** - Adiciona color, tax_rate, attributes a products; cria stock_movements, product_colors
 - **999_rollback.sql** - Complete rollback procedure
 
 ---

@@ -92,18 +92,18 @@
             </div>
           </div>
           <small class="text-muted d-block mt-1">Câmara ou ficheiro. Máx. 5MB por imagem. JPEG, PNG, GIF, WebP. Máx. 5 imagens.</small>
-          <div id="imagePreviews" class="row g-2 mt-2"></div>
+          <div id="imagePreviews" class="qp-previews-grid mt-2"></div>
         </div>
-        <!-- Modal zoom imagem -->
+        <!-- Modal zoom imagem: encaixa no ecrã do telemóvel, zoom com dedos -->
         <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content bg-dark">
               <div class="modal-header border-secondary py-2">
                 <h6 class="modal-title text-white">Ver imagem</h6>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
               </div>
-              <div class="modal-body p-0 text-center">
-                <img id="imageZoomImg" src="" alt="Pré-visualização" class="img-fluid" style="max-height: 80vh; object-fit: contain;">
+              <div class="modal-body p-0 d-flex align-items-center justify-content-center min-vh-50" style="touch-action: pinch-zoom;">
+                <img id="imageZoomImg" src="" alt="Pré-visualização" class="img-fluid qp-zoom-img" style="max-height: 75vh; max-width: 100%; object-fit: contain; user-select: none;">
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@
     imagePreviews.innerHTML = '';
     pendingFiles.forEach(function(f, i) {
       const div = document.createElement('div');
-      div.className = 'col-6 col-md-4 col-lg-2';
+      div.className = 'qp-preview-item';
       div.innerHTML = '<div class="qp-img-card position-relative">' +
         '<img src="" alt="" class="qp-img-thumb rounded" data-index="' + i + '">' +
         '<div class="qp-img-actions">' +

@@ -57,12 +57,22 @@
 }
 
 /* ===== QUICK PRODUCT - gestão de imagens ===== */
+/* Thumbnails pequenos: só aumentam ao clicar no zoom */
+.qp-previews-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.qp-preview-item {
+  flex: 0 0 auto;
+}
 .qp-img-card {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
   background: #f8f9fa;
-  aspect-ratio: 1;
+  width: 64px;
+  height: 64px;
 }
 .qp-img-thumb {
   width: 100%;
