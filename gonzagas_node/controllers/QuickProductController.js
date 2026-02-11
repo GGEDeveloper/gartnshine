@@ -24,13 +24,17 @@ class QuickProductController {
         families = { categories: all, subcategories: [] };
       }
       const colors = await getColorsSafe();
+      const preselectedFamilyId = req.query.family_id ? String(req.query.family_id).trim() : null;
+      const preselectedColor = req.query.color ? String(req.query.color).trim() : null;
 
       res.render('admin/quick-product/form', {
         layout: 'admin/layouts/main',
         title: 'Criar Produto Rápido',
         categories: families.categories,
         subcategories: families.subcategories,
-        colors,
+        colors: colors && colors.length > 0 ? colors : [{ name: 'Prata' }, { name: 'Dourado' }, { name: 'Outro' }],
+        preselectedFamilyId,
+        preselectedColor,
         breadcrumbs: res.locals.breadcrumb || [],
         user: req.session?.user || req.user,
         success_msg: req.flash('success_msg'),
@@ -95,7 +99,10 @@ class QuickProductController {
 
       const productId = await Product.createProductWithImages(productData, images, userId);
       req.flash('success_msg', `Produto criado com sucesso! Referência: ${productData.reference}`);
-      res.redirect('/admin/quick-product');
+      const params = new URLSearchParams();
+      if (family_id) params.set('family_id', family_id);
+      if (color && (color || '').trim()) params.set('color', color.trim());
+      res.redirect('/admin/quick-product' + (params.toString() ? '?' + params.toString() : ''));
     } catch (error) {
       console.error('QuickProductController.store error:', error);
       req.flash('error_msg', 'Erro ao criar produto: ' + (error.message || 'Erro desconhecido'));

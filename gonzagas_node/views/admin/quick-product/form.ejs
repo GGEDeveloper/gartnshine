@@ -24,10 +24,10 @@
             <select class="form-select form-select-lg" id="family_id" name="family_id">
               <option value="">-- Selecione --</option>
               <% (categories || []).forEach(cat => { %>
-                <option value="<%= cat.id %>" data-code="<%= cat.code || '' %>"><%= cat.name %></option>
+                <option value="<%= cat.id %>" data-code="<%= cat.code || '' %>" <%= (typeof preselectedFamilyId !== 'undefined' && preselectedFamilyId && String(preselectedFamilyId) === String(cat.id)) ? 'selected' : '' %>><%= cat.name %></option>
               <% }); %>
               <% (subcategories || []).forEach(sub => { %>
-                <option value="<%= sub.id %>" data-code="<%= sub.code || '' %>" data-parent="<%= sub.parent_id %>"><%= sub.name %></option>
+                <option value="<%= sub.id %>" data-code="<%= sub.code || '' %>" data-parent="<%= sub.parent_id %>" <%= (typeof preselectedFamilyId !== 'undefined' && preselectedFamilyId && String(preselectedFamilyId) === String(sub.id)) ? 'selected' : '' %>><%= sub.name %></option>
               <% }); %>
             </select>
           </div>
@@ -60,16 +60,12 @@
         <div class="row g-2 mt-2">
           <div class="col-12 col-md-6">
             <label for="color" class="form-label">Cor</label>
-            <% if (colors && colors.length > 0) { %>
-              <select class="form-select form-select-lg" id="color" name="color">
-                <option value="">— Selecionar —</option>
-                <% colors.forEach(c => { %>
-                  <option value="<%= c.name %>"><%= c.name %></option>
-                <% }); %>
-              </select>
-            <% } else { %>
-              <input type="text" class="form-control form-control-lg" id="color" name="color" placeholder="Ex: Prata, Dourado">
-            <% } %>
+            <select class="form-select form-select-lg" id="color" name="color">
+              <option value="">— Selecionar —</option>
+              <% (colors || []).forEach(c => { %>
+                <option value="<%= c.name %>" <%= (typeof preselectedColor !== 'undefined' && preselectedColor === c.name) ? 'selected' : '' %>><%= c.name %></option>
+              <% }); %>
+            </select>
           </div>
           <div class="col-12 col-md-6">
             <label for="current_stock" class="form-label">Quantidade</label>
