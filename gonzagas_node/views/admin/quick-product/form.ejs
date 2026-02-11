@@ -91,8 +91,22 @@
               <input type="file" class="form-control form-control-lg" id="images" name="images" accept="image/*" capture="environment" multiple>
             </div>
           </div>
-          <small class="text-muted d-block mt-1">Câmara ou ficheiro. Máx. 5MB por imagem. JPEG, PNG, GIF, WebP.</small>
+          <small class="text-muted d-block mt-1">Câmara ou ficheiro. Máx. 5MB por imagem. JPEG, PNG, GIF, WebP. Máx. 5 imagens.</small>
           <div id="imagePreviews" class="row g-2 mt-2"></div>
+        </div>
+        <!-- Modal zoom imagem -->
+        <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark">
+              <div class="modal-header border-secondary py-2">
+                <h6 class="modal-title text-white">Ver imagem</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body p-0 text-center">
+                <img id="imageZoomImg" src="" alt="Pré-visualização" class="img-fluid" style="max-height: 80vh; object-fit: contain;">
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Botões -->
@@ -142,27 +156,77 @@
   if (familySelect.value) fetchNextReference();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-  imagesInput.addEventListener('change', function() {
+  const MAX_IMAGES = 5;
+  let pendingFiles = [];
+
+  function syncFileInput() {
+    const dt = new DataTransfer();
+    pendingFiles.forEach(function(f) { dt.items.add(f); });
+    imagesInput.files = dt.files;
+  }
+
+  function removeImage(index) {
+    pendingFiles.splice(index, 1);
+    syncFileInput();
+    renderPreviews();
+  }
+
+  function renderPreviews() {
     imagePreviews.innerHTML = '';
-    const files = this.files;
-    for (let i = 0; i < Math.min(files.length, 5); i++) {
+    pendingFiles.forEach(function(f, i) {
+      const div = document.createElement('div');
+      div.className = 'col-6 col-md-4 col-lg-2';
+      div.innerHTML = '<div class="qp-img-card position-relative">' +
+        '<img src="" alt="" class="qp-img-thumb rounded" data-index="' + i + '">' +
+        '<div class="qp-img-actions">' +
+        '<button type="button" class="btn btn-sm btn-light qp-img-zoom" title="Ver melhor" data-index="' + i + '"><i class="fas fa-search-plus"></i></button>' +
+        '<button type="button" class="btn btn-sm btn-danger qp-img-remove" title="Remover" data-index="' + i + '"><i class="fas fa-trash"></i></button>' +
+        '</div>' +
+        '</div>';
+      const img = div.querySelector('.qp-img-thumb');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        img.src = e.target.result;
+        img.dataset.src = e.target.result;
+      };
+      reader.readAsDataURL(f);
+      imagePreviews.appendChild(div);
+    });
+  }
+
+  imagePreviews.addEventListener('click', function(e) {
+    const zoomBtn = e.target.closest('.qp-img-zoom');
+    const removeBtn = e.target.closest('.qp-img-remove');
+    if (zoomBtn) {
+      const idx = parseInt(zoomBtn.dataset.index, 10);
+      const thumb = imagePreviews.querySelector('.qp-img-thumb[data-index="' + idx + '"]');
+      const src = thumb?.src || thumb?.dataset?.src;
+      if (src) {
+        document.getElementById('imageZoomImg').src = src;
+        new bootstrap.Modal(document.getElementById('imageZoomModal')).show();
+      }
+    } else if (removeBtn) {
+      removeImage(parseInt(removeBtn.dataset.index, 10));
+    }
+  });
+
+  imagesInput.addEventListener('change', function() {
+    const files = Array.from(this.files || []);
+    pendingFiles = [];
+    for (let i = 0; i < Math.min(files.length, MAX_IMAGES); i++) {
       const f = files[i];
       if (!f.type.startsWith('image/')) continue;
       if (f.size > MAX_FILE_SIZE) {
         alert('Imagem "' + f.name + '" excede 5MB. Reduza o tamanho ou escolha outra.');
         this.value = '';
-        imagePreviews.innerHTML = '';
+        pendingFiles = [];
+        renderPreviews();
         return;
       }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const div = document.createElement('div');
-        div.className = 'col-4 col-md-2';
-        div.innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail" style="height:80px;object-fit:cover">';
-        imagePreviews.appendChild(div);
-      };
-      reader.readAsDataURL(f);
+      pendingFiles.push(f);
     }
+    syncFileInput();
+    renderPreviews();
   });
 
   form.addEventListener('submit', function(e) {

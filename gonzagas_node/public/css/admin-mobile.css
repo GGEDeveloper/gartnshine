@@ -56,6 +56,44 @@
   .table .btn-sm { min-width: 44px !important; min-height: 44px !important; padding: 0.5rem !important; }
 }
 
+/* ===== QUICK PRODUCT - gestão de imagens ===== */
+.qp-img-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8f9fa;
+  aspect-ratio: 1;
+}
+.qp-img-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.qp-img-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0.9;
+}
+.qp-img-zoom, .qp-img-remove {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0.4rem;
+}
+@media (max-width: 576px) {
+  .qp-img-zoom, .qp-img-remove {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 /* ===== INVENTORY - cards em mobile ===== */
 @media (max-width: 767.98px) {
   #product-table { display: none !important; }
