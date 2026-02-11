@@ -1,3 +1,4 @@
+<%- include('../partials/camera-module-import', { formId: 'productForm', imageInputName: 'images' }) %>
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -21,6 +22,7 @@
         </div>
         <div class="card-body">
             <form 
+                id="productForm"
                 action="<%= formAction %>" 
                 method="POST" 
                 enctype="multipart/form-data"
@@ -191,6 +193,20 @@
                 </div>
 
                 <div class="form-group mb-3">
+                            <label for="color" class="form-label">Cor</label>
+                            <% if (colors && colors.length > 0) { %>
+                              <select class="form-select" id="color" name="color">
+                                <option value="">— Selecionar —</option>
+                                <% colors.forEach(c => { %>
+                                  <option value="<%= c.name %>" <%= product && product.color === c.name ? 'selected' : '' %>><%= c.name %></option>
+                                <% }); %>
+                              </select>
+                            <% } else { %>
+                              <input type="text" class="form-control" id="color" name="color" value="<%= product ? product.color : '' %>" placeholder="Ex: Prata">
+                            <% } %>
+                </div>
+
+                <div class="form-group mb-3">
                             <label for="style" class="form-label">Estilo</label>
                             <input 
                                 type="text" 
@@ -350,15 +366,23 @@
                     <!-- Upload de Novas Imagens -->
                     <div class="mb-3">
                         <label for="images" class="form-label">Adicionar Novas Imagens</label>
-                        <input 
-                            type="file" 
-                            class="form-control" 
-                            id="images" 
-                            name="images" 
-                            accept="image/*"
-                            multiple
-                        >
-                        <small class="form-text text-muted">Pode selecionar múltiplas imagens. A primeira será definida como principal por padrão.</small>
+                        <div class="d-flex flex-column flex-sm-row gap-2 mb-2">
+                            <button type="button" class="btn btn-camera-capture" data-action="open-camera">
+                                <i class="fas fa-camera"></i>
+                                <span>Tirar foto</span>
+                            </button>
+                            <div class="flex-grow-1">
+                                <input 
+                                    type="file" 
+                                    class="form-control" 
+                                    id="images" 
+                                    name="images" 
+                                    accept="image/*"
+                                    multiple
+                                >
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Câmara ou ficheiro. Múltiplas imagens. A primeira será principal por padrão.</small>
                     </div>
                     
                     <!-- Preview de Novas Imagens -->
@@ -406,6 +430,35 @@
     </div>
   </div>
 
+<script>
+// Preview de novas imagens (incl. captura de câmara)
+(function() {
+  const inp = document.getElementById('images');
+  const container = document.getElementById('newImagePreviews');
+  if (!inp || !container) return;
+  inp.addEventListener('change', function() {
+    container.innerHTML = '';
+    const files = this.files;
+    if (files.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+    container.style.display = '';
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (!f.type.startsWith('image/')) continue;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 mb-3';
+        col.innerHTML = '<div class="card h-100"><img src="' + e.target.result + '" class="card-img-top" style="height:150px;object-fit:cover" alt=""><div class="card-body p-2"><small class="text-muted">' + f.name + '</small></div></div>';
+        container.appendChild(col);
+      };
+      reader.readAsDataURL(f);
+    }
+  });
+})();
+</script>
 <% if (product && product.id) { %>
 <script>
 // Array para armazenar IDs de imagens marcadas para exclusão

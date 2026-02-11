@@ -1,4 +1,4 @@
-<div class="container-fluid" style="background-color: #ffffff !important; color: #000000 !important;">
+<div class="container-fluid px-3 px-md-4 py-3" style="background-color: #ffffff !important; color: #000000 !important;">
   <style>
     /* Forçar tema claro */
     :root {
@@ -218,6 +218,47 @@
             </form>
           </div>
           
+          <!-- Mobile Cards -->
+          <div class="inventory-mobile-cards">
+            <% products.forEach(product => { %>
+              <div class="inventory-mobile-card">
+                <div class="card-top">
+                  <% if (product.image_url) { %>
+                    <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="card-img">
+                  <% } else { %>
+                    <div class="card-img bg-light d-flex align-items-center justify-content-center"><i class="fas fa-box text-muted"></i></div>
+                  <% } %>
+                  <div class="card-info">
+                    <div class="ref"><%= product.reference %></div>
+                    <div class="cat"><%= product.family_name || '-' %></div>
+                  </div>
+                </div>
+                <div class="card-badges">
+                  <% if (product.current_stock > 10) { %>
+                    <span class="badge badge-stock-in-stock">Em Stock (<%= product.current_stock %>)</span>
+                  <% } else if (product.current_stock > 0) { %>
+                    <span class="badge badge-stock-low-stock">Stock Baixo (<%= product.current_stock %>)</span>
+                  <% } else { %>
+                    <span class="badge badge-stock-out-of-stock">Sem Stock</span>
+                  <% } %>
+                  <% if (product.is_active) { %>
+                    <span class="badge badge-product-active">Ativo</span>
+                  <% } else { %>
+                    <span class="badge badge-product-inactive">Inativo</span>
+                  <% } %>
+                </div>
+                <div class="card-actions">
+                  <a href="/admin/inventory/history/<%= product.id %>" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-history"></i>
+                  </a>
+                  <a href="/admin/products/edit/<%= product.id %>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+
           <div class="table-responsive">
             <table class="table table-hover mb-0" id="product-table">
               <thead>

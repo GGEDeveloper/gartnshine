@@ -1,143 +1,174 @@
-// /home/mike/Documents/gonzagas/gonzagas_node/controllers/ProductFamilyController.js
-const ProductFamily = require('../models/ProductFamily'); // Assuming model path
+const ProductFamily = require('../models/ProductFamily');
+const ProductColor = require('../models/ProductColor');
 
-// Display a list of all product families
+let getColorsSafe = async () => {
+  try {
+    return await ProductColor.getAll();
+  } catch (e) {
+    return [];
+  }
+};
+
 exports.listFamilies = async (req, res) => {
   try {
-    const families = await ProductFamily.getAll(); // Or your equivalent method
+    const families = await ProductFamily.getAllWithProductCount();
+    const { categories, subcategories } = await ProductFamily.getCategoriesWithSubcategories().catch(() => ({ categories: families, subcategories: [] }));
+    const colors = await getColorsSafe();
     res.render('admin/product-families/index', {
-      title: 'Product Families',
+      title: 'Categorias e Cores',
       families,
-      layout: 'admin/layouts/main', // Specify the main admin layout
-      breadcrumb: [
-        { name: 'Home', url: '/admin/dashboard' },
-        { name: 'Product Families' }
-      ]
+      categories,
+      subcategories,
+      colors,
+      layout: 'admin/layouts/main',
+      breadcrumb: res.locals.breadcrumb || [],
+      user: req.session?.user || req.user,
+      success_msg: req.flash('success_msg'),
+      error_msg: req.flash('error_msg')
     });
   } catch (error) {
     console.error('Error fetching product families:', error);
-    req.flash('error_msg', 'Failed to load product families.');
+    req.flash('error_msg', 'Falha ao carregar categorias.');
     res.redirect('/admin/dashboard');
   }
 };
 
-// Show the form for adding a new product family
-exports.showAddForm = (req, res) => {
-  res.render('admin/product-families/family-form', {
-    title: 'Add New Product Family',
-    family: {}, // Empty object for a new family
-    isNew: true,
-    layout: 'admin/layouts/main',
-    breadcrumb: [
-      { name: 'Home', url: '/admin/dashboard' },
-      { name: 'Product Families', url: '/admin/product-families' },
-      { name: 'Add New' }
-    ]
-  });
+exports.showAddForm = async (req, res) => {
+  try {
+    const families = await ProductFamily.getAll();
+    const categories = families.filter(f => !f.parent_id);
+    res.render('admin/product-families/family-form', {
+      title: 'Nova Categoria',
+      family: {},
+      isNew: true,
+      categories,
+      layout: 'admin/layouts/main',
+      breadcrumb: res.locals.breadcrumb || [],
+      user: req.session?.user || req.user
+    });
+  } catch (error) {
+    console.error('Error showing add form:', error);
+    req.flash('error_msg', 'Falha ao carregar o formulário.');
+    res.redirect('/admin/product-families');
+  }
 };
 
-// Process the submission of the add form
 exports.createFamily = async (req, res) => {
   try {
-    const { name, description, code } = req.body; // Assuming 'name', 'description', 'code' fields
-    // Add validation as needed
+    const { name, description, code, parent_id } = req.body;
     if (!name || !code) {
-      req.flash('error_msg', 'Name and Code are required.');
-      return res.render('admin/product-families/family-form', {
-        title: 'Add New Product Family',
-        family: req.body, // Send back the entered data
-        isNew: true,
-        layout: 'admin/layouts/main',
-        breadcrumb: [
-          { name: 'Home', url: '/admin/dashboard' },
-          { name: 'Product Families', url: '/admin/product-families' },
-          { name: 'Add New' }
-        ],
-        error_msg: req.flash('error_msg') // Pass along the flash message
-      });
+      req.flash('error_msg', 'Nome e Código são obrigatórios.');
+      return res.redirect('/admin/product-families/create');
     }
-    await ProductFamily.create({ name, description, code }); // Or your equivalent method
-    req.flash('success_msg', 'Product family added successfully.');
+    await ProductFamily.create({ name, description, code, parent_id: parent_id || null });
+    req.flash('success_msg', 'Categoria criada com sucesso.');
     res.redirect('/admin/product-families');
   } catch (error) {
     console.error('Error creating product family:', error);
-    req.flash('error_msg', 'Failed to add product family. ' + error.message);
-    res.redirect('/admin/product-families/add');
+    req.flash('error_msg', 'Falha ao criar categoria. ' + (error.message || ''));
+    res.redirect('/admin/product-families/create');
   }
 };
 
-// Show the form for editing an existing product family
 exports.showEditForm = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
-    const family = await ProductFamily.getById(familyId); // Or your equivalent method
-
+    const family = await ProductFamily.getById(familyId);
     if (!family) {
-      req.flash('error_msg', 'Product family not found.');
+      req.flash('error_msg', 'Categoria não encontrada.');
       return res.redirect('/admin/product-families');
     }
-
+    const families = await ProductFamily.getAll();
+    const categories = families.filter(f => !f.parent_id && f.id !== familyId);
     res.render('admin/product-families/family-form', {
-      title: 'Edit Product Family',
+      title: 'Editar Categoria',
       family,
       isNew: false,
+      categories,
       layout: 'admin/layouts/main',
-      breadcrumb: [
-        { name: 'Home', url: '/admin/dashboard' },
-        { name: 'Product Families', url: '/admin/product-families' },
-        { name: 'Edit' }
-      ]
+      breadcrumb: res.locals.breadcrumb || [],
+      user: req.session?.user || req.user
     });
   } catch (error) {
-    console.error('Error fetching product family for edit:', error);
-    req.flash('error_msg', 'Failed to load product family for editing.');
+    console.error('Error showing edit form:', error);
+    req.flash('error_msg', 'Falha ao carregar o formulário.');
     res.redirect('/admin/product-families');
   }
 };
 
-// Process the submission of the edit form
 exports.updateFamily = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
-    const { name, description, code } = req.body;
-    // Add validation as needed
+    const { name, description, code, parent_id } = req.body;
     if (!name || !code) {
-      req.flash('error_msg', 'Name and Code are required.');
-      // Fetch the family again to ensure we have its ID for the form action
-      const family = await ProductFamily.getById(familyId);
-      return res.render('admin/product-families/family-form', {
-        title: 'Edit Product Family',
-        family: { ...family, ...req.body }, // Merge original with submitted data
-        isNew: false,
-        layout: 'admin/layouts/main',
-        breadcrumb: [
-          { name: 'Home', url: '/admin/dashboard' },
-          { name: 'Product Families', url: '/admin/product-families' },
-          { name: 'Edit' }
-        ],
-        error_msg: req.flash('error_msg') // Pass along the flash message
-      });
+      req.flash('error_msg', 'Nome e Código são obrigatórios.');
+      return res.redirect(`/admin/product-families/edit/${familyId}`);
     }
-    await ProductFamily.update(familyId, { name, description, code }); // Or your equivalent method
-    req.flash('success_msg', 'Product family updated successfully.');
+    await ProductFamily.update(familyId, { name, description, code, parent_id: parent_id || null });
+    req.flash('success_msg', 'Categoria atualizada com sucesso.');
     res.redirect('/admin/product-families');
   } catch (error) {
     console.error('Error updating product family:', error);
-    req.flash('error_msg', 'Failed to update product family. ' + error.message);
+    req.flash('error_msg', 'Falha ao atualizar categoria. ' + (error.message || ''));
     res.redirect(`/admin/product-families/edit/${familyId}`);
   }
 };
 
-// Delete a product family
 exports.deleteFamily = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
-    // Add any checks here, e.g., if families are associated with products
-    await ProductFamily.delete(familyId); // Or your equivalent method
-    req.flash('success_msg', 'Product family deleted successfully.');
+    await ProductFamily.delete(familyId);
+    req.flash('success_msg', 'Categoria eliminada com sucesso.');
   } catch (error) {
     console.error('Error deleting product family:', error);
-    req.flash('error_msg', 'Failed to delete product family. It might be in use.');
+    req.flash('error_msg', 'Não foi possível eliminar. Pode estar em uso por produtos.');
+  }
+  res.redirect('/admin/product-families');
+};
+
+// Colors
+exports.createColor = async (req, res) => {
+  try {
+    const { name, hex_code, sort_order } = req.body;
+    if (!name || !name.trim()) {
+      req.flash('error_msg', 'Nome da cor é obrigatório.');
+      return res.redirect('/admin/product-families');
+    }
+    await ProductColor.create({ name: name.trim(), hex_code: hex_code?.trim() || null, sort_order: parseInt(sort_order, 10) || 0 });
+    req.flash('success_msg', 'Cor adicionada com sucesso.');
+  } catch (error) {
+    console.error('Error creating color:', error);
+    req.flash('error_msg', 'Falha ao adicionar cor. ' + (error.message || ''));
+  }
+  res.redirect('/admin/product-families');
+};
+
+exports.updateColor = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { name, hex_code, sort_order, is_active } = req.body;
+    await ProductColor.update(id, {
+      name: name?.trim(),
+      hex_code: hex_code?.trim() || null,
+      sort_order: parseInt(sort_order, 10),
+      is_active: is_active === '1' || is_active === true
+    });
+    req.flash('success_msg', 'Cor atualizada.');
+  } catch (error) {
+    console.error('Error updating color:', error);
+    req.flash('error_msg', 'Falha ao atualizar cor.');
+  }
+  res.redirect('/admin/product-families');
+};
+
+exports.deleteColor = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    await ProductColor.delete(id);
+    req.flash('success_msg', 'Cor eliminada.');
+  } catch (error) {
+    console.error('Error deleting color:', error);
+    req.flash('error_msg', 'Falha ao eliminar cor.');
   }
   res.redirect('/admin/product-families');
 };

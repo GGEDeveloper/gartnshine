@@ -76,6 +76,19 @@ class Product extends BaseModel {
     }  
   }
 
+  // Count products out of stock
+  static async countOutOfStock() {
+    try {
+      const [rows] = await this.pool.query(
+        `SELECT COUNT(*) as count FROM ${this.tableName} WHERE current_stock <= 0 OR current_stock IS NULL`
+      );
+      return rows[0].count;
+    } catch (error) {
+      console.error('Error counting out of stock products:', error);
+      throw error;
+    }
+  }
+
   // Count products with low stock
   static async countLowStock(threshold = 10) {
     try {
@@ -347,6 +360,7 @@ class Product extends BaseModel {
           p.id, 
           p.name, 
           p.reference, 
+          p.current_stock,
           (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url, 
           p.created_at 
         FROM products p
@@ -515,7 +529,7 @@ class Product extends BaseModel {
 
       // Mapear campos permitidos para atualização
       // Nota: max_stock não existe na tabela, usar max_stock_level se necessário
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes'];
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'color'];
       const fieldsToUpdate = {};
 
       // Filtrar e converter campos

@@ -22,17 +22,19 @@ Ver ficheiros na raiz:
 - DEPLOY_CPANEL.md
 - MULTI_DOMAIN_DEPLOYMENT_GUIDE.md
 
-## Migração Quick Product (após deploy)
+## Migrações (após deploy)
 
-Para habilitar o módulo **Criar Produto Rápido** (`/admin/quick-product`):
-
+### 1. Quick Product + Categorias
 ```bash
-# No servidor ou via phpMyAdmin
 mysql -u artnshin_dev -p artnshin_gonzagas_db < _dev-info/schema/migration_quick_product_20260211.sql
 ```
-
 Adiciona: `parent_id` em `product_families`, `color` em `products`.
-Sem migração, o módulo funciona mas sem subcategorias nem cor.
+
+### 2. Cores (opções de cor para produtos)
+```bash
+mysql -u artnshin_dev -p artnshin_gonzagas_db < _dev-info/schema/migration_product_colors_20260211.sql
+```
+Cria tabela `product_colors` com opções pré-definidas (Prata, Dourado, etc.).
 
 ## Notas
 

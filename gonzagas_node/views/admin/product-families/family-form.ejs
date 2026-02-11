@@ -1,49 +1,46 @@
-<!-- /home/mike/Documents/gonzagas/gonzagas_node/views/admin/product-families/family-form.ejs -->
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0 text-gray-800"><%= title %></h1>
+    <a href="/admin/product-families" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+  </div>
 
-<div class="card">
-  <div class="card-header">
-    <h3 class="card-title"><%= title %></h3>
-    <div class="card-tools">
-      <a href="/admin/product-families" class="btn btn-sm btn-outline-secondary">
-        <i class="fas fa-arrow-left"></i> Back to List
-      </a>
+  <%- include('../partials/flash-messages') %>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <form action="<%= isNew ? '/admin/product-families/create' : '/admin/product-families/edit/' + family.id %>" method="POST">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nome *</label>
+          <input type="text" class="form-control" id="name" name="name" value="<%= family.name || '' %>" required>
+        </div>
+        <div class="mb-3">
+          <label for="code" class="form-label">Código *</label>
+          <input type="text" class="form-control" id="code" name="code" value="<%= family.code || '' %>" 
+                 placeholder="Ex: PAN, PPB" required <%= isNew ? '' : 'readonly' %>>
+          <small class="text-muted">Usado para referências (ex: PAN0001). Não alterar após criar.</small>
+        </div>
+        <div class="mb-3">
+          <label for="parent_id" class="form-label">Subcategoria de</label>
+          <select class="form-select" id="parent_id" name="parent_id">
+            <option value="">— Categoria principal —</option>
+            <% (categories || []).forEach(c => { %>
+              <option value="<%= c.id %>" <%= family.parent_id == c.id ? 'selected' : '' %>><%= c.name %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Descrição</label>
+          <textarea class="form-control" id="description" name="description" rows="2"><%= family.description || '' %></textarea>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="/admin/product-families" class="btn btn-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> <%= isNew ? 'Criar' : 'Guardar' %>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-  <form action="<%= isNew ? '/admin/product-families/add' : '/admin/product-families/edit/' + family.id %>" method="POST">
-    <div class="card-body">
-      <div class="mb-3">
-        <label for="name" class="form-label">Family Name <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="name" name="name" 
-               value="<%= (typeof family !== 'undefined' && family.name) ? family.name : '' %>" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="code" class="form-label">Family Code <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="code" name="code" 
-               value="<%= (typeof family !== 'undefined' && family.code) ? family.code : '' %>" required>
-      </div>
-      
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" name="description" 
-                  rows="3"><%= (typeof family !== 'undefined' && family.description) ? family.description : '' %></textarea>
-      </div>
-      
-      <!-- Add other fields here if your ProductFamily model has more attributes -->
-      <!-- For example, if you had a 'slug' or 'image_url':
-      <div class="mb-3">
-        <label for="slug" class="form-label">Slug</label>
-        <input type="text" class="form-control" id="slug" name="slug" 
-               value="<%= (typeof family !== 'undefined' && family.slug) ? family.slug : '' %>">
-      </div>
-      -->
-
-    </div>
-    <div class="card-footer text-end">
-      <a href="/admin/product-families" class="btn btn-secondary">Cancel</a>
-      <button type="submit" class="btn btn-primary ms-2">
-        <i class="fas fa-save"></i> <%= isNew ? 'Create Family' : 'Save Changes' %>
-      </button>
-    </div>
-  </form>
 </div>

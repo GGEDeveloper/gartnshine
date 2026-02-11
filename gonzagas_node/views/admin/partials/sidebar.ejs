@@ -10,14 +10,14 @@
   <nav class="sidebar-nav">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link <%= currentPath === '/admin' || currentPath === '/admin/dashboard' ? 'active' : '' %>" href="/admin/dashboard">
+        <a class="nav-link <%= (!currentPath || currentPath === '/' || currentPath === '/dashboard') ? 'active' : '' %>" href="/admin/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/products') ? 'active' : '' %>" href="/admin/products">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/products')) ? 'active' : '' %>" href="/admin/products">
           <i class="fas fa-fw fa-box"></i>
           <span>Products</span>
         </a>
@@ -31,21 +31,21 @@
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/product-families') ? 'active' : '' %>" href="/admin/product-families">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/product-families')) ? 'active' : '' %>" href="/admin/product-families">
           <i class="fas fa-fw fa-tags"></i>
-          <span>Product Families</span>
+          <span>Categorias e Cores</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/inventory') ? 'active' : '' %>" href="/admin/inventory">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/inventory')) ? 'active' : '' %>" href="/admin/inventory">
           <i class="fas fa-fw fa-warehouse"></i>
           <span>Inventory</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= currentPath.startsWith('/admin/checkpoints') ? 'active' : '' %>" href="/admin/checkpoints">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/checkpoints')) ? 'active' : '' %>" href="/admin/checkpoints">
           <i class="fas fa-fw fa-clipboard-check"></i>
           <span>Checkpoints</span>
         </a>

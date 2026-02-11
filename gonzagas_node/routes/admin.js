@@ -102,10 +102,13 @@ router.use('/settings', settingsAdminRouter);
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
   try {
-    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
+    const [totalProducts, totalFamilies, lowStockProducts, outOfStockProducts, recentProducts, recentTransactions] = await Promise.all([
       Product.count(),
       ProductFamily.count(),
-      Product.countLowStock()
+      Product.countLowStock(),
+      Product.countOutOfStock(),
+      Product.getRecent(5),
+      []
     ]);
 
     res.render('admin/dashboard', {
@@ -115,10 +118,12 @@ router.get('/', adminSessionRequired, async (req, res) => {
         products: totalProducts,
         families: totalFamilies,
         lowStock: lowStockProducts,
-        // Add other stats like orders, users, revenue as needed later
-        orders: 0, // Placeholder
-        users: 0, // Placeholder
-        revenue: '0.00' // Placeholder
+        outOfStock: outOfStockProducts,
+        recentProducts,
+        recentTransactions,
+        orders: 0,
+        users: 0,
+        revenue: '0.00'
       }
     });
   } catch (error) {
@@ -136,10 +141,13 @@ router.get('/', adminSessionRequired, async (req, res) => {
 // Alias for dashboard
 router.get('/dashboard', adminSessionRequired, async (req, res) => {
   try {
-    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
+    const [totalProducts, totalFamilies, lowStockProducts, outOfStockProducts, recentProducts, recentTransactions] = await Promise.all([
       Product.count(),
       ProductFamily.count(),
-      Product.countLowStock()
+      Product.countLowStock(),
+      Product.countOutOfStock(),
+      Product.getRecent(5),
+      []
     ]);
 
     res.render('admin/dashboard', {
@@ -149,9 +157,12 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
         products: totalProducts,
         families: totalFamilies,
         lowStock: lowStockProducts,
-        orders: 0, // Placeholder
-        users: 0, // Placeholder
-        revenue: '0.00' // Placeholder
+        outOfStock: outOfStockProducts,
+        recentProducts,
+        recentTransactions,
+        orders: 0,
+        users: 0,
+        revenue: '0.00'
       }
     });
   } catch (error) {
@@ -300,13 +311,16 @@ router.post('/upload/image', adminSessionRequired, summernoteImageUpload.single(
 });
 
 
-// Product Family Routes
+// Product Family / Categories + Colors Routes
 router.get('/product-families', adminSessionRequired, ProductFamilyController.listFamilies);
 router.get('/product-families/create', adminSessionRequired, ProductFamilyController.showAddForm);
 router.post('/product-families/create', adminSessionRequired, ProductFamilyController.createFamily);
 router.get('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.showEditForm);
 router.post('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.updateFamily);
 router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyController.deleteFamily);
+router.post('/product-families/colors/create', adminSessionRequired, ProductFamilyController.createColor);
+router.post('/product-families/colors/edit/:id', adminSessionRequired, ProductFamilyController.updateColor);
+router.post('/product-families/colors/delete/:id', adminSessionRequired, ProductFamilyController.deleteColor);
 
 
 // Quick Product (mobile creation)

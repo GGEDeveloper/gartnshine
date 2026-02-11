@@ -37,12 +37,13 @@ class ProductFamily {
     try {
       const [result] = await pool.query(`
         INSERT INTO product_families 
-        (code, name, description)
-        VALUES (?, ?, ?)
+        (code, name, description, parent_id)
+        VALUES (?, ?, ?, ?)
       `, [
         family.code,
         family.name,
-        family.description
+        family.description || null,
+        family.parent_id ? parseInt(family.parent_id, 10) : null
       ]);
       
       return result.insertId;
@@ -59,12 +60,14 @@ class ProductFamily {
         UPDATE product_families SET
         code = ?,
         name = ?,
-        description = ?
+        description = ?,
+        parent_id = ?
         WHERE id = ?
       `, [
         family.code,
         family.name,
-        family.description,
+        family.description || null,
+        family.parent_id ? parseInt(family.parent_id, 10) : null,
         id
       ]);
       

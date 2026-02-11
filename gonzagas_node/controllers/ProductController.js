@@ -1,6 +1,9 @@
 const BaseController = require('./BaseController');
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+const ProductColor = require('../models/ProductColor');
+
+const getColorsSafe = async () => { try { return await ProductColor.getActive(); } catch { return []; } };
 const { body, validationResult } = require('express-validator');
 const path = require('path'); // For image path manipulation
 
@@ -63,12 +66,13 @@ class ProductController extends BaseController {
   // Show form to create a new product
   async create(req, res) {
     try {
-      const productFamilies = await ProductFamily.getAll();
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       res.render('admin/products/product-form', { 
         layout: 'admin/layouts/main',
         title: 'Create New Product',
         product: {}, 
         productFamilies,
+        colors: colors || [],
         isNew: true, 
         breadcrumbs: res.locals.breadcrumb,
         user: req.user,
@@ -89,12 +93,13 @@ class ProductController extends BaseController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const productFamilies = await ProductFamily.getAll();
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       return res.status(400).render('admin/products/product-form', {
         layout: 'admin/layouts/main',
         title: 'Create New Product',
         product: req.body,
         productFamilies,
+        colors: colors || [],
         isNew: true,
         errors: errors.array(),
         breadcrumbs: res.locals.breadcrumb,
@@ -158,12 +163,13 @@ class ProductController extends BaseController {
     } catch (error) {
       console.error('Error storing product:', error);
       req.flash('error_msg', 'Failed to create product. ' + error.message);
-      const productFamilies = await ProductFamily.getAll();
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       res.status(500).render('admin/products/product-form', {
         layout: 'admin/layouts/main',
         title: 'Create New Product',
         product: req.body,
         productFamilies,
+        colors: colors || [],
         isNew: true,
         error_msg: req.flash('error_msg'),
         breadcrumbs: res.locals.breadcrumb,
@@ -238,9 +244,8 @@ class ProductController extends BaseController {
         }
       }
 
-      const productFamilies = await ProductFamily.getAll();
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       
-      // Get returnUrl from query or session for back button (returnUrl already declared above)
       let backUrl = '/admin/products';
       if (returnUrl && returnUrl.includes('/admin/products')) {
         backUrl = returnUrl;
@@ -253,6 +258,7 @@ class ProductController extends BaseController {
         title: `Edit Product: ${product.name}`,
         product,
         productFamilies,
+        colors: colors || [],
         isNew: false, 
         backUrl: backUrl, // Pass backUrl to view
         breadcrumbs: res.locals.breadcrumb,
@@ -278,13 +284,14 @@ class ProductController extends BaseController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const product = await Product.findById(productId);
-      const productFamilies = await ProductFamily.getAll();
+      const product = await Product.findByIdWithDetails(productId);
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       return res.status(400).render('admin/products/product-form', {
         layout: 'admin/layouts/main',
         title: 'Edit Product',
         product: { ...product, ...req.body },
         productFamilies,
+        colors: colors || [],
         isNew: false,
         errors: errors.array(),
         breadcrumbs: res.locals.breadcrumb,
@@ -378,11 +385,12 @@ class ProductController extends BaseController {
           } catch (retryError) {
             console.error(`Error updating product ${productId} even after attempting with updated_by = NULL:`, retryError);
             req.flash('error_msg', `Product update failed. User ID ${userId} may be invalid. (Details: ${retryError.message})`);
-            const product = await Product.findById(productId);
-            const productFamilies = await ProductFamily.getAll();
+            const product = await Product.findByIdWithDetails(productId);
+            const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
             res.status(500).render('admin/products/product-form', {
               product: { ...product, ...req.body },
               productFamilies,
+              colors: colors || [],
               isNew: false,
               error_msg: req.flash('error_msg'),
               breadcrumbs: res.locals.breadcrumb,
@@ -393,11 +401,12 @@ class ProductController extends BaseController {
         } else {
           console.error(`Error updating product ${productId}:`, error);
           req.flash('error_msg', 'Error updating product: ' + error.message);
-          const product = await Product.findById(productId);
-          const productFamilies = await ProductFamily.getAll();
+          const product = await Product.findByIdWithDetails(productId);
+          const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
           res.status(500).render('admin/products/product-form', {
             product: { ...product, ...req.body },
             productFamilies,
+            colors: colors || [],
             isNew: false,
             error_msg: req.flash('error_msg'),
             breadcrumbs: res.locals.breadcrumb,
@@ -409,11 +418,12 @@ class ProductController extends BaseController {
     } catch (error) {
       console.error('Error updating product:', error);
       req.flash('error_msg', 'Failed to update product. ' + error.message);
-      const product = await Product.findById(productId);
-      const productFamilies = await ProductFamily.getAll();
+      const product = await Product.findByIdWithDetails(productId);
+      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       res.status(500).render('admin/products/product-form', {
         product: { ...product, ...req.body },
         productFamilies,
+        colors: colors || [],
         isNew: false,
         error_msg: req.flash('error_msg'),
         breadcrumbs: res.locals.breadcrumb,

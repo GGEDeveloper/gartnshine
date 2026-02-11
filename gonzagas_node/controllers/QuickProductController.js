@@ -1,6 +1,11 @@
 const path = require('path');
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+const ProductColor = require('../models/ProductColor');
+
+const getColorsSafe = async () => {
+  try { return await ProductColor.getActive(); } catch { return []; }
+};
 
 class QuickProductController {
   /**
@@ -13,18 +18,19 @@ class QuickProductController {
         categories: [],
         subcategories: []
       }));
-      // Fallback: if getCategoriesWithSubcategories fails (e.g. parent_id not yet added), use getAll
       let families = categories.length || subcategories.length ? { categories, subcategories } : null;
       if (!families) {
         const all = await ProductFamily.getAll();
         families = { categories: all, subcategories: [] };
       }
+      const colors = await getColorsSafe();
 
       res.render('admin/quick-product/form', {
         layout: 'admin/layouts/main',
         title: 'Criar Produto Rápido',
         categories: families.categories,
         subcategories: families.subcategories,
+        colors,
         breadcrumbs: res.locals.breadcrumb || [],
         user: req.session?.user || req.user,
         success_msg: req.flash('success_msg'),
