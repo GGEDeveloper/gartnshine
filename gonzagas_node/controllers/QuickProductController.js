@@ -116,10 +116,10 @@ class QuickProductController {
    */
   async getCategories(req, res) {
     try {
-      const { categories, subcategories } = await ProductFamily.getCategoriesWithSubcategories().catch(() => ({
-        categories: await ProductFamily.getAll(),
-        subcategories: []
-      }));
+      const { categories, subcategories } = await ProductFamily.getCategoriesWithSubcategories().catch(async () => {
+        const all = await ProductFamily.getAll();
+        return { categories: all, subcategories: [] };
+      });
       res.json({ categories, subcategories });
     } catch (error) {
       console.error('QuickProductController.getCategories error:', error);
