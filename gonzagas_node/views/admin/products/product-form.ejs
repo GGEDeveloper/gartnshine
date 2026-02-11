@@ -1,4 +1,6 @@
-<%- include('../partials/camera-module-import', { formId: 'productForm', imageInputName: 'images' }) %>
+<link rel="stylesheet" href="/css/camera-capture.css">
+<script src="/js/camera-capture.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("productForm");if(f&&window.initCameraForForm)initCameraForForm(f,{imageInputName:"images",multiple:true,mobileOnly:false});});</script>
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">

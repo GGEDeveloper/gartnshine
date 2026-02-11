@@ -1,16 +1,14 @@
 <%
-/**
- * Partial: Camera Capture Module Import
- * Usage: <%- include('../partials/camera-module-import', { formId: 'productForm' }) %>
- * Vars: formId, imageInputName (default: 'images'), multiple (default: true), mobileOnly (default: false)
- */
-const formIdVal = typeof formId !== 'undefined' ? formId : 'productForm';
-const imageInputNameVal = typeof imageInputName !== 'undefined' ? imageInputName : 'images';
-const multipleVal = typeof multiple !== 'undefined' ? multiple : true;
-const mobileOnlyVal = typeof mobileOnly !== 'undefined' ? mobileOnly : false;
-if (typeof locals.style === 'undefined') locals.style = '';
-locals.style += '<link rel="stylesheet" href="/css/camera-capture.css">';
-if (typeof locals.scripts === 'undefined') locals.scripts = '';
-const initOpts = JSON.stringify({ imageInputName: imageInputNameVal, multiple: multipleVal, mobileOnly: mobileOnlyVal });
-locals.scripts += '<script src="/js/camera-capture.js"></script><script>document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("' + formIdVal + '");if(f&&window.initCameraForForm)initCameraForForm(f,' + initOpts + ');});</script>';
+(function() {
+  var formIdVal = typeof formId !== 'undefined' ? formId : 'productForm';
+  var imageInputNameVal = typeof imageInputName !== 'undefined' ? imageInputName : 'images';
+  var multipleVal = typeof multiple !== 'undefined' ? multiple : true;
+  var mobileOnlyVal = typeof mobileOnly !== 'undefined' ? mobileOnly : false;
+  if (typeof locals.style === 'undefined') locals.style = '';
+  locals.style += '<link rel="stylesheet" href="/css/camera-capture.css">';
+  if (typeof locals.scripts === 'undefined') locals.scripts = '';
+  var initOpts = JSON.stringify({ imageInputName: imageInputNameVal, multiple: multipleVal, mobileOnly: mobileOnlyVal });
+  var scriptInit = 'document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("' + formIdVal + '");if(f&&window.initCameraForForm)initCameraForForm(f,' + initOpts + ');});';
+  locals.scripts += '<script src="/js/camera-capture.js"><\/script><script>' + scriptInit + '<\/script>';
+})();
 %>
