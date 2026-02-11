@@ -1,0 +1,160 @@
+<div class="quick-product-form">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0 text-gray-800">
+      <i class="fas fa-bolt text-warning me-2"></i>Criar Produto Rápido
+    </h1>
+    <a href="/admin/products" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-list"></i> Ver Produtos
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <div class="card shadow mb-4 border-0">
+    <div class="card-body p-3 p-md-4">
+      <form action="/admin/quick-product" method="POST" enctype="multipart/form-data" id="quickProductForm" class="needs-validation" novalidate>
+        
+        <!-- Categoria / Subcategoria -->
+        <div class="row g-2">
+          <div class="col-12 col-md-6">
+            <label for="family_id" class="form-label">Categoria</label>
+            <select class="form-select form-select-lg" id="family_id" name="family_id">
+              <option value="">-- Selecione --</option>
+              <% (categories || []).forEach(cat => { %>
+                <option value="<%= cat.id %>" data-code="<%= cat.code || '' %>"><%= cat.name %></option>
+              <% }); %>
+              <% (subcategories || []).forEach(sub => { %>
+                <option value="<%= sub.id %>" data-code="<%= sub.code || '' %>" data-parent="<%= sub.parent_id %>"><%= sub.name %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="reference" class="form-label">Referência</label>
+            <div class="input-group input-group-lg">
+              <input type="text" class="form-control" id="reference" name="reference" placeholder="Auto" autocomplete="off">
+              <button type="button" class="btn btn-outline-secondary" id="btnRefreshRef" title="Gerar nova referência">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+            <small class="text-muted">Editável. Gerada automaticamente se vazio.</small>
+          </div>
+        </div>
+
+        <!-- Nome e Preço -->
+        <div class="row g-2 mt-2">
+          <div class="col-12 col-md-6">
+            <label for="name" class="form-label">Nome <small class="text-muted">(opcional)</small></label>
+            <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Ex: Anel Celtic Knot">
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="sale_price" class="form-label">Preço (€) *</label>
+            <input type="number" class="form-control form-control-lg" id="sale_price" name="sale_price" step="0.01" min="0" required placeholder="0.00">
+            <div class="invalid-feedback">Preço é obrigatório.</div>
+          </div>
+        </div>
+
+        <!-- Cor e Quantidade -->
+        <div class="row g-2 mt-2">
+          <div class="col-12 col-md-6">
+            <label for="color" class="form-label">Cor</label>
+            <input type="text" class="form-control form-control-lg" id="color" name="color" placeholder="Ex: Prata, Dourado">
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="current_stock" class="form-label">Quantidade</label>
+            <input type="number" class="form-control form-control-lg" id="current_stock" name="current_stock" min="0" value="1">
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="mt-2">
+          <label for="description" class="form-label">Descrição <small class="text-muted">(opcional)</small></label>
+          <textarea class="form-control" id="description" name="description" rows="2" placeholder="Breve descrição..."></textarea>
+        </div>
+
+        <!-- Imagem (câmara ou ficheiro) -->
+        <div class="mt-3">
+          <label class="form-label">Imagem <small class="text-muted">(opcional)</small></label>
+          <input type="file" class="form-control form-control-lg" id="images" name="images" accept="image/*" capture="environment" multiple>
+          <small class="text-muted">Câmara ou ficheiro. Máx. 5MB por imagem. JPEG, PNG, GIF, WebP.</small>
+          <div id="imagePreviews" class="row g-2 mt-2"></div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+          <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+            <i class="fas fa-plus-circle"></i> Criar Produto
+          </button>
+          <a href="/admin/dashboard" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('quickProductForm');
+  const familySelect = document.getElementById('family_id');
+  const referenceInput = document.getElementById('reference');
+  const btnRefreshRef = document.getElementById('btnRefreshRef');
+  const imagesInput = document.getElementById('images');
+  const imagePreviews = document.getElementById('imagePreviews');
+
+  function getPrefix() {
+    const opt = familySelect.options[familySelect.selectedIndex];
+    return opt && opt.dataset.code ? opt.dataset.code : 'GEN';
+  }
+
+  function fetchNextReference() {
+    const prefix = getPrefix();
+    fetch('/admin/quick-product/api/next-reference?prefix=' + encodeURIComponent(prefix))
+      .then(r => r.json())
+      .then(data => {
+        if (data.reference) referenceInput.value = data.reference;
+      })
+      .catch(() => {});
+  }
+
+  familySelect.addEventListener('change', function() {
+    if (!referenceInput.value || referenceInput.value.match(/^[A-Z]+\d+$/)) {
+      fetchNextReference();
+    }
+  });
+
+  btnRefreshRef.addEventListener('click', fetchNextReference);
+
+  if (familySelect.value) fetchNextReference();
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  imagesInput.addEventListener('change', function() {
+    imagePreviews.innerHTML = '';
+    const files = this.files;
+    for (let i = 0; i < Math.min(files.length, 5); i++) {
+      const f = files[i];
+      if (!f.type.startsWith('image/')) continue;
+      if (f.size > MAX_FILE_SIZE) {
+        alert('Imagem "' + f.name + '" excede 5MB. Reduza o tamanho ou escolha outra.');
+        this.value = '';
+        imagePreviews.innerHTML = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const div = document.createElement('div');
+        div.className = 'col-4 col-md-2';
+        div.innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail" style="height:80px;object-fit:cover">';
+        imagePreviews.appendChild(div);
+      };
+      reader.readAsDataURL(f);
+    }
+  });
+
+  form.addEventListener('submit', function(e) {
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  });
+})();
+</script>

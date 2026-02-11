@@ -108,6 +108,47 @@ class ProductFamily {
     }
   }
 
+  // Get categories with subcategories (for quick product form)
+  static async getCategoriesWithSubcategories() {
+    try {
+      let rows;
+      try {
+        const [r] = await pool.query(`
+          SELECT f.*, COUNT(p.id) as product_count
+          FROM product_families f
+          LEFT JOIN products p ON f.id = p.family_id
+          WHERE f.is_active = 1
+          GROUP BY f.id
+          ORDER BY f.name
+        `);
+        rows = r;
+      } catch (colErr) {
+        if (colErr.code === 'ER_BAD_FIELD_ERROR' || (colErr.message && colErr.message.includes('parent_id'))) {
+          const [r] = await pool.query('SELECT * FROM product_families WHERE is_active = 1 ORDER BY name');
+          rows = r;
+        } else throw colErr;
+      }
+      const hasParentId = rows.length > 0 && typeof rows[0].parent_id !== 'undefined';
+      const categories = hasParentId ? rows.filter(f => !f.parent_id) : rows;
+      const subcategories = hasParentId ? rows.filter(f => f.parent_id) : [];
+      return { categories, subcategories };
+    } catch (error) {
+      console.error('Error getting categories with subcategories:', error);
+      throw error;
+    }
+  }
+
+  // Get all families as flat list (categories + subcategories)
+  static async getAllForQuickForm() {
+    try {
+      const { categories, subcategories } = await this.getCategoriesWithSubcategories();
+      return { categories, subcategories };
+    } catch (error) {
+      console.error('Error getting families for quick form:', error);
+      throw error;
+    }
+  }
+
   // Get family with product count
   static async getAllWithProductCount() {
     try {

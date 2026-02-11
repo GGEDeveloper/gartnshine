@@ -24,6 +24,13 @@
       </li>
       
       <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/quick-product')) ? 'active' : '' %>" href="/admin/quick-product">
+          <i class="fas fa-fw fa-bolt"></i>
+          <span>Criar Rápido</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
         <a class="nav-link <%= currentPath.startsWith('/admin/product-families') ? 'active' : '' %>" href="/admin/product-families">
           <i class="fas fa-fw fa-tags"></i>
           <span>Product Families</span>

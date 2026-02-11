@@ -14,6 +14,7 @@ const AuthController = require('../controllers/AuthController');
 const ProductFamilyController = require('../controllers/ProductFamilyController');
 const ProductController = require('../controllers/ProductController');
 const InventoryController = require('../controllers/InventoryController');
+const QuickProductController = require('../controllers/QuickProductController');
 
 // Middleware
 const { guestSessionRequired, adminSessionRequired, roleRequired } = require('../middleware/authMiddleware');
@@ -307,6 +308,34 @@ router.get('/product-families/edit/:id', adminSessionRequired, ProductFamilyCont
 router.post('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.updateFamily);
 router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyController.deleteFamily);
 
+
+// Quick Product (mobile creation)
+router.get('/quick-product', adminSessionRequired, QuickProductController.showForm);
+router.get('/quick-product/api/next-reference', adminSessionRequired, QuickProductController.getNextReference);
+router.get('/quick-product/api/categories', adminSessionRequired, QuickProductController.getCategories);
+router.post('/quick-product',
+  adminSessionRequired,
+  (req, res, next) => {
+    productImageUpload.fields([
+      { name: 'images', maxCount: 10 },
+      { name: 'image', maxCount: 1 }
+    ])(req, res, (err) => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          req.flash('error_msg', 'Imagem demasiado grande. Máximo 5MB por ficheiro. Em telemóvel, considere reduzir a resolução.');
+          return res.redirect('/admin/quick-product');
+        }
+        if (err.message && err.message.includes('arquivo inválido')) {
+          req.flash('error_msg', 'Tipo de ficheiro inválido. Use JPEG, PNG, GIF ou WebP.');
+          return res.redirect('/admin/quick-product');
+        }
+        return next(err);
+      }
+      next();
+    });
+  },
+  QuickProductController.store
+);
 
 // Product Management Routes
 router.get('/products', adminSessionRequired, ProductController.index);

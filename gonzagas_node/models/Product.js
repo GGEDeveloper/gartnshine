@@ -403,6 +403,28 @@ class Product extends BaseModel {
     }
   }
 
+  // Get next reference for a given prefix (e.g. PAN -> PAN0001)
+  static async getNextReference(prefix) {
+    try {
+      const safePrefix = (prefix || 'GEN').substring(0, 10).toUpperCase();
+      const pattern = `%${safePrefix}%`;
+      const [rows] = await pool.query(
+        `SELECT reference FROM products WHERE reference LIKE ? ORDER BY reference DESC LIMIT 1`,
+        [pattern]
+      );
+      if (rows.length === 0) {
+        return `${safePrefix}0001`;
+      }
+      const lastRef = rows[0].reference;
+      const match = lastRef.match(new RegExp(`^${safePrefix}(\\d+)$`, 'i'));
+      const nextNum = match ? parseInt(match[1], 10) + 1 : 1;
+      return `${safePrefix}${String(nextNum).padStart(4, '0')}`;
+    } catch (error) {
+      console.error('Error getting next reference:', error);
+      throw error;
+    }
+  }
+
   // Adicionar um novo produto com imagens
   static async createProductWithImages(productData, imageFiles, userId) {
     const connection = await pool.getConnection();
@@ -410,7 +432,7 @@ class Product extends BaseModel {
       await connection.beginTransaction();
 
       // Mapear campos permitidos para inserção
-      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'attributes'];
+      const productFields = ['name', 'reference', 'description', 'family_id', 'sale_price', 'purchase_price', 'current_stock', 'min_stock', 'tax_rate', 'weight', 'dimensions', 'is_active', 'is_catalog_visible', 'featured', 'notes', 'attributes', 'color'];
       const fieldsToInsert = {};
 
       // Filtrar e converter campos
@@ -458,12 +480,20 @@ class Product extends BaseModel {
         }
       }
       
-      // Registar transação de stock inicial se houver stock
+      // Registar transação de stock inicial se houver stock (resiliente: tabela pode não existir em algumas DBs)
       if (fieldsToInsert.current_stock && parseFloat(fieldsToInsert.current_stock) > 0) {
-        await connection.query(
-          'INSERT INTO inventory_transactions (product_id, transaction_type, quantity, notes, unit_price) VALUES (?, ?, ?, ?, ?)',
-          [productId, 'initial_stock', parseFloat(fieldsToInsert.current_stock), 'Stock inicial do produto', fieldsToInsert.purchase_price || 0]
-        );
+        try {
+          const qty = parseFloat(fieldsToInsert.current_stock);
+          const unitPrice = fieldsToInsert.purchase_price || 0;
+          const totalAmount = unitPrice * qty;
+          await connection.query(
+            'INSERT INTO inventory_transactions (product_id, transaction_type, quantity, unit_price, total_amount, notes, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [productId, 'in', qty, unitPrice, totalAmount, 'Stock inicial do produto', userId]
+          );
+        } catch (invErr) {
+          console.warn(' inventory_transactions insert skipped (table may not exist):', invErr.message);
+          // Produto criado com sucesso; stock fica apenas em products.current_stock
+        }
       }
 
       await connection.commit();

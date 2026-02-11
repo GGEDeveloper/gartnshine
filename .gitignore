@@ -151,3 +151,6 @@ dev-debug.log
 # tasks.json
 # tasks/ 
 .cursor/mcp.json
+
+# Dev info backups (contain DB dumps)
+_dev-info/db-backups/
