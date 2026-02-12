@@ -22,8 +22,10 @@ module.exports = {
     // Diretório base para as visualizações
     directory: 'views',
     
-    // Configurações de cache
-    cache: process.env.NODE_ENV === 'production',
+    // Cache de templates (evita stale HTML em deploys):
+    // - VIEW_CACHE=true  => ativa cache
+    // - qualquer outro valor/ausente => desativa cache
+    cache: process.env.VIEW_CACHE === 'true',
     
     // Configurações de depuração
     debug: process.env.NODE_ENV === 'development'
