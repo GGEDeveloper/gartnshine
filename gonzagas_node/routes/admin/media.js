@@ -156,9 +156,10 @@ router.get('/api/media', [
 
 /**
  * GET /admin/api/media/thumb
- * Serve resized thumbnail (160x160) - admin only, evita carregar imagens originais na grid
+ * Serve resized thumbnail (160x160) - SEM auth (img src não envia cookies em alguns mobile)
+ * Path validado - só ficheiros em public/media. Imagens originais já são públicas em /media/
  */
-router.get('/api/media/thumb', adminSessionRequired, [
+router.get('/api/media/thumb', [
     query('path').notEmpty().isString().trim()
 ], async (req, res) => {
     try {
