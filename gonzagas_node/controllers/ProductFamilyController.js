@@ -73,7 +73,7 @@ exports.createFamily = async (req, res) => {
 exports.showEditForm = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
-    const family = await ProductFamily.getById(familyId);
+    const family = await ProductFamily.getByIdWithProductCount(familyId);
     if (!family) {
       req.flash('error_msg', 'Categoria não encontrada.');
       return res.redirect('/admin/product-families');
@@ -85,6 +85,7 @@ exports.showEditForm = async (req, res) => {
       family,
       isNew: false,
       categories,
+      canEditCode: Number(family.product_count || 0) === 0,
       layout: 'admin/layouts/main',
       breadcrumb: res.locals.breadcrumb || [],
       user: req.session?.user || req.user
@@ -100,11 +101,22 @@ exports.updateFamily = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
     const { name, description, code, parent_id } = req.body;
-    if (!name || !code) {
-      req.flash('error_msg', 'Nome e Código são obrigatórios.');
+    if (!name) {
+      req.flash('error_msg', 'Nome é obrigatório.');
       return res.redirect(`/admin/product-families/edit/${familyId}`);
     }
-    await ProductFamily.update(familyId, { name, description, code, parent_id: parent_id || null });
+    const family = await ProductFamily.getByIdWithProductCount(familyId);
+    if (!family) {
+      req.flash('error_msg', 'Categoria não encontrada.');
+      return res.redirect('/admin/product-families');
+    }
+    const productCount = Number(family.product_count || 0);
+    const effectiveCode = productCount === 0 && code && code.trim() ? code.trim() : family.code;
+    if (!effectiveCode) {
+      req.flash('error_msg', 'Código é obrigatório.');
+      return res.redirect(`/admin/product-families/edit/${familyId}`);
+    }
+    await ProductFamily.update(familyId, { name, description, code: effectiveCode, parent_id: parent_id || null });
     req.flash('success_msg', 'Categoria atualizada com sucesso.');
     res.redirect('/admin/product-families');
   } catch (error) {

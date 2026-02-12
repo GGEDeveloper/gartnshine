@@ -32,6 +32,24 @@ class ProductFamily {
     }
   }
 
+  // Get product family by ID with product count (para saber se pode editar o código)
+  static async getByIdWithProductCount(id) {
+    try {
+      const [rows] = await pool.query(`
+        SELECT f.*, COUNT(p.id) as product_count
+        FROM product_families f
+        LEFT JOIN products p ON f.id = p.family_id
+        WHERE f.id = ?
+        GROUP BY f.id
+      `, [id]);
+      
+      return rows.length ? rows[0] : null;
+    } catch (error) {
+      console.error('Error getting product family by ID:', error);
+      throw error;
+    }
+  }
+
   // Create a new product family
   static async create(family) {
     try {

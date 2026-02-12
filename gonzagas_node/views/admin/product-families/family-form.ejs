@@ -16,10 +16,10 @@
           <input type="text" class="form-control" id="name" name="name" value="<%= family.name || '' %>" required>
         </div>
         <div class="mb-3">
-          <label for="code" class="form-label">Código *</label>
+          <label for="code" class="form-label">Código (indicativo) *</label>
           <input type="text" class="form-control" id="code" name="code" value="<%= family.code || '' %>" 
-                 placeholder="Ex: PAN, PPB" required <%= isNew ? '' : 'readonly' %>>
-          <small class="text-muted">Usado para referências (ex: PAN0001). Não alterar após criar.</small>
+                 placeholder="Ex: PAN, PPB" required <%= (isNew || (typeof canEditCode !== 'undefined' && canEditCode)) ? '' : 'readonly' %>>
+          <small class="text-muted">Usado para referências (ex: PAN0001). Pode alterar apenas se não houver produtos nesta categoria.</small>
         </div>
         <div class="mb-3">
           <label for="parent_id" class="form-label">Subcategoria de</label>
