@@ -1,7 +1,10 @@
 /**
  * Media Library Management System
  * Advanced media management with drag & drop, filtering, editing
+ * Grid mostra SEMPRE miniaturas (160px), nunca imagens originais
  */
+
+const THUMB_SIZE = 160;
 
 class MediaLibrary {
     constructor(options = {}) {
@@ -223,18 +226,23 @@ class MediaLibrary {
         ).join('');
         
         const fsPath = (file._fsPath || '').replace(/"/g, '&quot;');
+        const thumbUrl = file.thumbnailUrl || (file._fsPath ? `/admin/api/media/thumb?path=${encodeURIComponent(file._fsPath)}` : (file.variants?.thumbnail || file.url));
+        const fullUrl = file.url;
         return `
             <div class="media-card ${isSelected ? 'selected' : ''}" 
                  data-media-id="${file.id}"
                  data-filename="${file.filename}"
                  data-type="${file.mime_type}"
-                 data-fs-path="${fsPath}">
+                 data-fs-path="${fsPath}"
+                 data-full-url="${fullUrl.replace(/"/g, '&quot;')}">
                 
-                <div class="media-card-image">
-                    <img src="${file.variants.medium || file.url}" 
+                <div class="media-card-image media-thumb">
+                    <img src="${thumbUrl}" 
                          alt="${file.alt_text || file.original_name}"
                          loading="lazy"
-                         onerror="this.src='${file.url}'">
+                         width="160"
+                         height="160"
+                         onerror="this.src='${fullUrl}'">
                     
                     <!-- Selection Checkbox -->
                     <div class="media-checkbox">
@@ -484,23 +492,28 @@ class MediaLibrary {
     showMediaDetail(media) {
         const modal = document.getElementById('mediaDetailModal');
         const content = document.getElementById('mediaDetailContent');
+        const fullUrl = media.url;
+        const hasVariants = media.variants && typeof media.variants === 'object' && Object.keys(media.variants).length > 0;
+        const variantsHtml = hasVariants
+            ? Object.entries(media.variants).map(([size, url]) => `
+                <a href="${url}" target="_blank" class="variant-link">
+                    <i class="fas fa-image"></i> ${size}
+                </a>
+            `).join('')
+            : '';
         
         content.innerHTML = `
             <div class="media-detail-layout">
                 <div class="media-detail-image">
-                    <img src="${media.variants.large || media.url}" alt="${media.alt_text || media.original_name}">
+                    <img src="${fullUrl}" alt="${media.alt_text || media.original_name}">
                     
                     <div class="image-variants">
-                        <h4>Variantes Disponíveis:</h4>
+                        <h4>Ficheiro Original</h4>
                         <div class="variants-list">
-                            <a href="${media.url}" target="_blank" class="variant-link">
-                                <i class="fas fa-expand"></i> Original (${media.file_size_formatted})
+                            <a href="${fullUrl}" target="_blank" class="variant-link">
+                                <i class="fas fa-expand"></i> Original (${media.file_size_formatted || '-'})
                             </a>
-                            ${Object.entries(media.variants).map(([size, url]) => `
-                                <a href="${url}" target="_blank" class="variant-link">
-                                    <i class="fas fa-image"></i> ${size}
-                                </a>
-                            `).join('')}
+                            ${variantsHtml}
                         </div>
                     </div>
                 </div>

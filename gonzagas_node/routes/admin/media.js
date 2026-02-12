@@ -1,11 +1,14 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs').promises;
+const sharp = require('sharp');
 const { body, query, param, validationResult } = require('express-validator');
 const Media = require('../../models/Media');
 const { adminSessionRequired } = require('../../middleware/authMiddleware');
 
 const router = express.Router();
+const THUMB_SIZE = 160;
 
 // Configure multer for media uploads
 const storage = multer.memoryStorage(); // Store in memory for processing
@@ -123,6 +126,39 @@ router.get('/api/media', [
             success: false,
             message: 'Erro ao carregar ficheiros de media'
         });
+    }
+});
+
+/**
+ * GET /admin/api/media/thumb
+ * Serve resized thumbnail (160x160) - admin only, evita carregar imagens originais na grid
+ */
+router.get('/api/media/thumb', adminSessionRequired, [
+    query('path').notEmpty().isString().trim()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send('Invalid path');
+        }
+        const relPath = req.query.path.replace(/\.\./g, '').replace(/^\/+/, '');
+        const mediaPath = path.join(__dirname, '../../public/media', relPath);
+        const ext = path.extname(relPath).toLowerCase();
+        const allowedExt = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        if (!allowedExt.includes(ext)) return res.status(400).send('Invalid image');
+        const stat = await fs.stat(mediaPath).catch(() => null);
+        if (!stat || !stat.isFile()) return res.status(404).send('Not found');
+        const pipeline = sharp(mediaPath, { failOnError: false });
+        const buffer = await pipeline
+            .resize(THUMB_SIZE, THUMB_SIZE, { fit: 'cover' })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        res.send(buffer);
+    } catch (err) {
+        console.warn('Thumbnail generation failed:', relPath, err.message);
+        res.status(500).send('Error generating thumbnail');
     }
 });
 
