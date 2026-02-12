@@ -46,8 +46,7 @@ router.get('/media/library', adminSessionRequired, async (req, res) => {
             folders,
             tags,
             page: 'media-library',
-            currentPath: '/media/library',
-            script: '<script src="/js/media-library.js"></script><script src="/js/media-camera.js"></script><script src="/js/media-upload.js"></script><script>document.addEventListener("DOMContentLoaded",function(){window.mediaLibrary=new MediaLibrary({apiEndpoint:"/admin/api/media",uploadEndpoint:"/admin/api/media/upload",maxFileSize:10*1024*1024,allowedTypes:["image/jpeg","image/jpg","image/png","image/webp","image/gif"]})});</script>'
+            currentPath: '/media/library'
         });
     } catch (error) {
         console.error('Media library page error:', error);

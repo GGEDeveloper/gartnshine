@@ -961,3 +961,4 @@ window.saveMediaEdit = () => {
     }
 };
 
+window.MediaLibrary = MediaLibrary;
