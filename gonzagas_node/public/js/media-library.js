@@ -12,7 +12,7 @@ class MediaLibrary {
         
         this.currentView = 'grid'; // grid or list
         this.selectedFiles = new Set();
-        this.currentFolder = '/';
+        this.currentFolder = '';
         this.currentTags = [];
         this.currentSearch = '';
         this.currentSort = 'created_at:desc';
@@ -376,7 +376,7 @@ class MediaLibrary {
     async uploadSingleFile(file, current, total) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('folder', this.currentFolder);
+        formData.append('folder', this.currentFolder || '/products/');
         formData.append('source', 'web');
         
         // Show individual upload progress

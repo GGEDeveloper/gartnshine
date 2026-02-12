@@ -165,7 +165,7 @@ class MediaCameraCapture {
             for (const imageData of this.capturedImages) {
                 const formData = new FormData();
                 formData.append('file', imageData.blob, 'camera_capture.jpg');
-                formData.append('folder', window.mediaLibrary?.currentFolder || '/');
+                formData.append('folder', window.mediaLibrary?.currentFolder || '/products/');
                 formData.append('source', 'mobile_camera');
                 formData.append('title', 'Camera Capture');
                 

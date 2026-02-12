@@ -210,7 +210,7 @@ router.post('/api/media/upload', upload.array('file', 10), [
         for (const file of req.files) {
             try {
                 const options = {
-                    folder,
+                    folder: folder || '/products/',
                     tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
                     title,
                     alt_text,
@@ -218,7 +218,7 @@ router.post('/api/media/upload', upload.array('file', 10), [
                     source
                 };
                 
-                const uploadedMedia = await Media.uploadMedia(file, options);
+                const uploadedMedia = await Media.uploadMediaToFilesystem(file, options);
                 uploadedFiles.push(uploadedMedia);
                 
             } catch (uploadError) {

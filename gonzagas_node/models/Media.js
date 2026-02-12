@@ -56,7 +56,7 @@ class Media {
 
         let filtered = files;
 
-        if (folder && folder !== '') {
+        if (folder && folder !== '' && folder !== 'all') {
             const subdir = folder.replace(/^\/|\/$/g, '');
             if (subdir) {
                 filtered = filtered.filter(f => f.relPath.startsWith(subdir + '/'));
@@ -263,6 +263,52 @@ class Media {
         }
     }
     
+    /**
+     * Upload media to filesystem (public/media) - sem BD, visível na Media Library
+     * Usado por: Media Library upload, câmara, introdução rápida
+     */
+    async uploadMediaToFilesystem(fileData, options = {}) {
+        const { folder = '/products/' } = options;
+        const subdir = folder.replace(/^\/|\/$/g, '') || '';
+        const targetDir = subdir ? path.join(this.mediaPath, subdir) : this.mediaPath;
+        await fs.mkdir(targetDir, { recursive: true });
+
+        const ext = path.extname(fileData.originalname).toLowerCase() || '.jpg';
+        const base = path.basename(fileData.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '_');
+        let filename = `${base}${ext}`;
+        let fullPath = path.join(targetDir, filename);
+        let n = 1;
+        while (await fs.access(fullPath).then(() => true).catch(() => false)) {
+            filename = `${base}_${n}${ext}`;
+            fullPath = path.join(targetDir, filename);
+            n++;
+        }
+
+        const buffer = fileData.buffer || (await fs.readFile(fileData.path));
+        await fs.writeFile(fullPath, buffer);
+
+        const relPath = subdir ? `${subdir}/${filename}` : filename;
+        const url = `/media/${relPath.replace(/\\/g, '/')}`;
+        const id = Math.abs(relPath.split('').reduce((h, c) => ((h << 5) - h) + c.charCodeAt(0), 0)) | 0;
+
+        return {
+            id,
+            filename,
+            original_name: fileData.originalname,
+            url,
+            file_path: url,
+            file_size: buffer.length,
+            file_size_formatted: this.formatFileSize(buffer.length),
+            mime_type: fileData.mimetype || 'image/jpeg',
+            folder_path: subdir ? `/${subdir}/` : '/',
+            tags: [],
+            variants: {},
+            dimensions: {},
+            created_ago: '-',
+            _fsPath: relPath
+        };
+    }
+
     /**
      * Upload new media file
      */
