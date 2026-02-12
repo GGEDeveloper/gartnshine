@@ -17,7 +17,8 @@ class SiteSettingsController {
           id: 1,
           featured_carousel_enabled: true,
           catalog_page_enabled: true,
-          hide_catalog_prices: false
+          hide_catalog_prices: false,
+          hide_out_of_stock: false
         };
         
         req.flash('warning', 'Usando configurações padrão. Verifique a ligação à base de dados.');
@@ -47,14 +48,15 @@ class SiteSettingsController {
       const {
         featured_carousel_enabled,
         catalog_page_enabled,
-        hide_catalog_prices
+        hide_catalog_prices,
+        hide_out_of_stock
       } = req.body;
 
-      // Convert checkbox values to boolean
       const updates = {
         featured_carousel_enabled: featured_carousel_enabled === 'on' ? 1 : 0,
         catalog_page_enabled: catalog_page_enabled === 'on' ? 1 : 0,
-        hide_catalog_prices: hide_catalog_prices === 'on' ? 1 : 0
+        hide_catalog_prices: hide_catalog_prices === 'on' ? 1 : 0,
+        hide_out_of_stock: hide_out_of_stock === 'on' ? 1 : 0
       };
 
       console.log('Atualizando configurações com dados:', updates);

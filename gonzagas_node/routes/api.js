@@ -119,8 +119,8 @@ router.get('/catalog/filter', async (req, res) => {
   try {
     const { families, price_range, search, page = 1, limit = 1000 } = req.query;
     
-    // Get all active products visible in catalog
-    let products = await Product.getActiveForCatalog(parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
+    const hideOutOfStock = res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock;
+    let products = await Product.getActiveForCatalog(parseInt(limit), (parseInt(page) - 1) * parseInt(limit), { hideOutOfStock: !!hideOutOfStock });
     
     // Filter by families
     if (families) {
@@ -174,8 +174,7 @@ router.get('/catalog/filter', async (req, res) => {
                parseFloat(product.sale_price) < parseFloat(product.purchase_price)
     }));
     
-    // Get filter counts
-    const allProducts = await Product.getActiveForCatalog(10000, 0);
+    const allProducts = await Product.getActiveForCatalog(10000, 0, { hideOutOfStock: !!hideOutOfStock });
     const filterCounts = {
       families: {}
     };

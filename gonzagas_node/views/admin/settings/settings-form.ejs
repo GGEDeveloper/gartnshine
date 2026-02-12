@@ -32,10 +32,16 @@
                         <small class="d-block form-text text-muted mt-1">Controla se a página principal do catálogo está acessível.</small>
                     </div>
 
-                    <div class="form-check form-switch py-3">
+                    <div class="form-check form-switch py-3 border-bottom">
                         <input type="checkbox" class="form-check-input" id="hide_catalog_prices" name="hide_catalog_prices" <%- settings.hide_catalog_prices ? 'checked' : '' %>>
                         <label class="form-check-label" for="hide_catalog_prices">Esconder preços (mostrar "Preço sob consulta")</label>
                         <small class="d-block form-text text-muted mt-1">Quando ativo, todos os produtos mostram "Preço sob consulta" em vez de preços reais.</small>
+                    </div>
+
+                    <div class="form-check form-switch py-3">
+                        <input type="checkbox" class="form-check-input" id="hide_out_of_stock" name="hide_out_of_stock" <%- settings.hide_out_of_stock ? 'checked' : '' %>>
+                        <label class="form-check-label" for="hide_out_of_stock">Esconder produtos sem stock do catálogo</label>
+                        <small class="d-block form-text text-muted mt-1">Quando ativo, produtos com stock 0 ficam ocultos no catálogo público.</small>
                     </div>
                 </div>
 

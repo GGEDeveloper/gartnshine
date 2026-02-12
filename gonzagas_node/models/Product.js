@@ -113,28 +113,34 @@ class Product extends BaseModel {
   /**
    * Get active products visible in the catalog with pagination and image.
    */
-  static async getActiveForCatalog(limit = 12, offset = 0) {
+  static async getActiveForCatalog(limit = 12, offset = 0, options = {}) {
     try {
+      const { hideOutOfStock = false } = options;
+      let whereClause = 'p.is_active = 1 AND p.is_catalog_visible = 1';
+      const params = [];
+      if (hideOutOfStock) {
+        whereClause += ' AND (p.current_stock IS NOT NULL AND p.current_stock > 0)';
+      }
+      params.push(limit, offset);
       const [rows] = await pool.query(`
         SELECT 
           p.id,
           p.name,
           p.reference,
-
           p.family_id,
-
           p.is_active,
           p.sale_price,
           p.purchase_price,
+          p.current_stock,
           p.description,
           f.name as family_name,
           (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
         FROM products p
         LEFT JOIN product_families f ON p.family_id = f.id
-        WHERE p.is_active = 1 AND p.is_catalog_visible = 1
+        WHERE ${whereClause}
         ORDER BY p.featured DESC, p.reference ASC
         LIMIT ? OFFSET ?
-      `, [limit, offset]);
+      `, params);
       return rows;
     } catch (error) {
       console.error('Error getting active products for catalog:', error);

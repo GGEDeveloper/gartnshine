@@ -79,6 +79,8 @@
                 <span class="badge bg-<%= product.current_stock > 10 ? 'success' : product.current_stock > 0 ? 'warning' : 'danger' %>"><%= product.current_stock || 0 %> un</span>
                 <span class="badge bg-<%= product.is_active ? 'success' : 'secondary' %>"><%= product.is_active ? 'Ativo' : 'Inativo' %></span>
                 <span class="badge bg-info"><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
+                <% const cost = parseFloat(product.cost_price || product.purchase_price || 0); const sale = parseFloat(product.sale_price || product.price || 0); const margin = sale > 0 ? ((sale - cost) / sale * 100) : 0; %>
+                <span class="badge bg-<%= margin >= 30 ? 'success' : margin >= 15 ? 'info' : 'secondary' %>" title="Margem"><%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %></span>
               </div>
               <div class="card-actions">
                 <% let editUrl = '/admin/products/edit/' + product.id; if (typeof queryParams !== 'undefined' && queryParams && Object.keys(queryParams).length) { const params = []; if (queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference)); if (queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category)); if (queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status)); if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status)); if (queryParams.sort_by) params.push('sort_by=' + encodeURIComponent(queryParams.sort_by)); if (queryParams.sort_order) params.push('sort_order=' + encodeURIComponent(queryParams.sort_order)); if (params.length) editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&')); } %>
@@ -113,6 +115,7 @@
                     <th><a href="?<%= buildSortUrl('family_name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Categoria <i class="fas fa-sort<%= qp.sort_by === 'family_name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th><a href="?<%= buildSortUrl('name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Nome <i class="fas fa-sort<%= qp.sort_by === 'name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th><a href="?<%= buildSortUrl('sale_price','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Preço <i class="fas fa-sort<%= qp.sort_by === 'sale_price' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th title="Margem (venda - custo) / venda">Rentab.</th>
                     <th><a href="?<%= buildSortUrl('current_stock','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Stock <i class="fas fa-sort<%= qp.sort_by === 'current_stock' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-down' %>"></i></a></th>
                     <th><a href="?<%= buildSortUrl('is_active','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Status <i class="fas fa-sort<%= qp.sort_by === 'is_active' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th class="text-end">Ações</th>
@@ -153,6 +156,16 @@
 <td><%= product.family_name || '' %></td>
 <td><%= product.name %></td>
                       <td><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
+                      <td>
+                        <% 
+                          const cost = parseFloat(product.cost_price || product.purchase_price || 0);
+                          const sale = parseFloat(product.sale_price || product.price || 0);
+                          const margin = sale > 0 ? ((sale - cost) / sale * 100) : 0;
+                        %>
+                        <span class="badge bg-<%= margin >= 30 ? 'success' : margin >= 15 ? 'info' : margin >= 0 ? 'secondary' : 'danger' %>" title="Margem: <%= margin.toFixed(1) %>%">
+                          <%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %>
+                        </span>
+                      </td>
                       <td>
                         <span class="badge bg-<%= product.current_stock > 10 ? 'success' : product.current_stock > 0 ? 'warning' : 'danger' %>">
                           <%= product.current_stock || 0 %>

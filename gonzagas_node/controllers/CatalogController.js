@@ -28,8 +28,9 @@ class CatalogController {
           : [parseInt(req.query.families)]
         : [];
 
-      // Get all active products visible in catalog
-      let products = await Product.getActiveForCatalog(1000, 0);
+      // Get all active products visible in catalog (filter out of stock if setting enabled)
+      const hideOutOfStock = res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock;
+      let products = await Product.getActiveForCatalog(1000, 0, { hideOutOfStock: !!hideOutOfStock });
       
       // Get all families that have products in the catalog
       let families = await ProductFamily.getAll();

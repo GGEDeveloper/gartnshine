@@ -139,18 +139,24 @@ class ProductController extends BaseController {
       let images = req.files && req.files.images ? req.files.images.map(file => ({
         path: path.join('/media/products/', file.filename).replace(/\\/g, '/'),
         filename: file.filename,
-        is_primary: false // Default to false, will be set by primary_image_id
+        is_primary: false
       })) : [];
-      
-      // If a primary image was selected from newly uploaded images
-      const primaryImageFilename = req.body.primary_image_filename; // Assuming this field is sent from the form
+
+      // Imagens da Biblioteca de Media (não são uploads - já existem em /media/products)
+      const mediaLibraryStr = (req.body.mediaLibraryImages || '').trim();
+      if (mediaLibraryStr) {
+        const libraryFilenames = mediaLibraryStr.split('|').filter(Boolean);
+        libraryFilenames.forEach(fn => {
+          if (fn && !images.some(i => i.filename === fn)) {
+            images.push({ filename: fn, path: `/media/products/${fn}`, is_primary: false });
+          }
+        });
+      }
+
+      const primaryImageFilename = req.body.primary_image_filename;
       if (primaryImageFilename) {
-        images = images.map(img => ({
-          ...img,
-          is_primary: img.filename === primaryImageFilename
-        }));
+        images = images.map(img => ({ ...img, is_primary: img.filename === primaryImageFilename }));
       } else if (images.length > 0) {
-        // If no primary image is explicitly selected, make the first uploaded image primary
         images[0].is_primary = true;
       }
 
@@ -161,7 +167,7 @@ class ProductController extends BaseController {
       } : null;
 
       if (mainImage) {
-        images.unshift(mainImage); 
+        images.unshift(mainImage);
       }
       
       await Product.createProductWithImages(productData, images, req.user.id);
@@ -355,6 +361,16 @@ class ProductController extends BaseController {
           filename: file.filename,
           is_primary: false
         }));
+      }
+
+      const mediaLibraryStr = (req.body.mediaLibraryImages || '').trim();
+      if (mediaLibraryStr) {
+        const libraryFilenames = mediaLibraryStr.split('|').filter(Boolean);
+        libraryFilenames.forEach(fn => {
+          if (fn && !allNewImages.some(i => i.filename === fn)) {
+            allNewImages.push({ filename: fn, path: `/media/products/${fn}`, is_primary: false });
+          }
+        });
       }
 
       const mainImageUpload = req.files && Array.isArray(req.files.image) && req.files.image.length > 0

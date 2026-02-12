@@ -185,8 +185,10 @@ app.use(async (req, res, next) => {
     console.error('Error loading site settings for views:', error);
     // Provide default settings to prevent crashes if DB fetch fails
     res.locals.siteSettings = {
-      featured_carousel_enabled: true, // Default to true if error
-      catalog_page_enabled: true,    // Default to true if error
+      featured_carousel_enabled: true,
+      catalog_page_enabled: true,
+      hide_catalog_prices: false,
+      hide_out_of_stock: false
     };
   }
   next();
