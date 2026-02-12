@@ -236,12 +236,13 @@ class MediaLibrary {
                  data-fs-path="${fsPath}"
                  data-full-url="${fullUrl.replace(/"/g, '&quot;')}">
                 
-                <div class="media-card-image media-thumb">
+                <div class="media-card-image media-thumb" style="max-width:160px;max-height:160px;overflow:hidden;width:100%;aspect-ratio:1">
                     <img src="${thumbUrl}" 
                          alt="${file.alt_text || file.original_name}"
                          loading="lazy"
                          width="160"
                          height="160"
+                         style="width:100%;height:100%;object-fit:cover;max-width:100%;max-height:100%;display:block"
                          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22160%22 height=%22160%22/%3E%3C/svg%3E'">
                     
                     <!-- Selection Checkbox -->
