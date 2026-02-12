@@ -12,14 +12,14 @@
       <li class="nav-item">
         <a class="nav-link <%= (!currentPath || currentPath === '/' || currentPath === '/dashboard') ? 'active' : '' %>" href="/admin/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
+          <span>Painel</span>
         </a>
       </li>
       
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/products')) ? 'active' : '' %>" href="/admin/products">
           <i class="fas fa-fw fa-box"></i>
-          <span>Products</span>
+          <span>Produtos</span>
         </a>
       </li>
       
@@ -40,21 +40,28 @@
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/inventory')) ? 'active' : '' %>" href="/admin/inventory">
           <i class="fas fa-fw fa-warehouse"></i>
-          <span>Inventory</span>
+          <span>Inventário</span>
         </a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/checkpoints')) ? 'active' : '' %>" href="/admin/checkpoints">
-          <i class="fas fa-fw fa-clipboard-check"></i>
-          <span>Checkpoints</span>
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/media')) ? 'active' : '' %>" href="/admin/media/library">
+          <i class="fas fa-fw fa-images"></i>
+          <span>Media</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings')) ? 'active' : '' %>" href="/admin/settings">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Configurações</span>
         </a>
       </li>
       
       <li class="nav-item mt-auto">
         <a class="nav-link text-danger" href="/admin/logout">
           <i class="fas fa-fw fa-sign-out-alt"></i>
-          <span>Logout</span>
+          <span>Sair</span>
         </a>
       </li>
     </ul>

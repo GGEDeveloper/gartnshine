@@ -12,6 +12,9 @@
   .form-control-lg, .form-select-lg { min-height: 48px !important; font-size: 16px !important; }
   /* Evita zoom ao focar inputs no iOS */
   input, select, textarea { font-size: 16px !important; }
+  /* Switches e checkboxes - área de toque maior */
+  .form-check-input { width: 2.5rem !important; height: 1.25rem !important; }
+  .form-check-label { padding-left: 0.5rem !important; min-height: 44px !important; display: flex !important; align-items: center !important; }
 }
 
 /* ===== LOGIN MOBILE ===== */
@@ -65,6 +68,7 @@
 }
 .qp-preview-item {
   flex: 0 0 auto;
+  min-width: 0;
 }
 .qp-img-card {
   position: relative;
@@ -73,10 +77,16 @@
   background: #f8f9fa;
   width: 64px;
   height: 64px;
+  min-width: 64px;
+  max-width: 64px;
+  min-height: 64px;
+  max-height: 64px;
 }
 .qp-img-thumb {
   width: 100%;
   height: 100%;
+  max-width: 64px;
+  max-height: 64px;
   object-fit: cover;
   display: block;
 }
@@ -110,6 +120,94 @@
   .inventory-mobile-cards { display: block !important; }
 }
 .inventory-mobile-cards { display: none; }
+
+/* ===== PRODUCTS LIST - cards em mobile ===== */
+@media (max-width: 767.98px) {
+  .products-table-wrapper { display: none !important; }
+  .products-mobile-cards { display: block !important; }
+}
+.products-mobile-cards { display: none; }
+
+@media (max-width: 767.98px) {
+  .products-mobile-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .products-mobile-card .card-top {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .products-mobile-card .card-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .products-mobile-card .card-img.bg-light {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .products-mobile-card .card-info { flex: 1; min-width: 0; }
+  .products-mobile-card .card-info .ref { font-weight: 600; color: #495057; }
+  .products-mobile-card .card-info .cat { font-size: 0.875rem; color: #6c757d; }
+  .products-mobile-card .card-info .name { font-size: 0.9rem; }
+  .products-mobile-card .card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .products-mobile-card .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e9ecef;
+  }
+  .products-mobile-card .card-actions .btn {
+    flex: 1;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ===== CHECKPOINTS - mobile ===== */
+@media (max-width: 767.98px) {
+  .checkpoint-item .card-body { padding: 1rem !important; }
+  .checkpoint-item .d-flex { flex-direction: column !important; align-items: stretch !important; }
+  .checkpoint-item .d-flex form { width: 100%; }
+  .checkpoint-item .btn { min-height: 44px !important; width: 100%; justify-content: center; }
+}
+
+/* ===== SETTINGS - mobile ===== */
+@media (max-width: 767.98px) {
+  .settings-form .form-check { padding: 1rem 0 !important; }
+  .settings-form .btn-primary { min-height: 48px !important; width: 100%; }
+}
+
+/* ===== PRODUCT FAMILIES - mobile ===== */
+@media (max-width: 767.98px) {
+  .pf-table-wrapper { display: none !important; }
+  .pf-mobile-cards { display: block !important; }
+}
+.pf-mobile-cards { display: none; }
+@media (max-width: 767.98px) {
+  .pf-mobile-card .btn { min-height: 44px !important; min-width: 44px !important; }
+}
+
+/* ===== PRODUCT FORM - atributos mobile ===== */
+@media (max-width: 767.98px) {
+  .product-form-mobile .btn-remove-attr { min-width: 44px !important; min-height: 44px !important; padding: 0.5rem !important; }
+  .product-form-mobile #addAttributeBtn { min-height: 44px !important; }
+}
 
 @media (max-width: 767.98px) {
   .inventory-mobile-card {

@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { body, query, param, validationResult } = require('express-validator');
 const Media = require('../../models/Media');
+const { adminSessionRequired } = require('../../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -28,23 +29,33 @@ const upload = multer({
  * GET /admin/media/library
  * Media library page
  */
-router.get('/media/library', async (req, res) => {
+router.get('/media/library', adminSessionRequired, async (req, res) => {
     try {
-        // Load folders and tags for filters
-        const [folders, tags] = await Promise.all([
-            Media.getAllFolders(),
-            Media.getAllTags()
-        ]);
+        // Load folders and tags for filters (fallback to [] if tables missing)
+        let folders = [];
+        let tags = [];
+        try {
+            [folders, tags] = await Promise.all([
+                Media.getAllFolders(),
+                Media.getAllTags()
+            ]);
+        } catch (loadErr) {
+            console.warn('Media filters not available (tables may be missing):', loadErr.message);
+        }
         
         res.render('admin/media/library', {
-            title: 'Media Library',
+            layout: 'admin/layouts/main',
+            title: 'Biblioteca de Media',
             folders,
             tags,
-            page: 'media-library'
+            page: 'media-library',
+            currentPath: '/media/library',
+            script: '<script src="/js/media-library.js"></script><script src="/js/media-camera.js"></script><script src="/js/media-upload.js"></script><script>document.addEventListener("DOMContentLoaded",function(){window.mediaLibrary=new MediaLibrary({apiEndpoint:"/admin/api/media",uploadEndpoint:"/admin/api/media/upload",maxFileSize:10*1024*1024,allowedTypes:["image/jpeg","image/jpg","image/png","image/webp","image/gif"]})});</script>'
         });
     } catch (error) {
         console.error('Media library page error:', error);
-        res.status(500).render('admin/error', {
+        res.status(500).render('error', {
+            title: 'Erro',
             message: 'Erro ao carregar biblioteca de media',
             error: process.env.NODE_ENV === 'development' ? error : {}
         });

@@ -112,7 +112,7 @@ router.get('/', adminSessionRequired, async (req, res) => {
     ]);
 
     res.render('admin/dashboard', {
-      title: 'Admin Dashboard',
+      title: 'Painel',
       user: req.session.user,
       stats: {
         products: totalProducts,
@@ -130,7 +130,7 @@ router.get('/', adminSessionRequired, async (req, res) => {
     console.error('Error loading dashboard stats:', error);
     req.flash('error_msg', 'Failed to load dashboard data.');
     res.render('admin/dashboard', {
-      title: 'Admin Dashboard',
+      title: 'Painel',
       user: req.session.user,
       stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
       error_msg: req.flash('error_msg')
@@ -151,7 +151,7 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
     ]);
 
     res.render('admin/dashboard', {
-      title: 'Admin Dashboard',
+      title: 'Painel',
       user: req.session.user,
       stats: {
         products: totalProducts,
@@ -170,7 +170,7 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
     req.flash('error_msg', 'Failed to load dashboard data.');
     // Render with N/A on error to prevent breaking the page, and show flash message
     res.render('admin/dashboard', {
-      title: 'Admin Dashboard',
+      title: 'Painel',
       user: req.session.user,
       stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
       error_msg: req.flash('error_msg') 
@@ -409,7 +409,9 @@ router.post('/products/edit/:id',
   ]),
   ProductController.update
 );
+router.get('/products/:id', adminSessionRequired, (req, res) => res.redirect(`/admin/products/edit/${req.params.id}`));
 router.delete('/products/:id', adminSessionRequired, ProductController.delete);
+router.post('/products/delete/:id', adminSessionRequired, ProductController.delete);
 
 // Rota para remover uma imagem de um produto
 router.delete('/products/:productId/images/:imageId', adminSessionRequired, async (req, res) => {
@@ -474,27 +476,30 @@ router.get('/inventory/history/:productId', adminSessionRequired, InventoryContr
 router.post('/inventory/adjust', adminSessionRequired, InventoryController.processAdjustment.bind(InventoryController));
 
 // Checkpoint management routes
-router.get('/checkpoints', async (req, res) => {
+router.get('/checkpoints', adminSessionRequired, async (req, res) => {
   try {
     const checkpoints = await Checkpoint.getAll();
     
     res.render('admin/checkpoints', {
-      title: 'Manage Checkpoints',
-      checkpoints
+      layout: 'admin/layouts/main',
+      title: 'Checkpoints',
+      checkpoints,
+      currentPath: req.path,
+      csrfToken: req.csrfToken ? req.csrfToken() : null
     });
   } catch (error) {
     console.error('Error loading checkpoints:', error);
     res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load checkpoints.'
+      title: 'Erro',
+      message: 'Falha ao carregar checkpoints.'
     });
   }
 });
 
-router.post('/checkpoints/create', async (req, res) => {
+router.post('/checkpoints/create', adminSessionRequired, async (req, res) => {
   try {
     const checkpoint = req.body;
-    checkpoint.created_by = req.session.user.username;
+    checkpoint.created_by = req.session?.user?.username || req.session?.user?.name || 'admin';
     
     await Checkpoint.create(checkpoint);
     
@@ -507,7 +512,7 @@ router.post('/checkpoints/create', async (req, res) => {
   }
 });
 
-router.post('/checkpoints/restore/:id', async (req, res) => {
+router.post('/checkpoints/restore/:id', adminSessionRequired, async (req, res) => {
   try {
     const checkpointId = parseInt(req.params.id);
     await Checkpoint.restore(checkpointId);
@@ -521,7 +526,7 @@ router.post('/checkpoints/restore/:id', async (req, res) => {
   }
 });
 
-router.post('/checkpoints/delete/:id', async (req, res) => {
+router.post('/checkpoints/delete/:id', adminSessionRequired, async (req, res) => {
   try {
     const checkpointId = parseInt(req.params.id);
     await Checkpoint.delete(checkpointId);

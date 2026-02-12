@@ -110,7 +110,7 @@ class Inventory extends BaseModel {
     const { productId, startDate, endDate, transactionType, limit = 100, offset = 0 } = filters;
     
     let query = `
-      SELECT it.*, p.name as product_name, p.sku
+      SELECT it.*, p.name as product_name, p.reference as product_reference
       FROM inventory_transactions it
       JOIN products p ON it.product_id = p.id
       WHERE 1=1
@@ -329,6 +329,13 @@ class Inventory extends BaseModel {
   }
 
   /**
+   * Obtém o histórico de movimentações de um produto (alias para getMovementHistory)
+   */
+  static async getProductHistory(productId, limit = 50) {
+    return this.getMovementHistory({ productId, limit, offset: 0 });
+  }
+
+  /**
    * Obtém as transações de um produto específico
    */
   static async getProductTransactions(productId, limit = 50) {
@@ -362,7 +369,7 @@ class Inventory extends BaseModel {
     } = filters;
     
     let query = `
-      SELECT it.*, p.name as product_name, p.sku
+      SELECT it.*, p.name as product_name, p.reference as product_reference
       FROM ${this.tableName} it
       JOIN products p ON it.product_id = p.id
       WHERE 1=1

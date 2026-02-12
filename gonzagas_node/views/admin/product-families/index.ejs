@@ -32,7 +32,31 @@
         </div>
         <div class="card-body p-2 p-md-3">
           <% if (families && families.length > 0) { %>
-            <div class="table-responsive">
+            <!-- Mobile Cards -->
+            <div class="pf-mobile-cards">
+              <% families.forEach(f => { %>
+                <div class="pf-mobile-card card mb-2">
+                  <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <code class="me-2"><%= f.code %></code>
+                        <% if (f.parent_id) { %><span class="text-muted">↳</span> <% } %>
+                        <strong><%= f.name %></strong>
+                        <span class="badge bg-secondary ms-2"><%= f.product_count || 0 %> prod.</span>
+                      </div>
+                      <div class="d-flex gap-1">
+                        <a href="/admin/product-families/edit/<%= f.id %>" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i></a>
+                        <form action="/admin/product-families/delete/<%= f.id %>" method="POST" class="d-inline" onsubmit="return confirm('Eliminar esta categoria?');">
+                          <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+            <!-- Desktop Table -->
+            <div class="table-responsive pf-table-wrapper">
               <table class="table table-sm table-hover mb-0">
                 <thead>
                   <tr>
@@ -118,15 +142,15 @@
                         <div class="modal-body">
                           <div class="mb-2">
                             <label class="form-label">Nome</label>
-                            <input type="text" class="form-control" name="name" value="<%= c.name %>" required>
+                            <input type="text" class="form-control form-control-lg" name="name" value="<%= c.name %>" required>
                           </div>
                           <div class="mb-2">
                             <label class="form-label">Código Hex (opcional)</label>
-                            <input type="text" class="form-control" name="hex_code" value="<%= c.hex_code || '' %>" placeholder="#C0C0C0">
+                            <input type="text" class="form-control form-control-lg" name="hex_code" value="<%= c.hex_code || '' %>" placeholder="#C0C0C0">
                           </div>
                           <div class="mb-2">
                             <label class="form-label">Ordem</label>
-                            <input type="number" class="form-control" name="sort_order" value="<%= c.sort_order || 0 %>">
+                            <input type="number" class="form-control form-control-lg" name="sort_order" value="<%= c.sort_order || 0 %>">
                           </div>
                           <div class="form-check">
                             <input type="checkbox" class="form-check-input" name="is_active" value="1" id="active<%= c.id %>" <%= c.is_active ? 'checked' : '' %>>
@@ -165,7 +189,7 @@
         <div class="modal-body">
           <div class="mb-2">
             <label class="form-label">Nome *</label>
-            <input type="text" class="form-control" name="name" required placeholder="Ex: Prata">
+            <input type="text" class="form-control form-control-lg" name="name" required placeholder="Ex: Prata">
           </div>
           <div class="mb-2">
             <label class="form-label">Código Hex (opcional)</label>
@@ -173,7 +197,7 @@
           </div>
           <div class="mb-2">
             <label class="form-label">Ordem</label>
-            <input type="number" class="form-control" name="sort_order" value="0">
+            <input type="number" class="form-control form-control-lg" name="sort_order" value="0">
           </div>
         </div>
         <div class="modal-footer">

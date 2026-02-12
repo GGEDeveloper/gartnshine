@@ -42,7 +42,7 @@ class ProductController extends BaseController {
 
       res.render('admin/products/index', {
         layout: 'admin/layouts/main',
-        title: 'Manage Products',
+        title: 'Produtos',
         products,
         productFamilies,
         totalProducts,
@@ -51,7 +51,8 @@ class ProductController extends BaseController {
         limit,
         currentPath: req.path,
         queryParams: req.query,
-        user: req.user,
+        user: req.user || req.session?.user,
+        csrfToken: req.csrfToken ? req.csrfToken() : null,
         breadcrumbs: res.locals.breadcrumb,
         success_msg: req.flash('success_msg'),
         error_msg: req.flash('error_msg')
@@ -110,7 +111,8 @@ class ProductController extends BaseController {
 
     try {
       const productData = { ...req.body };
-      
+      productData.tax_rate = req.body.tax_rate ? parseFloat(req.body.tax_rate) : 0;
+
       productData.is_active = !!(productData.is_active === 'on' || productData.is_active === true || productData.is_active === 'true' || productData.is_active === '1');
       productData.is_catalog_visible = !!(productData.is_catalog_visible === 'on' || productData.is_catalog_visible === true || productData.is_catalog_visible === 'true' || productData.is_catalog_visible === '1');
       productData.featured = !!(req.body.featured === 'on' || req.body.featured === true || req.body.featured === 'true' || req.body.featured === '1' || req.body.featured === 1);
@@ -303,6 +305,15 @@ class ProductController extends BaseController {
     try {
       const isTruthy = (value) => value === '1' || value === 'on' || value === true || value === 'true';
 
+      const attributes = [];
+      if (Array.isArray(req.body.attributeNames) && Array.isArray(req.body.attributeValues)) {
+        for (let i = 0; i < req.body.attributeNames.length; i++) {
+          const name = (req.body.attributeNames[i] || '').trim();
+          const value = (req.body.attributeValues[i] || '').trim();
+          if (name && value) attributes.push({ name, value });
+        }
+      }
+
       const productData = {
         name: req.body.name,
         description: req.body.description,
@@ -317,10 +328,15 @@ class ProductController extends BaseController {
         tags: req.body.tags,
         weight: req.body.weight ? parseFloat(req.body.weight) : 0.000,
         dimensions: req.body.dimensions,
+        material: req.body.material,
+        color: req.body.color,
+        style: req.body.style,
+        notes: req.body.notes,
+        barcode: req.body.barcode,
+        attributes: JSON.stringify(attributes),
         is_active: isTruthy(req.body.is_active),
         featured: isTruthy(req.body.featured),
         is_catalog_visible: isTruthy(req.body.is_catalog_visible),
-        // Gestão de imagens
         imagesToDelete: req.body.imagesToDelete ? req.body.imagesToDelete.split(',').filter(id => id.trim() !== '').map(id => parseInt(id.trim(), 10)) : [],
         primary_image_id: req.body.primary_image_id ? parseInt(req.body.primary_image_id, 10) : null,
       };

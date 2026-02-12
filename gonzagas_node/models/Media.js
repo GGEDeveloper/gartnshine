@@ -3,7 +3,7 @@
  * Handles all media-related database operations
  */
 
-const pool = require('../config/database');
+const { pool } = require('../config/database');
 const path = require('path');
 const fs = require('fs').promises;
 const sharp = require('sharp');

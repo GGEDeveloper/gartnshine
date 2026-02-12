@@ -1,6 +1,7 @@
 const express = require('express');
 const { query, param, validationResult } = require('express-validator');
 const Analytics = require('../../models/Analytics');
+const { adminSessionRequired } = require('../../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -8,10 +9,12 @@ const router = express.Router();
  * GET /admin/analytics/dashboard
  * Analytics dashboard page
  */
-router.get('/analytics/dashboard', (req, res) => {
+router.get('/analytics/dashboard', adminSessionRequired, (req, res) => {
     res.render('admin/analytics/dashboard', {
-        title: 'Analytics Dashboard',
-        page: 'analytics'
+        layout: 'admin/layouts/main',
+        title: 'Analytics',
+        page: 'analytics',
+        currentPath: req.path
     });
 });
 

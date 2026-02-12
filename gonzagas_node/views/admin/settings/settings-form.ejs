@@ -1,64 +1,46 @@
-<%- /* /home/pixiewsl/CascadeProjects/final/gartnshine/gonzagas_node/views/admin/settings/settings-form.ejs */ -%>
-
 <%- contentFor('title') %>
 <%= title %>
 <%- contentFor('body') %>
 
-<div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><%= title %></h1>
+<div class="container-fluid px-3 px-md-4 py-3">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+        <h1 class="h4 mb-0 text-gray-800">Configurações do Site</h1>
     </div>
 
     <%- include('../partials/flash-messages') %>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Manage Site Features</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Funcionalidades do Catálogo</h6>
         </div>
         <div class="card-body">
-            <form action="/admin/settings" method="POST">
+            <form action="/admin/settings" method="POST" class="settings-form">
                 <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <% } %>
 
-                <div class="form-group row">
-                    <label for="featured_carousel_enabled" class="col-sm-4 col-form-label">Enable Featured Pieces Carousel (Homepage)</label>
-                    <div class="col-sm-8">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="featured_carousel_enabled" name="featured_carousel_enabled" <%- settings.featured_carousel_enabled ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="featured_carousel_enabled">Toggle Carousel</label>
-                        </div>
-                        <small class="form-text text-muted">Controls the visibility of the featured products carousel on the homepage.</small>
+                <div class="mb-4">
+                    <div class="form-check form-switch py-3 border-bottom">
+                        <input type="checkbox" class="form-check-input" id="featured_carousel_enabled" name="featured_carousel_enabled" <%- settings.featured_carousel_enabled ? 'checked' : '' %>>
+                        <label class="form-check-label" for="featured_carousel_enabled">Carrossel de peças em destaque (página inicial)</label>
+                        <small class="d-block form-text text-muted mt-1">Controla a visibilidade do carrossel de produtos em destaque na página inicial.</small>
+                    </div>
+
+                    <div class="form-check form-switch py-3 border-bottom">
+                        <input type="checkbox" class="form-check-input" id="catalog_page_enabled" name="catalog_page_enabled" <%- settings.catalog_page_enabled ? 'checked' : '' %>>
+                        <label class="form-check-label" for="catalog_page_enabled">Página do catálogo ativa</label>
+                        <small class="d-block form-text text-muted mt-1">Controla se a página principal do catálogo está acessível.</small>
+                    </div>
+
+                    <div class="form-check form-switch py-3">
+                        <input type="checkbox" class="form-check-input" id="hide_catalog_prices" name="hide_catalog_prices" <%- settings.hide_catalog_prices ? 'checked' : '' %>>
+                        <label class="form-check-label" for="hide_catalog_prices">Esconder preços (mostrar "Preço sob consulta")</label>
+                        <small class="d-block form-text text-muted mt-1">Quando ativo, todos os produtos mostram "Preço sob consulta" em vez de preços reais.</small>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="catalog_page_enabled" class="col-sm-4 col-form-label">Enable Catalog Page</label>
-                    <div class="col-sm-8">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="catalog_page_enabled" name="catalog_page_enabled" <%- settings.catalog_page_enabled ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="catalog_page_enabled">Toggle Catalog Page</label>
-                        </div>
-                        <small class="form-text text-muted">Controls whether the main product catalog page is accessible.</small>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="hide_catalog_prices" class="col-sm-4 col-form-label">Hide Catalog Prices</label>
-                    <div class="col-sm-8">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="hide_catalog_prices" name="hide_catalog_prices" <%- settings.hide_catalog_prices ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="hide_catalog_prices">Show "Price on Request" Instead of Prices</label>
-                        </div>
-                        <small class="form-text text-muted">When enabled, all products in the catalog will show "Preço sob consulta" instead of actual prices.</small>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-8 offset-sm-4">
-                        <button type="submit" class="btn btn-primary">Save Settings</button>
-                    </div>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <button type="submit" class="btn btn-primary">Guardar configurações</button>
                 </div>
             </form>
         </div>

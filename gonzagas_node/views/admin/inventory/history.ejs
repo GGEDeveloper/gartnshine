@@ -1,0 +1,68 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+    <h1 class="h4 mb-0 text-gray-800">Histórico de Stock</h1>
+    <a href="/admin/inventory" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-arrow-left me-1"></i> Voltar ao Inventário
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-2"><%= product.name %></h5>
+      <p class="text-muted small mb-0">
+        Ref: <%= product.reference || '-' %> • Stock atual: <strong><%= product.current_stock ?? 0 %></strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Movimentações</h5>
+    </div>
+    <div class="card-body">
+      <% if (history && history.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Preço unit.</th>
+                <th>Total</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% history.forEach(t => { %>
+                <tr>
+                  <td><%= t.created_at ? new Date(t.created_at).toLocaleString('pt-PT') : '-' %></td>
+                  <td>
+                    <% const type = (t.transaction_type || '').toLowerCase(); %>
+                    <% if (type === 'in' || type === 'purchase' || type === 'return') { %>
+                      <span class="badge bg-success">Entrada</span>
+                    <% } else if (type === 'out' || type === 'sale') { %>
+                      <span class="badge bg-danger">Saída</span>
+                    <% } else if (type === 'adjustment') { %>
+                      <span class="badge bg-warning">Ajuste</span>
+                    <% } else { %>
+                      <span class="badge bg-secondary"><%= t.transaction_type || '-' %></span>
+                    <% } %>
+                  </td>
+                  <td><%= t.quantity %></td>
+                  <td><%= t.unit_price != null ? parseFloat(t.unit_price).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) : '-' %></td>
+                  <td><%= t.total_amount != null ? parseFloat(t.total_amount).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) : '-' %></td>
+                  <td><small class="text-muted"><%= t.notes || '-' %></small></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-muted mb-0">Nenhuma movimentação registada para este produto.</p>
+      <% } %>
+    </div>
+  </div>
+</div>

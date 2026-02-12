@@ -176,8 +176,8 @@
     pendingFiles.forEach(function(f, i) {
       const div = document.createElement('div');
       div.className = 'qp-preview-item';
-      div.innerHTML = '<div class="qp-img-card position-relative">' +
-        '<img src="" alt="" class="qp-img-thumb rounded" data-index="' + i + '">' +
+      div.innerHTML = '<div class="qp-img-card position-relative" style="width:64px;height:64px;">' +
+        '<img src="" alt="" class="qp-img-thumb rounded" data-index="' + i + '" style="width:100%;height:100%;object-fit:cover;max-width:64px;max-height:64px">' +
         '<div class="qp-img-actions">' +
         '<button type="button" class="btn btn-sm btn-light qp-img-zoom" title="Ver melhor" data-index="' + i + '"><i class="fas fa-search-plus"></i></button>' +
         '<button type="button" class="btn btn-sm btn-danger qp-img-remove" title="Remover" data-index="' + i + '"><i class="fas fa-trash"></i></button>' +

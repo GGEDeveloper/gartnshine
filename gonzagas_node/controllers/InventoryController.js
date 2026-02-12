@@ -92,7 +92,7 @@ class InventoryController extends BaseController {
       
       res.render('admin/inventory/history', {
         layout: 'admin/layouts/main',
-        title: `Inventory History for ${product.name}`,
+        title: `Histórico: ${product.name}`,
         product,
         history,
         currentPath: req.path,

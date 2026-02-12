@@ -1,20 +1,20 @@
 <link rel="stylesheet" href="/css/camera-capture.css">
 <script src="/js/camera-capture.js"></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("productForm");if(f&&window.initCameraForForm)initCameraForForm(f,{imageInputName:"images",multiple:true,mobileOnly:false});});</script>
-<div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><%= title %></h1>
+<div class="container-fluid px-3 px-md-4 py-3">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+        <h1 class="h4 mb-0 text-gray-800"><%= title %></h1>
         <% if (product && product.id) { %>
-            <a href="/admin/products/<%= product.id %>" class="btn btn-outline-primary btn-sm">
+            <a href="/admin/products/<%= product.id %>" class="btn btn-outline-primary btn-sm" title="Ver/Editar produto">
                 <i class="fas fa-eye"></i> Visualizar
             </a>
         <% } %>
-          </div>
+    </div>
 
     <%- include('../partials/flash-messages') %>
 
 <% const formAction = isNew ? '/admin/products/create' : `/admin/products/edit/${product.id}`; %>
+<% let productAttributes = []; if (product && product.attributes) { try { productAttributes = typeof product.attributes === 'string' ? JSON.parse(product.attributes) : (product.attributes || []); } catch(e) { productAttributes = []; } } %>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -28,7 +28,7 @@
                 action="<%= formAction %>" 
                 method="POST" 
                 enctype="multipart/form-data"
-                class="needs-validation"
+                class="needs-validation product-form-mobile"
                 novalidate
                 data-notification="Salvando produto..."
                 data-notification-type="info"
@@ -37,7 +37,7 @@
                     <input type="hidden" name="_method" value="PUT">
                 <% } %>
 
-            <div class="row">
+            <div class="row g-3">
                     <!-- Coluna Esquerda -->
                     <div class="col-md-6">
                         <!-- Informações Básicas -->
@@ -45,7 +45,7 @@
                             <label for="name" class="form-label">Nome do Produto *</label>
                             <input 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-lg" 
                                 id="name" 
                                 name="name" 
                                 value="<%= product ? product.name : '' %>"
@@ -60,7 +60,7 @@
                             <label for="reference" class="form-label">Referência</label>
                             <input 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-lg" 
                                 id="reference" 
                                 name="reference" 
                                 value="<%= product ? product.reference : '' %>"
@@ -80,7 +80,7 @@
                 
                     <div class="form-group mb-3">
                             <label for="family_id" class="form-label">Família de Produtos</label>
-                            <select class="form-control" id="family_id" name="family_id">
+                            <select class="form-control form-select form-control-lg" id="family_id" name="family_id">
                         <option value="">Selecione uma família</option>
                                 <% if (productFamilies && productFamilies.length > 0) { %>
                           <% productFamilies.forEach(family => { %>
@@ -113,13 +113,29 @@
                             <label for="sale_price" class="form-label">Preço de Venda (€)</label>
                             <input 
                                 type="number" 
-                                class="form-control" 
+                                class="form-control form-control-lg" 
                                 id="sale_price" 
                                 name="sale_price" 
                                 step="0.01" 
                                 min="0"
                                 value="<%= product ? product.sale_price : '' %>"
                             >
+                      </div>
+
+                    <div class="form-group mb-3">
+                            <label for="tax_rate" class="form-label">Taxa de IVA (%)</label>
+                            <input 
+                                type="number" 
+                                class="form-control form-control-lg" 
+                                id="tax_rate" 
+                                name="tax_rate" 
+                                step="0.01" 
+                                min="0"
+                                max="100"
+                                placeholder="0"
+                                value="<%= product && product.tax_rate != null ? product.tax_rate : '' %>"
+                            >
+                            <small class="form-text text-muted">Ex: 23 para 23%</small>
                       </div>
                     </div>
 
@@ -212,13 +228,51 @@
                             <label for="style" class="form-label">Estilo</label>
                             <input 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control form-control-lg" 
                                 id="style" 
                                 name="style" 
                                 value="<%= product ? product.style : '' %>"
                             >
                 </div>
                 </div>
+                </div>
+
+                <!-- Atributos (nome/valor) -->
+                <div class="form-group mb-4">
+                    <label class="form-label">Atributos</label>
+                    <small class="d-block text-muted mb-2">Ex: Tamanho, Material, etc.</small>
+                    <div id="attributesContainer">
+                        <% if (productAttributes && productAttributes.length > 0) { %>
+                          <% productAttributes.forEach((attr, i) => { %>
+                            <div class="attribute-row row g-2 mb-2">
+                              <div class="col-5 col-md-4">
+                                <input type="text" class="form-control form-control-lg" name="attributeNames[]" placeholder="Nome" value="<%= attr.name %>">
+                              </div>
+                              <div class="col-5 col-md-4">
+                                <input type="text" class="form-control form-control-lg" name="attributeValues[]" placeholder="Valor" value="<%= attr.value %>">
+                              </div>
+                              <div class="col-2">
+                                <button type="button" class="btn btn-outline-danger btn-remove-attr" title="Remover"><i class="fas fa-times"></i></button>
+                              </div>
+                            </div>
+                          <% }); %>
+                        <% } else { %>
+                          <div class="attribute-row row g-2 mb-2">
+                            <div class="col-5 col-md-4">
+                              <input type="text" class="form-control form-control-lg" name="attributeNames[]" placeholder="Nome">
+                            </div>
+                            <div class="col-5 col-md-4">
+                              <input type="text" class="form-control form-control-lg" name="attributeValues[]" placeholder="Valor">
+                            </div>
+                            <div class="col-2">
+                              <button type="button" class="btn btn-outline-danger btn-remove-attr" title="Remover"><i class="fas fa-times"></i></button>
+                            </div>
+                          </div>
+                        <% } %>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addAttributeBtn">
+                      <i class="fas fa-plus me-1"></i> Adicionar atributo
+                    </button>
                 </div>
                 
                 <!-- Descrição -->
@@ -401,7 +455,7 @@
           </div>
           
                 <!-- Botões -->
-                <div class="form-group d-flex justify-content-between">
+                <div class="form-group d-flex flex-column flex-sm-row justify-content-between gap-2">
                     <a href="<%= typeof backUrl !== 'undefined' ? backUrl : '/admin/products' %>" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </a>
@@ -432,6 +486,38 @@
     </div>
   </div>
 
+<script>
+// Atributos dinâmicos
+(function() {
+  const container = document.getElementById('attributesContainer');
+  const addBtn = document.getElementById('addAttributeBtn');
+  if (!container || !addBtn) return;
+  
+  addBtn.addEventListener('click', function() {
+    const row = document.createElement('div');
+    row.className = 'attribute-row row g-2 mb-2';
+    row.innerHTML = `
+      <div class="col-5 col-md-4">
+        <input type="text" class="form-control form-control-lg" name="attributeNames[]" placeholder="Nome">
+      </div>
+      <div class="col-5 col-md-4">
+        <input type="text" class="form-control form-control-lg" name="attributeValues[]" placeholder="Valor">
+      </div>
+      <div class="col-2">
+        <button type="button" class="btn btn-outline-danger btn-remove-attr" title="Remover"><i class="fas fa-times"></i></button>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+  
+  container.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-remove-attr')) {
+      const row = e.target.closest('.attribute-row');
+      if (row && container.querySelectorAll('.attribute-row').length > 1) row.remove();
+    }
+  });
+})();
+</script>
 <script>
 // Preview de novas imagens (incl. captura de câmara)
 (function() {
