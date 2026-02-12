@@ -196,12 +196,21 @@ class MediaLibrary {
         if (!mediaFiles || mediaFiles.length === 0) {
             grid.innerHTML = '';
             noResults.style.display = 'block';
+            this.mediaCache = new Map();
+            const dropzone = document.getElementById('dropzone');
+            if (dropzone) dropzone.style.display = 'block';
             return;
         }
         
         noResults.style.display = 'none';
-        
+        this.mediaCache = new Map(mediaFiles.map(f => [f.id, f]));
         grid.innerHTML = mediaFiles.map(file => this.createMediaCard(file)).join('');
+        
+        const dropzone = document.getElementById('dropzone');
+        if (dropzone) dropzone.style.display = 'none';
+        
+        if (document.getElementById('loadingState')) document.getElementById('loadingState').style.display = 'none';
+        if (grid) grid.style.display = 'grid';
         
         // Bind card events
         this.bindMediaCardEvents();
@@ -209,15 +218,17 @@ class MediaLibrary {
     
     createMediaCard(file) {
         const isSelected = this.selectedFiles.has(file.id);
-        const tags = file.tags.map(tag => 
+        const tags = (file.tags || []).map(tag => 
             `<span class="tag" style="background-color: ${tag.color}20; color: ${tag.color};">${tag.name}</span>`
         ).join('');
         
+        const fsPath = (file._fsPath || '').replace(/"/g, '&quot;');
         return `
             <div class="media-card ${isSelected ? 'selected' : ''}" 
                  data-media-id="${file.id}"
                  data-filename="${file.filename}"
-                 data-type="${file.mime_type}">
+                 data-type="${file.mime_type}"
+                 data-fs-path="${fsPath}">
                 
                 <div class="media-card-image">
                     <img src="${file.variants.medium || file.url}" 
@@ -253,7 +264,7 @@ class MediaLibrary {
                         </button>
                         
                         <button class="action-btn danger" 
-                                onclick="window.mediaLibrary.deleteMedia(${file.id})"
+                                onclick="window.mediaLibrary.deleteMedia(${file.id}, '${(file._fsPath || '').replace(/'/g, "\\'")}')"
                                 title="Eliminar">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -448,11 +459,18 @@ class MediaLibrary {
     
     // Media management methods
     async viewMedia(mediaId) {
+        const cached = this.mediaCache && this.mediaCache.get(Number(mediaId));
+        if (cached) {
+            this.currentMediaDetail = cached;
+            this.showMediaDetail(cached);
+            return;
+        }
         try {
             const response = await fetch(`${this.apiEndpoint}/${mediaId}`);
             const data = await response.json();
             
             if (data.success) {
+                this.currentMediaDetail = data.media;
                 this.showMediaDetail(data.media);
             } else {
                 throw new Error(data.message);
@@ -503,13 +521,13 @@ class MediaLibrary {
                             <dd>${media.file_size_formatted}</dd>
                             
                             <dt>Dimensões:</dt>
-                            <dd>${media.dimensions.width} × ${media.dimensions.height} px</dd>
+                            <dd>${(media.dimensions && media.dimensions.width) ? `${media.dimensions.width} × ${media.dimensions.height} px` : '-'}</dd>
                             
                             <dt>Tipo:</dt>
                             <dd>${media.mime_type}</dd>
                             
                             <dt>Enviado:</dt>
-                            <dd>${new Date(media.created_at).toLocaleString('pt-PT')}</dd>
+                            <dd>${media.created_at ? new Date(media.created_at).toLocaleString('pt-PT') : '-'}</dd>
                             
                             <dt>URL:</dt>
                             <dd>
@@ -537,7 +555,7 @@ class MediaLibrary {
                         </div>
                     ` : ''}
                     
-                    ${media.tags.length > 0 ? `
+                    ${(media.tags && media.tags.length) > 0 ? `
                         <div class="detail-section">
                             <h4>Tags</h4>
                             <div class="tags-display">
@@ -559,7 +577,7 @@ class MediaLibrary {
                             <i class="fas fa-copy"></i> Copiar URL
                         </button>
                         
-                        <button class="btn btn-danger" onclick="window.mediaLibrary.deleteMedia(${media.id}); window.mediaLibrary.closeMediaDetail();">
+                        <button class="btn btn-danger" onclick="window.mediaLibrary.deleteMedia(${media.id}, '${(media._fsPath || '').replace(/'/g, "\\'")}'); window.mediaLibrary.closeMediaDetail();">
                             <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </div>
@@ -649,13 +667,17 @@ class MediaLibrary {
         }
     }
     
-    async deleteMedia(mediaId) {
-        if (!confirm('Tem certeza que deseja eliminar este ficheiro? Esta ação não pode ser desfeita.')) {
+    async deleteMedia(mediaId, fsPath, skipConfirm) {
+        if (!skipConfirm && !confirm('Tem certeza que deseja eliminar este ficheiro? Esta ação não pode ser desfeita.')) {
             return;
         }
         
+        const path = fsPath || (this.currentMediaDetail && this.currentMediaDetail._fsPath) || 
+            (document.querySelector(`[data-media-id="${mediaId}"]`)?.dataset?.fsPath || '');
+        
         try {
-            const response = await fetch(`${this.apiEndpoint}/${mediaId}`, {
+            const url = path ? `${this.apiEndpoint}/${mediaId}?path=${encodeURIComponent(path)}` : `${this.apiEndpoint}/${mediaId}`;
+            const response = await fetch(url, {
                 method: 'DELETE'
             });
             
@@ -695,6 +717,18 @@ class MediaLibrary {
         this.updateSelectionUI();
     }
     
+    async deleteSelected() {
+        if (this.selectedFiles.size === 0) return;
+        if (!confirm(`Eliminar ${this.selectedFiles.size} ficheiro(s) selecionado(s)? Esta ação não pode ser desfeita.`)) return;
+        for (const mediaId of [...this.selectedFiles]) {
+            const card = document.querySelector(`[data-media-id="${mediaId}"]`);
+            const fsPath = card?.dataset?.fsPath || (this.mediaCache?.get(Number(mediaId))?._fsPath);
+            await this.deleteMedia(mediaId, fsPath, true);
+        }
+        this.selectedFiles.clear();
+        this.loadMedia();
+    }
+
     selectAll() {
         const cards = document.querySelectorAll('.media-card');
         cards.forEach(card => {
@@ -833,7 +867,7 @@ class MediaLibrary {
         const mediaGrid = document.getElementById('mediaGrid');
         
         if (loadingState) loadingState.style.display = show ? 'block' : 'none';
-        if (mediaGrid) mediaGrid.style.display = show ? 'none' : 'block';
+        if (mediaGrid) mediaGrid.style.display = show ? 'none' : 'grid';
     }
     
     showError(message) {

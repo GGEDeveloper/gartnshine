@@ -1,5 +1,7 @@
 const { pool } = require('../config/database');
 const BaseModel = require('./BaseModel');
+const path = require('path');
+const fs = require('fs').promises;
 
 class Product extends BaseModel {
   static tableName = 'products';
@@ -753,6 +755,34 @@ class Product extends BaseModel {
     }
   }
   
+  // Delete product and associated image files from disk
+  static async delete(id) {
+    const connection = await pool.getConnection();
+    try {
+      const [images] = await connection.query(
+        'SELECT image_filename FROM product_images WHERE product_id = ?',
+        [id]
+      );
+      const mediaDir = path.join(__dirname, '../public/media/products');
+      for (const row of images) {
+        const filename = row.image_filename;
+        if (filename) {
+          const filePath = path.join(mediaDir, filename);
+          try {
+            await fs.unlink(filePath);
+          } catch (e) {
+            if (e.code !== 'ENOENT') console.warn('Could not delete product image:', filePath, e.message);
+          }
+        }
+      }
+      const sql = `DELETE FROM ${this.tableName} WHERE ${this.primaryKey} = ?`;
+      const [result] = await connection.query(sql, [id]);
+      return result.affectedRows > 0;
+    } finally {
+      connection.release();
+    }
+  }
+
   // Obter histórico de preços de um produto
   static async getPriceHistory(productId, limit = 30) {
     try {

@@ -312,21 +312,27 @@ router.put('/api/media/:id', [
 
 /**
  * DELETE /admin/api/media/:id
- * Delete media file
+ * Delete media file (filesystem: use ?path=products/foo.jpg ; DB: use id)
  */
-router.delete('/api/media/:id', [
-    param('id').isInt({ min: 1 }).toInt()
-], async (req, res) => {
+router.delete('/api/media/:id', async (req, res) => {
     try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid media ID'
+        const pathParam = req.query.path || req.query.fsPath;
+        
+        if (pathParam) {
+            await Media.deleteMediaFromFilesystem(pathParam);
+            return res.json({
+                success: true,
+                message: 'Ficheiro eliminado com sucesso'
             });
         }
         
-        const mediaId = req.params.id;
+        const mediaId = parseInt(req.params.id, 10);
+        if (!mediaId || isNaN(mediaId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID inválido. Para ficheiros em disco, use o parâmetro path.'
+            });
+        }
         
         await Media.deleteMedia(mediaId);
         

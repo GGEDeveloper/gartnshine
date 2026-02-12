@@ -497,7 +497,25 @@ class Media {
     }
     
     /**
-     * Delete media file
+     * Delete media file from filesystem (public/media)
+     */
+    async deleteMediaFromFilesystem(fsPath) {
+        if (!fsPath || typeof fsPath !== 'string') return false;
+        const fullPath = path.join(this.mediaPath, fsPath.replace(/^\//, '').replace(/\\/g, '/'));
+        if (!fullPath.startsWith(this.mediaPath)) {
+            throw new Error('Invalid path');
+        }
+        try {
+            await fs.unlink(fullPath);
+            return true;
+        } catch (e) {
+            if (e.code === 'ENOENT') return true;
+            throw e;
+        }
+    }
+
+    /**
+     * Delete media file (DB or filesystem)
      */
     async deleteMedia(id) {
         try {
