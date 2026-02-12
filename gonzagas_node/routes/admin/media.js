@@ -31,16 +31,13 @@ const upload = multer({
  */
 router.get('/media/library', adminSessionRequired, async (req, res) => {
     try {
-        // Load folders and tags for filters (fallback to [] if tables missing)
-        let folders = [];
+        // Pastas do disco (public/media)
+        const folders = await Media.getFoldersFromFilesystem();
         let tags = [];
         try {
-            [folders, tags] = await Promise.all([
-                Media.getAllFolders(),
-                Media.getAllTags()
-            ]);
+            tags = await Media.getAllTags();
         } catch (loadErr) {
-            console.warn('Media filters not available (tables may be missing):', loadErr.message);
+            console.warn('Media tags not available:', loadErr.message);
         }
         
         res.render('admin/media/library', {
@@ -87,12 +84,10 @@ router.get('/api/media', [
         
         const {
             folder,
-            tags,
-            type,
             search,
             page = 1,
             limit = 24,
-            sort = 'created_at:desc'
+            sort = 'filename:asc'
         } = req.query;
         
         const [sortBy, sortOrder] = sort.split(':');
@@ -100,21 +95,15 @@ router.get('/api/media', [
         
         const options = {
             folder: folder || null,
-            tags: tags ? tags.split(',') : null,
-            type,
-            search,
+            search: search || null,
             limit: parseInt(limit),
             offset,
-            sortBy,
-            sortOrder: sortOrder?.toUpperCase() || 'DESC'
+            sortBy: sortBy || 'filename',
+            sortOrder: (sortOrder || 'ASC').toUpperCase()
         };
         
-        const media = await Media.getAllMedia(options);
-        
-        // Get total count for pagination
-        const totalOptions = { ...options, limit: null, offset: null };
-        const totalMedia = await Media.getAllMedia(totalOptions);
-        const total = totalMedia.length;
+        // Sempre ler do disco (public/media) - sem scripts de import
+        const { items: media, total } = await Media.getMediaFromFilesystem(options);
         const totalPages = Math.ceil(total / limit);
         
         res.json({
@@ -376,7 +365,7 @@ router.delete('/api/media/:id', [
  */
 router.get('/api/media/folders', async (req, res) => {
     try {
-        const folders = await Media.getAllFolders();
+        const folders = await Media.getFoldersFromFilesystem();
         
         res.json({
             success: true,

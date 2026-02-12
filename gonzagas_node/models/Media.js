@@ -12,12 +12,147 @@ const crypto = require('crypto');
 class Media {
     constructor() {
         this.uploadPath = path.join(__dirname, '../public/uploads');
+        this.mediaPath = path.join(__dirname, '../public/media');
         this.allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
         this.maxFileSize = 10 * 1024 * 1024; // 10MB
     }
+
+    /**
+     * Scan filesystem (public/media) - sempre reflete o que está na pasta
+     */
+    async getMediaFromFilesystem(options = {}) {
+        const {
+            folder = null,
+            search = null,
+            limit = 50,
+            offset = 0,
+            sortBy = 'filename',
+            sortOrder = 'ASC'
+        } = options;
+
+        const imageExt = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const files = [];
+
+        async function scanDir(dir, relPath = '') {
+            const items = await fs.readdir(dir, { withFileTypes: true });
+            for (const item of items) {
+                const rp = relPath ? `${relPath}/${item.name}` : item.name;
+                const full = path.join(dir, item.name);
+                if (item.isDirectory()) {
+                    await scanDir(full, rp);
+                } else if (item.isFile()) {
+                    const ext = path.extname(item.name).toLowerCase();
+                    if (imageExt.includes(ext)) files.push({ relPath: rp, fullPath: full, name: item.name });
+                }
+            }
+        }
+
+        try {
+            await scanDir(this.mediaPath);
+        } catch (e) {
+            console.error('Media filesystem scan error:', e.message);
+            return [];
+        }
+
+        let filtered = files;
+
+        if (folder && folder !== '') {
+            const subdir = folder.replace(/^\/|\/$/g, '');
+            if (subdir) {
+                filtered = filtered.filter(f => f.relPath.startsWith(subdir + '/'));
+            } else {
+                filtered = filtered.filter(f => !f.relPath.includes('/'));
+            }
+        }
+
+        if (search) {
+            const q = search.toLowerCase();
+            filtered = filtered.filter(f => f.name.toLowerCase().includes(q) || f.relPath.toLowerCase().includes(q));
+        }
+
+        const ord = sortOrder === 'DESC' ? -1 : 1;
+        filtered.sort((a, b) => {
+            const va = sortBy === 'filename' ? a.name : a.relPath;
+            const vb = sortBy === 'filename' ? b.name : b.relPath;
+            return ord * va.localeCompare(vb);
+        });
+
+        const total = filtered.length;
+        const paginated = filtered.slice(offset, offset + limit);
+
+        const items = await Promise.all(paginated.map(async (f) => {
+            let fileSize = 0;
+            try {
+                const stat = await fs.stat(f.fullPath);
+                fileSize = stat.size;
+            } catch {}
+            const ext = path.extname(f.name).toLowerCase();
+            const mime = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp' }[ext] || 'image/jpeg';
+            const url = `/media/${f.relPath.replace(/\\/g, '/')}`;
+            const id = Math.abs(f.relPath.split('').reduce((h, c) => ((h << 5) - h) + c.charCodeAt(0), 0) | 0);
+            return {
+                id,
+                filename: f.name,
+                original_name: f.name,
+                url,
+                file_path: url,
+                file_size: fileSize,
+                file_size_formatted: this.formatFileSize(fileSize),
+                mime_type: mime,
+                folder_path: f.relPath.includes('/') ? '/' + f.relPath.split('/')[0] + '/' : '/',
+                tags: [],
+                variants: {},
+                dimensions: {},
+                created_ago: '-',
+                _fsPath: f.relPath
+            };
+        }));
+
+        return { items, total };
+    }
+
+    /**
+     * Get folders from filesystem (public/media)
+     */
+    async getFoldersFromFilesystem() {
+        const imageExt = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const counts = { '/': 0, '/gallery/': 0, '/products/': 0 };
+
+        async function countInDir(dir, folderKey) {
+            try {
+                const items = await fs.readdir(dir, { withFileTypes: true });
+                for (const item of items) {
+                    if (item.isFile()) {
+                        const ext = path.extname(item.name).toLowerCase();
+                        if (imageExt.includes(ext)) counts[folderKey]++;
+                    } else if (item.isDirectory()) {
+                        await countInDir(path.join(dir, item.name), folderKey);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        try {
+            const items = await fs.readdir(this.mediaPath, { withFileTypes: true });
+            for (const item of items) {
+                if (item.isFile()) {
+                    const ext = path.extname(item.name).toLowerCase();
+                    if (imageExt.includes(ext)) counts['/']++;
+                }
+            }
+            await countInDir(path.join(this.mediaPath, 'gallery'), '/gallery/');
+            await countInDir(path.join(this.mediaPath, 'products'), '/products/');
+        } catch (e) {}
+
+        return [
+            { name: 'Root', path: '/', file_count: counts['/'], color: '#667eea' },
+            { name: 'Gallery', path: '/gallery/', file_count: counts['/gallery/'], color: '#4ecdc4' },
+            { name: 'Products', path: '/products/', file_count: counts['/products/'], color: '#c0a080' }
+        ];
+    }
     
     /**
-     * Get all media files with filters
+     * Get all media files with filters (legacy DB - keeps for uploads)
      */
     async getAllMedia(options = {}) {
         const {
@@ -395,11 +530,15 @@ class Media {
      * Helper methods
      */
     formatMediaFile(row) {
+        // Files from filesystem (public/media) have file_path like /media/gallery/foo.jpg
+        const url = (row.file_path && String(row.file_path).startsWith('/media')) 
+            ? row.file_path 
+            : `/uploads/${row.filename}`;
         const formatted = {
             ...row,
-            url: `/uploads/${row.filename}`,
-            variants: row.processed_variants ? JSON.parse(row.processed_variants) : {},
-            dimensions: row.dimensions ? JSON.parse(row.dimensions) : {},
+            url,
+            variants: (row.processed_variants && typeof row.processed_variants === 'string') ? JSON.parse(row.processed_variants) : (row.processed_variants || {}),
+            dimensions: (row.dimensions && typeof row.dimensions === 'string') ? JSON.parse(row.dimensions) : (row.dimensions || {}),
             tags: []
         };
         

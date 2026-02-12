@@ -22,20 +22,26 @@ class ProductController extends BaseController {
 
       const filterOptions = {
         reference: req.query.reference,
-        categoryName: req.query.category, // Will need to resolve to family_id in Model
+        categoryName: req.query.category,
         status: req.query.status,
         stock_status: req.query.stock_status
       };
 
-      // Remove undefined or empty string filters
+      const sortOptions = {
+        sortBy: req.query.sort_by || 'reference',
+        sortOrder: (req.query.sort_order || 'asc').toUpperCase()
+      };
+      if (sortOptions.sortOrder !== 'ASC' && sortOptions.sortOrder !== 'DESC') {
+        sortOptions.sortOrder = 'ASC';
+      }
+
       for (const key in filterOptions) {
         if (filterOptions[key] === undefined || filterOptions[key] === '') {
           delete filterOptions[key];
         }
       }
-      console.log('ProductController.index - Constructed filterOptions:', filterOptions);
 
-      const products = await Product.getAll(limit, offset, filterOptions);
+      const products = await Product.getAll(limit, offset, filterOptions, sortOptions);
       const totalProducts = await Product.count(filterOptions);
       const totalPages = Math.ceil(totalProducts / limit);
       const productFamilies = await ProductFamily.getAll();
@@ -50,7 +56,7 @@ class ProductController extends BaseController {
         currentPage: page,
         limit,
         currentPath: req.path,
-        queryParams: req.query,
+        queryParams: { ...req.query, sort_by: sortOptions.sortBy, sort_order: sortOptions.sortOrder.toLowerCase() },
         user: req.user || req.session?.user,
         csrfToken: req.csrfToken ? req.csrfToken() : null,
         breadcrumbs: res.locals.breadcrumb,
@@ -451,23 +457,23 @@ class ProductController extends BaseController {
 
   // Delete a product
   async delete(req, res) {
-    console.log('--- ProductController.delete ---');
     const productId = parseInt(req.params.id);
-    console.log('Product ID to delete:', productId);
-
+    if (!productId || isNaN(productId)) {
+      req.flash('error_msg', 'ID de produto inválido.');
+      return res.redirect('/admin/products');
+    }
     try {
-      const result = await Product.deleteById(productId);
-      
-      if (result && result.affectedRows > 0) { 
-          req.flash('success_msg', 'Product deleted successfully.');
+      const deleted = await Product.delete(productId);
+      if (deleted) {
+        req.flash('success_msg', 'Produto excluído com sucesso.');
       } else {
-          req.flash('error_msg', 'Product not found or could not be deleted.');
+        req.flash('error_msg', 'Produto não encontrado ou não foi possível excluir.');
       }
-      res.redirect('/admin/products');
+      return res.redirect('/admin/products');
     } catch (error) {
       console.error('Error deleting product:', error);
-      req.flash('error_msg', 'Failed to delete product. ' + error.message);
-      res.redirect('/admin/products');
+      req.flash('error_msg', 'Erro ao excluir produto: ' + (error.message || 'erro desconhecido'));
+      return res.redirect('/admin/products');
     }
   }
 

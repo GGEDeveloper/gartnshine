@@ -14,7 +14,7 @@ class Product extends BaseModel {
     return pool;
   }
   // Get all products with family information and pagination support
-  static async getAll(limit = 10, offset = 0, filterOptions = {}) {
+  static async getAll(limit = 10, offset = 0, filterOptions = {}, sortOptions = {}) {
     try {
       const whereClauses = [];
       const params = [];
@@ -55,13 +55,18 @@ class Product extends BaseModel {
         whereString = `WHERE ${whereClauses.join(' AND ')}`;
       }
 
+      const allowedSort = ['id', 'reference', 'name', 'sale_price', 'current_stock', 'is_active', 'created_at', 'family_name'];
+      const sortBy = allowedSort.includes(sortOptions.sortBy) ? sortOptions.sortBy : 'reference';
+      const sortOrder = (sortOptions.sortOrder || 'ASC').toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+      const orderColumn = sortBy === 'family_name' ? 'f.name' : `p.${sortBy}`;
+
       const sql = `
         SELECT p.*, p.sale_price as price, f.name as family_name, 
                (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url 
         FROM products p
         LEFT JOIN product_families f ON p.family_id = f.id
         ${whereString}
-        ORDER BY p.reference
+        ORDER BY ${orderColumn} ${sortOrder}
         LIMIT ? OFFSET ?
       `;
 

@@ -135,6 +135,7 @@ async function run() {
   await pool.query(`
     INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES
     ('Root', '/', 'Pasta principal', 'folder', '#667eea'),
+    ('Gallery', '/gallery/', 'Galeria do frontend', 'images', '#4ecdc4'),
     ('Products', '/products/', 'Imagens de produtos', 'gem', '#c0a080'),
     ('Categories', '/categories/', 'Imagens de categorias', 'tags', '#4ecdc4'),
     ('Blog', '/blog/', 'Imagens para blog', 'edit', '#f59e0b'),

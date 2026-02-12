@@ -191,5 +191,19 @@ function applyFilters() {
     console.error('Elementos necessários para o modal de colunas não encontrados. Verifique os IDs: toggle-columns-btn, columnsModal, apply-columns-btn.');
   }
   
+  // Handler para botão Eliminar Produto
+  document.querySelectorAll('.delete-product-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const productId = this.getAttribute('data-id');
+      if (!productId) return;
+      if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) return;
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/admin/products/delete/' + productId;
+      document.body.appendChild(form);
+      form.submit();
+    });
+  });
+
   console.log('Inventory page script initialized successfully.');
 });

@@ -81,7 +81,7 @@
                 <span class="badge bg-info"><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
               </div>
               <div class="card-actions">
-                <% let editUrl = '/admin/products/edit/' + product.id; if (typeof queryParams !== 'undefined' && queryParams && Object.keys(queryParams).length) { const params = []; if (queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference)); if (queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category)); if (queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status)); if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status)); if (params.length) editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&')); } %>
+                <% let editUrl = '/admin/products/edit/' + product.id; if (typeof queryParams !== 'undefined' && queryParams && Object.keys(queryParams).length) { const params = []; if (queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference)); if (queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category)); if (queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status)); if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status)); if (queryParams.sort_by) params.push('sort_by=' + encodeURIComponent(queryParams.sort_by)); if (queryParams.sort_order) params.push('sort_order=' + encodeURIComponent(queryParams.sort_order)); if (params.length) editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&')); } %>
                 <a href="<%= editUrl %>" class="btn btn-primary btn-sm flex-grow-1"><i class="fas fa-edit"></i> Editar</a>
                 <a href="/admin/inventory/history/<%= product.id %>" class="btn btn-outline-secondary btn-sm"><i class="fas fa-history"></i></a>
                 <form action="/admin/products/delete/<%= product.id %>" method="POST" class="d-inline" onsubmit="return confirm('Excluir este produto?')">
@@ -94,18 +94,27 @@
         </div>
 
         <!-- Desktop Table -->
+        <% 
+          function buildSortUrl(col, defaultOrder, qp) {
+            const params = qp ? { ...qp } : {};
+            params.sort_by = col;
+            params.sort_order = (params.sort_by === col && params.sort_order === defaultOrder) ? (defaultOrder === 'asc' ? 'desc' : 'asc') : defaultOrder;
+            return Object.keys(params).filter(k => params[k]).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+          }
+          const qp = typeof queryParams !== 'undefined' ? queryParams : {};
+        %>
         <div class="table-responsive products-table-wrapper">
               <table class="table table-hover mb-0 datatable" style="width:100%">
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <th><a href="?<%= buildSortUrl('id','asc',qp) %>" class="text-decoration-none text-dark sortable-th">ID <i class="fas fa-sort<%= qp.sort_by === 'id' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th>Imagem</th>
-                    <th>Referência</th>
-<th>Categoria</th>
-<th>Nome</th>
-                    <th>Preço</th>
-                    <th>Stock</th>
-                    <th>Status</th>
+                    <th><a href="?<%= buildSortUrl('reference','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Referência <i class="fas fa-sort<%= qp.sort_by === 'reference' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-up' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('family_name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Categoria <i class="fas fa-sort<%= qp.sort_by === 'family_name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Nome <i class="fas fa-sort<%= qp.sort_by === 'name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('sale_price','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Preço <i class="fas fa-sort<%= qp.sort_by === 'sale_price' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('current_stock','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Stock <i class="fas fa-sort<%= qp.sort_by === 'current_stock' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-down' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('is_active','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Status <i class="fas fa-sort<%= qp.sort_by === 'is_active' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th class="text-end">Ações</th>
                   </tr>
                 </thead>
@@ -167,6 +176,8 @@
                               if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status));
                               if (queryParams.page) params.push('page=' + encodeURIComponent(queryParams.page));
                               if (queryParams.limit) params.push('limit=' + encodeURIComponent(queryParams.limit));
+                              if (queryParams.sort_by) params.push('sort_by=' + encodeURIComponent(queryParams.sort_by));
+                              if (queryParams.sort_order) params.push('sort_order=' + encodeURIComponent(queryParams.sort_order));
                               if (params.length > 0) {
                                 editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&'));
                               }
@@ -189,26 +200,17 @@
 
             <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
               <% 
-                // Helper function to build query string preserving filters
+                // Helper function to build query string preserving filters and sort
                 function buildQueryString(page, limit, queryParams) {
                   const params = [];
                   params.push('page=' + encodeURIComponent(page));
                   params.push('limit=' + encodeURIComponent(limit));
-                  
-                  // Preserve filter parameters
-                  if (queryParams && queryParams.reference) {
-                    params.push('reference=' + encodeURIComponent(queryParams.reference));
-                  }
-                  if (queryParams && queryParams.category) {
-                    params.push('category=' + encodeURIComponent(queryParams.category));
-                  }
-                  if (queryParams && queryParams.status) {
-                    params.push('status=' + encodeURIComponent(queryParams.status));
-                  }
-                  if (queryParams && queryParams.stock_status) {
-                    params.push('stock_status=' + encodeURIComponent(queryParams.stock_status));
-                  }
-                  
+                  if (queryParams && queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference));
+                  if (queryParams && queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category));
+                  if (queryParams && queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status));
+                  if (queryParams && queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status));
+                  if (queryParams && queryParams.sort_by) params.push('sort_by=' + encodeURIComponent(queryParams.sort_by));
+                  if (queryParams && queryParams.sort_order) params.push('sort_order=' + encodeURIComponent(queryParams.sort_order));
                   return params.join('&');
                 }
               %>
@@ -463,8 +465,8 @@
             language: {
               url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
             },
-            searching: true,  // Client-side search only on current page
-            ordering: true,    // Client-side ordering only on current page
+            searching: true,
+            ordering: false,   // Server-side ordering via column header links
             paging: false,     // Disable DataTables pagination - we use server-side pagination
             info: false,       // Disable DataTables info - we have our own pagination
             dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +

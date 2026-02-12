@@ -271,25 +271,13 @@ $(document).ready(function() {
     }
   });
 
-  // Confirmação de exclusão
+  // Confirmação de exclusão (usado quando o botão tem id="deleteProduct")
   $('#deleteProduct').on('click', function() {
     if (confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
       const productId = $(this).data('product-id');
-      $.ajax({
-        url: `/admin/products/${productId}`,
-        type: 'DELETE',
-        success: function(response) {
-          if (response.redirect) {
-            window.location.href = response.redirect;
-          } else {
-            window.location.href = '/admin/products';
-          }
-        },
-        error: function(xhr) {
-          const errorMessage = xhr.responseJSON?.message || 'Erro ao excluir o produto';
-          showAlert(errorMessage, 'danger');
-        }
-      });
+      const form = $('<form>').attr({ method: 'POST', action: `/admin/products/delete/${productId}` });
+      $('body').append(form);
+      form.submit();
     }
   });
 

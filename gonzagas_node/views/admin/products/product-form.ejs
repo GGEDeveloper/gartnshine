@@ -612,17 +612,10 @@ function confirmDelete(productId) {
         // Mostrar notificação de carregamento
         notifications.warning('Excluindo produto...', 2000);
         
-        // Criar formulário para DELETE
+        // Usar rota POST /admin/products/delete/:id
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = `/admin/products/${productId}`;
-        
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'DELETE';
-        
-        form.appendChild(methodInput);
+        form.action = `/admin/products/delete/${productId}`;
         document.body.appendChild(form);
         form.submit();
     }
