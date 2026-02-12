@@ -2,13 +2,38 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
-const sharp = require('sharp');
+const { Jimp } = require('jimp');
 const { body, query, param, validationResult } = require('express-validator');
 const Media = require('../../models/Media');
 const { adminSessionRequired } = require('../../middleware/authMiddleware');
 
+let sharp;
+try {
+    sharp = require('sharp');
+} catch (e) {
+    sharp = null; // cPanel pode falhar - usa Jimp
+}
+
 const router = express.Router();
 const THUMB_SIZE = 160;
+
+/** Gera thumbnail - Sharp (rapido) ou Jimp (fallback puro JS para cPanel/dominios.pt) */
+async function generateThumbnail(mediaPath) {
+    if (sharp) {
+        try {
+            const pipeline = sharp(mediaPath, { failOnError: false });
+            return await pipeline
+                .resize(THUMB_SIZE, THUMB_SIZE, { fit: 'cover' })
+                .jpeg({ quality: 80 })
+                .toBuffer();
+        } catch (sharpErr) {
+            console.warn('Sharp failed, using Jimp:', sharpErr.message);
+        }
+    }
+    const image = await Jimp.read(mediaPath);
+    image.cover({ w: THUMB_SIZE, h: THUMB_SIZE });
+    return await image.getBuffer('image/jpeg', { quality: 80 });
+}
 
 // Configure multer for media uploads
 const storage = multer.memoryStorage(); // Store in memory for processing
@@ -148,11 +173,7 @@ router.get('/api/media/thumb', adminSessionRequired, [
         if (!allowedExt.includes(ext)) return res.status(400).send('Invalid image');
         const stat = await fs.stat(mediaPath).catch(() => null);
         if (!stat || !stat.isFile()) return res.status(404).send('Not found');
-        const pipeline = sharp(mediaPath, { failOnError: false });
-        const buffer = await pipeline
-            .resize(THUMB_SIZE, THUMB_SIZE, { fit: 'cover' })
-            .jpeg({ quality: 80 })
-            .toBuffer();
+        const buffer = await generateThumbnail(mediaPath);
         res.setHeader('Content-Type', 'image/jpeg');
         res.setHeader('Cache-Control', 'public, max-age=86400');
         res.send(buffer);

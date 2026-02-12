@@ -242,7 +242,7 @@ class MediaLibrary {
                          loading="lazy"
                          width="160"
                          height="160"
-                         onerror="this.src='${fullUrl}'">
+                         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22160%22 height=%22160%22/%3E%3C/svg%3E'">
                     
                     <!-- Selection Checkbox -->
                     <div class="media-checkbox">
