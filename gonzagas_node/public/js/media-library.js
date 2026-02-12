@@ -13,9 +13,9 @@ class MediaLibrary {
         this.maxFileSize = options.maxFileSize || 10 * 1024 * 1024;
         this.allowedTypes = options.allowedTypes || ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
         
-        this.currentView = 'grid'; // grid or list
+        this.currentView = 'grid'; // grid ou list (só mobile)
         this.selectedFiles = new Set();
-        this.currentFolder = '';
+        this.currentFolder = '/gallery/'; // Media = galeria (produtos gerem-se no form)
         this.currentTags = [];
         this.currentSearch = '';
         this.currentSort = 'created_at:desc';
@@ -90,6 +90,7 @@ class MediaLibrary {
         // Filters
         const folderSelect = document.getElementById('folderSelect');
         if (folderSelect) {
+            this.currentFolder = folderSelect.value || '/gallery/';
             folderSelect.addEventListener('change', (e) => {
                 this.currentFolder = e.target.value;
                 this.currentPage = 1;
@@ -396,7 +397,7 @@ class MediaLibrary {
     async uploadSingleFile(file, current, total) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('folder', this.currentFolder || '/products/');
+        formData.append('folder', this.currentFolder || '/gallery/');
         formData.append('source', 'web');
         
         // Show individual upload progress

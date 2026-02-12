@@ -33,51 +33,26 @@ router.get('/', async (req, res) => {
       // Continue without database data
     }
     
-    // Get media files for the gallery
-    const mediaPath = path.join(__dirname, '../../media');
+    // Media para galeria: public/media/gallery
+    const galleryPath = path.join(__dirname, '../public/media/gallery');
     let mediaFiles = [];
     
     try {
-      console.log(`Reading media directory: ${mediaPath}`);
-      const files = await fs.readdir(mediaPath);
-      console.log(`Found ${files.length} files in media directory`);
-      
+      const files = await fs.readdir(galleryPath);
       mediaFiles = files.filter(file => {
         const ext = path.extname(file).toLowerCase();
-        return ['.jpg', '.jpeg', '.png', '.gif', '.mp4'].includes(ext);
+        return ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext);
       }).map(file => ({
         filename: file,
-        type: path.extname(file).toLowerCase() === '.mp4' ? 'video' : 'image',
-        path: `/media/${file}`
+        type: 'image',
+        path: `/media/gallery/${file}`
       }));
-      
-      console.log(`Filtered to ${mediaFiles.length} media files`);
     } catch (error) {
-      console.error(`Error reading media directory ${mediaPath}:`, error);
+      console.error('Error reading gallery directory:', error);
     }
     
-    // If no media files found, try fallback path
-    if (mediaFiles.length === 0) {
-      try {
-        const fallbackPath = path.join(__dirname, '../media');
-        console.log(`Trying fallback media path: ${fallbackPath}`);
-        const files = await fs.readdir(fallbackPath);
-        console.log(`Found ${files.length} files in fallback media directory`);
-        
-        mediaFiles = files.filter(file => {
-          const ext = path.extname(file).toLowerCase();
-          return ['.jpg', '.jpeg', '.png', '.gif', '.mp4'].includes(ext);
-        }).map(file => ({
-          filename: file,
-          type: path.extname(file).toLowerCase() === '.mp4' ? 'video' : 'image',
-          path: `/media/${file}`
-        }));
-        
-        console.log(`Filtered to ${mediaFiles.length} media files from fallback`);
-      } catch (error) {
-        console.error('Error reading fallback media directory:', error);
-      }
-    }
+    // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
+    const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/placeholder-image.png';
     
     console.log(`Rendering index with ${mediaFiles.length} media files`);
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
@@ -87,6 +62,7 @@ router.get('/', async (req, res) => {
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
+      heroImage,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
       theme: {

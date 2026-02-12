@@ -95,18 +95,38 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+
+.header-search {
+  flex: 0 0 auto;
+  width: 200px;
+  min-width: 120px;
+}
+
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo-container {
+  flex-shrink: 0;
 }
 
 .logo h1 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 0;
   color: var(--color-text);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .main-nav {
   display: flex;
   align-items: center;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
 .nav-menu {

@@ -59,8 +59,9 @@ const upload = multer({
  */
 router.get('/media/library', adminSessionRequired, async (req, res) => {
     try {
-        // Pastas do disco (public/media)
-        const folders = await Media.getFoldersFromFilesystem();
+        // Media = galeria apenas (fotos de produtos gerem-se no form de produto)
+        const allFolders = await Media.getFoldersFromFilesystem();
+        const folders = allFolders.filter(f => f.path !== '/products/');
         let tags = [];
         try {
             tags = await Media.getAllTags();

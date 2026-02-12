@@ -3,12 +3,12 @@
 <div class="media-library-content px-3 px-md-4 py-3">
             <div class="content-header">
                 <div class="header-left">
-                    <h1><i class="fas fa-images"></i> Media Library</h1>
-                    <p class="header-subtitle">Miniaturas · Upload · Câmara</p>
+                    <h1><i class="fas fa-images"></i> Galeria</h1>
+                    <p class="header-subtitle">Imagens para a galeria do site (fotos de produtos gerem-se no form de produto)</p>
                 </div>
                 
                 <div class="header-actions">
-                    <button class="btn btn-secondary" id="toggleViewMode">
+                    <button class="btn btn-secondary d-md-none" id="toggleViewMode" title="Alternar vista">
                         <i class="fas fa-th-large"></i>
                         <span>Grelha</span>
                     </button>
@@ -39,10 +39,11 @@
                     <!-- Folder Navigation -->
                     <div class="folder-nav">
                         <select id="folderSelect" class="form-select">
-                            <option value="">Todas as Pastas</option>
+                            <option value="">Todas</option>
                             <% folders.forEach(folder => { %>
                                 <option value="<%= folder.path %>" 
-                                        data-color="<%= folder.color %>">
+                                        data-color="<%= folder.color %>"
+                                        <%= folder.path === '/gallery/' ? 'selected' : '' %>>
                                     <% for(let i = 0; i < (folder.path.split('/').length - 2); i++) { %>
                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                     <% } %>

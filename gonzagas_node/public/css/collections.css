@@ -1,0 +1,161 @@
+/**
+ * Collections / Gallery - Gonzaga's Art & Shine
+ * Estilo coerente com o site: tema escuro, natureza, elegante
+ */
+
+.collections-page {
+  min-height: 60vh;
+  padding: 2rem 0 4rem;
+}
+
+.collections-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header - alinhado ao section-header da home */
+.collections-header {
+  text-align: center;
+  padding: 2rem 0 2.5rem;
+}
+
+.collections-title h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-text);
+}
+
+.collections-subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.5px;
+}
+
+/* Divisor geométrico - igual à home */
+.collections-header .geometric-divider {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.collections-header .geometric-divider span {
+  width: 12px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-highlight));
+  border-radius: 2px;
+}
+
+/* Grid de galeria */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  aspect-ratio: 1;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(106, 140, 105, 0.3);
+}
+
+.gallery-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-item:hover .gallery-image {
+  transform: scale(1.05);
+}
+
+.gallery-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Estado vazio */
+.no-images {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.no-images h3 {
+  color: var(--color-text);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.no-images p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Lightbox override - tema escuro */
+.collections-page .lb-overlay {
+  background: rgba(0, 0, 0, 0.92) !important;
+}
+
+.collections-page .lb-nav a.lb-prev,
+.collections-page .lb-nav a.lb-next {
+  color: var(--color-accent) !important;
+}
+
+.collections-page .lb-close {
+  color: var(--color-text) !important;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .collections-page {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .collections-header {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

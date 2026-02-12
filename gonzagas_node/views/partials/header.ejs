@@ -1,5 +1,12 @@
 <header class="main-header">
   <div class="header-container">
+    <!-- Logo - primeiro para não sobrepor -->
+    <div class="logo-container">
+      <a href="/" class="logo">
+        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
+      </a>
+    </div>
+
     <!-- Desktop Navigation -->
     <nav class="main-nav desktop-nav">
       <ul class="nav-menu">
@@ -38,13 +45,6 @@
     <!-- Search Box -->
     <div class="header-search">
       <input type="search" name="search" class="search-input" placeholder="Pesquisar produtos..." autocomplete="off" aria-label="Pesquisar produtos">
-    </div>
-
-    <!-- Logo -->
-    <div class="logo-container">
-      <a href="/" class="logo">
-        <h1><%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></h1>
-      </a>
     </div>
     
     <!-- Mobile Navigation Toggle -->
