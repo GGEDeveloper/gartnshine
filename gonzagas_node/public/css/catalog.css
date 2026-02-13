@@ -112,19 +112,19 @@
 }
 
 .filter-checkbox {
-  accent-color: var(--color-silver);
+  accent-color: #C0C0C0 !important;
 }
 
 .filter-checkbox:checked {
-  accent-color: var(--color-silver);
+  accent-color: #C0C0C0 !important;
 }
 
 input[type="radio"] {
-  accent-color: var(--color-silver);
+  accent-color: #C0C0C0 !important;
 }
 
 input[type="radio"]:checked {
-  accent-color: var(--color-silver);
+  accent-color: #C0C0C0 !important;
 }
 
 .filter-range {
@@ -738,4 +738,34 @@ input[type="radio"]:checked {
   .view-options {
     display: none;
   }
+}
+
+/* ==========================================
+   FIX: Cores prata para checkboxes e radios
+   Força prata (browsers usam ciano por defeito)
+   ========================================== */
+
+input[type="checkbox"],
+input[type="radio"],
+.filter-checkbox,
+.filter-radio {
+  accent-color: #C0C0C0 !important;
+  -webkit-accent-color: #C0C0C0 !important;
+  color-scheme: dark;
+}
+
+/* Botão Filtros - remove verde */
+.filters-mobile-toggle,
+.catalog-filters button,
+button[class*="filter"],
+.filter-toggle-btn,
+.floating-filter-btn {
+  border-color: #A8A8A8 !important;
+  color: #C0C0C0 !important;
+}
+
+.filters-mobile-toggle:hover,
+.filter-toggle-btn:hover {
+  border-color: #C0C0C0 !important;
+  background-color: rgba(192, 192, 192, 0.1) !important;
 } 
