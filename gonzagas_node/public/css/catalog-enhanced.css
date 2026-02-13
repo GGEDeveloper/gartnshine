@@ -19,7 +19,7 @@
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(143, 132, 106, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(192, 192, 192, 0.25);
   border-color: var(--color-accent);
 }
 
@@ -439,7 +439,7 @@
 .products-grid:not(.list-view) .product-card:hover,
 .catalog-grid:not(.list-view) .product-card:hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 8px 16px rgba(143, 132, 106, 0.3) !important;
+  box-shadow: 0 8px 16px rgba(192, 192, 192, 0.25) !important;
   border-color: var(--color-accent) !important;
 }
 
@@ -618,7 +618,7 @@
   color: var(--color-primary);
   border-color: var(--color-highlight);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(143, 132, 106, 0.3);
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.25);
 }
 
 .filter-toggle-btn.active {
@@ -876,10 +876,10 @@ body.drawer-open {
 
 @keyframes pulse-filter {
   0%, 100% {
-    box-shadow: 0 4px 20px rgba(143, 132, 106, 0.4), 0 0 0 0 rgba(143, 132, 106, 0.5);
+    box-shadow: 0 4px 20px rgba(192, 192, 192, 0.35), 0 0 0 0 rgba(192, 192, 192, 0.3);
   }
   50% {
-    box-shadow: 0 4px 20px rgba(143, 132, 106, 0.4), 0 0 0 10px rgba(143, 132, 106, 0);
+    box-shadow: 0 4px 20px rgba(192, 192, 192, 0.35), 0 0 0 10px rgba(192, 192, 192, 0);
   }
 }
 
@@ -944,7 +944,7 @@ body.drawer-open {
 .catalog-search-input:focus {
   outline: none;
   border-color: var(--color-highlight);
-  box-shadow: 0 0 0 3px rgba(143, 132, 106, 0.2);
+  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2);
 }
 
 .catalog-search-input::placeholder {

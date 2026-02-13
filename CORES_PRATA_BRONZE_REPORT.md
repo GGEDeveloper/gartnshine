@@ -18,9 +18,9 @@
 ## Alterações Aplicadas
 
 ### 1. `gonzagas_node/public/css/variables.css`
-- Variáveis já estavam corretas (aplicadas em commit anterior)
-- `--color-highlight: #C0C0C0`, `--color-accent: #A8A8A8`, `--color-accent-alt: #B87333`
-- Variáveis adicionais: `--color-silver`, `--color-silver-dark`, `--color-bronze`
+- Variáveis: `--color-highlight: #C0C0C0`, `--color-accent: #A8A8A8`, `--color-accent-alt: #B87333`
+- **Gradientes:** `--gradient-accent` (#A8A8A8→#888888), `--gradient-highlight` (#C0C0C0→#B87333), `--gradient-psychedelic` (prata/bronze)
+- **Glows:** `--glow-neon` e `--glow-accent` com rgba prata (removido verde/beige rgba(143,132,106) e rgba(75,104,84))
 
 ### 2. `gonzagas_node/public/css/catalog.css`
 - **Checkboxes e radios:** `accent-color: #C0C0C0 !important` (hex direto, não variável)
