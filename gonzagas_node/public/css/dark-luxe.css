@@ -6,8 +6,8 @@
 /* Paleta em variables.css - overrides específicos abaixo */
 body {
   background:
-    radial-gradient(circle at 8% 0%, rgba(150, 160, 172, 0.08), transparent 36%),
-    radial-gradient(circle at 92% 0%, rgba(168, 168, 168, 0.06), transparent 40%),
+    radial-gradient(circle at 8% 0%, rgba(192, 192, 192, 0.04), transparent 36%),
+    radial-gradient(circle at 92% 0%, rgba(168, 168, 168, 0.04), transparent 40%),
     linear-gradient(180deg, var(--surface-0) 0%, var(--surface-1) 35%, var(--surface-2) 100%);
   color: var(--color-text);
 }
@@ -26,7 +26,7 @@ body {
 .nav-menu a:hover,
 .nav-menu a.active {
   color: var(--color-text);
-  text-shadow: 0 0 14px rgba(192, 192, 192, 0.35);
+  text-shadow: 0 0 14px rgba(192, 192, 192, 0.28);
 }
 
 .logo h1 {
@@ -59,8 +59,8 @@ textarea::placeholder {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: rgba(192, 192, 192, 0.35);
-  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.15);
+  border-color: rgba(192, 192, 192, 0.45);
+  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.22);
   outline: none;
 }
 
@@ -76,13 +76,13 @@ button,
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6b6b6b, #8a8a8a);
-  color: #0b1016;
-  border-color: rgba(192, 192, 192, 0.4);
+  background: linear-gradient(135deg, #888888, #A8A8A8);
+  color: #0a0a0a;
+  border-color: rgba(192, 192, 192, 0.5);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #7a7a7a, #9a9a9a);
+  background: linear-gradient(135deg, #A8A8A8, #C0C0C0);
   transform: translateY(-1px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
 }
@@ -164,9 +164,9 @@ footer a:hover {
 #backToTopBtn,
 .back-to-top,
 .floating-filter-btn {
-  background: linear-gradient(135deg, #A8A8A8, #C0C0C0) !important;
-  color: #0b1016 !important;
-  border-color: rgba(192, 192, 192, 0.4) !important;
+  background: linear-gradient(135deg, #A8A8A8, #B87333) !important;
+  color: #0a0a0a !important;
+  border-color: rgba(192, 192, 192, 0.45) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.36) !important;
 }
 
@@ -174,8 +174,8 @@ footer a:hover {
 .back-to-top:hover,
 .floating-filter-btn:hover,
 .floating-filter-btn.active {
-  background: linear-gradient(135deg, #C0C0C0, #E8E8E8) !important;
-  border-color: rgba(232, 232, 232, 0.5) !important;
+  background: linear-gradient(135deg, #C0C0C0, #CD7F32) !important;
+  border-color: rgba(192, 192, 192, 0.62) !important;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42) !important;
 }
 
@@ -198,7 +198,7 @@ footer a:hover {
 .border-glow,
 .hover-glow:hover {
   border-color: var(--color-silver) !important;
-  box-shadow: 0 0 10px rgba(192, 192, 192, 0.35), 0 0 20px rgba(184, 115, 51, 0.2) !important;
+  box-shadow: 0 0 10px rgba(192, 192, 192, 0.36), 0 0 20px rgba(168, 168, 168, 0.24) !important;
 }
 
 .section-header h2,
