@@ -1,13 +1,15 @@
 /**
  * Homepage - Gonzaga's Art & Shine
  * Hero: só imagem + tagline encostada ao topo
+ * Desktop full screen + Mobile otimizado
  */
 
-/* ===== HERO ===== */
+/* ===== HERO DESKTOP (full screen) ===== */
 .hero {
   position: relative;
-  height: 55vh;
-  min-height: 320px;
+  width: 100%;
+  height: 100vh;
+  min-height: 480px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -15,23 +17,30 @@
   z-index: 1;
 }
 
-/* Hero imagem de fundo (sempre visível, sem video) */
+/* Hero imagem de fundo - cobre toda a área sem distorção */
 .hero-image-backdrop {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
+  background-color: #0a0d10;
 }
 
-/* Hero content - tagline encostada ao topo (override dark-luxe para fundo transparente) */
+/* Hero content - tagline encostada ao topo */
 .hero .hero-content {
   position: relative;
   z-index: 2;
   text-align: center;
   width: 100%;
   max-width: none;
-  padding: 1.25rem 1rem 0;
+  padding: 1.5rem 1rem 0;
+  padding-top: max(1.5rem, env(safe-area-inset-top));
   margin: 0;
   background: transparent !important;
   border: none !important;
@@ -42,33 +51,52 @@
 
 .hero-tagline {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: 400;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
   margin: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   display: inline-block;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 4px;
 }
 
+/* ===== HERO MOBILE ===== */
 @media (max-width: 768px) {
   .hero {
+    height: 55vh;
     min-height: 280px;
-    height: 45vh;
   }
 
-  .hero-content {
-    padding: 1rem 0.75rem 0;
+  .hero-image-backdrop {
+    background-position: center center;
+  }
+
+  .hero .hero-content {
+    padding: max(1rem, env(safe-area-inset-top)) 0.75rem 0;
   }
 
   .hero-tagline {
-    font-size: clamp(0.9rem, 4vw, 1.2rem);
-    padding: 0.4rem 0.8rem;
+    font-size: clamp(0.9rem, 4.5vw, 1.15rem);
+    padding: 0.5rem 1rem;
+    max-width: 90%;
+  }
+}
+
+/* Mobile pequeno (portrait) */
+@media (max-width: 480px) {
+  .hero {
+    height: 50vh;
+    min-height: 240px;
+  }
+
+  .hero-tagline {
+    font-size: 0.95rem;
+    padding: 0.45rem 0.9rem;
   }
 }
 
