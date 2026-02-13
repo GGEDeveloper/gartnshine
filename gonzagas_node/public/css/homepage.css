@@ -1,53 +1,22 @@
 /**
  * Homepage - Gonzaga's Art & Shine
- * Hero, Featured, mobile-first
+ * Hero: só imagem + tagline encostada ao topo
  */
 
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  height: 75vh;
-  min-height: 420px;
+  height: 55vh;
+  min-height: 320px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   overflow: hidden;
   z-index: 1;
 }
 
-.video-background-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-/* Desktop: video background */
-.video-background {
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-}
-
-/* Esconder texto fallback do video */
-.video-background-container video {
-  font-size: 0;
-  color: transparent;
-}
-
-.video-background-container video::before {
-  content: '';
-  display: none;
-}
-
-/* Hero imagem estática (mobile + fallback) */
+/* Hero imagem de fundo (sempre visível, sem video) */
 .hero-image-backdrop {
-  display: none;
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -55,54 +24,52 @@
   background-repeat: no-repeat;
 }
 
-/* Mobile: só imagem, sem video (mais leve, sem blur) */
-@media (max-width: 768px) {
-  .hero {
-    min-height: 55vh;
-    height: 55vh;
-  }
-
-  .video-background-container video {
-    display: none !important;
-  }
-
-  .hero-image-backdrop {
-    display: block !important;
-  }
-}
-
-/* Hero content */
-.hero-content {
+/* Hero content - tagline encostada ao topo (override dark-luxe para fundo transparente) */
+.hero .hero-content {
   position: relative;
   z-index: 2;
   text-align: center;
-  color: var(--color-text);
-  padding: 1rem 1.5rem;
-  max-width: 480px;
-  margin: 0 auto;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.hero-content h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.02em;
-  color: var(--color-text);
-}
-
-.hero-content p {
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  opacity: 0.95;
-  font-weight: 300;
+  width: 100%;
+  max-width: none;
+  padding: 1.25rem 1rem 0;
   margin: 0;
-  line-height: 1.4;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.hero-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 280px;
+    height: 45vh;
+  }
+
+  .hero-content {
+    padding: 1rem 0.75rem 0;
+  }
+
+  .hero-tagline {
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+    padding: 0.4rem 0.8rem;
+  }
 }
 
 /* ===== FEATURED SECTION ===== */

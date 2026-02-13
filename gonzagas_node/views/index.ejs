@@ -1,17 +1,9 @@
 <main>
-    <!-- Hero: desktop=video, mobile=imagem (mais leve, sem blur) -->
+    <!-- Hero: só imagem de fundo + texto "Elegância que nasce da terra" encostado ao topo -->
     <section class="hero">
-      <div class="video-background-container">
-        <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-image.png" %>');"></div>
-        <video autoplay muted loop playsinline class="video-background" 
-               poster="<%= heroImage || "/images/placeholder-image.png" %>"
-               preload="metadata">
-          <source src="/videos/hero-background.mp4" type="video/mp4">
-        </video>
-      </div>
+      <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-image.png" %>');"></div>
       <div class="hero-content">
-        <h1><%= siteTitle %></h1>
-        <p><%= siteDescription %></p>
+        <p class="hero-tagline"><%= siteDescription %></p>
       </div>
     </section>
     

@@ -2,8 +2,8 @@
  * Gonzaga's Art & Shine - Paleta de cores (fonte única)
  * Carregar primeiro para garantir consistência em todo o frontend.
  * 
- * Estilo: preto, elegante, prateado, verdes secos, dourados leves
- * SEM azul, roxo ou violeta.
+ * Estilo: preto, elegante, prateado, bronze
+ * SEM azul, roxo, violeta ou verde.
  */
 
 :root {
@@ -12,10 +12,17 @@
   --color-secondary: #0b1016;
   --color-tertiary: #121922;
   
-  /* Acentos - prateado, verde seco, dourado leve */
-  --color-highlight: #9098a3;
-  --color-accent: #4b6854;
-  --color-accent-alt: #8f846a;
+  /* Acentos - PRATEADO/BRONZE (SEM verde, azul, roxo) */
+  --color-highlight: #C0C0C0;
+  --color-accent: #A8A8A8;
+  --color-accent-alt: #B87333;
+  
+  /* Cores adicionais prata/bronze */
+  --color-silver-light: #E8E8E8;
+  --color-silver: #C0C0C0;
+  --color-silver-dark: #A8A8A8;
+  --color-bronze: #B87333;
+  --color-bronze-dark: #8B4513;
   
   /* Texto */
   --color-text: #f4f6f8;
@@ -34,13 +41,13 @@
   --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.32);
   
   /* Glows e efeitos */
-  --glow-neon: 0 0 10px rgba(143, 132, 106, 0.45), 0 0 20px rgba(143, 132, 106, 0.25);
-  --glow-accent: 0 0 10px rgba(75, 104, 84, 0.5), 0 0 20px rgba(75, 104, 84, 0.3);
+  --glow-neon: 0 0 10px rgba(192, 192, 192, 0.35), 0 0 20px rgba(143, 132, 106, 0.2);
+  --glow-accent: 0 0 10px rgba(168, 168, 168, 0.4), 0 0 20px rgba(184, 115, 51, 0.25);
   
   /* Gradientes */
-  --gradient-accent: linear-gradient(135deg, #4b6854, #6f7a6a);
-  --gradient-highlight: linear-gradient(135deg, #9098a3, #8f846a);
-  --gradient-psychedelic: linear-gradient(135deg, #4b6854, #9098a3, #8f846a);
+  --gradient-accent: linear-gradient(135deg, #A8A8A8, #C0C0C0);
+  --gradient-highlight: linear-gradient(135deg, #C0C0C0, #B87333);
+  --gradient-psychedelic: linear-gradient(135deg, #A8A8A8, #C0C0C0, #B87333);
   
   /* Superfícies */
   --surface-0: #05070a;

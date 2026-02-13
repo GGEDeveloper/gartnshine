@@ -103,21 +103,16 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 /* ===== HERO MOBILE ===== */
 @media (max-width: 768px) {
   .hero {
-    min-height: 50vh;
-    padding: 2rem 1rem;
+    min-height: 280px;
+    padding: 0;
   }
 
-  .hero-content h1 {
-    font-size: 1.75rem;
-    margin-bottom: 0.5rem;
+  .hero .hero-content {
+    padding: 1rem 0.75rem 0;
   }
 
-  .hero-content p {
-    font-size: 1rem;
-  }
-
-  .video-background-container {
-    min-height: 50vh;
+  .hero-tagline {
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
   }
 }
 

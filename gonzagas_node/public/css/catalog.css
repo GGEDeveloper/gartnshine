@@ -112,7 +112,19 @@
 }
 
 .filter-checkbox {
-  accent-color: var(--color-highlight);
+  accent-color: var(--color-silver);
+}
+
+.filter-checkbox:checked {
+  accent-color: var(--color-silver);
+}
+
+input[type="radio"] {
+  accent-color: var(--color-silver);
+}
+
+input[type="radio"]:checked {
+  accent-color: var(--color-silver);
 }
 
 .filter-range {

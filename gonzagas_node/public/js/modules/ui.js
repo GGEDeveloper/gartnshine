@@ -40,9 +40,9 @@ window.GonzagaUI = (function() {
       right: window.innerWidth <= 768 ? '20px' : '30px',
       width: window.innerWidth <= 768 ? '42px' : '45px',
       height: window.innerWidth <= 768 ? '42px' : '45px',
-      background: 'linear-gradient(135deg, var(--color-highlight, #9098a3), var(--color-accent, #4b6854))',
+      background: 'linear-gradient(135deg, var(--color-highlight, #C0C0C0), var(--color-accent, #A8A8A8))',
       color: 'var(--color-primary, #1e1e1e)',
-      border: '2px solid rgba(143, 132, 106, 0.35)',
+      border: '2px solid rgba(192, 192, 192, 0.35)',
       borderRadius: '50%',
       padding: '0',
       gap: '0',
@@ -51,7 +51,7 @@ window.GonzagaUI = (function() {
       visibility: 'hidden',
       transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)',
       zIndex: '1020',
-      boxShadow: '0 6px 25px rgba(143, 132, 106, 0.34), 0 0 0 0 rgba(143, 132, 106, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+      boxShadow: '0 6px 25px rgba(192, 192, 192, 0.3), 0 0 0 0 rgba(192, 192, 192, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -64,8 +64,8 @@ window.GonzagaUI = (function() {
     // Hover effects are handled by CSS, but add smooth transitions
     backToTopButton.addEventListener('mouseenter', () => {
       backToTopButton.style.transform = 'translateY(-5px) scale(1.1)';
-      backToTopButton.style.boxShadow = '0 8px 30px rgba(143, 132, 106, 0.4), 0 0 0 8px rgba(143, 132, 106, 0.12)';
-      backToTopButton.style.borderColor = 'var(--color-highlight, #9098a3)';
+      backToTopButton.style.boxShadow = '0 8px 30px rgba(192, 192, 192, 0.35), 0 0 0 8px rgba(192, 192, 192, 0.12)';
+      backToTopButton.style.borderColor = 'var(--color-highlight, #C0C0C0)';
     });
 
     backToTopButton.addEventListener('mouseleave', () => {
@@ -74,8 +74,8 @@ window.GonzagaUI = (function() {
       } else {
         backToTopButton.style.transform = 'translateY(20px) scale(0.8)';
       }
-      backToTopButton.style.boxShadow = '0 4px 20px rgba(143, 132, 106, 0.3), 0 0 0 0 rgba(143, 132, 106, 0.42)';
-      backToTopButton.style.borderColor = 'rgba(143, 132, 106, 0.35)';
+      backToTopButton.style.boxShadow = '0 4px 20px rgba(192, 192, 192, 0.35), 0 0 0 0 rgba(192, 192, 192, 0.35)';
+      backToTopButton.style.borderColor = 'rgba(192, 192, 192, 0.35)';
     });
 
     // Click event with smooth scroll

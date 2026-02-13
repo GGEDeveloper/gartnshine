@@ -173,10 +173,10 @@
   color: white;
 }
 
-/* INFO - Dourado leve */
+/* INFO - Prata/bronze */
 .notification-info {
-  background: linear-gradient(135deg, rgba(75, 104, 84, 0.95) 0%, rgba(143, 132, 106, 0.95) 100%);
-  border-left: 4px solid #8f846a;
+  background: linear-gradient(135deg, rgba(168, 168, 168, 0.95) 0%, rgba(184, 115, 51, 0.9) 100%);
+  border-left: 4px solid var(--color-bronze, #B87333);
   color: white;
 }
 

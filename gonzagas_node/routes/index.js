@@ -68,9 +68,9 @@ router.get('/', async (req, res) => {
       theme: {
         colorPrimary: '#05070a',
         colorSecondary: '#0b1016',
-        colorAccent: '#4b6854',
+        colorAccent: '#A8A8A8',
         colorText: '#f4f6f8',
-        colorHighlight: '#9098a3'
+        colorHighlight: '#C0C0C0'
       }
     });
   } catch (error) {
@@ -140,9 +140,9 @@ router.get('/collections', async (req, res) => {
       theme: {
         colorPrimary: '#05070a',
         colorSecondary: '#0b1016',
-        colorAccent: '#4b6854',
+        colorAccent: '#A8A8A8',
         colorText: '#f4f6f8',
-        colorHighlight: '#9098a3'
+        colorHighlight: '#C0C0C0'
       },
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
