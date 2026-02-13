@@ -1,8 +1,13 @@
 # Relatório de Correção de Cores - Paleta Prata/Bronze
 
 **Data:** 2025-02-13  
+**Versão:** v3 (checkboxes custom + dark-luxe verificado)  
 **Objetivo:** Eliminar cores azul ciano e verde dos elementos do site (checkboxes, radios, botões, footer)  
 **Site:** artnshine.pt
+
+## Verificação de deploy
+- `dark-luxe.css` linha 9-10: deve ter `rgba(192, 192, 192, 0.04)` e `rgba(168, 168, 168, 0.04)` (NÃO rgba(150...) ou rgba(75, 104...))
+- Se ainda vires verde/azul, o ficheiro no servidor não foi atualizado - fazer pull e reiniciar
 
 ---
 

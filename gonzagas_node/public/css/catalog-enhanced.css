@@ -667,14 +667,45 @@
   background: rgba(192, 192, 192, 0.08);
 }
 
+/* Checkbox/radio custom - forçar prata (override ciano do browser) */
 .filter-checkbox,
 .filter-radio {
-  width: 18px;
-  height: 18px;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
   cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  border: 2px solid #A8A8A8 !important;
+  border-radius: 4px !important;
+  background: transparent !important;
   accent-color: #C0C0C0 !important;
-  -webkit-accent-color: #C0C0C0 !important;
-  color-scheme: dark;
+  flex-shrink: 0;
+}
+
+.filter-checkbox {
+  border-radius: 4px !important;
+}
+
+.filter-radio {
+  border-radius: 50% !important;
+}
+
+.filter-checkbox:checked {
+  background-color: #C0C0C0 !important;
+  border-color: #A8A8A8 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a0a0a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-size: 12px 12px !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.filter-radio:checked {
+  background-color: #C0C0C0 !important;
+  border-color: #A8A8A8 !important;
+  box-shadow: inset 0 0 0 3px #0a0a0a !important;
 }
 
 .filter-label {

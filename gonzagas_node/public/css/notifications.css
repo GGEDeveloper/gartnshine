@@ -103,7 +103,7 @@
 
 /* SUCCESS - Verde/Dourado */
 .notification-success {
-  background: linear-gradient(135deg, rgba(75, 104, 84, 0.95) 0%, rgba(92, 122, 90, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(168, 168, 168, 0.95) 0%, rgba(184, 115, 51, 0.9) 100%);
   border-left: 4px solid #d4af37;
   color: white;
 }
