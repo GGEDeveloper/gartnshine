@@ -87,7 +87,7 @@ async function run() {
       path VARCHAR(500) NOT NULL UNIQUE,
       parent_id INT NULL,
       description TEXT NULL,
-      color VARCHAR(7) DEFAULT '#667eea',
+      color VARCHAR(7) DEFAULT '#4f5b66',
       icon VARCHAR(50) DEFAULT 'folder',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -134,10 +134,10 @@ async function run() {
   // Insert default folders
   await pool.query(`
     INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES
-    ('Root', '/', 'Pasta principal', 'folder', '#667eea'),
-    ('Gallery', '/gallery/', 'Galeria do frontend', 'images', '#4ecdc4'),
+    ('Root', '/', 'Pasta principal', 'folder', '#4f5b66'),
+    ('Gallery', '/gallery/', 'Galeria do frontend', 'images', '#4b6854'),
     ('Products', '/products/', 'Imagens de produtos', 'gem', '#c0a080'),
-    ('Categories', '/categories/', 'Imagens de categorias', 'tags', '#4ecdc4'),
+    ('Categories', '/categories/', 'Imagens de categorias', 'tags', '#4b6854'),
     ('Blog', '/blog/', 'Imagens para blog', 'edit', '#f59e0b'),
     ('Marketing', '/marketing/', 'Material de marketing', 'bullhorn', '#ef4444'),
     ('Temp', '/temp/', 'Ficheiros temporários', 'clock', '#9ca3af')
@@ -149,9 +149,9 @@ async function run() {
     INSERT IGNORE INTO media_tags (name, slug, color) VALUES
     ('Produto', 'produto', '#c0a080'),
     ('Destaque', 'destaque', '#f59e0b'),
-    ('Categoria', 'categoria', '#4ecdc4'),
+    ('Categoria', 'categoria', '#4b6854'),
     ('Marketing', 'marketing', '#ef4444'),
-    ('Blog', 'blog', '#8b5cf6'),
+    ('Blog', 'blog', '#4b6854'),
     ('Temporário', 'temporario', '#9ca3af')
   `);
   console.log('Default tags OK');

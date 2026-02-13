@@ -4,8 +4,8 @@
  */
 
 :root {
-    --media-primary: #667eea;
-    --media-secondary: #4ecdc4;
+    --media-primary: #4f5b66;
+    --media-secondary: #4b6854;
     --media-accent: #c0a080;
     --media-success: #10b981;
     --media-danger: #ef4444;
@@ -640,7 +640,7 @@
 .form-control:focus {
     outline: none;
     border-color: var(--media-primary);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 3px rgba(75, 104, 84, 0.22);
 }
 
 .form-help {

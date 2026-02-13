@@ -47,7 +47,7 @@ async function run() {
   console.log(`Found ${allFiles.length} image files`);
 
   // Ensure Gallery folder exists
-  await pool.query(`INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES ('Gallery', '/gallery/', 'Galeria do frontend', 'images', '#4ecdc4')`);
+  await pool.query(`INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES ('Gallery', '/gallery/', 'Galeria do frontend', 'images', '#4b6854')`);
 
   let imported = 0;
   let skipped = 0;

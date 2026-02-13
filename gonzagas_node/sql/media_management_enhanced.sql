@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS media_folders (
     path VARCHAR(500) NOT NULL UNIQUE,
     parent_id INT NULL,
     description TEXT NULL,
-    color VARCHAR(7) DEFAULT '#667eea',
+    color VARCHAR(7) DEFAULT '#4f5b66',
     icon VARCHAR(50) DEFAULT 'folder',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -106,9 +106,9 @@ CREATE TABLE IF NOT EXISTS media_processing_jobs (
 
 -- Insert default folders
 INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES
-('Root', '/', 'Pasta principal', 'folder', '#667eea'),
+('Root', '/', 'Pasta principal', 'folder', '#4f5b66'),
 ('Products', '/products/', 'Imagens de produtos', 'gem', '#c0a080'),
-('Categories', '/categories/', 'Imagens de categorias', 'tags', '#4ecdc4'),
+('Categories', '/categories/', 'Imagens de categorias', 'tags', '#4b6854'),
 ('Blog', '/blog/', 'Imagens para blog', 'edit', '#f59e0b'),
 ('Marketing', '/marketing/', 'Material de marketing', 'bullhorn', '#ef4444'),
 ('Logos', '/logos/', 'Logos e branding', 'copyright', '#10b981'),
@@ -118,13 +118,13 @@ INSERT IGNORE INTO media_folders (name, path, description, icon, color) VALUES
 INSERT IGNORE INTO media_tags (name, slug, color) VALUES
 ('Produto', 'produto', '#c0a080'),
 ('Destaque', 'destaque', '#f59e0b'),
-('Categoria', 'categoria', '#4ecdc4'),
+('Categoria', 'categoria', '#4b6854'),
 ('Marketing', 'marketing', '#ef4444'),
-('Blog', 'blog', '#8b5cf6'),
-('Social Media', 'social-media', '#06b6d4'),
+('Blog', 'blog', '#4b6854'),
+('Social Media', 'social-media', '#8f846a'),
 ('Print', 'print', '#059669'),
 ('Web', 'web', '#dc2626'),
-('Mobile', 'mobile', '#7c3aed'),
+('Mobile', 'mobile', '#4f5b66'),
 ('Temporário', 'temporario', '#9ca3af');
 
 -- Create indexes for better performance

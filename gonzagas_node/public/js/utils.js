@@ -169,7 +169,7 @@ window.GonzagaUtils = (function() {
       success: '#10b981',
       error: '#ef4444',
       warning: '#f59e0b',
-      info: '#3b82f6'
+      info: '#4f5b66'
     };
     
     toast.style.backgroundColor = colors[type] || colors.info;

@@ -9,16 +9,16 @@
 /* CSS Variables Específicas Homepage */
 :root {
     /* Gonzaga's Brand Colors */
-    --color-primary: #667eea;
+    --color-primary: #4f5b66;
     --color-secondary: #c0a080;
-    --color-accent: #4ecdc4;
+    --color-accent: #4b6854;
     --color-gold: #d4af37;
     --color-rose-gold: #e8b4b8;
     
     /* Hero Section */
     --hero-height: 100vh;
     --hero-bg-gradient: linear-gradient(135deg, 
-        rgba(102, 126, 234, 0.95) 0%, 
+        rgba(75, 104, 84, 0.95) 0%, 
         rgba(192, 160, 128, 0.85) 100%);
     
     /* Spacing Scale */
@@ -601,12 +601,12 @@
     font-weight: 600;
     font-size: 1.1rem;
     transition: var(--transition-smooth);
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 32px rgba(75, 104, 84, 0.3);
 }
 
 .btn-view-all:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 12px 40px rgba(75, 104, 84, 0.4);
     color: white;
 }
 
@@ -651,7 +651,7 @@
     justify-content: center;
     margin: 0 auto 24px;
     font-size: 2rem;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 32px rgba(75, 104, 84, 0.3);
 }
 
 .trust-card h3 {
@@ -724,7 +724,7 @@
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, 
-        rgba(102, 126, 234, 0.8), 
+        rgba(75, 104, 84, 0.8), 
         rgba(192, 160, 128, 0.8));
     display: flex;
     align-items: center;

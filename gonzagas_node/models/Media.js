@@ -145,8 +145,8 @@ class Media {
         } catch (e) {}
 
         return [
-            { name: 'Root', path: '/', file_count: counts['/'], color: '#667eea' },
-            { name: 'Gallery', path: '/gallery/', file_count: counts['/gallery/'], color: '#4ecdc4' },
+            { name: 'Root', path: '/', file_count: counts['/'], color: '#4f5b66' },
+            { name: 'Gallery', path: '/gallery/', file_count: counts['/gallery/'], color: '#4b6854' },
             { name: 'Products', path: '/products/', file_count: counts['/products/'], color: '#c0a080' }
         ];
     }

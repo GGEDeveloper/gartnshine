@@ -3,14 +3,9 @@
  * Dark theme with psychedelic and geometric accents
  */
 
+/* Variáveis de paleta em variables.css - usa var() para consistência */
 :root {
-  --color-primary: #1e1e1e;
-  --color-secondary: #4a3c2d;
-  --color-accent: #6a8c69;
-  --color-text: #f0f0f0;
-  --color-highlight: #b19cd9;
   --color-error: #ff6b6b;
-  --color-success: #51cf66;
   --font-primary: 'Poppins', sans-serif;
   --font-heading: 'Playfair Display', serif;
 }
@@ -1471,13 +1466,13 @@ section {
 
 @keyframes pulse {
   0% { 
-    box-shadow: 0 0 0 rgba(177, 156, 217, 0); 
+    box-shadow: 0 0 0 rgba(143, 132, 106, 0); 
   }
   50% { 
-    box-shadow: 0 0 15px rgba(177, 156, 217, 0.5); 
+    box-shadow: 0 0 15px rgba(143, 132, 106, 0.5); 
   }
   100% { 
-    box-shadow: 0 0 0 rgba(177, 156, 217, 0); 
+    box-shadow: 0 0 0 rgba(143, 132, 106, 0); 
   }
 }
 

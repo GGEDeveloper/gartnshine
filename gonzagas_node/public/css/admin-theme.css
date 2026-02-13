@@ -17,14 +17,14 @@
   --color-primary-light: #7a9c79;
   
   /* Accent Colors */
-  --color-accent: #b19cd9;
-  --color-accent-dark: #a18cc9;
+  --color-accent: #6f7a6a;
+  --color-accent-dark: #5b6a5c;
   
   /* Status Colors */
   --color-success: #51cf66;
   --color-warning: #fcc419;
   --color-error: #ff6b6b;
-  --color-info: #339af0;
+  --color-info: #4f5b66;
   
   /* Borders */
   --border-color: #3a3a3a;
@@ -308,7 +308,7 @@ a:hover {
 }
 
 .alert-info {
-  background-color: rgba(51, 154, 240, 0.1);
+  background-color: rgba(75, 104, 84, 0.15);
   border-left: 4px solid var(--color-info);
   color: var(--color-text);
 }

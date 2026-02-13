@@ -168,7 +168,7 @@
 }
 
 .notification-info {
-  background: #2196f3;
+  background: #4f5b66;
   color: white;
 }
 
@@ -180,17 +180,17 @@
   right: 30px;
   width: 45px;
   height: 45px;
-  background: linear-gradient(135deg, #b19cd9, #6a8c69);
+  background: linear-gradient(135deg, #8f846a, #4b6854);
   color: #1e1e1e;
-  border: 2px solid rgba(177, 156, 217, 0.3);
+  border: 2px solid rgba(143, 132, 106, 0.35);
   border-radius: 50%;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 1020;
-  box-shadow: 0 4px 15px rgba(177, 156, 217, 0.4), 
-              0 0 0 0 rgba(177, 156, 217, 0.5);
+  box-shadow: 0 4px 15px rgba(143, 132, 106, 0.35), 
+              0 0 0 0 rgba(143, 132, 106, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -243,9 +243,9 @@
 #backToTopBtn:hover,
 .back-to-top:hover {
   transform: translateY(-3px) scale(1.1);
-  box-shadow: 0 6px 20px rgba(177, 156, 217, 0.5), 
-              0 0 0 6px rgba(177, 156, 217, 0.1);
-  border-color: #b19cd9;
+  box-shadow: 0 6px 20px rgba(143, 132, 106, 0.4), 
+              0 0 0 6px rgba(143, 132, 106, 0.12);
+  border-color: #8f846a;
 }
 
 #backToTopBtn:hover svg,

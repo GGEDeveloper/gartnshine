@@ -293,7 +293,7 @@
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md), 0 0 15px rgba(177, 156, 217, 0.2);
+  box-shadow: var(--shadow-md), 0 0 15px rgba(143, 132, 106, 0.2);
 }
 
 .product-image-container {
@@ -605,7 +605,7 @@
 
 .empty-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(177, 156, 217, 0.4);
+  box-shadow: 0 5px 15px rgba(143, 132, 106, 0.4);
 }
 
 /* Related products */
@@ -643,7 +643,7 @@
 
 .category-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md), 0 0 15px rgba(177, 156, 217, 0.2);
+  box-shadow: var(--shadow-md), 0 0 15px rgba(143, 132, 106, 0.2);
 }
 
 .category-image {

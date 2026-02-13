@@ -103,7 +103,7 @@
 
 /* SUCCESS - Verde/Dourado */
 .notification-success {
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.95) 0%, rgba(56, 178, 172, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(75, 104, 84, 0.95) 0%, rgba(92, 122, 90, 0.95) 100%);
   border-left: 4px solid #d4af37;
   color: white;
 }
@@ -173,15 +173,15 @@
   color: white;
 }
 
-/* INFO - Azul/Dourado */
+/* INFO - Dourado leve */
 .notification-info {
-  background: linear-gradient(135deg, rgba(66, 153, 225, 0.95) 0%, rgba(72, 187, 120, 0.95) 100%);
-  border-left: 4px solid #d4af37;
+  background: linear-gradient(135deg, rgba(75, 104, 84, 0.95) 0%, rgba(143, 132, 106, 0.95) 100%);
+  border-left: 4px solid #8f846a;
   color: white;
 }
 
 .notification-info .notification-icon {
-  color: #bee3f8;
+  color: #c4b896;
 }
 
 .notification-info .notification-message {

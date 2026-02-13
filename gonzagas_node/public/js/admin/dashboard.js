@@ -44,13 +44,13 @@ function initCharts() {
         datasets: [{
           label: 'Vendas (R$)',
           data: [12000, 15000, 10000, 18000, 22000, 19000, 25000, 23000, 20000, 28000, 26000, 30000],
-          backgroundColor: 'rgba(59, 130, 246, 0.05)',
-          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(79, 91, 102, 0.08)',
+          borderColor: '#4f5b66',
           borderWidth: 2,
           tension: 0.3,
           fill: true,
           pointBackgroundColor: '#fff',
-          pointBorderColor: '#3B82F6',
+          pointBorderColor: '#4f5b66',
           pointBorderWidth: 2,
           pointRadius: 4,
           pointHoverRadius: 6
@@ -89,10 +89,10 @@ function initCharts() {
         datasets: [{
           data: [45, 25, 20, 10],
           backgroundColor: [
-            '#3B82F6',
+            '#4f5b66',
             '#10B981',
             '#F59E0B',
-            '#8B5CF6'
+            '#8f846a'
           ],
           borderWidth: 0,
           cutout: '70%'

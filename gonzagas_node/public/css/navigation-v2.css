@@ -367,7 +367,7 @@
     outline: none;
     border-color: var(--color-primary);
     background: white;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 4px rgba(75, 104, 84, 0.22);
 }
 
 .search-btn {

@@ -280,7 +280,7 @@ html, body {
 /* 
 @media (max-width: 991.98px) {
   body.admin-layout-fixed.debug-layout #wrapper {
-    border: 3px solid blue !important;
+    border: 3px solid #4b6854 !important;
   }
   body.admin-layout-fixed.debug-layout #content-wrapper {
     border: 3px solid green !important;

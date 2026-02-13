@@ -274,11 +274,11 @@ const config = {
   
   // Configurações de tema
   theme: {
-    colorPrimary: '#1e1e1e',     // Fundo escuro
-    colorSecondary: '#4a3c2d',   // Marrom florestal
-    colorAccent: '#6a8c69',      // Verde florestal
-    colorText: '#f0f0f0',        // Texto claro
-    colorHighlight: '#b19cd9',    // Roxo psicodélico
+    colorPrimary: '#05070a',
+    colorSecondary: '#0b1016',
+    colorAccent: '#4b6854',
+    colorText: '#f4f6f8',
+    colorHighlight: '#9098a3',
   },
   
   // Configurações do sistema de checkpoint para backup de dados

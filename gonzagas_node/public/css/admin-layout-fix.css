@@ -212,7 +212,7 @@ html, body {
 }
 
 .debug-layout #wrapper {
-  border: 3px solid blue !important;
+  border: 3px solid #4b6854 !important;
 }
 
 .debug-layout #content-wrapper {

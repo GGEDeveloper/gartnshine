@@ -157,8 +157,8 @@ req.flash('error', 'Erro ao salvar as configurações. Tente novamente.');
 - **Uso**: Avisos, estoques baixos, ações que precisam atenção
 - **Duração**: 6 segundos
 
-### ℹ️ **INFO** - Azul/Dourado
-- **Cores**: Gradiente azul com destaque dourado
+### ℹ️ **INFO** - Verde seco / Dourado leve
+- **Cores**: Gradiente verde seco com destaque dourado
 - **Uso**: Informações gerais, status de processamento
 - **Duração**: 5 segundos
 

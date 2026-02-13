@@ -1,0 +1,266 @@
+/*
+ * Dark Luxe Overrides
+ * Global visual pass: darker, refined, elegant
+ */
+
+/* Paleta em variables.css - overrides específicos abaixo */
+body {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(150, 160, 172, 0.08), transparent 36%),
+    radial-gradient(circle at 92% 0%, rgba(75, 104, 84, 0.08), transparent 40%),
+    linear-gradient(180deg, var(--surface-0) 0%, var(--surface-1) 35%, var(--surface-2) 100%);
+  color: var(--color-text);
+}
+
+.main-header {
+  background: rgba(5, 7, 10, 0.94);
+  border-bottom: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.nav-menu a {
+  color: rgba(244, 246, 248, 0.84);
+  transition: color 0.22s ease, text-shadow 0.22s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: var(--color-text);
+  text-shadow: 0 0 14px rgba(75, 104, 84, 0.28);
+}
+
+.logo h1 {
+  color: var(--color-text);
+  letter-spacing: 0.95px;
+  font-weight: 700;
+}
+
+.search-input,
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  background: rgba(11, 16, 22, 0.95);
+  color: var(--color-text);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+}
+
+.search-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search-input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(75, 104, 84, 0.45);
+  box-shadow: 0 0 0 3px rgba(75, 104, 84, 0.22);
+  outline: none;
+}
+
+.btn,
+button,
+.btn-primary,
+.btn-outline,
+.btn-secondary {
+  border-color: var(--border-soft);
+  box-shadow: none;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2b3c31, #3a5243);
+  color: #f7faf8;
+  border-color: rgba(75, 104, 84, 0.5);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #365043, #45604f);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
+}
+
+.btn-outline,
+.btn-secondary {
+  background: rgba(15, 20, 28, 0.92);
+  color: var(--color-text);
+}
+
+.btn-outline:hover,
+.btn-secondary:hover {
+  background: rgba(23, 31, 42, 0.98);
+  transform: translateY(-1px);
+}
+
+.hero-content,
+.product-card,
+.gallery-item,
+.collection-nav,
+.catalog-sidebar,
+.filter-section,
+.modal-content,
+.dropdown-menu,
+.notification,
+.card {
+  background-color: var(--surface-glass);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-luxe);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.product-card {
+  background: rgba(8, 12, 18, 0.92) !important;
+}
+
+.catalog-grid .product-card,
+.products-grid .product-card,
+.catalog-grid:not(.list-view) .product-card,
+.products-grid:not(.list-view) .product-card {
+  background: rgba(8, 12, 18, 0.94) !important;
+  border: 1px solid var(--border-soft) !important;
+}
+
+.catalog-grid .product-info,
+.products-grid .product-info {
+  background: rgba(6, 10, 15, 0.92) !important;
+}
+
+.product-info,
+.media-card-info,
+.card-body {
+  background: rgba(7, 11, 16, 0.9);
+}
+
+.main-footer,
+footer {
+  background: linear-gradient(180deg, #070a0e 0%, #030508 100%);
+  border-top: 1px solid var(--border-soft);
+}
+
+.main-footer a,
+footer a {
+  color: rgba(243, 244, 246, 0.85);
+}
+
+.main-footer a:hover,
+footer a:hover {
+  color: #ffffff;
+}
+
+/* Remove legacy blue/purple accents from older styles */
+.notification-info {
+  background: #3d4954 !important;
+  color: #f4f6f8 !important;
+}
+
+#backToTopBtn,
+.back-to-top,
+.floating-filter-btn {
+  background: linear-gradient(135deg, #4b6854, #8f846a) !important;
+  color: #0b1016 !important;
+  border-color: rgba(143, 132, 106, 0.45) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.36) !important;
+}
+
+#backToTopBtn:hover,
+.back-to-top:hover,
+.floating-filter-btn:hover,
+.floating-filter-btn.active {
+  background: linear-gradient(135deg, #5b7864, #9a8f72) !important;
+  border-color: rgba(154, 143, 114, 0.62) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42) !important;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #9098a3, #8f846a) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.geometric-bg {
+  background-color: var(--surface-1) !important;
+  background-image:
+    linear-gradient(30deg, rgba(17, 24, 33, 0.9) 12%, transparent 12.5%, transparent 87%, rgba(17, 24, 33, 0.9) 87.5%, rgba(17, 24, 33, 0.9)),
+    linear-gradient(150deg, rgba(17, 24, 33, 0.9) 12%, transparent 12.5%, transparent 87%, rgba(17, 24, 33, 0.9) 87.5%, rgba(17, 24, 33, 0.9)),
+    linear-gradient(30deg, rgba(17, 24, 33, 0.9) 12%, transparent 12.5%, transparent 87%, rgba(17, 24, 33, 0.9) 87.5%, rgba(17, 24, 33, 0.9)),
+    linear-gradient(150deg, rgba(17, 24, 33, 0.9) 12%, transparent 12.5%, transparent 87%, rgba(17, 24, 33, 0.9) 87.5%, rgba(17, 24, 33, 0.9)) !important;
+}
+
+.border-glow,
+.hover-glow:hover {
+  border-color: #8f846a !important;
+  box-shadow: 0 0 10px rgba(143, 132, 106, 0.36), 0 0 20px rgba(75, 104, 84, 0.24) !important;
+}
+
+.section-header h2,
+.page-title,
+.collections-title h1,
+.hero-content h1 {
+  color: #f7f8fb;
+  letter-spacing: 0.02em;
+}
+
+.section-header h2::after,
+.collections-title h1::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 2px;
+  margin: 0.55rem auto 0;
+  background: linear-gradient(90deg, var(--color-accent), #8f846a);
+  opacity: 0.9;
+}
+
+.product-reference,
+.product-family,
+.product-price,
+.collections-subtitle,
+.page-subtitle,
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.product-card,
+.gallery-item,
+.card {
+  border-radius: 14px;
+}
+
+.product-card:hover,
+.gallery-item:hover,
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-image,
+.product-image {
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.geometric-divider span {
+  opacity: 0.92;
+}
+
+@media (max-width: 768px) {
+  .main-header {
+    background: rgba(5, 7, 10, 0.96);
+  }
+
+  .hero-content,
+  .product-card,
+  .gallery-item,
+  .card {
+    border-radius: 12px;
+  }
+}
+

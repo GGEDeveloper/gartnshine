@@ -83,7 +83,7 @@ aside .dark\:text-gray-400 {
 /* Itens ativos na barra lateral */
 aside .bg-blue-50,
 aside .dark\:bg-blue-900\/30 {
-  background-color: #1e40af !important; /* Azul mais escuro para itens ativos */
+  background-color: #4b6854 !important; /* Verde seco para itens ativos */
   color: #ffffff !important;
 }
 
@@ -98,7 +98,7 @@ aside .from-blue-600,
 aside .to-blue-700,
 aside .dark\:from-gray-900,
 aside .dark\:to-gray-800 {
-  background: linear-gradient(135deg, #1e40af, #1e3a8a) !important; /* Gradiente mais escuro */
+  background: linear-gradient(135deg, #4b6854, #3d5646) !important; /* Verde seco escuro */
 }
 
 /* Texto do cabeçalho da barra lateral */

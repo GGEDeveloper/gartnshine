@@ -19,7 +19,7 @@
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(177, 156, 217, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(143, 132, 106, 0.3);
   border-color: var(--color-accent);
 }
 
@@ -439,7 +439,7 @@
 .products-grid:not(.list-view) .product-card:hover,
 .catalog-grid:not(.list-view) .product-card:hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 8px 16px rgba(177, 156, 217, 0.3) !important;
+  box-shadow: 0 8px 16px rgba(143, 132, 106, 0.3) !important;
   border-color: var(--color-accent) !important;
 }
 
@@ -618,7 +618,7 @@
   color: var(--color-primary);
   border-color: var(--color-highlight);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(177, 156, 217, 0.3);
+  box-shadow: 0 4px 12px rgba(143, 132, 106, 0.3);
 }
 
 .filter-toggle-btn.active {
@@ -716,7 +716,7 @@
 .btn-filter-apply:hover {
   background: var(--color-accent);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(177, 156, 217, 0.4);
+  box-shadow: 0 4px 12px rgba(143, 132, 106, 0.4);
 }
 
 .btn-filter-clear {
@@ -772,11 +772,11 @@ body.drawer-open {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #b19cd9, #6a8c69) !important;
+  background: linear-gradient(135deg, #8f846a, #4b6854) !important;
   color: #1e1e1e !important;
-  border: 2px solid rgba(177, 156, 217, 0.3);
-  box-shadow: 0 4px 15px rgba(177, 156, 217, 0.4), 
-              0 0 0 0 rgba(177, 156, 217, 0.5);
+  border: 2px solid rgba(143, 132, 106, 0.35);
+  box-shadow: 0 4px 15px rgba(143, 132, 106, 0.36), 
+              0 0 0 0 rgba(143, 132, 106, 0.45);
   cursor: pointer;
   z-index: 1030 !important;
   display: flex !important;
@@ -835,9 +835,9 @@ body.drawer-open {
 
 .floating-filter-btn:hover {
   transform: translateY(-3px) scale(1.1);
-  box-shadow: 0 6px 20px rgba(177, 156, 217, 0.5), 
-              0 0 0 6px rgba(177, 156, 217, 0.1);
-  border-color: #b19cd9;
+  box-shadow: 0 6px 20px rgba(143, 132, 106, 0.42), 
+              0 0 0 6px rgba(143, 132, 106, 0.12);
+  border-color: #8f846a;
 }
 
 .floating-filter-btn:hover .filter-icon {
@@ -845,9 +845,9 @@ body.drawer-open {
 }
 
 .floating-filter-btn.active {
-  background: linear-gradient(135deg, #6a8c69, #b19cd9) !important;
+  background: linear-gradient(135deg, #4b6854, #8f846a) !important;
   animation: none;
-  border-color: #b19cd9;
+  border-color: #8f846a;
 }
 
 .floating-filter-btn:active {
@@ -874,10 +874,10 @@ body.drawer-open {
 
 @keyframes pulse-filter {
   0%, 100% {
-    box-shadow: 0 4px 20px rgba(177, 156, 217, 0.4), 0 0 0 0 rgba(177, 156, 217, 0.5);
+    box-shadow: 0 4px 20px rgba(143, 132, 106, 0.4), 0 0 0 0 rgba(143, 132, 106, 0.5);
   }
   50% {
-    box-shadow: 0 4px 20px rgba(177, 156, 217, 0.4), 0 0 0 10px rgba(177, 156, 217, 0);
+    box-shadow: 0 4px 20px rgba(143, 132, 106, 0.4), 0 0 0 10px rgba(143, 132, 106, 0);
   }
 }
 
@@ -942,7 +942,7 @@ body.drawer-open {
 .catalog-search-input:focus {
   outline: none;
   border-color: var(--color-highlight);
-  box-shadow: 0 0 0 3px rgba(177, 156, 217, 0.2);
+  box-shadow: 0 0 0 3px rgba(143, 132, 106, 0.2);
 }
 
 .catalog-search-input::placeholder {

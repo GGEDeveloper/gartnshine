@@ -1,0 +1,51 @@
+/**
+ * Gonzaga's Art & Shine - Paleta de cores (fonte única)
+ * Carregar primeiro para garantir consistência em todo o frontend.
+ * 
+ * Estilo: preto, elegante, prateado, verdes secos, dourados leves
+ * SEM azul, roxo ou violeta.
+ */
+
+:root {
+  /* Superfícies e fundos */
+  --color-primary: #05070a;
+  --color-secondary: #0b1016;
+  --color-tertiary: #121922;
+  
+  /* Acentos - prateado, verde seco, dourado leve */
+  --color-highlight: #9098a3;
+  --color-accent: #4b6854;
+  --color-accent-alt: #8f846a;
+  
+  /* Texto */
+  --color-text: #f4f6f8;
+  --color-text-muted: #aab3bf;
+  
+  /* Estados */
+  --color-success: #5c7a5a;
+  --color-warning: #ffb74d;
+  --color-danger: #ff5252;
+  --color-info: #4f5b66;
+  
+  /* Bordas e sombras */
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --shadow-luxe: 0 14px 30px rgba(0, 0, 0, 0.48);
+  --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.32);
+  
+  /* Glows e efeitos */
+  --glow-neon: 0 0 10px rgba(143, 132, 106, 0.45), 0 0 20px rgba(143, 132, 106, 0.25);
+  --glow-accent: 0 0 10px rgba(75, 104, 84, 0.5), 0 0 20px rgba(75, 104, 84, 0.3);
+  
+  /* Gradientes */
+  --gradient-accent: linear-gradient(135deg, #4b6854, #6f7a6a);
+  --gradient-highlight: linear-gradient(135deg, #9098a3, #8f846a);
+  --gradient-psychedelic: linear-gradient(135deg, #4b6854, #9098a3, #8f846a);
+  
+  /* Superfícies */
+  --surface-0: #05070a;
+  --surface-1: #0a0f15;
+  --surface-2: #101722;
+  --surface-3: #172130;
+  --surface-glass: rgba(10, 15, 22, 0.82);
+}

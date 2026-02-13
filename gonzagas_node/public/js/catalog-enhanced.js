@@ -41,17 +41,6 @@
         masonryEnabled: true
       });
 
-      // Initialize quick view early to ensure modal is created
-      window.catalogQuickView = new CatalogQuickView({
-        modalId: 'quick-view-modal',
-        apiEndpoint: '/api/catalog/product'
-      });
-      
-      // Ensure modal is created
-      if (!document.getElementById('quick-view-modal')) {
-        window.catalogQuickView.createModal();
-      }
-
       window.catalogViewModes = new CatalogViewModes({
         container: document.getElementById('products-grid'),
         gridBtn: document.getElementById('view-grid'),

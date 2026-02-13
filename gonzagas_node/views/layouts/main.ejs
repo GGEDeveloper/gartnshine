@@ -18,7 +18,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
-  <!-- Main CSS Files -->
+  <!-- Main CSS Files - variables.css primeiro (paleta única) -->
+    <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/homepage.css?v=<%= Date.now() %>">
     <link rel="stylesheet" href="/css/theme.css">
@@ -39,15 +40,16 @@
     <!-- Theme Variables -->
     <style>
       :root {
-        --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#1e1e1e' %>;
-        --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#4a3c2d' %>;
-        --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#6a8c69' %>;
-        --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f0f0f0' %>;
-        --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#b19cd9' %>;
+        --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#05070a' %>;
+        --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#0b1016' %>;
+        --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#4b6854' %>;
+        --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f4f6f8' %>;
+        --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#9098a3' %>;
       }
     </style>
     
     <%- style %>
+    <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= Date.now() %>">
 </head>
 <body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     

@@ -78,11 +78,11 @@ class CatalogController {
         siteTitle: 'Gonzaga\'s Art & Shine',
         siteDescription: 'Elegância que nasce da terra',
         theme: {
-          colorPrimary: '#1e1e1e',
-          colorSecondary: '#4a3c2d', 
-          colorAccent: '#6a8c69',
-          colorText: '#f0f0f0',
-          colorHighlight: '#b19cd9'
+          colorPrimary: '#05070a',
+          colorSecondary: '#0b1016',
+          colorAccent: '#4b6854',
+          colorText: '#f4f6f8',
+          colorHighlight: '#9098a3'
         },
         helpers: {
           isFamilySelected: function(familyId) {

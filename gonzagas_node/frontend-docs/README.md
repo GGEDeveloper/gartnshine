@@ -5,9 +5,13 @@
 ```
 public/
 ├── css/
+│   ├── variables.css     # Paleta única (carregar primeiro)
 │   ├── main.css          # Estilos principais do site
-│   ├── admin.css        # Estilos do painel administrativo
-│   └── theme.css        # Variáveis de tema e estilos globais
+│   ├── theme.css         # Utilitários, sombras, gradientes
+│   ├── dark-luxe.css     # Overrides tema escuro
+│   ├── catalog.css       # Catálogo e galeria
+│   ├── collections.css   # Página Collections
+│   └── admin.css         # Painel administrativo
 └── js/
     ├── main.js         # Scripts principais
     └── admin.js        # Scripts do painel administrativo
@@ -23,18 +27,36 @@ views/
     └── admin/          # Páginas do painel administrativo
 ```
 
-## 🎨 Sistema de Estilos
+## 🎨 Sistema de Estilos (Modular)
 
-### Cores Principais
+### Carregamento de CSS (ordem)
+1. **variables.css** – paleta única (fonte de verdade)
+2. **main.css** – base e tipografia
+3. **theme.css** – utilitários e sombras
+4. **dark-luxe.css** – overrides para tema escuro elegante
+5. Páginas específicas: homepage.css, catalog.css, collections.css, etc.
+
+### Paleta (variables.css – sem azul/roxo/violeta)
 ```css
 :root {
-  --color-primary: #1e1e1e;      /* Cor de fundo principal */
-  --color-secondary: #4a3c2d;   /* Cor de destaque */
-  --color-accent: #6a8c69;      /* Cor de realce */
-  --color-text: #f0f0f0;        /* Cor do texto principal */
-  --color-highlight: #b19cd9;   /* Cor de destaque secundária */
+  --color-primary: #05070a;      /* Fundo principal */
+  --color-secondary: #0b1016;
+  --color-tertiary: #121922;
+  --color-highlight: #9098a3;    /* Prateado */
+  --color-accent: #4b6854;       /* Verde seco */
+  --color-accent-alt: #8f846a;   /* Dourado leve */
+  --color-text: #f4f6f8;
+  --color-text-muted: #aab3bf;
 }
 ```
+
+### Páginas do frontend (main layout)
+| Página | Layout | CSS principal |
+|-------|--------|----------------|
+| Home | main.ejs | variables, main, theme, catalog, dark-luxe |
+| Gallery (Collections) | main.ejs | + collections.css |
+| Catalog | main.ejs | + catalog.css, catalog-enhanced.css |
+| Search Results | standalone | variables, main, catalog, search-results, dark-luxe |
 
 ### Tipografia
 - **Títulos**: 'Playfair Display', serif
