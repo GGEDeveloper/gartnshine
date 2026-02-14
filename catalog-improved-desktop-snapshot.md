@@ -1,0 +1,3147 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Gonzaga's Art & Shine" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - heading "Gonzaga's Art & Shine" [level=1] [ref=e6]
+      - navigation [ref=e2017]:
+        - list [ref=e2018]:
+          - listitem [ref=e2019]:
+            - link "Home" [ref=e2020] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e2021]:
+            - link "Gallery" [ref=e2022] [cursor=pointer]:
+              - /url: /collections
+          - listitem [ref=e2023]:
+            - link "Catalog" [ref=e2024] [cursor=pointer]:
+              - /url: /catalog
+          - listitem [ref=e2025]:
+            - link "About" [ref=e2026] [cursor=pointer]:
+              - /url: /about
+          - listitem [ref=e2027]:
+            - link "Admin" [ref=e2028] [cursor=pointer]:
+              - /url: /admin/login
+      - searchbox "Pesquisar produtos" [ref=e9]
+  - main [ref=e42]:
+    - main [ref=e43]:
+      - generic [ref=e44]:
+        - complementary [ref=e45]:
+          - generic [ref=e46]:
+            - heading "Filtros" [level=3] [ref=e47]: Filtros
+            - button "Fechar filtros" [ref=e48] [cursor=pointer]
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - heading "Pesquisar" [level=4] [ref=e52]
+              - textbox "Pesquisar produtos..." [ref=e54]
+            - generic [ref=e55]:
+              - heading "Famílias" [level=4] [ref=e56]
+              - generic [ref=e57]:
+                - generic [ref=e58]:
+                  - checkbox "Todas as Famílias" [checked] [ref=e59] [cursor=pointer]
+                  - generic [ref=e60] [cursor=pointer]: Todas as Famílias
+                - generic [ref=e61]:
+                  - checkbox "Aneis" [ref=e62] [cursor=pointer]
+                  - generic [ref=e63] [cursor=pointer]: Aneis
+                - generic [ref=e64]:
+                  - checkbox "Brincos" [ref=e65] [cursor=pointer]
+                  - generic [ref=e66] [cursor=pointer]: Brincos
+                - generic [ref=e67]:
+                  - checkbox "Colares" [ref=e68] [cursor=pointer]
+                  - generic [ref=e69] [cursor=pointer]: Colares
+                - generic [ref=e70]:
+                  - checkbox "Pulseiras" [ref=e71] [cursor=pointer]
+                  - generic [ref=e72] [cursor=pointer]: Pulseiras
+            - generic [ref=e73]:
+              - heading "Preço" [level=4] [ref=e74]
+              - generic [ref=e75]:
+                - generic [ref=e76]:
+                  - radio "Todos" [checked] [ref=e77] [cursor=pointer]
+                  - generic [ref=e78] [cursor=pointer]: Todos
+                - generic [ref=e79]:
+                  - radio "Até €50" [ref=e80] [cursor=pointer]
+                  - generic [ref=e81] [cursor=pointer]: Até €50
+                - generic [ref=e82]:
+                  - radio "€50 - €100" [ref=e83] [cursor=pointer]
+                  - generic [ref=e84] [cursor=pointer]: €50 - €100
+                - generic [ref=e85]:
+                  - radio "€100+" [ref=e86] [cursor=pointer]
+                  - generic [ref=e87] [cursor=pointer]: €100+
+            - generic [ref=e88]:
+              - button "Aplicar Filtros" [ref=e89] [cursor=pointer]: Aplicar Filtros
+              - link "Limpar Filtros" [ref=e90] [cursor=pointer]:
+                - /url: /catalog
+                - text: Limpar Filtros
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - heading "Catálogo de Produtos" [level=1] [ref=e94]
+              - paragraph [ref=e95]: Descubra as nossas peças únicas
+            - generic [ref=e96]:
+              - button "Abrir filtros" [ref=e97] [cursor=pointer]:
+                - generic [ref=e98]: Filtros
+              - generic [ref=e99]:
+                - generic [ref=e100]: "188"
+                - generic [ref=e101]: produtos
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - generic [ref=e104]: "Ordenar por:"
+              - combobox "Ordenar por:" [ref=e105] [cursor=pointer]:
+                - option "Padrão" [selected]
+                - 'option "Preço: Menor → Maior"'
+                - 'option "Preço: Maior → Menor"'
+                - 'option "Nome: A-Z"'
+                - 'option "Nome: Z-A"'
+                - 'option "Referência: Crescente"'
+                - 'option "Referência: Decrescente"'
+            - generic [ref=e2030]:
+              - button "Vista em grelha" [ref=e2031] [cursor=pointer]
+              - button "Vista em lista" [ref=e2032] [cursor=pointer]
+          - generic [ref=e107]:
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - link "Produto PAN0004" [ref=e111] [cursor=pointer]:
+                  - /url: /catalog/product/4
+                  - img "Produto PAN0004"
+                - generic:
+                  - link [ref=e112] [cursor=pointer]:
+                    - /url: /catalog/product/4
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/4
+                    - text: Ver Detalhes
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: "Ref: PAN0004"
+                - paragraph [ref=e115]: Aneis
+                - heading "Produto PAN0004" [level=3] [ref=e116]
+                - paragraph [ref=e117]: 15,00 €
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - link "Produto PAN0006" [ref=e121] [cursor=pointer]:
+                  - /url: /catalog/product/6
+                  - img "Produto PAN0006"
+                - generic [ref=e2033]:
+                  - link [ref=e122] [cursor=pointer]:
+                    - /url: /catalog/product/6
+                  - link "Ver Detalhes" [ref=e2034] [cursor=pointer]:
+                    - /url: /catalog/product/6
+                    - text: Ver Detalhes
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: "Ref: PAN0006"
+                - paragraph [ref=e125]: Aneis
+                - heading "Produto PAN0006" [level=3] [ref=e126]
+                - paragraph [ref=e127]: 25,00 €
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - link "Produto PPU0007" [ref=e131] [cursor=pointer]:
+                  - /url: /catalog/product/115
+                  - img "Produto PPU0007"
+                - generic:
+                  - link [ref=e132] [cursor=pointer]:
+                    - /url: /catalog/product/115
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/115
+                    - text: Ver Detalhes
+              - generic [ref=e133]:
+                - paragraph [ref=e134]: "Ref: PPU0007"
+                - paragraph [ref=e135]: Pulseiras
+                - heading "Produto PPU0007" [level=3] [ref=e136]
+                - paragraph [ref=e137]: 165,00 €
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - link "Produto PPU0009" [ref=e141] [cursor=pointer]:
+                  - /url: /catalog/product/117
+                  - img "Produto PPU0009"
+                - generic:
+                  - link [ref=e142] [cursor=pointer]:
+                    - /url: /catalog/product/117
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/117
+                    - text: Ver Detalhes
+              - generic [ref=e143]:
+                - paragraph [ref=e144]: "Ref: PPU0009"
+                - paragraph [ref=e145]: Pulseiras
+                - heading "Produto PPU0009" [level=3] [ref=e146]
+                - paragraph [ref=e147]: 25,00 €
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - link "Produto PPU0066" [ref=e151] [cursor=pointer]:
+                  - /url: /catalog/product/176
+                  - img "Produto PPU0066"
+                - generic:
+                  - link [ref=e152] [cursor=pointer]:
+                    - /url: /catalog/product/176
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/176
+                    - text: Ver Detalhes
+              - generic [ref=e153]:
+                - paragraph [ref=e154]: "Ref: PPU0066"
+                - paragraph [ref=e155]: Pulseiras
+                - heading "Produto PPU0066" [level=3] [ref=e156]
+                - paragraph [ref=e157]: 75,00 €
+            - generic [ref=e159]:
+              - generic [ref=e160]:
+                - link "Produto PPU0068" [ref=e161] [cursor=pointer]:
+                  - /url: /catalog/product/178
+                  - img "Produto PPU0068"
+                - generic:
+                  - link [ref=e162] [cursor=pointer]:
+                    - /url: /catalog/product/178
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/178
+                    - text: Ver Detalhes
+              - generic [ref=e163]:
+                - paragraph [ref=e164]: "Ref: PPU0068"
+                - paragraph [ref=e165]: Pulseiras
+                - heading "Produto PPU0068" [level=3] [ref=e166]
+                - paragraph [ref=e167]: 20,00 €
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - link "Produto PPU0070" [ref=e171] [cursor=pointer]:
+                  - /url: /catalog/product/180
+                  - img "Produto PPU0070"
+                - generic:
+                  - link [ref=e172] [cursor=pointer]:
+                    - /url: /catalog/product/180
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/180
+                    - text: Ver Detalhes
+              - generic [ref=e173]:
+                - paragraph [ref=e174]: "Ref: PPU0070"
+                - paragraph [ref=e175]: Pulseiras
+                - heading "Produto PPU0070" [level=3] [ref=e176]
+                - paragraph [ref=e177]: 15,00 €
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - link "Produto PVO0002" [ref=e181] [cursor=pointer]:
+                  - /url: /catalog/product/182
+                  - img "Produto PVO0002"
+                - generic:
+                  - link [ref=e182] [cursor=pointer]:
+                    - /url: /catalog/product/182
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/182
+                    - text: Ver Detalhes
+              - generic [ref=e183]:
+                - paragraph [ref=e184]: "Ref: PVO0002"
+                - paragraph [ref=e185]: Colares
+                - heading "Produto PVO0002" [level=3] [ref=e186]
+                - paragraph [ref=e187]: 190,00 €
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - link "Produto PVO0004" [ref=e191] [cursor=pointer]:
+                  - /url: /catalog/product/184
+                  - img "Produto PVO0004"
+                - generic:
+                  - link [ref=e192] [cursor=pointer]:
+                    - /url: /catalog/product/184
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/184
+                    - text: Ver Detalhes
+              - generic [ref=e193]:
+                - paragraph [ref=e194]: "Ref: PVO0004"
+                - paragraph [ref=e195]: Colares
+                - heading "Produto PVO0004" [level=3] [ref=e196]
+                - paragraph [ref=e197]: 40,00 €
+            - generic [ref=e199]:
+              - generic [ref=e200]:
+                - link "Produto PVO0005" [ref=e201] [cursor=pointer]:
+                  - /url: /catalog/product/185
+                  - img "Produto PVO0005"
+                - generic:
+                  - link [ref=e202] [cursor=pointer]:
+                    - /url: /catalog/product/185
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/185
+                    - text: Ver Detalhes
+              - generic [ref=e203]:
+                - paragraph [ref=e204]: "Ref: PVO0005"
+                - paragraph [ref=e205]: Colares
+                - heading "Produto PVO0005" [level=3] [ref=e206]
+                - paragraph [ref=e207]: 65,00 €
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - link "Produto PAN0001" [ref=e211] [cursor=pointer]:
+                  - /url: /catalog/product/1
+                  - img "Produto PAN0001"
+                - generic:
+                  - link [ref=e212] [cursor=pointer]:
+                    - /url: /catalog/product/1
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/1
+                    - text: Ver Detalhes
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: "Ref: PAN0001"
+                - paragraph [ref=e215]: Aneis
+                - heading "Produto PAN0001" [level=3] [ref=e216]
+                - paragraph [ref=e217]: 15,00 €
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - link "Produto PAN0002" [ref=e221] [cursor=pointer]:
+                  - /url: /catalog/product/2
+                  - img "Produto PAN0002"
+                - generic:
+                  - link [ref=e222] [cursor=pointer]:
+                    - /url: /catalog/product/2
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/2
+                    - text: Ver Detalhes
+              - generic [ref=e223]:
+                - paragraph [ref=e224]: "Ref: PAN0002"
+                - paragraph [ref=e225]: Aneis
+                - heading "Produto PAN0002" [level=3] [ref=e226]
+                - paragraph [ref=e227]: 15,00 €
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - link "Produto PAN0003" [ref=e231] [cursor=pointer]:
+                  - /url: /catalog/product/3
+                  - img "Produto PAN0003"
+                - generic:
+                  - link [ref=e232] [cursor=pointer]:
+                    - /url: /catalog/product/3
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/3
+                    - text: Ver Detalhes
+              - generic [ref=e233]:
+                - paragraph [ref=e234]: "Ref: PAN0003"
+                - paragraph [ref=e235]: Aneis
+                - heading "Produto PAN0003" [level=3] [ref=e236]
+                - paragraph [ref=e237]: 15,00 €
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - link "Produto PAN0005" [ref=e241] [cursor=pointer]:
+                  - /url: /catalog/product/5
+                  - img "Produto PAN0005"
+                - generic:
+                  - link [ref=e242] [cursor=pointer]:
+                    - /url: /catalog/product/5
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/5
+                    - text: Ver Detalhes
+              - generic [ref=e243]:
+                - paragraph [ref=e244]: "Ref: PAN0005"
+                - paragraph [ref=e245]: Aneis
+                - heading "Produto PAN0005" [level=3] [ref=e246]
+                - paragraph [ref=e247]: 25,00 €
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - link "Produto PAN0007" [ref=e251] [cursor=pointer]:
+                  - /url: /catalog/product/7
+                  - img "Produto PAN0007"
+                - generic:
+                  - link [ref=e252] [cursor=pointer]:
+                    - /url: /catalog/product/7
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/7
+                    - text: Ver Detalhes
+              - generic [ref=e253]:
+                - paragraph [ref=e254]: "Ref: PAN0007"
+                - paragraph [ref=e255]: Aneis
+                - heading "Produto PAN0007" [level=3] [ref=e256]
+                - paragraph [ref=e257]: 25,00 €
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - link "Produto PAN0008" [ref=e261] [cursor=pointer]:
+                  - /url: /catalog/product/8
+                  - img "Produto PAN0008"
+                - generic:
+                  - link [ref=e262] [cursor=pointer]:
+                    - /url: /catalog/product/8
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/8
+                    - text: Ver Detalhes
+              - generic [ref=e263]:
+                - paragraph [ref=e264]: "Ref: PAN0008"
+                - paragraph [ref=e265]: Aneis
+                - heading "Produto PAN0008" [level=3] [ref=e266]
+                - paragraph [ref=e267]: 25,00 €
+            - generic [ref=e269]:
+              - generic [ref=e270]:
+                - link "Produto PAN0009" [ref=e271] [cursor=pointer]:
+                  - /url: /catalog/product/9
+                  - img "Produto PAN0009"
+                - generic:
+                  - link [ref=e272] [cursor=pointer]:
+                    - /url: /catalog/product/9
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/9
+                    - text: Ver Detalhes
+              - generic [ref=e273]:
+                - paragraph [ref=e274]: "Ref: PAN0009"
+                - paragraph [ref=e275]: Aneis
+                - heading "Produto PAN0009" [level=3] [ref=e276]
+                - paragraph [ref=e277]: 25,00 €
+            - generic [ref=e279]:
+              - generic [ref=e280]:
+                - link "Produto PAN0010" [ref=e281] [cursor=pointer]:
+                  - /url: /catalog/product/10
+                  - img "Produto PAN0010"
+                - generic:
+                  - link [ref=e282] [cursor=pointer]:
+                    - /url: /catalog/product/10
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/10
+                    - text: Ver Detalhes
+              - generic [ref=e283]:
+                - paragraph [ref=e284]: "Ref: PAN0010"
+                - paragraph [ref=e285]: Aneis
+                - heading "Produto PAN0010" [level=3] [ref=e286]
+                - paragraph [ref=e287]: 25,00 €
+            - generic [ref=e289]:
+              - generic [ref=e290]:
+                - link "Produto PAN0011" [ref=e291] [cursor=pointer]:
+                  - /url: /catalog/product/11
+                  - img "Produto PAN0011"
+                - generic:
+                  - link [ref=e292] [cursor=pointer]:
+                    - /url: /catalog/product/11
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/11
+                    - text: Ver Detalhes
+              - generic [ref=e293]:
+                - paragraph [ref=e294]: "Ref: PAN0011"
+                - paragraph [ref=e295]: Aneis
+                - heading "Produto PAN0011" [level=3] [ref=e296]
+                - paragraph [ref=e297]: 25,00 €
+            - generic [ref=e299]:
+              - generic [ref=e300]:
+                - link "Produto PAN0012" [ref=e301] [cursor=pointer]:
+                  - /url: /catalog/product/12
+                  - img "Produto PAN0012"
+                - generic:
+                  - link [ref=e302] [cursor=pointer]:
+                    - /url: /catalog/product/12
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/12
+                    - text: Ver Detalhes
+              - generic [ref=e303]:
+                - paragraph [ref=e304]: "Ref: PAN0012"
+                - paragraph [ref=e305]: Aneis
+                - heading "Produto PAN0012" [level=3] [ref=e306]
+                - paragraph [ref=e307]: 25,00 €
+            - generic [ref=e309]:
+              - generic [ref=e310]:
+                - link "Produto PAN0013" [ref=e311] [cursor=pointer]:
+                  - /url: /catalog/product/13
+                  - img "Produto PAN0013"
+                - generic:
+                  - link [ref=e312] [cursor=pointer]:
+                    - /url: /catalog/product/13
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/13
+                    - text: Ver Detalhes
+              - generic [ref=e313]:
+                - paragraph [ref=e314]: "Ref: PAN0013"
+                - paragraph [ref=e315]: Aneis
+                - heading "Produto PAN0013" [level=3] [ref=e316]
+                - paragraph [ref=e317]: 25,00 €
+            - generic [ref=e319]:
+              - generic [ref=e320]:
+                - link "Produto PAN0014" [ref=e321] [cursor=pointer]:
+                  - /url: /catalog/product/14
+                  - img "Produto PAN0014"
+                - generic:
+                  - link [ref=e322] [cursor=pointer]:
+                    - /url: /catalog/product/14
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/14
+                    - text: Ver Detalhes
+              - generic [ref=e323]:
+                - paragraph [ref=e324]: "Ref: PAN0014"
+                - paragraph [ref=e325]: Aneis
+                - heading "Produto PAN0014" [level=3] [ref=e326]
+                - paragraph [ref=e327]: 25,00 €
+            - generic [ref=e329]:
+              - generic [ref=e330]:
+                - link "Produto PAN0015" [ref=e331] [cursor=pointer]:
+                  - /url: /catalog/product/15
+                  - img "Produto PAN0015"
+                - generic:
+                  - link [ref=e332] [cursor=pointer]:
+                    - /url: /catalog/product/15
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/15
+                    - text: Ver Detalhes
+              - generic [ref=e333]:
+                - paragraph [ref=e334]: "Ref: PAN0015"
+                - paragraph [ref=e335]: Aneis
+                - heading "Produto PAN0015" [level=3] [ref=e336]
+                - paragraph [ref=e337]: 25,00 €
+            - generic [ref=e339]:
+              - generic [ref=e340]:
+                - link "Produto PAN0016" [ref=e341] [cursor=pointer]:
+                  - /url: /catalog/product/16
+                  - img "Produto PAN0016"
+                - generic:
+                  - link [ref=e342] [cursor=pointer]:
+                    - /url: /catalog/product/16
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/16
+                    - text: Ver Detalhes
+              - generic [ref=e343]:
+                - paragraph [ref=e344]: "Ref: PAN0016"
+                - paragraph [ref=e345]: Aneis
+                - heading "Produto PAN0016" [level=3] [ref=e346]
+                - paragraph [ref=e347]: 25,00 €
+            - generic [ref=e349]:
+              - generic [ref=e350]:
+                - link "Produto PAN0017" [ref=e351] [cursor=pointer]:
+                  - /url: /catalog/product/17
+                  - img "Produto PAN0017"
+                - generic:
+                  - link [ref=e352] [cursor=pointer]:
+                    - /url: /catalog/product/17
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/17
+                    - text: Ver Detalhes
+              - generic [ref=e353]:
+                - paragraph [ref=e354]: "Ref: PAN0017"
+                - paragraph [ref=e355]: Aneis
+                - heading "Produto PAN0017" [level=3] [ref=e356]
+                - paragraph [ref=e357]: 25,00 €
+            - generic [ref=e359]:
+              - generic [ref=e360]:
+                - link "Produto PAN0018" [ref=e361] [cursor=pointer]:
+                  - /url: /catalog/product/18
+                  - img "Produto PAN0018"
+                - generic:
+                  - link [ref=e362] [cursor=pointer]:
+                    - /url: /catalog/product/18
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/18
+                    - text: Ver Detalhes
+              - generic [ref=e363]:
+                - paragraph [ref=e364]: "Ref: PAN0018"
+                - paragraph [ref=e365]: Aneis
+                - heading "Produto PAN0018" [level=3] [ref=e366]
+                - paragraph [ref=e367]: 25,00 €
+            - generic [ref=e369]:
+              - generic [ref=e370]:
+                - link "Produto PAN0019" [ref=e371] [cursor=pointer]:
+                  - /url: /catalog/product/19
+                  - img "Produto PAN0019"
+                - generic:
+                  - link [ref=e372] [cursor=pointer]:
+                    - /url: /catalog/product/19
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/19
+                    - text: Ver Detalhes
+              - generic [ref=e373]:
+                - paragraph [ref=e374]: "Ref: PAN0019"
+                - paragraph [ref=e375]: Aneis
+                - heading "Produto PAN0019" [level=3] [ref=e376]
+                - paragraph [ref=e377]: 45,00 €
+            - generic [ref=e379]:
+              - generic [ref=e380]:
+                - link "Produto PAN0020" [ref=e381] [cursor=pointer]:
+                  - /url: /catalog/product/20
+                  - img "Produto PAN0020"
+                - generic:
+                  - link [ref=e382] [cursor=pointer]:
+                    - /url: /catalog/product/20
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/20
+                    - text: Ver Detalhes
+              - generic [ref=e383]:
+                - paragraph [ref=e384]: "Ref: PAN0020"
+                - paragraph [ref=e385]: Aneis
+                - heading "Produto PAN0020" [level=3] [ref=e386]
+                - paragraph [ref=e387]: 45,00 €
+            - generic [ref=e389]:
+              - generic [ref=e390]:
+                - link "Produto PAN0021" [ref=e391] [cursor=pointer]:
+                  - /url: /catalog/product/21
+                  - img "Produto PAN0021"
+                - generic:
+                  - link [ref=e392] [cursor=pointer]:
+                    - /url: /catalog/product/21
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/21
+                    - text: Ver Detalhes
+              - generic [ref=e393]:
+                - paragraph [ref=e394]: "Ref: PAN0021"
+                - paragraph [ref=e395]: Aneis
+                - heading "Produto PAN0021" [level=3] [ref=e396]
+                - paragraph [ref=e397]: 45,00 €
+            - generic [ref=e399]:
+              - generic [ref=e400]:
+                - link "Produto PAN0022" [ref=e401] [cursor=pointer]:
+                  - /url: /catalog/product/22
+                  - img "Produto PAN0022"
+                - generic:
+                  - link [ref=e402] [cursor=pointer]:
+                    - /url: /catalog/product/22
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/22
+                    - text: Ver Detalhes
+              - generic [ref=e403]:
+                - paragraph [ref=e404]: "Ref: PAN0022"
+                - paragraph [ref=e405]: Aneis
+                - heading "Produto PAN0022" [level=3] [ref=e406]
+                - paragraph [ref=e407]: 45,00 €
+            - generic [ref=e409]:
+              - generic [ref=e410]:
+                - link "Produto PAN0023" [ref=e411] [cursor=pointer]:
+                  - /url: /catalog/product/23
+                  - img "Produto PAN0023"
+                - generic:
+                  - link [ref=e412] [cursor=pointer]:
+                    - /url: /catalog/product/23
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/23
+                    - text: Ver Detalhes
+              - generic [ref=e413]:
+                - paragraph [ref=e414]: "Ref: PAN0023"
+                - paragraph [ref=e415]: Aneis
+                - heading "Produto PAN0023" [level=3] [ref=e416]
+                - paragraph [ref=e417]: 45,00 €
+            - generic [ref=e419]:
+              - generic [ref=e420]:
+                - link "Produto PAN0024" [ref=e421] [cursor=pointer]:
+                  - /url: /catalog/product/24
+                  - img "Produto PAN0024"
+                - generic:
+                  - link [ref=e422] [cursor=pointer]:
+                    - /url: /catalog/product/24
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/24
+                    - text: Ver Detalhes
+              - generic [ref=e423]:
+                - paragraph [ref=e424]: "Ref: PAN0024"
+                - paragraph [ref=e425]: Aneis
+                - heading "Produto PAN0024" [level=3] [ref=e426]
+                - paragraph [ref=e427]: 45,00 €
+            - generic [ref=e429]:
+              - generic [ref=e430]:
+                - link "Produto PAN0025" [ref=e431] [cursor=pointer]:
+                  - /url: /catalog/product/25
+                  - img "Produto PAN0025"
+                - generic:
+                  - link [ref=e432] [cursor=pointer]:
+                    - /url: /catalog/product/25
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/25
+                    - text: Ver Detalhes
+              - generic [ref=e433]:
+                - paragraph [ref=e434]: "Ref: PAN0025"
+                - paragraph [ref=e435]: Aneis
+                - heading "Produto PAN0025" [level=3] [ref=e436]
+                - paragraph [ref=e437]: 45,00 €
+            - generic [ref=e439]:
+              - generic [ref=e440]:
+                - link "Produto PAN0026" [ref=e441] [cursor=pointer]:
+                  - /url: /catalog/product/26
+                  - img "Produto PAN0026"
+                - generic:
+                  - link [ref=e442] [cursor=pointer]:
+                    - /url: /catalog/product/26
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/26
+                    - text: Ver Detalhes
+              - generic [ref=e443]:
+                - paragraph [ref=e444]: "Ref: PAN0026"
+                - paragraph [ref=e445]: Aneis
+                - heading "Produto PAN0026" [level=3] [ref=e446]
+                - paragraph [ref=e447]: 25,00 €
+            - generic [ref=e449]:
+              - generic [ref=e450]:
+                - link "Produto PAN0027" [ref=e451] [cursor=pointer]:
+                  - /url: /catalog/product/27
+                  - img "Produto PAN0027"
+                - generic:
+                  - link [ref=e452] [cursor=pointer]:
+                    - /url: /catalog/product/27
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/27
+                    - text: Ver Detalhes
+              - generic [ref=e453]:
+                - paragraph [ref=e454]: "Ref: PAN0027"
+                - paragraph [ref=e455]: Aneis
+                - heading "Produto PAN0027" [level=3] [ref=e456]
+                - paragraph [ref=e457]: 45,00 €
+            - generic [ref=e459]:
+              - generic [ref=e460]:
+                - link "Produto PAN0028" [ref=e461] [cursor=pointer]:
+                  - /url: /catalog/product/28
+                  - img "Produto PAN0028"
+                - generic:
+                  - link [ref=e462] [cursor=pointer]:
+                    - /url: /catalog/product/28
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/28
+                    - text: Ver Detalhes
+              - generic [ref=e463]:
+                - paragraph [ref=e464]: "Ref: PAN0028"
+                - paragraph [ref=e465]: Aneis
+                - heading "Produto PAN0028" [level=3] [ref=e466]
+                - paragraph [ref=e467]: 45,00 €
+            - generic [ref=e469]:
+              - generic [ref=e470]:
+                - link "Produto PAN0029" [ref=e471] [cursor=pointer]:
+                  - /url: /catalog/product/29
+                  - img "Produto PAN0029"
+                - generic:
+                  - link [ref=e472] [cursor=pointer]:
+                    - /url: /catalog/product/29
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/29
+                    - text: Ver Detalhes
+              - generic [ref=e473]:
+                - paragraph [ref=e474]: "Ref: PAN0029"
+                - paragraph [ref=e475]: Aneis
+                - heading "Produto PAN0029" [level=3] [ref=e476]
+                - paragraph [ref=e477]: 45,00 €
+            - generic [ref=e479]:
+              - generic [ref=e480]:
+                - link "Produto PAN0030" [ref=e481] [cursor=pointer]:
+                  - /url: /catalog/product/30
+                  - img "Produto PAN0030"
+                - generic:
+                  - link [ref=e482] [cursor=pointer]:
+                    - /url: /catalog/product/30
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/30
+                    - text: Ver Detalhes
+              - generic [ref=e483]:
+                - paragraph [ref=e484]: "Ref: PAN0030"
+                - paragraph [ref=e485]: Aneis
+                - heading "Produto PAN0030" [level=3] [ref=e486]
+                - paragraph [ref=e487]: 25,00 €
+            - generic [ref=e489]:
+              - generic [ref=e490]:
+                - link "Produto PAN0031" [ref=e491] [cursor=pointer]:
+                  - /url: /catalog/product/31
+                  - img "Produto PAN0031"
+                - generic:
+                  - link [ref=e492] [cursor=pointer]:
+                    - /url: /catalog/product/31
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/31
+                    - text: Ver Detalhes
+              - generic [ref=e493]:
+                - paragraph [ref=e494]: "Ref: PAN0031"
+                - paragraph [ref=e495]: Aneis
+                - heading "Produto PAN0031" [level=3] [ref=e496]
+                - paragraph [ref=e497]: 25,00 €
+            - generic [ref=e499]:
+              - generic [ref=e500]:
+                - link "Produto PAN0032" [ref=e501] [cursor=pointer]:
+                  - /url: /catalog/product/32
+                  - img "Produto PAN0032"
+                - generic:
+                  - link [ref=e502] [cursor=pointer]:
+                    - /url: /catalog/product/32
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/32
+                    - text: Ver Detalhes
+              - generic [ref=e503]:
+                - paragraph [ref=e504]: "Ref: PAN0032"
+                - paragraph [ref=e505]: Aneis
+                - heading "Produto PAN0032" [level=3] [ref=e506]
+                - paragraph [ref=e507]: 25,00 €
+            - generic [ref=e509]:
+              - generic [ref=e510]:
+                - link "Produto PAN0033" [ref=e511] [cursor=pointer]:
+                  - /url: /catalog/product/33
+                  - img "Produto PAN0033"
+                - generic:
+                  - link [ref=e512] [cursor=pointer]:
+                    - /url: /catalog/product/33
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/33
+                    - text: Ver Detalhes
+              - generic [ref=e513]:
+                - paragraph [ref=e514]: "Ref: PAN0033"
+                - paragraph [ref=e515]: Aneis
+                - heading "Produto PAN0033" [level=3] [ref=e516]
+                - paragraph [ref=e517]: 25,00 €
+            - generic [ref=e519]:
+              - generic [ref=e520]:
+                - link "Produto PAN0034" [ref=e521] [cursor=pointer]:
+                  - /url: /catalog/product/34
+                  - img "Produto PAN0034"
+                - generic:
+                  - link [ref=e522] [cursor=pointer]:
+                    - /url: /catalog/product/34
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/34
+                    - text: Ver Detalhes
+              - generic [ref=e523]:
+                - paragraph [ref=e524]: "Ref: PAN0034"
+                - paragraph [ref=e525]: Aneis
+                - heading "Produto PAN0034" [level=3] [ref=e526]
+                - paragraph [ref=e527]: 25,00 €
+            - generic [ref=e529]:
+              - generic [ref=e530]:
+                - link "Produto PAN0035" [ref=e531] [cursor=pointer]:
+                  - /url: /catalog/product/35
+                  - img "Produto PAN0035"
+                - generic:
+                  - link [ref=e532] [cursor=pointer]:
+                    - /url: /catalog/product/35
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/35
+                    - text: Ver Detalhes
+              - generic [ref=e533]:
+                - paragraph [ref=e534]: "Ref: PAN0035"
+                - paragraph [ref=e535]: Aneis
+                - heading "Produto PAN0035" [level=3] [ref=e536]
+                - paragraph [ref=e537]: 25,00 €
+            - generic [ref=e539]:
+              - generic [ref=e540]:
+                - link "Produto PAN0036" [ref=e541] [cursor=pointer]:
+                  - /url: /catalog/product/36
+                  - img "Produto PAN0036"
+                - generic:
+                  - link [ref=e542] [cursor=pointer]:
+                    - /url: /catalog/product/36
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/36
+                    - text: Ver Detalhes
+              - generic [ref=e543]:
+                - paragraph [ref=e544]: "Ref: PAN0036"
+                - paragraph [ref=e545]: Aneis
+                - heading "Produto PAN0036" [level=3] [ref=e546]
+                - paragraph [ref=e547]: 25,00 €
+            - generic [ref=e549]:
+              - generic [ref=e550]:
+                - link "Produto PAN0037" [ref=e551] [cursor=pointer]:
+                  - /url: /catalog/product/37
+                  - img "Produto PAN0037"
+                - generic:
+                  - link [ref=e552] [cursor=pointer]:
+                    - /url: /catalog/product/37
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/37
+                    - text: Ver Detalhes
+              - generic [ref=e553]:
+                - paragraph [ref=e554]: "Ref: PAN0037"
+                - paragraph [ref=e555]: Aneis
+                - heading "Produto PAN0037" [level=3] [ref=e556]
+                - paragraph [ref=e557]: 25,00 €
+            - generic [ref=e559]:
+              - generic [ref=e560]:
+                - link "Produto PAN0038" [ref=e561] [cursor=pointer]:
+                  - /url: /catalog/product/38
+                  - img "Produto PAN0038"
+                - generic:
+                  - link [ref=e562] [cursor=pointer]:
+                    - /url: /catalog/product/38
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/38
+                    - text: Ver Detalhes
+              - generic [ref=e563]:
+                - paragraph [ref=e564]: "Ref: PAN0038"
+                - paragraph [ref=e565]: Aneis
+                - heading "Produto PAN0038" [level=3] [ref=e566]
+                - paragraph [ref=e567]: 25,00 €
+            - generic [ref=e569]:
+              - generic [ref=e570]:
+                - link "Produto PAN0039" [ref=e571] [cursor=pointer]:
+                  - /url: /catalog/product/39
+                  - img "Produto PAN0039"
+                - generic:
+                  - link [ref=e572] [cursor=pointer]:
+                    - /url: /catalog/product/39
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/39
+                    - text: Ver Detalhes
+              - generic [ref=e573]:
+                - paragraph [ref=e574]: "Ref: PAN0039"
+                - paragraph [ref=e575]: Aneis
+                - heading "Produto PAN0039" [level=3] [ref=e576]
+                - paragraph [ref=e577]: 25,00 €
+            - generic [ref=e579]:
+              - generic [ref=e580]:
+                - link "Produto PAN0040" [ref=e581] [cursor=pointer]:
+                  - /url: /catalog/product/40
+                  - img "Produto PAN0040"
+                - generic:
+                  - link [ref=e582] [cursor=pointer]:
+                    - /url: /catalog/product/40
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/40
+                    - text: Ver Detalhes
+              - generic [ref=e583]:
+                - paragraph [ref=e584]: "Ref: PAN0040"
+                - paragraph [ref=e585]: Aneis
+                - heading "Produto PAN0040" [level=3] [ref=e586]
+                - paragraph [ref=e587]: 25,00 €
+            - generic [ref=e589]:
+              - generic [ref=e590]:
+                - link "Produto PAN0041" [ref=e591] [cursor=pointer]:
+                  - /url: /catalog/product/41
+                  - img "Produto PAN0041"
+                - generic:
+                  - link [ref=e592] [cursor=pointer]:
+                    - /url: /catalog/product/41
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/41
+                    - text: Ver Detalhes
+              - generic [ref=e593]:
+                - paragraph [ref=e594]: "Ref: PAN0041"
+                - paragraph [ref=e595]: Aneis
+                - heading "Produto PAN0041" [level=3] [ref=e596]
+                - paragraph [ref=e597]: 25,00 €
+            - generic [ref=e599]:
+              - generic [ref=e600]:
+                - link "Produto PAN0042" [ref=e601] [cursor=pointer]:
+                  - /url: /catalog/product/42
+                  - img "Produto PAN0042"
+                - generic:
+                  - link [ref=e602] [cursor=pointer]:
+                    - /url: /catalog/product/42
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/42
+                    - text: Ver Detalhes
+              - generic [ref=e603]:
+                - paragraph [ref=e604]: "Ref: PAN0042"
+                - paragraph [ref=e605]: Aneis
+                - heading "Produto PAN0042" [level=3] [ref=e606]
+                - paragraph [ref=e607]: 30,00 €
+            - generic [ref=e609]:
+              - generic [ref=e610]:
+                - link "Produto PAN0043" [ref=e611] [cursor=pointer]:
+                  - /url: /catalog/product/43
+                  - img "Produto PAN0043"
+                - generic:
+                  - link [ref=e612] [cursor=pointer]:
+                    - /url: /catalog/product/43
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/43
+                    - text: Ver Detalhes
+              - generic [ref=e613]:
+                - paragraph [ref=e614]: "Ref: PAN0043"
+                - paragraph [ref=e615]: Aneis
+                - heading "Produto PAN0043" [level=3] [ref=e616]
+                - paragraph [ref=e617]: 25,00 €
+            - generic [ref=e619]:
+              - generic [ref=e620]:
+                - link "Produto PAN0044" [ref=e621] [cursor=pointer]:
+                  - /url: /catalog/product/44
+                  - img "Produto PAN0044"
+                - generic:
+                  - link [ref=e622] [cursor=pointer]:
+                    - /url: /catalog/product/44
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/44
+                    - text: Ver Detalhes
+              - generic [ref=e623]:
+                - paragraph [ref=e624]: "Ref: PAN0044"
+                - paragraph [ref=e625]: Aneis
+                - heading "Produto PAN0044" [level=3] [ref=e626]
+                - paragraph [ref=e627]: 40,00 €
+            - generic [ref=e629]:
+              - generic [ref=e630]:
+                - link "Produto PAN0045" [ref=e631] [cursor=pointer]:
+                  - /url: /catalog/product/45
+                  - img "Produto PAN0045"
+                - generic:
+                  - link [ref=e632] [cursor=pointer]:
+                    - /url: /catalog/product/45
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/45
+                    - text: Ver Detalhes
+              - generic [ref=e633]:
+                - paragraph [ref=e634]: "Ref: PAN0045"
+                - paragraph [ref=e635]: Aneis
+                - heading "Produto PAN0045" [level=3] [ref=e636]
+                - paragraph [ref=e637]: 40,00 €
+            - generic [ref=e639]:
+              - generic [ref=e640]:
+                - link "Produto PAN0046" [ref=e641] [cursor=pointer]:
+                  - /url: /catalog/product/46
+                  - img "Produto PAN0046"
+                - generic:
+                  - link [ref=e642] [cursor=pointer]:
+                    - /url: /catalog/product/46
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/46
+                    - text: Ver Detalhes
+              - generic [ref=e643]:
+                - paragraph [ref=e644]: "Ref: PAN0046"
+                - paragraph [ref=e645]: Aneis
+                - heading "Produto PAN0046" [level=3] [ref=e646]
+                - paragraph [ref=e647]: 40,00 €
+            - generic [ref=e649]:
+              - generic [ref=e650]:
+                - link "Produto PAN0047" [ref=e651] [cursor=pointer]:
+                  - /url: /catalog/product/47
+                  - img "Produto PAN0047"
+                - generic:
+                  - link [ref=e652] [cursor=pointer]:
+                    - /url: /catalog/product/47
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/47
+                    - text: Ver Detalhes
+              - generic [ref=e653]:
+                - paragraph [ref=e654]: "Ref: PAN0047"
+                - paragraph [ref=e655]: Aneis
+                - heading "Produto PAN0047" [level=3] [ref=e656]
+                - paragraph [ref=e657]: 45,00 €
+            - generic [ref=e659]:
+              - generic [ref=e660]:
+                - link "Produto PAN0048" [ref=e661] [cursor=pointer]:
+                  - /url: /catalog/product/48
+                  - img "Produto PAN0048"
+                - generic:
+                  - link [ref=e662] [cursor=pointer]:
+                    - /url: /catalog/product/48
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/48
+                    - text: Ver Detalhes
+              - generic [ref=e663]:
+                - paragraph [ref=e664]: "Ref: PAN0048"
+                - paragraph [ref=e665]: Aneis
+                - heading "Produto PAN0048" [level=3] [ref=e666]
+                - paragraph [ref=e667]: 45,00 €
+            - generic [ref=e669]:
+              - generic [ref=e670]:
+                - link "Produto PAN0049" [ref=e671] [cursor=pointer]:
+                  - /url: /catalog/product/49
+                  - img "Produto PAN0049"
+                - generic:
+                  - link [ref=e672] [cursor=pointer]:
+                    - /url: /catalog/product/49
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/49
+                    - text: Ver Detalhes
+              - generic [ref=e673]:
+                - paragraph [ref=e674]: "Ref: PAN0049"
+                - paragraph [ref=e675]: Aneis
+                - heading "Produto PAN0049" [level=3] [ref=e676]
+                - paragraph [ref=e677]: 45,00 €
+            - generic [ref=e679]:
+              - generic [ref=e680]:
+                - link "Produto PAN0050" [ref=e681] [cursor=pointer]:
+                  - /url: /catalog/product/50
+                  - img "Produto PAN0050"
+                - generic:
+                  - link [ref=e682] [cursor=pointer]:
+                    - /url: /catalog/product/50
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/50
+                    - text: Ver Detalhes
+              - generic [ref=e683]:
+                - paragraph [ref=e684]: "Ref: PAN0050"
+                - paragraph [ref=e685]: Aneis
+                - heading "Produto PAN0050" [level=3] [ref=e686]
+                - paragraph [ref=e687]: 40,00 €
+            - generic [ref=e689]:
+              - generic [ref=e690]:
+                - link "Produto PAN0051" [ref=e691] [cursor=pointer]:
+                  - /url: /catalog/product/51
+                  - img "Produto PAN0051"
+                - generic:
+                  - link [ref=e692] [cursor=pointer]:
+                    - /url: /catalog/product/51
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/51
+                    - text: Ver Detalhes
+              - generic [ref=e693]:
+                - paragraph [ref=e694]: "Ref: PAN0051"
+                - paragraph [ref=e695]: Aneis
+                - heading "Produto PAN0051" [level=3] [ref=e696]
+                - paragraph [ref=e697]: 45,00 €
+            - generic [ref=e699]:
+              - generic [ref=e700]:
+                - link "Produto PAN0052" [ref=e701] [cursor=pointer]:
+                  - /url: /catalog/product/52
+                  - img "Produto PAN0052"
+                - generic:
+                  - link [ref=e702] [cursor=pointer]:
+                    - /url: /catalog/product/52
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/52
+                    - text: Ver Detalhes
+              - generic [ref=e703]:
+                - paragraph [ref=e704]: "Ref: PAN0052"
+                - paragraph [ref=e705]: Aneis
+                - heading "Produto PAN0052" [level=3] [ref=e706]
+                - paragraph [ref=e707]: 55,00 €
+            - generic [ref=e709]:
+              - generic [ref=e710]:
+                - link "Produto PAN0053" [ref=e711] [cursor=pointer]:
+                  - /url: /catalog/product/53
+                  - img "Produto PAN0053"
+                - generic:
+                  - link [ref=e712] [cursor=pointer]:
+                    - /url: /catalog/product/53
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/53
+                    - text: Ver Detalhes
+              - generic [ref=e713]:
+                - paragraph [ref=e714]: "Ref: PAN0053"
+                - paragraph [ref=e715]: Aneis
+                - heading "Produto PAN0053" [level=3] [ref=e716]
+                - paragraph [ref=e717]: 55,00 €
+            - generic [ref=e719]:
+              - generic [ref=e720]:
+                - link "Produto PAN0054" [ref=e721] [cursor=pointer]:
+                  - /url: /catalog/product/54
+                  - img "Produto PAN0054"
+                - generic:
+                  - link [ref=e722] [cursor=pointer]:
+                    - /url: /catalog/product/54
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/54
+                    - text: Ver Detalhes
+              - generic [ref=e723]:
+                - paragraph [ref=e724]: "Ref: PAN0054"
+                - paragraph [ref=e725]: Aneis
+                - heading "Produto PAN0054" [level=3] [ref=e726]
+                - paragraph [ref=e727]: 55,00 €
+            - generic [ref=e729]:
+              - generic [ref=e730]:
+                - link "Produto PAN0055" [ref=e731] [cursor=pointer]:
+                  - /url: /catalog/product/55
+                  - img "Produto PAN0055"
+                - generic:
+                  - link [ref=e732] [cursor=pointer]:
+                    - /url: /catalog/product/55
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/55
+                    - text: Ver Detalhes
+              - generic [ref=e733]:
+                - paragraph [ref=e734]: "Ref: PAN0055"
+                - paragraph [ref=e735]: Aneis
+                - heading "Produto PAN0055" [level=3] [ref=e736]
+                - paragraph [ref=e737]: 55,00 €
+            - generic [ref=e739]:
+              - generic [ref=e740]:
+                - link "Produto PAN0056" [ref=e741] [cursor=pointer]:
+                  - /url: /catalog/product/56
+                  - img "Produto PAN0056"
+                - generic:
+                  - link [ref=e742] [cursor=pointer]:
+                    - /url: /catalog/product/56
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/56
+                    - text: Ver Detalhes
+              - generic [ref=e743]:
+                - paragraph [ref=e744]: "Ref: PAN0056"
+                - paragraph [ref=e745]: Aneis
+                - heading "Produto PAN0056" [level=3] [ref=e746]
+                - paragraph [ref=e747]: 55,00 €
+            - generic [ref=e749]:
+              - generic [ref=e750]:
+                - link "Produto PAN0057" [ref=e751] [cursor=pointer]:
+                  - /url: /catalog/product/57
+                  - img "Produto PAN0057"
+                - generic:
+                  - link [ref=e752] [cursor=pointer]:
+                    - /url: /catalog/product/57
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/57
+                    - text: Ver Detalhes
+              - generic [ref=e753]:
+                - paragraph [ref=e754]: "Ref: PAN0057"
+                - paragraph [ref=e755]: Aneis
+                - heading "Produto PAN0057" [level=3] [ref=e756]
+                - paragraph [ref=e757]: 55,00 €
+            - generic [ref=e759]:
+              - generic [ref=e760]:
+                - link "Produto PAN0058" [ref=e761] [cursor=pointer]:
+                  - /url: /catalog/product/58
+                  - img "Produto PAN0058"
+                - generic:
+                  - link [ref=e762] [cursor=pointer]:
+                    - /url: /catalog/product/58
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/58
+                    - text: Ver Detalhes
+              - generic [ref=e763]:
+                - paragraph [ref=e764]: "Ref: PAN0058"
+                - paragraph [ref=e765]: Aneis
+                - heading "Produto PAN0058" [level=3] [ref=e766]
+                - paragraph [ref=e767]: 45,00 €
+            - generic [ref=e769]:
+              - generic [ref=e770]:
+                - link "Produto PAN0059" [ref=e771] [cursor=pointer]:
+                  - /url: /catalog/product/59
+                  - img "Produto PAN0059"
+                - generic:
+                  - link [ref=e772] [cursor=pointer]:
+                    - /url: /catalog/product/59
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/59
+                    - text: Ver Detalhes
+              - generic [ref=e773]:
+                - paragraph [ref=e774]: "Ref: PAN0059"
+                - paragraph [ref=e775]: Aneis
+                - heading "Produto PAN0059" [level=3] [ref=e776]
+                - paragraph [ref=e777]: 45,00 €
+            - generic [ref=e779]:
+              - generic [ref=e780]:
+                - link "Produto PAN0060" [ref=e781] [cursor=pointer]:
+                  - /url: /catalog/product/60
+                  - img "Produto PAN0060"
+                - generic:
+                  - link [ref=e782] [cursor=pointer]:
+                    - /url: /catalog/product/60
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/60
+                    - text: Ver Detalhes
+              - generic [ref=e783]:
+                - paragraph [ref=e784]: "Ref: PAN0060"
+                - paragraph [ref=e785]: Aneis
+                - heading "Produto PAN0060" [level=3] [ref=e786]
+                - paragraph [ref=e787]: 55,00 €
+            - generic [ref=e789]:
+              - generic [ref=e790]:
+                - link "Produto PAN0061" [ref=e791] [cursor=pointer]:
+                  - /url: /catalog/product/61
+                  - img "Produto PAN0061"
+                - generic:
+                  - link [ref=e792] [cursor=pointer]:
+                    - /url: /catalog/product/61
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/61
+                    - text: Ver Detalhes
+              - generic [ref=e793]:
+                - paragraph [ref=e794]: "Ref: PAN0061"
+                - paragraph [ref=e795]: Aneis
+                - heading "Produto PAN0061" [level=3] [ref=e796]
+                - paragraph [ref=e797]: 45,00 €
+            - generic [ref=e799]:
+              - generic [ref=e800]:
+                - link "Produto PAN0062" [ref=e801] [cursor=pointer]:
+                  - /url: /catalog/product/62
+                  - img "Produto PAN0062"
+                - generic:
+                  - link [ref=e802] [cursor=pointer]:
+                    - /url: /catalog/product/62
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/62
+                    - text: Ver Detalhes
+              - generic [ref=e803]:
+                - paragraph [ref=e804]: "Ref: PAN0062"
+                - paragraph [ref=e805]: Aneis
+                - heading "Produto PAN0062" [level=3] [ref=e806]
+                - paragraph [ref=e807]: 55,00 €
+            - generic [ref=e809]:
+              - generic [ref=e810]:
+                - link "Produto PAN0063" [ref=e811] [cursor=pointer]:
+                  - /url: /catalog/product/63
+                  - img "Produto PAN0063"
+                - generic:
+                  - link [ref=e812] [cursor=pointer]:
+                    - /url: /catalog/product/63
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/63
+                    - text: Ver Detalhes
+              - generic [ref=e813]:
+                - paragraph [ref=e814]: "Ref: PAN0063"
+                - paragraph [ref=e815]: Aneis
+                - heading "Produto PAN0063" [level=3] [ref=e816]
+                - paragraph [ref=e817]: 45,00 €
+            - generic [ref=e819]:
+              - generic [ref=e820]:
+                - link "Produto PAN0064" [ref=e821] [cursor=pointer]:
+                  - /url: /catalog/product/64
+                  - img "Produto PAN0064"
+                - generic:
+                  - link [ref=e822] [cursor=pointer]:
+                    - /url: /catalog/product/64
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/64
+                    - text: Ver Detalhes
+              - generic [ref=e823]:
+                - paragraph [ref=e824]: "Ref: PAN0064"
+                - paragraph [ref=e825]: Aneis
+                - heading "Produto PAN0064" [level=3] [ref=e826]
+                - paragraph [ref=e827]: 45,00 €
+            - generic [ref=e829]:
+              - generic [ref=e830]:
+                - link "Produto PAN0065" [ref=e831] [cursor=pointer]:
+                  - /url: /catalog/product/65
+                  - img "Produto PAN0065"
+                - generic:
+                  - link [ref=e832] [cursor=pointer]:
+                    - /url: /catalog/product/65
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/65
+                    - text: Ver Detalhes
+              - generic [ref=e833]:
+                - paragraph [ref=e834]: "Ref: PAN0065"
+                - paragraph [ref=e835]: Aneis
+                - heading "Produto PAN0065" [level=3] [ref=e836]
+                - paragraph [ref=e837]: 45,00 €
+            - generic [ref=e839]:
+              - generic [ref=e840]:
+                - link "Produto PAN0066" [ref=e841] [cursor=pointer]:
+                  - /url: /catalog/product/66
+                  - img "Produto PAN0066"
+                - generic:
+                  - link [ref=e842] [cursor=pointer]:
+                    - /url: /catalog/product/66
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/66
+                    - text: Ver Detalhes
+              - generic [ref=e843]:
+                - paragraph [ref=e844]: "Ref: PAN0066"
+                - paragraph [ref=e845]: Aneis
+                - heading "Produto PAN0066" [level=3] [ref=e846]
+                - paragraph [ref=e847]: 75,00 €
+            - generic [ref=e849]:
+              - generic [ref=e850]:
+                - link "Produto PAN0067" [ref=e851] [cursor=pointer]:
+                  - /url: /catalog/product/67
+                  - img "Produto PAN0067"
+                - generic:
+                  - link [ref=e852] [cursor=pointer]:
+                    - /url: /catalog/product/67
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/67
+                    - text: Ver Detalhes
+              - generic [ref=e853]:
+                - paragraph [ref=e854]: "Ref: PAN0067"
+                - paragraph [ref=e855]: Aneis
+                - heading "Produto PAN0067" [level=3] [ref=e856]
+                - paragraph [ref=e857]: 75,00 €
+            - generic [ref=e859]:
+              - generic [ref=e860]:
+                - link "Produto PAN0068" [ref=e861] [cursor=pointer]:
+                  - /url: /catalog/product/68
+                  - img "Produto PAN0068"
+                - generic:
+                  - link [ref=e862] [cursor=pointer]:
+                    - /url: /catalog/product/68
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/68
+                    - text: Ver Detalhes
+              - generic [ref=e863]:
+                - paragraph [ref=e864]: "Ref: PAN0068"
+                - paragraph [ref=e865]: Aneis
+                - heading "Produto PAN0068" [level=3] [ref=e866]
+                - paragraph [ref=e867]: 75,00 €
+            - generic [ref=e869]:
+              - generic [ref=e870]:
+                - link "Produto PAN0069" [ref=e871] [cursor=pointer]:
+                  - /url: /catalog/product/69
+                  - img "Produto PAN0069"
+                - generic:
+                  - link [ref=e872] [cursor=pointer]:
+                    - /url: /catalog/product/69
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/69
+                    - text: Ver Detalhes
+              - generic [ref=e873]:
+                - paragraph [ref=e874]: "Ref: PAN0069"
+                - paragraph [ref=e875]: Aneis
+                - heading "Produto PAN0069" [level=3] [ref=e876]
+                - paragraph [ref=e877]: 0,00 €
+            - generic [ref=e879]:
+              - generic [ref=e880]:
+                - link "Produto PAN0070" [ref=e881] [cursor=pointer]:
+                  - /url: /catalog/product/70
+                  - img "Produto PAN0070"
+                - generic:
+                  - link [ref=e882] [cursor=pointer]:
+                    - /url: /catalog/product/70
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/70
+                    - text: Ver Detalhes
+              - generic [ref=e883]:
+                - paragraph [ref=e884]: "Ref: PAN0070"
+                - paragraph [ref=e885]: Aneis
+                - heading "Produto PAN0070" [level=3] [ref=e886]
+                - paragraph [ref=e887]: 45,00 €
+            - generic [ref=e889]:
+              - generic [ref=e890]:
+                - link "Produto PAN0071" [ref=e891] [cursor=pointer]:
+                  - /url: /catalog/product/71
+                  - img "Produto PAN0071"
+                - generic:
+                  - link [ref=e892] [cursor=pointer]:
+                    - /url: /catalog/product/71
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/71
+                    - text: Ver Detalhes
+              - generic [ref=e893]:
+                - paragraph [ref=e894]: "Ref: PAN0071"
+                - paragraph [ref=e895]: Aneis
+                - heading "Produto PAN0071" [level=3] [ref=e896]
+                - paragraph [ref=e897]: 25,00 €
+            - generic [ref=e899]:
+              - generic [ref=e900]:
+                - link "Produto PAN0072" [ref=e901] [cursor=pointer]:
+                  - /url: /catalog/product/72
+                  - img "Produto PAN0072"
+                - generic:
+                  - link [ref=e902] [cursor=pointer]:
+                    - /url: /catalog/product/72
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/72
+                    - text: Ver Detalhes
+              - generic [ref=e903]:
+                - paragraph [ref=e904]: "Ref: PAN0072"
+                - paragraph [ref=e905]: Aneis
+                - heading "Produto PAN0072" [level=3] [ref=e906]
+                - paragraph [ref=e907]: 40,00 €
+            - generic [ref=e909]:
+              - generic [ref=e910]:
+                - link "Produto PAN0073" [ref=e911] [cursor=pointer]:
+                  - /url: /catalog/product/73
+                  - img "Produto PAN0073"
+                - generic:
+                  - link [ref=e912] [cursor=pointer]:
+                    - /url: /catalog/product/73
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/73
+                    - text: Ver Detalhes
+              - generic [ref=e913]:
+                - paragraph [ref=e914]: "Ref: PAN0073"
+                - paragraph [ref=e915]: Aneis
+                - heading "Produto PAN0073" [level=3] [ref=e916]
+                - paragraph [ref=e917]: 25,00 €
+            - generic [ref=e919]:
+              - generic [ref=e920]:
+                - link "Produto PAN0074" [ref=e921] [cursor=pointer]:
+                  - /url: /catalog/product/74
+                  - img "Produto PAN0074"
+                - generic:
+                  - link [ref=e922] [cursor=pointer]:
+                    - /url: /catalog/product/74
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/74
+                    - text: Ver Detalhes
+              - generic [ref=e923]:
+                - paragraph [ref=e924]: "Ref: PAN0074"
+                - paragraph [ref=e925]: Aneis
+                - heading "Produto PAN0074" [level=3] [ref=e926]
+                - paragraph [ref=e927]: 30,00 €
+            - generic [ref=e929]:
+              - generic [ref=e930]:
+                - link "Produto PAN0075" [ref=e931] [cursor=pointer]:
+                  - /url: /catalog/product/75
+                  - img "Produto PAN0075"
+                - generic:
+                  - link [ref=e932] [cursor=pointer]:
+                    - /url: /catalog/product/75
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/75
+                    - text: Ver Detalhes
+              - generic [ref=e933]:
+                - paragraph [ref=e934]: "Ref: PAN0075"
+                - paragraph [ref=e935]: Aneis
+                - heading "Produto PAN0075" [level=3] [ref=e936]
+                - paragraph [ref=e937]: 40,00 €
+            - generic [ref=e939]:
+              - generic [ref=e940]:
+                - link "Produto PPB0001" [ref=e941] [cursor=pointer]:
+                  - /url: /catalog/product/76
+                  - img "Produto PPB0001"
+                - generic:
+                  - link [ref=e942] [cursor=pointer]:
+                    - /url: /catalog/product/76
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/76
+                    - text: Ver Detalhes
+              - generic [ref=e943]:
+                - paragraph [ref=e944]: "Ref: PPB0001"
+                - paragraph [ref=e945]: Brincos
+                - heading "Produto PPB0001" [level=3] [ref=e946]
+                - paragraph [ref=e947]: 15,00 €
+            - generic [ref=e949]:
+              - generic [ref=e950]:
+                - link "Produto PPB0002" [ref=e951] [cursor=pointer]:
+                  - /url: /catalog/product/77
+                  - img "Produto PPB0002"
+                - generic:
+                  - link [ref=e952] [cursor=pointer]:
+                    - /url: /catalog/product/77
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/77
+                    - text: Ver Detalhes
+              - generic [ref=e953]:
+                - paragraph [ref=e954]: "Ref: PPB0002"
+                - paragraph [ref=e955]: Brincos
+                - heading "Produto PPB0002" [level=3] [ref=e956]
+                - paragraph [ref=e957]: 15,00 €
+            - generic [ref=e959]:
+              - generic [ref=e960]:
+                - link "Produto PPB0003" [ref=e961] [cursor=pointer]:
+                  - /url: /catalog/product/78
+                  - img "Produto PPB0003"
+                - generic:
+                  - link [ref=e962] [cursor=pointer]:
+                    - /url: /catalog/product/78
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/78
+                    - text: Ver Detalhes
+              - generic [ref=e963]:
+                - paragraph [ref=e964]: "Ref: PPB0003"
+                - paragraph [ref=e965]: Brincos
+                - heading "Produto PPB0003" [level=3] [ref=e966]
+                - paragraph [ref=e967]: 15,00 €
+            - generic [ref=e969]:
+              - generic [ref=e970]:
+                - link "Produto PPB0004" [ref=e971] [cursor=pointer]:
+                  - /url: /catalog/product/79
+                  - img "Produto PPB0004"
+                - generic:
+                  - link [ref=e972] [cursor=pointer]:
+                    - /url: /catalog/product/79
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/79
+                    - text: Ver Detalhes
+              - generic [ref=e973]:
+                - paragraph [ref=e974]: "Ref: PPB0004"
+                - paragraph [ref=e975]: Brincos
+                - heading "Produto PPB0004" [level=3] [ref=e976]
+                - paragraph [ref=e977]: 15,00 €
+            - generic [ref=e979]:
+              - generic [ref=e980]:
+                - link "Produto PPB0005" [ref=e981] [cursor=pointer]:
+                  - /url: /catalog/product/80
+                  - img "Produto PPB0005"
+                - generic:
+                  - link [ref=e982] [cursor=pointer]:
+                    - /url: /catalog/product/80
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/80
+                    - text: Ver Detalhes
+              - generic [ref=e983]:
+                - paragraph [ref=e984]: "Ref: PPB0005"
+                - paragraph [ref=e985]: Brincos
+                - heading "Produto PPB0005" [level=3] [ref=e986]
+                - paragraph [ref=e987]: 15,00 €
+            - generic [ref=e989]:
+              - generic [ref=e990]:
+                - link "Produto PPB0006" [ref=e991] [cursor=pointer]:
+                  - /url: /catalog/product/81
+                  - img "Produto PPB0006"
+                - generic:
+                  - link [ref=e992] [cursor=pointer]:
+                    - /url: /catalog/product/81
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/81
+                    - text: Ver Detalhes
+              - generic [ref=e993]:
+                - paragraph [ref=e994]: "Ref: PPB0006"
+                - paragraph [ref=e995]: Brincos
+                - heading "Produto PPB0006" [level=3] [ref=e996]
+                - paragraph [ref=e997]: 25,00 €
+            - generic [ref=e999]:
+              - generic [ref=e1000]:
+                - link "Produto PPB0007" [ref=e1001] [cursor=pointer]:
+                  - /url: /catalog/product/82
+                  - img "Produto PPB0007"
+                - generic:
+                  - link [ref=e1002] [cursor=pointer]:
+                    - /url: /catalog/product/82
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/82
+                    - text: Ver Detalhes
+              - generic [ref=e1003]:
+                - paragraph [ref=e1004]: "Ref: PPB0007"
+                - paragraph [ref=e1005]: Brincos
+                - heading "Produto PPB0007" [level=3] [ref=e1006]
+                - paragraph [ref=e1007]: 25,00 €
+            - generic [ref=e1009]:
+              - generic [ref=e1010]:
+                - link "Produto PPB0008" [ref=e1011] [cursor=pointer]:
+                  - /url: /catalog/product/83
+                  - img "Produto PPB0008"
+                - generic:
+                  - link [ref=e1012] [cursor=pointer]:
+                    - /url: /catalog/product/83
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/83
+                    - text: Ver Detalhes
+              - generic [ref=e1013]:
+                - paragraph [ref=e1014]: "Ref: PPB0008"
+                - paragraph [ref=e1015]: Brincos
+                - heading "Produto PPB0008" [level=3] [ref=e1016]
+                - paragraph [ref=e1017]: 25,00 €
+            - generic [ref=e1019]:
+              - generic [ref=e1020]:
+                - link "Produto PPB0009" [ref=e1021] [cursor=pointer]:
+                  - /url: /catalog/product/84
+                  - img "Produto PPB0009"
+                - generic:
+                  - link [ref=e1022] [cursor=pointer]:
+                    - /url: /catalog/product/84
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/84
+                    - text: Ver Detalhes
+              - generic [ref=e1023]:
+                - paragraph [ref=e1024]: "Ref: PPB0009"
+                - paragraph [ref=e1025]: Brincos
+                - heading "Produto PPB0009" [level=3] [ref=e1026]
+                - paragraph [ref=e1027]: 25,00 €
+            - generic [ref=e1029]:
+              - generic [ref=e1030]:
+                - link "Produto PPB0010" [ref=e1031] [cursor=pointer]:
+                  - /url: /catalog/product/85
+                  - img "Produto PPB0010"
+                - generic:
+                  - link [ref=e1032] [cursor=pointer]:
+                    - /url: /catalog/product/85
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/85
+                    - text: Ver Detalhes
+              - generic [ref=e1033]:
+                - paragraph [ref=e1034]: "Ref: PPB0010"
+                - paragraph [ref=e1035]: Brincos
+                - heading "Produto PPB0010" [level=3] [ref=e1036]
+                - paragraph [ref=e1037]: 25,00 €
+            - generic [ref=e1039]:
+              - generic [ref=e1040]:
+                - link "Produto PPB0011" [ref=e1041] [cursor=pointer]:
+                  - /url: /catalog/product/86
+                  - img "Produto PPB0011"
+                - generic:
+                  - link [ref=e1042] [cursor=pointer]:
+                    - /url: /catalog/product/86
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/86
+                    - text: Ver Detalhes
+              - generic [ref=e1043]:
+                - paragraph [ref=e1044]: "Ref: PPB0011"
+                - paragraph [ref=e1045]: Brincos
+                - heading "Produto PPB0011" [level=3] [ref=e1046]
+                - paragraph [ref=e1047]: 25,00 €
+            - generic [ref=e1049]:
+              - generic [ref=e1050]:
+                - link "Produto PPB0012" [ref=e1051] [cursor=pointer]:
+                  - /url: /catalog/product/87
+                  - img "Produto PPB0012"
+                - generic:
+                  - link [ref=e1052] [cursor=pointer]:
+                    - /url: /catalog/product/87
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/87
+                    - text: Ver Detalhes
+              - generic [ref=e1053]:
+                - paragraph [ref=e1054]: "Ref: PPB0012"
+                - paragraph [ref=e1055]: Brincos
+                - heading "Produto PPB0012" [level=3] [ref=e1056]
+                - paragraph [ref=e1057]: 25,00 €
+            - generic [ref=e1059]:
+              - generic [ref=e1060]:
+                - link "Produto PPB0013" [ref=e1061] [cursor=pointer]:
+                  - /url: /catalog/product/88
+                  - img "Produto PPB0013"
+                - generic:
+                  - link [ref=e1062] [cursor=pointer]:
+                    - /url: /catalog/product/88
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/88
+                    - text: Ver Detalhes
+              - generic [ref=e1063]:
+                - paragraph [ref=e1064]: "Ref: PPB0013"
+                - paragraph [ref=e1065]: Brincos
+                - heading "Produto PPB0013" [level=3] [ref=e1066]
+                - paragraph [ref=e1067]: 25,00 €
+            - generic [ref=e1069]:
+              - generic [ref=e1070]:
+                - link "Produto PPB0014" [ref=e1071] [cursor=pointer]:
+                  - /url: /catalog/product/89
+                  - img "Produto PPB0014"
+                - generic:
+                  - link [ref=e1072] [cursor=pointer]:
+                    - /url: /catalog/product/89
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/89
+                    - text: Ver Detalhes
+              - generic [ref=e1073]:
+                - paragraph [ref=e1074]: "Ref: PPB0014"
+                - paragraph [ref=e1075]: Brincos
+                - heading "Produto PPB0014" [level=3] [ref=e1076]
+                - paragraph [ref=e1077]: 25,00 €
+            - generic [ref=e1079]:
+              - generic [ref=e1080]:
+                - link "Produto PPB0015" [ref=e1081] [cursor=pointer]:
+                  - /url: /catalog/product/90
+                  - img "Produto PPB0015"
+                - generic:
+                  - link [ref=e1082] [cursor=pointer]:
+                    - /url: /catalog/product/90
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/90
+                    - text: Ver Detalhes
+              - generic [ref=e1083]:
+                - paragraph [ref=e1084]: "Ref: PPB0015"
+                - paragraph [ref=e1085]: Brincos
+                - heading "Produto PPB0015" [level=3] [ref=e1086]
+                - paragraph [ref=e1087]: 25,00 €
+            - generic [ref=e1089]:
+              - generic [ref=e1090]:
+                - link "Produto PPB0016" [ref=e1091] [cursor=pointer]:
+                  - /url: /catalog/product/91
+                  - img "Produto PPB0016"
+                - generic:
+                  - link [ref=e1092] [cursor=pointer]:
+                    - /url: /catalog/product/91
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/91
+                    - text: Ver Detalhes
+              - generic [ref=e1093]:
+                - paragraph [ref=e1094]: "Ref: PPB0016"
+                - paragraph [ref=e1095]: Brincos
+                - heading "Produto PPB0016" [level=3] [ref=e1096]
+                - paragraph [ref=e1097]: 25,00 €
+            - generic [ref=e1099]:
+              - generic [ref=e1100]:
+                - link "Produto PPB0017" [ref=e1101] [cursor=pointer]:
+                  - /url: /catalog/product/92
+                  - img "Produto PPB0017"
+                - generic:
+                  - link [ref=e1102] [cursor=pointer]:
+                    - /url: /catalog/product/92
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/92
+                    - text: Ver Detalhes
+              - generic [ref=e1103]:
+                - paragraph [ref=e1104]: "Ref: PPB0017"
+                - paragraph [ref=e1105]: Brincos
+                - heading "Produto PPB0017" [level=3] [ref=e1106]
+                - paragraph [ref=e1107]: 25,00 €
+            - generic [ref=e1109]:
+              - generic [ref=e1110]:
+                - link "Produto PPB0018" [ref=e1111] [cursor=pointer]:
+                  - /url: /catalog/product/93
+                  - img "Produto PPB0018"
+                - generic:
+                  - link [ref=e1112] [cursor=pointer]:
+                    - /url: /catalog/product/93
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/93
+                    - text: Ver Detalhes
+              - generic [ref=e1113]:
+                - paragraph [ref=e1114]: "Ref: PPB0018"
+                - paragraph [ref=e1115]: Brincos
+                - heading "Produto PPB0018" [level=3] [ref=e1116]
+                - paragraph [ref=e1117]: 30,00 €
+            - generic [ref=e1119]:
+              - generic [ref=e1120]:
+                - link "Produto PPB0019" [ref=e1121] [cursor=pointer]:
+                  - /url: /catalog/product/94
+                  - img "Produto PPB0019"
+                - generic:
+                  - link [ref=e1122] [cursor=pointer]:
+                    - /url: /catalog/product/94
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/94
+                    - text: Ver Detalhes
+              - generic [ref=e1123]:
+                - paragraph [ref=e1124]: "Ref: PPB0019"
+                - paragraph [ref=e1125]: Brincos
+                - heading "Produto PPB0019" [level=3] [ref=e1126]
+                - paragraph [ref=e1127]: 30,00 €
+            - generic [ref=e1129]:
+              - generic [ref=e1130]:
+                - link "Produto PPB0020" [ref=e1131] [cursor=pointer]:
+                  - /url: /catalog/product/95
+                  - img "Produto PPB0020"
+                - generic:
+                  - link [ref=e1132] [cursor=pointer]:
+                    - /url: /catalog/product/95
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/95
+                    - text: Ver Detalhes
+              - generic [ref=e1133]:
+                - paragraph [ref=e1134]: "Ref: PPB0020"
+                - paragraph [ref=e1135]: Brincos
+                - heading "Produto PPB0020" [level=3] [ref=e1136]
+                - paragraph [ref=e1137]: 30,00 €
+            - generic [ref=e1139]:
+              - generic [ref=e1140]:
+                - link "Produto PPB0021" [ref=e1141] [cursor=pointer]:
+                  - /url: /catalog/product/96
+                  - img "Produto PPB0021"
+                - generic:
+                  - link [ref=e1142] [cursor=pointer]:
+                    - /url: /catalog/product/96
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/96
+                    - text: Ver Detalhes
+              - generic [ref=e1143]:
+                - paragraph [ref=e1144]: "Ref: PPB0021"
+                - paragraph [ref=e1145]: Brincos
+                - heading "Produto PPB0021" [level=3] [ref=e1146]
+                - paragraph [ref=e1147]: 30,00 €
+            - generic [ref=e1149]:
+              - generic [ref=e1150]:
+                - link "Produto PPB0022" [ref=e1151] [cursor=pointer]:
+                  - /url: /catalog/product/97
+                  - img "Produto PPB0022"
+                - generic:
+                  - link [ref=e1152] [cursor=pointer]:
+                    - /url: /catalog/product/97
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/97
+                    - text: Ver Detalhes
+              - generic [ref=e1153]:
+                - paragraph [ref=e1154]: "Ref: PPB0022"
+                - paragraph [ref=e1155]: Brincos
+                - heading "Produto PPB0022" [level=3] [ref=e1156]
+                - paragraph [ref=e1157]: 30,00 €
+            - generic [ref=e1159]:
+              - generic [ref=e1160]:
+                - link "Produto PPB0023" [ref=e1161] [cursor=pointer]:
+                  - /url: /catalog/product/98
+                  - img "Produto PPB0023"
+                - generic:
+                  - link [ref=e1162] [cursor=pointer]:
+                    - /url: /catalog/product/98
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/98
+                    - text: Ver Detalhes
+              - generic [ref=e1163]:
+                - paragraph [ref=e1164]: "Ref: PPB0023"
+                - paragraph [ref=e1165]: Brincos
+                - heading "Produto PPB0023" [level=3] [ref=e1166]
+                - paragraph [ref=e1167]: 55,00 €
+            - generic [ref=e1169]:
+              - generic [ref=e1170]:
+                - link "Produto PPB0024" [ref=e1171] [cursor=pointer]:
+                  - /url: /catalog/product/99
+                  - img "Produto PPB0024"
+                - generic:
+                  - link [ref=e1172] [cursor=pointer]:
+                    - /url: /catalog/product/99
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/99
+                    - text: Ver Detalhes
+              - generic [ref=e1173]:
+                - paragraph [ref=e1174]: "Ref: PPB0024"
+                - paragraph [ref=e1175]: Brincos
+                - heading "Produto PPB0024" [level=3] [ref=e1176]
+                - paragraph [ref=e1177]: 55,00 €
+            - generic [ref=e1179]:
+              - generic [ref=e1180]:
+                - link "Produto PPB0025" [ref=e1181] [cursor=pointer]:
+                  - /url: /catalog/product/100
+                  - img "Produto PPB0025"
+                - generic:
+                  - link [ref=e1182] [cursor=pointer]:
+                    - /url: /catalog/product/100
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/100
+                    - text: Ver Detalhes
+              - generic [ref=e1183]:
+                - paragraph [ref=e1184]: "Ref: PPB0025"
+                - paragraph [ref=e1185]: Brincos
+                - heading "Produto PPB0025" [level=3] [ref=e1186]
+                - paragraph [ref=e1187]: 60,00 €
+            - generic [ref=e1189]:
+              - generic [ref=e1190]:
+                - link "Produto PPB0026" [ref=e1191] [cursor=pointer]:
+                  - /url: /catalog/product/101
+                  - img "Produto PPB0026"
+                - generic:
+                  - link [ref=e1192] [cursor=pointer]:
+                    - /url: /catalog/product/101
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/101
+                    - text: Ver Detalhes
+              - generic [ref=e1193]:
+                - paragraph [ref=e1194]: "Ref: PPB0026"
+                - paragraph [ref=e1195]: Brincos
+                - heading "Produto PPB0026" [level=3] [ref=e1196]
+                - paragraph [ref=e1197]: 30,00 €
+            - generic [ref=e1199]:
+              - generic [ref=e1200]:
+                - link "Produto PPB0027" [ref=e1201] [cursor=pointer]:
+                  - /url: /catalog/product/102
+                  - img "Produto PPB0027"
+                - generic:
+                  - link [ref=e1202] [cursor=pointer]:
+                    - /url: /catalog/product/102
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/102
+                    - text: Ver Detalhes
+              - generic [ref=e1203]:
+                - paragraph [ref=e1204]: "Ref: PPB0027"
+                - paragraph [ref=e1205]: Brincos
+                - heading "Produto PPB0027" [level=3] [ref=e1206]
+                - paragraph [ref=e1207]: 40,00 €
+            - generic [ref=e1209]:
+              - generic [ref=e1210]:
+                - link "Produto PPB0028" [ref=e1211] [cursor=pointer]:
+                  - /url: /catalog/product/103
+                  - img "Produto PPB0028"
+                - generic:
+                  - link [ref=e1212] [cursor=pointer]:
+                    - /url: /catalog/product/103
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/103
+                    - text: Ver Detalhes
+              - generic [ref=e1213]:
+                - paragraph [ref=e1214]: "Ref: PPB0028"
+                - paragraph [ref=e1215]: Brincos
+                - heading "Produto PPB0028" [level=3] [ref=e1216]
+                - paragraph [ref=e1217]: 40,00 €
+            - generic [ref=e1219]:
+              - generic [ref=e1220]:
+                - link "Produto PPB0029" [ref=e1221] [cursor=pointer]:
+                  - /url: /catalog/product/104
+                  - img "Produto PPB0029"
+                - generic:
+                  - link [ref=e1222] [cursor=pointer]:
+                    - /url: /catalog/product/104
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/104
+                    - text: Ver Detalhes
+              - generic [ref=e1223]:
+                - paragraph [ref=e1224]: "Ref: PPB0029"
+                - paragraph [ref=e1225]: Brincos
+                - heading "Produto PPB0029" [level=3] [ref=e1226]
+                - paragraph [ref=e1227]: 40,00 €
+            - generic [ref=e1229]:
+              - generic [ref=e1230]:
+                - link "Produto PPB0030" [ref=e1231] [cursor=pointer]:
+                  - /url: /catalog/product/105
+                  - img "Produto PPB0030"
+                - generic:
+                  - link [ref=e1232] [cursor=pointer]:
+                    - /url: /catalog/product/105
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/105
+                    - text: Ver Detalhes
+              - generic [ref=e1233]:
+                - paragraph [ref=e1234]: "Ref: PPB0030"
+                - paragraph [ref=e1235]: Brincos
+                - heading "Produto PPB0030" [level=3] [ref=e1236]
+                - paragraph [ref=e1237]: 40,00 €
+            - generic [ref=e1239]:
+              - generic [ref=e1240]:
+                - link "Produto PPB0031" [ref=e1241] [cursor=pointer]:
+                  - /url: /catalog/product/106
+                  - img "Produto PPB0031"
+                - generic:
+                  - link [ref=e1242] [cursor=pointer]:
+                    - /url: /catalog/product/106
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/106
+                    - text: Ver Detalhes
+              - generic [ref=e1243]:
+                - paragraph [ref=e1244]: "Ref: PPB0031"
+                - paragraph [ref=e1245]: Brincos
+                - heading "Produto PPB0031" [level=3] [ref=e1246]
+                - paragraph [ref=e1247]: 45,00 €
+            - generic [ref=e1249]:
+              - generic [ref=e1250]:
+                - link "Produto PPB0032" [ref=e1251] [cursor=pointer]:
+                  - /url: /catalog/product/107
+                  - img "Produto PPB0032"
+                - generic:
+                  - link [ref=e1252] [cursor=pointer]:
+                    - /url: /catalog/product/107
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/107
+                    - text: Ver Detalhes
+              - generic [ref=e1253]:
+                - paragraph [ref=e1254]: "Ref: PPB0032"
+                - paragraph [ref=e1255]: Brincos
+                - heading "Produto PPB0032" [level=3] [ref=e1256]
+                - paragraph [ref=e1257]: 55,00 €
+            - generic [ref=e1259]:
+              - generic [ref=e1260]:
+                - link "Produto PPB0033" [ref=e1261] [cursor=pointer]:
+                  - /url: /catalog/product/108
+                  - img "Produto PPB0033"
+                - generic:
+                  - link [ref=e1262] [cursor=pointer]:
+                    - /url: /catalog/product/108
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/108
+                    - text: Ver Detalhes
+              - generic [ref=e1263]:
+                - paragraph [ref=e1264]: "Ref: PPB0033"
+                - paragraph [ref=e1265]: Brincos
+                - heading "Produto PPB0033" [level=3] [ref=e1266]
+                - paragraph [ref=e1267]: 60,00 €
+            - generic [ref=e1269]:
+              - generic [ref=e1270]:
+                - link "Produto PPU0000" [ref=e1271] [cursor=pointer]:
+                  - /url: /catalog/product/137
+                  - img "Produto PPU0000"
+                - generic:
+                  - link [ref=e1272] [cursor=pointer]:
+                    - /url: /catalog/product/137
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/137
+                    - text: Ver Detalhes
+              - generic [ref=e1273]:
+                - paragraph [ref=e1274]: "Ref: PPU0000"
+                - paragraph [ref=e1275]: Pulseiras
+                - heading "Produto PPU0000" [level=3] [ref=e1276]
+                - paragraph [ref=e1277]: 95,00 €
+            - generic [ref=e1279]:
+              - generic [ref=e1280]:
+                - link "Produto PPU0001" [ref=e1281] [cursor=pointer]:
+                  - /url: /catalog/product/109
+                  - img "Produto PPU0001"
+                - generic:
+                  - link [ref=e1282] [cursor=pointer]:
+                    - /url: /catalog/product/109
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/109
+                    - text: Ver Detalhes
+              - generic [ref=e1283]:
+                - paragraph [ref=e1284]: "Ref: PPU0001"
+                - paragraph [ref=e1285]: Pulseiras
+                - heading "Produto PPU0001" [level=3] [ref=e1286]
+                - paragraph [ref=e1287]: 225,00 €
+            - generic [ref=e1289]:
+              - generic [ref=e1290]:
+                - link "Produto PPU0002" [ref=e1291] [cursor=pointer]:
+                  - /url: /catalog/product/110
+                  - img "Produto PPU0002"
+                - generic:
+                  - link [ref=e1292] [cursor=pointer]:
+                    - /url: /catalog/product/110
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/110
+                    - text: Ver Detalhes
+              - generic [ref=e1293]:
+                - paragraph [ref=e1294]: "Ref: PPU0002"
+                - paragraph [ref=e1295]: Pulseiras
+                - heading "Produto PPU0002" [level=3] [ref=e1296]
+                - paragraph [ref=e1297]: 225,00 €
+            - generic [ref=e1299]:
+              - generic [ref=e1300]:
+                - link "Produto PPU0003" [ref=e1301] [cursor=pointer]:
+                  - /url: /catalog/product/111
+                  - img "Produto PPU0003"
+                - generic:
+                  - link [ref=e1302] [cursor=pointer]:
+                    - /url: /catalog/product/111
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/111
+                    - text: Ver Detalhes
+              - generic [ref=e1303]:
+                - paragraph [ref=e1304]: "Ref: PPU0003"
+                - paragraph [ref=e1305]: Pulseiras
+                - heading "Produto PPU0003" [level=3] [ref=e1306]
+                - paragraph [ref=e1307]: 70,00 €
+            - generic [ref=e1309]:
+              - generic [ref=e1310]:
+                - link "Produto PPU0004" [ref=e1311] [cursor=pointer]:
+                  - /url: /catalog/product/112
+                  - img "Produto PPU0004"
+                - generic:
+                  - link [ref=e1312] [cursor=pointer]:
+                    - /url: /catalog/product/112
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/112
+                    - text: Ver Detalhes
+              - generic [ref=e1313]:
+                - paragraph [ref=e1314]: "Ref: PPU0004"
+                - paragraph [ref=e1315]: Pulseiras
+                - heading "Produto PPU0004" [level=3] [ref=e1316]
+                - paragraph [ref=e1317]: 240,00 €
+            - generic [ref=e1319]:
+              - generic [ref=e1320]:
+                - link "Produto PPU0005" [ref=e1321] [cursor=pointer]:
+                  - /url: /catalog/product/113
+                  - img "Produto PPU0005"
+                - generic:
+                  - link [ref=e1322] [cursor=pointer]:
+                    - /url: /catalog/product/113
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/113
+                    - text: Ver Detalhes
+              - generic [ref=e1323]:
+                - paragraph [ref=e1324]: "Ref: PPU0005"
+                - paragraph [ref=e1325]: Pulseiras
+                - heading "Produto PPU0005" [level=3] [ref=e1326]
+                - paragraph [ref=e1327]: 50,00 €
+            - generic [ref=e1329]:
+              - generic [ref=e1330]:
+                - link "Produto PPU0006" [ref=e1331] [cursor=pointer]:
+                  - /url: /catalog/product/114
+                  - img "Produto PPU0006"
+                - generic:
+                  - link [ref=e1332] [cursor=pointer]:
+                    - /url: /catalog/product/114
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/114
+                    - text: Ver Detalhes
+              - generic [ref=e1333]:
+                - paragraph [ref=e1334]: "Ref: PPU0006"
+                - paragraph [ref=e1335]: Pulseiras
+                - heading "Produto PPU0006" [level=3] [ref=e1336]
+                - paragraph [ref=e1337]: 175,00 €
+            - generic [ref=e1339]:
+              - generic [ref=e1340]:
+                - link "Produto PPU0008" [ref=e1341] [cursor=pointer]:
+                  - /url: /catalog/product/116
+                  - img "Produto PPU0008"
+                - generic:
+                  - link [ref=e1342] [cursor=pointer]:
+                    - /url: /catalog/product/116
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/116
+                    - text: Ver Detalhes
+              - generic [ref=e1343]:
+                - paragraph [ref=e1344]: "Ref: PPU0008"
+                - paragraph [ref=e1345]: Pulseiras
+                - heading "Produto PPU0008" [level=3] [ref=e1346]
+                - paragraph [ref=e1347]: 45,00 €
+            - generic [ref=e1349]:
+              - generic [ref=e1350]:
+                - link "Produto PPU0010" [ref=e1351] [cursor=pointer]:
+                  - /url: /catalog/product/118
+                  - img "Produto PPU0010"
+                - generic:
+                  - link [ref=e1352] [cursor=pointer]:
+                    - /url: /catalog/product/118
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/118
+                    - text: Ver Detalhes
+              - generic [ref=e1353]:
+                - paragraph [ref=e1354]: "Ref: PPU0010"
+                - paragraph [ref=e1355]: Pulseiras
+                - heading "Produto PPU0010" [level=3] [ref=e1356]
+                - paragraph [ref=e1357]: 40,00 €
+            - generic [ref=e1359]:
+              - generic [ref=e1360]:
+                - link "Produto PPU0011" [ref=e1361] [cursor=pointer]:
+                  - /url: /catalog/product/119
+                  - img "Produto PPU0011"
+                - generic:
+                  - link [ref=e1362] [cursor=pointer]:
+                    - /url: /catalog/product/119
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/119
+                    - text: Ver Detalhes
+              - generic [ref=e1363]:
+                - paragraph [ref=e1364]: "Ref: PPU0011"
+                - paragraph [ref=e1365]: Pulseiras
+                - heading "Produto PPU0011" [level=3] [ref=e1366]
+                - paragraph [ref=e1367]: 40,00 €
+            - generic [ref=e1369]:
+              - generic [ref=e1370]:
+                - link "Produto PPU0012" [ref=e1371] [cursor=pointer]:
+                  - /url: /catalog/product/120
+                  - img "Produto PPU0012"
+                - generic:
+                  - link [ref=e1372] [cursor=pointer]:
+                    - /url: /catalog/product/120
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/120
+                    - text: Ver Detalhes
+              - generic [ref=e1373]:
+                - paragraph [ref=e1374]: "Ref: PPU0012"
+                - paragraph [ref=e1375]: Pulseiras
+                - heading "Produto PPU0012" [level=3] [ref=e1376]
+                - paragraph [ref=e1377]: 45,00 €
+            - generic [ref=e1379]:
+              - generic [ref=e1380]:
+                - link "Produto PPU0013" [ref=e1381] [cursor=pointer]:
+                  - /url: /catalog/product/121
+                  - img "Produto PPU0013"
+                - generic:
+                  - link [ref=e1382] [cursor=pointer]:
+                    - /url: /catalog/product/121
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/121
+                    - text: Ver Detalhes
+              - generic [ref=e1383]:
+                - paragraph [ref=e1384]: "Ref: PPU0013"
+                - paragraph [ref=e1385]: Pulseiras
+                - heading "Produto PPU0013" [level=3] [ref=e1386]
+                - paragraph [ref=e1387]: 45,00 €
+            - generic [ref=e1389]:
+              - generic [ref=e1390]:
+                - link "Produto PPU0014" [ref=e1391] [cursor=pointer]:
+                  - /url: /catalog/product/122
+                  - img "Produto PPU0014"
+                - generic:
+                  - link [ref=e1392] [cursor=pointer]:
+                    - /url: /catalog/product/122
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/122
+                    - text: Ver Detalhes
+              - generic [ref=e1393]:
+                - paragraph [ref=e1394]: "Ref: PPU0014"
+                - paragraph [ref=e1395]: Pulseiras
+                - heading "Produto PPU0014" [level=3] [ref=e1396]
+                - paragraph [ref=e1397]: 70,00 €
+            - generic [ref=e1399]:
+              - generic [ref=e1400]:
+                - link "Produto PPU0015" [ref=e1401] [cursor=pointer]:
+                  - /url: /catalog/product/123
+                  - img "Produto PPU0015"
+                - generic:
+                  - link [ref=e1402] [cursor=pointer]:
+                    - /url: /catalog/product/123
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/123
+                    - text: Ver Detalhes
+              - generic [ref=e1403]:
+                - paragraph [ref=e1404]: "Ref: PPU0015"
+                - paragraph [ref=e1405]: Pulseiras
+                - heading "Produto PPU0015" [level=3] [ref=e1406]
+                - paragraph [ref=e1407]: 50,00 €
+            - generic [ref=e1409]:
+              - generic [ref=e1410]:
+                - link "Produto PPU0016" [ref=e1411] [cursor=pointer]:
+                  - /url: /catalog/product/124
+                  - img "Produto PPU0016"
+                - generic:
+                  - link [ref=e1412] [cursor=pointer]:
+                    - /url: /catalog/product/124
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/124
+                    - text: Ver Detalhes
+              - generic [ref=e1413]:
+                - paragraph [ref=e1414]: "Ref: PPU0016"
+                - paragraph [ref=e1415]: Pulseiras
+                - heading "Produto PPU0016" [level=3] [ref=e1416]
+                - paragraph [ref=e1417]: 75,00 €
+            - generic [ref=e1419]:
+              - generic [ref=e1420]:
+                - link "Produto PPU0017" [ref=e1421] [cursor=pointer]:
+                  - /url: /catalog/product/125
+                  - img "Produto PPU0017"
+                - generic:
+                  - link [ref=e1422] [cursor=pointer]:
+                    - /url: /catalog/product/125
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/125
+                    - text: Ver Detalhes
+              - generic [ref=e1423]:
+                - paragraph [ref=e1424]: "Ref: PPU0017"
+                - paragraph [ref=e1425]: Pulseiras
+                - heading "Produto PPU0017" [level=3] [ref=e1426]
+                - paragraph [ref=e1427]: 75,00 €
+            - generic [ref=e1429]:
+              - generic [ref=e1430]:
+                - link "Produto PPU0018" [ref=e1431] [cursor=pointer]:
+                  - /url: /catalog/product/126
+                  - img "Produto PPU0018"
+                - generic:
+                  - link [ref=e1432] [cursor=pointer]:
+                    - /url: /catalog/product/126
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/126
+                    - text: Ver Detalhes
+              - generic [ref=e1433]:
+                - paragraph [ref=e1434]: "Ref: PPU0018"
+                - paragraph [ref=e1435]: Pulseiras
+                - heading "Produto PPU0018" [level=3] [ref=e1436]
+                - paragraph [ref=e1437]: 165,00 €
+            - generic [ref=e1439]:
+              - generic [ref=e1440]:
+                - link "Produto PPU0019" [ref=e1441] [cursor=pointer]:
+                  - /url: /catalog/product/127
+                  - img "Produto PPU0019"
+                - generic:
+                  - link [ref=e1442] [cursor=pointer]:
+                    - /url: /catalog/product/127
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/127
+                    - text: Ver Detalhes
+              - generic [ref=e1443]:
+                - paragraph [ref=e1444]: "Ref: PPU0019"
+                - paragraph [ref=e1445]: Pulseiras
+                - heading "Produto PPU0019" [level=3] [ref=e1446]
+                - paragraph [ref=e1447]: 75,00 €
+            - generic [ref=e1449]:
+              - generic [ref=e1450]:
+                - link "Produto PPU0020" [ref=e1451] [cursor=pointer]:
+                  - /url: /catalog/product/128
+                  - img "Produto PPU0020"
+                - generic:
+                  - link [ref=e1452] [cursor=pointer]:
+                    - /url: /catalog/product/128
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/128
+                    - text: Ver Detalhes
+              - generic [ref=e1453]:
+                - paragraph [ref=e1454]: "Ref: PPU0020"
+                - paragraph [ref=e1455]: Pulseiras
+                - heading "Produto PPU0020" [level=3] [ref=e1456]
+                - paragraph [ref=e1457]: 75,00 €
+            - generic [ref=e1459]:
+              - generic [ref=e1460]:
+                - link "Produto PPU0021" [ref=e1461] [cursor=pointer]:
+                  - /url: /catalog/product/129
+                  - img "Produto PPU0021"
+                - generic:
+                  - link [ref=e1462] [cursor=pointer]:
+                    - /url: /catalog/product/129
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/129
+                    - text: Ver Detalhes
+              - generic [ref=e1463]:
+                - paragraph [ref=e1464]: "Ref: PPU0021"
+                - paragraph [ref=e1465]: Pulseiras
+                - heading "Produto PPU0021" [level=3] [ref=e1466]
+                - paragraph [ref=e1467]: 50,00 €
+            - generic [ref=e1469]:
+              - generic [ref=e1470]:
+                - link "Produto PPU0022" [ref=e1471] [cursor=pointer]:
+                  - /url: /catalog/product/130
+                  - img "Produto PPU0022"
+                - generic:
+                  - link [ref=e1472] [cursor=pointer]:
+                    - /url: /catalog/product/130
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/130
+                    - text: Ver Detalhes
+              - generic [ref=e1473]:
+                - paragraph [ref=e1474]: "Ref: PPU0022"
+                - paragraph [ref=e1475]: Pulseiras
+                - heading "Produto PPU0022" [level=3] [ref=e1476]
+                - paragraph [ref=e1477]: 25,00 €
+            - generic [ref=e1479]:
+              - generic [ref=e1480]:
+                - link "Produto PPU0023" [ref=e1481] [cursor=pointer]:
+                  - /url: /catalog/product/131
+                  - img "Produto PPU0023"
+                - generic:
+                  - link [ref=e1482] [cursor=pointer]:
+                    - /url: /catalog/product/131
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/131
+                    - text: Ver Detalhes
+              - generic [ref=e1483]:
+                - paragraph [ref=e1484]: "Ref: PPU0023"
+                - paragraph [ref=e1485]: Pulseiras
+                - heading "Produto PPU0023" [level=3] [ref=e1486]
+                - paragraph [ref=e1487]: 45,00 €
+            - generic [ref=e1489]:
+              - generic [ref=e1490]:
+                - link "Produto PPU0024" [ref=e1491] [cursor=pointer]:
+                  - /url: /catalog/product/132
+                  - img "Produto PPU0024"
+                - generic:
+                  - link [ref=e1492] [cursor=pointer]:
+                    - /url: /catalog/product/132
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/132
+                    - text: Ver Detalhes
+              - generic [ref=e1493]:
+                - paragraph [ref=e1494]: "Ref: PPU0024"
+                - paragraph [ref=e1495]: Pulseiras
+                - heading "Produto PPU0024" [level=3] [ref=e1496]
+                - paragraph [ref=e1497]: 40,00 €
+            - generic [ref=e1499]:
+              - generic [ref=e1500]:
+                - link "Produto PPU0025" [ref=e1501] [cursor=pointer]:
+                  - /url: /catalog/product/133
+                  - img "Produto PPU0025"
+                - generic:
+                  - link [ref=e1502] [cursor=pointer]:
+                    - /url: /catalog/product/133
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/133
+                    - text: Ver Detalhes
+              - generic [ref=e1503]:
+                - paragraph [ref=e1504]: "Ref: PPU0025"
+                - paragraph [ref=e1505]: Pulseiras
+                - heading "Produto PPU0025" [level=3] [ref=e1506]
+                - paragraph [ref=e1507]: 50,00 €
+            - generic [ref=e1509]:
+              - generic [ref=e1510]:
+                - link "Produto PPU0026" [ref=e1511] [cursor=pointer]:
+                  - /url: /catalog/product/134
+                  - img "Produto PPU0026"
+                - generic:
+                  - link [ref=e1512] [cursor=pointer]:
+                    - /url: /catalog/product/134
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/134
+                    - text: Ver Detalhes
+              - generic [ref=e1513]:
+                - paragraph [ref=e1514]: "Ref: PPU0026"
+                - paragraph [ref=e1515]: Pulseiras
+                - heading "Produto PPU0026" [level=3] [ref=e1516]
+                - paragraph [ref=e1517]: 90,00 €
+            - generic [ref=e1519]:
+              - generic [ref=e1520]:
+                - link "Produto PPU0027" [ref=e1521] [cursor=pointer]:
+                  - /url: /catalog/product/135
+                  - img "Produto PPU0027"
+                - generic:
+                  - link [ref=e1522] [cursor=pointer]:
+                    - /url: /catalog/product/135
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/135
+                    - text: Ver Detalhes
+              - generic [ref=e1523]:
+                - paragraph [ref=e1524]: "Ref: PPU0027"
+                - paragraph [ref=e1525]: Pulseiras
+                - heading "Produto PPU0027" [level=3] [ref=e1526]
+                - paragraph [ref=e1527]: 85,00 €
+            - generic [ref=e1529]:
+              - generic [ref=e1530]:
+                - link "Produto PPU0028" [ref=e1531] [cursor=pointer]:
+                  - /url: /catalog/product/138
+                  - img "Produto PPU0028"
+                - generic:
+                  - link [ref=e1532] [cursor=pointer]:
+                    - /url: /catalog/product/138
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/138
+                    - text: Ver Detalhes
+              - generic [ref=e1533]:
+                - paragraph [ref=e1534]: "Ref: PPU0028"
+                - paragraph [ref=e1535]: Pulseiras
+                - heading "Produto PPU0028" [level=3] [ref=e1536]
+                - paragraph [ref=e1537]: 140,00 €
+            - generic [ref=e1539]:
+              - generic [ref=e1540]:
+                - link "Produto PPU0029" [ref=e1541] [cursor=pointer]:
+                  - /url: /catalog/product/139
+                  - img "Produto PPU0029"
+                - generic:
+                  - link [ref=e1542] [cursor=pointer]:
+                    - /url: /catalog/product/139
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/139
+                    - text: Ver Detalhes
+              - generic [ref=e1543]:
+                - paragraph [ref=e1544]: "Ref: PPU0029"
+                - paragraph [ref=e1545]: Pulseiras
+                - heading "Produto PPU0029" [level=3] [ref=e1546]
+                - paragraph [ref=e1547]: 140,00 €
+            - generic [ref=e1549]:
+              - generic [ref=e1550]:
+                - link "Produto PPU0030" [ref=e1551] [cursor=pointer]:
+                  - /url: /catalog/product/140
+                  - img "Produto PPU0030"
+                - generic:
+                  - link [ref=e1552] [cursor=pointer]:
+                    - /url: /catalog/product/140
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/140
+                    - text: Ver Detalhes
+              - generic [ref=e1553]:
+                - paragraph [ref=e1554]: "Ref: PPU0030"
+                - paragraph [ref=e1555]: Pulseiras
+                - heading "Produto PPU0030" [level=3] [ref=e1556]
+                - paragraph [ref=e1557]: 160,00 €
+            - generic [ref=e1559]:
+              - generic [ref=e1560]:
+                - link "Produto PPU0031" [ref=e1561] [cursor=pointer]:
+                  - /url: /catalog/product/141
+                  - img "Produto PPU0031"
+                - generic:
+                  - link [ref=e1562] [cursor=pointer]:
+                    - /url: /catalog/product/141
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/141
+                    - text: Ver Detalhes
+              - generic [ref=e1563]:
+                - paragraph [ref=e1564]: "Ref: PPU0031"
+                - paragraph [ref=e1565]: Pulseiras
+                - heading "Produto PPU0031" [level=3] [ref=e1566]
+                - paragraph [ref=e1567]: 170,00 €
+            - generic [ref=e1569]:
+              - generic [ref=e1570]:
+                - link "Produto PPU0032" [ref=e1571] [cursor=pointer]:
+                  - /url: /catalog/product/142
+                  - img "Produto PPU0032"
+                - generic:
+                  - link [ref=e1572] [cursor=pointer]:
+                    - /url: /catalog/product/142
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/142
+                    - text: Ver Detalhes
+              - generic [ref=e1573]:
+                - paragraph [ref=e1574]: "Ref: PPU0032"
+                - paragraph [ref=e1575]: Pulseiras
+                - heading "Produto PPU0032" [level=3] [ref=e1576]
+                - paragraph [ref=e1577]: 170,00 €
+            - generic [ref=e1579]:
+              - generic [ref=e1580]:
+                - link "Produto PPU0033" [ref=e1581] [cursor=pointer]:
+                  - /url: /catalog/product/143
+                  - img "Produto PPU0033"
+                - generic:
+                  - link [ref=e1582] [cursor=pointer]:
+                    - /url: /catalog/product/143
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/143
+                    - text: Ver Detalhes
+              - generic [ref=e1583]:
+                - paragraph [ref=e1584]: "Ref: PPU0033"
+                - paragraph [ref=e1585]: Pulseiras
+                - heading "Produto PPU0033" [level=3] [ref=e1586]
+                - paragraph [ref=e1587]: 170,00 €
+            - generic [ref=e1589]:
+              - generic [ref=e1590]:
+                - link "Produto PPU0034" [ref=e1591] [cursor=pointer]:
+                  - /url: /catalog/product/144
+                  - img "Produto PPU0034"
+                - generic:
+                  - link [ref=e1592] [cursor=pointer]:
+                    - /url: /catalog/product/144
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/144
+                    - text: Ver Detalhes
+              - generic [ref=e1593]:
+                - paragraph [ref=e1594]: "Ref: PPU0034"
+                - paragraph [ref=e1595]: Pulseiras
+                - heading "Produto PPU0034" [level=3] [ref=e1596]
+                - paragraph [ref=e1597]: 170,00 €
+            - generic [ref=e1599]:
+              - generic [ref=e1600]:
+                - link "Produto PPU0035" [ref=e1601] [cursor=pointer]:
+                  - /url: /catalog/product/145
+                  - img "Produto PPU0035"
+                - generic:
+                  - link [ref=e1602] [cursor=pointer]:
+                    - /url: /catalog/product/145
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/145
+                    - text: Ver Detalhes
+              - generic [ref=e1603]:
+                - paragraph [ref=e1604]: "Ref: PPU0035"
+                - paragraph [ref=e1605]: Pulseiras
+                - heading "Produto PPU0035" [level=3] [ref=e1606]
+                - paragraph [ref=e1607]: 175,00 €
+            - generic [ref=e1609]:
+              - generic [ref=e1610]:
+                - link "Produto PPU0036" [ref=e1611] [cursor=pointer]:
+                  - /url: /catalog/product/146
+                  - img "Produto PPU0036"
+                - generic:
+                  - link [ref=e1612] [cursor=pointer]:
+                    - /url: /catalog/product/146
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/146
+                    - text: Ver Detalhes
+              - generic [ref=e1613]:
+                - paragraph [ref=e1614]: "Ref: PPU0036"
+                - paragraph [ref=e1615]: Pulseiras
+                - heading "Produto PPU0036" [level=3] [ref=e1616]
+                - paragraph [ref=e1617]: 20,00 €
+            - generic [ref=e1619]:
+              - generic [ref=e1620]:
+                - link "Produto PPU0037" [ref=e1621] [cursor=pointer]:
+                  - /url: /catalog/product/147
+                  - img "Produto PPU0037"
+                - generic:
+                  - link [ref=e1622] [cursor=pointer]:
+                    - /url: /catalog/product/147
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/147
+                    - text: Ver Detalhes
+              - generic [ref=e1623]:
+                - paragraph [ref=e1624]: "Ref: PPU0037"
+                - paragraph [ref=e1625]: Pulseiras
+                - heading "Produto PPU0037" [level=3] [ref=e1626]
+                - paragraph [ref=e1627]: 225,00 €
+            - generic [ref=e1629]:
+              - generic [ref=e1630]:
+                - link "Produto PPU0038" [ref=e1631] [cursor=pointer]:
+                  - /url: /catalog/product/148
+                  - img "Produto PPU0038"
+                - generic:
+                  - link [ref=e1632] [cursor=pointer]:
+                    - /url: /catalog/product/148
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/148
+                    - text: Ver Detalhes
+              - generic [ref=e1633]:
+                - paragraph [ref=e1634]: "Ref: PPU0038"
+                - paragraph [ref=e1635]: Pulseiras
+                - heading "Produto PPU0038" [level=3] [ref=e1636]
+                - paragraph [ref=e1637]: 235,00 €
+            - generic [ref=e1639]:
+              - generic [ref=e1640]:
+                - link "Produto PPU0039" [ref=e1641] [cursor=pointer]:
+                  - /url: /catalog/product/149
+                  - img "Produto PPU0039"
+                - generic:
+                  - link [ref=e1642] [cursor=pointer]:
+                    - /url: /catalog/product/149
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/149
+                    - text: Ver Detalhes
+              - generic [ref=e1643]:
+                - paragraph [ref=e1644]: "Ref: PPU0039"
+                - paragraph [ref=e1645]: Pulseiras
+                - heading "Produto PPU0039" [level=3] [ref=e1646]
+                - paragraph [ref=e1647]: 25,00 €
+            - generic [ref=e1649]:
+              - generic [ref=e1650]:
+                - link "Produto PPU0040" [ref=e1651] [cursor=pointer]:
+                  - /url: /catalog/product/150
+                  - img "Produto PPU0040"
+                - generic:
+                  - link [ref=e1652] [cursor=pointer]:
+                    - /url: /catalog/product/150
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/150
+                    - text: Ver Detalhes
+              - generic [ref=e1653]:
+                - paragraph [ref=e1654]: "Ref: PPU0040"
+                - paragraph [ref=e1655]: Pulseiras
+                - heading "Produto PPU0040" [level=3] [ref=e1656]
+                - paragraph [ref=e1657]: 25,00 €
+            - generic [ref=e1659]:
+              - generic [ref=e1660]:
+                - link "Produto PPU0041" [ref=e1661] [cursor=pointer]:
+                  - /url: /catalog/product/151
+                  - img "Produto PPU0041"
+                - generic:
+                  - link [ref=e1662] [cursor=pointer]:
+                    - /url: /catalog/product/151
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/151
+                    - text: Ver Detalhes
+              - generic [ref=e1663]:
+                - paragraph [ref=e1664]: "Ref: PPU0041"
+                - paragraph [ref=e1665]: Pulseiras
+                - heading "Produto PPU0041" [level=3] [ref=e1666]
+                - paragraph [ref=e1667]: 35,00 €
+            - generic [ref=e1669]:
+              - generic [ref=e1670]:
+                - link "Produto PPU0042" [ref=e1671] [cursor=pointer]:
+                  - /url: /catalog/product/152
+                  - img "Produto PPU0042"
+                - generic:
+                  - link [ref=e1672] [cursor=pointer]:
+                    - /url: /catalog/product/152
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/152
+                    - text: Ver Detalhes
+              - generic [ref=e1673]:
+                - paragraph [ref=e1674]: "Ref: PPU0042"
+                - paragraph [ref=e1675]: Pulseiras
+                - heading "Produto PPU0042" [level=3] [ref=e1676]
+                - paragraph [ref=e1677]: 35,00 €
+            - generic [ref=e1679]:
+              - generic [ref=e1680]:
+                - link "Produto PPU0043" [ref=e1681] [cursor=pointer]:
+                  - /url: /catalog/product/153
+                  - img "Produto PPU0043"
+                - generic:
+                  - link [ref=e1682] [cursor=pointer]:
+                    - /url: /catalog/product/153
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/153
+                    - text: Ver Detalhes
+              - generic [ref=e1683]:
+                - paragraph [ref=e1684]: "Ref: PPU0043"
+                - paragraph [ref=e1685]: Pulseiras
+                - heading "Produto PPU0043" [level=3] [ref=e1686]
+                - paragraph [ref=e1687]: 40,00 €
+            - generic [ref=e1689]:
+              - generic [ref=e1690]:
+                - link "Produto PPU0044" [ref=e1691] [cursor=pointer]:
+                  - /url: /catalog/product/154
+                  - img "Produto PPU0044"
+                - generic:
+                  - link [ref=e1692] [cursor=pointer]:
+                    - /url: /catalog/product/154
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/154
+                    - text: Ver Detalhes
+              - generic [ref=e1693]:
+                - paragraph [ref=e1694]: "Ref: PPU0044"
+                - paragraph [ref=e1695]: Pulseiras
+                - heading "Produto PPU0044" [level=3] [ref=e1696]
+                - paragraph [ref=e1697]: 40,00 €
+            - generic [ref=e1699]:
+              - generic [ref=e1700]:
+                - link "Produto PPU0045" [ref=e1701] [cursor=pointer]:
+                  - /url: /catalog/product/155
+                  - img "Produto PPU0045"
+                - generic:
+                  - link [ref=e1702] [cursor=pointer]:
+                    - /url: /catalog/product/155
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/155
+                    - text: Ver Detalhes
+              - generic [ref=e1703]:
+                - paragraph [ref=e1704]: "Ref: PPU0045"
+                - paragraph [ref=e1705]: Pulseiras
+                - heading "Produto PPU0045" [level=3] [ref=e1706]
+                - paragraph [ref=e1707]: 40,00 €
+            - generic [ref=e1709]:
+              - generic [ref=e1710]:
+                - link "Produto PPU0046" [ref=e1711] [cursor=pointer]:
+                  - /url: /catalog/product/156
+                  - img "Produto PPU0046"
+                - generic:
+                  - link [ref=e1712] [cursor=pointer]:
+                    - /url: /catalog/product/156
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/156
+                    - text: Ver Detalhes
+              - generic [ref=e1713]:
+                - paragraph [ref=e1714]: "Ref: PPU0046"
+                - paragraph [ref=e1715]: Pulseiras
+                - heading "Produto PPU0046" [level=3] [ref=e1716]
+                - paragraph [ref=e1717]: 40,00 €
+            - generic [ref=e1719]:
+              - generic [ref=e1720]:
+                - link "Produto PPU0047" [ref=e1721] [cursor=pointer]:
+                  - /url: /catalog/product/157
+                  - img "Produto PPU0047"
+                - generic:
+                  - link [ref=e1722] [cursor=pointer]:
+                    - /url: /catalog/product/157
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/157
+                    - text: Ver Detalhes
+              - generic [ref=e1723]:
+                - paragraph [ref=e1724]: "Ref: PPU0047"
+                - paragraph [ref=e1725]: Pulseiras
+                - heading "Produto PPU0047" [level=3] [ref=e1726]
+                - paragraph [ref=e1727]: 40,00 €
+            - generic [ref=e1729]:
+              - generic [ref=e1730]:
+                - link "Produto PPU0048" [ref=e1731] [cursor=pointer]:
+                  - /url: /catalog/product/158
+                  - img "Produto PPU0048"
+                - generic:
+                  - link [ref=e1732] [cursor=pointer]:
+                    - /url: /catalog/product/158
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/158
+                    - text: Ver Detalhes
+              - generic [ref=e1733]:
+                - paragraph [ref=e1734]: "Ref: PPU0048"
+                - paragraph [ref=e1735]: Pulseiras
+                - heading "Produto PPU0048" [level=3] [ref=e1736]
+                - paragraph [ref=e1737]: 40,00 €
+            - generic [ref=e1739]:
+              - generic [ref=e1740]:
+                - link "Produto PPU0049" [ref=e1741] [cursor=pointer]:
+                  - /url: /catalog/product/159
+                  - img "Produto PPU0049"
+                - generic:
+                  - link [ref=e1742] [cursor=pointer]:
+                    - /url: /catalog/product/159
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/159
+                    - text: Ver Detalhes
+              - generic [ref=e1743]:
+                - paragraph [ref=e1744]: "Ref: PPU0049"
+                - paragraph [ref=e1745]: Pulseiras
+                - heading "Produto PPU0049" [level=3] [ref=e1746]
+                - paragraph [ref=e1747]: 40,00 €
+            - generic [ref=e1749]:
+              - generic [ref=e1750]:
+                - link "Produto PPU0050" [ref=e1751] [cursor=pointer]:
+                  - /url: /catalog/product/160
+                  - img "Produto PPU0050"
+                - generic:
+                  - link [ref=e1752] [cursor=pointer]:
+                    - /url: /catalog/product/160
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/160
+                    - text: Ver Detalhes
+              - generic [ref=e1753]:
+                - paragraph [ref=e1754]: "Ref: PPU0050"
+                - paragraph [ref=e1755]: Pulseiras
+                - heading "Produto PPU0050" [level=3] [ref=e1756]
+                - paragraph [ref=e1757]: 40,00 €
+            - generic [ref=e1759]:
+              - generic [ref=e1760]:
+                - link "Produto PPU0051" [ref=e1761] [cursor=pointer]:
+                  - /url: /catalog/product/161
+                  - img "Produto PPU0051"
+                - generic:
+                  - link [ref=e1762] [cursor=pointer]:
+                    - /url: /catalog/product/161
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/161
+                    - text: Ver Detalhes
+              - generic [ref=e1763]:
+                - paragraph [ref=e1764]: "Ref: PPU0051"
+                - paragraph [ref=e1765]: Pulseiras
+                - heading "Produto PPU0051" [level=3] [ref=e1766]
+                - paragraph [ref=e1767]: 40,00 €
+            - generic [ref=e1769]:
+              - generic [ref=e1770]:
+                - link "Produto PPU0052" [ref=e1771] [cursor=pointer]:
+                  - /url: /catalog/product/162
+                  - img "Produto PPU0052"
+                - generic:
+                  - link [ref=e1772] [cursor=pointer]:
+                    - /url: /catalog/product/162
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/162
+                    - text: Ver Detalhes
+              - generic [ref=e1773]:
+                - paragraph [ref=e1774]: "Ref: PPU0052"
+                - paragraph [ref=e1775]: Pulseiras
+                - heading "Produto PPU0052" [level=3] [ref=e1776]
+                - paragraph [ref=e1777]: 50,00 €
+            - generic [ref=e1779]:
+              - generic [ref=e1780]:
+                - link "Produto PPU0053" [ref=e1781] [cursor=pointer]:
+                  - /url: /catalog/product/163
+                  - img "Produto PPU0053"
+                - generic:
+                  - link [ref=e1782] [cursor=pointer]:
+                    - /url: /catalog/product/163
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/163
+                    - text: Ver Detalhes
+              - generic [ref=e1783]:
+                - paragraph [ref=e1784]: "Ref: PPU0053"
+                - paragraph [ref=e1785]: Pulseiras
+                - heading "Produto PPU0053" [level=3] [ref=e1786]
+                - paragraph [ref=e1787]: 50,00 €
+            - generic [ref=e1789]:
+              - generic [ref=e1790]:
+                - link "Produto PPU0054" [ref=e1791] [cursor=pointer]:
+                  - /url: /catalog/product/164
+                  - img "Produto PPU0054"
+                - generic:
+                  - link [ref=e1792] [cursor=pointer]:
+                    - /url: /catalog/product/164
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/164
+                    - text: Ver Detalhes
+              - generic [ref=e1793]:
+                - paragraph [ref=e1794]: "Ref: PPU0054"
+                - paragraph [ref=e1795]: Pulseiras
+                - heading "Produto PPU0054" [level=3] [ref=e1796]
+                - paragraph [ref=e1797]: 40,00 €
+            - generic [ref=e1799]:
+              - generic [ref=e1800]:
+                - link "Produto PPU0055" [ref=e1801] [cursor=pointer]:
+                  - /url: /catalog/product/165
+                  - img "Produto PPU0055"
+                - generic:
+                  - link [ref=e1802] [cursor=pointer]:
+                    - /url: /catalog/product/165
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/165
+                    - text: Ver Detalhes
+              - generic [ref=e1803]:
+                - paragraph [ref=e1804]: "Ref: PPU0055"
+                - paragraph [ref=e1805]: Pulseiras
+                - heading "Produto PPU0055" [level=3] [ref=e1806]
+                - paragraph [ref=e1807]: 50,00 €
+            - generic [ref=e1809]:
+              - generic [ref=e1810]:
+                - link "Produto PPU0056" [ref=e1811] [cursor=pointer]:
+                  - /url: /catalog/product/166
+                  - img "Produto PPU0056"
+                - generic:
+                  - link [ref=e1812] [cursor=pointer]:
+                    - /url: /catalog/product/166
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/166
+                    - text: Ver Detalhes
+              - generic [ref=e1813]:
+                - paragraph [ref=e1814]: "Ref: PPU0056"
+                - paragraph [ref=e1815]: Pulseiras
+                - heading "Produto PPU0056" [level=3] [ref=e1816]
+                - paragraph [ref=e1817]: 50,00 €
+            - generic [ref=e1819]:
+              - generic [ref=e1820]:
+                - link "Produto PPU0057" [ref=e1821] [cursor=pointer]:
+                  - /url: /catalog/product/167
+                  - img "Produto PPU0057"
+                - generic:
+                  - link [ref=e1822] [cursor=pointer]:
+                    - /url: /catalog/product/167
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/167
+                    - text: Ver Detalhes
+              - generic [ref=e1823]:
+                - paragraph [ref=e1824]: "Ref: PPU0057"
+                - paragraph [ref=e1825]: Pulseiras
+                - heading "Produto PPU0057" [level=3] [ref=e1826]
+                - paragraph [ref=e1827]: 50,00 €
+            - generic [ref=e1829]:
+              - generic [ref=e1830]:
+                - link "Produto PPU0058" [ref=e1831] [cursor=pointer]:
+                  - /url: /catalog/product/168
+                  - img "Produto PPU0058"
+                - generic:
+                  - link [ref=e1832] [cursor=pointer]:
+                    - /url: /catalog/product/168
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/168
+                    - text: Ver Detalhes
+              - generic [ref=e1833]:
+                - paragraph [ref=e1834]: "Ref: PPU0058"
+                - paragraph [ref=e1835]: Pulseiras
+                - heading "Produto PPU0058" [level=3] [ref=e1836]
+                - paragraph [ref=e1837]: 120,00 €
+            - generic [ref=e1839]:
+              - generic [ref=e1840]:
+                - link "Produto PPU0059" [ref=e1841] [cursor=pointer]:
+                  - /url: /catalog/product/169
+                  - img "Produto PPU0059"
+                - generic:
+                  - link [ref=e1842] [cursor=pointer]:
+                    - /url: /catalog/product/169
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/169
+                    - text: Ver Detalhes
+              - generic [ref=e1843]:
+                - paragraph [ref=e1844]: "Ref: PPU0059"
+                - paragraph [ref=e1845]: Pulseiras
+                - heading "Produto PPU0059" [level=3] [ref=e1846]
+                - paragraph [ref=e1847]: 50,00 €
+            - generic [ref=e1849]:
+              - generic [ref=e1850]:
+                - link "Produto PPU0060" [ref=e1851] [cursor=pointer]:
+                  - /url: /catalog/product/170
+                  - img "Produto PPU0060"
+                - generic:
+                  - link [ref=e1852] [cursor=pointer]:
+                    - /url: /catalog/product/170
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/170
+                    - text: Ver Detalhes
+              - generic [ref=e1853]:
+                - paragraph [ref=e1854]: "Ref: PPU0060"
+                - paragraph [ref=e1855]: Pulseiras
+                - heading "Produto PPU0060" [level=3] [ref=e1856]
+                - paragraph [ref=e1857]: 100,00 €
+            - generic [ref=e1859]:
+              - generic [ref=e1860]:
+                - link "Produto PPU0061" [ref=e1861] [cursor=pointer]:
+                  - /url: /catalog/product/171
+                  - img "Produto PPU0061"
+                - generic:
+                  - link [ref=e1862] [cursor=pointer]:
+                    - /url: /catalog/product/171
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/171
+                    - text: Ver Detalhes
+              - generic [ref=e1863]:
+                - paragraph [ref=e1864]: "Ref: PPU0061"
+                - paragraph [ref=e1865]: Pulseiras
+                - heading "Produto PPU0061" [level=3] [ref=e1866]
+                - paragraph [ref=e1867]: 75,00 €
+            - generic [ref=e1869]:
+              - generic [ref=e1870]:
+                - link "Produto PPU0062" [ref=e1871] [cursor=pointer]:
+                  - /url: /catalog/product/172
+                  - img "Produto PPU0062"
+                - generic:
+                  - link [ref=e1872] [cursor=pointer]:
+                    - /url: /catalog/product/172
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/172
+                    - text: Ver Detalhes
+              - generic [ref=e1873]:
+                - paragraph [ref=e1874]: "Ref: PPU0062"
+                - paragraph [ref=e1875]: Pulseiras
+                - heading "Produto PPU0062" [level=3] [ref=e1876]
+                - paragraph [ref=e1877]: 50,00 €
+            - generic [ref=e1879]:
+              - generic [ref=e1880]:
+                - link "Produto PPU0063" [ref=e1881] [cursor=pointer]:
+                  - /url: /catalog/product/173
+                  - img "Produto PPU0063"
+                - generic:
+                  - link [ref=e1882] [cursor=pointer]:
+                    - /url: /catalog/product/173
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/173
+                    - text: Ver Detalhes
+              - generic [ref=e1883]:
+                - paragraph [ref=e1884]: "Ref: PPU0063"
+                - paragraph [ref=e1885]: Pulseiras
+                - heading "Produto PPU0063" [level=3] [ref=e1886]
+                - paragraph [ref=e1887]: 75,00 €
+            - generic [ref=e1889]:
+              - generic [ref=e1890]:
+                - link "Produto PPU0064" [ref=e1891] [cursor=pointer]:
+                  - /url: /catalog/product/174
+                  - img "Produto PPU0064"
+                - generic:
+                  - link [ref=e1892] [cursor=pointer]:
+                    - /url: /catalog/product/174
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/174
+                    - text: Ver Detalhes
+              - generic [ref=e1893]:
+                - paragraph [ref=e1894]: "Ref: PPU0064"
+                - paragraph [ref=e1895]: Pulseiras
+                - heading "Produto PPU0064" [level=3] [ref=e1896]
+                - paragraph [ref=e1897]: 75,00 €
+            - generic [ref=e1899]:
+              - generic [ref=e1900]:
+                - link "Produto PPU0065" [ref=e1901] [cursor=pointer]:
+                  - /url: /catalog/product/175
+                  - img "Produto PPU0065"
+                - generic:
+                  - link [ref=e1902] [cursor=pointer]:
+                    - /url: /catalog/product/175
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/175
+                    - text: Ver Detalhes
+              - generic [ref=e1903]:
+                - paragraph [ref=e1904]: "Ref: PPU0065"
+                - paragraph [ref=e1905]: Pulseiras
+                - heading "Produto PPU0065" [level=3] [ref=e1906]
+                - paragraph [ref=e1907]: 35,00 €
+            - generic [ref=e1909]:
+              - generic [ref=e1910]:
+                - link "Produto PPU0067" [ref=e1911] [cursor=pointer]:
+                  - /url: /catalog/product/177
+                  - img "Produto PPU0067"
+                - generic:
+                  - link [ref=e1912] [cursor=pointer]:
+                    - /url: /catalog/product/177
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/177
+                    - text: Ver Detalhes
+              - generic [ref=e1913]:
+                - paragraph [ref=e1914]: "Ref: PPU0067"
+                - paragraph [ref=e1915]: Pulseiras
+                - heading "Produto PPU0067" [level=3] [ref=e1916]
+                - paragraph [ref=e1917]: 20,00 €
+            - generic [ref=e1919]:
+              - generic [ref=e1920]:
+                - link "Produto PPU0069" [ref=e1921] [cursor=pointer]:
+                  - /url: /catalog/product/179
+                  - img "Produto PPU0069"
+                - generic:
+                  - link [ref=e1922] [cursor=pointer]:
+                    - /url: /catalog/product/179
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/179
+                    - text: Ver Detalhes
+              - generic [ref=e1923]:
+                - paragraph [ref=e1924]: "Ref: PPU0069"
+                - paragraph [ref=e1925]: Pulseiras
+                - heading "Produto PPU0069" [level=3] [ref=e1926]
+                - paragraph [ref=e1927]: 15,00 €
+            - generic [ref=e1929]:
+              - generic [ref=e1930]:
+                - link "Produto PPU0071" [ref=e1931] [cursor=pointer]:
+                  - /url: /catalog/product/181
+                  - img "Produto PPU0071"
+                - generic:
+                  - link [ref=e1932] [cursor=pointer]:
+                    - /url: /catalog/product/181
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/181
+                    - text: Ver Detalhes
+              - generic [ref=e1933]:
+                - paragraph [ref=e1934]: "Ref: PPU0071"
+                - paragraph [ref=e1935]: Pulseiras
+                - heading "Produto PPU0071" [level=3] [ref=e1936]
+                - paragraph [ref=e1937]: 15,00 €
+            - generic [ref=e1939]:
+              - generic [ref=e1940]:
+                - link "Produto PVO0001" [ref=e1941] [cursor=pointer]:
+                  - /url: /catalog/product/136
+                  - img "Produto PVO0001"
+                - generic:
+                  - link [ref=e1942] [cursor=pointer]:
+                    - /url: /catalog/product/136
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/136
+                    - text: Ver Detalhes
+              - generic [ref=e1943]:
+                - paragraph [ref=e1944]: "Ref: PVO0001"
+                - paragraph [ref=e1945]: Colares
+                - heading "Produto PVO0001" [level=3] [ref=e1946]
+                - paragraph [ref=e1947]: 200,00 €
+            - generic [ref=e1949]:
+              - generic [ref=e1950]:
+                - link "Produto PVO0003" [ref=e1951] [cursor=pointer]:
+                  - /url: /catalog/product/183
+                  - img "Produto PVO0003"
+                - generic:
+                  - link [ref=e1952] [cursor=pointer]:
+                    - /url: /catalog/product/183
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/183
+                    - text: Ver Detalhes
+              - generic [ref=e1953]:
+                - paragraph [ref=e1954]: "Ref: PVO0003"
+                - paragraph [ref=e1955]: Colares
+                - heading "Produto PVO0003" [level=3] [ref=e1956]
+                - paragraph [ref=e1957]: 40,00 €
+            - generic [ref=e1959]:
+              - generic [ref=e1960]:
+                - link "Produto PVO0006" [ref=e1961] [cursor=pointer]:
+                  - /url: /catalog/product/186
+                  - img "Produto PVO0006"
+                - generic:
+                  - link [ref=e1962] [cursor=pointer]:
+                    - /url: /catalog/product/186
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/186
+                    - text: Ver Detalhes
+              - generic [ref=e1963]:
+                - paragraph [ref=e1964]: "Ref: PVO0006"
+                - paragraph [ref=e1965]: Colares
+                - heading "Produto PVO0006" [level=3] [ref=e1966]
+                - paragraph [ref=e1967]: 20,00 €
+            - generic [ref=e1969]:
+              - generic [ref=e1970]:
+                - link "Produto PVO0007" [ref=e1971] [cursor=pointer]:
+                  - /url: /catalog/product/187
+                  - img "Produto PVO0007"
+                - generic:
+                  - link [ref=e1972] [cursor=pointer]:
+                    - /url: /catalog/product/187
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/187
+                    - text: Ver Detalhes
+              - generic [ref=e1973]:
+                - paragraph [ref=e1974]: "Ref: PVO0007"
+                - paragraph [ref=e1975]: Colares
+                - heading "Produto PVO0007" [level=3] [ref=e1976]
+                - paragraph [ref=e1977]: 20,00 €
+            - generic [ref=e1979]:
+              - generic [ref=e1980]:
+                - link "Produto PVO0008" [ref=e1981] [cursor=pointer]:
+                  - /url: /catalog/product/188
+                  - img "Produto PVO0008"
+                - generic:
+                  - link [ref=e1982] [cursor=pointer]:
+                    - /url: /catalog/product/188
+                  - link "Ver Detalhes":
+                    - /url: /catalog/product/188
+                    - text: Ver Detalhes
+              - generic [ref=e1983]:
+                - paragraph [ref=e1984]: "Ref: PVO0008"
+                - paragraph [ref=e1985]: Colares
+                - heading "Produto PVO0008" [level=3] [ref=e1986]
+                - paragraph [ref=e1987]: 40,00 €
+  - contentinfo [ref=e1988]:
+    - generic [ref=e1989]:
+      - generic [ref=e1990]:
+        - heading "Gonzaga's Art & Shine" [level=3] [ref=e1991]
+        - paragraph [ref=e1992]: Elegância que nasce da terra
+      - generic [ref=e1993]:
+        - heading "Redes Sociais" [level=3] [ref=e1994]
+        - list [ref=e1995]:
+          - listitem [ref=e1996]:
+            - link "Instagram" [ref=e1997] [cursor=pointer]:
+              - /url: https://www.instagram.com/gonzagaartnshine/
+              - img [ref=e1998]
+              - text: Instagram
+          - listitem [ref=e2000]:
+            - link "Facebook" [ref=e2001] [cursor=pointer]:
+              - /url: https://www.facebook.com/profile.php?id=61573519807731
+              - img [ref=e2002]
+              - text: Facebook
+      - generic [ref=e2004]:
+        - heading "Privacidade & Termos" [level=3] [ref=e2005]
+        - list [ref=e2006]:
+          - listitem [ref=e2007]:
+            - link "Política de Privacidade" [ref=e2008] [cursor=pointer]:
+              - /url: /privacy-policy
+              - text: Política de Privacidade
+          - listitem [ref=e2009]:
+            - link "Termos de Uso" [ref=e2010] [cursor=pointer]:
+              - /url: /terms-of-service
+              - text: Termos de Uso
+    - generic [ref=e2011]:
+      - paragraph [ref=e2012]: © 2026 Gonzaga's Art & Shine. All rights reserved.
+      - paragraph [ref=e2013]:
+        - link "Privacidade" [ref=e2014] [cursor=pointer]:
+          - /url: /privacy-policy
+        - text: "|"
+        - link "Termos" [ref=e2015] [cursor=pointer]:
+          - /url: /terms-of-service
+        - text: "|"
+        - link "Direitos" [ref=e2016] [cursor=pointer]:
+          - /url: /user-rights

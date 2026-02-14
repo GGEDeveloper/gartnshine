@@ -123,7 +123,7 @@
       <!-- Catalog Controls (Sort & View) -->
       <div class="catalog-controls">
         <div class="catalog-controls-left">
-          <label for="catalog-sort" class="me-2" style="color: var(--color-text);">Ordenar por:</label>
+          <label for="catalog-sort" class="sort-label">Ordenar por:</label>
           <select id="catalog-sort" class="sort-select">
             <option value="default">Padrão</option>
             <option value="price-asc">Preço: Menor → Maior</option>
@@ -136,10 +136,10 @@
         </div>
         <div class="catalog-controls-right">
           <div class="view-toggle">
-            <button type="button" class="view-btn active" id="view-grid" title="Vista em grelha">
+            <button type="button" class="view-btn active" id="view-grid" title="Vista em grelha" aria-label="Vista em grelha">
               <i class="fas fa-th"></i>
             </button>
-            <button type="button" class="view-btn" id="view-list" title="Vista em lista">
+            <button type="button" class="view-btn" id="view-list" title="Vista em lista" aria-label="Vista em lista">
               <i class="fas fa-list"></i>
             </button>
           </div>
@@ -165,8 +165,8 @@
                        class="product-image-link">
                       <img src="<%= imageUrl %>" 
                            alt="<%= product.name %>" 
-                           class="product-image lazy-load"
-                           data-src="<%= imageUrl %>"
+                           class="product-image lazy-loaded"
+                           loading="lazy"
                            onerror="this.src='/images/placeholder-image.png';">
                       <div class="product-overlay">
                         <a href="/catalog/product/<%= product.id %>" class="btn-quick-view">
@@ -240,80 +240,37 @@
 <script src="/js/modules/catalog-search.js"></script>
 <script src="/js/catalog-enhanced.js"></script>
 
-<!-- Fix: Ensure ALL product images display correctly -->
+<!-- Catalog Image Handler - Optimized -->
 <script>
 (function() {
   'use strict';
   
-  // CRITICAL: Force all images to load and display immediately
-  function forceAllImagesVisible() {
-    const images = document.querySelectorAll('.product-image-container .product-image');
-    let fixed = 0;
-    
-    images.forEach(img => {
-      // Ensure src is set (critical for images with data-src)
-      if (img.dataset.src && !img.src) {
-        img.src = img.dataset.src;
-      }
-      
-      // Ensure image is visible
-      img.style.opacity = '1';
-      img.style.visibility = 'visible';
-      img.style.display = 'block';
-      
-      // Fix height if needed
-      if (img.offsetHeight === 0) {
-        const container = img.closest('.product-image-container');
-        if (container) {
-          const containerHeight = container.offsetHeight || container.clientHeight;
-          if (containerHeight > 0) {
-            img.style.height = containerHeight + 'px';
-            img.style.minHeight = containerHeight + 'px';
-            fixed++;
-          }
-        }
-      }
-    });
-    
-    if (fixed > 0) {
-      console.log('Fixed height for', fixed, 'images');
-    }
-  }
-  
-  // Run immediately
-  function init() {
-    // Force all images to load
-    forceAllImagesVisible();
-    
-    // Also handle image load events
+  function ensureImagesVisible() {
     const images = document.querySelectorAll('.product-image');
     images.forEach(img => {
-      if (img.complete) {
-        forceAllImagesVisible();
-      } else {
-        img.addEventListener('load', forceAllImagesVisible, { once: true });
-        img.addEventListener('error', forceAllImagesVisible, { once: true });
+      // Ensure all images have lazy-loaded class for proper display
+      if (!img.classList.contains('lazy-loaded')) {
+        img.classList.add('lazy-loaded');
+      }
+      
+      // Handle error state
+      if (!img.complete || img.naturalHeight === 0) {
+        img.addEventListener('error', function() {
+          this.src = '/images/placeholder-image.png';
+          this.classList.add('lazy-loaded');
+        }, { once: true });
       }
     });
   }
   
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', ensureImagesVisible);
   } else {
-    init();
+    ensureImagesVisible();
   }
   
-  // Run after window load
-  window.addEventListener('load', function() {
-    forceAllImagesVisible();
-    setTimeout(forceAllImagesVisible, 100);
-    setTimeout(forceAllImagesVisible, 500);
-  });
-  
-  // Also run periodically to catch any missed images
-  setTimeout(forceAllImagesVisible, 200);
-  setTimeout(forceAllImagesVisible, 1000);
-  setTimeout(forceAllImagesVisible, 2000);
+  // Run once more after full page load
+  window.addEventListener('load', ensureImagesVisible, { once: true });
 })();
 </script>
 

@@ -235,11 +235,9 @@ class CatalogFilters {
             <a href="/catalog/product/${product.id}" class="product-image-link">
               <img src="${imageUrl}" 
                    alt="${this.escapeHtml(product.name)}" 
-                   class="product-image lazy-load"
+                   class="product-image lazy-loaded"
                    loading="lazy"
-                   data-src="${imageUrl}"
-                   style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
-                   onerror="this.src='/images/placeholder-image.png'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
+                   onerror="this.src='/images/placeholder-image.png'">
               <div class="product-overlay">
                 <a href="/catalog/product/${product.id}" class="btn-quick-view">
                   <i class="fas fa-eye"></i> Ver Detalhes
@@ -251,7 +249,7 @@ class CatalogFilters {
           </div>
           <div class="product-info">
             <p class="product-reference">Ref: ${this.escapeHtml(product.reference || 'N/A')}</p>
-            <p class="product-family"><small class="text-highlight">${this.escapeHtml(product.family_name || '')}</small></p>
+            ${product.family_name ? `<p class="product-family"><small class="text-highlight">${this.escapeHtml(product.family_name)}</small></p>` : ''}
             <h3 class="product-title">${this.escapeHtml(product.name || 'Produto')}</h3>
             <p class="product-price">
               ${product.formatted_sale_price || '<span class="text-muted fst-italic">Preço sob consulta</span>'}
