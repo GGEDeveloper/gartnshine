@@ -1,0 +1,565 @@
+/**
+ * Admin Dark Luxe - Gonzaga's Art & Shine
+ * Mesmo estilo visual do frontend: paleta prata/bronze, fundos escuros
+ * Nuances para legibilidade nas tabelas
+ */
+
+/* ===== VARIÁVEIS ADMIN (override) ===== */
+body.admin-layout-fixed {
+  --primary: #0b1016;
+  --primary-light: #05070a;
+  --dark: #0b1016;
+  --light: #f4f6f8;
+  --gray-100: #121922;
+  --gray-200: #172130;
+  --gray-300: #1e2936;
+  --gray-400: #aab3bf;
+  --gray-500: #9098a3;
+  --gray-600: #C0C0C0;
+  --gray-700: #e0e4e8;
+  --gray-800: #f4f6f8;
+  --gray-900: #ffffff;
+  --white: #0a0f15;
+  --color-accent: #A8A8A8;
+  --color-highlight: #C0C0C0;
+}
+
+/* ===== BODY & LAYOUT ===== */
+body.admin-layout-fixed {
+  background: linear-gradient(180deg, #05070a 0%, #0b1016 35%, #121922 100%) !important;
+  color: #e0e4e8 !important;
+}
+
+/* ===== SIDEBAR ===== */
+body.admin-layout-fixed .sidebar {
+  background: #0b1016 !important;
+  border-right: 1px solid rgba(192, 192, 192, 0.1) !important;
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .sidebar-brand {
+  border-bottom-color: rgba(192, 192, 192, 0.1) !important;
+}
+
+body.admin-layout-fixed .sidebar-nav .nav-link {
+  color: #aab3bf !important;
+}
+
+body.admin-layout-fixed .sidebar-nav .nav-link:hover {
+  background: rgba(192, 192, 192, 0.08) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .sidebar-nav .nav-link.active {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  color: #C0C0C0 !important;
+  border-left: 3px solid #A8A8A8;
+}
+
+body.admin-layout-fixed .sidebar-header {
+  color: #9098a3 !important;
+}
+
+/* ===== HEADER / TOPBAR ===== */
+body.admin-layout-fixed .header,
+body.admin-layout-fixed .topbar,
+body.admin-layout-fixed header.bg-white,
+body.admin-layout-fixed #wrapper #content-wrapper #content .header,
+body.admin-layout-fixed #wrapper #content-wrapper .header {
+  background: #0b1016 !important;
+  border-bottom: 1px solid rgba(192, 192, 192, 0.1) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.admin-layout-fixed .header .nav-link,
+body.admin-layout-fixed .header .text-gray-600,
+body.admin-layout-fixed .header .text-gray-500,
+body.admin-layout-fixed .header .text-dark,
+body.admin-layout-fixed .header h5,
+body.admin-layout-fixed .header .btn-link {
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .header .nav-link:hover,
+body.admin-layout-fixed .header .dropdown-item:hover {
+  color: #E8E8E8 !important;
+  background: rgba(192, 192, 192, 0.08) !important;
+}
+
+body.admin-layout-fixed .header .dropdown-menu {
+  background: #121922 !important;
+  border: 1px solid rgba(192, 192, 192, 0.1) !important;
+}
+
+body.admin-layout-fixed .header .dropdown-item {
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .header .dropdown-divider {
+  border-color: rgba(192, 192, 192, 0.2) !important;
+}
+
+/* ===== CONTENT AREA ===== */
+body.admin-layout-fixed #content-wrapper,
+body.admin-layout-fixed .main {
+  background: transparent !important;
+}
+
+body.admin-layout-fixed #content,
+body.admin-layout-fixed .admin-content {
+  background: transparent !important;
+}
+
+/* ===== CARDS ===== */
+body.admin-layout-fixed .card {
+  background: rgba(11, 16, 22, 0.95) !important;
+  border: 1px solid rgba(192, 192, 192, 0.1) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.admin-layout-fixed .card-header {
+  background: rgba(18, 25, 34, 0.8) !important;
+  border-bottom: 1px solid rgba(192, 192, 192, 0.1) !important;
+  color: #C0C0C0 !important;
+  font-weight: 600;
+}
+
+body.admin-layout-fixed .card-title {
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .card-body {
+  color: #e0e4e8 !important;
+}
+
+/* ===== TABELAS - legibilidade com nuances ===== */
+body.admin-layout-fixed .table,
+body.admin-layout-fixed .dataTables_wrapper .table,
+body.admin-layout-fixed table.table {
+  background: rgba(18, 25, 34, 0.9) !important;
+  color: #e0e4e8 !important;
+  border-color: rgba(192, 192, 192, 0.15) !important;
+}
+
+body.admin-layout-fixed .table th,
+body.admin-layout-fixed .dataTables_wrapper .table th {
+  background: rgba(23, 33, 42, 0.95) !important;
+  color: #C0C0C0 !important;
+  border-color: rgba(192, 192, 192, 0.15) !important;
+  font-weight: 600;
+}
+
+body.admin-layout-fixed .table td,
+body.admin-layout-fixed .dataTables_wrapper .table td {
+  background: rgba(18, 25, 34, 0.95) !important;
+  color: #e0e4e8 !important;
+  border-color: rgba(192, 192, 192, 0.08) !important;
+}
+
+body.admin-layout-fixed .table tbody tr {
+  background: rgba(18, 25, 34, 0.95) !important;
+}
+
+body.admin-layout-fixed .table tbody tr:nth-child(even) td {
+  background: rgba(23, 33, 42, 0.8) !important;
+}
+
+body.admin-layout-fixed .table tbody tr:nth-child(odd) td {
+  background: rgba(18, 25, 34, 0.95) !important;
+}
+
+body.admin-layout-fixed .table tbody tr:hover td {
+  background: rgba(192, 192, 192, 0.08) !important;
+}
+
+/* Table inventory - override para dark com dados visíveis */
+body.admin-layout-fixed .table-inventory,
+body.admin-layout-fixed .table-inventory > thead > tr > th,
+body.admin-layout-fixed .table-inventory > tbody > tr > td {
+  background-color: rgba(18, 25, 34, 0.95) !important;
+  color: #e0e4e8 !important;
+  border-color: rgba(192, 192, 192, 0.15) !important;
+}
+
+body.admin-layout-fixed .table-inventory thead th {
+  background: rgba(23, 33, 42, 0.98) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .table-inventory tbody tr:nth-child(even) td {
+  background: rgba(23, 33, 42, 0.6) !important;
+}
+
+body.admin-layout-fixed .table-inventory tbody tr:hover td {
+  background: rgba(192, 192, 192, 0.05) !important;
+}
+
+body.admin-layout-fixed .table-inventory .text-muted {
+  color: #9098a3 !important;
+}
+
+body.admin-layout-fixed .table-inventory .badge {
+  background: rgba(168, 168, 168, 0.2) !important;
+  color: #C0C0C0 !important;
+  border-color: rgba(192, 192, 192, 0.3) !important;
+}
+
+/* Placeholders e imagens em tabelas */
+body.admin-layout-fixed .table .bg-light,
+body.admin-layout-fixed .table td .bg-light {
+  background: rgba(23, 33, 42, 0.9) !important;
+  color: #9098a3 !important;
+}
+
+body.admin-layout-fixed .img-thumbnail {
+  border-color: rgba(192, 192, 192, 0.2) !important;
+}
+
+/* Badges inventário (stock/status) - legibilidade com nuances */
+body.admin-layout-fixed .badge-stock-in-stock {
+  background: rgba(81, 207, 102, 0.35) !important;
+  color: #51cf66 !important;
+  border: 1px solid rgba(81, 207, 102, 0.4) !important;
+}
+
+body.admin-layout-fixed .badge-stock-low-stock {
+  background: rgba(184, 115, 51, 0.4) !important;
+  color: #E8C878 !important;
+  border: 1px solid rgba(184, 115, 51, 0.5) !important;
+}
+
+body.admin-layout-fixed .badge-stock-out-of-stock {
+  background: rgba(232, 100, 100, 0.4) !important;
+  color: #F0A0A0 !important;
+  border: 1px solid rgba(232, 100, 100, 0.5) !important;
+}
+
+body.admin-layout-fixed .badge-product-active {
+  background: rgba(81, 207, 102, 0.3) !important;
+  color: #51cf66 !important;
+}
+
+body.admin-layout-fixed .badge-product-inactive {
+  background: rgba(144, 152, 163, 0.4) !important;
+  color: #aab3bf !important;
+}
+
+/* Filtros e modais */
+body.admin-layout-fixed .table-filters {
+  background: rgba(18, 25, 34, 0.8) !important;
+  border: 1px solid rgba(192, 192, 192, 0.15) !important;
+  border-radius: 0.5rem;
+}
+
+body.admin-layout-fixed .table-filters label {
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .column-modal .modal-content {
+  background: rgba(11, 16, 22, 0.98) !important;
+  border: 1px solid rgba(192, 192, 192, 0.15) !important;
+}
+
+body.admin-layout-fixed .column-modal .modal-header {
+  background: rgba(18, 25, 34, 0.9) !important;
+  border-bottom-color: rgba(192, 192, 192, 0.1) !important;
+}
+
+body.admin-layout-fixed .column-modal .modal-title {
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .column-modal .modal-footer {
+  border-top-color: rgba(192, 192, 192, 0.1) !important;
+}
+
+/* Botões info/danger no admin */
+body.admin-layout-fixed .btn-info {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  border-color: rgba(192, 192, 192, 0.3) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .btn-info:hover {
+  background: linear-gradient(135deg, #3a3a3a, #4a4a4a) !important;
+  color: #E8E8E8 !important;
+}
+
+body.admin-layout-fixed .btn-danger {
+  background: rgba(232, 100, 100, 0.35) !important;
+  border-color: rgba(232, 100, 100, 0.5) !important;
+  color: #F0A0A0 !important;
+}
+
+body.admin-layout-fixed .btn-danger:hover {
+  background: rgba(232, 100, 100, 0.5) !important;
+  color: #fff !important;
+}
+
+body.admin-layout-fixed .btn-secondary {
+  background: rgba(168, 168, 168, 0.2) !important;
+  border-color: rgba(192, 192, 192, 0.3) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .btn-secondary:hover {
+  background: rgba(192, 192, 192, 0.15) !important;
+  color: #E8E8E8 !important;
+}
+
+/* ===== MEDIA LIBRARY ===== */
+body.admin-layout-fixed .dropzone {
+  border: 2px dashed rgba(192, 192, 192, 0.3) !important;
+  background: rgba(18, 25, 34, 0.6) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .dropzone.dragover {
+  border-color: #A8A8A8 !important;
+  background: rgba(168, 168, 168, 0.15) !important;
+}
+
+body.admin-layout-fixed .media-grid {
+  background: transparent !important;
+}
+
+body.admin-layout-fixed .media-item {
+  background: rgba(18, 25, 34, 0.9) !important;
+  border: 1px solid rgba(192, 192, 192, 0.15) !important;
+}
+
+body.admin-layout-fixed .media-item:hover {
+  border-color: rgba(192, 192, 192, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ===== BOTÕES ===== */
+body.admin-layout-fixed .btn-primary {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  border-color: rgba(192, 192, 192, 0.3) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .btn-primary:hover {
+  background: linear-gradient(135deg, #3a3a3a, #4a4a4a) !important;
+  color: #E8E8E8 !important;
+  border-color: rgba(192, 192, 192, 0.4) !important;
+}
+
+body.admin-layout-fixed .btn-outline-primary,
+body.admin-layout-fixed .btn-outline-secondary {
+  border-color: #A8A8A8 !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .btn-outline-primary:hover,
+body.admin-layout-fixed .btn-outline-secondary:hover {
+  background: rgba(192, 192, 192, 0.1) !important;
+  color: #E8E8E8 !important;
+}
+
+/* ===== FORMS ===== */
+body.admin-layout-fixed .form-control,
+body.admin-layout-fixed .form-select,
+body.admin-layout-fixed input[type="text"],
+body.admin-layout-fixed input[type="email"],
+body.admin-layout-fixed input[type="number"],
+body.admin-layout-fixed textarea,
+body.admin-layout-fixed select {
+  background: rgba(11, 16, 22, 0.95) !important;
+  border: 1px solid rgba(192, 192, 192, 0.2) !important;
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .form-control:focus,
+body.admin-layout-fixed .form-select:focus {
+  border-color: rgba(192, 192, 192, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.15) !important;
+}
+
+body.admin-layout-fixed .form-control::placeholder {
+  color: #6b7280 !important;
+}
+
+body.admin-layout-fixed .form-label,
+body.admin-layout-fixed label {
+  color: #C0C0C0 !important;
+}
+
+/* ===== TIPOGRAFIA ===== */
+body.admin-layout-fixed h1,
+body.admin-layout-fixed h2,
+body.admin-layout-fixed h3,
+body.admin-layout-fixed h4,
+body.admin-layout-fixed h5,
+body.admin-layout-fixed h6,
+body.admin-layout-fixed .page-title {
+  color: #f4f6f8 !important;
+}
+
+body.admin-layout-fixed .text-muted {
+  color: #9098a3 !important;
+}
+
+body.admin-layout-fixed a {
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed a:hover {
+  color: #E8E8E8 !important;
+}
+
+/* ===== FOOTER ===== */
+body.admin-layout-fixed .footer {
+  background: #0b1016 !important;
+  border-top: 1px solid rgba(192, 192, 192, 0.1) !important;
+  color: #9098a3 !important;
+}
+
+/* ===== SCROLL TO TOP ===== */
+body.admin-layout-fixed .scroll-to-top {
+  background: linear-gradient(135deg, #3a3a3a, #5a5a5a) !important;
+  color: #C0C0C0 !important;
+  border: 1px solid rgba(192, 192, 192, 0.3) !important;
+}
+
+body.admin-layout-fixed .scroll-to-top:hover {
+  background: linear-gradient(135deg, #4a4a4a, #6a6a6a) !important;
+  color: #E8E8E8 !important;
+}
+
+/* ===== STAT ICONS (dashboard cards) - paleta prata/bronze ===== */
+body.admin-layout-fixed .stat-icon.bg-primary {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  color: #C0C0C0 !important;
+  border: 1px solid rgba(192, 192, 192, 0.3) !important;
+}
+
+body.admin-layout-fixed .stat-icon.bg-success {
+  background: linear-gradient(135deg, #2a3528, #3a4538) !important;
+  color: #A8C0A8 !important;
+  border: 1px solid rgba(168, 192, 168, 0.3) !important;
+}
+
+body.admin-layout-fixed .stat-icon.bg-warning {
+  background: linear-gradient(135deg, #3a3520, #4a4528) !important;
+  color: #D4B85C !important;
+  border: 1px solid rgba(184, 115, 51, 0.3) !important;
+}
+
+body.admin-layout-fixed .stat-icon.bg-danger {
+  background: linear-gradient(135deg, #3a2525, #4a3030) !important;
+  color: #E8A0A0 !important;
+  border: 1px solid rgba(184, 115, 51, 0.2) !important;
+}
+
+/* ===== LIST GROUP (Produtos Recentes) - legibilidade ===== */
+body.admin-layout-fixed .list-group-item {
+  background: rgba(18, 25, 34, 0.6) !important;
+  border-color: rgba(192, 192, 192, 0.1) !important;
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .list-group-item .text-dark {
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .list-group-item .bg-light {
+  background: rgba(23, 33, 42, 0.9) !important;
+  color: #9098a3 !important;
+}
+
+body.admin-layout-fixed .list-group-item .badge.bg-primary,
+body.admin-layout-fixed .list-group-item .badge.rounded-pill {
+  background: rgba(168, 168, 168, 0.35) !important;
+  color: #f4f6f8 !important;
+  border: 1px solid rgba(192, 192, 192, 0.4) !important;
+}
+
+/* ===== BOTÕES OUTLINE (success, warning, danger) ===== */
+body.admin-layout-fixed .btn-outline-success {
+  border-color: rgba(168, 192, 168, 0.5) !important;
+  color: #A8C0A8 !important;
+}
+
+body.admin-layout-fixed .btn-outline-success:hover {
+  background: rgba(168, 192, 168, 0.15) !important;
+  color: #C8E0C8 !important;
+}
+
+body.admin-layout-fixed .btn-outline-warning {
+  border-color: rgba(184, 115, 51, 0.5) !important;
+  color: #D4B85C !important;
+}
+
+body.admin-layout-fixed .btn-outline-warning:hover {
+  background: rgba(184, 115, 51, 0.15) !important;
+  color: #E8C878 !important;
+}
+
+body.admin-layout-fixed .btn-outline-danger {
+  border-color: rgba(232, 160, 160, 0.5) !important;
+  color: #E8A0A0 !important;
+}
+
+body.admin-layout-fixed .btn-outline-danger:hover {
+  background: rgba(232, 160, 160, 0.15) !important;
+  color: #F0B0B0 !important;
+}
+
+/* ===== BADGES & ALERTS ===== */
+body.admin-layout-fixed .badge.bg-success {
+  background: rgba(81, 207, 102, 0.3) !important;
+  color: #51cf66 !important;
+}
+
+body.admin-layout-fixed .badge.bg-danger,
+body.admin-layout-fixed .badge.bg-warning {
+  color: #fff !important;
+}
+
+body.admin-layout-fixed .alert-info {
+  background: rgba(168, 168, 168, 0.15) !important;
+  border-left-color: #A8A8A8 !important;
+  color: #e0e4e8 !important;
+}
+
+/* ===== DATATABLES ===== */
+body.admin-layout-fixed .dataTables_wrapper {
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .dataTables_filter input {
+  background: rgba(11, 16, 22, 0.95) !important;
+  border-color: rgba(192, 192, 192, 0.2) !important;
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .dataTables_length select {
+  background: rgba(11, 16, 22, 0.95) !important;
+  border-color: rgba(192, 192, 192, 0.2) !important;
+  color: #e0e4e8 !important;
+}
+
+body.admin-layout-fixed .dataTables_info,
+body.admin-layout-fixed .dataTables_paginate {
+  color: #9098a3 !important;
+}
+
+body.admin-layout-fixed .page-link {
+  background: rgba(18, 25, 34, 0.9) !important;
+  border-color: rgba(192, 192, 192, 0.2) !important;
+  color: #C0C0C0 !important;
+}
+
+body.admin-layout-fixed .page-link:hover {
+  background: rgba(192, 192, 192, 0.1) !important;
+  color: #E8E8E8 !important;
+}
+
+body.admin-layout-fixed .page-item.active .page-link {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  border-color: #A8A8A8 !important;
+  color: #C0C0C0 !important;
+}

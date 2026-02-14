@@ -32,7 +32,7 @@ html, body {
     left: 0 !important;
     width: 260px !important;
     height: 100vh !important;
-    background: var(--primary, #2c3e50) !important;
+    background: #0b1016 !important;
     z-index: 100 !important;
     transform: none !important;
     transition: transform 0.3s ease !important;
@@ -73,7 +73,7 @@ html, body {
     left: -100% !important;
     width: 280px !important;
     height: 100vh !important;
-    background: var(--primary, #2c3e50) !important;
+    background: #0b1016 !important;
     z-index: 1000 !important;
     transform: none !important;
     transition: left 0.3s ease !important;
@@ -189,7 +189,7 @@ html, body {
     left: -100% !important;
     width: 280px !important;
     height: 100vh !important;
-    background: var(--primary, #2c3e50) !important;
+    background: #0b1016 !important;
     z-index: 1000 !important; /* Entre overlay e header */
     transform: none !important;
     transition: left 0.3s ease !important;

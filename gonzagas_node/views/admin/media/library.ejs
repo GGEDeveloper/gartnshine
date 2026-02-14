@@ -1,126 +1,99 @@
-<% locals.style = (locals.style || '') + '<link rel="stylesheet" href="/css/media-library.css"><style>.dropzone{border:2px dashed #ccc;border-radius:12px;padding:40px;text-align:center;background:#f8f9fa;margin-bottom:30px;max-width:100%;box-sizing:border-box}.dropzone.dragover{border-color:#4b6854;background:rgba(75,104,84,0.1)}.media-library-content *{box-sizing:border-box}</style>'; %>
+<% locals.style = (locals.style || '') + '<link rel="stylesheet" href="/css/media-library.css">'; %>
 <div class="media-library-page">
-<div class="media-library-content px-3 px-md-4 py-3">
-            <div class="content-header">
-                <div class="header-left">
-                    <h1><i class="fas fa-images"></i> Galeria</h1>
-                    <p class="header-subtitle">Imagens para a galeria do site (fotos de produtos gerem-se no form de produto)</p>
-                </div>
-                
-                <div class="header-actions">
-                    <button class="btn btn-secondary d-md-none" id="toggleViewMode" title="Alternar vista">
-                        <i class="fas fa-th-large"></i>
-                        <span>Grelha</span>
-                    </button>
-                    
-                    <button class="btn btn-secondary" onclick="openBulkActions()">
-                        <i class="fas fa-tasks"></i>
-                        <span>Ações em Lote</span>
-                    </button>
-                    
-                    <div class="upload-actions">
-                        <label class="btn btn-primary" for="fileInput">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Upload</span>
-                        </label>
-                        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
-                        
-                        <button class="btn btn-primary" onclick="openCameraCapture()">
-                            <i class="fas fa-camera"></i>
-                            <span>Câmara</span>
-                        </button>
-                    </div>
-                </div>
+    <div class="media-library-content px-3 px-md-4 py-3">
+        <!-- Header -->
+        <div class="content-header">
+            <div class="header-left">
+                <h1><i class="fas fa-images"></i> Galeria de Media</h1>
+                <p class="header-subtitle">Gerir imagens da galeria e coleções • Produtos editam-se no formulário de produto</p>
             </div>
             
-            <!-- Filters & Search -->
-            <div class="media-toolbar">
-                <div class="toolbar-left">
-                    <!-- Folder Navigation -->
-                    <div class="folder-nav">
-                        <select id="folderSelect" class="form-select">
-                            <option value="">Todas</option>
-                            <% folders.forEach(folder => { %>
-                                <option value="<%= folder.path %>" 
-                                        data-color="<%= folder.color %>"
-                                        <%= folder.path === '/gallery/' ? 'selected' : '' %>>
-                                    <% for(let i = 0; i < (folder.path.split('/').length - 2); i++) { %>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <% } %>
-                                    📁 <%= folder.name %> (<%= folder.file_count %>)
-                                </option>
-                            <% }); %>
-                        </select>
-                        
-                        <button class="btn btn-sm btn-outline" onclick="createNewFolder()">
-                            <i class="fas fa-folder-plus"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Tag Filter (hidden on mobile) -->
-                    <div class="tag-filter d-none d-md-block">
-                        <select id="tagSelect" class="form-select" multiple>
-                            <% tags.forEach(tag => { %>
-                                <option value="<%= tag.slug %>" 
-                                        data-color="<%= tag.color %>">
-                                    <%= tag.name %> (<%= tag.usage_count %>)
-                                </option>
-                            <% }); %>
-                        </select>
-                    </div>
-                </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary btn-sm d-md-none" id="toggleViewMode" title="Alternar vista">
+                    <i class="fas fa-th-large"></i>
+                    Grelha
+                </button>
                 
-                <div class="toolbar-center">
-                    <!-- Search -->
-                    <div class="search-box">
-                        <input type="text" 
-                               id="mediaSearch" 
-                               placeholder="Pesquisar ficheiros..." 
-                               class="search-input">
-                        <button class="search-btn">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="toolbar-right">
-                    <!-- Sort Options -->
-                    <select id="sortSelect" class="form-select">
-                        <option value="created_at:desc">Mais Recentes</option>
-                        <option value="created_at:asc">Mais Antigos</option>
-                        <option value="filename:asc">Nome A-Z</option>
-                        <option value="filename:desc">Nome Z-A</option>
-                        <option value="file_size:desc">Maior Tamanho</option>
-                        <option value="file_size:asc">Menor Tamanho</option>
-                    </select>
+                <div class="upload-actions">
+                    <label class="btn btn-primary" for="fileInput">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Upload
+                    </label>
+                    <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
                     
-                    <!-- Results per page -->
-                    <select id="limitSelect" class="form-select">
-                        <option value="24">24 por página</option>
-                        <option value="48">48 por página</option>
-                        <option value="96">96 por página</option>
+                    <button class="btn btn-primary d-md-inline-block d-none" onclick="openCameraCapture()">
+                        <i class="fas fa-camera"></i>
+                        Câmara
+                    </button>
+                </div>
+            </div>
+        </div>
+            
+        <!-- Toolbar: Filtros & Pesquisa -->
+        <div class="media-toolbar">
+            <div class="toolbar-left">
+                <div class="folder-nav">
+                    <select id="folderSelect" class="form-select">
+                        <option value="">📁 Todas as Pastas</option>
+                        <% folders.forEach(folder => { %>
+                            <option value="<%= folder.path %>" 
+                                    <%= folder.path === '/gallery/' ? 'selected' : '' %>>
+                                <% for(let i = 0; i < (folder.path.split('/').length - 2); i++) { %>
+                                    &nbsp;&nbsp;
+                                <% } %>
+                                └ <%= folder.name %> (<%= folder.file_count %>)
+                            </option>
+                        <% }); %>
                     </select>
                 </div>
             </div>
             
-            <!-- Upload Drop Zone -->
-            <div class="dropzone" id="dropzone">
-                <div class="dropzone-content">
-                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
-                    <h3>Arraste ficheiros aqui para fazer upload</h3>
-                    <p>ou clique no botão Upload acima</p>
-                    <div class="supported-formats">
-                        <small>Suportado: JPG, PNG, WebP, GIF (máx. 10MB por ficheiro)</small>
-                    </div>
-                </div>
-                
-                <!-- Upload Progress -->
-                <div class="upload-progress-container" style="display: none;">
-                    <div class="upload-progress-items" id="uploadProgressItems">
-                        <!-- Dynamic upload progress items -->
-                    </div>
+            <div class="toolbar-center">
+                <div class="search-box">
+                    <input type="text" 
+                           id="mediaSearch" 
+                           placeholder="Pesquisar por nome ou tag..." 
+                           class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
+            
+            <div class="toolbar-right">
+                <select id="sortSelect" class="form-select">
+                    <option value="created_at:desc">↓ Recentes</option>
+                    <option value="created_at:asc">↑ Antigos</option>
+                    <option value="filename:asc">A → Z</option>
+                    <option value="filename:desc">Z → A</option>
+                </select>
+                
+                <select id="limitSelect" class="form-select">
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="96">96</option>
+                </select>
+            </div>
+        </div>
+            
+        <!-- Upload Drop Zone -->
+        <div class="dropzone" id="dropzone">
+            <div class="dropzone-content">
+                <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                <h3>Arraste imagens aqui</h3>
+                <p>ou clique no botão <strong>Upload</strong> acima</p>
+                <div class="supported-formats">
+                    <small>📸 JPG, PNG, WebP, GIF • Máx. 10MB por ficheiro</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Upload Progress -->
+        <div class="upload-progress-container" id="uploadProgressContainer" style="display: none;">
+            <div class="upload-progress-items" id="uploadProgressItems">
+                <!-- Dynamic upload progress items -->
+            </div>
+        </div>
             
             <!-- Media Grid -->
             <div class="media-grid-container">
@@ -293,6 +266,7 @@
 </div>
 
 <script src="/js/media-library.js"></script>
+<script src="/js/media-library-helpers.js"></script>
 <script src="/js/media-camera.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -303,6 +277,10 @@ document.addEventListener("DOMContentLoaded", function() {
             maxFileSize: 10 * 1024 * 1024,
             allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
         });
+        
+        console.log('Media Library initialized successfully');
+    } else {
+        console.error('MediaLibrary class not found');
     }
 });
 </script>

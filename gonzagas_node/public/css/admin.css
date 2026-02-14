@@ -34,21 +34,12 @@
   --box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
 }
 
-/* Table Styles */
-.table-inventory,
-.table-inventory > thead > tr > th,
-.table-inventory > tbody > tr > td,
-.table-inventory > tfoot > tr > td {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
+/* Table Styles - base (admin-dark-luxe.css override para tema escuro) */
 .table-inventory {
   width: 100%;
   margin-bottom: 1.5rem;
   border-collapse: collapse;
-  border: 1px solid #000000;
+  border: 1px solid rgba(192, 192, 192, 0.15);
 }
 
 .table-inventory th {
@@ -68,31 +59,6 @@
 
 .table-inventory tbody tr {
   transition: background-color 0.2s ease;
-}
-
-.table-inventory tbody tr:hover {
-  background-color: #f8f9fa !important;
-}
-
-/* Override text colors */
-.table-inventory .text-muted,
-.table-inventory .text-primary,
-.table-inventory .text-success,
-.table-inventory .text-dark {
-  color: #000000 !important;
-}
-
-/* Override badges */
-.table-inventory .badge {
-  background-color: #f8f9fa !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
-.table-inventory .badge {
-  font-weight: 500;
-  padding: 0.35em 0.65em;
-  font-size: 0.75em;
 }
 
 /* Responsive Table */

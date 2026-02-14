@@ -40,27 +40,47 @@ class MediaLibrary {
         const dropzone = document.getElementById('dropzone');
         if (!dropzone) return;
         
+        const preventDefaults = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+        
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, this.preventDefaults, false);
-            document.body.addEventListener(eventName, this.preventDefaults, false);
+            dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
         });
         
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzone.addEventListener(eventName, () => {
-                dropzone.classList.add('dragover');
-            }, false);
+        let dragCounter = 0;
+        
+        dropzone.addEventListener('dragenter', () => {
+            dragCounter++;
+            dropzone.classList.add('dragover');
         });
         
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, () => {
+        dropzone.addEventListener('dragleave', () => {
+            dragCounter--;
+            if (dragCounter === 0) {
                 dropzone.classList.remove('dragover');
-            }, false);
+            }
         });
         
         dropzone.addEventListener('drop', (e) => {
-            const files = Array.from(e.dataTransfer.files);
-            this.handleFilesUpload(files);
-        }, false);
+            dragCounter = 0;
+            dropzone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => 
+                file.type.startsWith('image/')
+            );
+            if (files.length > 0) {
+                this.handleFilesUpload(files);
+            } else {
+                this.showError('Apenas ficheiros de imagem são permitidos');
+            }
+        });
+        
+        // Click to upload
+        dropzone.addEventListener('click', () => {
+            document.getElementById('fileInput')?.click();
+        });
     }
     
     bindEvents() {
@@ -197,6 +217,9 @@ class MediaLibrary {
         const grid = document.getElementById('mediaGrid');
         const noResults = document.getElementById('noResults');
         
+        // Clear grid
+        if (grid) grid.innerHTML = '';
+        
         if (!mediaFiles || mediaFiles.length === 0) {
             grid.innerHTML = '';
             noResults.style.display = 'block';
@@ -221,60 +244,64 @@ class MediaLibrary {
     }
     
     createMediaCard(file) {
-        const isSelected = this.selectedFiles.has(file.id);
+        const mediaId = file.id || file._fsPath;
+        const isSelected = this.selectedFiles.has(mediaId);
         const tags = (file.tags || []).map(tag => 
-            `<span class="tag" style="background-color: ${tag.color}20; color: ${tag.color};">${tag.name}</span>`
+            `<span class="tag">${tag.name || tag}</span>`
         ).join('');
         
-        const fsPath = (file._fsPath || '').replace(/"/g, '&quot;');
-        const thumbUrl = file.thumbnailUrl || (file._fsPath ? `/admin/api/media/thumb?path=${encodeURIComponent(file._fsPath)}` : (file.variants?.thumbnail || file.url));
-        const fullUrl = file.url;
+        const fsPath = (file._fsPath || file.path || '').replace(/"/g, '&quot;').replace(/'/g, "\\'");
+        const thumbUrl = file.thumbnailUrl || (file._fsPath ? `/admin/api/media/thumb?path=${encodeURIComponent(file._fsPath)}` : (file.url));
+        const fullUrl = file.url || `/media/${file._fsPath}`;
+        const filename = file.filename || file.original_name || file.name || 'Sem nome';
+        const shortName = filename.length > 30 ? filename.substring(0, 27) + '...' : filename;
+        
         return `
             <div class="media-card ${isSelected ? 'selected' : ''}" 
-                 data-media-id="${file.id}"
-                 data-filename="${file.filename}"
-                 data-type="${file.mime_type}"
+                 data-media-id="${mediaId}"
                  data-fs-path="${fsPath}"
                  data-full-url="${fullUrl.replace(/"/g, '&quot;')}">
                 
-                <div class="media-card-image media-thumb" style="max-width:160px;max-height:160px;overflow:hidden;width:100%;aspect-ratio:1">
+                <div class="media-card-image">
                     <img src="${thumbUrl}" 
-                         alt="${file.alt_text || file.original_name}"
+                         alt="${file.alt_text || filename}"
                          loading="lazy"
-                         width="160"
-                         height="160"
-                         style="width:100%;height:100%;object-fit:cover;max-width:100%;max-height:100%;display:block"
-                         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22160%22 height=%22160%22/%3E%3C/svg%3E'">
+                         onerror="this.src='/images/placeholder-image.png'">
                     
                     <!-- Selection Checkbox -->
-                    <div class="media-checkbox">
+                    <div class="media-checkbox" onclick="event.stopPropagation()">
                         <input type="checkbox" 
                                ${isSelected ? 'checked' : ''} 
-                               onchange="window.mediaLibrary.toggleSelection(${file.id}, this.checked)">
+                               data-media-id="${mediaId}">
                     </div>
                     
                     <!-- Quick Actions -->
-                    <div class="media-actions">
+                    <div class="media-actions" onclick="event.stopPropagation()">
                         <button class="action-btn" 
-                                onclick="window.mediaLibrary.viewMedia(${file.id})"
+                                data-action="view"
+                                data-media-id="${mediaId}"
                                 title="Ver detalhes">
                             <i class="fas fa-eye"></i>
                         </button>
                         
                         <button class="action-btn" 
-                                onclick="window.mediaLibrary.editMedia(${file.id})"
-                                title="Editar">
+                                data-action="edit"
+                                data-media-id="${mediaId}"
+                                title="Editar nome">
                             <i class="fas fa-edit"></i>
                         </button>
                         
                         <button class="action-btn" 
-                                onclick="window.mediaLibrary.copyUrl('${file.url}')"
+                                data-action="copy"
+                                data-url="${fullUrl.replace(/"/g, '&quot;')}"
                                 title="Copiar URL">
                             <i class="fas fa-copy"></i>
                         </button>
                         
                         <button class="action-btn danger" 
-                                onclick="window.mediaLibrary.deleteMedia(${file.id}, '${(file._fsPath || '').replace(/'/g, "\\'")}')"
+                                data-action="delete"
+                                data-media-id="${mediaId}"
+                                data-fs-path="${fsPath}"
                                 title="Eliminar">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -282,43 +309,110 @@ class MediaLibrary {
                     
                     <!-- File Type Badge -->
                     <div class="file-type-badge">
-                        ${this.getFileTypeIcon(file.mime_type)}
+                        ${this.getFileTypeIcon(file.mime_type || file.type)}
                     </div>
                 </div>
                 
                 <div class="media-card-info">
-                    <h4 class="media-title" title="${file.title || file.original_name}">
-                        ${file.title || file.original_name}
-                    </h4>
+                    <div class="media-title" 
+                         contenteditable="false"
+                         data-media-id="${mediaId}"
+                         data-original="${filename}"
+                         title="${filename} (clique para editar)">
+                        ${shortName}
+                    </div>
                     
                     <div class="media-meta">
-                        <span class="file-size">${file.file_size_formatted}</span>
-                        ${file.dimensions.width ? 
+                        <span class="file-size">${file.file_size_formatted || this.formatFileSize(file.size || 0)}</span>
+                        ${file.dimensions && file.dimensions.width ? 
                             `<span class="dimensions">${file.dimensions.width} × ${file.dimensions.height}</span>` : 
                             ''
                         }
                     </div>
                     
                     ${tags ? `<div class="media-tags">${tags}</div>` : ''}
-                    
-                    <div class="media-date">${file.created_ago}</div>
                 </div>
             </div>
         `;
     }
     
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+    
     bindMediaCardEvents() {
-        // Double-click to view details
-        document.querySelectorAll('.media-card').forEach(card => {
-            card.addEventListener('dblclick', () => {
-                const mediaId = parseInt(card.dataset.mediaId);
-                this.viewMedia(mediaId);
+        // Action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.dataset.action;
+                const mediaId = btn.dataset.mediaId;
+                const fsPath = btn.dataset.fsPath;
+                const url = btn.dataset.url;
+                
+                switch(action) {
+                    case 'view':
+                        this.showMediaPreview(mediaId);
+                        break;
+                    case 'edit':
+                        this.quickEditName(mediaId);
+                        break;
+                    case 'copy':
+                        this.copyUrl(url);
+                        break;
+                    case 'delete':
+                        this.deleteMedia(mediaId, fsPath);
+                        break;
+                }
+            });
+        });
+        
+        // Checkboxes
+        document.querySelectorAll('.media-checkbox input').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const mediaId = checkbox.dataset.mediaId;
+                this.toggleSelection(mediaId, checkbox.checked);
+            });
+        });
+        
+        // Title editing
+        document.querySelectorAll('.media-title').forEach(title => {
+            title.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (title.contentEditable === 'false') {
+                    this.startEditingTitle(title);
+                }
             });
             
-            // Single click to select
+            title.addEventListener('blur', (e) => {
+                this.saveTitle(title);
+            });
+            
+            title.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.saveTitle(title);
+                    title.blur();
+                } else if (e.key === 'Escape') {
+                    title.textContent = title.dataset.original;
+                    title.contentEditable = 'false';
+                    title.classList.remove('editing');
+                }
+            });
+        });
+        
+        // Card click to select/preview
+        document.querySelectorAll('.media-card').forEach(card => {
             card.addEventListener('click', (e) => {
-                if (!e.target.closest('.media-checkbox') && !e.target.closest('.media-actions')) {
-                    const mediaId = parseInt(card.dataset.mediaId);
+                if (!e.target.closest('.media-actions') && 
+                    !e.target.closest('.media-checkbox') &&
+                    !e.target.closest('.media-title')) {
+                    const mediaId = card.dataset.mediaId;
                     const isSelected = this.selectedFiles.has(mediaId);
                     
                     if (e.ctrlKey || e.metaKey) {
@@ -418,15 +512,25 @@ class MediaLibrary {
     }
     
     showUploadProgress(show) {
-        const container = document.querySelector('.upload-progress-container');
-        const dropzoneContent = document.querySelector('.dropzone-content');
+        const container = document.getElementById('uploadProgressContainer');
+        const dropzone = document.getElementById('dropzone');
         
         if (container) {
             container.style.display = show ? 'block' : 'none';
         }
         
-        if (dropzoneContent) {
-            dropzoneContent.style.display = show ? 'none' : 'block';
+        if (dropzone && show) {
+            dropzone.style.display = 'none';
+        } else if (dropzone) {
+            dropzone.style.display = 'block';
+        }
+        
+        if (!show) {
+            // Clear progress items after hiding
+            setTimeout(() => {
+                const items = document.getElementById('uploadProgressItems');
+                if (items) items.innerHTML = '';
+            }, 500);
         }
     }
     
@@ -886,13 +990,42 @@ class MediaLibrary {
     }
     
     showError(message) {
-        // Create and show error notification
         this.showNotification(message, 'error');
     }
     
     showSuccess(message) {
-        // Create and show success notification
         this.showNotification(message, 'success');
+    }
+    
+    showNotification(message, type = 'success') {
+        // Remove existing notifications
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+        
+        notification.innerHTML = `
+            <div class="notification-icon">
+                <i class="fas fa-${icon}"></i>
+            </div>
+            <div class="notification-content">${message}</div>
+            <button class="notification-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
     }
     
     showNotification(message, type = 'info') {
