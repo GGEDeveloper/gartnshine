@@ -414,11 +414,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.locals.siteTitle = 'Gonzaga\'s Art & Shine';
 app.locals.siteDescription = 'Elegância que nasce da terra';
 app.locals.theme = {
-  colorPrimary: '#1a1a1a',
-  colorSecondary: '#2d2d2d',
-  colorAccent: '#c0a080',
-  colorText: '#ffffff',
-  colorHighlight: '#d4b190'
+  colorPrimary: '#000000',
+  colorSecondary: '#000000',
+  colorAccent: '#A8A8A8',
+  colorText: '#f4f6f8',
+  colorHighlight: '#C0C0C0'
 };
 
 // Add user to all routes

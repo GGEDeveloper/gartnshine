@@ -166,7 +166,7 @@
 .geometric-divider span {
   width: 12px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-highlight));
+  background: var(--color-silver);
   border-radius: 2px;
 }
 
