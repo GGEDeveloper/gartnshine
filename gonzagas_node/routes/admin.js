@@ -400,13 +400,23 @@ router.post('/products/create',
   ]), 
   ProductController.store
 );
-router.get('/products/edit/:id', adminSessionRequired, ProductController.edit);
+router.get('/products/edit/:id', adminSessionRequired, (req, res, next) => {
+  // Capture returnTo parameter from query string
+  res.locals.returnTo = req.query.returnTo || '/admin/products';
+  next();
+}, ProductController.edit);
+
 router.post('/products/edit/:id', 
   adminSessionRequired, 
   productImageUpload.fields([
     { name: 'images', maxCount: 10 },
     { name: 'image', maxCount: 1 } 
   ]),
+  (req, res, next) => {
+    // Preserve returnTo parameter through form submission
+    res.locals.returnTo = req.body.returnTo || '/admin/products';
+    next();
+  },
   ProductController.update
 );
 router.get('/products/:id', adminSessionRequired, (req, res) => res.redirect(`/admin/products/edit/${req.params.id}`));

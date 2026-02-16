@@ -216,20 +216,21 @@ class ProductController extends BaseController {
       console.log('product images:', product.images);
 
       // Guardar query params do referer ou returnUrl para preservar filtros/página após update
-      const returnUrl = req.query.returnUrl || '';
+      // Priority: returnTo (from route) > returnUrl (query param) > referer
+      const returnTo = res.locals.returnTo || req.query.returnTo || req.query.returnUrl || '';
       const referer = req.get('referer') || '';
       
-      // Priorizar returnUrl se fornecido
-      if (returnUrl && returnUrl.includes('/admin/products')) {
+      // Priorizar returnTo/returnUrl se fornecido
+      if (returnTo && (returnTo.includes('/admin/products') || returnTo.includes('/catalog/product'))) {
         try {
-          const url = new URL(returnUrl, `http://${req.get('host') || 'localhost'}`);
+          const url = new URL(returnTo, `http://${req.get('host') || 'localhost'}`);
           const queryParams = url.searchParams.toString();
-          if (queryParams) {
+          if (queryParams && returnTo.includes('/admin/products')) {
             req.session.productListQueryParams = queryParams;
-            console.log('Saved query params from returnUrl:', queryParams);
+            console.log('Saved query params from returnTo:', queryParams);
           }
         } catch (error) {
-          console.error('Error parsing returnUrl:', error);
+          console.error('Error parsing returnTo:', error);
         }
       } else if (referer.includes('/admin/products')) {
         try {
@@ -261,8 +262,8 @@ class ProductController extends BaseController {
       const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
       
       let backUrl = '/admin/products';
-      if (returnUrl && returnUrl.includes('/admin/products')) {
-        backUrl = returnUrl;
+      if (returnTo && (returnTo.includes('/admin/products') || returnTo.includes('/catalog/product'))) {
+        backUrl = returnTo;
       } else if (req.session.productListQueryParams) {
         backUrl = '/admin/products?' + req.session.productListQueryParams;
       }
@@ -275,6 +276,7 @@ class ProductController extends BaseController {
         colors: colors || [],
         isNew: false, 
         backUrl: backUrl, // Pass backUrl to view
+        returnTo: returnTo, // Pass returnTo for form submission
         breadcrumbs: res.locals.breadcrumb,
         user: req.user,
         csrfToken: req.csrfToken ? req.csrfToken() : null,
@@ -405,8 +407,17 @@ class ProductController extends BaseController {
         req.flash('success_msg', 'Product updated successfully!');
         
         // Preservar filtros e página após update
-        const queryParams = req.session.productListQueryParams || '';
-        const redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+        // Priority: returnTo (from form/route) > query params from session > default
+        const returnTo = res.locals.returnTo || req.body.returnTo || '';
+        let redirectUrl = '/admin/products';
+        
+        if (returnTo) {
+          redirectUrl = returnTo;
+        } else {
+          const queryParams = req.session.productListQueryParams || '';
+          redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+        }
+        
         delete req.session.productListQueryParams; // Limpar após usar
         res.redirect(redirectUrl);
       } catch (error) {
@@ -416,8 +427,16 @@ class ProductController extends BaseController {
             await Product.updateProductWithImages(productId, productData, allNewImages, null); // Retry with userId = null
             req.flash('warning_msg', `Product updated. However, the 'updated by' user (ID ${userId}) was not found, so this information was not recorded for this update.`);
             // Preservar filtros e página após update
-            const queryParams = req.session.productListQueryParams || '';
-            const redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+            const returnTo = res.locals.returnTo || req.body.returnTo || '';
+            let redirectUrl = '/admin/products';
+            
+            if (returnTo) {
+              redirectUrl = returnTo;
+            } else {
+              const queryParams = req.session.productListQueryParams || '';
+              redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
+            }
+            
             delete req.session.productListQueryParams;
             res.redirect(redirectUrl);
           } catch (retryError) {

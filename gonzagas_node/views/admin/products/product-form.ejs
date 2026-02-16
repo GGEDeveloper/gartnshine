@@ -37,6 +37,11 @@
                 <% if (product && product.id) { %>
                     <input type="hidden" name="_method" value="PUT">
                 <% } %>
+                
+                <!-- Hidden input to preserve returnTo parameter -->
+                <% if (typeof returnTo !== 'undefined' && returnTo) { %>
+                    <input type="hidden" name="returnTo" value="<%= returnTo %>">
+                <% } %>
 
             <div class="row g-3">
                     <!-- Coluna Esquerda -->

@@ -1,4 +1,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+<link rel="stylesheet" href="/css/background-override.css">
+<% if (user && user.role === 'admin') { %>
+    <link rel="stylesheet" href="/css/admin-quick-actions.css">
+<% } %>
 <style>
     /* Product Detail Layout - Images Left, Details Right */
     .product-detail-container {
@@ -309,6 +313,19 @@
         
         <!-- Right: Product Info -->
         <div class="product-info-section">
+            <!-- Admin Quick Edit Button (só aparece para admins) -->
+            <% if (user && user.role === 'admin') { %>
+            <div class="admin-quick-actions">
+                <a href="/admin/products/edit/<%= product.id %>?returnTo=<%= encodeURIComponent('/catalog/product/' + product.id) %>" 
+                   class="btn-admin-edit"
+                   title="Editar este produto"
+                   data-tooltip="Editar Produto">
+                    <i class="fas fa-edit"></i>
+                    <span class="btn-text">Editar Produto</span>
+                </a>
+            </div>
+            <% } %>
+            
             <div>
                 <h1 class="product-title"><%= product.name %></h1>
                 <p class="product-reference">Ref: <%= product.reference %></p>
