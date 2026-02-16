@@ -44,10 +44,10 @@
   --glow-neon: 0 0 10px rgba(192, 192, 192, 0.45), 0 0 20px rgba(192, 192, 192, 0.25);
   --glow-accent: 0 0 10px rgba(168, 168, 168, 0.5), 0 0 20px rgba(168, 168, 168, 0.3);
   
-  /* Gradientes - PRATA/BRONZE (SEM verde/azul) */
-  --gradient-accent: linear-gradient(135deg, #A8A8A8, #888888);
-  --gradient-highlight: linear-gradient(135deg, #C0C0C0, #B87333);
-  --gradient-psychedelic: linear-gradient(135deg, #A8A8A8, #C0C0C0, #B87333);
+  /* Gradientes DESATIVADOS - Cores sólidas para backgrounds pretos */
+  --gradient-accent: #A8A8A8; /* Era: linear-gradient(135deg, #A8A8A8, #888888) */
+  --gradient-highlight: #C0C0C0; /* Era: linear-gradient(135deg, #C0C0C0, #B87333) */
+  --gradient-psychedelic: #B87333; /* Era: linear-gradient(135deg, #A8A8A8, #C0C0C0, #B87333) */
   
   /* Superfícies */
   --surface-0: #05070a;
