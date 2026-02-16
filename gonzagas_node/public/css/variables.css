@@ -1,58 +1,159 @@
 /**
- * Gonzaga's Art & Shine - Paleta de cores (fonte única)
- * Carregar primeiro para garantir consistência em todo o frontend.
+ * =====================================================
+ * GONZAGA ART & SHINE - VARIABLES.CSS
+ * SINCRONIZADO COM tokens-dark-nature.css
+ * =====================================================
  * 
- * Estilo: preto, elegante, prateado, bronze
- * SEM azul, roxo, violeta ou verde.
+ * Este ficheiro providencia ALIASES para compatibilidade
+ * retroativa com código antigo que usa nomenclatura diferente.
+ * 
+ * FONTE ÚNICA DE VERDADE: tokens-dark-nature.css
+ * Este ficheiro apenas MAPEIA nomes antigos -> novos
+ * 
+ * IMPORTANTE: Carregar DEPOIS de tokens-dark-nature.css
+ * para garantir que as variáveis base existem.
+ * =====================================================
  */
 
 :root {
-  /* Superfícies e fundos */
-  --color-primary: #05070a;
-  --color-secondary: #0b1016;
-  --color-tertiary: #121922;
+  /* =====================================================
+     MAPEAMENTO: NOMENCLATURA ANTIGA -> DARK NATURE
+     ===================================================== */
   
-  /* Acentos - PRATEADO/BRONZE (SEM verde, azul, roxo) */
-  --color-highlight: #C0C0C0;
-  --color-accent: #A8A8A8;
-  --color-accent-alt: #B87333;
+  /* Superfícies e fundos (mapeados de Dark Nature) */
+  --color-primary: var(--black);           /* #0B0D0C */
+  --color-secondary: var(--moss);          /* #0F2E20 */
+  --color-tertiary: var(--forest);         /* #123524 */
   
-  /* Cores adicionais prata/bronze */
-  --color-silver-light: #E8E8E8;
-  --color-silver: #C0C0C0;
-  --color-silver-dark: #A8A8A8;
-  --color-bronze: #B87333;
-  --color-bronze-dark: #8B4513;
+  /* Acentos - Metais (Prata/Dourado equilibrado) */
+  --color-highlight: var(--silver-matte);  /* #C7CACE - Prata fosca */
+  --color-accent: var(--gold-old);         /* #B08D57 - Dourado antigo */
+  --color-accent-alt: var(--accent-tiger); /* #6B4A1B - Olho-de-tigre */
+  
+  /* Metais - Nomenclatura específica */
+  --color-silver-light: var(--silver-matte); /* #C7CACE */
+  --color-silver: var(--silver-matte);       /* #C7CACE */
+  --color-silver-dark: var(--slate);         /* #6E6B65 */
+  --color-bronze: var(--gold-old);           /* #B08D57 */
+  --color-bronze-dark: var(--accent-tiger);  /* #6B4A1B */
   
   /* Texto */
-  --color-text: #f4f6f8;
-  --color-text-muted: #aab3bf;
+  --color-text: var(--ivory);              /* #E7E1D6 - Marfim suave */
+  --color-text-muted: var(--slate);        /* #6E6B65 - Cinza xisto */
   
-  /* Estados */
-  --color-success: #5c7a5a;
-  --color-warning: #ffb74d;
-  --color-danger: #ff5252;
-  --color-info: #A8A8A8; /* ✅ CORRIGIDO: Era #4f5b66 (azul) */
+  /* Estados (usando cores naturais Dark Nature) */
+  --color-success: var(--forest);          /* #123524 - Verde floresta */
+  --color-warning: var(--accent-tiger);    /* #6B4A1B - Castanho dourado */
+  --color-danger: #d73027;                 /* Vermelho sombrio (consistente com alerts) */
+  --color-info: var(--accent-turquoise);   /* #1B3A3D - Azul-verde abissal */
   
-  /* Bordas e sombras */
-  --border-soft: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --shadow-luxe: 0 14px 30px rgba(0, 0, 0, 0.48);
-  --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.32);
+  /* Bordas (usando sistema Dark Nature) */
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-light: rgba(255, 255, 255, 0.04);
+  --border-soft: var(--border-subtle);     /* 1px solid rgba(255,255,255,0.06) */
+  --border-strong: var(--border-strong);   /* 1px solid rgba(255,255,255,0.2) */
   
-  /* Glows e efeitos - PRATA (sem verde/beige) */
-  --glow-neon: 0 0 10px rgba(192, 192, 192, 0.45), 0 0 20px rgba(192, 192, 192, 0.25);
-  --glow-accent: 0 0 10px rgba(168, 168, 168, 0.5), 0 0 20px rgba(168, 168, 168, 0.3);
+  /* Sombras (usando sistema Dark Nature) */
+  --shadow-luxe: var(--shadow-elevated);   /* 0 20px 40px rgba(0,0,0,0.4) */
+  --shadow-soft: var(--shadow-soft);       /* 0 4px 12px rgba(0,0,0,0.25) */
   
-  /* Gradientes DESATIVADOS - Cores sólidas para backgrounds pretos */
-  --gradient-accent: #A8A8A8; /* Era: linear-gradient(135deg, #A8A8A8, #888888) */
-  --gradient-highlight: #C0C0C0; /* Era: linear-gradient(135deg, #C0C0C0, #B87333) */
-  --gradient-psychedelic: #B87333; /* Era: linear-gradient(135deg, #A8A8A8, #C0C0C0, #B87333) */
+  /* Glows (usando sistema Dark Nature) */
+  --glow-neon: var(--glow-silver);         /* 0 0 20px rgba(199,202,206,0.3) */
+  --glow-accent: var(--glow-gold);         /* 0 0 20px rgba(176,141,87,0.3) */
   
-  /* Superfícies */
-  --surface-0: #05070a;
-  --surface-1: #0a0f15;
-  --surface-2: #101722;
-  --surface-3: #172130;
-  --surface-glass: rgba(10, 15, 22, 0.82);
+  /* Gradientes (mapeados de Dark Nature) */
+  --gradient-accent: var(--gradient-tiger);      /* Olho-de-tigre */
+  --gradient-highlight: var(--gradient-card);    /* Card sutil */
+  --gradient-psychedelic: var(--gradient-hero);  /* Hero overlay */
+  
+  /* Superfícies (hierarquia de profundidade) */
+  --surface-0: var(--black);               /* #0B0D0C - Base */
+  --surface-1: var(--moss);                /* #0F2E20 - Elevado 1 */
+  --surface-2: var(--forest);              /* #123524 - Elevado 2 */
+  --surface-3: var(--earth);               /* #3A2C22 - Elevado 3 */
+  --surface-glass: rgba(11, 13, 12, 0.82); /* Vidro fosco */
+  
+  /* =====================================================
+     VARIÁVEIS ADICIONAIS PARA COMPATIBILIDADE
+     ===================================================== */
+  
+  /* Backgrounds */
+  --color-bg: var(--black);
+  --color-bg-light: rgba(255, 255, 255, 0.02);
+  --color-bg-dark: rgba(0, 0, 0, 0.3);
+  
+  /* RGB values para uso com rgba() */
+  --color-primary-rgb: 11, 13, 12;         /* var(--black) */
+  --color-secondary-rgb: 15, 46, 32;       /* var(--moss) */
+  --color-accent-rgb: 176, 141, 87;        /* var(--gold-old) */
+  --color-highlight-rgb: 199, 202, 206;    /* var(--silver-matte) */
+  
+  /* Estados RGB */
+  --color-success-rgb: 18, 53, 36;         /* var(--forest) */
+  --color-warning-rgb: 107, 74, 27;        /* var(--accent-tiger) */
+  --color-danger-rgb: 215, 48, 39;         /* vermelho */
+  --color-info-rgb: 27, 58, 61;            /* var(--accent-turquoise) */
+  
+  /* Cores mais escuras para hover states */
+  --color-primary-dark: #060807;
+  --color-secondary-dark: #0a2318;
+  --color-success-dark: #0e3420;
+  --color-warning-dark: #52371a;
+  --color-danger-dark: #b92820;
+  --color-info-dark: #142a2d;
+}
+
+/* =====================================================
+   DOCUMENTAÇÃO DO MAPEAMENTO
+   ===================================================== */
+
+/**
+ * TABELA DE EQUIVALÊNCIAS:
+ * 
+ * | variables.css         | tokens-dark-nature.css | Valor HEX | Descrição           |
+ * |-----------------------|------------------------|-----------|---------------------|
+ * | --color-primary       | --black                | #0B0D0C   | Preto profundo      |
+ * | --color-secondary     | --moss                 | #0F2E20   | Verde musgo         |
+ * | --color-tertiary      | --forest               | #123524   | Verde floresta      |
+ * | --color-highlight     | --silver-matte         | #C7CACE   | Prata fosca         |
+ * | --color-accent        | --gold-old             | #B08D57   | Dourado antigo      |
+ * | --color-accent-alt    | --accent-tiger         | #6B4A1B   | Olho-de-tigre       |
+ * | --color-text          | --ivory                | #E7E1D6   | Marfim suave        |
+ * | --color-text-muted    | --slate                | #6E6B65   | Cinza xisto         |
+ * 
+ * GRADUAL DEPRECATION PLAN:
+ * - Fase 1 (ATUAL): Aliases ativos para compatibilidade
+ * - Fase 2: Migrar ficheiros para usar tokens-dark-nature.css diretamente
+ * - Fase 3: Deprecar variables.css quando 100% migrado
+ * 
+ * COMO USAR EM NOVOS FICHEIROS:
+ * Preferir sempre tokens-dark-nature.css:
+ * ❌ NÃO: background: var(--color-primary);
+ * ✅ SIM: background: var(--black);
+ * 
+ * QUANDO EDITAR FICHEIROS ANTIGOS:
+ * - Se pequenas mudanças: manter variables.css
+ * - Se refactoring grande: migrar para tokens-dark-nature.css
+ */
+
+/* =====================================================
+   MEDIA QUERIES DE SUPORTE
+   ===================================================== */
+
+/* Print Mode */
+@media print {
+  :root {
+    --color-primary: #000000;
+    --color-text: #000000;
+    --color-text-muted: #333333;
+    --shadow-luxe: none;
+    --shadow-soft: none;
+  }
+}
+
+/* Prefer Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Herança automática de tokens-dark-nature.css */
+  }
 }
