@@ -183,12 +183,12 @@ body.admin-layout-fixed .table-inventory > tbody > tr > td {
 }
 
 body.admin-layout-fixed .table-inventory thead th {
-  background: rgba(23, 33, 42, 0.98) !important;
+  background: rgba(0, 0, 0, 0.98) !important;
   color: #C0C0C0 !important;
 }
 
 body.admin-layout-fixed .table-inventory tbody tr:nth-child(even) td {
-  background: rgba(23, 33, 42, 0.6) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
 }
 
 body.admin-layout-fixed .table-inventory tbody tr:hover td {
@@ -208,7 +208,7 @@ body.admin-layout-fixed .table-inventory .badge {
 /* Placeholders e imagens em tabelas */
 body.admin-layout-fixed .table .bg-light,
 body.admin-layout-fixed .table td .bg-light {
-  background: rgba(23, 33, 42, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   color: var(--color-text-muted) !important;
 }
 
@@ -241,7 +241,7 @@ body.admin-layout-fixed .badge-product-active {
 }
 
 body.admin-layout-fixed .badge-product-inactive {
-  background: rgba(144, 152, 163, 0.4) !important;
+  background: rgba(128, 128, 128, 0.4) !important;
   color: var(--color-text-muted) !important;
 }
 
@@ -257,7 +257,7 @@ body.admin-layout-fixed .table-filters label {
 }
 
 body.admin-layout-fixed .column-modal .modal-content {
-  background: rgba(11, 16, 22, 0.98) !important;
+  background: rgba(0, 0, 0, 0.98) !important;
   border: 1px solid rgba(192, 192, 192, 0.15) !important;
 }
 
@@ -311,7 +311,7 @@ body.admin-layout-fixed .btn-secondary:hover {
 /* ===== MEDIA LIBRARY ===== */
 body.admin-layout-fixed .dropzone {
   border: 2px dashed rgba(192, 192, 192, 0.3) !important;
-  background: rgba(18, 25, 34, 0.6) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
   color: #C0C0C0 !important;
 }
 
@@ -439,7 +439,7 @@ body.admin-layout-fixed .stat-icon.bg-primary {
 body.admin-layout-fixed .stat-icon.bg-success {
   background: var(--color-secondary)) !important;
   color: #A8C0A8 !important;
-  border: 1px solid rgba(168, 192, 168, 0.3) !important;
+  border: 1px solid rgba(168, 168, 168, 0.3) !important;
 }
 
 body.admin-layout-fixed .stat-icon.bg-warning {
@@ -456,7 +456,7 @@ body.admin-layout-fixed .stat-icon.bg-danger {
 
 /* ===== LIST GROUP (Produtos Recentes) - legibilidade ===== */
 body.admin-layout-fixed .list-group-item {
-  background: rgba(18, 25, 34, 0.6) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
   border-color: rgba(192, 192, 192, 0.1) !important;
   color: var(--color-text) !important;
 }
@@ -466,7 +466,7 @@ body.admin-layout-fixed .list-group-item .text-dark {
 }
 
 body.admin-layout-fixed .list-group-item .bg-light {
-  background: rgba(23, 33, 42, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   color: var(--color-text-muted) !important;
 }
 
@@ -479,12 +479,12 @@ body.admin-layout-fixed .list-group-item .badge.rounded-pill {
 
 /* ===== BOTÕES OUTLINE (success, warning, danger) ===== */
 body.admin-layout-fixed .btn-outline-success {
-  border-color: rgba(168, 192, 168, 0.5) !important;
+  border-color: rgba(168, 168, 168, 0.5) !important;
   color: #A8C0A8 !important;
 }
 
 body.admin-layout-fixed .btn-outline-success:hover {
-  background: rgba(168, 192, 168, 0.15) !important;
+  background: rgba(168, 168, 168, 0.15) !important;
   color: #C8E0C8 !important;
 }
 
