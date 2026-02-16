@@ -6,7 +6,8 @@
 
 /* Paleta em variables.css - overrides específicos abaixo */
 body {
-  background: linear-gradient(180deg, var(--surface-0) 0%, var(--surface-1) 35%, var(--surface-2) 100%);
+  background: #000000 !important;
+  background-image: none !important;
   color: var(--color-text);
 }
 
@@ -74,13 +75,13 @@ button,
 }
 
 .btn-primary {
-  background: var(--color-secondary));
+  background: var(--color-secondary);
   color: #e0e0e0;
   border-color: rgba(160, 160, 160, 0.5);
 }
 
 .btn-primary:hover {
-  background: var(--color-secondary));
+  background: var(--color-secondary);
   transform: translateY(-1px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
 }
@@ -139,7 +140,7 @@ button,
 
 .main-footer,
 footer {
-  background: var(--color-secondary));
+  background: var(--color-secondary);
   border-top: 1px solid var(--border-soft);
 }
 
@@ -162,7 +163,7 @@ footer a:hover {
 #backToTopBtn,
 .back-to-top,
 .floating-filter-btn {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   color: #e0e0e0 !important;
   border-color: rgba(160, 160, 160, 0.45) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.36) !important;
@@ -172,13 +173,13 @@ footer a:hover {
 .back-to-top:hover,
 .floating-filter-btn:hover,
 .floating-filter-btn.active {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   border-color: rgba(160, 160, 160, 0.62) !important;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42) !important;
 }
 
 .text-gradient {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
@@ -214,7 +215,7 @@ footer a:hover {
   width: 56px;
   height: 2px;
   margin: 0.55rem auto 0;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-bronze));
+  background: var(--color-accent);
   opacity: 0.9;
 }
 

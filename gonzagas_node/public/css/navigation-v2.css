@@ -90,7 +90,7 @@
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -489,7 +489,7 @@
 }
 
 .btn-nav-whatsapp:hover {
-    background: var(--color-secondary));
+    background: var(--color-secondary);
     color: white;
     text-decoration: none;
     transform: translateY(-1px);
@@ -750,7 +750,7 @@
 
 .contact-item.whatsapp:hover {
     color: white;
-    background: var(--color-secondary));
+    background: var(--color-secondary);
 }
 
 .contact-item i {

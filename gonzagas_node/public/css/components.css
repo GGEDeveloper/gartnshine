@@ -369,7 +369,7 @@
 
 /* ===== CARD COMPONENTS ===== */
 .card {
-  background: linear-gradient(145deg, rgba(61, 40, 24, 0.3), rgba(75, 51, 38, 0.3));
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 16px;

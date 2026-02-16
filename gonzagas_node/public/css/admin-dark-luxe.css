@@ -26,7 +26,7 @@ body.admin-layout-fixed {
 
 /* ===== BODY & LAYOUT ===== */
 body.admin-layout-fixed {
-  background: var(--color-secondary)) 35%, #121922 100%) !important;
+  background: var(--color-secondary) 35%, #121922 100%) !important;
   color: var(--color-text) !important;
 }
 
@@ -51,7 +51,7 @@ body.admin-layout-fixed .sidebar-nav .nav-link:hover {
 }
 
 body.admin-layout-fixed .sidebar-nav .nav-link.active {
-  background: linear-gradient(135deg, var(--color-secondary), var(--surface-3)) !important;
+  background: var(--color-primary) !important;
   color: #C0C0C0 !important;
   border-left: 3px solid #A8A8A8;
 }
@@ -276,13 +276,13 @@ body.admin-layout-fixed .column-modal .modal-footer {
 
 /* Botões info/danger no admin */
 body.admin-layout-fixed .btn-info {
-  background: linear-gradient(135deg, var(--color-secondary), var(--surface-3)) !important;
+  background: var(--color-primary) !important;
   border-color: rgba(192, 192, 192, 0.3) !important;
   color: #C0C0C0 !important;
 }
 
 body.admin-layout-fixed .btn-info:hover {
-  background: linear-gradient(135deg, var(--surface-3), #4a4a4a) !important;
+  background: var(--color-primary) !important;
   color: var(--color-silver-light) !important;
 }
 
@@ -336,13 +336,13 @@ body.admin-layout-fixed .media-item:hover {
 
 /* ===== BOTÕES ===== */
 body.admin-layout-fixed .btn-primary {
-  background: linear-gradient(135deg, var(--color-secondary), var(--surface-3)) !important;
+  background: var(--color-primary) !important;
   border-color: rgba(192, 192, 192, 0.3) !important;
   color: #C0C0C0 !important;
 }
 
 body.admin-layout-fixed .btn-primary:hover {
-  background: linear-gradient(135deg, var(--surface-3), #4a4a4a) !important;
+  background: var(--color-primary) !important;
   color: var(--color-silver-light) !important;
   border-color: rgba(192, 192, 192, 0.4) !important;
 }
@@ -419,37 +419,37 @@ body.admin-layout-fixed .footer {
 
 /* ===== SCROLL TO TOP ===== */
 body.admin-layout-fixed .scroll-to-top {
-  background: linear-gradient(135deg, var(--surface-3), #5a5a5a) !important;
+  background: var(--color-primary) !important;
   color: #C0C0C0 !important;
   border: 1px solid rgba(192, 192, 192, 0.3) !important;
 }
 
 body.admin-layout-fixed .scroll-to-top:hover {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   color: var(--color-silver-light) !important;
 }
 
 /* ===== STAT ICONS (dashboard cards) - paleta prata/bronze ===== */
 body.admin-layout-fixed .stat-icon.bg-primary {
-  background: linear-gradient(135deg, var(--color-secondary), var(--surface-3)) !important;
+  background: var(--color-primary) !important;
   color: #C0C0C0 !important;
   border: 1px solid rgba(192, 192, 192, 0.3) !important;
 }
 
 body.admin-layout-fixed .stat-icon.bg-success {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   color: #A8C0A8 !important;
   border: 1px solid rgba(168, 168, 168, 0.3) !important;
 }
 
 body.admin-layout-fixed .stat-icon.bg-warning {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   color: #D4B85C !important;
   border: 1px solid rgba(184, 115, 51, 0.3) !important;
 }
 
 body.admin-layout-fixed .stat-icon.bg-danger {
-  background: var(--color-secondary)) !important;
+  background: var(--color-secondary) !important;
   color: #E8A0A0 !important;
   border: 1px solid rgba(184, 115, 51, 0.2) !important;
 }
@@ -559,7 +559,7 @@ body.admin-layout-fixed .page-link:hover {
 }
 
 body.admin-layout-fixed .page-item.active .page-link {
-  background: linear-gradient(135deg, var(--color-secondary), var(--surface-3)) !important;
+  background: var(--color-primary) !important;
   border-color: #A8A8A8 !important;
   color: #C0C0C0 !important;
 }

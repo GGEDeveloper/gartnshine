@@ -17,9 +17,7 @@
     
     /* Hero Section */
     --hero-height: 100vh;
-    --hero-bg-gradient: linear-gradient(135deg, 
-        rgba(75, 104, 84, 0.95) 0%, 
-        rgba(192, 160, 128, 0.85) 100%);
+    --hero-bg-gradient: var(--color-primary);
     
     /* Spacing Scale */
     --section-padding: clamp(60px, 8vw, 120px);
@@ -186,7 +184,7 @@
 }
 
 .title-accent {
-    background: linear-gradient(135deg, var(--color-gold), var(--color-rose-gold));
+    background: var(--color-bronze);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -212,7 +210,7 @@
     align-items: center;
     gap: 12px;
     padding: 16px 32px;
-    background: linear-gradient(135deg, var(--color-gold), var(--color-rose-gold));
+    background: var(--color-bronze);
     color: white;
     text-decoration: none;
     border-radius: 50px;
@@ -594,7 +592,7 @@
     align-items: center;
     gap: 12px;
     padding: 16px 32px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    background: var(--color-primary);
     color: white;
     text-decoration: none;
     border-radius: 50px;
@@ -643,7 +641,7 @@
 .trust-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    background: var(--color-primary);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -723,9 +721,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(75, 104, 84, 0.8), 
-        rgba(192, 160, 128, 0.8));
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -783,7 +779,7 @@
 
 .cta-section {
     padding: var(--section-padding) 0;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    background: var(--color-primary);
     color: white;
     text-align: center;
 }

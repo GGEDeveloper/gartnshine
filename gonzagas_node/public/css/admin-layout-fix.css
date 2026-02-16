@@ -28,7 +28,7 @@ html, body {
   left: 0 !important;
   width: 260px !important;
   height: 100vh !important;
-  background: var(--primary, var(--color-secondary)) !important;
+  background: var(--primary, var(--color-secondary) !important;
   z-index: 100 !important;
   transform: none !important;
   transition: transform 0.3s ease !important;

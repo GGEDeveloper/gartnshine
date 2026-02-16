@@ -72,12 +72,12 @@ body.dark-theme {
 .product-card,
 .card,
 .card-body {
-    background: rgba(30, 30, 30, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
     background-image: none !important;
 }
 
 .product-card:hover {
-    background: rgba(40, 40, 40, 0.9) !important;
+    background: rgba(0, 0, 0, 0.9) !important;
     background-image: none !important;
 }
 
@@ -163,7 +163,7 @@ nav {
 
 .image-skeleton,
 .skeleton-loading {
-    background: rgba(30, 30, 30, 0.3) !important;
+    background: rgba(0, 0, 0, 0.3) !important;
     background-image: none !important;
     /* Animation mantida para loading */
     animation: skeleton-pulse 1.5s ease-in-out infinite;
@@ -223,7 +223,7 @@ nav {
 .admin .card,
 .dashboard-card,
 .stat-card {
-    background: rgba(30, 30, 30, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
     background-image: none !important;
 }
 
@@ -234,13 +234,13 @@ nav {
 .media-library-page,
 .media-card,
 .dropzone {
-    background: rgba(30, 30, 30, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
     background-image: none !important;
 }
 
 .media-card:hover,
 .dropzone:hover {
-    background: rgba(40, 40, 40, 0.9) !important;
+    background: rgba(0, 0, 0, 0.9) !important;
     background-image: none !important;
 }
 
@@ -266,7 +266,7 @@ nav {
 
 .collection-card,
 .gallery-item {
-    background: rgba(30, 30, 30, 0.8) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
     background-image: none !important;
 }
 

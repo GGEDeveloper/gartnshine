@@ -5,7 +5,7 @@
 
 /* ===== ENHANCED PRODUCT CARDS ===== */
 .product-card {
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -231,12 +231,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, 
-    rgba(30, 30, 30, 0.3) 0%, 
-    rgba(50, 50, 50, 0.5) 50%, 
-    rgba(30, 30, 30, 0.3) 100%);
+  background: rgba(0, 0, 0, 0.3);
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s ease-in-out infinite;
+  animation: none;
   z-index: 1;
   pointer-events: none;
 }
@@ -296,7 +293,7 @@
   flex-direction: column;
   align-items: center;
   padding: 10px 20px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--color-accent);
   border-radius: 10px;
 }
@@ -469,7 +466,7 @@
   flex-direction: column !important;
   height: 100% !important;
   max-height: 100% !important; /* Prevent card from exceeding parent height */
-  background: rgba(30, 30, 30, 0.8) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
   border-radius: 12px !important;
   overflow: hidden !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
@@ -533,7 +530,7 @@
 
 .sort-select {
   padding: 8px 12px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--color-accent);
   border-radius: 8px;
   color: var(--color-text);
@@ -552,7 +549,7 @@
 .view-toggle {
   display: flex;
   gap: 5px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--color-accent);
   border-radius: 8px;
   padding: 4px;
@@ -625,7 +622,7 @@
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid rgba(168, 168, 168, 0.2);
-  background: rgba(30, 30, 30, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -872,7 +869,7 @@ body.drawer-open {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-silver-dark), var(--color-silver)) !important;
+  background: var(--color-silver) !important;
   color: var(--color-primary) !important;
   border: 2px solid rgba(192, 192, 192, 0.35);
   box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3), 
@@ -945,7 +942,7 @@ body.drawer-open {
 }
 
 .floating-filter-btn.active {
-  background: linear-gradient(135deg, var(--color-silver-dark), var(--color-silver)) !important;
+  background: var(--color-silver) !important;
   animation: none;
   border-color: var(--color-silver);
 }
@@ -1031,7 +1028,7 @@ body.drawer-open {
 .catalog-search-input {
   width: 100%;
   padding: 12px 45px 12px 15px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--color-accent);
   border-radius: 25px;
   color: var(--color-text);
@@ -1122,7 +1119,7 @@ body.drawer-open {
 
 /* ===== QUICK VIEW MODAL ===== */
 .quick-view-content {
-  background: rgba(30, 30, 30, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   border: 1px solid var(--color-accent);
 }
 
@@ -1169,7 +1166,7 @@ body.drawer-open {
   min-width: 40px;
   height: 40px;
   padding: 8px 12px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--color-accent);
   border-radius: 8px;
   color: var(--color-text);
@@ -1225,7 +1222,7 @@ body.drawer-open {
 .no-products {
   text-align: center;
   padding: 80px 20px;
-  background: rgba(30, 30, 30, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 16px;
   border: 2px dashed rgba(168, 168, 168, 0.3);
   margin: 40px 0;

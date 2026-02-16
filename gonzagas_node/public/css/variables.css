@@ -45,9 +45,9 @@
   --glow-accent: 0 0 10px rgba(168, 168, 168, 0.5), 0 0 20px rgba(168, 168, 168, 0.3);
   
   /* Gradientes DESATIVADOS - Cores sólidas para backgrounds pretos */
-  --gradient-accent: #A8A8A8; /* Era: var(--color-secondary)) */
-  --gradient-highlight: #C0C0C0; /* Era: var(--color-secondary)) */
-  --gradient-psychedelic: #B87333; /* Era: var(--color-secondary)) */
+  --gradient-accent: #A8A8A8; /* Era: var(--color-secondary) */
+  --gradient-highlight: #C0C0C0; /* Era: var(--color-secondary) */
+  --gradient-psychedelic: #B87333; /* Era: var(--color-secondary) */
   
   /* Superfícies */
   --surface-0: #05070a;

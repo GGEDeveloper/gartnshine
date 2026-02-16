@@ -205,14 +205,14 @@
   padding: 10px 20px;
   font-weight: 500;
   border: 2px dashed #6b7280;
-  background: var(--color-secondary));
+  background: var(--color-secondary);
   color: #4b5563;
   transition: all 0.2s;
 }
 
 .btn-camera-capture:hover {
   border-color: #4f46e5;
-  background: var(--color-secondary));
+  background: var(--color-secondary);
   color: #4f46e5;
 }
 
