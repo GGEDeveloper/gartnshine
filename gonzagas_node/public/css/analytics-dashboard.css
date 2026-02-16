@@ -1,5 +1,5 @@
 /* ============================================
-   ANALYTICS DASHBOARD STYLES
+   ANALYTICS DASHBOARD STYLES - DARK NATURE
    ============================================ */
 
 /* Header */
@@ -9,17 +9,17 @@
     align-items: flex-start;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color, #e0e0e0);
+    border-bottom: 2px solid var(--border-strong);
 }
 
 .analytics-header h1 {
     font-size: 2rem;
-    color: var(--text-primary, #1a1a1a);
+    color: var(--ivory);
     margin: 0 0 0.5rem 0;
 }
 
 .analytics-header .subtitle {
-    color: var(--text-secondary, #666);
+    color: var(--slate);
     margin: 0;
 }
 
@@ -31,24 +31,25 @@
 
 .date-range-select {
     padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color, #e0e0e0);
-    border-radius: 8px;
-    background: white;
+    border: var(--border-subtle);
+    border-radius: var(--radius-large);
+    background: var(--moss);
+    color: var(--ivory);
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .date-range-select:hover {
-    border-color: var(--primary-color, #2C3E50);
+    border-color: var(--gold-old);
 }
 
 .btn-export {
     padding: 0.75rem 1.5rem;
-    background: var(--primary-color, #2C3E50);
-    color: white;
+    background: var(--gold-old);
+    color: var(--black);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-large);
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -58,9 +59,9 @@
 }
 
 .btn-export:hover {
-    background: var(--primary-dark, #1a252f);
+    background: var(--accent-tiger);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-soft);
 }
 
 /* Metrics Grid */
@@ -72,25 +73,26 @@
 }
 
 .metric-card {
-    background: white;
-    border-radius: 12px;
+    background: var(--gradient-card);
+    border-radius: var(--radius-large);
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-soft);
     display: flex;
     align-items: center;
     gap: 1rem;
     transition: all 0.3s ease;
+    border: var(--border-subtle);
 }
 
 .metric-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: var(--shadow-elevated);
     transform: translateY(-2px);
 }
 
 .metric-icon {
     width: 60px;
     height: 60px;
-    border-radius: 12px;
+    border-radius: var(--radius-large);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,10 +100,11 @@
     color: white;
 }
 
-.metric-icon.sessions { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.metric-icon.visitors { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-.metric-icon.pageviews { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-.metric-icon.whatsapp { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+/* Pedras Sagradas Dark Nature */
+.metric-icon.sessions { background: var(--gradient-onyx); } /* Ónix */
+.metric-icon.visitors { background: var(--gradient-tiger); } /* Olho-de-tigre */
+.metric-icon.pageviews { background: var(--gradient-turquoise); } /* Turquesa */
+.metric-icon.whatsapp { background: var(--forest); } /* Verde floresta */
 
 .metric-content {
     flex: 1;
@@ -110,13 +113,13 @@
 .metric-value {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-primary, #1a1a1a);
+    color: var(--ivory);
     margin-bottom: 0.25rem;
 }
 
 .metric-label {
     font-size: 0.9rem;
-    color: var(--text-secondary, #666);
+    color: var(--slate);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -128,7 +131,7 @@
 }
 
 .metric-change.positive {
-    color: #10b981;
+    color: var(--forest);
 }
 
 .metric-change.positive::before {
@@ -136,7 +139,7 @@
 }
 
 .metric-change.negative {
-    color: #ef4444;
+    color: #d73027;
 }
 
 .metric-change.negative::before {
@@ -152,21 +155,22 @@
 }
 
 .chart-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: var(--moss);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-soft);
     overflow: hidden;
+    border: var(--border-subtle);
 }
 
 .chart-header {
     padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    border-bottom: var(--border-subtle);
 }
 
 .chart-header h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: var(--text-primary, #1a1a1a);
+    color: var(--ivory);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -186,21 +190,22 @@
 }
 
 .data-table-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: var(--moss);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-soft);
     overflow: hidden;
+    border: var(--border-subtle);
 }
 
 .table-header {
     padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    border-bottom: var(--border-subtle);
 }
 
 .table-header h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: var(--text-primary, #1a1a1a);
+    color: var(--ivory);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -220,15 +225,15 @@
     padding: 0.75rem;
     font-size: 0.85rem;
     text-transform: uppercase;
-    color: var(--text-secondary, #666);
+    color: var(--slate);
     font-weight: 600;
-    border-bottom: 2px solid var(--border-color, #e0e0e0);
+    border-bottom: 2px solid rgba(176, 141, 87, 0.3);
 }
 
 .analytics-table td {
     padding: 1rem 0.75rem;
-    border-bottom: 1px solid #f0f0f0;
-    color: var(--text-primary, #1a1a1a);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--ivory);
 }
 
 .analytics-table tr:last-child td {
@@ -236,33 +241,34 @@
 }
 
 .analytics-table tr:hover {
-    background: #f9fafb;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .analytics-table .loading {
     text-align: center;
-    color: var(--text-secondary, #666);
+    color: var(--slate);
     padding: 2rem;
 }
 
 /* Conversion Funnel */
 .funnel-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: var(--moss);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-soft);
     overflow: hidden;
     margin-bottom: 2rem;
+    border: var(--border-subtle);
 }
 
 .funnel-header {
     padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    border-bottom: var(--border-subtle);
 }
 
 .funnel-header h3 {
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
-    color: var(--text-primary, #1a1a1a);
+    color: var(--ivory);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -271,7 +277,7 @@
 .funnel-header .subtitle {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--text-secondary, #666);
+    color: var(--slate);
 }
 
 .funnel-body {
@@ -285,13 +291,13 @@
 
 .funnel-bar {
     height: 60px;
-    background: linear-gradient(to right, var(--primary-color, #2C3E50), var(--primary-light, #3498db));
-    border-radius: 8px;
+    background: var(--gradient-tiger);
+    border-radius: var(--radius-large);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 1.5rem;
-    color: white;
+    color: var(--black);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -329,7 +335,7 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: 0.9rem;
-    color: var(--text-secondary, #666);
+    color: var(--slate);
     font-weight: 600;
 }
 
@@ -351,14 +357,14 @@
 .loading-overlay .spinner {
     width: 60px;
     height: 60px;
-    border: 4px solid rgba(255,255,255,0.3);
-    border-top-color: white;
+    border: 4px solid rgba(176, 141, 87, 0.3);
+    border-top-color: var(--gold-old);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
 .loading-overlay p {
-    color: white;
+    color: var(--ivory);
     margin-top: 1rem;
     font-size: 1.1rem;
 }
@@ -395,4 +401,3 @@
         font-size: 1.5rem;
     }
 }
-
