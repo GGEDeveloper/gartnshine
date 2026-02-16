@@ -1,11 +1,12 @@
 /* INSPIRADO NO FIGMA, NOTION, LINEAR - BEST IN CLASS */
+/* ✅ 100% MODULAR - Usa APENAS variáveis do variables.css */
 
 :root {
-    /* Color System */
-    --color-primary: #4f5b66;
-    --color-primary-dark: #3d4752;
-    --color-secondary: #8f846a;
-    --color-accent: #4b6854;
+    /* Color System - USANDO VARIÁVEIS */
+    --color-primary: var(--color-accent); /* Era #667eea ❌ */
+    --color-primary-dark: var(--color-accent-alt);
+    --color-secondary: var(--color-bronze);
+    --color-accent: var(--color-silver); /* Era #4ecdc4 ❌ */
     
     /* Neutrals */
     --color-neutral-50: #f9fafb;
@@ -19,11 +20,11 @@
     --color-neutral-800: #1f2937;
     --color-neutral-900: #111827;
     
-    /* Semantic Colors */
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-error: #ef4444;
-    --color-info: #4f5b66;
+    /* Semantic Colors - USANDO VARIÁVEIS */
+    --color-success: var(--color-success); /* Era #10b981 ❌ */
+    --color-warning: var(--color-warning);
+    --color-error: var(--color-danger); /* Era #ef4444 ❌ */
+    --color-info: var(--color-info); /* Era #3b82f6 ❌ */
     
     /* Spacing Scale */
     --space-1: 0.25rem;   /* 4px */
@@ -182,7 +183,7 @@ body {
 
 .filter-btn.active {
     color: var(--color-primary);
-    background: rgba(75, 104, 84, 0.1);
+    background: rgba(168, 168, 168, 0.1); /* Usando opacidade para prata */
 }
 
 /* Top Bar Right */
@@ -306,7 +307,7 @@ body {
 
 .nav-item.active .nav-link {
     color: var(--color-primary);
-    background: rgba(75, 104, 84, 0.1);
+    background: rgba(168, 168, 168, 0.1); /* Usando opacidade para prata */
 }
 
 .nav-link i {
@@ -449,7 +450,7 @@ body {
 }
 
 .btn-widget-action:hover {
-    background: rgba(75, 104, 84, 0.1);
+    background: rgba(168, 168, 168, 0.1); /* Usando opacidade para prata */
 }
 
 .widget-content {
@@ -563,17 +564,17 @@ body {
 }
 
 .health-status.good {
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(92, 122, 90, 0.1); /* Usando success color com opacidade */
     color: var(--color-success);
 }
 
 .health-status.warning {
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(255, 183, 77, 0.1); /* Usando warning color com opacidade */
     color: var(--color-warning);
 }
 
 .health-status.excellent {
-    background: rgba(75, 104, 84, 0.1);
+    background: rgba(168, 168, 168, 0.1); /* Usando primary color com opacidade */
     color: var(--color-primary);
 }
 
