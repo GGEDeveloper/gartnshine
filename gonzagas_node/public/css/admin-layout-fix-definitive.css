@@ -32,7 +32,7 @@ html, body {
     left: 0 !important;
     width: 260px !important;
     height: 100vh !important;
-    background: #0b1016 !important;
+    background: var(--color-secondary) !important;
     z-index: 100 !important;
     transform: none !important;
     transition: transform 0.3s ease !important;
@@ -73,7 +73,7 @@ html, body {
     left: -100% !important;
     width: 280px !important;
     height: 100vh !important;
-    background: #0b1016 !important;
+    background: var(--color-secondary) !important;
     z-index: 1000 !important;
     transform: none !important;
     transition: left 0.3s ease !important;
@@ -142,7 +142,7 @@ html, body {
     max-width: 100% !important;
     padding: 0 1rem !important;
     height: 60px !important;
-    background: #ffffff !important;
+    background: var(--color-silver-light) !important;
     box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15) !important;
     position: sticky !important;
     top: 0 !important;
@@ -189,7 +189,7 @@ html, body {
     left: -100% !important;
     width: 280px !important;
     height: 100vh !important;
-    background: #0b1016 !important;
+    background: var(--color-secondary) !important;
     z-index: 1000 !important; /* Entre overlay e header */
     transform: none !important;
     transition: left 0.3s ease !important;
@@ -280,7 +280,7 @@ html, body {
 /* 
 @media (max-width: 991.98px) {
   body.admin-layout-fixed.debug-layout #wrapper {
-    border: 3px solid #4b6854 !important;
+    border: 3px solid var(--color-success) !important;
   }
   body.admin-layout-fixed.debug-layout #content-wrapper {
     border: 3px solid green !important;

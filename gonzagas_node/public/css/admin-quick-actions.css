@@ -265,13 +265,13 @@ body.has-floating-filter .admin-quick-actions {
 
 @media (prefers-contrast: high) {
     .btn-admin-edit {
-        border: 3px solid #ffffff;
+        border: 3px solid var(--color-silver-light);
         box-shadow: none;
     }
     
     .btn-admin-edit:hover {
         background: #d4a76f;
-        border-color: #ffffff;
+        border-color: var(--color-silver-light);
     }
 }
 
@@ -307,7 +307,7 @@ body.has-floating-filter .admin-quick-actions {
     right: 0;
     padding: 8px 12px;
     background: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: var(--color-silver-light);
     font-size: 0.8rem;
     border-radius: 6px;
     white-space: nowrap;

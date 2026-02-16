@@ -60,7 +60,7 @@
   height: 40px;
   border: 4px solid rgba(212, 175, 55, 0.3);
   border-radius: 50%;
-  border-top-color: #d4af37;
+  border-top-color: var(--color-bronze);
   animation: spin 1s linear infinite;
 }
 
@@ -101,7 +101,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
   letter-spacing: 2px;
-  color: #e8c87c;
+  color: var(--color-bronze);
 }
 
 /* ===== NOTIFICATION SYSTEM ===== */
@@ -153,22 +153,22 @@
 }
 
 .notification-success {
-  background: #4caf50;
+  background: var(--color-success);
   color: white;
 }
 
 .notification-error {
-  background: #f44336;
+  background: var(--color-danger);
   color: white;
 }
 
 .notification-warning {
-  background: #ff9800;
+  background: var(--color-warning);
   color: white;
 }
 
 .notification-info {
-  background: #4f5b66;
+  background: var(--color-info);
   color: white;
 }
 
@@ -180,8 +180,8 @@
   right: 30px;
   width: 45px;
   height: 45px;
-  background: linear-gradient(135deg, #A8A8A8, #C0C0C0);
-  color: #1e1e1e;
+  background: var(--color-silver);
+  color: var(--color-primary);
   border: 2px solid rgba(192, 192, 192, 0.35);
   border-radius: 50%;
   cursor: pointer;
@@ -320,8 +320,8 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #d4af37, #f4e4a6);
-  color: #2c1810;
+  background: var(--color-bronze);
+  color: var(--color-secondary);
 }
 
 .btn-primary:hover {
@@ -331,24 +331,24 @@
 
 .btn-secondary {
   background: rgba(212, 175, 55, 0.1);
-  color: #d4af37;
+  color: var(--color-bronze);
   border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .btn-secondary:hover {
   background: rgba(212, 175, 55, 0.2);
-  border-color: #d4af37;
+  border-color: var(--color-bronze);
 }
 
 .btn-outline {
   background: transparent;
-  color: #d4af37;
-  border: 2px solid #d4af37;
+  color: var(--color-bronze);
+  border: 2px solid var(--color-bronze);
 }
 
 .btn-outline:hover {
-  background: #d4af37;
-  color: #2c1810;
+  background: var(--color-bronze);
+  color: var(--color-secondary);
 }
 
 .btn-sm {
@@ -402,14 +402,14 @@
   font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #f5f2ed;
+  color: var(--color-text);
   margin-bottom: 8px;
 }
 
 .card-text {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
-  color: #d0c4b0;
+  color: var(--color-text-muted);
   line-height: 1.5;
 }
 
@@ -437,7 +437,7 @@
 }
 
 .modal {
-  background: linear-gradient(145deg, #2c1810, #3d2818);
+  background: var(--color-secondary);
   border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 16px;
   max-width: 90vw;
@@ -462,14 +462,14 @@
 .modal-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
-  color: #f5f2ed;
+  color: var(--color-text);
   margin: 0;
 }
 
 .modal-close {
   background: none;
   border: none;
-  color: #d0c4b0;
+  color: var(--color-text-muted);
   font-size: 24px;
   cursor: pointer;
   padding: 0;
@@ -482,12 +482,12 @@
 }
 
 .modal-close:hover {
-  color: #d4af37;
+  color: var(--color-bronze);
 }
 
 .modal-body {
   padding: 24px;
-  color: #d0c4b0;
+  color: var(--color-text-muted);
 }
 
 .modal-footer {
@@ -508,7 +508,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #e8c87c;
+  color: var(--color-bronze);
   margin-bottom: 8px;
 }
 
@@ -518,30 +518,30 @@
   background: rgba(44, 24, 16, 0.6);
   border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 8px;
-  color: #f5f2ed;
+  color: var(--color-text);
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .form-control::placeholder {
-  color: #d0c4b0;
+  color: var(--color-text-muted);
   opacity: 0.7;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #d4af37;
+  border-color: var(--color-bronze);
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
   background: rgba(44, 24, 16, 0.8);
 }
 
 .form-control:invalid {
-  border-color: #f44336;
+  border-color: var(--color-danger);
 }
 
 .form-control:valid {
-  border-color: #4caf50;
+  border-color: var(--color-success);
 }
 
 /* ===== RESPONSIVE UTILITIES ===== */
@@ -611,6 +611,6 @@
 .form-control:focus,
 .notification-close:focus,
 .modal-close:focus {
-  outline: 2px solid #d4af37;
+  outline: 2px solid var(--color-bronze);
   outline-offset: 2px;
 } 

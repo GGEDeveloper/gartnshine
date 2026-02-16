@@ -58,7 +58,7 @@
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-color: #0a0d10;
+  background-color: var(--color-primary);
   display: none;
   z-index: 1;
 }

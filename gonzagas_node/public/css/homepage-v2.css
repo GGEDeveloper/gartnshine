@@ -6,14 +6,14 @@
 /* Import AOS */
 @import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
 
-/* CSS Variables Específicas Homepage */
+/* CSS Variables Específicas Homepage - 100% MODULAR */
 :root {
-    /* Gonzaga's Brand Colors */
-    --color-primary: #4f5b66;
-    --color-secondary: #c0a080;
-    --color-accent: #4b6854;
-    --color-gold: #d4af37;
-    --color-rose-gold: #e8b4b8;
+    /* Gonzaga's Brand Colors - Aliases para variáveis globais */
+    --color-primary: var(--color-info);
+    --color-secondary: var(--color-bronze);
+    --color-accent: var(--color-success);
+    --color-gold: var(--color-bronze);
+    --color-rose-gold: var(--color-bronze);
     
     /* Hero Section */
     --hero-height: 100vh;
@@ -407,7 +407,7 @@
 
 .featured-products-v2 {
     padding: var(--section-padding) 0;
-    background: linear-gradient(180deg, #f8f9fa 0%, white 100%);
+    background: var(--surface-1);
 }
 
 .products-carousel-wrapper {
@@ -444,7 +444,7 @@
     position: relative;
     aspect-ratio: 1;
     overflow: hidden;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: var(--surface-1);
 }
 
 .featured-product-image img {
@@ -525,7 +525,7 @@
 
 .btn-product-whatsapp {
     padding: 12px;
-    background: #25D366;
+    background: var(--color-success);
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -536,7 +536,7 @@
 }
 
 .btn-product-whatsapp:hover {
-    background: #20BA5A;
+    background: var(--color-success);
     transform: translateY(-1px);
     color: white;
 }
@@ -629,7 +629,7 @@
 .trust-card {
     text-align: center;
     padding: 40px 30px;
-    background: linear-gradient(135deg, #f8f9fa, white);
+    background: var(--surface-1);
     border-radius: 20px;
     border: 1px solid rgba(0,0,0,0.05);
     transition: var(--transition-smooth);
@@ -672,7 +672,7 @@
 
 .categories-showcase {
     padding: var(--section-padding) 0;
-    background: linear-gradient(180deg, white 0%, #f8f9fa 100%);
+    background: var(--surface-1);
 }
 
 .categories-grid {
@@ -703,7 +703,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+    background: var(--surface-1);
 }
 
 .category-image img {
@@ -834,20 +834,20 @@
 }
 
 .btn-cta-primary:hover {
-    background: #c19b26;
+    background: var(--color-bronze-dark);
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(212, 175, 55, 0.4);
     color: white;
 }
 
 .btn-cta-whatsapp {
-    background: #25D366;
+    background: var(--color-success);
     color: white;
     box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
 }
 
 .btn-cta-whatsapp:hover {
-    background: #20BA5A;
+    background: var(--color-success);
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(37, 211, 102, 0.4);
     color: white;

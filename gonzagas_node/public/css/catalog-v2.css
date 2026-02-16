@@ -5,7 +5,7 @@
 }
 
 .catalog-hero {
-    background: linear-gradient(135deg, #f8f9fa 0%, white 100%);
+    background: var(--surface-1);
     padding: 40px 0;
 }
 
@@ -24,7 +24,7 @@
 
 .filter-chip {
     padding: 8px 16px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--color-text);
     background: white;
     border-radius: 25px;
     cursor: pointer;
@@ -32,9 +32,9 @@
 }
 
 .filter-chip.active {
-    background: #4f5b66;
+    background: var(--color-info);
     color: white;
-    border-color: #4f5b66;
+    border-color: var(--color-info);
 }
 
 .catalog-layout {
@@ -94,11 +94,11 @@
 .product-price {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #c0a080;
+    color: var(--color-bronze);
 }
 
 .btn-whatsapp-mini {
-    background: #25D366;
+    background: var(--color-success);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -112,7 +112,7 @@
 }
 
 .btn-whatsapp-mini:hover {
-    background: #20BA5A;
+    background: var(--color-success);
 }
 
 /* Mobile Responsive */
@@ -134,14 +134,14 @@
 
 /* Loading States */
 .skeleton-card {
-    background: #f0f0f0;
+    background: var(--color-text);
     border-radius: 16px;
     overflow: hidden;
 }
 
 .skeleton-image {
     aspect-ratio: 1;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: var(--surface-1);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 }

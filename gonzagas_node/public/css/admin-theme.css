@@ -5,29 +5,29 @@
 
 :root {
   /* Base Colors */
-  --color-bg: #1a1a1a;
-  --color-surface: #242424;
-  --color-surface-alt: #2d2d2d;
-  --color-text: #e0e0e0;
-  --color-text-muted: #a0a0a0;
+  --color-bg: var(--color-primary);
+  --color-surface: var(--color-secondary);
+  --color-surface-alt: var(--color-tertiary);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
   
   /* Primary Colors */
-  --color-primary: #6a8c69;
-  --color-primary-dark: #5a7c59;
-  --color-primary-light: #7a9c79;
+  --color-primary: var(--color-success);
+  --color-primary-dark: var(--color-success);
+  --color-primary-light: var(--color-success);
   
   /* Accent Colors */
-  --color-accent: #6f7a6a;
-  --color-accent-dark: #5b6a5c;
+  --color-accent: var(--color-info);
+  --color-accent-dark: var(--color-info);
   
   /* Status Colors */
-  --color-success: #51cf66;
-  --color-warning: #fcc419;
-  --color-error: #ff6b6b;
-  --color-info: #4f5b66;
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-danger);
+  --color-info: var(--color-info);
   
   /* Borders */
-  --border-color: #3a3a3a;
+  --border-color: var(--surface-3);
   --border-radius: 8px;
   
   /* Shadows */
