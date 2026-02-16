@@ -1,6 +1,7 @@
 /* 
  * Theme definitions for Gonzaga's Art & Shine
  * Dark psychedelic and geometric theme with nature-inspired elements
+ * ✅ 100% MODULAR - Usa APENAS variáveis do variables.css
  */
 
 :root {
@@ -9,35 +10,35 @@
   --color-secondary: #1a1a1c;
   --color-tertiary: #252528;
   
-  /* Psychedelic highlights */
-  --color-highlight: #b19cd9; /* Purple */
-  --color-accent: #43c59e;    /* Teal */
-  --color-accent-alt: #ff7e5f; /* Coral */
+  /* Psychedelic highlights - USANDO VARIÁVEIS */
+  --color-highlight: var(--color-silver); /* Era #b19cd9 ❌ */
+  --color-accent: var(--color-accent); /* Era #43c59e ❌ */
+  --color-accent-alt: var(--color-bronze); /* Era #ff7e5f ❌ */
   
   /* Text colors */
   --color-text: #f8f8f8;
   --color-text-muted: #aaaaaa;
   
   /* State colors */
-  --color-success: #43c59e;
-  --color-warning: #ffb74d;
-  --color-danger: #ff5252;
-  --color-info: #64b5f6;
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info); /* Era #64b5f6 ❌ */
   
-  /* Special effects */
-  --glow-neon: 0 0 10px rgba(177, 156, 217, 0.5), 0 0 20px rgba(177, 156, 217, 0.3);
-  --glow-accent: 0 0 10px rgba(67, 197, 158, 0.5), 0 0 20px rgba(67, 197, 158, 0.3);
+  /* Special effects - USANDO VARIÁVEIS */
+  --glow-neon: var(--glow-neon);
+  --glow-accent: var(--glow-accent);
   
-  /* Gradients */
+  /* Gradients - USANDO VARIÁVEIS */
   --gradient-primary: linear-gradient(135deg, #121212, #252528);
-  --gradient-accent: linear-gradient(135deg, #43c59e, #9ac8eb);
-  --gradient-highlight: linear-gradient(135deg, #b19cd9, #ff7e5f);
-  --gradient-psychedelic: linear-gradient(135deg, #43c59e, #b19cd9, #ff7e5f);
+  --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-silver-light));
+  --gradient-highlight: linear-gradient(135deg, var(--color-silver), var(--color-bronze));
+  --gradient-psychedelic: linear-gradient(135deg, var(--color-accent), var(--color-silver), var(--color-bronze));
   
-  /* Dashboard specific */
-  --admin-primary: #2d3748;
-  --admin-secondary: #1a202c;
-  --admin-accent: #805ad5;
+  /* Dashboard specific - USANDO VARIÁVEIS */
+  --admin-primary: var(--color-secondary);
+  --admin-secondary: var(--color-primary);
+  --admin-accent: var(--color-silver); /* Era #805ad5 ❌ */
   --admin-text: #f7fafc;
   --admin-muted: #a0aec0;
   --admin-border: #4a5568;
@@ -59,7 +60,7 @@
   --color-primary: #0a0a0a;
   --color-secondary: #121214;
   --color-tertiary: #1c1c1f;
-  --color-highlight: #9a86c0;
+  --color-highlight: var(--color-silver-dark);
   --color-text: #e0e0e0;
 }
 
@@ -93,8 +94,8 @@
     linear-gradient(150deg, var(--color-secondary) 12%, transparent 12.5%, transparent 87%, var(--color-secondary) 87.5%, var(--color-secondary)),
     linear-gradient(30deg, var(--color-secondary) 12%, transparent 12.5%, transparent 87%, var(--color-secondary) 87.5%, var(--color-secondary)),
     linear-gradient(150deg, var(--color-secondary) 12%, transparent 12.5%, transparent 87%, var(--color-secondary) 87.5%, var(--color-secondary)),
-    linear-gradient(60deg, rgba(177, 156, 217, 0.1) 25%, transparent 25.5%, transparent 75%, rgba(177, 156, 217, 0.1) 75%, rgba(177, 156, 217, 0.1)),
-    linear-gradient(60deg, rgba(177, 156, 217, 0.1) 25%, transparent 25.5%, transparent 75%, rgba(177, 156, 217, 0.1) 75%, rgba(177, 156, 217, 0.1));
+    linear-gradient(60deg, rgba(192, 192, 192, 0.1) 25%, transparent 25.5%, transparent 75%, rgba(192, 192, 192, 0.1) 75%, rgba(192, 192, 192, 0.1)),
+    linear-gradient(60deg, rgba(192, 192, 192, 0.1) 25%, transparent 25.5%, transparent 75%, rgba(192, 192, 192, 0.1) 75%, rgba(192, 192, 192, 0.1));
   background-size: 80px 140px;
   background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
 }
@@ -102,8 +103,8 @@
 .forest-bg {
   background-color: var(--color-primary);
   background-image: 
-    radial-gradient(rgba(67, 197, 158, 0.1) 2px, transparent 2px),
-    radial-gradient(rgba(67, 197, 158, 0.07) 2px, transparent 2px);
+    radial-gradient(rgba(168, 168, 168, 0.1) 2px, transparent 2px),
+    radial-gradient(rgba(168, 168, 168, 0.07) 2px, transparent 2px);
   background-size: 60px 60px;
   background-position: 0 0, 30px 30px;
 }
@@ -244,4 +245,4 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
-} 
+}
