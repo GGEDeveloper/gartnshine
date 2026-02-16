@@ -2,19 +2,20 @@
  * Admin CSS for Gonzaga's Art & Shine
  * Modern Admin Dashboard
  * Based on Star Admin Design
+ * ✅ 100% MODULAR - Usa APENAS variáveis do variables.css
  */
 
 :root {
-  /* Theme Colors */
-  --primary: #2c3e50;
+  /* Theme Colors - USANDO VARIÁVEIS */
+  --primary: var(--color-secondary); /* Era #2c3e50 ❌ */
   --primary-light: #f5f7fa;
-  --secondary: #6c757d;
-  --success: #27ae60;
-  --info: #2980b9;
-  --warning: #f39c12;
-  --danger: #e74c3c;
+  --secondary: var(--color-accent);
+  --success: var(--color-success); /* Era #27ae60 ❌ */
+  --info: var(--color-info); /* Era #2980b9 ❌ */
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
   --light: #f8f9fa;
-  --dark: #2c3e50;
+  --dark: var(--color-secondary);
   --white: #ffffff;
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
@@ -23,8 +24,8 @@
   --gray-500: #95a5a6;
   --gray-600: #7f8c8d;
   --gray-700: #495057;
-  --gray-800: #2c3e50;
-  --gray-900: #1a252f;
+  --gray-800: var(--color-secondary);
+  --gray-900: var(--color-primary);
   
   /* Layout */
   --sidebar-width: 260px;
