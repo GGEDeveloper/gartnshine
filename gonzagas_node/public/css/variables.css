@@ -1,0 +1,58 @@
+/**
+ * Gonzaga's Art & Shine - Paleta de cores (fonte única)
+ * Carregar primeiro para garantir consistência em todo o frontend.
+ * 
+ * Estilo: preto, elegante, prateado, bronze
+ * SEM azul, roxo, violeta ou verde.
+ */
+
+:root {
+  /* Superfícies e fundos */
+  --color-primary: #05070a;
+  --color-secondary: #0b1016;
+  --color-tertiary: #121922;
+  
+  /* Acentos - PRATEADO/BRONZE (SEM verde, azul, roxo) */
+  --color-highlight: #C0C0C0;
+  --color-accent: #A8A8A8;
+  --color-accent-alt: #B87333;
+  
+  /* Cores adicionais prata/bronze */
+  --color-silver-light: #E8E8E8;
+  --color-silver: #C0C0C0;
+  --color-silver-dark: #A8A8A8;
+  --color-bronze: #B87333;
+  --color-bronze-dark: #8B4513;
+  
+  /* Texto */
+  --color-text: #f4f6f8;
+  --color-text-muted: #aab3bf;
+  
+  /* Estados */
+  --color-success: #5c7a5a;
+  --color-warning: #ffb74d;
+  --color-danger: #ff5252;
+  --color-info: #A8A8A8; /* ✅ CORRIGIDO: Era #4f5b66 (azul) */
+  
+  /* Bordas e sombras */
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --shadow-luxe: 0 14px 30px rgba(0, 0, 0, 0.48);
+  --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.32);
+  
+  /* Glows e efeitos - PRATA (sem verde/beige) */
+  --glow-neon: 0 0 10px rgba(192, 192, 192, 0.45), 0 0 20px rgba(192, 192, 192, 0.25);
+  --glow-accent: 0 0 10px rgba(168, 168, 168, 0.5), 0 0 20px rgba(168, 168, 168, 0.3);
+  
+  /* Gradientes DESATIVADOS - Cores sólidas para backgrounds pretos */
+  --gradient-accent: #A8A8A8; /* Era: linear-gradient(135deg, #A8A8A8, #888888) */
+  --gradient-highlight: #C0C0C0; /* Era: linear-gradient(135deg, #C0C0C0, #B87333) */
+  --gradient-psychedelic: #B87333; /* Era: linear-gradient(135deg, #A8A8A8, #C0C0C0, #B87333) */
+  
+  /* Superfícies */
+  --surface-0: #05070a;
+  --surface-1: #0a0f15;
+  --surface-2: #101722;
+  --surface-3: #172130;
+  --surface-glass: rgba(10, 15, 22, 0.82);
+}
