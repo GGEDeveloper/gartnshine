@@ -36,7 +36,7 @@
   <!-- Google Fonts - Dark Nature Typography -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- CSS Dark Nature - Ordem Crítica -->
+  <!-- CSS Dark Nature - Ordem Crítica (FONTE ÚNICA DE VERDADE) -->
   <link rel="stylesheet" href="/css/tokens-dark-nature.css">
   <link rel="stylesheet" href="/css/base-dark-nature.css">
   <link rel="stylesheet" href="/css/components-dark-nature.css">
@@ -49,26 +49,8 @@
     <link rel="stylesheet" href="/css/<%= customCss %>.css">
   <% } %>
   
-  <!-- CSS Vars Dinâmicos (compatibilidade com sistema antigo) -->
-  <style>
-    :root {
-      /* Dark Nature Palette */
-      --color-primary: #B08D57;
-      --color-secondary: #C7CACE;
-      --color-accent: #0B0D0C;
-      --color-text: #E7E1D6;
-      --color-highlight: #6B4A1B;
-      
-      /* Compatibilidade com tema antigo */
-      <% if (typeof theme !== 'undefined') { %>
-        --color-primary: <%= theme.colorPrimary || '#B08D57' %>;
-        --color-secondary: <%= theme.colorSecondary || '#C7CACE' %>;
-        --color-accent: <%= theme.colorAccent || '#0B0D0C' %>;
-        --color-text: <%= theme.colorText || '#E7E1D6' %>;
-        --color-highlight: <%= theme.colorHighlight || '#6B4A1B' %>;
-      <% } %>
-    }
-  </style>
+  <!-- NOTA: CSS Vars agora são definidos APENAS em tokens-dark-nature.css -->
+  <!-- Removido CSS inline hardcoded para evitar conflitos -->
   
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -248,7 +230,7 @@
     <% } %>
   <% } %>
   
-  <!-- CSS para Alerts -->
+  <!-- CSS para Alerts (usando variáveis do tokens-dark-nature.css) -->
   <style>
     .alert {
       position: fixed;
