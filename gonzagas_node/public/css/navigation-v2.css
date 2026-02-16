@@ -478,7 +478,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 18px;
-    background: linear-gradient(135deg, #25D366, #20BA5A);
+    background: linear-gradient(135deg, var(--color-success), #20BA5A);
     color: white;
     text-decoration: none;
     border-radius: 25px;
@@ -489,7 +489,7 @@
 }
 
 .btn-nav-whatsapp:hover {
-    background: linear-gradient(135deg, #20BA5A, #1da851);
+    background: var(--color-secondary));
     color: white;
     text-decoration: none;
     transform: translateY(-1px);
@@ -741,7 +741,7 @@
 }
 
 .contact-item.whatsapp {
-    background: linear-gradient(135deg, #25D366, #20BA5A);
+    background: linear-gradient(135deg, var(--color-success), #20BA5A);
     color: white;
     padding: 12px 16px;
     border-radius: 12px;
@@ -750,7 +750,7 @@
 
 .contact-item.whatsapp:hover {
     color: white;
-    background: linear-gradient(135deg, #20BA5A, #1da851);
+    background: var(--color-secondary));
 }
 
 .contact-item i {

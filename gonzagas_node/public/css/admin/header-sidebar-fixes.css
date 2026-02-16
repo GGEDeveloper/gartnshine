@@ -98,7 +98,7 @@ aside .from-blue-600,
 aside .to-blue-700,
 aside .dark\:from-gray-900,
 aside .dark\:to-gray-800 {
-  background: linear-gradient(135deg, #4b6854, #3d5646) !important; /* Verde seco escuro */
+  background: var(--color-secondary)) !important; /* Verde seco escuro */
 }
 
 /* Texto do cabeçalho da barra lateral */

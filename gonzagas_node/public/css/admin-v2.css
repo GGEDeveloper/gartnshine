@@ -484,7 +484,7 @@ body {
 }
 
 .activity-icon.whatsapp {
-    background: #25D366;
+    background: var(--color-success);
     color: white;
 }
 

@@ -7,12 +7,12 @@
 
 /* === HOMEPAGE SECTIONS === */
 .featured-products-v2 {
-    background: #000000 !important; /* Era: linear-gradient(180deg, #f8f9fa 0%, white 100%) */
+    background: #000000 !important; /* Era: var(--color-secondary)) */
     background-image: none !important;
 }
 
 .categories-showcase {
-    background: #000000 !important; /* Era: linear-gradient(180deg, white 0%, #f8f9fa 100%) */
+    background: #000000 !important; /* Era: var(--color-secondary)) */
     background-image: none !important;
 }
 
