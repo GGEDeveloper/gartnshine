@@ -47,7 +47,7 @@
 .collections-header .geometric-divider span {
   width: 12px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-highlight));
+  background: var(--color-silver);
   border-radius: 2px;
 }
 
@@ -72,7 +72,7 @@
 .gallery-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  border-color: rgba(106, 140, 105, 0.3);
+  border-color: rgba(192, 192, 192, 0.15);
 }
 
 .gallery-image-container {

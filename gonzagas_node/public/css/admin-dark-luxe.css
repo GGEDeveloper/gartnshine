@@ -112,14 +112,14 @@ body.admin-layout-fixed .admin-content {
 
 /* ===== CARDS ===== */
 body.admin-layout-fixed .card {
-  background: rgba(11, 16, 22, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   border: 1px solid rgba(192, 192, 192, 0.1) !important;
   border-radius: 10px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.admin-layout-fixed .card-header {
-  background: rgba(18, 25, 34, 0.8) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
   border-bottom: 1px solid rgba(192, 192, 192, 0.1) !important;
   color: #C0C0C0 !important;
   font-weight: 600;
@@ -137,14 +137,14 @@ body.admin-layout-fixed .card-body {
 body.admin-layout-fixed .table,
 body.admin-layout-fixed .dataTables_wrapper .table,
 body.admin-layout-fixed table.table {
-  background: rgba(18, 25, 34, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   color: var(--color-text) !important;
   border-color: rgba(192, 192, 192, 0.15) !important;
 }
 
 body.admin-layout-fixed .table th,
 body.admin-layout-fixed .dataTables_wrapper .table th {
-  background: rgba(23, 33, 42, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   color: #C0C0C0 !important;
   border-color: rgba(192, 192, 192, 0.15) !important;
   font-weight: 600;
@@ -152,21 +152,21 @@ body.admin-layout-fixed .dataTables_wrapper .table th {
 
 body.admin-layout-fixed .table td,
 body.admin-layout-fixed .dataTables_wrapper .table td {
-  background: rgba(18, 25, 34, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   color: var(--color-text) !important;
   border-color: rgba(192, 192, 192, 0.08) !important;
 }
 
 body.admin-layout-fixed .table tbody tr {
-  background: rgba(18, 25, 34, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
 }
 
 body.admin-layout-fixed .table tbody tr:nth-child(even) td {
-  background: rgba(23, 33, 42, 0.8) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
 }
 
 body.admin-layout-fixed .table tbody tr:nth-child(odd) td {
-  background: rgba(18, 25, 34, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
 }
 
 body.admin-layout-fixed .table tbody tr:hover td {
@@ -177,7 +177,7 @@ body.admin-layout-fixed .table tbody tr:hover td {
 body.admin-layout-fixed .table-inventory,
 body.admin-layout-fixed .table-inventory > thead > tr > th,
 body.admin-layout-fixed .table-inventory > tbody > tr > td {
-  background-color: rgba(18, 25, 34, 0.95) !important;
+  background-color: rgba(0, 0, 0, 0.95) !important;
   color: var(--color-text) !important;
   border-color: rgba(192, 192, 192, 0.15) !important;
 }
@@ -247,7 +247,7 @@ body.admin-layout-fixed .badge-product-inactive {
 
 /* Filtros e modais */
 body.admin-layout-fixed .table-filters {
-  background: rgba(18, 25, 34, 0.8) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
   border: 1px solid rgba(192, 192, 192, 0.15) !important;
   border-radius: 0.5rem;
 }
@@ -262,7 +262,7 @@ body.admin-layout-fixed .column-modal .modal-content {
 }
 
 body.admin-layout-fixed .column-modal .modal-header {
-  background: rgba(18, 25, 34, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   border-bottom-color: rgba(192, 192, 192, 0.1) !important;
 }
 
@@ -325,7 +325,7 @@ body.admin-layout-fixed .media-grid {
 }
 
 body.admin-layout-fixed .media-item {
-  background: rgba(18, 25, 34, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   border: 1px solid rgba(192, 192, 192, 0.15) !important;
 }
 
@@ -367,7 +367,7 @@ body.admin-layout-fixed input[type="email"],
 body.admin-layout-fixed input[type="number"],
 body.admin-layout-fixed textarea,
 body.admin-layout-fixed select {
-  background: rgba(11, 16, 22, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   border: 1px solid rgba(192, 192, 192, 0.2) !important;
   color: var(--color-text) !important;
 }
@@ -531,13 +531,13 @@ body.admin-layout-fixed .dataTables_wrapper {
 }
 
 body.admin-layout-fixed .dataTables_filter input {
-  background: rgba(11, 16, 22, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   border-color: rgba(192, 192, 192, 0.2) !important;
   color: var(--color-text) !important;
 }
 
 body.admin-layout-fixed .dataTables_length select {
-  background: rgba(11, 16, 22, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   border-color: rgba(192, 192, 192, 0.2) !important;
   color: var(--color-text) !important;
 }
@@ -548,7 +548,7 @@ body.admin-layout-fixed .dataTables_paginate {
 }
 
 body.admin-layout-fixed .page-link {
-  background: rgba(18, 25, 34, 0.9) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
   border-color: rgba(192, 192, 192, 0.2) !important;
   color: #C0C0C0 !important;
 }
