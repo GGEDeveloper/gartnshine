@@ -57,14 +57,14 @@
   flex: 1;
   font-size: 14px;
   line-height: 1.4;
-  color: #2d3748;
+  color: var(--color-tertiary);
   font-weight: 500;
 }
 
 .notification-close {
   background: none;
   border: none;
-  color: #718096;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -75,7 +75,7 @@
 
 .notification-close:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #4a5568;
+  color: var(--color-info);
 }
 
 .notification-progress {
@@ -104,12 +104,12 @@
 /* SUCCESS - Verde/Dourado */
 .notification-success {
   background: linear-gradient(135deg, rgba(168, 168, 168, 0.95) 0%, rgba(184, 115, 51, 0.9) 100%);
-  border-left: 4px solid #d4af37;
+  border-left: 4px solid var(--color-bronze);
   color: white;
 }
 
 .notification-success .notification-icon {
-  color: #d4af37;
+  color: var(--color-bronze);
 }
 
 .notification-success .notification-message {
@@ -128,12 +128,12 @@
 /* ERROR - Vermelho/Dourado */
 .notification-error {
   background: linear-gradient(135deg, rgba(245, 101, 101, 0.95) 0%, rgba(229, 62, 62, 0.95) 100%);
-  border-left: 4px solid #d4af37;
+  border-left: 4px solid var(--color-bronze);
   color: white;
 }
 
 .notification-error .notification-icon {
-  color: #fed7d7;
+  color: var(--color-danger);
 }
 
 .notification-error .notification-message {
@@ -152,12 +152,12 @@
 /* WARNING - Laranja/Amarelo */
 .notification-warning {
   background: linear-gradient(135deg, rgba(237, 137, 54, 0.95) 0%, rgba(246, 173, 85, 0.95) 100%);
-  border-left: 4px solid #d4af37;
+  border-left: 4px solid var(--color-bronze);
   color: white;
 }
 
 .notification-warning .notification-icon {
-  color: #fef5e7;
+  color: var(--color-warning);
 }
 
 .notification-warning .notification-message {
@@ -176,12 +176,12 @@
 /* INFO - Prata/bronze */
 .notification-info {
   background: linear-gradient(135deg, rgba(168, 168, 168, 0.95) 0%, rgba(184, 115, 51, 0.9) 100%);
-  border-left: 4px solid var(--color-bronze, #B87333);
+  border-left: 4px solid var(--color-bronze);
   color: white;
 }
 
 .notification-info .notification-icon {
-  color: #c4b896;
+  color: var(--color-bronze);
 }
 
 .notification-info .notification-message {
@@ -288,15 +288,15 @@
   }
   
   .notification-message {
-    color: #e2e8f0;
+    color: var(--color-text);
   }
   
   .notification-close {
-    color: #a0aec0;
+    color: var(--color-text-muted);
   }
   
   .notification-close:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #e2e8f0;
+    color: var(--color-text);
   }
 } 
