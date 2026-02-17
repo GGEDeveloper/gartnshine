@@ -1,0 +1,20 @@
+=== FILES MOVED ===
+✅ Moved: admin-v2.css
+✅ Moved: admin-theme.css
+✅ Moved: admin-layout-fix.css
+✅ Moved: mobile-navigation.css
+✅ Moved: navigation-v2.css
+✅ Moved: enhanced-navigation.css
+✅ Moved: product-detail-v2.css
+✅ Moved: loading-states.css
+✅ Moved: admin-dashboard.css
+✅ Moved: admin-orders.css
+✅ Moved: admin-product-form.css
+✅ Moved: dashboard.css
+✅ Moved: admin-styles.css
+✅ Moved: header-sidebar-fixes.css
+✅ Removed empty directory: public/css/admin/
+
+=== SUMMARY ===
+Files successfully moved: 14
+Files skipped (safety): 0
