@@ -1,0 +1,90 @@
+=== APP.JS VIEW CONFIG ===
+app.set('port', process.env.PORT || 3000);
+
+// Carrega as configurações de visualização
+const viewConfig = require('./config/view');
+
+// Configurações de view engine
+app.set('views', path.join(__dirname, viewConfig.views.directory));
+app.set('view engine', viewConfig.views.extension);
+app.set('layout', viewConfig.layouts.public.default);
+app.set('view cache', viewConfig.views.cache);
+app.set('etag', false);
+
+// Configura o express-ejs-layouts
+app.use(expressLayouts);
+app.set('layout extractScripts', true);
+app.set('layout extractStyles', true);
+app.set('layout extractMetas', true);
+
+// Middleware para definir o layout padrão com base na rota
+app.use((req, res, next) => {
+  // Se a rota começar com /admin, usa o layout do admin
+  if (req.path.startsWith('/admin')) {
+--
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'public, max-age=2592000');
+  }
+}));
+
+// Set up view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Global app variables
+app.locals.siteTitle = 'Gonzaga\'s Art & Shine';
+app.locals.siteDescription = 'Elegância que nasce da terra';
+app.locals.theme = {
+
+=== EXPLICIT LAYOUT RENDERS ===
+No explicit layout renders
+
+=== DIRECT LAYOUT.EJS REFERENCES ===
+./test-frontend-styles.js:78:  'views/layout.ejs',
+
+=== LAYOUTS/MAIN.EJS REFERENCES ===
+./config/view.js:7:      default: 'admin/layouts/main',
+./config/view.js:12:      default: 'layouts/main',
+./test-admin-layout.js:80:  'views/admin/layouts/main.ejs',
+./test-admin-layout.js:96:const mainLayoutPath = path.join(__dirname, 'views/admin/layouts/main.ejs');
+./routes/index.js:61:      layout: 'layouts/main',
+./routes/index.js:135:      layout: 'layouts/main',
+./routes/index.js:247:      layout: 'layouts/main',
+./routes/index.js:372:      layout: 'layouts/main'
+./routes/admin/analytics.js:14:        layout: 'admin/layouts/main',
+./routes/admin/media.js:73:            layout: 'admin/layouts/main',
+./routes/admin.js:405:      layout: 'admin/layouts/main',
+./test-navigation-fix.js:34:const adminLayoutPath = path.join(__dirname, 'views/admin/layouts/main.ejs');
+./test-navigation-fix.js:50:const frontendLayoutPath = path.join(__dirname, 'views/layouts/main.ejs');
+./controllers/QuickProductController.js:31:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:50:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:78:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:105:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:182:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:272:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:306:        layout: 'admin/layouts/main',
+./controllers/ProductController.js:576:        // layout: 'layouts/main-layout', // Already set in product-detail-uc.ejs
+./controllers/ProductFamilyController.js:23:      layout: 'admin/layouts/main',
+./controllers/ProductFamilyController.js:45:      layout: 'admin/layouts/main',
+./controllers/ProductFamilyController.js:89:      layout: 'admin/layouts/main',
+./controllers/SiteSettingsController.js:28:        layout: 'admin/layouts/main', // Or your default admin layout
+./controllers/CatalogController.js:18:          layout: 'layouts/main'
+./controllers/CatalogController.js:73:        layout: 'layouts/main',
+./controllers/InventoryController.js:56:        layout: 'admin/layouts/main',
+./controllers/InventoryController.js:94:        layout: 'admin/layouts/main',
+./test-local.js:68:        layout: 'layouts/main',
+./test-local.js:81:        layout: 'admin/layouts/main',
+./test-admin-mobile-solution.js:64:const adminLayoutPath = path.join(__dirname, 'views/admin/layouts/main.ejs');
+./test-mobile-and-catalog.js:65:  'views/admin/layouts/main.ejs',
+./test-mobile-and-catalog.js:69:  'views/layouts/main.ejs',
+./test-mobile-and-catalog.js:86:const adminLayoutPath = path.join(__dirname, 'views/admin/layouts/main.ejs');
+./test-frontend-styles.js:77:  'views/layouts/main.ejs',
+./SISTEMA_NOTIFICACOES.md:101:- `views/layouts/main.ejs` - Layout público
+./SISTEMA_NOTIFICACOES.md:102:- `views/admin/layouts/main.ejs` - Layout admin
+
+=== BACKGROUND-OVERRIDE.CSS USAGE ===
+views/catalog/product-detail.ejs:2:<link rel="stylesheet" href="/css/background-override.css">
+views/layout.ejs:19:  <link rel="stylesheet" href="/css/background-override.css">
+
+=== BLACK-BACKGROUND-FIX.CSS USAGE ===
+views/layout.ejs:20:  <link rel="stylesheet" href="/css/black-background-fix.css">
