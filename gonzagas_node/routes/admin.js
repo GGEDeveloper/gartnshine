@@ -178,58 +178,6 @@ router.get('/dashboard', adminSessionRequired, async (req, res) => {
   }
 });
 
-// Dashboard V2 - Modern Admin Dashboard
-router.get('/dashboard-v2', adminSessionRequired, async (req, res) => {
-  try {
-    const [totalProducts, totalFamilies, lowStockProducts] = await Promise.all([
-      Product.count(),
-      ProductFamily.count(),
-      Product.countLowStock()
-    ]);
-
-    // Recent activity (placeholder - would come from activity log)
-    const recentActivity = [
-      {
-        type: 'product',
-        icon: 'fas fa-plus-circle',
-        title: 'Produto adicionado',
-        description: 'Anel Celtic Knot',
-        time: 'há 2 minutos'
-      },
-      {
-        type: 'search',
-        icon: 'fas fa-search',
-        title: 'Pesquisa',
-        description: '"brincos prata"',
-        time: 'há 5 minutos'
-      },
-      {
-        type: 'whatsapp',
-        icon: 'fab fa-whatsapp',
-        title: 'WhatsApp',
-        description: 'Contacto sobre REF-001',
-        time: 'há 12 minutos'
-      }
-    ];
-
-    res.render('admin/dashboard-v2', {
-      title: 'Dashboard V2 - Gonzaga\'s Admin',
-      user: req.session.user,
-      totalProducts: totalProducts,
-      stats: {
-        products: totalProducts,
-        views: 1429,
-        whatsapp: 89,
-        searches: 356
-      },
-      recentActivity: recentActivity
-    });
-  } catch (error) {
-    console.error('Dashboard V2 error:', error);
-    res.status(500).send('Error loading dashboard V2');
-  }
-});
-
 // Authentication routes
 router.get('/login', guestSessionRequired, AuthController.showLoginForm.bind(AuthController));
 router.post('/login', guestSessionRequired, AuthController.login.bind(AuthController));
@@ -353,43 +301,6 @@ router.post('/quick-product',
 
 // Product Management Routes
 router.get('/products', adminSessionRequired, ProductController.index);
-
-// Products V2 - Modern Cards View
-router.get('/products-v2', adminSessionRequired, async (req, res) => {
-  try {
-    const { search = '' } = req.query;
-    const { pool } = require('../config/database');
-    
-    // Get products with images
-    const [products] = await pool.query(`
-      SELECT p.*, pf.name as family_name,
-             (SELECT pi.image_filename FROM product_images pi 
-              WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image
-      FROM products p
-      LEFT JOIN product_families pf ON p.family_id = pf.id
-      WHERE p.is_active = 1
-      ${search ? 'AND (p.name LIKE ? OR p.reference LIKE ?)' : ''}
-      ORDER BY p.created_at DESC
-      LIMIT 100
-    `, search ? [`%${search}%`, `%${search}%`] : []);
-    
-    // Get categories
-    const [categories] = await pool.query(`
-      SELECT id, name FROM product_families ORDER BY name
-    `);
-    
-    res.render('admin/products-v2', {
-      title: 'Produtos V2 - Admin',
-      user: req.session.user,
-      products: products,
-      categories: categories,
-      searchQuery: search
-    });
-  } catch (error) {
-    console.error('Products V2 error:', error);
-    res.status(500).send('Error loading products V2');
-  }
-});
 
 router.get('/products/add', adminSessionRequired, ProductController.create);
 router.post('/products/create', 
