@@ -1,0 +1,110 @@
+{
+  "archiveDate": "2026-02-17T00:47:00Z",
+  "archiveVersion": "1.0",
+  "reason": "Limpeza após migração completa para sistema Dark Nature",
+  "archivedBy": "Sistema de Desenvolvimento",
+  "verified": true,
+  "safeToDelete": false,
+  "notes": "Ficheiros preservados para referência histórica. Não são carregados em nenhum template ativo.",
+  
+  "archivedFiles": [
+    {
+      "filename": "main.css",
+      "size": "35KB",
+      "reason": "Catch-all gigante não referenciado em layout.ejs nem main-layout.ejs",
+      "replacedBy": "Sistema modular: tokens-dark-nature.css → base-dark-nature.css → components-dark-nature.css",
+      "lastUsedIn": "Versão anterior ao Dark Nature",
+      "safeToRestore": false,
+      "notes": "Contém estilos mistos de várias versões. Não recomendado restaurar."
+    },
+    {
+      "filename": "dashboard.css",
+      "size": "40KB",
+      "reason": "Gigante obsoleto, substituído por admin-dark-nature.css",
+      "replacedBy": "admin-dark-nature.css + admin-dashboard.css (modular)",
+      "lastUsedIn": "dashboard.ejs (versão antiga, não dark-nature)",
+      "safeToRestore": false,
+      "notes": "Versão monolítica. dashboard-dark-nature.ejs usa stack modular."
+    },
+    {
+      "filename": "components.css",
+      "size": "9KB",
+      "reason": "Substituído por components-dark-nature.css",
+      "replacedBy": "components-dark-nature.css (30KB, muito mais completo)",
+      "lastUsedIn": "Versão anterior ao Dark Nature",
+      "safeToRestore": false,
+      "notes": "Versão antiga sem tema Dark Nature. Não compatível com tokens atuais."
+    },
+    {
+      "filename": "catalog.css",
+      "size": "12KB",
+      "reason": "Versão antiga, catálogo usa layout.ejs com sistema modular",
+      "replacedBy": "components-dark-nature.css (contém todos os componentes)",
+      "lastUsedIn": "Versão standalone do catálogo (obsoleta)",
+      "safeToRestore": false,
+      "notes": "Catálogo agora usa sistema modular via layout.ejs"
+    },
+    {
+      "filename": "catalog-v2.css",
+      "size": "3KB",
+      "reason": "Versão intermediária obsoleta",
+      "replacedBy": "Sistema modular Dark Nature",
+      "lastUsedIn": "Iteração v2 do catálogo (descontinuada)",
+      "safeToRestore": false,
+      "notes": "Versão de transição. Substituída pelo sistema final."
+    },
+    {
+      "filename": "homepage-v2.css",
+      "size": "19KB",
+      "reason": "Não carregado - index.ejs é standalone ou usa sistema modular",
+      "replacedBy": "tokens + base + components dark-nature inline no index.ejs",
+      "lastUsedIn": "Versão v2 da homepage (não utilizada)",
+      "safeToRestore": false,
+      "notes": "index.ejs carrega diretamente o stack Dark Nature. Este ficheiro nunca foi referenciado."
+    }
+  ],
+  
+  "activeSystem": {
+    "architecture": "Modular Dark Nature",
+    "layers": [
+      "Layer 1 - Primitives: tokens-dark-nature.css",
+      "Layer 2 - Base: variables.css (aliases) + base-dark-nature.css",
+      "Layer 3 - Components: components-dark-nature.css",
+      "Layer 4 - Pages: pdp-dark-nature.css, cart-dark-nature.css, etc",
+      "Layer 5 - Utilities: loading-states.css, notifications.css, etc"
+    ],
+    "mainLayouts": [
+      "layout.ejs: tokens → base → components (dark-nature)",
+      "index.ejs: standalone com tokens → base → components inline",
+      "dashboard-dark-nature.ejs: tokens → base → components → admin-dark-nature",
+      "login-dark-nature.ejs: tokens → base → admin-login-dark-nature"
+    ]
+  },
+  
+  "verification": {
+    "templatesChecked": [
+      "gonzagas_node/views/layout.ejs",
+      "gonzagas_node/views/layouts/main-layout.ejs",
+      "gonzagas_node/views/index.ejs",
+      "gonzagas_node/views/admin/dashboard-dark-nature.ejs",
+      "gonzagas_node/views/admin/login-dark-nature.ejs"
+    ],
+    "noReferencesFound": true,
+    "buildTested": "Pending",
+    "visualTestingRequired": true
+  },
+  
+  "metrics": {
+    "totalFilesArchived": 6,
+    "totalSizeArchived": "~118KB",
+    "percentageReduction": "26%",
+    "activeFilesBefore": 37,
+    "activeFilesAfter": 31
+  },
+  
+  "rollbackInstructions": {
+    "command": "cp gonzagas_node/public/css/_archive/2026-02-17-cleanup/[FILE] gonzagas_node/public/css/",
+    "warning": "Apenas restaurar se absolutamente necessário. Sistema ativo usa Dark Nature.",
+    "compatibility": "Ficheiros arquivados NÃO são compatíveis com sistema Dark Nature atual"
+  }
+}
