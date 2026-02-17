@@ -1,0 +1,130 @@
+/* Correções de cores para o cabeçalho */
+header.bg-white {
+  background-color: #1e293b !important; /* Cor de fundo mais escura para melhor contraste */
+  border-bottom: 1px solid #334155 !important;
+}
+
+/* Texto no cabeçalho */
+header .text-gray-500,
+header .text-gray-600,
+header .dark\:text-gray-400,
+header .dark\:text-gray-300 {
+  color: #e2e8f0 !important; /* Cor de texto mais clara para melhor contraste */
+}
+
+/* Logo e título no cabeçalho */
+header .text-gray-900,
+header .dark\:text-white {
+  color: #ffffff !important; /* Branco puro para melhor visibilidade */
+  font-weight: 600;
+}
+
+/* Ícones no cabeçalho */
+header .fa-bell,
+header .fa-search {
+  color: #e2e8f0 !important;
+}
+
+/* Badge de notificações */
+header .bg-red-500 {
+  background-color: #ef4444 !important; /* Vermelho mais vibrante */
+  color: white !important;
+}
+
+/* Dropdown de notificações */
+header .bg-white,
+header .dark\:bg-gray-800 {
+  background-color: #1e293b !important; /* Cor de fundo escura */
+  border: 1px solid #334155 !important;
+}
+
+/* Texto nos dropdowns */
+header .text-gray-700,
+header .dark\:text-gray-100,
+header .text-gray-800,
+header .dark\:text-white {
+  color: #e2e8f0 !important; /* Texto claro para melhor contraste */
+}
+
+/* Hover nos itens do menu */
+header .hover\:bg-gray-100:hover,
+header .dark\:hover\:bg-gray-700:hover {
+  background-color: #334155 !important; /* Cor de fundo ao passar o mouse */
+}
+
+/* Bordas e separadores */
+header .border-gray-100,
+header .dark\:border-gray-700,
+header .border-t,
+header .border-b {
+  border-color: #334155 !important; /* Cor de borda mais suave */
+}
+
+/* Botão de tema */
+header .text-gray-400,
+header .dark\:text-gray-500 {
+  color: #94a3b8 !important; /* Cor mais clara para melhor visibilidade */
+}
+
+/* Barra lateral - ajustes gerais */
+aside {
+  background-color: #1e293b !important; /* Cor de fundo escura */
+  border-right: 1px solid #334155 !important;
+}
+
+/* Texto na barra lateral */
+aside .text-gray-700,
+aside .dark\:text-gray-300,
+aside .text-gray-600,
+aside .dark\:text-gray-400 {
+  color: #e2e8f0 !important; /* Texto claro para melhor contraste */
+}
+
+/* Itens ativos na barra lateral */
+aside .bg-blue-50,
+aside .dark\:bg-blue-900\/30 {
+  background-color: #4b6854 !important; /* Verde seco para itens ativos */
+  color: #ffffff !important;
+}
+
+/* Hover nos itens da barra lateral */
+aside .hover\:bg-gray-100:hover,
+aside .dark\:hover\:bg-gray-800:hover {
+  background-color: #334155 !important; /* Cor de fundo ao passar o mouse */
+}
+
+/* Cabeçalho da barra lateral */
+aside .from-blue-600,
+aside .to-blue-700,
+aside .dark\:from-gray-900,
+aside .dark\:to-gray-800 {
+  background: var(--color-secondary)) !important; /* Verde seco escuro */
+}
+
+/* Texto do cabeçalho da barra lateral */
+aside .text-white {
+  color: #ffffff !important; /* Branco puro para melhor contraste */
+  font-weight: 600;
+}
+
+/* Rodapé da barra lateral */
+aside .bg-white,
+aside .dark\:bg-gray-800 {
+  background-color: #1e293b !important; /* Cor de fundo escura */
+  border-top: 1px solid #334155 !important;
+}
+
+/* Ajustes para o modo claro (caso necessário) */
+@media (prefers-color-scheme: light) {
+  header.bg-white {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+  
+  aside {
+    background-color: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
+  }
+  
+  /* Adicione mais ajustes para o modo claro conforme necessário */
+}

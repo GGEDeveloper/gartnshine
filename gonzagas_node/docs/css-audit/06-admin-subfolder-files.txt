@@ -1,0 +1,5 @@
+public/css/admin/admin-styles.css
+public/css/admin/header-sidebar-fixes.css
+
+NOTA: Nenhum destes ficheiros é referenciado em views/ (grep não encontrou admin-styles nem header-sidebar-fixes).
+Candidatos a CSS morto.

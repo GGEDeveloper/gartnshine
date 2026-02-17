@@ -1,0 +1,73 @@
+views/collections.ejs:<link rel="stylesheet" href="/css/collections.css?v=<%= Date.now() %>">
+views/collections.ejs:<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+views/catalog/product-detail.ejs:<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+views/catalog/product-detail.ejs:<link rel="stylesheet" href="/css/background-override.css">
+views/catalog/product-detail.ejs:    <link rel="stylesheet" href="/css/admin-quick-actions.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="/css/variables.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="/css/main.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="/css/catalog.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="/css/search-results.css">
+views/catalog/search-results.ejs:    <link rel="stylesheet" href="/css/dark-luxe.css">
+views/layouts/main-layout.ejs:  <link rel="preload" href="/css/admin.css" as="style">
+views/layouts/main-layout.ejs:  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+views/layouts/main-layout.ejs:  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+views/layouts/main-layout.ejs:  <link rel="stylesheet" href="/css/admin.css" media="print" onload="this.media='all'">
+views/layouts/main-layout.ejs:    <link rel="stylesheet" href="/css/<%= customCss %>.css" media="print" onload="this.media='all'">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/variables.css">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/main.css">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/homepage.css?v=<%= Date.now() %>">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/theme.css">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/components.css?v=<%= Date.now() %>">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/catalog.css?v=<%= Date.now() %>">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/catalog-enhanced.css?v=<%= Date.now() %>">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/notifications.css">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/search.css">
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/frontend-mobile.css?v=<%= Date.now() %>">
+views/layouts/main.ejs:    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+views/layouts/main.ejs:    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+views/layouts/main.ejs:    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+views/layouts/main.ejs:    <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= Date.now() %>">
+views/error/500.ejs:  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+views/error/500.ejs:  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/error/404.ejs:  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+views/error/404.ejs:  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/admin/media/library.ejs:<% locals.style = (locals.style || '') + '<link rel="stylesheet" href="/css/media-library.css">'; %>
+views/admin/layouts/main.ejs:    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" type="text/css">
+views/admin/layouts/main.ejs:  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/variables.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/admin.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/admin-layout-fix-definitive.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/admin-dark-luxe.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/admin-tables-mobile.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/admin-mobile.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link href="/css/notifications.css" rel="stylesheet">
+views/admin/layouts/main.ejs:    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+views/admin/layouts/auth.ejs:    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/admin/layouts/auth.ejs:    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+views/admin/layouts/auth.ejs:    <link rel="stylesheet" href="/css/admin.css">
+views/admin/layouts/auth.ejs:    <link rel="stylesheet" href="/css/admin-mobile.css">
+views/admin/layouts/auth.ejs:    <link rel="stylesheet" href="/css/notifications.css">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/admin/layouts/simple-layout.ejs:  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" href="/css/admin.css">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" href="/css/admin-mobile.css">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" href="/css/admin-tables-mobile.css">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+views/admin/layouts/simple-layout.ejs:  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css">
+views/admin/products/product-form.ejs:<link rel="stylesheet" href="/css/camera-capture.css">
+views/admin/partials/camera-module-import.ejs:  locals.style += '<link rel="stylesheet" href="/css/camera-capture.css">';
+views/admin/quick-product/form.ejs:<link rel="stylesheet" href="/css/camera-capture.css">
+views/error-500.ejs:    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+views/layout.ejs:  <link rel="stylesheet" href="/css/variables.css">
+views/layout.ejs:  <link rel="stylesheet" href="/css/main.css">
+views/layout.ejs:  <link rel="stylesheet" href="/css/background-override.css">
+views/layout.ejs:  <link rel="stylesheet" href="/css/black-background-fix.css">
+views/layout.ejs:  <link rel="stylesheet" href="/css/cookie-banner.css">
+views/layout.ejs:        <link rel="stylesheet" href="/css/mobile/mobile-base.css">
+views/layout.ejs:      <link rel="stylesheet" href="/css/mobile/mobile-header.css">
+views/layout.ejs:      <link rel="stylesheet" href="/css/mobile/mobile-cards.css">
+views/layout.ejs:      <link rel="stylesheet" href="/css/mobile/mobile-catalog.css">
+views/layout.ejs:      <link rel="stylesheet" href="/css/mobile/mobile-admin.css">
+views/layout.ejs:    <link rel="stylesheet" href="/css/<%= customCss %>.css">
+views/error-404.ejs:    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

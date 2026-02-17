@@ -1,0 +1,314 @@
+/* =============================================
+   BLACK BACKGROUND FIX - REMOVAL DE GRADIENTES
+   Remove todos os gradientes verticais e horizontais
+   Força background preto (#000000) em todo o site
+   Data: 16 Fevereiro 2026
+   ============================================= */
+
+/* === HOMEPAGE SECTIONS === */
+.featured-products-v2 {
+    background: #000000 !important; /* Era: var(--color-secondary) */
+    background-image: none !important;
+}
+
+.categories-showcase {
+    background: #000000 !important; /* Era: var(--color-secondary) */
+    background-image: none !important;
+}
+
+.trust-section {
+    background: #000000 !important; /* Era: white */
+    background-image: none !important;
+}
+
+.cta-section {
+    background: #000000 !important; /* Era: linear-gradient(135deg, ...) */
+    background-image: none !important;
+}
+
+/* === HERO SECTION === */
+.hero-section-v2 {
+    background: #000000 !important; /* Remove gradiente diagonal */
+    background-image: none !important;
+}
+
+.hero-gradient-overlay {
+    background: rgba(0, 0, 0, 0.6) !important; /* Overlay simples sem gradiente */
+    background-image: none !important;
+}
+
+.hero-background {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === COLLECTION CARDS === */
+.collection-image::after {
+    background: rgba(0, 0, 0, 0.5) !important; /* Remove gradiente vertical */
+    background-image: none !important;
+}
+
+.collection-info {
+    background: rgba(0, 0, 0, 0.8) !important; /* Fundo sólido */
+    background-image: none !important;
+}
+
+.all-collections {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === GLOBAL RESETS === */
+body,
+html,
+main,
+.container,
+section,
+article {
+    background: #000000 !important;
+    background-image: none !important;
+    background-gradient: none !important;
+}
+
+/* Remove gradientes de decoração */
+.floating-circle {
+    opacity: 0.3 !important; /* Reduz opacidade em vez de remover completamente */
+}
+
+.hero-pattern-overlay {
+    opacity: 0 !important; /* Desativa padrões com gradientes */
+}
+
+/* === CARD BACKGROUNDS === */
+.featured-product-card {
+    background: #1a1a1a !important; /* Cinza escuro sólido em vez de branco */
+    background-image: none !important;
+}
+
+.trust-card {
+    background: #1a1a1a !important; /* Remove gradiente subtle */
+    background-image: none !important;
+}
+
+.category-card .category-overlay {
+    background: rgba(0, 0, 0, 0.75) !important; /* Overlay preto simples */
+    background-image: none !important;
+}
+
+.category-image {
+    background: #1a1a1a !important;
+    background-image: none !important;
+}
+
+.value-card {
+    background: #1a1a1a !important;
+    background-image: none !important;
+}
+
+/* === PRODUCT CARDS === */
+.product-card {
+    background: #1a1a1a !important;
+    background-image: none !important;
+}
+
+.product-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+    background-image: none !important;
+}
+
+/* === SECTIONS === */
+.brand-story {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.story-content {
+    background: rgba(0, 0, 0, 0.8) !important;
+    background-image: none !important;
+}
+
+.featured-section {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.collections-carousel {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === ADMIN AREAS === */
+.admin-container,
+.admin-content,
+.dashboard-section {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === PRODUCT DETAIL === */
+.product-detail,
+.product-container {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.related-products {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === CATALOG === */
+.catalog-page,
+.catalog-container {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.collection-page {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.collection-header {
+    background: #0b0d0c !important;
+    background-image: none !important;
+}
+
+.collection-nav {
+    background: #0b0d0c !important;
+    background-image: none !important;
+}
+
+/* === FOOTER === */
+.main-footer {
+    background: #000000 !important; /* Remove qualquer gradiente no footer */
+    background-image: none !important;
+}
+
+.footer-container {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* === ABOUT PAGE === */
+.about-page {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.about-header {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.about-header::before {
+    background: rgba(0, 0, 0, 0.6) !important;
+    background-image: none !important;
+}
+
+.about-values {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+.about-connect {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* === Garante que pseudo-elements não têm gradientes === */
+*::before,
+*::after {
+    background-image: none !important;
+}
+
+/* === Force black on all potential gradient elements === */
+[style*="gradient"] {
+    background-image: none !important;
+    background: #000000 !important;
+}
+
+/* === Remove inline styles com gradientes === */
+[style*="linear-gradient"],
+[style*="radial-gradient"] {
+    background-image: none !important;
+    background: #000000 !important;
+}
+
+/* === BUTTONS - Keep button gradients but force backgrounds === */
+.btn-hero-primary,
+.btn-view-all,
+.btn-cta-primary {
+    /* Mantém gradientes nos botões - são decorativos e pequenos */
+}
+
+/* === IMAGES - Mantém backgrounds para carregamento === */
+.featured-product-image,
+.hero-showcase,
+.category-image img {
+    /* Mantém backgrounds de placeholder para imagens */
+}
+
+/* === OVERLAYS - Simplifica mas mantém funcionalidade === */
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+    background-image: none !important;
+}
+
+/* === ENSURE READABILITY === */
+/* Ajusta text colors quando necessário para manter legibilidade */
+.featured-product-name,
+.featured-product-category {
+    color: #f4f6f8 !important; /* Texto claro em fundos escuros */
+}
+
+.trust-card h3,
+.trust-card p {
+    color: #f4f6f8 !important;
+}
+
+.category-name,
+.category-count {
+    color: #ffffff !important;
+}
+
+/* === PERFORMANCE === */
+/* Força GPU acceleration para backgrounds sólidos */
+.featured-products-v2,
+.categories-showcase,
+.trust-section,
+.cta-section {
+    transform: translateZ(0);
+    will-change: auto;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    /* Mantém backgrounds pretos em mobile */
+    body,
+    main,
+    section {
+        background: #000000 !important;
+        background-image: none !important;
+    }
+}
+
+/* === HIGH CONTRAST MODE === */
+@media (prefers-contrast: high) {
+    body,
+    section,
+    .container {
+        background: #000000 !important;
+        background-image: none !important;
+        border: 1px solid #ffffff;
+    }
+}
+
+/* === PRINT === */
+@media print {
+    body,
+    section {
+        background: white !important; /* Branco para impressão */
+        color: black !important;
+    }
+}

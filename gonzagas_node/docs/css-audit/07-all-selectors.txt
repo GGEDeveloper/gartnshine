@@ -1,0 +1,868 @@
+=== admin-dark-luxe.css ===
+body.admin-layout-fixed {
+body.admin-layout-fixed {
+body.admin-layout-fixed .sidebar {
+body.admin-layout-fixed .sidebar-brand {
+body.admin-layout-fixed .sidebar-nav .nav-link {
+body.admin-layout-fixed .sidebar-nav .nav-link:hover {
+body.admin-layout-fixed .sidebar-nav .nav-link.active {
+body.admin-layout-fixed .sidebar-header {
+body.admin-layout-fixed #wrapper #content-wrapper .header {
+body.admin-layout-fixed .header .btn-link {
+body.admin-layout-fixed .header .dropdown-item:hover {
+body.admin-layout-fixed .header .dropdown-menu {
+body.admin-layout-fixed .header .dropdown-item {
+body.admin-layout-fixed .header .dropdown-divider {
+body.admin-layout-fixed .main {
+body.admin-layout-fixed .admin-content {
+body.admin-layout-fixed .card {
+body.admin-layout-fixed .card-header {
+body.admin-layout-fixed .card-title {
+body.admin-layout-fixed .card-body {
+body.admin-layout-fixed table.table {
+body.admin-layout-fixed .dataTables_wrapper .table th {
+body.admin-layout-fixed .dataTables_wrapper .table td {
+body.admin-layout-fixed .table tbody tr {
+body.admin-layout-fixed .table tbody tr:nth-child(even) td {
+body.admin-layout-fixed .table tbody tr:nth-child(odd) td {
+body.admin-layout-fixed .table tbody tr:hover td {
+body.admin-layout-fixed .table-inventory > tbody > tr > td {
+body.admin-layout-fixed .table-inventory thead th {
+body.admin-layout-fixed .table-inventory tbody tr:nth-child(even) td {
+
+=== admin-dashboard.css ===
+.stats-card {
+.stats-card .card-body {
+.stats-card .card-header {
+.stats-card .card-title {
+.stats-card .card-icon {
+.stats-card .card-value {
+.stats-card .card-change {
+.stats-card .card-change.positive {
+.stats-card .card-change.negative {
+.stats-card .card-footer {
+.chart-container {
+.chart-container .chart-header {
+.chart-container .chart-title {
+.chart-container .chart-actions {
+.chart-container .chart-body {
+.data-table-container {
+.data-table-header {
+.data-table-title {
+.data-table-actions {
+.data-table {
+.data-table thead th {
+.data-table tbody tr {
+.data-table tbody td {
+.status-badge {
+.status-active {
+.status-pending {
+.status-inactive {
+.status-cancelled {
+.product-card {
+.product-card .product-image {
+
+=== admin-layout-fix-definitive.css ===
+html, body {
+
+=== admin-layout-fix.css ===
+html, body {
+#wrapper {
+.sidebar {
+#content-wrapper {
+#content {
+.container-fluid {
+.header {
+.table-responsive {
+.table {
+.card {
+.row {
+.col, [class*="col-"] {
+.admin-content {
+.sidebar-toggle {
+.debug-layout * {
+.debug-layout #wrapper {
+.debug-layout #content-wrapper {
+.debug-layout .sidebar {
+.admin-layout-fixed #content-wrapper {
+.admin-layout-fixed .sidebar {
+
+=== admin-mobile.css ===
+.qp-previews-grid {
+.qp-preview-item {
+.qp-img-card {
+.qp-img-thumb {
+.qp-img-actions {
+.qp-img-zoom, .qp-img-remove {
+.inventory-mobile-cards { display: none; }
+.products-mobile-cards { display: none; }
+.pf-mobile-cards { display: none; }
+html { scroll-behavior: smooth; }
+
+=== admin-orders.css ===
+.admin-content {
+.page-header {
+.page-title {
+.card {
+.card-header {
+.card-title {
+#ordersTable_wrapper {
+#ordersTable th {
+#ordersTable td {
+.btn-action {
+.badge {
+.badge.bg-success {
+.badge.bg-warning {
+.badge.bg-danger {
+.badge.bg-info {
+
+=== admin-product-form.css ===
+.admin-product-form .card {
+.admin-product-form .card-header {
+.admin-product-form .card-title {
+#imagePreview {
+.attribute-row {
+.attribute-row .remove-attribute {
+.nav-tabs .nav-link {
+.nav-tabs .nav-link.active {
+.input-group-text {
+.note-editor.note-frame {
+.invalid-feedback {
+.required-field::after {
+.card-footer {
+.custom-file-label::after {
+.select2-container--default .select2-selection--multiple {
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+#addAttribute {
+input[type="datetime-local"] {
+.form-check {
+#deleteProduct {
+.alert {
+
+=== admin-quick-actions.css ===
+.admin-quick-actions {
+.btn-admin-edit {
+.btn-admin-edit i {
+.btn-admin-edit:hover {
+.btn-admin-edit:hover i {
+.btn-admin-edit:active {
+.btn-admin-edit:focus {
+.btn-admin-edit {
+body.has-floating-filter .admin-quick-actions {
+.btn-admin-edit.is-loading {
+.btn-admin-edit.is-loading i {
+.btn-admin-edit::before {
+.btn-admin-edit::after {
+.btn-admin-edit:hover::after {
+
+=== admin-tables-mobile.css ===
+.table-loading {
+.table-loading::after {
+
+=== admin-theme.css ===
+html {
+body {
+h1, h2, h3, h4, h5, h6 {
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
+p {
+a {
+a:hover {
+.container {
+.flex {
+.flex-col {
+.items-center {
+.justify-between {
+.gap-4 {
+.p-4 {
+.mb-4 {
+.mt-4 {
+.rounded {
+.shadow {
+.shadow-md {
+.bg-surface {
+.text-muted {
+.btn {
+.btn-primary {
+.btn-primary:hover {
+.btn-outline {
+
+=== admin-v2.css ===
+body {
+.admin-container-v2 {
+.admin-topbar {
+.topbar-left {
+.brand-title {
+.brand-icon {
+.topbar-center {
+.admin-search-enhanced {
+.admin-search-enhanced:focus-within {
+.search-global {
+.search-global:focus {
+.search-global::placeholder {
+.search-filters {
+.filter-btn {
+.filter-btn:hover {
+.filter-btn.active {
+.topbar-right {
+.quick-actions {
+.btn-quick {
+.btn-quick:hover {
+.user-menu {
+.user-menu:hover {
+.user-avatar {
+.user-name {
+.admin-main {
+.admin-sidebar {
+.sidebar-nav {
+.nav-section {
+.nav-title {
+.nav-list {
+
+=== admin.css ===
+.table-inventory > tfoot > tr > td {
+.table-inventory {
+.table-inventory th {
+.table-inventory td {
+.table-inventory tbody tr {
+.table-inventory tbody tr:hover {
+.table-inventory .text-dark {
+.table-inventory .badge {
+.table-inventory .badge {
+.table-responsive {
+body {
+h1, h2, h3, h4, h5, h6 {
+a {
+a:hover {
+#wrapper {
+.sidebar {
+.sidebar-brand {
+.sidebar-brand-icon img {
+.sidebar-brand-text {
+.sidebar-nav .nav-item {
+.sidebar-nav .nav-link {
+.sidebar-nav .nav-link.active {
+.sidebar-nav .nav-link i {
+.sidebar-header {
+#content-wrapper {
+.header {
+.header .navbar-nav .nav-item .nav-link {
+.header .navbar-nav .nav-item .nav-link:hover {
+.header .dropdown-menu {
+.header .dropdown-item {
+
+=== background-override.css ===
+body {
+article {
+body[style*="gradient"] {
+body.admin-layout-fixed {
+body.dark-theme {
+.hero-container {
+.hero-video-overlay {
+.card-body {
+.product-card:hover {
+.filter-toggle-btn {
+.btn-highlight:hover {
+.btn-admin-edit {
+.btn-admin-edit:hover {
+.products-container {
+footer {
+nav {
+.hero-tagline {
+.text-gradient {
+.skeleton-loading {
+.alert-success {
+.alert-error {
+.alert-warning {
+.alert-info {
+.admin-header {
+.content-wrapper {
+.stat-card {
+.dropzone {
+.dropzone:hover {
+.modal-body {
+.overlay {
+
+=== black-background-fix.css ===
+.featured-products-v2 {
+.categories-showcase {
+.trust-section {
+.cta-section {
+.hero-section-v2 {
+.hero-gradient-overlay {
+.hero-background {
+.collection-image::after {
+.collection-info {
+.all-collections {
+article {
+.floating-circle {
+.hero-pattern-overlay {
+.featured-product-card {
+.trust-card {
+.category-card .category-overlay {
+.category-image {
+.value-card {
+.product-card {
+.product-overlay {
+.brand-story {
+.story-content {
+.featured-section {
+.collections-carousel {
+.dashboard-section {
+.product-container {
+.related-products {
+.catalog-container {
+.collection-page {
+.collection-header {
+
+=== camera-capture.css ===
+.camera-overlay {
+.camera-container {
+.camera-header {
+.camera-header h3 {
+.camera-overlay .btn-switch-camera {
+.camera-overlay .btn-switch-camera:hover {
+.camera-overlay .btn-switch-camera:active {
+.camera-overlay .btn-switch-camera {
+.camera-overlay .btn-switch-camera[style*="display: none"] {
+.camera-preview {
+.camera-preview video {
+.camera-preview canvas {
+.camera-flash {
+.camera-controls {
+.camera-overlay .btn-capture {
+.camera-overlay .btn-capture span {
+.camera-overlay .btn-capture:hover {
+.camera-overlay .btn-capture:active {
+.camera-hints {
+.camera-hints p {
+.camera-hints i {
+.btn-camera-capture {
+.btn-camera-capture:hover {
+.btn-camera-capture i {
+
+=== catalog-enhanced.css ===
+.product-card {
+.product-card:hover {
+.product-image-container {
+.product-image-container .product-image {
+.product-image-container {
+.product-image-container .product-image {
+.product-image-container img.lazy-load {
+.product-image-container img.lazy-loaded {
+.product-image-container img[data-src] {
+.product-card:hover .product-image-container img {
+.product-image-link {
+.product-overlay {
+.product-card:hover .product-overlay {
+.btn-quick-view {
+.btn-quick-view:hover {
+.product-badge {
+.badge-new {
+.badge-sale {
+.product-info {
+.product-reference {
+.product-family {
+.product-title {
+.product-price {
+.image-skeleton {
+.product-image-container img.image-loaded {
+.catalog-header {
+.header-left {
+.page-title {
+.page-subtitle {
+.header-right {
+
+=== catalog.css ===
+.catalog-container {
+.catalog-header {
+.catalog-title {
+.catalog-description {
+.catalog-filters {
+.filters-header {
+.filters-title {
+.filters-clear {
+.filters-clear:hover {
+.filters-body {
+.filter-group {
+.filter-label {
+.filter-select {
+.filter-select:focus {
+.filter-option {
+.filter-checkbox-group {
+.filter-checkbox-label {
+.filter-checkbox {
+.filter-checkbox:checked {
+input[type="radio"] {
+input[type="radio"]:checked {
+.filter-range {
+.price-inputs {
+.price-input {
+.price-input:focus {
+.price-slider {
+.price-slider::-webkit-slider-thumb {
+.price-slider::-webkit-slider-thumb:hover {
+.price-slider::-moz-range-thumb {
+.price-slider::-moz-range-thumb:hover {
+
+=== collections.css ===
+.collections-page {
+.collections-page .container {
+.collections-header {
+.collections-title h1 {
+.collections-subtitle {
+.collections-header .geometric-divider {
+.collections-header .geometric-divider span {
+.gallery-grid {
+.gallery-item {
+.gallery-item:hover {
+.gallery-image-container {
+.gallery-image {
+.gallery-item:hover .gallery-image {
+.gallery-link {
+.no-images {
+.no-images h3 {
+.no-images p {
+.collections-page .lb-overlay {
+.collections-page .lb-nav a.lb-next {
+.collections-page .lb-close {
+
+=== components.css ===
+.fade-in {
+.slide-up {
+.slide-in-left {
+.slide-in-right {
+.loading-spinner {
+.loading-overlay {
+.loading-overlay.hidden {
+.loading-content {
+.loading-text {
+.notification {
+.notification-content {
+.notification-message {
+.notification-close {
+.notification-close:hover {
+.notification-success {
+.notification-error {
+.notification-warning {
+.notification-info {
+.back-to-top {
+.back-to-top::before {
+.back-to-top:hover::before {
+.back-to-top svg {
+.back-to-top .back-to-top-label {
+.back-to-top.visible {
+.back-to-top:hover {
+.back-to-top:hover svg {
+.back-to-top:active {
+.btn {
+.btn-primary {
+.btn-primary:hover {
+
+=== dark-luxe.css ===
+body {
+.main-header {
+.nav-menu a {
+.nav-menu a.active {
+.logo h1 {
+select {
+textarea::placeholder {
+select:focus {
+.btn-secondary {
+.btn-primary {
+.btn-primary:hover {
+.btn-secondary {
+.btn-secondary:hover {
+.card {
+.product-card {
+.products-grid:not(.list-view) .product-card {
+.products-grid .product-info {
+.card-body {
+footer {
+footer a {
+footer a:hover {
+.notification-info {
+.floating-filter-btn {
+.floating-filter-btn.active {
+.text-gradient {
+.geometric-bg {
+.hover-glow:hover {
+.hero-content h1 {
+.collections-title h1::after {
+.text-muted {
+
+=== dashboard.css ===
+.dashboard-container {
+.welcome-banner {
+.welcome-content h1 {
+.welcome-content p {
+.welcome-actions .btn {
+.welcome-actions .btn:hover {
+.quick-actions {
+.quick-action {
+.quick-action:hover {
+.quick-action-icon {
+.quick-action h3 {
+.quick-action p {
+.quick-action:nth-child(1) .quick-action-icon {
+.quick-action:nth-child(2) .quick-action-icon {
+.quick-action:nth-child(3) .quick-action-icon {
+.quick-action:nth-child(4) .quick-action-icon {
+.stats-grid {
+.stat-card {
+.stat-card::before {
+.stat-card.warning::before {
+.stat-card.danger::before {
+.stat-card.success::before {
+.stat-card:hover {
+.stat-card.warning {
+.stat-card.danger {
+.stat-card.success {
+.stat-icon {
+.stat-card.warning .stat-icon {
+.stat-card.danger .stat-icon {
+.stat-card.success .stat-icon {
+
+=== enhanced-navigation.css ===
+.enhanced-nav {
+.enhanced-nav-container {
+.nav-logo {
+.nav-logo-icon {
+.nav-main {
+.nav-link {
+.nav-link:hover {
+.nav-link.active {
+.nav-link.active::after {
+.mobile-menu-toggle {
+.nav-link {
+.nav-link::before {
+.nav-link:hover::before {
+.breadcrumbs-enhanced {
+.breadcrumb-link {
+.breadcrumb-link:hover {
+.breadcrumb-separator {
+.breadcrumb-current {
+.loading-bar {
+
+=== frontend-mobile.css ===
+html {
+body {
+h1 {
+h2 {
+h3 {
+button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
+.mobile-nav-link {
+.filter-checkbox, .filter-radio {
+.container, .main-content, .catalog-container {
+
+=== homepage.css ===
+.hero {
+.hero-video-container {
+.hero-video {
+.hero-video-overlay {
+.hero-image-backdrop {
+.hero .hero-content {
+.hero-tagline {
+.featured-section {
+.section-header {
+.section-header h2 {
+.geometric-divider {
+.geometric-divider span {
+.featured-carousel {
+.featured-carousel .slick-slide {
+.featured-carousel .product-card {
+.featured-section .product-image-container {
+.featured-carousel .slick-next:before {
+.featured-carousel .slick-dots li button:before {
+.featured-carousel .slick-dots li.slick-active button:before {
+
+=== loading-states.css ===
+.skeleton {
+.skeleton-text {
+.skeleton-text.large {
+.skeleton-text.small {
+.skeleton-image {
+.skeleton-card {
+.skeleton-product-card {
+.skeleton-product-card .skeleton-image {
+.skeleton-product-card .skeleton-content {
+.skeleton-product-card .skeleton-title {
+.skeleton-product-card .skeleton-text {
+.skeleton-product-card .skeleton-price {
+.loading-spinner {
+.loading-spinner.small {
+.loading-spinner.large {
+.loading-overlay {
+.loading-overlay .loading-spinner {
+.loading-overlay .loading-text {
+.progress-bar {
+.progress-fill {
+.pulse {
+.fade-in {
+.slide-in-up {
+.skeleton-grid {
+.loading {
+.loading-dots::after {
+
+=== main.css ===
+html {
+body {
+h1, h2, h3, h4, h5, h6 {
+h1 {
+h2 {
+h3 {
+a {
+a:hover {
+img {
+.container {
+.main-header {
+.header-container {
+.logo h1 {
+.main-nav {
+.nav-menu {
+.nav-menu a {
+.nav-menu a:hover {
+.nav-menu a.active::after {
+.dropdown-toggle::after {
+.dropdown-menu {
+.dropdown.open .dropdown-menu {
+.dropdown-menu li {
+.dropdown-menu a {
+.dropdown-menu a:hover {
+.dropdown {
+.dropdown-toggle::after {
+.dropdown-menu {
+.dropdown.open > .dropdown-menu { /* Use > for direct child, ensure .open is on .dropdown */
+.dropdown-menu a {
+.dropdown-menu a:focus {
+
+=== media-library.css ===
+.media-library-page {
+.media-library-content {
+.content-header {
+.header-left h1 {
+.header-left h1 i {
+.header-subtitle {
+.header-actions {
+.upload-actions {
+.media-toolbar {
+.toolbar-right {
+.toolbar-center {
+.folder-nav {
+.search-box {
+.search-input {
+.search-input::placeholder {
+.search-input:focus {
+.search-btn {
+.search-btn:hover {
+.form-select {
+.form-select:hover {
+.form-select:focus {
+.form-control {
+.form-control:focus {
+.form-control::placeholder {
+.form-group {
+.form-group label {
+.form-help {
+.dropzone {
+.dropzone:hover {
+.dropzone.dragover {
+
+=== mobile-navigation.css ===
+.header {
+.header-content {
+.header-logo {
+.header-logo-img {
+.header-logo h1 {
+.header-logo-short {
+.mobile-nav-toggle {
+.mobile-nav-toggle:hover {
+.hamburger {
+.hamburger-line {
+.mobile-nav {
+.mobile-nav.active {
+.mobile-nav-content {
+.mobile-nav-header {
+.mobile-nav-close {
+.mobile-nav-close:hover {
+.mobile-nav-links {
+.mobile-nav-link {
+.mobile-nav-link.active {
+.mobile-nav-link i {
+.mobile-nav-link span {
+.mobile-nav-dropdown {
+.mobile-nav-dropdown-toggle {
+.mobile-nav-dropdown-arrow {
+.mobile-nav-dropdown-toggle.active .mobile-nav-dropdown-arrow {
+.mobile-nav-dropdown-content {
+.mobile-nav-dropdown-content.active {
+.mobile-nav-dropdown-link {
+.mobile-nav-dropdown-link:focus {
+.mobile-nav-dropdown-link i {
+
+=== navigation-v2.css ===
+.header-v2 {
+.navbar-v2 {
+.navbar-v2.navbar-scrolled {
+.navbar-v2.navbar-hidden {
+.nav-container {
+.brand-logo {
+.brand-logo:hover {
+.logo-image {
+.navbar-scrolled .logo-image {
+.logo-image img {
+.brand-text {
+.brand-name {
+.brand-tagline {
+.navbar-scrolled .brand-name {
+.navbar-scrolled .brand-tagline {
+.nav-desktop {
+.nav-menu {
+.nav-item {
+.nav-link {
+.nav-link::after {
+.nav-link:hover {
+.nav-item.active .nav-link::after {
+.nav-link i {
+.dropdown.active .nav-link i {
+.dropdown {
+.dropdown-menu {
+.dropdown.active .dropdown-menu {
+.mega-menu {
+.mega-menu-content {
+.menu-section h4 {
+
+=== notifications.css ===
+.notification-container {
+.notification {
+.notification.show {
+.notification.hide {
+.notification-content {
+.notification-icon {
+.notification-message {
+.notification-close {
+.notification-close:hover {
+.notification-progress {
+.notification-success {
+.notification-success .notification-icon {
+.notification-success .notification-message {
+.notification-success .notification-close {
+.notification-success .notification-close:hover {
+.notification-error {
+.notification-error .notification-icon {
+.notification-error .notification-message {
+.notification-error .notification-close {
+.notification-error .notification-close:hover {
+.notification-warning {
+.notification-warning .notification-icon {
+.notification-warning .notification-message {
+.notification-warning .notification-close {
+.notification-warning .notification-close:hover {
+.notification-info {
+.notification-info .notification-icon {
+.notification-info .notification-message {
+.notification-info .notification-close {
+.notification-info .notification-close:hover {
+
+=== product-detail-v2.css ===
+.product-detail-v2 {
+.container {
+.product-hero {
+.breadcrumbs-v2 {
+.breadcrumb-item {
+.breadcrumb-item:hover {
+.breadcrumb-separator {
+.breadcrumb-current {
+.product-main-grid {
+.product-gallery-v2 {
+.gallery-main {
+.main-image {
+.gallery-main:hover .main-image {
+.image-controls {
+.gallery-main:hover .image-controls {
+.btn-fullscreen {
+.btn-fullscreen:hover {
+.image-indicators {
+.indicator {
+.indicator.active {
+.gallery-thumbnails {
+.thumbnail {
+.thumbnail.active {
+.thumbnail img {
+.product-info-v2 {
+.product-header {
+.product-title {
+.product-reference {
+.product-actions-quick {
+.btn-share {
+
+=== search-results.css ===
+.search-results-page {
+.search-header {
+.search-title-section {
+.search-title {
+.search-title i {
+.search-meta {
+.search-controls {
+.control-group {
+.control-group label {
+.form-select {
+.form-select:hover {
+.form-select:focus {
+.view-toggle {
+.btn-view {
+.btn-view:hover {
+.btn-view.active {
+.search-layout {
+.search-filters {
+.filters-header {
+.filters-header h3 {
+.btn-clear-filters {
+.btn-clear-filters:hover {
+.filter-group {
+.filter-title {
+.filter-title i {
+.filter-options {
+.filter-option {
+.filter-option:hover {
+.filter-option input[type="checkbox"] {
+.filter-option span {
+
+=== search.css ===
+.search-container {
+.search-results {
+.search-result-item {
+.search-result-item:hover {
+.search-result-item img {
+.search-result-info h4 {
+.search-result-info p {
+.search-result-info .price {
+.search-result-info mark {
+.search-no-results, .search-loading {
+
+=== theme.css ===
+.dark-mode {
+.light-mode {
+.admin-theme {
+.geometric-bg {
+.forest-bg {
+.psychedelic-bg {
+.text-glow {
+.text-gradient {
+.border-glow {
+.border-psychedelic {
+.border-psychedelic::after {
+.hover-glow:hover {
+.hover-scale:hover {
+.pulse-effect {
+.font-display {
+.font-body {
+.shimmer {
+.visually-hidden {
+
+=== variables.css ===
+

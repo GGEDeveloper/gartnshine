@@ -1,0 +1,301 @@
+/* =============================================
+   BACKGROUND OVERRIDE - PRETO SÓLIDO GLOBAL
+   Remove todos os gradientes e força fundo preto
+   ============================================= */
+
+/* ==========================================
+   FORCE BLACK BACKGROUNDS GLOBALLY
+   ========================================== */
+
+html,
+body {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    background-image: none !important;
+}
+
+main,
+.container,
+section,
+article {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   REMOVE ALL GRADIENTS FROM BODY
+   ========================================== */
+
+body[style*="gradient"] {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   OVERRIDE DARK LUXE GRADIENTS
+   ========================================== */
+
+/* Admin area background (era gradiente) */
+body.admin-layout-fixed {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* Dark luxe body */
+.dark-luxe body,
+body.dark-theme {
+    background: #000000 !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   HERO SECTIONS - SIMPLE OVERLAYS
+   ========================================== */
+
+.hero,
+.hero-section,
+.hero-container {
+    background-image: none !important;
+}
+
+/* Hero overlays - simple semi-transparent black instead of gradient */
+.hero-overlay,
+.hero-video-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   CARDS - SOLID BACKGROUNDS
+   ========================================== */
+
+.product-card,
+.card,
+.card-body {
+    background: rgba(0, 0, 0, 0.8) !important;
+    background-image: none !important;
+}
+
+.product-card:hover {
+    background: rgba(0, 0, 0, 0.9) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   BUTTONS - SOLID COLORS
+   ========================================== */
+
+/* Silver/Bronze buttons sem gradiente */
+.btn-primary,
+.btn-highlight,
+.floating-filter-btn,
+.filter-toggle-btn {
+    background: #C0C0C0 !important;
+    background-image: none !important;
+}
+
+.btn-primary:hover,
+.btn-highlight:hover {
+    background: #A8A8A8 !important;
+    background-image: none !important;
+}
+
+/* Admin buttons */
+.btn-admin-edit {
+    background: #B08D57 !important;
+    background-image: none !important;
+}
+
+.btn-admin-edit:hover {
+    background: #c19963 !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   CATALOG & PRODUCT PAGES
+   ========================================== */
+
+.catalog-main,
+.product-detail-container,
+.products-container {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* Footer gradient removal */
+.footer,
+footer {
+    background: #0a0a0a !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   NAVIGATION
+   ========================================== */
+
+.header,
+.navbar,
+nav {
+    background: rgba(0, 0, 0, 0.95) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   HOMEPAGE SPECIFIC
+   ========================================== */
+
+.hero-tagline {
+    background: rgba(0, 0, 0, 0.25) !important;
+    background-image: none !important;
+}
+
+/* Text gradients preserved (são para texto, não fundo) */
+.text-gradient {
+    background: #C0C0C0 !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ==========================================
+   LOADING & SKELETON STATES
+   ========================================== */
+
+.image-skeleton,
+.skeleton-loading {
+    background: rgba(0, 0, 0, 0.3) !important;
+    background-image: none !important;
+    /* Animation mantida para loading */
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+}
+
+/* ==========================================
+   NOTIFICATIONS - SOLID BACKGROUNDS
+   ========================================== */
+
+.notification.success,
+.alert-success {
+    background: rgba(168, 168, 168, 0.9) !important;
+    background-image: none !important;
+}
+
+.notification.error,
+.alert-error {
+    background: rgba(245, 101, 101, 0.9) !important;
+    background-image: none !important;
+}
+
+.notification.warning,
+.alert-warning {
+    background: rgba(237, 137, 54, 0.9) !important;
+    background-image: none !important;
+}
+
+.notification.info,
+.alert-info {
+    background: rgba(168, 168, 168, 0.9) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   ADMIN AREA - SOLID DARK
+   ========================================== */
+
+.admin-sidebar,
+.sidebar,
+.admin-header {
+    background: #0b1016 !important;
+    background-image: none !important;
+}
+
+.admin-content,
+.content-wrapper {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* Admin cards */
+.admin .card,
+.dashboard-card,
+.stat-card {
+    background: rgba(0, 0, 0, 0.8) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   MEDIA LIBRARY
+   ========================================== */
+
+.media-library-page,
+.media-card,
+.dropzone {
+    background: rgba(0, 0, 0, 0.8) !important;
+    background-image: none !important;
+}
+
+.media-card:hover,
+.dropzone:hover {
+    background: rgba(0, 0, 0, 0.9) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   MODALS & OVERLAYS
+   ========================================== */
+
+.modal-content,
+.modal-body {
+    background: rgba(20, 20, 20, 0.95) !important;
+    background-image: none !important;
+}
+
+.modal-backdrop,
+.overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   COLLECTIONS & GALLERY
+   ========================================== */
+
+.collection-card,
+.gallery-item {
+    background: rgba(0, 0, 0, 0.8) !important;
+    background-image: none !important;
+}
+
+/* ==========================================
+   FORCE OVERRIDE INLINE STYLES
+   ========================================== */
+
+[style*="linear-gradient"],
+[style*="radial-gradient"],
+[style*="conic-gradient"] {
+    background-image: none !important;
+}
+
+/* ==========================================
+   PRINT STYLES - MAINTAIN BLACK
+   ========================================== */
+
+@media print {
+    body {
+        background: white !important;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITY - HIGH CONTRAST
+   ========================================== */
+
+@media (prefers-contrast: high) {
+    body {
+        background: #000000 !important;
+    }
+}

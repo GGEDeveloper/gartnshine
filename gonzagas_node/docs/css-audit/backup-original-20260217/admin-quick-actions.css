@@ -1,0 +1,343 @@
+/* =============================================
+   ADMIN QUICK ACTIONS
+   Botão flutuante de edição rápida nas páginas de produto
+   Só aparece para utilizadores admin
+   ============================================= */
+
+/* ==========================================
+   FLOATING ADMIN BUTTON
+   ========================================== */
+
+.admin-quick-actions {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1030; /* Acima de conteúdo normal, abaixo de modals */
+    animation: slideInUpAdmin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================
+   EDIT BUTTON STYLING
+   ========================================== */
+
+.btn-admin-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    
+    /* Background bronze/dourado */
+    background: #B08D57;
+    color: #0a0a0a;
+    
+    /* Typography */
+    font-weight: 600;
+    font-family: var(--font-primary, 'Poppins', sans-serif);
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    
+    /* Border & Shadow */
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 8px 24px rgba(176, 141, 87, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    
+    /* Transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Prevent text selection */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    
+    /* Cursor */
+    cursor: pointer;
+}
+
+/* Icon styling */
+.btn-admin-edit i {
+    font-size: 1.15rem;
+    transition: transform 0.3s ease;
+}
+
+/* ==========================================
+   HOVER & ACTIVE STATES
+   ========================================== */
+
+.btn-admin-edit:hover {
+    background: #c19963;
+    color: #000000;
+    transform: translateY(-3px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 
+        0 12px 32px rgba(193, 153, 99, 0.5),
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-admin-edit:hover i {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.btn-admin-edit:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 
+        0 6px 16px rgba(176, 141, 87, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Focus state para acessibilidade */
+.btn-admin-edit:focus {
+    outline: 3px solid rgba(193, 153, 99, 0.5);
+    outline-offset: 3px;
+}
+
+/* ==========================================
+   ANIMATION
+   ========================================== */
+
+@keyframes slideInUpAdmin {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ==========================================
+   PULSE ANIMATION (OPCIONAL)
+   Descomente para adicionar pulso subtil
+   ========================================== */
+
+/*
+.btn-admin-edit {
+    animation: slideInUpAdmin 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+               adminPulse 3s ease-in-out 0.5s infinite;
+}
+
+@keyframes adminPulse {
+    0%, 100% {
+        box-shadow: 
+            0 8px 24px rgba(176, 141, 87, 0.4),
+            0 4px 12px rgba(0, 0, 0, 0.3),
+            0 0 0 0 rgba(176, 141, 87, 0.4);
+    }
+    50% {
+        box-shadow: 
+            0 8px 24px rgba(176, 141, 87, 0.4),
+            0 4px 12px rgba(0, 0, 0, 0.3),
+            0 0 0 8px rgba(176, 141, 87, 0);
+    }
+}
+*/
+
+/* ==========================================
+   MOBILE ADJUSTMENTS
+   ========================================== */
+
+@media (max-width: 768px) {
+    .admin-quick-actions {
+        bottom: 20px;
+        right: 16px;
+        /* Pode ajustar posição se conflitar com outros elementos mobile */
+    }
+    
+    .btn-admin-edit {
+        padding: 12px 18px;
+        font-size: 0.875rem;
+        gap: 8px;
+    }
+    
+    .btn-admin-edit i {
+        font-size: 1.05rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .admin-quick-actions {
+        bottom: 16px;
+        right: 12px;
+    }
+    
+    .btn-admin-edit {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+    }
+    
+    /* Pode esconder texto e mostrar só ícone em ecrãs muito pequenos */
+    .btn-admin-edit span.btn-text {
+        display: none;
+    }
+}
+
+/* ==========================================
+   TABLET LANDSCAPE
+   ========================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .admin-quick-actions {
+        bottom: 28px;
+        right: 20px;
+    }
+}
+
+/* ==========================================
+   LARGE DESKTOP
+   ========================================== */
+
+@media (min-width: 1440px) {
+    .admin-quick-actions {
+        bottom: 32px;
+        right: 32px;
+    }
+    
+    .btn-admin-edit {
+        padding: 16px 28px;
+        font-size: 1rem;
+    }
+}
+
+/* ==========================================
+   CONFLITO COM FLOATING FILTER BUTTON
+   Se existir botão de filtro flutuante, ajustar
+   ========================================== */
+
+/* Se floating filter button estiver no canto esquerdo, admin fica à direita ✓ */
+/* Se ambos estiverem visíveis ao mesmo tempo, pode ajustar: */
+
+.floating-filter-btn.visible ~ .admin-quick-actions,
+body.has-floating-filter .admin-quick-actions {
+    /* Opcionalmente ajustar se houver conflito visual */
+    /* bottom: 24px; (já está) */
+}
+
+/* ==========================================
+   DARK MODE / LIGHT MODE COMPATIBILITY
+   ========================================== */
+
+@media (prefers-color-scheme: light) {
+    .btn-admin-edit {
+        /* Se algum dia houver light mode, ajustar aqui */
+        background: #B08D57;
+        color: #0a0a0a;
+    }
+}
+
+/* ==========================================
+   PRINT - HIDE ADMIN BUTTON
+   ========================================== */
+
+@media print {
+    .admin-quick-actions {
+        display: none !important;
+    }
+}
+
+/* ==========================================
+   REDUCED MOTION - ACCESSIBILITY
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-quick-actions,
+    .btn-admin-edit,
+    .btn-admin-edit i {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .btn-admin-edit:hover {
+        transform: none;
+    }
+}
+
+/* ==========================================
+   HIGH CONTRAST MODE
+   ========================================== */
+
+@media (prefers-contrast: high) {
+    .btn-admin-edit {
+        border: 3px solid var(--color-silver-light);
+        box-shadow: none;
+    }
+    
+    .btn-admin-edit:hover {
+        background: #d4a76f;
+        border-color: var(--color-silver-light);
+    }
+}
+
+/* ==========================================
+   LOADING STATE (OPCIONAL)
+   Para quando o botão está a processar
+   ========================================== */
+
+.btn-admin-edit.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.btn-admin-edit.is-loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   TOOLTIP (OPCIONAL)
+   Mostrar mensagem ao hover
+   ========================================== */
+
+.btn-admin-edit::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--color-silver-light);
+    font-size: 0.8rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.btn-admin-edit::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    right: 20px;
+    border: 4px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.btn-admin-edit:hover::before,
+.btn-admin-edit:hover::after {
+    opacity: 1;
+}
+
+/* Esconder tooltip em mobile */
+@media (max-width: 768px) {
+    .btn-admin-edit::before,
+    .btn-admin-edit::after {
+        display: none;
+    }
+}
