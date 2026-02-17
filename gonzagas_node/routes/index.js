@@ -517,7 +517,7 @@ router.get('/search', async (req, res) => {
       priceMin: priceMin,
       priceMax: priceMax,
       title: `Pesquisa: ${query || 'Todos os produtos'}`,
-      layout: 'layout', // Dark Nature layout
+      layout: false, // Standalone page com header/footer próprio
       siteTitle: 'Gonzaga\'s Art & Shine'
     });
     

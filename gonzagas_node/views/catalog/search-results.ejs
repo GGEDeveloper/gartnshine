@@ -8,14 +8,15 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/catalog.css">
+    <!-- Dark Nature System (substitui main.css + catalog.css arquivados) -->
+    <link rel="stylesheet" href="/css/tokens-dark-nature.css">
+    <link rel="stylesheet" href="/css/base-dark-nature.css">
+    <link rel="stylesheet" href="/css/components-dark-nature.css">
     <link rel="stylesheet" href="/css/search-results.css">
 </head>
 <body>
 
-<%- include('../partials/header') %>
+<%- include('../partials/header-dark-nature') %>
 
 <main class="search-results-page">
     <div class="container">
@@ -291,6 +292,8 @@ function clearFilters() {
     window.location = url.toString();
 }
 </script>
+
+<%- include('../partials/footer-dark-nature') %>
 
 </body>
 </html>
