@@ -11,6 +11,13 @@ Ficheiros CSS de experiências que nunca foram utilizados em produção.
 - **Referências:** 0 no código
 - **Seguro eliminar:** ✅ Sim
 
+### admin-login-dark-nature.css
+- **Tamanho:** 6.0KB
+- **Arquivado:** 2026-02-18
+- **Motivo:** Tema dark-nature para login admin nunca implementado
+- **Referências:** 0 no código
+- **Seguro eliminar:** ✅ Sim
+
 ## Reversão
 
 Para restaurar qualquer ficheiro:
