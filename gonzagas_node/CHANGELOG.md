@@ -1,152 +1,169 @@
 # Changelog - Gonzaga's Art & Shine
 
-## [2025-07-18] - Arquitetura Modular & UI/UX Improvements
+Todas as mudanças notáveis neste projeto serão documentadas neste ficheiro.
 
-### 🏗️ **Arquitetura Modular Implementada**
-
-#### **Sistema de Configuração Global**
-- **Arquivo**: `public/js/config.js`
-- **Funcionalidades**:
-  - Detecção automática de ambiente (localhost = development)
-  - Debug flags configuráveis
-  - Feature toggles para funcionalidades
-  - Controle de ordem de carregamento de módulos
-  - Timeouts configuráveis
-
-#### **Módulos JavaScript Organizados**
-- **`public/js/modules/utils.js`**: Utilitários (debounce, throttle, manipulação DOM)
-- **`public/js/modules/navigation.js`**: Sistema de navegação e scroll effects
-- **`public/js/modules/ui.js`**: Componentes UI (loading, lightbox, back-to-top, video backgrounds)
-- **`public/js/modules/carousel.js`**: Sistema de carrosséis reutilizável
-
-#### **Module Manager**
-- **Arquivo**: `public/js/main.js`
-- **Funcionalidades**:
-  - Inicialização segura e sequencial de módulos
-  - Controle de dependências
-  - Tratamento de erros
-  - Sistema de logs para debugging
-
-#### **CSS Componentizado**
-- **Arquivo**: `public/css/components.css`
-- **Componentes**:
-  - Loading overlays reutilizáveis
-  - Botões padronizados
-  - Cards de produtos
-  - Sistema de grids responsivo
-
-### 📱 **Melhorias Mobile - Área Admin**
-
-#### **CSS Mobile Específico**
-- **Arquivo**: `public/css/admin-mobile.css`
-- **Melhorias**:
-  - Sidebar responsiva com toggle móvel
-  - Menu hamburger funcional
-  - Navegação otimizada para touch
-  - Layout adaptativo para telas pequenas
-
-#### **Tabelas Mobile-Friendly**
-- **Arquivo**: `public/css/admin-tables-mobile.css`
-- **Funcionalidades**:
-  - Scroll horizontal em tabelas grandes
-  - Cards responsivos para dados tabulares
-  - Botões de ação otimizados para touch
-
-#### **JavaScript Mobile**
-- **Melhorias no**: `public/js/admin.js`
-- **Funcionalidades**:
-  - Toggle de sidebar móvel
-  - Detecção de tamanho de tela
-  - Eventos touch otimizados
-
-### 🎨 **UI/UX da Galeria**
-
-#### **Página Collections Otimizada**
-- **Arquivo**: `views/collections.ejs`
-- **Melhorias**:
-  - Remoção do loading infinito
-  - Interface limpa focada nas imagens
-  - Remoção de elementos desnecessários:
-    - Botões zoom não funcionais
-    - Títulos e descrições redundantes
-    - Overlays de informação
-  - Mantido sistema lightbox funcional
-
-#### **Performance Otimizada**
-- **Loading progressivo** de imagens
-- **Lazy loading** implementado
-- **Transições suaves** mantidas
-- **CSS otimizado** (remoção de estilos não utilizados)
-
-### 🔧 **Correções Técnicas**
-
-#### **Sistema Modular**
-- ✅ Correção de dependências entre módulos
-- ✅ Tratamento de erros melhorado
-- ✅ Logs de debugging implementados
-- ✅ Ordem de carregamento otimizada
-
-#### **Interface Mobile**
-- ✅ Sidebar inacessível corrigida
-- ✅ Menu hamburger funcional
-- ✅ Tabelas responsivas implementadas
-- ✅ Touch navigation otimizada
-
-#### **Galeria**
-- ✅ Loading infinito eliminado
-- ✅ Performance melhorada
-- ✅ Interface limpa e minimalista
-- ✅ Sistema lightbox mantido
-
-### 📊 **Arquivos Modificados/Criados**
-
-#### **Novos Arquivos**
-```
-public/js/config.js                 - Sistema de configuração global
-public/js/modules/utils.js         - Módulo de utilitários
-public/js/modules/navigation.js    - Módulo de navegação
-public/js/modules/ui.js            - Módulo de componentes UI
-public/js/modules/carousel.js      - Módulo de carrossel
-public/css/components.css          - CSS componentizado
-public/css/admin-mobile.css        - CSS mobile para admin
-public/css/admin-tables-mobile.css - CSS para tabelas mobile
-```
-
-#### **Arquivos Atualizados**
-```
-public/js/main.js                  - Module Manager implementado
-public/js/admin.js                 - Funcionalidades mobile adicionadas
-views/collections.ejs              - Interface limpa implementada
-views/admin/layouts/*.ejs          - CSS mobile incluído
-```
-
-### 🚀 **Benefícios Implementados**
-
-1. **Modularidade**: Código organizado e reutilizável
-2. **Manutenibilidade**: Fácil debugging e extensão
-3. **Performance**: Loading otimizado e CSS limpo
-4. **Responsividade**: Interface móvel completamente funcional
-5. **UX**: Galeria limpa focada no conteúdo
-6. **Escalabilidade**: Sistema preparado para futuras funcionalidades
-
-### 📋 **Status dos Todos**
-- ✅ Arquitetura modular implementada
-- ✅ Interface admin mobile corrigida
-- ✅ Galeria otimizada e limpa
-- ✅ Sistema de loading corrigido
-- ✅ Documentação atualizada
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
+e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ---
 
-## Próximos Passos Sugeridos
+## [Fase 4] - 2026-02-18
 
-1. **Testes de Integração**: Validar funcionamento em diferentes dispositivos
-2. **Otimização de Imagens**: Implementar compressão automática
-3. **SEO**: Adicionar meta tags otimizadas
-4. **PWA**: Transformar em Progressive Web App
-5. **Analytics**: Implementar tracking de uso
+### 🗂️ Arquivamento e Limpeza de Código
+
+#### ✅ Ficheiros Organizados (25 ficheiros)
+
+**Testes arquivados** → `_archive/tests-archived/`
+- 10 ficheiros de teste one-off movidos
+- Estrutura: admin-testing/, navigation-testing/, misc-testing/
+- Ficheiros: test-admin-layout.js, test-admin-margin-fix.js, test-admin-mobile-solution.js, test-definitive-fix.js, test-final-navigation-fix.js, test-navigation-fix.js, test-mobile-and-catalog.js, test-frontend-styles.js, test-local.js, test_port.js
+
+**SQL Dumps arquivados** → `_archive/sql-dumps-archived/`
+- 7 dumps SQL históricos organizados
+- Estrutura: 2025-06-01-backup/, production-dumps/
+- Dumps: gonzagas_db_backup_20250601_160053.sql, gonzagas_essential_production_dump.sql, gonzagas_local_complete_dump.sql, gonzagas_local_complete_optimized.sql, gonzagas_production_dump.sql, gonzagas_production_dump_fixed.sql, gonzagas_production_ready_dump.sql
+
+**JavaScript deprecated** → `_archive/js-deprecated/`
+- 3 ficheiros JS obsoletos arquivados
+- Estrutura: admin-versions/, debug-tools/, mobile-fixes-old/
+- Ficheiros: admin.old.js, debug-navigation.js, admin-mobile-fix.js
+
+**Scripts one-off** → `_archive/scripts-archived/`
+- 2 scripts de geração de dumps arquivados
+- Estrutura: database-generation/
+- Scripts: create_essential_production_dump.js, create_production_ready_dump.js
+
+**Documentação reorganizada**
+- 3 docs movidos para `docs/features/`, `docs/procedures/`, `docs/deployment/`
+- 1 HTML de teste arquivado em `_archive/docs-archived/testing/`
+- Docs: README_hide_catalog_prices.md → docs/features/hide-catalog-prices.md, deploy-files.md → docs/deployment/files-checklist.md, TESTE_NOTIFICACOES.html → _archive/docs-archived/testing/
+
+#### 📚 Documentação Criada
+
+**7 READMEs explicativos** adicionados:
+- `_archive/tests-archived/README.md` - Contexto histórico dos testes
+- `_archive/sql-dumps-archived/README.md` - Documentação de dumps SQL
+- `_archive/js-deprecated/README.md` - Histórico de JS obsoleto
+- `_archive/scripts-archived/README.md` - Scripts one-off executados
+- `_archive/docs-archived/README.md` - Docs e testes arquivados
+- `docs/features/README.md` - Índice de funcionalidades
+- `docs/procedures/README.md` - Processos operacionais
+- `docs/deployment/README.md` - Documentação de deploy consolidada
+
+#### 🛠️ Ferramentas
+
+**Script de arquivamento criado**: `fase4-arquivamento.sh`
+- Move 29 ficheiros automaticamente com `git mv`
+- Preserva histórico Git
+- Validações e mensagens detalhadas
+- Contadores e resumo final
+- Fix aplicado: `((moved_count++))` → `moved_count=$((moved_count+1))` para compatibilidade com `set -e`
+
+#### 🔧 Infraestrutura
+
+**`.gitignore` completo adicionado**
+- Previne SQL dumps na raiz
+- Bloqueia ficheiros de teste temporários (test-*.js, test_*.js)
+- Ignora backups (*.backup, *.old, *.bak)
+- Protege credenciais (.env, *.pem, *.key)
+- Exclui logs e cache
+- Mantém versionado: estrutura SQL essencial, migrations, configs exemplo, _archive
+
+#### 📊 Impacto
+
+**Métricas**:
+- ~600KB limpos da raiz do projeto
+- 25 ficheiros movidos (4 não existiam neste branch)
+- 7 READMEs criados (~15KB de documentação)
+- Zero eliminações - tudo preservado
+- Git history mantido com `git mv`
+
+**Estrutura final**:
+```
+gonzagas_node/
+├── _archive/
+│   ├── tests-archived/       (10 ficheiros + README)
+│   ├── sql-dumps-archived/   (7 ficheiros + README)
+│   ├── js-deprecated/        (3 ficheiros + README)
+│   ├── scripts-archived/     (2 ficheiros + README)
+│   └── docs-archived/        (1 ficheiro + README)
+├── docs/
+│   ├── features/             (1 doc + README)
+│   ├── procedures/           (README)
+│   └── deployment/           (1 doc + README)
+└── (raiz limpa e organizada)
+```
+
+#### 🔄 Reversibilidade
+
+**Completa**:
+- Todos ficheiros preservados em `_archive/`
+- Git history completo via `git mv`
+- READMEs documentam contexto histórico
+- Commits anteriores a 2026-02-18 mantêm ficheiros originais
+
+#### 🎯 Filosofia
+
+**"Preservar tudo, organizar melhor"**
+- Zero eliminações
+- Máxima documentação
+- Histórico preservado
+- Estrutura clara e navegável
 
 ---
 
-*Checkpoint criado em: 2025-07-18*
-*Status: Sistema estável e funcional* 
+## [Fase 3] - 2026-02-17
+
+### 🗂️ Arquivamento de CSS e Views Deprecated
+
+#### Arquivados
+
+**CSS deprecated** → `_archive/css-deprecated/`
+- Ficheiros antigos de estilos não mais utilizados
+- Mantidos para referência histórica
+
+**Views deprecated** → `_archive/views-deprecated/`
+- Templates EJS antigos
+- Backups de views substituídas
+
+#### Documentação
+
+**READMEs criados**:
+- Contexto de cada arquivo
+- Razões do arquivamento
+- Instruções de reversão
+
+---
+
+## [Fases anteriores]
+
+### Fases 1-2
+- Planeamento e estruturação inicial
+- Setup de ambiente de desenvolvimento
+- Configuração de base de dados
+- Implementação de features core
+
+---
+
+## Notas
+
+### Sobre Arquivamento
+
+Todos os ficheiros arquivados em `_archive/`:
+- **Não são eliminados** - preservação total
+- **Git history mantido** - rastreabilidade completa  
+- **Documentados** - cada pasta tem README explicativo
+- **Reversíveis** - podem ser restaurados se necessário
+
+### Sobre Versionamento
+
+Este projeto segue:
+- **Commits semânticos** - prefixos emoji + mensagens claras
+- **Branches feature** - desenvolvimento isolado
+- **Documentação inline** - decisões explicadas no código
+- **Histórico preservado** - git mv para movimentos
+
+---
+
+**Mantido por:** Equipa Gonzaga's Art & Shine
+**Última atualização:** 2026-02-18
