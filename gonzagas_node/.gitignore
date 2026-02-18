@@ -239,6 +239,9 @@ temp/
 debug-*.js
 debug-*.log
 
+# CSS audit artifacts (backups + screenshots from Fase 3)
+docs/css-audit/
+
 # ============================================
 # CREDENCIAIS E CERTIFICADOS
 # ============================================
