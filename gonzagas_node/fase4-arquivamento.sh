@@ -45,10 +45,10 @@ for file in test-admin-layout.js test-admin-margin-fix.js test-admin-mobile-solu
     if [ -f "$file" ]; then
         git mv "$file" _archive/tests-archived/admin-testing/
         echo "  ✓ $file → admin-testing/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -57,10 +57,10 @@ for file in test-catalog-enhanced.js test-catalog-full-validation.js test-catalo
     if [ -f "$file" ]; then
         git mv "$file" _archive/tests-archived/catalog-testing/
         echo "  ✓ $file → catalog-testing/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -69,10 +69,10 @@ for file in test-definitive-fix.js test-final-navigation-fix.js test-navigation-
     if [ -f "$file" ]; then
         git mv "$file" _archive/tests-archived/navigation-testing/
         echo "  ✓ $file → navigation-testing/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -81,10 +81,10 @@ for file in test-frontend-styles.js test-local.js test_port.js; do
     if [ -f "$file" ]; then
         git mv "$file" _archive/tests-archived/misc-testing/
         echo "  ✓ $file → misc-testing/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -101,10 +101,10 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 if [ -f "gonzagas_db_backup_20250601_160053.sql" ]; then
     git mv gonzagas_db_backup_20250601_160053.sql _archive/sql-dumps-archived/2025-06-01-backup/
     echo "  ✓ gonzagas_db_backup_20250601_160053.sql → 2025-06-01-backup/"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ gonzagas_db_backup_20250601_160053.sql (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 # Production dumps
@@ -112,10 +112,10 @@ for file in gonzagas_essential_production_dump.sql gonzagas_local_complete_dump.
     if [ -f "$file" ]; then
         git mv "$file" _archive/sql-dumps-archived/production-dumps/
         echo "  ✓ $file → production-dumps/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -133,28 +133,28 @@ cd public/js
 if [ -f "admin.old.js" ]; then
     git mv admin.old.js ../../_archive/js-deprecated/admin-versions/
     echo "  ✓ admin.old.js → admin-versions/"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ admin.old.js (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 if [ -f "debug-navigation.js" ]; then
     git mv debug-navigation.js ../../_archive/js-deprecated/debug-tools/
     echo "  ✓ debug-navigation.js → debug-tools/"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ debug-navigation.js (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 if [ -f "admin-mobile-fix.js" ]; then
     git mv admin-mobile-fix.js ../../_archive/js-deprecated/mobile-fixes-old/
     echo "  ✓ admin-mobile-fix.js → mobile-fixes-old/"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ admin-mobile-fix.js (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 cd ../..
@@ -172,10 +172,10 @@ for file in create_essential_production_dump.js create_production_ready_dump.js;
     if [ -f "$file" ]; then
         git mv "$file" _archive/scripts-archived/database-generation/
         echo "  ✓ $file → database-generation/"
-        ((moved_count++))
+        moved_count=$((moved_count+1))
     else
         echo "  ⊘ $file (já movido ou não existe)"
-        ((skip_count++))
+        skip_count=$((skip_count+1))
     fi
 done
 
@@ -192,38 +192,38 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 if [ -f "README_hide_catalog_prices.md" ]; then
     git mv README_hide_catalog_prices.md docs/features/hide-catalog-prices.md
     echo "  ✓ README_hide_catalog_prices.md → docs/features/hide-catalog-prices.md"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ README_hide_catalog_prices.md (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 if [ -f "validate-catalog-manual.md" ]; then
     git mv validate-catalog-manual.md docs/procedures/catalog-validation.md
     echo "  ✓ validate-catalog-manual.md → docs/procedures/catalog-validation.md"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ validate-catalog-manual.md (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 if [ -f "deploy-files.md" ]; then
     git mv deploy-files.md docs/deployment/files-checklist.md
     echo "  ✓ deploy-files.md → docs/deployment/files-checklist.md"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ deploy-files.md (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 # Arquivar HTML de teste
 if [ -f "TESTE_NOTIFICACOES.html" ]; then
     git mv TESTE_NOTIFICACOES.html _archive/docs-archived/testing/
     echo "  ✓ TESTE_NOTIFICACOES.html → docs-archived/testing/"
-    ((moved_count++))
+    moved_count=$((moved_count+1))
 else
     echo "  ⊘ TESTE_NOTIFICACOES.html (já movido ou não existe)"
-    ((skip_count++))
+    skip_count=$((skip_count+1))
 fi
 
 echo ""
