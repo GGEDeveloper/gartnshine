@@ -127,7 +127,7 @@ const config = {
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: parseInt(process.env.SESSION_MAX_AGE_MS, 10) || 10 * 60 * 1000, // 10 min de inatividade
+      maxAge: parseInt(process.env.SESSION_MAX_AGE_MS, 10) || 30 * 60 * 1000, // 30 min inatividade (rolling renova em cada pedido)
       sameSite: 'lax',
     },
   },

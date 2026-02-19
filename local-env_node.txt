@@ -21,7 +21,7 @@ APP_NAME="Gonzaga's Art & Shine"  # ← MANTER
 APP_VERSION=1.0.0     # ← MANTER
 APP_URL=http://localhost:3000  # ← ALTERAR de https://artnshine.pt para http://localhost:3000
 SESSION_SECRET=gonzagas-local-development-secret  # ← ALTERAR para algo mais simples
-SESSION_MAX_AGE_MS=600000  # 10 min inatividade (rolling: renova em cada pedido)
+SESSION_MAX_AGE_MS=1800000  # 30 min inatividade (rolling: renova em cada pedido)
 
 # ====================
 # E-MAIL (para testes locais)

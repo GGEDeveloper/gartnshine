@@ -216,10 +216,10 @@ window.GonzagaUI = (function() {
       </div>
     `;
 
-    // Styles
+    // Styles (bottom-right para consistência com notifications.css)
     Object.assign(notification.style, {
       position: 'fixed',
-      top: '20px',
+      bottom: '20px',
       right: '20px',
       background: type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : type === 'warning' ? '#ff9800' : '#4f5b66',
       color: 'white',

@@ -3,17 +3,27 @@
    Gonzaga's Art & Shine
    =========================== */
 
+/* Notificações fora do container (ui.js, media-library) - forçar bottom-right */
+body > .notification {
+  bottom: 20px !important;
+  right: 20px !important;
+  top: auto !important;
+  left: auto !important;
+}
+
 .notification-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  top: auto !important;
   z-index: 10000;
   max-width: 400px;
   width: auto;
   pointer-events: none;
 }
 
-.notification {
+.notification-container .notification {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 12px;
@@ -27,15 +37,19 @@
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   pointer-events: auto;
-  position: relative;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
 }
 
-.notification.show {
+.notification-container .notification.show {
   transform: translateX(0);
   opacity: 1;
 }
 
-.notification.hide {
+.notification-container .notification.hide {
   transform: translateX(420px);
   opacity: 0;
 }
@@ -201,12 +215,12 @@
    EFEITOS ESPECIAIS
    =========================== */
 
-.notification:hover {
+.notification-container .notification:hover {
   transform: translateX(-8px) scale(1.02);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
 }
 
-.notification:hover .notification-progress {
+.notification-container .notification:hover .notification-progress {
   animation-play-state: paused;
 }
 
@@ -216,13 +230,13 @@
 
 @media (max-width: 480px) {
   .notification-container {
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
+    left: auto !important;
+    right: 20px !important;
+    bottom: 20px !important;
     max-width: none;
   }
   
-  .notification {
+  .notification-container .notification {
     min-width: auto;
     max-width: none;
     margin-bottom: 8px;
@@ -265,7 +279,7 @@
 }
 
 /* Efeito de entrada suave */
-.notification {
+.notification-container .notification {
   animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
