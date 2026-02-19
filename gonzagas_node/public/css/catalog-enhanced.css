@@ -718,6 +718,13 @@
   gap: 10px;
 }
 
+.filter-options.filter-tree .filter-tree-depth-1,
+.filter-options.filter-tree .filter-tree-depth-2,
+.filter-options.filter-tree .filter-tree-depth-3 {
+  border-left: 1px solid rgba(192, 192, 192, 0.12);
+  margin-left: 4px;
+}
+
 .filter-option {
   display: flex;
   align-items: center;

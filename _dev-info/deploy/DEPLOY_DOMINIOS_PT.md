@@ -11,7 +11,7 @@
 1. **node_modules** – CloudLinux exige symlink para pasta do Node.js Selector; não usar pasta física
 2. **Upload de imagens** – Máx. 5MB por ficheiro (Multer). Fotos de telemóvel (3–5MB) podem causar lentidão; recomenda-se compressão em clientes
 3. **Tabelas DB** – Algumas DBs de produção podem não ter `inventory_transactions`; o código cria o produto na mesma forma resiliente
-4. **Rate limiting** – Admin: 200 req/15min; API: 100; público: 300
+4. **Rate limiting** – Configurável via .env (RATE_LIMIT_*). Default: 400 req/15min por IP. **CRÍTICO:** Em produção com proxy, definir `TRUST_PROXY=1` no .env para que o rate limit use o IP real por utilizador (sem isto, todos partilham o IP do proxy e o limite dispara rápido).
 
 ## Comandos Úteis (referência dos ficheiros do projeto)
 

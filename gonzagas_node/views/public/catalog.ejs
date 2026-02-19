@@ -34,17 +34,17 @@
             </div>
           </div>
           
-          <!-- Family Filters -->
+          <!-- Family Filters (Tree) -->
           <div class="filter-section">
             <h4 class="filter-title">Famílias</h4>
-            <div class="filter-options">
+            <div class="filter-options filter-tree">
               <div class="filter-option">
                 <input type="checkbox" id="all-families" name="families" value="all" 
                        class="filter-checkbox" <%= selectedFamilyIds.length === 0 ? 'checked' : '' %>>
                 <label for="all-families" class="filter-label">Todas as Famílias</label>
               </div>
-              <% families.forEach(family => { %>
-                <div class="filter-option">
+              <% (families || []).forEach(family => { %>
+                <div class="filter-option filter-tree-item filter-tree-depth-<%= family.depth || 0 %>" style="padding-left: <%= 8 + (family.depth || 0) * 16 %>px;">
                   <input type="checkbox" id="family-<%= family.id %>" name="families" 
                          value="<%= family.id %>" class="filter-checkbox family-filter" 
                          <%= selectedFamilyIds.includes(family.id) ? 'checked' : '' %>>

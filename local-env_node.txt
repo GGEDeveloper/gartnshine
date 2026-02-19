@@ -39,9 +39,15 @@ ALLOWED_FILE_TYPES=image/jpeg,image/png,image/gif,application/pdf  # ← MANTER
 # ====================
 # SEGURANÇA
 # ====================
-TRUST_PROXY=loopback  # ← MANTER
-RATE_LIMIT_WINDOW_MS=900000  # ← MANTER
-RATE_LIMIT_MAX_REQUESTS=100  # ← MANTER
+# PRODUÇÃO (artnshine.pt): TRUST_PROXY=1 (obrigatório atrás de nginx/proxy)
+# LOCAL: TRUST_PROXY=loopback ou omitir
+TRUST_PROXY=loopback  # ← PRODUÇÃO: usar TRUST_PROXY=1
+
+# Rate limiting (por IP, por janela) - defaults: 2500 req/15min
+RATE_LIMIT_WINDOW_MS=900000  # 15 min
+RATE_LIMIT_API_MAX=2500      # API (catálogo, filtros, etc.)
+RATE_LIMIT_PUBLIC_MAX=2500   # Páginas públicas
+RATE_LIMIT_ADMIN_MAX=2500   # Admin
 
 # ====================
 # CONFIGURAÇÕES ADICIONAIS PARA LOCAL

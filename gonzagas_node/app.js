@@ -20,6 +20,11 @@ const config = require('./config/config');
 // Inicializa o aplicativo Express
 const app = express();
 
+// Trust proxy - CRÍTICO em produção (nginx/Cloudflare): usa X-Forwarded-For para IP real
+// Sem isto, todos os utilizadores partilham o mesmo IP do proxy → rate limit dispara para todos
+const trustProxy = process.env.TRUST_PROXY;
+app.set('trust proxy', trustProxy === '1' || trustProxy === 'true' ? 1 : (trustProxy || false));
+
 // Configuração global de variáveis
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 3000);
@@ -80,28 +85,32 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false // Para compatibilidade
 }));
 
-// 3. Rate limiting global
+// 3. Rate limiting global (configurável via .env)
+// RATE_LIMIT_WINDOW_MS, RATE_LIMIT_API_MAX, RATE_LIMIT_PUBLIC_MAX, RATE_LIMIT_ADMIN_MAX
+const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000;
+const RATE_LIMIT_API_MAX = parseInt(process.env.RATE_LIMIT_API_MAX, 10) || 2500;
+const RATE_LIMIT_PUBLIC_MAX = parseInt(process.env.RATE_LIMIT_PUBLIC_MAX, 10) || 2500;
+const RATE_LIMIT_ADMIN_MAX = parseInt(process.env.RATE_LIMIT_ADMIN_MAX, 10) || 2500;
+
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
+  windowMs: RATE_LIMIT_WINDOW_MS,
   max: (req) => {
-    // Diferentes limits baseado no tipo de request
-    if (req.path.startsWith('/admin')) {
-      return 200; // Admin precisa mais requests
-    }
-    if (req.path.startsWith('/api')) {
-      return 100; // API mais restritivo
-    }
-    return 300; // Público mais generoso
+    if (req.path.startsWith('/admin')) return RATE_LIMIT_ADMIN_MAX;
+    if (req.path.startsWith('/api')) return RATE_LIMIT_API_MAX;
+    return RATE_LIMIT_PUBLIC_MAX;
   },
   message: {
     error: 'Demasiados pedidos, tente novamente em 15 minutos',
-    retryAfter: 15 * 60
+    retryAfter: Math.round(RATE_LIMIT_WINDOW_MS / 1000)
   },
   standardHeaders: true,
   legacyHeaders: false,
-  // SKIP certas rotas essenciais
   skip: (req) => {
-    return req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2)$/);
+    // Estáticos não contam
+    if (req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|webp)$/)) return true;
+    // Health check
+    if (req.path === '/health' || req.path === '/ping') return true;
+    return false;
   }
 });
 

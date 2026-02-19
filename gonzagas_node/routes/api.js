@@ -120,19 +120,19 @@ router.get('/catalog/filter', async (req, res) => {
     const { families, price_range, search, page = 1, limit = 1000 } = req.query;
     
     const hideOutOfStock = res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock;
-    let products = await Product.getActiveForCatalog(parseInt(limit), (parseInt(page) - 1) * parseInt(limit), { hideOutOfStock: !!hideOutOfStock });
+    let products = await Product.getActiveForCatalog(parseInt(limit) * 3, 0, { hideOutOfStock: !!hideOutOfStock });
     
-    // Filter by families
-    if (families) {
-      const familyIds = Array.isArray(families) 
-        ? families.map(id => parseInt(id))
-        : [parseInt(families)];
-      
-      if (familyIds.length > 0 && !familyIds.includes(NaN)) {
-        products = products.filter(product => 
-          familyIds.includes(product.family_id)
-        );
-      }
+    // Parse and expand family IDs (include descendants when parent selected)
+    let selectedFamilyIds = [];
+    if (families && families !== 'all') {
+      selectedFamilyIds = Array.isArray(families)
+        ? families.map(id => parseInt(id)).filter(n => !isNaN(n))
+        : [parseInt(families)].filter(n => !isNaN(n));
+    }
+    if (selectedFamilyIds.length > 0) {
+      const flatFamilies = await ProductFamily.getAll();
+      const expandedIds = ProductFamily.getFamilyIdsWithDescendants(flatFamilies, selectedFamilyIds);
+      products = products.filter(p => expandedIds.includes(p.family_id));
     }
     
     // Filter by price range

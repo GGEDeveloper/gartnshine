@@ -242,6 +242,21 @@ class ProductFamily {
     return Array.from(ids);
   }
 
+  /**
+   * Dado um conjunto de IDs selecionados, retorna esses IDs + todos os descendentes.
+   * Usado no catálogo: ao selecionar "Aneis" (parent), incluir produtos de subcategorias.
+   */
+  static getFamilyIdsWithDescendants(flat, selectedIds) {
+    if (!selectedIds || selectedIds.length === 0) return [];
+    const expanded = new Set();
+    selectedIds.forEach(id => {
+      expanded.add(id);
+      const desc = this.getDescendantIds(flat, id);
+      desc.forEach(d => expanded.add(d));
+    });
+    return Array.from(expanded);
+  }
+
   /** Ordenar IDs por profundidade (mais profundos primeiro) para delete em cascata */
   static getDescendantIdsByDepth(flat, id) {
     const ids = this.getDescendantIds(flat, id);
