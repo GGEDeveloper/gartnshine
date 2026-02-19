@@ -15,6 +15,11 @@
   justify-content: center;
   align-items: center;
   animation: cameraOverlayIn 0.25s ease-out;
+  overflow: hidden;
+  /* Mobile: viewport estável, evita scroll */
+  height: 100vh;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
 }
 
 @keyframes cameraOverlayIn {
