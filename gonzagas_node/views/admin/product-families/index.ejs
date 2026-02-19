@@ -24,71 +24,33 @@
   </ul>
 
   <div class="tab-content" id="mainTabsContent">
-    <!-- Categorias -->
+    <!-- Categorias (árvore) -->
     <div class="tab-pane fade show active" id="categories" role="tabpanel">
       <div class="card shadow mb-4">
         <div class="card-header py-2">
-          <h6 class="m-0 font-weight-bold">Categorias e Subcategorias</h6>
+          <h6 class="m-0 font-weight-bold">Categorias (árvore)</h6>
+          <small class="text-muted">Suporta subcategorias, sub-subcategorias, etc.</small>
         </div>
         <div class="card-body p-2 p-md-3">
-          <% if (families && families.length > 0) { %>
-            <!-- Mobile Cards -->
-            <div class="pf-mobile-cards">
-              <% families.forEach(f => { %>
-                <div class="pf-mobile-card card mb-2">
-                  <div class="card-body py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <code class="me-2"><%= f.code %></code>
-                        <% if (f.parent_id) { %><span class="text-muted">↳</span> <% } %>
-                        <strong><%= f.name %></strong>
-                        <span class="badge bg-secondary ms-2"><%= f.product_count || 0 %> prod.</span>
-                      </div>
-                      <div class="d-flex gap-1">
-                        <a href="/admin/product-families/edit/<%= f.id %>" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i></a>
-                        <form action="/admin/product-families/delete/<%= f.id %>" method="POST" class="d-inline" onsubmit="return confirm('Eliminar esta categoria?');">
-                          <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% }); %>
-            </div>
-            <!-- Desktop Table -->
-            <div class="table-responsive pf-table-wrapper">
+          <% if (familiesTree && familiesTree.length > 0) { %>
+            <div class="table-responsive pf-table-wrapper d-none d-md-block">
               <table class="table table-sm table-hover mb-0">
                 <thead>
                   <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
+                    <th>Código / Nome</th>
                     <th>Descrição</th>
                     <th>Produtos</th>
                     <th style="width: 120px;">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% families.forEach(f => { %>
-                    <tr class="<%= f.parent_id ? 'table-light' : '' %>">
-                      <td><code><%= f.code %></code></td>
-                      <td>
-                        <% if (f.parent_id) { %><span class="text-muted ms-2">↳</span> <% } %>
-                        <%= f.name %>
-                      </td>
-                      <td><small class="text-muted"><%= f.description || '-' %></small></td>
-                      <td><%= f.product_count || 0 %></td>
-                      <td>
-                        <a href="/admin/product-families/edit/<%= f.id %>" class="btn btn-outline-primary btn-sm">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="/admin/product-families/delete/<%= f.id %>" method="POST" class="d-inline" onsubmit="return confirm('Eliminar esta categoria?');">
-                          <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                  <% }); %>
+                  <%- include('_tree-row', { nodes: familiesTree, depth: 0 }) %>
                 </tbody>
               </table>
+            </div>
+            <!-- Mobile: cards em árvore -->
+            <div class="pf-mobile-cards d-md-none">
+              <%- include('_tree-mobile', { nodes: familiesTree, depth: 0 }) %>
             </div>
           <% } else { %>
             <p class="text-muted mb-0">Nenhuma categoria. <a href="/admin/product-families/create">Criar a primeira</a>.</p>

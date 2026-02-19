@@ -1,0 +1,19 @@
+<% nodes.forEach(function(f) { %>
+<tr class="pf-tree-row" data-depth="<%= depth %>">
+  <td style="padding-left: <%= 12 + depth * 24 %>px;">
+    <code class="me-2"><%= f.code %></code>
+    <strong><%= f.name %></strong>
+  </td>
+  <td><small class="text-muted"><%= (f.description || '-').substring(0, 60) %><%= (f.description || '').length > 60 ? '…' : '' %></small></td>
+  <td><span class="badge bg-secondary"><%= f.product_count || 0 %></span></td>
+  <td style="width: 120px;">
+    <a href="/admin/product-families/edit/<%= f.id %>" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i></a>
+    <form action="/admin/product-families/delete/<%= f.id %>" method="POST" class="d-inline" onsubmit="return confirm('Eliminar esta categoria?');">
+      <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
+    </form>
+  </td>
+</tr>
+<% if (f.children && f.children.length > 0) { %>
+  <%- include('_tree-row', { nodes: f.children, depth: depth + 1 }) %>
+<% } %>
+<% }); %>

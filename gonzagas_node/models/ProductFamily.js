@@ -96,22 +96,21 @@ class ProductFamily {
     }
   }
 
-  // Delete a product family
+  // Delete a product family (e descendentes em cascata - primeiro os filhos)
   static async delete(id) {
     try {
-      // First check if there are products using this family
-      const [products] = await pool.query(
-        'SELECT COUNT(*) as count FROM products WHERE family_id = ?',
-        [id]
-      );
-      
-      if (products[0].count > 0) {
-        throw new Error(`Cannot delete family with ID ${id} because it is being used by ${products[0].count} products`);
+      const [all] = await pool.query('SELECT id, parent_id FROM product_families');
+      const toDelete = this.getDescendantIdsByDepth(all, id);
+      for (const did of toDelete) {
+        const [products] = await pool.query('SELECT COUNT(*) as count FROM products WHERE family_id = ?', [did]);
+        if (products[0].count > 0) {
+          throw new Error(`Não é possível eliminar: a categoria ou uma subcategoria tem produto(s) associado(s).`);
+        }
       }
-      
-      const [result] = await pool.query('DELETE FROM product_families WHERE id = ?', [id]);
-      
-      return result.affectedRows > 0;
+      for (const did of toDelete) {
+        await pool.query('DELETE FROM product_families WHERE id = ?', [did]);
+      }
+      return true;
     } catch (error) {
       console.error('Error deleting product family:', error);
       throw error;
@@ -185,6 +184,80 @@ class ProductFamily {
       console.error('Error getting families with product count:', error);
       throw error;
     }
+  }
+
+  /**
+   * Build hierarchical tree from flat list (suporta subsubcat, subsubsubcat, etc.)
+   * @param {Array} flat - Lista plana com parent_id
+   * @returns {Array} Árvore [{ ...item, children: [...] }]
+   */
+  static buildTree(flat) {
+    if (!flat || !Array.isArray(flat)) return [];
+    const map = {};
+    const roots = [];
+    flat.forEach(item => {
+      const node = { ...item, children: [] };
+      map[item.id] = node;
+    });
+    flat.forEach(item => {
+      const node = map[item.id];
+      const parentId = item.parent_id;
+      if (!parentId || !map[parentId]) {
+        roots.push(node);
+      } else {
+        map[parentId].children.push(node);
+      }
+    });
+    const sortChildren = (nodes) => {
+      nodes.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      nodes.forEach(n => { if (n.children?.length) sortChildren(n.children); });
+    };
+    sortChildren(roots);
+    return roots;
+  }
+
+  /**
+   * Get all families as tree (para listagem em árvore)
+   */
+  static async getTreeWithProductCount() {
+    const flat = await this.getAllWithProductCount();
+    return this.buildTree(flat);
+  }
+
+  /**
+   * Get IDs of node and all descendants (para excluir em selects de parent - evita ciclos)
+   */
+  static getDescendantIds(flat, id) {
+    const ids = new Set([id]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      flat.forEach(f => {
+        if (f.parent_id != null && ids.has(f.parent_id) && !ids.has(f.id)) {
+          ids.add(f.id);
+          changed = true;
+        }
+      });
+    }
+    return Array.from(ids);
+  }
+
+  /** Ordenar IDs por profundidade (mais profundos primeiro) para delete em cascata */
+  static getDescendantIdsByDepth(flat, id) {
+    const ids = this.getDescendantIds(flat, id);
+    const depthOf = {};
+    ids.forEach(i => { depthOf[i] = 0; });
+    let changed = true;
+    while (changed) {
+      changed = false;
+      flat.forEach(f => {
+        if (ids.includes(f.id) && f.parent_id != null && ids.includes(f.parent_id)) {
+          const d = depthOf[f.parent_id] + 1;
+          if (d > depthOf[f.id]) { depthOf[f.id] = d; changed = true; }
+        }
+      });
+    }
+    return ids.sort((a, b) => depthOf[b] - depthOf[a]);
   }
 }
 

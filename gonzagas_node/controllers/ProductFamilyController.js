@@ -11,14 +11,11 @@ let getColorsSafe = async () => {
 
 exports.listFamilies = async (req, res) => {
   try {
-    const families = await ProductFamily.getAllWithProductCount();
-    const { categories, subcategories } = await ProductFamily.getCategoriesWithSubcategories().catch(() => ({ categories: families, subcategories: [] }));
+    const familiesTree = await ProductFamily.getTreeWithProductCount();
     const colors = await getColorsSafe();
     res.render('admin/product-families/index', {
       title: 'Categorias e Cores',
-      families,
-      categories,
-      subcategories,
+      familiesTree,
       colors,
       layout: 'admin/layouts/main',
       breadcrumb: res.locals.breadcrumb || [],
@@ -33,15 +30,26 @@ exports.listFamilies = async (req, res) => {
   }
 };
 
+/** Build flat list with depth for parent select (qualquer nível: cat, subcat, subsubcat...) */
+function buildParentOptions(tree, depth = 0) {
+  const out = [];
+  for (const node of tree) {
+    out.push({ ...node, depth });
+    if (node.children?.length) out.push(...buildParentOptions(node.children, depth + 1));
+  }
+  return out;
+}
+
 exports.showAddForm = async (req, res) => {
   try {
-    const families = await ProductFamily.getAll();
-    const categories = families.filter(f => !f.parent_id);
+    const flat = await ProductFamily.getAll();
+    const tree = ProductFamily.buildTree(flat);
+    const parentOptions = buildParentOptions(tree);
     res.render('admin/product-families/family-form', {
       title: 'Nova Categoria',
       family: {},
       isNew: true,
-      categories,
+      parentOptions,
       layout: 'admin/layouts/main',
       breadcrumb: res.locals.breadcrumb || [],
       user: req.session?.user || req.user
@@ -78,13 +86,15 @@ exports.showEditForm = async (req, res) => {
       req.flash('error_msg', 'Categoria não encontrada.');
       return res.redirect('/admin/product-families');
     }
-    const families = await ProductFamily.getAll();
-    const categories = families.filter(f => !f.parent_id && f.id !== familyId);
+    const flat = await ProductFamily.getAll();
+    const excludeIds = ProductFamily.getDescendantIds(flat, familyId);
+    const tree = ProductFamily.buildTree(flat.filter(f => !excludeIds.includes(f.id)));
+    const parentOptions = buildParentOptions(tree);
     res.render('admin/product-families/family-form', {
       title: 'Editar Categoria',
       family,
       isNew: false,
-      categories,
+      parentOptions,
       canEditCode: Number(family.product_count || 0) === 0,
       layout: 'admin/layouts/main',
       breadcrumb: res.locals.breadcrumb || [],

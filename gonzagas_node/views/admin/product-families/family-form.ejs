@@ -24,11 +24,14 @@
         <div class="mb-3">
           <label for="parent_id" class="form-label">Subcategoria de</label>
           <select class="form-select form-control-lg" id="parent_id" name="parent_id">
-            <option value="">— Categoria principal —</option>
-            <% (categories || []).forEach(c => { %>
-              <option value="<%= c.id %>" <%= family.parent_id == c.id ? 'selected' : '' %>><%= c.name %></option>
+            <option value="">— Categoria principal (raiz) —</option>
+            <% (parentOptions || []).forEach(function(opt) { %>
+              <option value="<%= opt.id %>" <%= family.parent_id == opt.id ? 'selected' : '' %>>
+                <%= '　'.repeat(opt.depth || 0) %><%= opt.depth > 0 ? '└ ' : '' %><%= opt.name %> (<%= opt.code %>)
+              </option>
             <% }); %>
           </select>
+          <small class="text-muted">Pode escolher qualquer nível: categoria, subcategoria, sub-subcategoria, etc.</small>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Descrição</label>
