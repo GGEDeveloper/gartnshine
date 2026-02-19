@@ -123,10 +123,11 @@ const config = {
     secret: process.env.SESSION_SECRET || crypto.randomBytes(64).toString('hex'),
     resave: false,
     saveUninitialized: false,
+    rolling: true, // Renova o cookie em cada pedido → sessão mantém-se enquanto houver atividade
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+      maxAge: parseInt(process.env.SESSION_MAX_AGE_MS, 10) || 10 * 60 * 1000, // 10 min de inatividade
       sameSite: 'lax',
     },
   },
@@ -201,19 +202,7 @@ const config = {
     charset: 'utf8mb4_unicode_ci',
   },
   
-  // Configurações de sessão
-  session: {
-    secret: process.env.SESSION_SECRET || 'gonzaga-art-and-shine-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000, // 24 horas
-      domain: process.env.COOKIE_DOMAIN || 'localhost',
-    },
-  },
+  // session: definido acima (~linha 122) - rolling + 10min inatividade
   
   // Configurações de cache
   cache: {
