@@ -23,11 +23,11 @@
             <label for="family_id" class="form-label">Categoria</label>
             <select class="form-select form-select-lg" id="family_id" name="family_id">
               <option value="">-- Selecione --</option>
-              <% (categories || []).forEach(cat => { %>
-                <option value="<%= cat.id %>" data-code="<%= cat.code || '' %>" <%= (typeof preselectedFamilyId !== 'undefined' && preselectedFamilyId && String(preselectedFamilyId) === String(cat.id)) ? 'selected' : '' %>><%= cat.name %></option>
-              <% }); %>
-              <% (subcategories || []).forEach(sub => { %>
-                <option value="<%= sub.id %>" data-code="<%= sub.code || '' %>" data-parent="<%= sub.parent_id %>" <%= (typeof preselectedFamilyId !== 'undefined' && preselectedFamilyId && String(preselectedFamilyId) === String(sub.id)) ? 'selected' : '' %>><%= sub.name %></option>
+              <% (familiesForView || []).forEach(f => { 
+                const d = f.depth || 0;
+                const indent = (d > 0 ? '  '.repeat(d) + '└ ' : '');
+              %>
+                <option value="<%= f.id %>" data-code="<%= f.code || '' %>" <%= (typeof preselectedFamilyId !== 'undefined' && preselectedFamilyId && String(preselectedFamilyId) === String(f.id)) ? 'selected' : '' %>><%= indent %><%= f.name %></option>
               <% }); %>
             </select>
           </div>

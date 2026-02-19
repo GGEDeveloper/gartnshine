@@ -14,15 +14,17 @@ class QuickProductController {
    */
   async showForm(req, res) {
     try {
-      const { categories, subcategories } = await ProductFamily.getCategoriesWithSubcategories().catch(() => ({
-        categories: [],
-        subcategories: []
-      }));
-      let families = categories.length || subcategories.length ? { categories, subcategories } : null;
-      if (!families) {
-        const all = await ProductFamily.getAll();
-        families = { categories: all, subcategories: [] };
-      }
+      const flat = await ProductFamily.getAll().catch(() => []);
+      const familiesTree = ProductFamily.buildTree(flat);
+      const flattenTree = (nodes, depth = 0) => {
+        const out = [];
+        (nodes || []).forEach(n => {
+          out.push({ id: n.id, name: n.name, code: n.code || '', depth });
+          if (n.children?.length) out.push(...flattenTree(n.children, depth + 1));
+        });
+        return out;
+      };
+      const familiesForView = flattenTree(familiesTree);
       const colors = await getColorsSafe();
       const preselectedFamilyId = req.query.family_id ? String(req.query.family_id).trim() : null;
       const preselectedColor = req.query.color ? String(req.query.color).trim() : null;
@@ -30,8 +32,7 @@ class QuickProductController {
       res.render('admin/quick-product/form', {
         layout: 'admin/layouts/main',
         title: 'Criar Produto Rápido',
-        categories: families.categories,
-        subcategories: families.subcategories,
+        familiesForView,
         colors: colors && colors.length > 0 ? colors : [{ name: 'Prata' }, { name: 'Dourado' }, { name: 'Outro' }],
         preselectedFamilyId,
         preselectedColor,
