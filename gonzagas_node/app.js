@@ -233,6 +233,7 @@ app.use(helmet({
         "'unsafe-inline'",
         "'unsafe-eval'",
         'https://artnshine.pt',
+        'https://www.googletagmanager.com',
         'https://cdn.jsdelivr.net', // Adicionado para Bootstrap JS e outros scripts do jsdelivr
         'https://cdn.datatables.net', // Adicionado para DataTables JS
         'https://code.jquery.com'    // Adicionado para jQuery
@@ -245,6 +246,7 @@ app.use(helmet({
         "'self'",
         "'unsafe-inline'",
         'https://artnshine.pt',
+        'https://www.googletagmanager.com',
         'https://cdn.jsdelivr.net', // Adicionado para Bootstrap JS e outros scripts do jsdelivr
         'https://cdn.datatables.net', // Adicionado para DataTables JS
         'https://code.jquery.com',
@@ -312,7 +314,10 @@ app.use(helmet({
         "http://127.0.0.1:3000", 
         "http://172.30.46.39:3000",
         'wss://*.artnshine.pt',
-        'https://cdn.datatables.net'
+        'https://cdn.datatables.net',
+        'https://www.googletagmanager.com',
+        'https://www.google-analytics.com',
+        'https://analytics.google.com'
       ]
     }
   },

@@ -468,3 +468,23 @@
     { name: product.name, url: '/catalog/product/' + product.id }
   ]
 }) %>
+
+<% if (process.env.GA_TRACKING_ID) { %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof gtag === 'undefined') return;
+    gtag('event', 'view_item', {
+      currency: 'EUR',
+      value: <%= product.sale_price ? parseFloat(product.sale_price).toFixed(2) : 0 %>,
+      items: [{
+        item_id: '<%= (product.reference || product.id) %>',
+        item_name: '<%= (product.name || '').replace(/'/g, "\\'").replace(/"/g, '\\"') %>',
+        item_category: '<%= (product.family_name || 'Sem categoria').replace(/'/g, "\\'") %>',
+        price: <%= product.sale_price ? parseFloat(product.sale_price).toFixed(2) : 0 %>,
+        quantity: 1,
+        item_brand: "Gonzaga's Art & Shine"
+      }]
+    });
+  });
+</script>
+<% } %>

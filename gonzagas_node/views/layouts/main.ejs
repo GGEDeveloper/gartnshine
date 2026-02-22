@@ -95,6 +95,23 @@
 
   <%- style %>
   <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= Date.now() %>">
+
+  <% if (process.env.GA_TRACKING_ID && (typeof cookieConsent === 'undefined' || cookieConsent === null || (typeof canUseAnalytics === 'function' && canUseAnalytics()))) { %>
+  <!-- Google Tag Manager / GA4 -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', '<%= process.env.GA_TRACKING_ID %>', {
+      anonymize_ip: true,
+      page_title: typeof title !== 'undefined' ? title : document.title,
+      page_location: window.location.href,
+      send_page_view: true
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.GA_TRACKING_ID %>"></script>
+  <% } %>
 </head>
 <body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     

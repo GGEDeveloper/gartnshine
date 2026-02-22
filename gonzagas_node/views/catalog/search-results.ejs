@@ -294,6 +294,18 @@ function clearFilters() {
 }
 </script>
 
+<% if (process.env.GA_TRACKING_ID && typeof query !== 'undefined' && query) { %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof gtag === 'undefined') return;
+    gtag('event', 'search', {
+      search_term: '<%= (query || '').replace(/'/g, "\\'") %>',
+      number_of_results: <%= typeof totalResults !== 'undefined' ? totalResults : 0 %>
+    });
+  });
+</script>
+<% } %>
+
 </body>
 </html>
 
