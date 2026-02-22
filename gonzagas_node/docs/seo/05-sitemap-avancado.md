@@ -41,10 +41,22 @@ Criado o `utils/seo-helpers.js` com a função `generateSlug()`.
 ### 4. Correção de Rotas Dinâmicas
 As rotas de coleção estavam incorretamente mapeadas como `/catalog/family/:id` no sitemap antigo. Foram corrigidas para a rota real da aplicação: `/collection/:id`.
 
-## Como Adicionar Novas Páginas no Futuro
-Quando o desenvolvimento criar as novas páginas do frontend (ex: O Catálogo Dark Nature), siga este fluxo:
-1. Certifique-se que o ficheiro EJS existe (ex: `views/pages/catalogo-dark-nature.ejs`).
-2. Certifique-se que a rota `GET /catalogo` está a retornar 200 localmente.
-3. Abra `gonzagas_node/routes/seo.js`.
-4. Adicione o novo bloco `<url>` na secção `Páginas estáticas`.
-5. Abra o mesmo ficheiro e adicione a permissão no `robots.txt`: `Allow: /catalogo`.
+## Regra de manutenção (IMPORTANTE)
+
+**Só adicionar ao sitemap uma rota quando:**
+1. A route Express existir em `gonzagas_node/routes/`
+2. A view EJS correspondente existir
+3. Retornar HTTP 200 confirmado localmente
+
+**Rotas ativas e no sitemap (estado atual):**
+
+| Rota | View | Título |
+|------|------|--------|
+| `/` | `index.ejs` | Art&Shine — Elegância que nasce da terra |
+| `/catalog` | CatalogController | Catálogo |
+| `/catalog/product/:id` | `catalog/product-detail.ejs` | Nome do produto |
+| `/collections` | `collections.ejs` | Galeria de Peças |
+| `/collection/:id` | `collection.ejs` | Nome da coleção |
+| `/about` | `about.ejs` | Sobre Nós |
+| `/privacy-policy` | `privacy-policy.ejs` | Política de Privacidade |
+| `/terms-of-service` | `terms-of-service.ejs` | Termos de Serviço |

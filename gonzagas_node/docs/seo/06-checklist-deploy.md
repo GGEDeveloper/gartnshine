@@ -38,3 +38,17 @@ Com o código em produção, abra uma janela anónima e verifique:
 - [ ] `https://artnshine.pt/sitemap.xml` carrega em formato XML válido, sem mostrar páginas como `/catalogo` ou `/artesaos`.
 - [ ] Entrar na página de um produto, inspecionar o código (`Ctrl+U`) e garantir que a `<link rel=\"canonical\">` aponta para o URL absoluto do `artnshine.pt` e não `gonzagaartshine.com` nem `localhost`.
 - [ ] No código fonte, o ID do GA4 carregou na tag `<script>`.
+
+## 8. Sitemap — verificação de cobertura
+
+O sitemap cobre todas as páginas públicas do site:
+
+- [ ] Homepage `/` indexável
+- [ ] Catálogo `/catalog` indexável
+- [ ] Galeria `/collections` indexável
+- [ ] Todas as coleções `/collection/:id` (23 total)
+- [ ] Todos os produtos `/catalog/product/:id` (~270 total)
+- [ ] Páginas estáticas (`/about`, `/privacy-policy`, `/terms-of-service`)
+
+Se forem criadas novas rotas públicas no futuro, adicionar ao sitemap
+seguindo a regra: route + view + HTTP 200 confirmado.

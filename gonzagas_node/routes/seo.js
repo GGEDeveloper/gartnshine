@@ -1,6 +1,18 @@
 /**
  * SEO routes: sitemap.xml e robots.txt
- * REGRA: Só adicionar ao sitemap rotas cujas views existam (evitar 404/500).
+ *
+ * REGRA DE MANUTENÇÃO:
+ * Só adicionar uma rota ao sitemap quando tiver route + view confirmados a retornar HTTP 200.
+ *
+ * ROTAS ATIVAS (sitemap completo):
+ *   /                        → index.ejs
+ *   /catalog                 → CatalogController
+ *   /catalog/product/:id     → catalog/product-detail.ejs
+ *   /collections             → collections.ejs  (Galeria de Peças)
+ *   /collection/:familyId    → collection.ejs
+ *   /about                   → about.ejs
+ *   /privacy-policy          → privacy-policy.ejs
+ *   /terms-of-service        → terms-of-service.ejs
  */
 const express = require('express');
 const router = express.Router();
