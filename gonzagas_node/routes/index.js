@@ -57,8 +57,10 @@ router.get('/', async (req, res) => {
     console.log(`Rendering index with ${mediaFiles.length} media files`);
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
-      title: 'Home',
+      title: 'Art&Shine — Joalharia Gótica Natural',
       layout: 'layouts/main',
+      metaDescription: 'Descubra joalharia gótica artesanal portuguesa. Peças únicas em prata 925 com ónix, olho-de-tigre, ametista e turquesa. Elegância que nasce da terra.',
+      canonicalUrl: 'https://artnshine.pt/',
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
@@ -131,8 +133,10 @@ router.get('/collections', async (req, res) => {
     }));
     
     res.render('collections', {
-      title: 'Gallery',
+      title: 'Galeria de Peças',
       layout: 'layouts/main',
+      metaDescription: 'Galeria de joalharia gótica Art&Shine. Explore toda a nossa coleção de peças artesanais em prata 925 com ónix, olho-de-tigre, ametista e turquesa.',
+      canonicalUrl: 'https://artnshine.pt/collections',
       images: imageFiles,
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
@@ -176,7 +180,9 @@ router.get('/collection/:familyId', async (req, res) => {
       title: family.name,
       family,
       products,
-      families
+      families,
+      metaDescription: family.description ? family.description.substring(0, 155).replace(/"/g, "'") + '...' : 'Coleção ' + family.name + ' — joalharia gótica artesanal Art&Shine em prata 925 com pedras naturais.',
+      canonicalUrl: 'https://artnshine.pt/collection/' + familyId
     });
   } catch (error) {
     console.error('Error loading collection:', error);
@@ -246,7 +252,11 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       whatsappData,
       layout: 'layouts/main',
       title: `${product.name} - Gonzaga's Art & Shine`,
-      siteTitle: 'Gonzaga\'s Art & Shine'
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      metaDescription: product.description ? product.description.substring(0, 155).replace(/"/g, "'") + '...' : product.name + ' — Joalharia gótica artesanal Art&Shine. Prata 925 com pedras naturais autênticas.',
+      canonicalUrl: 'https://artnshine.pt/catalog/product/' + id,
+      ogImage: product.images && product.images.length > 0 ? 'https://artnshine.pt/uploads/products/' + product.images[0] : undefined,
+      ogType: 'product'
     });
     
   } catch (error) {
@@ -408,7 +418,9 @@ router.get('/api/nav-featured', async (req, res) => {
 // About page
 router.get('/about', (req, res) => {
   res.render('about', { 
-    title: 'About Gonzaga\'s Art & Shine'
+    title: 'Sobre Nós',
+    metaDescription: 'Conheça a Art&Shine, marca portuguesa de joalharia gótica artesanal. Criamos peças únicas em prata 925 com pedras naturais autênticas.',
+    canonicalUrl: 'https://artnshine.pt/about'
   });
 });
 

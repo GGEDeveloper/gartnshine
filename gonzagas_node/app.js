@@ -173,7 +173,7 @@ app.use((req, res, next) => {
     name: 'Gonzaga\'s Art & Shine',
     version: process.env.APP_VERSION || '1.0.0',
     environment: app.get('env'),
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL || 'https://artnshine.pt'
   };
   
   // Flash messages
@@ -182,6 +182,13 @@ app.use((req, res, next) => {
   // Usuário autenticado
   res.locals.user = req.user || null;
   
+  next();
+});
+
+// SEO: currentPath e fullUrl para meta tags dinâmicas
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  res.locals.fullUrl = (process.env.BASE_URL || 'https://artnshine.pt') + req.path;
   next();
 });
 

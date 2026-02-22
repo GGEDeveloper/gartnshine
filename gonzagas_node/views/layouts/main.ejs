@@ -1,54 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
 <head>
-  <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<%= typeof siteDescription !== 'undefined' ? siteDescription : 'Gonzaga\'s Art & Shine - Elegância que nasce da terra' %>">
-    <meta name="keywords" content="joias, prata, bali, boho, elegância, artesanal, Gonzaga">
-    <meta name="author" content="Gonzaga's Art & Shine">
-    <meta name="robots" content="index, follow">
-    
-    <title><%= title %> | <%= typeof siteTitle !== 'undefined' ? siteTitle : 'Gonzaga\'s Art & Shine' %></title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
-  <!-- Main CSS Files - variables.css primeiro (paleta única) -->
-    <link rel="stylesheet" href="/css/variables.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/homepage.css?v=<%= Date.now() %>">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/components.css?v=<%= Date.now() %>">
-    <link rel="stylesheet" href="/css/catalog-enhanced.css?v=<%= Date.now() %>">
-    <link rel="stylesheet" href="/css/notifications.css">
-    <link rel="stylesheet" href="/css/search.css">
-    <link rel="stylesheet" href="/css/frontend-mobile.css?v=<%= Date.now() %>">
-    
-  <!-- GLightbox CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    
-    <!-- Slick Carousel CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-    
-    <!-- Theme Variables -->
-    <style>
-      :root {
-        --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#05070a' %>;
-        --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#0b1016' %>;
-        --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#A8A8A8' %>;
-        --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f4f6f8' %>;
-        --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#C0C0C0' %>;
-      }
-    </style>
-    
-    <%- style %>
-    <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= Date.now() %>">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO: Title dinâmico -->
+  <title><%= typeof title !== 'undefined' && title ? (title.includes('Art&Shine') ? title : title + ' | Art&Shine') : 'Art&Shine — Joalharia Gótica Natural' %></title>
+
+  <!-- SEO Meta Tags dinâmicas -->
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais. Brincos, colares e anéis únicos feitos em Portugal.') %>">
+  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' && metaKeywords ? metaKeywords : 'joalharia gótica, prata 925, pedras naturais, artesanal, portugal, ónix, olho-de-tigre, ametista, turquesa' %>">
+  <meta name="robots" content="<%= typeof metaRobots !== 'undefined' && metaRobots ? metaRobots : 'index, follow' %>">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Art&Shine">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="<%= typeof ogType !== 'undefined' && ogType ? ogType : 'website' %>">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Joalharia Gótica Natural' %>">
+  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais.') %>">
+  <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
+  <meta property="og:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Art&Shine — Joalharia Gótica Natural">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine' %>">
+  <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais.') %>">
+  <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
+
+  <!-- Schema.org Organization (artnshine.pt) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "OnlineStore",
+    "name": "Art&Shine",
+    "alternateName": "Gonzaga Art & Shine",
+    "description": "Joalharia gótica artesanal com pedras naturais. Elegância que nasce da terra.",
+    "url": "https://artnshine.pt",
+    "logo": "https://artnshine.pt/logo.svg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "availableLanguage": "Portuguese"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PT"
+    }
+  }
+  </script>
+
+  <!-- metas dinâmicas injetadas por view (extractMetas) -->
+  <%- typeof metas !== 'undefined' ? metas : '' %>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Preconnect para Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Main CSS Files -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/homepage.css?v=<%= Date.now() %>">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/components.css?v=<%= Date.now() %>">
+  <link rel="stylesheet" href="/css/catalog-enhanced.css?v=<%= Date.now() %>">
+  <link rel="stylesheet" href="/css/notifications.css">
+  <link rel="stylesheet" href="/css/search.css">
+  <link rel="stylesheet" href="/css/frontend-mobile.css?v=<%= Date.now() %>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+  <!-- Theme Variables -->
+  <style>
+    :root {
+      --color-primary: <%= typeof theme !== 'undefined' && theme.colorPrimary ? theme.colorPrimary : '#05070a' %>;
+      --color-secondary: <%= typeof theme !== 'undefined' && theme.colorSecondary ? theme.colorSecondary : '#0b1016' %>;
+      --color-accent: <%= typeof theme !== 'undefined' && theme.colorAccent ? theme.colorAccent : '#A8A8A8' %>;
+      --color-text: <%= typeof theme !== 'undefined' && theme.colorText ? theme.colorText : '#f4f6f8' %>;
+      --color-highlight: <%= typeof theme !== 'undefined' && theme.colorHighlight ? theme.colorHighlight : '#C0C0C0' %>;
+    }
+  </style>
+
+  <%- style %>
+  <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= Date.now() %>">
 </head>
 <body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     
