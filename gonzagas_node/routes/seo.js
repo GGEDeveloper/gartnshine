@@ -1,7 +1,11 @@
+/**
+ * SEO routes: sitemap.xml e robots.txt
+ * REGRA: Só adicionar ao sitemap rotas cujas views existam (evitar 404/500).
+ */
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/database');
-const { generateSlug, formatSitemapDate } = require('../utils/seo-helpers');
+const { formatSitemapDate } = require('../utils/seo-helpers');
 
 // SITEMAP.XML DINÂMICO
 router.get('/sitemap.xml', async (req, res) => {
@@ -50,12 +54,12 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>1.0</priority>
   </url>
 
-  <!-- Páginas estáticas -->
+  <!-- Páginas estáticas (apenas views existentes) -->
   <url>
-    <loc>${baseUrl}/catalogo</loc>
+    <loc>${baseUrl}/about</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>${baseUrl}/collections</loc>
@@ -64,40 +68,26 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>${baseUrl}/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/manifesto</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/artesaos</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/galeria</loc>
+    <loc>${baseUrl}/catalog</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>${baseUrl}/privacy-policy</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>${baseUrl}/terms-of-service</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>`;
 
-    // Páginas de coleção/família
+    // Coleções (/collection/:id)
     for (const family of families) {
-      const slug = generateSlug(family.name);
       const lastmod = formatSitemapDate(family.updated_at);
       sitemap += `
 
@@ -110,9 +100,8 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
-    // Páginas de produto com imagem
+    // Produtos (/catalog/product/:id)
     for (const product of products) {
-      const slug = generateSlug(product.name);
       const lastmod = formatSitemapDate(product.updated_at);
       const productUrl = `${baseUrl}/catalog/product/${product.id}`;
 
@@ -162,13 +151,9 @@ router.get('/robots.txt', (req, res) => {
   res.send(`User-agent: *
 Allow: /
 Allow: /catalog
-Allow: /catalogo
 Allow: /about
 Allow: /collections
 Allow: /collection/
-Allow: /galeria
-Allow: /manifesto
-Allow: /artesaos
 Disallow: /admin/
 Disallow: /api/
 Disallow: /uploads/temp/
