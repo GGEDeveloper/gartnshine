@@ -1,0 +1,48 @@
+<%
+  const _baseUrl = 'https://artnshine.pt';
+  const _price = typeof product !== 'undefined' && product.sale_price ? parseFloat(product.sale_price).toFixed(2) : '0';
+  const _inStock = typeof product !== 'undefined' && (product.current_stock > 0 || (product.stock !== undefined && product.stock > 0));
+  const _sku = typeof product !== 'undefined' ? (product.reference || product.id) : '';
+  const _name = typeof product !== 'undefined' ? (product.name || product.nome || '') : '';
+  const _desc = typeof product !== 'undefined' ? ((product.description || product.descricao || '').replace(/"/g, '&quot;').substring(0, 300)) : '';
+  let _img = _baseUrl + '/images/og-artnshine.jpg';
+  if (typeof product !== 'undefined') {
+    if (product.imagem_principal) {
+      _img = product.imagem_principal.startsWith('http') ? product.imagem_principal : _baseUrl + product.imagem_principal;
+    } else if (product.images && product.images.length > 0) {
+      _img = _baseUrl + '/uploads/products/' + product.images[0];
+    } else if (product.image_url) {
+      _img = _baseUrl + '/uploads/products/' + product.image_url;
+    }
+  }
+  const _url = typeof canonicalUrl !== 'undefined' ? canonicalUrl : _baseUrl;
+%>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "<%= _name %>",
+  "description": "<%= _desc %>",
+  "sku": "<%= _sku %>",
+  "brand": {
+    "@type": "Brand",
+    "name": "Gonzaga's Art & Shine"
+  },
+  "image": "<%= _img %>",
+  "url": "<%= _url %>",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "EUR",
+    "price": "<%= _price %>",
+    "priceValidUntil": "<%= new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0] %>",
+    "availability": "<%= _inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' %>",
+    "url": "<%= _url %>",
+    "seller": {
+      "@type": "Organization",
+      "name": "Gonzaga's Art & Shine",
+      "url": "https://artnshine.pt"
+    }
+  },
+  "material": "Prata 925 / Latão banhado a prata"
+}
+</script>
