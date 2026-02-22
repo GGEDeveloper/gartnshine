@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO: Title dinâmico -->
-  <title><%= typeof title !== 'undefined' && title ? (title.includes('Art&Shine') ? title : title + ' | Art&Shine') : 'Art&Shine — Joalharia Gótica Natural' %></title>
+  <title><%= typeof title !== 'undefined' && title ? (title.includes('Art&Shine') ? title : title + ' | Art&Shine') : 'Art&Shine — Elegância que nasce da terra' %></title>
 
   <!-- SEO Meta Tags dinâmicas -->
-  <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais. Brincos, colares e anéis únicos feitos em Portugal.') %>">
-  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' && metaKeywords ? metaKeywords : 'joalharia gótica, prata 925, pedras naturais, artesanal, portugal, ónix, olho-de-tigre, ametista, turquesa' %>">
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra — Gonzaga\'s Art & Shine.') %>">
+  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' && metaKeywords ? metaKeywords : 'prata 925, joias artesanais, pedras naturais, ónix, olho-de-tigre, ametista, turquesa, Gonzaga Art Shine, joias dark nature, prata alternativa, elegância natural, Portugal' %>">
   <meta name="robots" content="<%= typeof metaRobots !== 'undefined' && metaRobots ? metaRobots : 'index, follow' %>">
 
   <!-- Canonical URL -->
@@ -19,18 +19,18 @@
   <meta property="og:site_name" content="Art&Shine">
   <meta property="og:locale" content="pt_PT">
   <meta property="og:type" content="<%= typeof ogType !== 'undefined' && ogType ? ogType : 'website' %>">
-  <meta property="og:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Joalharia Gótica Natural' %>">
-  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais.') %>">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Elegância que nasce da terra' %>">
+  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.') %>">
   <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
   <meta property="og:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Art&Shine — Joalharia Gótica Natural">
+  <meta property="og:image:alt" content="Art&Shine — Elegância que nasce da terra">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine' %>">
-  <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joalharia gótica artesanal com pedras naturais.') %>">
+  <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.') %>">
   <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
 
   <!-- Schema.org Organization (artnshine.pt) -->
@@ -40,7 +40,7 @@
     "@type": "OnlineStore",
     "name": "Art&Shine",
     "alternateName": "Gonzaga Art & Shine",
-    "description": "Joalharia gótica artesanal com pedras naturais. Elegância que nasce da terra.",
+    "description": "Joias artesanais em prata 925, latão banhado a prata e pedras naturais. Elegância que nasce da terra.",
     "url": "https://artnshine.pt",
     "logo": "https://artnshine.pt/logo.svg",
     "contactPoint": {
