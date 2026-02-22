@@ -107,31 +107,10 @@ Allow: /
 Allow: /catalog
 Allow: /about
 Allow: /collections
-Allow: /css/
-Allow: /js/
-Allow: /images/
-Allow: /uploads/products/
-
-# Disallow admin and sensitive areas
 Disallow: /admin/
 Disallow: /api/
 Disallow: /uploads/temp/
-Disallow: /*.json$
-Disallow: /*.xml$
-Disallow: /scripts/
-Disallow: /config/
-
-# Allow specific bots
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Crawl delay for politeness
 Crawl-delay: 1
-
-# Sitemap location
 Sitemap: ${baseUrl}/sitemap.xml`;
 
     res.send(robots);
