@@ -29,29 +29,50 @@ router.get('/sitemap.xml', async (req, res) => {
 
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
 
-    // Produtos ativos com nome, slug e imagem principal
-    const [products] = await pool.execute(`
-      SELECT 
-        p.id, 
-        p.name,
-        p.slug,
-        p.reference,
-        p.updated_at,
-        (SELECT pi.image_filename 
-         FROM product_images pi 
-         WHERE pi.product_id = p.id AND pi.is_primary = 1 
-         LIMIT 1) as main_image
-      FROM products p
-      WHERE p.is_active = 1
-      ORDER BY p.updated_at DESC
-    `);
+    let products, families;
+    try {
+      [products] = await pool.execute(`
+        SELECT 
+          p.id, p.name, p.slug, p.reference, p.updated_at,
+          (SELECT pi.image_filename 
+           FROM product_images pi 
+           WHERE pi.product_id = p.id AND pi.is_primary = 1 
+           LIMIT 1) as main_image
+        FROM products p
+        WHERE p.is_active = 1
+        ORDER BY p.updated_at DESC
+      `);
+    } catch (e) {
+      if (e.message && e.message.includes("Unknown column 'slug'")) {
+        [products] = await pool.execute(`
+          SELECT 
+            p.id, p.name, p.reference, p.updated_at,
+            (SELECT pi.image_filename 
+             FROM product_images pi 
+             WHERE pi.product_id = p.id AND pi.is_primary = 1 
+             LIMIT 1) as main_image
+          FROM products p
+          WHERE p.is_active = 1
+          ORDER BY p.updated_at DESC
+        `);
+      } else throw e;
+    }
 
-    // Famílias/coleções com nome e slug
-    const [families] = await pool.execute(`
-      SELECT id, name, slug, updated_at
-      FROM product_families
-      ORDER BY updated_at DESC
-    `);
+    try {
+      [families] = await pool.execute(`
+        SELECT id, name, slug, updated_at
+        FROM product_families
+        ORDER BY updated_at DESC
+      `);
+    } catch (e) {
+      if (e.message && e.message.includes("Unknown column 'slug'")) {
+        [families] = await pool.execute(`
+          SELECT id, name, updated_at
+          FROM product_families
+          ORDER BY updated_at DESC
+        `);
+      } else throw e;
+    }
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -187,20 +208,42 @@ router.get('/feed/products.xml', async (req, res) => {
 
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
 
-    const [products] = await pool.execute(`
-      SELECT 
-        p.id, p.name, p.slug, p.reference, p.description,
-        p.sale_price, p.current_stock, p.material, p.weight,
-        pf.name as family_name,
-        (SELECT pi.image_filename 
-         FROM product_images pi 
-         WHERE pi.product_id = p.id AND pi.is_primary = 1 
-         LIMIT 1) as main_image
-      FROM products p
-      LEFT JOIN product_families pf ON p.family_id = pf.id
-      WHERE p.is_active = 1
-      ORDER BY p.id ASC
-    `);
+    let products;
+    try {
+      [products] = await pool.execute(`
+        SELECT 
+          p.id, p.name, p.slug, p.reference, p.description,
+          p.sale_price, p.current_stock, p.material, p.weight,
+          pf.name as family_name,
+          (SELECT pi.image_filename 
+           FROM product_images pi 
+           WHERE pi.product_id = p.id AND pi.is_primary = 1 
+           LIMIT 1) as main_image
+        FROM products p
+        LEFT JOIN product_families pf ON p.family_id = pf.id
+        WHERE p.is_active = 1
+        ORDER BY p.id ASC
+      `);
+    } catch (feedErr) {
+      if (feedErr.message && feedErr.message.includes("Unknown column 'slug'")) {
+        [products] = await pool.execute(`
+          SELECT 
+            p.id, p.name, p.reference, p.description,
+            p.sale_price, p.current_stock, p.material, p.weight,
+            pf.name as family_name,
+            (SELECT pi.image_filename 
+             FROM product_images pi 
+             WHERE pi.product_id = p.id AND pi.is_primary = 1 
+             LIMIT 1) as main_image
+          FROM products p
+          LEFT JOIN product_families pf ON p.family_id = pf.id
+          WHERE p.is_active = 1
+          ORDER BY p.id ASC
+        `);
+      } else {
+        throw feedErr;
+      }
+    }
 
     const escXml = (str) => {
       if (!str) return '';

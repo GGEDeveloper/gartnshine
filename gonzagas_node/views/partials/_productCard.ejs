@@ -3,15 +3,18 @@
     <% 
       const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
       const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/placeholder-image.png';
+      const webpUrl = imageUrl !== '/images/placeholder-image.png' ? imageUrl.replace(/\.(jpg|jpeg|png)$/i, '.webp') : null;
     %>
 
     <% if (typeof isCatalogPage !== 'undefined' && isCatalogPage) { %>
       <a href="<%= imageUrl %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
-        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid">
+        <% if (webpUrl) { %><picture><source srcset="<%= webpUrl %>" type="image/webp"><% } %>
+        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid"><% if (webpUrl) { %></picture><% } %>
       </a>
     <% } else { %>
       <a href="<%= catalogLink %>" class="d-block mb-2" aria-label="Ver produtos da categoria <%= product.family_name || 'Catálogo' %>">
-        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid">
+        <% if (webpUrl) { %><picture><source srcset="<%= webpUrl %>" type="image/webp"><% } %>
+        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid"><% if (webpUrl) { %></picture><% } %>
       </a>
     <% } %>
   </div>

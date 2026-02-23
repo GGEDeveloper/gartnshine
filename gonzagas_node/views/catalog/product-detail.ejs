@@ -389,10 +389,14 @@
                    class="glightbox product-image-link" 
                    data-glightbox="type: image; title: <%= product.name %>"
                    data-gallery="product-gallery">
-                    <img src="/media/products/<%= mainImage %>" 
-                         alt="<%= product.name %>" 
-                         id="mainProductImage"
-                         loading="eager">
+                    <% const mainWebp = mainImage.replace(/\.(jpg|jpeg|png)$/i, '.webp'); %>
+                    <picture>
+                      <source srcset="/media/products/<%= mainWebp %>" type="image/webp">
+                      <img src="/media/products/<%= mainImage %>" 
+                           alt="<%= product.name %>" 
+                           id="mainProductImage"
+                           loading="eager">
+                    </picture>
                 </a>
             </div>
             
@@ -406,9 +410,13 @@
                        class="glightbox product-thumbnail-link" 
                        data-glightbox="type: image; title: <%= product.name %>"
                        data-gallery="product-gallery">
-                        <img src="/media/products/<%= img %>" 
-                             alt="<%= product.name %> - Imagem <%= index + 1 %>" 
-                             loading="lazy">
+                        <% const thumbWebp = img.replace(/\.(jpg|jpeg|png)$/i, '.webp'); %>
+                        <picture>
+                          <source srcset="/media/products/<%= thumbWebp %>" type="image/webp">
+                          <img src="/media/products/<%= img %>" 
+                               alt="<%= product.name %> - Imagem <%= index + 1 %>" 
+                               loading="lazy">
+                        </picture>
                     </a>
                 </div>
                 <% }); %>

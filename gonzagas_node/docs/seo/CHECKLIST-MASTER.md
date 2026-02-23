@@ -124,7 +124,7 @@ Validar: PageSpeed Insights → oportunidades → "Preconnect to required origin
 
 - [x] **P2** Instalar dependência `sharp` no projeto Node.js
 - [x] **P2** Criar script ou middleware que converte imagens de upload para WebP automaticamente
-- [ ] **P2** Actualizar queries que servem imagens de produto para preferir `.webp` se existir
+- [x] **P2** Actualizar queries que servem imagens de produto para preferir `.webp` se existir
 - [ ] Testar com 3 produtos diferentes
 
 ```
@@ -135,6 +135,14 @@ Dependências adicionadas: sharp já estava instalado (^0.34.4)
 Feito: processImage() agora gera WebP para cada variante (thumbnail, small, medium, large) + full-size WebP. has_webp flag no retorno. Falta: frontend <picture> tags para servir WebP com fallback.
 Validar: ver source de página de produto → imagens devem ter extensão .webp
          Chrome DevTools → Network → filtrar por imagens → verificar tipo MIME "image/webp"
+```
+
+```
+📝 LOG DO AGENTE (Sprint 10 — picture tags)
+Data: 22/02/2026
+Ficheiros: `views/partials/_productCard.ejs`, `views/partials/_productCardHomepage.ejs`, `views/catalog/product-detail.ejs`, `views/public/catalog.ejs`
+Feito: <picture> com <source type="image/webp"> e fallback <img> em todos os product cards e product-detail. Convenção: image.jpg → image.webp no mesmo path. Placeholder excluído (sem picture).
+Validar: Chrome DevTools → Network → filtrar imagens → verificar image/webp quando disponível
 ```
 
 ---
@@ -333,6 +341,14 @@ Migration SQL: ALTER TABLE products ADD COLUMN slug VARCHAR(255) UNIQUE
 Feito: Rota aceita :idOrSlug (numérico → redirect 301 para slug se existir). Sitemap usa slug quando disponível. Script generate-slugs.js popula slugs existentes. EXECUTAR migração + script em produção antes do deploy.
 Validar: https://artnshine.pt/catalog/product/ID → deve redirecionar 301 para /catalog/product/SLUG
          https://artnshine.pt/catalog/product/anel-prata-925-onix-negro → deve abrir produto
+```
+
+```
+📝 LOG DO AGENTE (Sprint 10 — run-migration.js)
+Data: 22/02/2026
+Ficheiros: `sql/add_slug_columns.sql`, `scripts/run-migration.js`
+Feito: add_slug_columns.sql reescrito com 4 statements separados. run-migration.js executa cada statement, trata 1060 (coluna duplicada) e 1061 (índice duplicado) — idempotente. Uso: node scripts/run-migration.js
+Validar: node scripts/run-migration.js → output "Coluna já existe" ou "Coluna slug adicionada"
 ```
 
 ---
@@ -552,6 +568,14 @@ Data: 23/02/2026
 Ficheiros: `routes/seo.js`
 Feito: Rota GET /feed/products.xml criada com todos os campos obrigatórios do Merchant Center (g:id, title, description, link, g:image_link, g:price, g:availability, g:condition, g:brand, g:mpn, g:product_type, g:google_product_category=188 Jewelry, g:shipping PT gratuito). Usa slugs para URLs quando disponíveis.
 Validar: https://artnshine.pt/feed/products.xml → deve retornar XML válido com produtos
+```
+
+```
+📝 LOG DO AGENTE (Feed resiliente — Sprint 10)
+Data: 22/02/2026
+Ficheiros: `routes/seo.js`
+Feito: Feed e sitemap resilientes quando coluna slug não existe. try/catch na query principal; se "Unknown column 'slug'" → fallback sem slug, usa product.id para URLs. Evita 500 em produção antes da migração.
+Validar: DB sem slug → /feed/products.xml e /sitemap.xml devem responder 200
 ```
 
 ---
@@ -844,7 +868,7 @@ Primeiro check feito: Sim / Não
 Última actualização: 23/02/2026
 
 🚨 Urgente:     [3] / 3   (U1✅ U2✅ U3✅app-level; HTTP→HTTPS⏳servidor)
-Fase A:         [7] / 7   (A1✅ A2✅partial A3✅ A4✅ A5✅ A6✅ A7✅)
+Fase A:         [7] / 7   (A1✅ A2✅ A3✅ A4✅ A5✅ A6✅ A7✅)
 Fase B:         [3] / 5   (B1✅ B2✅ B3✅ B4⏳ B5⏳)
 Fase C:         [5] / 6   (C1✅ C2✅ C3✅ C4✅partial C5✅ C6✅partial)
 Técnico:        [5] / 6   (T1✅ T2✅ T3✅ T4✅ T5⏳ T6✅+security)
@@ -991,6 +1015,27 @@ Ficheiros modificados:
   - views/layouts/main.ejs, views/catalog/product-detail.ejs, routes/index.js, docs/seo/CHECKLIST-MASTER.md
 Validar: curl -s http://localhost:3000/catalog/product/1 | grep -A 80 'application/ld+json'
          Dois blocos ld+json: @graph + Product. price/availability com valores reais.
+```
+
+### Sprint 10 — 22/02/2026 (Migration Script + CHECKLIST)
+```
+Data: 22/02/2026
+Tarefas concluídas:
+  - TAREFA 1: Script de migração seguro
+    - sql/add_slug_columns.sql: 4 statements separados (products slug+unique, product_families slug+unique)
+    - scripts/run-migration.js: executa cada statement, trata 1060/1061 (idempotente)
+    - Feed e sitemap resilientes: try/catch quando slug não existe → fallback com product.id
+  - TAREFA 2 Grupo A: A2 WebP picture tags
+    - <picture> com <source type="image/webp"> em _productCard.ejs, _productCardHomepage.ejs
+    - product-detail.ejs: main image + thumbnails
+    - public/catalog.ejs: product cards inline
+    - Placeholder excluído; convenção image.jpg → image.webp
+Ficheiros modificados:
+  - sql/add_slug_columns.sql, scripts/run-migration.js, routes/seo.js
+  - views/partials/_productCard.ejs, views/partials/_productCardHomepage.ejs
+  - views/catalog/product-detail.ejs, views/public/catalog.ejs
+  - docs/seo/CHECKLIST-MASTER.md
+Notas: Grupo B (C1,C2,C6 slugs, C4, B4, B5, T5, D1,D3,D4, E1-E4, F1-F3, OP1-OP5, M1-M3, U3 HTTP→HTTPS) permanecem bloqueados conforme plano.
 ```
 
 ---

@@ -163,11 +163,23 @@
                     %>
                     <a href="/catalog/product/<%= product.id %>" 
                        class="product-image-link">
-                      <img src="<%= imageUrl %>" 
-                           alt="<%= product.name %> — joia artesanal prata 925" 
-                           class="product-image lazy-loaded"
-                           loading="lazy"
-                           onerror="this.src='/images/placeholder-image.png';">
+                      <% if (imageUrl !== '/images/placeholder-image.png') { %>
+                        <% const webpUrl = imageUrl.replace(/\.(jpg|jpeg|png)$/i, '.webp'); %>
+                        <picture>
+                          <source srcset="<%= webpUrl %>" type="image/webp">
+                          <img src="<%= imageUrl %>" 
+                               alt="<%= product.name %> — joia artesanal prata 925" 
+                               class="product-image lazy-loaded"
+                               loading="lazy"
+                               onerror="this.src='/images/placeholder-image.png';">
+                        </picture>
+                      <% } else { %>
+                        <img src="<%= imageUrl %>" 
+                             alt="<%= product.name %> — joia artesanal prata 925" 
+                             class="product-image lazy-loaded"
+                             loading="lazy"
+                             onerror="this.src='/images/placeholder-image.png';">
+                      <% } %>
                       <div class="product-overlay">
                         <a href="/catalog/product/<%= product.id %>" class="btn-quick-view">
                           <i class="fas fa-eye"></i> Ver Detalhes
