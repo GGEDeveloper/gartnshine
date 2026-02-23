@@ -54,7 +54,11 @@
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "PT"
-    }
+    },
+    "sameAs": [
+      "https://www.instagram.com/gonzagaartnshine/",
+      "https://www.facebook.com/profile.php?id=61573519807731"
+    ]
   }
   </script>
 
@@ -67,6 +71,10 @@
   <!-- Preconnect para Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <% if (process.env.GA_TRACKING_ID) { %>
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <% } %>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">

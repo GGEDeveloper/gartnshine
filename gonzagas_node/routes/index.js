@@ -366,6 +366,11 @@ router.get('/search', async (req, res) => {
       ORDER BY pf.name
     `);
     
+    // noindex filtered search pages to avoid infinite URL combinations
+    const hasFilters = sort !== 'relevance' || categories || inStock || priceMin || priceMax || parseInt(page) > 1;
+    const metaRobots = hasFilters ? 'noindex, follow' : 'index, follow';
+    const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
+
     res.render('catalog/search-results', {
       query: query,
       products: products,
@@ -379,7 +384,9 @@ router.get('/search', async (req, res) => {
       priceMin: priceMin,
       priceMax: priceMax,
       title: `Pesquisa: ${query || 'Todos os produtos'}`,
-      layout: 'layouts/main'
+      layout: 'layouts/main',
+      metaRobots: metaRobots,
+      canonicalUrl: `${baseUrl}/search?q=${encodeURIComponent(query || '')}`
     });
     
   } catch (error) {

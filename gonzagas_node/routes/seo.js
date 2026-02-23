@@ -169,6 +169,7 @@ Allow: /collection/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /uploads/temp/
+Disallow: /search?*
 Crawl-delay: 1
 Sitemap: ${baseUrl}/sitemap.xml`);
 });
