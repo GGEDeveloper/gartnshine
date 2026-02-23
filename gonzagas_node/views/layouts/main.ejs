@@ -36,28 +36,67 @@
   <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.') %>">
   <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
 
-  <!-- Schema.org Organization (artnshine.pt) -->
+  <!-- Schema.org @graph: Organization + WebSite + WebPage -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "OnlineStore",
-    "name": "Art&Shine",
-    "alternateName": "Gonzaga Art & Shine",
-    "description": "Joias artesanais em prata 925, latão banhado a prata e pedras naturais. Elegância que nasce da terra.",
-    "url": "https://artnshine.pt",
-    "logo": "https://artnshine.pt/logo.svg",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "Customer Service",
-      "availableLanguage": "Portuguese"
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "addressCountry": "PT"
-    },
-    "sameAs": [
-      "https://www.instagram.com/gonzagaartnshine/",
-      "https://www.facebook.com/profile.php?id=61573519807731"
+    "@graph": [
+      {
+        "@type": "OnlineStore",
+        "@id": "https://artnshine.pt/#organization",
+        "name": "Gonzaga's Art & Shine",
+        "alternateName": "Art&Shine",
+        "description": "Joias artesanais em prata 925, latão banhado a prata e pedras naturais. Elegância que nasce da terra.",
+        "url": "https://artnshine.pt",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://artnshine.pt/#logo",
+          "url": "https://artnshine.pt/logo.svg",
+          "contentUrl": "https://artnshine.pt/logo.svg",
+          "caption": "Gonzaga's Art & Shine"
+        },
+        "image": { "@id": "https://artnshine.pt/#logo" },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "geral@artnshine.pt",
+          "contactType": "Customer Service",
+          "availableLanguage": "Portuguese"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "PT"
+        },
+        "sameAs": [
+          "https://www.instagram.com/gonzagaartnshine/",
+          "https://www.facebook.com/profile.php?id=61573519807731"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://artnshine.pt/#website",
+        "url": "https://artnshine.pt",
+        "name": "Art&Shine",
+        "description": "Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.",
+        "publisher": { "@id": "https://artnshine.pt/#organization" },
+        "inLanguage": "pt-PT",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://artnshine.pt/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>#webpage",
+        "url": "<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>",
+        "name": "<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Elegância que nasce da terra' %>",
+        "isPartOf": { "@id": "https://artnshine.pt/#website" },
+        "about": { "@id": "https://artnshine.pt/#organization" },
+        "inLanguage": "pt-PT"
+      }
     ]
   }
   </script>

@@ -227,15 +227,15 @@ Validar: Chrome DevTools → Network → CSS/JS → Response Headers → Cache-C
 
 ### B1 — Schema @graph unificado na homepage
 
-- [ ] **P1** Criar bloco JSON-LD com `@graph` contendo: `WebSite`, `Organization`, `OnlineStore` na homepage
-- [ ] **P1** Incluir `sameAs` com URLs reais das redes sociais (depois do U2 estar feito)
-- [ ] Adicionar via partial EJS ou directamente em `views/index.ejs`
+- [x] **P1** Criar bloco JSON-LD com `@graph` contendo: `WebSite`, `Organization`, `OnlineStore` na homepage
+- [x] **P1** Incluir `sameAs` com URLs reais das redes sociais (depois do U2 estar feito)
+- [x] Adicionar via partial EJS ou directamente em `views/index.ejs`
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Feito:
+Data: 23/02/2026
+Ficheiros: `views/layouts/main.ejs`, `views/index.ejs`
+Feito: @graph unificado em main.ejs com OnlineStore (#organization), WebSite (#website) com SearchAction, WebPage dinâmico. sameAs Instagram + Facebook. Homepage index.ejs simplificado para CollectionPage referenciando @graph IDs.
 Validar: https://search.google.com/test/rich-results → testar https://artnshine.pt
          Deve mostrar: Organization, WebSite sem erros
 ```
