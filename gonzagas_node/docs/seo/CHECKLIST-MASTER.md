@@ -349,15 +349,15 @@ Validar: https://artnshine.pt/collection/1 → deve redirecionar 301 para /colle
 
 ### C3 — Alt text em todas as imagens de produto
 
-- [ ] **P2** Garantir que todas as `<img>` de produto têm `alt` descritivo (não vazio, não genérico)
-- [ ] **P2** Formato: `alt="<%= product.name %> — joia artesanal prata 925"`
-- [ ] Verificar templates: `catalog/product-detail.ejs`, `catalog/` listagens, `index.ejs`
+- [x] **P2** Garantir que todas as `<img>` de produto têm `alt` descritivo (não vazio, não genérico)
+- [x] **P2** Formato: `alt="<%= product.name %> — joia artesanal prata 925"`
+- [x] Verificar templates: `catalog/product-detail.ejs`, `catalog/` listagens, `index.ejs`
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Feito:
+Data: 23/02/2026
+Ficheiros: `views/partials/_productCard.ejs`, `views/partials/_productCardHomepage.ejs`, `views/public/catalog.ejs`
+Feito: Alt text melhorado para "product.name — joia artesanal prata 925" em todos os product cards e catálogo. product-detail.ejs já tinha alt=product.name (aceitável no contexto de detalhe).
 Validar: ver source de qualquer página de produto → todas as <img> devem ter alt não vazio
 ```
 
@@ -397,14 +397,14 @@ Feito: Homepage h1 adicionado com classe visually-hidden ("Joias Artesanais em P
 
 ### C6 — Sitemap actualizado com novos slugs
 
-- [ ] **P2** Após C1 e C2, actualizar `routes/seo.js` para usar URLs com slugs em vez de IDs numéricos
+- [x] **P2** Após C1 e C2, actualizar `routes/seo.js` para usar URLs com slugs em vez de IDs numéricos
 - [ ] Regenerar e submeter novo sitemap no Search Console
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Feito:
+Data: 23/02/2026
+Ficheiros: `routes/seo.js`
+Feito: Sitemap já usa product.slug e family.slug quando disponíveis (implementado no Sprint 3). Re-submissão no Search Console pendente após deploy.
 Validar: https://artnshine.pt/sitemap.xml → URLs devem ter slugs, não IDs
          Search Console → Sitemaps → Submeter de novo
 ```
@@ -830,20 +830,20 @@ Primeiro check feito: Sim / Não
 > Atualizar manualmente após cada sprint
 
 ```
-Última actualização: ___________
+Última actualização: 23/02/2026
 
-🚨 Urgente:     [_] / 3
-Fase A:         [_] / 7
-Fase B:         [_] / 5
-Fase C:         [_] / 6
-Técnico:        [_] / 6
-Fase D:         [_] / 4
-Fase E:         [_] / 4
-Fase F:         [_] / 3
-Off-Page:       [_] / 5
-Monitorização:  [_] / 3
+🚨 Urgente:     [2] / 3   (U1✅ U2✅ U3⏳servidor)
+Fase A:         [7] / 7   (A1✅ A2✅partial A3✅ A4✅ A5✅ A6✅ A7✅)
+Fase B:         [3] / 5   (B1✅ B2✅ B3✅ B4⏳ B5⏳)
+Fase C:         [5] / 6   (C1✅ C2✅ C3✅ C4✅partial C5✅ C6✅partial)
+Técnico:        [4] / 6   (T1✅ T2✅ T3⏳ T4✅ T5⏳ T6✅)
+Fase D:         [0] / 4
+Fase E:         [0] / 4
+Fase F:         [0] / 3
+Off-Page:       [0] / 5
+Monitorização:  [0] / 3
 ─────────────────────────
-TOTAL:          [_] / 46
+TOTAL:          [21] / 46
 ```
 
 ---
@@ -852,55 +852,71 @@ TOTAL:          [_] / 46
 
 > Usar esta secção para registar o que foi feito em cada sessão de trabalho com o agente
 
-### Sprint 1 — Fev 2026
+### Sprint 1 — 23/02/2026 (Urgente)
 ```
 Data: 23/02/2026
 Tarefas concluídas:
-  -
-  -
+  - U1: noindex /search filtrado + Disallow /search?* no robots.txt
+  - U2: sameAs Instagram + Facebook em index.ejs e main.ejs
+  - A1: preconnect googletagmanager.com + dns-prefetch google-analytics.com
+  - C5: Homepage h1 visually-hidden com keywords
 Ficheiros modificados:
-  -
-Notas:
+  - routes/index.js, routes/seo.js, views/index.ejs, views/layouts/main.ejs, views/catalog/search-results.ejs
+Notas: U3 (WWW redirect) pendente — requer config servidor
 ```
 
-### Sprint 2
+### Sprint 2 — 23/02/2026 (Performance)
 ```
-Data:
+Data: 23/02/2026
 Tarefas concluídas:
-  -
-  -
+  - A2: WebP conversion no Media.processImage()
+  - A3: Lazy loading verificado (já implementado)
+  - A4: OG image branded 1200x630 gerada via script
+  - A5: Favicon set completo (16,32,180,192,512) + site.webmanifest
 Ficheiros modificados:
-  -
-Notas:
+  - models/Media.js, scripts/generate-og-image.js, scripts/generate-favicons.js
+  - public/images/og-artnshine.jpg, public/favicon-*.png, public/site.webmanifest
+  - views/layouts/main.ejs
+Notas: A6+A7 já existiam (compression + cache headers)
 ```
 
-### Sprint 3
+### Sprint 3 — 23/02/2026 (URLs Semânticas)
 ```
-Data:
+Data: 23/02/2026
 Tarefas concluídas:
-  -
+  - C1: slug column products + route /catalog/product/:idOrSlug + 301 redirect
+  - C2: slug column product_families + route /collection/:familyIdOrSlug + 301 redirect
+  - C4: Meta descriptions melhoradas (fallback name+material+family)
+  - C6: Sitemap usa slugs quando disponíveis
 Ficheiros modificados:
-  -
-Notas:
+  - sql/add_slug_columns.sql, scripts/generate-slugs.js, scripts/audit-meta-descriptions.js
+  - routes/index.js, routes/seo.js, models/ProductFamily.js
+Notas: DEPLOY REQUER: sql/add_slug_columns.sql + scripts/generate-slugs.js
 ```
 
-### Sprint 4
+### Sprint 4 — 23/02/2026 (Schema @graph)
 ```
-Data:
+Data: 23/02/2026
 Tarefas concluídas:
-  -
+  - B1: @graph unificado (OnlineStore + WebSite + WebPage) em main.ejs
+  - B1: SearchAction para sitelinks search box
+  - Homepage schema simplificado para CollectionPage
 Ficheiros modificados:
-  -
-Notas:
+  - views/layouts/main.ejs, views/index.ejs
+Notas: Schema Product (B2) e Breadcrumb (B3) já implementados em fases anteriores
 ```
 
-### Sprint 5
+### Sprint 5 — 23/02/2026 (Polish Técnico)
 ```
-Data:
+Data: 23/02/2026
 Tarefas concluídas:
-  -
+  - Fix lang="pt-BR" → lang="pt-PT"
+  - Fix Date.now() cache busting → app.version estável
+  - C3: Alt text enriquecido em product cards ("name — joia artesanal prata 925")
+  - C6: Marcado como concluído (já codificado no Sprint 3)
 Ficheiros modificados:
-  -
+  - views/layouts/main.ejs, views/partials/_productCard.ejs
+  - views/partials/_productCardHomepage.ejs, views/public/catalog.ejs
 Notas:
 ```
 

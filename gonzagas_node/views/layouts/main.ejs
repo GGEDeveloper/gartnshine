@@ -104,16 +104,6 @@
   <!-- metas dinâmicas injetadas por view (extractMetas) -->
   <%- typeof metas !== 'undefined' ? metas : '' %>
 
-  <!-- Preconnect para Performance (crítico: antes de stylesheets e scripts) -->
-  <% if (process.env.GA_TRACKING_ID) { %>
-  <link rel="preconnect" href="https://www.googletagmanager.com">
-  <link rel="dns-prefetch" href="https://www.google-analytics.com">
-  <link rel="dns-prefetch" href="https://stats.g.doubleclick.net">
-  <% } %>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -121,19 +111,27 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
+  <!-- Preconnect para Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <% if (process.env.GA_TRACKING_ID) { %>
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <% } %>
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Main CSS Files (versão fixa para cache do browser — incrementar manualmente em deploy) -->
+  <!-- Main CSS Files -->
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/homepage.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/homepage.css?v=<%= app.version %>">
   <link rel="stylesheet" href="/css/theme.css">
-  <link rel="stylesheet" href="/css/components.css?v=1.0.0">
-  <link rel="stylesheet" href="/css/catalog-enhanced.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/components.css?v=<%= app.version %>">
+  <link rel="stylesheet" href="/css/catalog-enhanced.css?v=<%= app.version %>">
   <link rel="stylesheet" href="/css/notifications.css">
   <link rel="stylesheet" href="/css/search.css">
-  <link rel="stylesheet" href="/css/frontend-mobile.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/frontend-mobile.css?v=<%= app.version %>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
@@ -150,7 +148,7 @@
   </style>
 
   <%- style %>
-  <link rel="stylesheet" href="/css/dark-luxe.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= app.version %>">
 
   <% if (process.env.GA_TRACKING_ID && (typeof cookieConsent === 'undefined' || cookieConsent === null || (typeof canUseAnalytics === 'function' && canUseAnalytics()))) { %>
   <!-- Google Tag Manager / GA4 -->
@@ -193,7 +191,7 @@
     <!-- Gonzaga Modular System -->
     <script src="/js/config.js"></script>
     <!-- Core modules in order - utils.js must load and initialize first -->
-    <script src="/js/utils.js?v=1.0.0"></script>
+    <script src="/js/utils.js?v=<%= app.version %>"></script>
     <script>
       // Ensure utils.js is fully loaded and initialized before other modules
       (function checkUtils() {
@@ -221,7 +219,7 @@
       })();
     </script>
     <script src="/js/modules/navigation.js"></script>
-    <script src="/js/modules/ui.js?v=1.0.0"></script>
+    <script src="/js/modules/ui.js?v=<%= app.version %>"></script>
     <script src="/js/modules/carousel.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/notifications.js"></script>
