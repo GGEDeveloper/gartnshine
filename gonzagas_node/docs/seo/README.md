@@ -22,14 +22,26 @@ Estabelecer e evoluir uma infraestrutura SEO de topo para `artnshine.pt`, posici
 | **Fundação 4** | GA4 & Cookie Consent | ✅ Concluído | `04-ga4-tracking.md` |
 | **Fundação 5** | Sitemap Inteligente | ✅ Concluído (299 URLs) | `05-sitemap-avancado.md` |
 | **Fundação 6** | Checklist Deploy | ✅ Concluído | `06-checklist-deploy.md` |
-| **Fase A** | Performance & Core Web Vitals | 🔴 Por implementar | `08-fase-a-performance.md` |
-| **Fase B** | Schema Avançado @graph | 🔴 Por implementar | `09-fase-b-schema-avancado.md` |
-| **Fase C** | URLs Semânticas & On-Page | 🔴 Por implementar | `10-fase-c-urls-onpage.md` |
-| **Fase D** | Google Merchant Center | 🟡 Por planear | `11-fase-d-merchant-center.md` |
-| **Fase E** | SEO Local | 🟡 Por planear | `12-fase-e-seo-local.md` |
+| **Roadmap** | Visão geral Fases A→F | 📋 Plano | `07-seo-roadmap-avancado.md` |
+| **Fase A** | Performance & Core Web Vitals | 🔴 A implementar | `08-fase-a-performance.md` |
+| **Fase B** | Schema Markup @graph | 🔴 A implementar | `09-fase-b-schema-avancado.md` |
+| **Fase C** | URLs Semânticas & On-Page | 🔴 A implementar | `10-fase-c-urls-onpage.md` |
+| **Fase D** | Google Merchant Center | 🟡 A planear | `11-fase-d-merchant-center.md` |
+| **Fase E** | SEO Local | 🟡 A planear | `12-fase-e-seo-local.md` |
 | **Fase F** | Conteúdo & Blog | 🟢 Futura | `13-fase-f-conteudo-blog.md` |
+| **Técnico+** | Problemas silenciosos activos | 🔴 **URGENTE** | `14-seo-tecnico-avancado.md` |
+| **Off-Page** | Pinterest, backlinks, redes | 🟡 A planear | `15-seo-off-page.md` |
+| **Monitorização** | Rotinas semanais/mensais | 📋 Processo | `16-seo-monitorizacao.md` |
 
-**Visão geral e prioridades:** `07-seo-roadmap-avancado.md`
+---
+
+## ⚠️ Prioridade Imediata
+
+**`14-seo-tecnico-avancado.md` tem 2 problemas activos em produção:**
+
+1. **Páginas `/search` com filtros são indexáveis** — já existem combinações infinitas de URLs que o Google pode estar a rastrear. Adicionar `noindex` e bloquear no `robots.txt`.
+
+2. **URLs de coleções são numéricas** (`/collection/1`) — zero valor SEO. Implementar slugs em conjunto com a Fase C.
 
 ---
 
@@ -64,7 +76,16 @@ Estabelecer e evoluir uma infraestrutura SEO de topo para `artnshine.pt`, posici
 12. [`12-fase-e-seo-local.md`](12-fase-e-seo-local.md) — Google Business Profile, LocalBusiness schema, NAP
 
 ### 🟢 Fase F — Conteúdo & Blog
-13. [`13-fase-f-conteudo-blog.md`](13-fase-f-conteudo-blog.md) — Estratégia de conteúdo, artigos SEO, long-tail
+13. [`13-fase-f-conteudo-blog.md`](13-fase-f-conteudo-blog.md) — Blog, plano editorial, long-tail keywords
+
+### 🔴 SEO Técnico Avançado (Problemas Activos)
+14. [`14-seo-tecnico-avancado.md`](14-seo-tecnico-avancado.md) — noindex search, slugs coleções, preconnect, stock, WWW
+
+### 🟡 SEO Off-Page
+15. [`15-seo-off-page.md`](15-seo-off-page.md) — Pinterest, backlinks PT, sameAs, Instagram, reviews
+
+### 📋 Monitorização Contínua
+16. [`16-seo-monitorizacao.md`](16-seo-monitorizacao.md) — Rotinas 15min/semana, 1h/mês, KPI tracking
 
 ---
 
@@ -78,12 +99,12 @@ Estabelecer e evoluir uma infraestrutura SEO de topo para `artnshine.pt`, posici
 ### Ao criar um novo produto
 1. Preencher o campo `description` na DB (gera meta description única)
 2. Usar nome descritivo com keywords: material + pedra + tipo
-3. Adicionar imagem de qualidade (será convertida para WebP automaticamente após Fase A)
+3. Imagem de qualidade (será convertida para WebP automaticamente após Fase A)
 
-### Monitorização semanal
-- **Search Console** → Core Web Vitals + erros de indexação
-- **GA4** → tráfego orgânico, bounce rate, conversão
-- **PageSpeed Insights** → score de performance após cada deploy
+### Monitorização — ver `16-seo-monitorizacao.md`
+- **Semanal (15 min):** Search Console + GA4 — todos os Lunés
+- **Mensal (1h):** Análise keywords, PageSpeed, KPI tracking
+- **Trimestral (2h):** Auditoria completa
 
 ---
 
@@ -100,3 +121,5 @@ Estabelecer e evoluir uma infraestrutura SEO de topo para `artnshine.pt`, posici
 | LinkedIn Post Inspector | https://www.linkedin.com/post-inspector/ |
 | Google Merchant Center | https://merchants.google.com |
 | Google Business Profile | https://business.google.com |
+| Pinterest Business | https://business.pinterest.com |
+| Screaming Frog (auditoria) | https://www.screamingfrog.co.uk/seo-spider/ |
