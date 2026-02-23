@@ -532,14 +532,14 @@ Domínio verificado: Sim / Não
 
 ### D2 — Rota de feed XML de produtos
 
-- [ ] **P2** Criar endpoint `GET /feed/products.xml` em `routes/seo.js`
-- [ ] Feed deve incluir: `id`, `title`, `description`, `link`, `image_link`, `price`, `availability`, `brand`, `gtin`/`mpn`
+- [x] **P2** Criar endpoint `GET /feed/products.xml` em `routes/seo.js`
+- [x] Feed deve incluir: `id`, `title`, `description`, `link`, `image_link`, `price`, `availability`, `brand`, `gtin`/`mpn`
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Feito:
+Data: 23/02/2026
+Ficheiros: `routes/seo.js`
+Feito: Rota GET /feed/products.xml criada com todos os campos obrigatórios do Merchant Center (g:id, title, description, link, g:image_link, g:price, g:availability, g:condition, g:brand, g:mpn, g:product_type, g:google_product_category=188 Jewelry, g:shipping PT gratuito). Usa slugs para URLs quando disponíveis.
 Validar: https://artnshine.pt/feed/products.xml → deve retornar XML válido com produtos
 ```
 

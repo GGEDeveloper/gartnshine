@@ -177,4 +177,92 @@ Crawl-delay: 1
 Sitemap: ${baseUrl}/sitemap.xml`);
 });
 
+// GOOGLE MERCHANT CENTER PRODUCT FEED
+router.get('/feed/products.xml', async (req, res) => {
+  try {
+    res.set({
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600'
+    });
+
+    const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
+
+    const [products] = await pool.execute(`
+      SELECT 
+        p.id, p.name, p.slug, p.reference, p.description,
+        p.sale_price, p.current_stock, p.material, p.weight,
+        pf.name as family_name,
+        (SELECT pi.image_filename 
+         FROM product_images pi 
+         WHERE pi.product_id = p.id AND pi.is_primary = 1 
+         LIMIT 1) as main_image
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE p.is_active = 1
+      ORDER BY p.id ASC
+    `);
+
+    const escXml = (str) => {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    };
+
+    let feed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+  <channel>
+    <title>Gonzaga's Art &amp; Shine</title>
+    <link>${baseUrl}</link>
+    <description>Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.</description>`;
+
+    for (const product of products) {
+      const productPath = product.slug || product.id;
+      const productUrl = `${baseUrl}/catalog/product/${productPath}`;
+      const imageUrl = product.main_image
+        ? `${baseUrl}/uploads/products/${product.main_image}`
+        : `${baseUrl}/images/og-artnshine.jpg`;
+      const price = product.sale_price ? parseFloat(product.sale_price).toFixed(2) : '0.00';
+      const availability = product.current_stock > 0 ? 'in_stock' : 'out_of_stock';
+      const desc = product.description
+        ? escXml(product.description.substring(0, 5000))
+        : escXml(`${product.name} — Joia artesanal Gonzaga's Art & Shine. ${product.material || 'Prata 925'} com pedras naturais.`);
+
+      feed += `
+    <item>
+      <g:id>${escXml(product.reference || String(product.id))}</g:id>
+      <title>${escXml(product.name)}</title>
+      <description>${desc}</description>
+      <link>${productUrl}</link>
+      <g:image_link>${imageUrl}</g:image_link>
+      <g:price>${price} EUR</g:price>
+      <g:availability>${availability}</g:availability>
+      <g:condition>new</g:condition>
+      <g:brand>Gonzaga's Art &amp; Shine</g:brand>
+      <g:mpn>${escXml(product.reference || String(product.id))}</g:mpn>
+      <g:product_type>${escXml(product.family_name || 'Joias')}</g:product_type>
+      <g:google_product_category>188</g:google_product_category>
+      <g:shipping>
+        <g:country>PT</g:country>
+        <g:service>Standard</g:service>
+        <g:price>0.00 EUR</g:price>
+      </g:shipping>
+    </item>`;
+    }
+
+    feed += `
+  </channel>
+</rss>`;
+
+    res.send(feed);
+
+  } catch (error) {
+    console.error('Product feed generation error:', error);
+    res.status(500).send('<?xml version="1.0" encoding="UTF-8"?><rss xmlns:g="http://base.google.com/ns/1.0" version="2.0"><channel></channel></rss>');
+  }
+});
+
 module.exports = router;
