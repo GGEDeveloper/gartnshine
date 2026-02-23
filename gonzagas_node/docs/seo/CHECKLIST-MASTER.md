@@ -252,11 +252,15 @@ Validar: https://search.google.com/test/rich-results → testar https://artnshin
 
 ```
 📝 LOG DO AGENTE
-Data: 23/02/2026
-Ficheiros: `views/partials/schema-product.ejs`, `views/catalog/product-detail.ejs`
-Feito: Partial schema-product.ejs com name, sku, brand, image, offers (price, availability dinâmico), material. Incluído no product-detail.ejs.
-Validar: https://search.google.com/test/rich-results → testar URL de produto real
-         Deve mostrar: Product com preço e disponibilidade sem erros
+Data: 22/02/2026
+Ficheiros: `views/layouts/main.ejs`, `views/catalog/product-detail.ejs`
+Feito: Schema Product + Offer JSON-LD no head via bloco condicional no layout (ogType==='product').
+  Bloco inclui @id canónico, isRelatedTo (#organization), itemCondition NewCondition, seller @id.
+  price: sale_price (fallback price). availability: current_stock > 0 → InStock.
+  mainImageUrl: /media/products/ (product.images[0] ou product.image_url).
+  Removido include schema-product.ejs do body. Dois blocos ld+json no head: @graph + Product.
+Validar: curl -s http://localhost:3000/catalog/product/1 | grep -A 80 'application/ld+json'
+         price e availability com valores reais da DB (ex: 15.00, OutOfStock)
 ```
 
 ---
@@ -442,11 +446,12 @@ Remete para: U1
 
 ```
 📝 LOG DO AGENTE
-Data: 23/02/2026
-Ficheiros: `views/partials/schema-product.ejs`
-Feito: JÁ IMPLEMENTADO via schema-product.ejs — usa product.sale_price para price e current_stock > 0 para availability
-Validar: produto com stock → availability InStock
-         produto sem stock → availability OutOfStock (testar manualmente ou com produto de teste)
+Data: 22/02/2026
+Ficheiros: `views/catalog/product-detail.ejs`
+Feito: Schema Offer integrado no bloco Product no head (B2). price: product.sale_price (fallback product.price).
+  availability: current_stock > 0 → https://schema.org/InStock, senão OutOfStock. seller: @id #organization.
+Validar: curl produto real → verificar price e availability no JSON-LD
+         produto com stock → InStock; produto esgotado → OutOfStock
 ```
 
 ---
@@ -970,6 +975,22 @@ Tarefas concluídas:
 Ficheiros modificados:
   - app.js, views/collection.ejs, views/catalog/product-detail.ejs
 Notas: HTTP→HTTPS redirect (artnshine.pt) ainda requer config no servidor dominios.pt.
+```
+
+### Sprint 9 — 22/02/2026 (B2 Schema Product no head)
+```
+Data: 22/02/2026
+Tarefas concluídas:
+  - B2: Schema Product + Offer dinâmico no head (layout main.ejs, condicional ogType==='product')
+    - @id canónico, isRelatedTo, itemCondition, seller @id
+    - price: sale_price (fallback price), availability: current_stock dinâmico
+  - T2: Confirmado Offer com price e availability dinâmicos
+  - Removido schema-product.ejs do body (evitar duplicação)
+  - Fix: related products query (sem slug/image_url) para DB sem essas colunas
+Ficheiros modificados:
+  - views/layouts/main.ejs, views/catalog/product-detail.ejs, routes/index.js, docs/seo/CHECKLIST-MASTER.md
+Validar: curl -s http://localhost:3000/catalog/product/1 | grep -A 80 'application/ld+json'
+         Dois blocos ld+json: @graph + Product. price/availability com valores reais.
 ```
 
 ---

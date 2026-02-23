@@ -283,7 +283,8 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     let relatedProducts = [];
     if (product.current_stock <= 0 && product.family_id) {
       const [related] = await pool.execute(`
-        SELECT p.id, p.name, p.slug, p.sale_price, p.current_stock, p.image_url,
+        SELECT p.id, p.name, p.sale_price, p.current_stock,
+               (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC LIMIT 1) as image_url,
                pf.name as family_name
         FROM products p
         LEFT JOIN product_families pf ON p.family_id = pf.id
