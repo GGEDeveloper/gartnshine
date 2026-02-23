@@ -423,17 +423,41 @@ class Media {
                 .jpeg({ quality: 90 })
                 .toBuffer();
             
-            // Save variants to disk
+            // Save variants to disk (JPEG + WebP)
             const variantPaths = {};
-            for (const [size, buffer] of Object.entries(variants)) {
+            const webpPaths = {};
+            for (const [size, buf] of Object.entries(variants)) {
                 const variantFilename = this.getVariantFilename(filename, size);
                 const variantPath = path.join(this.uploadPath, 'variants', variantFilename);
                 
-                // Ensure variants directory exists
                 await fs.mkdir(path.dirname(variantPath), { recursive: true });
-                await fs.writeFile(variantPath, buffer);
-                
+                await fs.writeFile(variantPath, buf);
                 variantPaths[size] = `/uploads/variants/${variantFilename}`;
+
+                // WebP variant alongside each JPEG
+                try {
+                    const ext = path.extname(variantFilename);
+                    const webpFilename = variantFilename.replace(ext, '.webp');
+                    const webpPath = path.join(this.uploadPath, 'variants', webpFilename);
+                    const webpBuf = await sharp(buf).webp({ quality: 80 }).toBuffer();
+                    await fs.writeFile(webpPath, webpBuf);
+                    webpPaths[size] = `/uploads/variants/${webpFilename}`;
+                } catch (webpErr) {
+                    console.warn(`WebP conversion failed for ${size}:`, webpErr.message);
+                }
+            }
+
+            // Full-size WebP
+            let hasWebp = false;
+            try {
+                const ext = path.extname(filename);
+                const webpFullFilename = filename.replace(ext, '.webp');
+                const webpFullPath = path.join(this.uploadPath, webpFullFilename);
+                const webpFull = await sharp(buffer).webp({ quality: 82 }).toBuffer();
+                await fs.writeFile(webpFullPath, webpFull);
+                hasWebp = true;
+            } catch (webpErr) {
+                console.warn('Full-size WebP conversion failed:', webpErr.message);
             }
             
             return {
@@ -445,6 +469,8 @@ class Media {
                     aspectRatio: (metadata.width / metadata.height).toFixed(2)
                 },
                 variants: variantPaths,
+                webpVariants: webpPaths,
+                hasWebp,
                 dominantColor
             };
             
