@@ -32,6 +32,20 @@ class ProductFamily {
     }
   }
 
+  static async getByIdOrSlug(idOrSlug) {
+    try {
+      const isNumeric = /^\d+$/.test(String(idOrSlug));
+      const [rows] = await pool.query(
+        `SELECT * FROM product_families WHERE ${isNumeric ? 'id' : 'slug'} = ?`,
+        [isNumeric ? parseInt(idOrSlug) : idOrSlug]
+      );
+      return rows.length ? rows[0] : null;
+    } catch (error) {
+      console.error('Error getting product family by ID or slug:', error);
+      throw error;
+    }
+  }
+
   // Get product family by ID with product count (para saber se pode editar o código)
   static async getByIdWithProductCount(id) {
     try {

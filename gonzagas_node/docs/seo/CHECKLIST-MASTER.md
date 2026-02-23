@@ -314,16 +314,16 @@ Nota: só implementar quando existirem reviews reais de clientes
 
 ### C1 — Coluna `slug` nos produtos
 
-- [ ] **P1** Adicionar coluna `slug VARCHAR(255) UNIQUE` à tabela `products`
-- [ ] **P1** Gerar slugs para todos os produtos existentes (script SQL ou Node.js)
-- [ ] **P1** Actualizar rota `GET /catalog/product/:id` para aceitar slug (com redirect 301 do ID antigo)
+- [x] **P1** Adicionar coluna `slug VARCHAR(255) UNIQUE` à tabela `products`
+- [x] **P1** Gerar slugs para todos os produtos existentes (script SQL ou Node.js)
+- [x] **P1** Actualizar rota `GET /catalog/product/:id` para aceitar slug (com redirect 301 do ID antigo)
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Migration SQL:
-Feito:
+Data: 23/02/2026
+Ficheiros: `sql/add_slug_columns.sql`, `scripts/generate-slugs.js`, `routes/index.js`, `routes/seo.js`
+Migration SQL: ALTER TABLE products ADD COLUMN slug VARCHAR(255) UNIQUE
+Feito: Rota aceita :idOrSlug (numérico → redirect 301 para slug se existir). Sitemap usa slug quando disponível. Script generate-slugs.js popula slugs existentes. EXECUTAR migração + script em produção antes do deploy.
 Validar: https://artnshine.pt/catalog/product/ID → deve redirecionar 301 para /catalog/product/SLUG
          https://artnshine.pt/catalog/product/anel-prata-925-onix-negro → deve abrir produto
 ```
@@ -332,16 +332,16 @@ Validar: https://artnshine.pt/catalog/product/ID → deve redirecionar 301 para 
 
 ### C2 — Coluna `slug` nas coleções (product_families)
 
-- [ ] **P1** Adicionar coluna `slug VARCHAR(255) UNIQUE` à tabela `product_families`
-- [ ] **P1** Gerar slugs para todas as famílias existentes
-- [ ] **P1** Actualizar rota `GET /collection/:familyId` → `GET /collection/:slug` com redirect 301
+- [x] **P1** Adicionar coluna `slug VARCHAR(255) UNIQUE` à tabela `product_families`
+- [x] **P1** Gerar slugs para todas as famílias existentes
+- [x] **P1** Actualizar rota `GET /collection/:familyId` → `GET /collection/:slug` com redirect 301
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-Slugs gerados:
-Feito:
+Data: 23/02/2026
+Ficheiros: `sql/add_slug_columns.sql`, `scripts/generate-slugs.js`, `routes/index.js`, `models/ProductFamily.js`
+Slugs gerados: via scripts/generate-slugs.js (run after migration)
+Feito: ProductFamily.getByIdOrSlug() criado. Rota aceita :familyIdOrSlug (numérico → redirect 301 para slug). Sitemap usa slug. EXECUTAR migração + script em produção.
 Validar: https://artnshine.pt/collection/1 → deve redirecionar 301 para /collection/SLUG
 ```
 
@@ -366,15 +366,15 @@ Validar: ver source de qualquer página de produto → todas as <img> devem ter 
 ### C4 — Meta descriptions únicas por produto
 
 - [ ] **P2** Garantir que cada produto tem `description` preenchida na DB
-- [ ] **P2** Lógica no template: se `product.description` existe → usar os primeiros 155 chars; senão → template genérico com nome + material
-- [ ] Já existe lógica parcial em `routes/index.js` — verificar e completar
+- [x] **P2** Lógica no template: se `product.description` existe → usar os primeiros 155 chars; senão → template genérico com nome + material
+- [x] Já existe lógica parcial em `routes/index.js` — verificar e completar
 
 ```
 📝 LOG DO AGENTE
-Data:
-Ficheiros:
-N.º produtos sem description na DB:
-Feito:
+Data: 23/02/2026
+Ficheiros: `routes/index.js`, `scripts/audit-meta-descriptions.js`
+N.º produtos sem description na DB: usar scripts/audit-meta-descriptions.js para verificar
+Feito: Fallback melhorado — constrói meta description a partir de name + material + family_name quando description vazia. Script de auditoria criado. Preenchimento manual da DB é tarefa de conteúdo.
 ```
 
 ---

@@ -161,10 +161,11 @@ router.get('/collections', async (req, res) => {
 });
 
 // Collection page - Show products by family
-router.get('/collection/:familyId', async (req, res) => {
+router.get('/collection/:familyIdOrSlug', async (req, res) => {
   try {
-    const familyId = parseInt(req.params.familyId);
-    const family = await ProductFamily.getById(familyId);
+    const { familyIdOrSlug } = req.params;
+    const isNumeric = /^\d+$/.test(familyIdOrSlug);
+    const family = await ProductFamily.getByIdOrSlug(familyIdOrSlug);
     
     if (!family) {
       return res.status(404).render('error', {
@@ -172,9 +173,15 @@ router.get('/collection/:familyId', async (req, res) => {
         message: 'Collection not found.'
       });
     }
+
+    // 301 redirect from numeric ID to slug URL when slug exists
+    if (isNumeric && family.slug) {
+      return res.redirect(301, `/collection/${family.slug}`);
+    }
     
-    const products = await Product.getByFamily(familyId);
+    const products = await Product.getByFamily(family.id);
     const families = await ProductFamily.getAll();
+    const slugOrId = family.slug || family.id;
     
     res.render('collection', {
       title: family.name,
@@ -182,7 +189,7 @@ router.get('/collection/:familyId', async (req, res) => {
       products,
       families,
       metaDescription: family.description ? family.description.substring(0, 155).replace(/"/g, "'") + '...' : 'Coleção ' + family.name + ' — joias artesanais em prata 925 e pedras naturais. Gonzaga\'s Art & Shine, elegância que nasce da terra.',
-      canonicalUrl: 'https://artnshine.pt/collection/' + familyId
+      canonicalUrl: 'https://artnshine.pt/collection/' + slugOrId
     });
   } catch (error) {
     console.error('Error loading collection:', error);
@@ -203,20 +210,30 @@ router.get('/product/:id/details-uc', ProductController.showProductDetailUnderCo
 router.get('/product/:id', ProductController.showProductDetailUnderConstruction);
 
 // Product detail route for WhatsApp
-router.get('/catalog/product/:id', async (req, res) => {
+router.get('/catalog/product/:idOrSlug', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { idOrSlug } = req.params;
     const { pool } = require('../config/database');
     
+    const isNumeric = /^\d+$/.test(idOrSlug);
+    const whereClause = isNumeric ? 'p.id = ?' : 'p.slug = ?';
+    const param = isNumeric ? parseInt(idOrSlug) : idOrSlug;
+
     const [results] = await pool.execute(`
       SELECT p.*, pf.name as family_name,
              GROUP_CONCAT(pi.image_filename ORDER BY pi.is_primary DESC) as images
       FROM products p
       LEFT JOIN product_families pf ON p.family_id = pf.id
       LEFT JOIN product_images pi ON p.id = pi.product_id
-      WHERE p.id = ? AND p.is_active = 1
+      WHERE ${whereClause} AND p.is_active = 1
       GROUP BY p.id
-    `, [id]);
+    `, [param]);
+
+    // 301 redirect from numeric ID to slug URL when slug exists
+    if (isNumeric && results.length > 0 && results[0].slug) {
+      return res.redirect(301, `/catalog/product/${results[0].slug}`);
+    }
+    const id = results.length > 0 ? results[0].id : idOrSlug;
     
     if (results.length === 0) {
       return res.status(404).render('error', { message: 'Produto não encontrado' });
@@ -247,15 +264,31 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       encodedMessage: encodeURIComponent(whatsappMessage)
     };
     
+    // Build rich meta description from available fields
+    let metaDesc;
+    if (product.description && product.description.trim()) {
+      metaDesc = product.description.substring(0, 155).replace(/"/g, "'") + '...';
+    } else {
+      const parts = [product.name];
+      if (product.material) parts.push(product.material);
+      if (product.family_name) parts.push(product.family_name);
+      parts.push("Gonzaga's Art & Shine");
+      metaDesc = parts.join(' — ') + '. Elegância que nasce da terra.';
+      if (metaDesc.length > 160) metaDesc = metaDesc.substring(0, 157) + '...';
+    }
+
+    const productSlugOrId = product.slug || id;
+    const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
+
     res.render('catalog/product-detail', { 
       product, 
       whatsappData,
       layout: 'layouts/main',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine',
-      metaDescription: product.description ? product.description.substring(0, 155).replace(/"/g, "'") + '...' : product.name + ' — Joia artesanal Gonzaga\'s Art & Shine. Prata 925 com pedras naturais autênticas. Elegância que nasce da terra.',
-      canonicalUrl: 'https://artnshine.pt/catalog/product/' + id,
-      ogImage: product.images && product.images.length > 0 ? 'https://artnshine.pt/uploads/products/' + product.images[0] : undefined,
+      metaDescription: metaDesc,
+      canonicalUrl: `${baseUrl}/catalog/product/${productSlugOrId}`,
+      ogImage: product.images && product.images.length > 0 ? `${baseUrl}/uploads/products/${product.images[0]}` : undefined,
       ogType: 'product'
     });
     

@@ -29,11 +29,12 @@ router.get('/sitemap.xml', async (req, res) => {
 
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
 
-    // Produtos ativos com nome e imagem principal
+    // Produtos ativos com nome, slug e imagem principal
     const [products] = await pool.execute(`
       SELECT 
         p.id, 
-        p.name, 
+        p.name,
+        p.slug,
         p.reference,
         p.updated_at,
         (SELECT pi.image_filename 
@@ -45,9 +46,9 @@ router.get('/sitemap.xml', async (req, res) => {
       ORDER BY p.updated_at DESC
     `);
 
-    // Famílias/coleções com nome
+    // Famílias/coleções com nome e slug
     const [families] = await pool.execute(`
-      SELECT id, name, updated_at
+      SELECT id, name, slug, updated_at
       FROM product_families
       ORDER BY updated_at DESC
     `);
@@ -98,24 +99,26 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.2</priority>
   </url>`;
 
-    // Coleções (/collection/:id)
+    // Coleções (/collection/:idOrSlug)
     for (const family of families) {
       const lastmod = formatSitemapDate(family.updated_at);
+      const familyPath = family.slug || family.id;
       sitemap += `
 
   <!-- Coleção: ${family.name} -->
   <url>
-    <loc>${baseUrl}/collection/${family.id}</loc>
+    <loc>${baseUrl}/collection/${familyPath}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`;
     }
 
-    // Produtos (/catalog/product/:id)
+    // Produtos (/catalog/product/:idOrSlug)
     for (const product of products) {
       const lastmod = formatSitemapDate(product.updated_at);
-      const productUrl = `${baseUrl}/catalog/product/${product.id}`;
+      const productPath = product.slug || product.id;
+      const productUrl = `${baseUrl}/catalog/product/${productPath}`;
 
       sitemap += `
 
