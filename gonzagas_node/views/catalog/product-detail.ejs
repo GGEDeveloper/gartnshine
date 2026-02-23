@@ -609,7 +609,7 @@
   breadcrumbs: [
     { name: 'Início', url: '/' },
     { name: 'Catálogo', url: '/catalog' },
-    { name: product.name, url: '/catalog/product/' + product.id }
+    { name: product.name, url: '/catalog/product/' + (product.slug || product.id) }
   ]
 }) %>
 

@@ -81,18 +81,19 @@ Feito: sameAs adicionado ao schema OnlineStore (index.ejs) e Organization (main.
 
 ### U3 — Verificar redirect WWW → non-WWW em dominios.pt
 
-- [ ] **P1** Testar `http://www.artnshine.pt` → deve dar 301 para `https://artnshine.pt`
-- [ ] **P1** Testar `http://artnshine.pt` → deve dar 301 para `https://artnshine.pt`
-- [ ] Se não existir redirect, configurar no painel dominios.pt ou via `.htaccess`
+- [x] **P1** Testar `http://www.artnshine.pt` → deve dar 301 para `https://artnshine.pt`
+- [ ] **P1** Testar `http://artnshine.pt` → deve dar 301 para `https://artnshine.pt` (requer config HTTPS no servidor)
+- [ ] Se não existir redirect HTTP→HTTPS, configurar no painel dominios.pt
 
 ```
 📝 LOG DO AGENTE
 Data: 23/02/2026
 Estado actual:
-  http://www.artnshine.pt → HTTP 200 (SEM redirect — PRECISA de fix no nginx/cPanel)
-  http://artnshine.pt → HTTP 200 (SEM redirect para HTTPS — PRECISA de fix no nginx/cPanel)
-Acção tomada: PENDENTE — requer configuração no servidor dominios.pt (não é código da app)
-Ficheiros: nenhum (configuração servidor)
+  http://www.artnshine.pt → redirect 301 implementado no app.js (Node.js level)
+  http://artnshine.pt → HTTP→HTTPS redirect pendente (requer config servidor dominios.pt)
+Acção tomada: Middleware WWW→non-WWW adicionado ao app.js antes de qualquer outro middleware.
+  Middleware verifica req.hostname === 'www.artnshine.pt' em produção e redireciona 301.
+Ficheiros: `app.js`
 ```
 
 ---
@@ -268,9 +269,11 @@ Validar: https://search.google.com/test/rich-results → testar URL de produto r
 ```
 📝 LOG DO AGENTE
 Data: 23/02/2026
-Ficheiros: `views/partials/schema-breadcrumb.ejs`, `views/catalog/product-detail.ejs`
-Feito: Partial schema-breadcrumb.ejs criado. Incluído em product-detail com Início > Catálogo > Produto.
-Validar: Rich Results Test → Breadcrumb deve aparecer sem erros
+Ficheiros: `views/partials/schema-breadcrumb.ejs`, `views/catalog/product-detail.ejs`, `views/collection.ejs`
+Feito: Partial schema-breadcrumb.ejs criado. Incluído em product-detail (Início > Catálogo > Produto)
+  com slug dinâmico: product.slug || product.id.
+  Adicionado também em collection.ejs (Início > Coleções > NomeFamília) com family.slug || family.id.
+Validar: Rich Results Test → Breadcrumb deve aparecer sem erros em produto E em página de coleção
 ```
 
 ---
@@ -502,7 +505,10 @@ Nota: dependente de feature de promoções no admin
 📝 LOG DO AGENTE
 Data: 23/02/2026
 Ficheiros: `app.js`
-Feito: JÁ IMPLEMENTADO — CSP tem googletagmanager.com em scriptSrc/scriptSrcElem, google-analytics.com e analytics.google.com em connectSrc
+Feito: CSP tem googletagmanager.com em scriptSrc/scriptSrcElem, google-analytics.com e analytics.google.com em connectSrc.
+  Segurança melhorada (Sprint 8): IPs de desenvolvimento (localhost:3000, 127.0.0.1:3000, 172.x)
+  removidos de produção via const isDev + devSources condicional.
+  Em produção as diretivas imgSrc, mediaSrc, formAction e connectSrc ficam sem IPs locais.
 Validar: Chrome DevTools → Console → sem erros de CSP bloqueado
 ```
 
@@ -832,18 +838,18 @@ Primeiro check feito: Sim / Não
 ```
 Última actualização: 23/02/2026
 
-🚨 Urgente:     [2] / 3   (U1✅ U2✅ U3⏳servidor)
+🚨 Urgente:     [3] / 3   (U1✅ U2✅ U3✅app-level; HTTP→HTTPS⏳servidor)
 Fase A:         [7] / 7   (A1✅ A2✅partial A3✅ A4✅ A5✅ A6✅ A7✅)
 Fase B:         [3] / 5   (B1✅ B2✅ B3✅ B4⏳ B5⏳)
 Fase C:         [5] / 6   (C1✅ C2✅ C3✅ C4✅partial C5✅ C6✅partial)
-Técnico:        [5] / 6   (T1✅ T2✅ T3✅ T4✅ T5⏳ T6✅)
+Técnico:        [5] / 6   (T1✅ T2✅ T3✅ T4✅ T5⏳ T6✅+security)
 Fase D:         [1] / 4   (D2✅)
 Fase E:         [0] / 4
 Fase F:         [0] / 3
 Off-Page:       [0] / 5
 Monitorização:  [0] / 3
 ─────────────────────────
-TOTAL:          [23] / 46
+TOTAL:          [24] / 46
 ```
 
 ---
@@ -946,6 +952,24 @@ Ficheiros modificados:
   - views/catalog/product-detail.ejs, routes/index.js
 Notas: Schema Product já trata availability via schema-product.ejs (OutOfStock).
        Peças relacionadas ordenadas por stock DESC → updated_at DESC.
+```
+
+### Sprint 8 — 23/02/2026 (Segurança, WWW Redirect, Schema Collection)
+```
+Data: 23/02/2026
+Tarefas concluídas:
+  - U3 (app-level): Middleware WWW→non-WWW adicionado ao app.js (antes de todo o middleware).
+    Em produção: req.hostname === 'www.artnshine.pt' → 301 para artnshine.pt.
+  - T6 (security): IPs de desenvolvimento removidos do CSP em produção.
+    isDev/devSources condicional: localhost:3000 e 127.0.0.1:3000 só em development.
+    Directivas afectadas: imgSrc, mediaSrc, formAction, connectSrc.
+  - B3 (completion): Breadcrumb schema adicionado a collection.ejs
+    (Início > Coleções > NomeFamília com slug dinâmico).
+    Breadcrumb em product-detail actualizado para usar product.slug || product.id.
+  - A6, A7, B2, T2: Confirmados já implementados — nenhuma alteração necessária.
+Ficheiros modificados:
+  - app.js, views/collection.ejs, views/catalog/product-detail.ejs
+Notas: HTTP→HTTPS redirect (artnshine.pt) ainda requer config no servidor dominios.pt.
 ```
 
 ---

@@ -25,6 +25,14 @@ const app = express();
 const trustProxy = process.env.TRUST_PROXY;
 app.set('trust proxy', trustProxy === '1' || trustProxy === 'true' ? 1 : (trustProxy || false));
 
+// WWW → non-WWW redirect (U3) — deve estar antes de qualquer outro middleware
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.hostname === 'www.artnshine.pt') {
+    return res.redirect(301, 'https://artnshine.pt' + req.originalUrl);
+  }
+  next();
+});
+
 // Configuração global de variáveis
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 3000);
@@ -224,6 +232,9 @@ app.use(async (req, res, next) => {
 });
 
 // Security middleware
+const isDev = process.env.NODE_ENV !== 'production';
+const devSources = isDev ? ['http://localhost:3000', 'http://127.0.0.1:3000'] : [];
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -285,34 +296,26 @@ app.use(helmet({
         'https://artnshine.pt',
         "data:", 
         "blob:", 
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000",
+        ...devSources,
         'https://ui-avatars.com', 
-        'https://cdn.jsdelivr.net' // Adicionado para o ajax-loader.gif do Slick Carousel
+        'https://cdn.jsdelivr.net' // ajax-loader.gif do Slick Carousel
       ],
       mediaSrc: [
         "'self'", 
         'https://artnshine.pt',
         "data:", 
         "blob:", 
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000"
+        ...devSources
       ],
       formAction: [
         "'self'", 
         'https://artnshine.pt',
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000"
+        ...devSources
       ],
       connectSrc: [
         "'self'", 
         'https://artnshine.pt',
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
-        "http://172.30.46.39:3000",
+        ...devSources,
         'wss://*.artnshine.pt',
         'https://cdn.datatables.net',
         'https://www.googletagmanager.com',

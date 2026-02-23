@@ -104,4 +104,12 @@
     products.forEach(product => productsGrid.appendChild(product));
   });
 </script>
+
+<%- include('partials/schema-breadcrumb', {
+  breadcrumbs: [
+    { name: 'Início', url: '/' },
+    { name: 'Coleções', url: '/collections' },
+    { name: family.name, url: '/collection/' + (family.slug || family.id) }
+  ]
+}) %>
  
