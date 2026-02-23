@@ -280,9 +280,31 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     const productSlugOrId = product.slug || id;
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
 
+    let relatedProducts = [];
+    if (product.current_stock <= 0 && product.family_id) {
+      const [related] = await pool.execute(`
+        SELECT p.id, p.name, p.slug, p.sale_price, p.current_stock, p.image_url,
+               pf.name as family_name
+        FROM products p
+        LEFT JOIN product_families pf ON p.family_id = pf.id
+        WHERE p.family_id = ? AND p.id != ? AND p.is_active = 1
+        ORDER BY p.current_stock DESC, p.updated_at DESC
+        LIMIT 4
+      `, [product.family_id, product.id]);
+      relatedProducts = related;
+    }
+
+    const whatsappNotifyMsg = encodeURIComponent(
+      `Olá! Gostaria de ser avisado(a) quando esta peça estiver disponível:\n\n` +
+      `*${product.name}*\nReferência: ${product.reference}\n` +
+      `Ver produto: ${baseUrl}/catalog/product/${productSlugOrId}`
+    );
+
     res.render('catalog/product-detail', { 
       product, 
       whatsappData,
+      whatsappNotifyMsg,
+      relatedProducts,
       layout: 'layouts/main',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine',

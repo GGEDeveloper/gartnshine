@@ -450,16 +450,16 @@ Validar: produto com stock → availability InStock
 
 ### T3 — Política de produtos sem stock
 
-- [ ] **P2** Decidir e implementar política: manter indexado com OutOfStock + mensagem "Avisar quando disponível"
-- [ ] Adicionar link/botão para peças semelhantes da mesma família quando produto esgotado
-- [ ] NÃO fazer 404 nem noindex em joias únicas
+- [x] **P2** Decidir e implementar política: manter indexado com OutOfStock + mensagem "Avisar quando disponível"
+- [x] Adicionar link/botão para peças semelhantes da mesma família quando produto esgotado
+- [x] NÃO fazer 404 nem noindex em joias únicas
 
 ```
 📝 LOG DO AGENTE
-Data:
-Decisão tomada:
-Ficheiros:
-Feito:
+Data: 23/02/2026
+Decisão tomada: Peças esgotadas mantêm-se indexadas (joias únicas). Badge "Esgotado" + botão "Avisar quando disponível" via WhatsApp + secção "Peças semelhantes" com até 4 produtos da mesma família.
+Ficheiros: views/catalog/product-detail.ejs, routes/index.js
+Feito: Badge out-of-stock, botão notify WhatsApp com mensagem template, grid de peças relacionadas (mesmo family_id), ordenadas por stock DESC + updated_at DESC.
 ```
 
 ---
@@ -836,14 +836,14 @@ Primeiro check feito: Sim / Não
 Fase A:         [7] / 7   (A1✅ A2✅partial A3✅ A4✅ A5✅ A6✅ A7✅)
 Fase B:         [3] / 5   (B1✅ B2✅ B3✅ B4⏳ B5⏳)
 Fase C:         [5] / 6   (C1✅ C2✅ C3✅ C4✅partial C5✅ C6✅partial)
-Técnico:        [4] / 6   (T1✅ T2✅ T3⏳ T4✅ T5⏳ T6✅)
-Fase D:         [0] / 4
+Técnico:        [5] / 6   (T1✅ T2✅ T3✅ T4✅ T5⏳ T6✅)
+Fase D:         [1] / 4   (D2✅)
 Fase E:         [0] / 4
 Fase F:         [0] / 3
 Off-Page:       [0] / 5
 Monitorização:  [0] / 3
 ─────────────────────────
-TOTAL:          [21] / 46
+TOTAL:          [23] / 46
 ```
 
 ---
@@ -918,6 +918,34 @@ Ficheiros modificados:
   - views/layouts/main.ejs, views/partials/_productCard.ejs
   - views/partials/_productCardHomepage.ejs, views/public/catalog.ejs
 Notas:
+```
+
+### Sprint 6 — 23/02/2026 (Google Merchant Center Feed)
+```
+Data: 23/02/2026
+Tarefas concluídas:
+  - D2: GET /feed/products.xml — Google Merchant Center product feed
+Ficheiros modificados:
+  - routes/seo.js
+Notas: Feed inclui g:id, title, description, link, g:image_link, g:price EUR,
+       g:availability (in_stock/out_of_stock), g:condition, g:brand, g:mpn,
+       g:product_type, g:google_product_category=188, g:shipping PT gratuito.
+       Usa slugs quando disponíveis.
+```
+
+### Sprint 7 — 23/02/2026 (Out-of-Stock Policy)
+```
+Data: 23/02/2026
+Tarefas concluídas:
+  - T3: Política de produtos esgotados implementada
+    - Badge "Esgotado" (vermelho) substitui "Por Encomenda"
+    - Botão "Avisar quando disponível" via WhatsApp (mensagem template dedicada)
+    - Secção "Peças semelhantes" com até 4 produtos da mesma família
+    - Produtos esgotados mantêm-se indexados (joias únicas — sem noindex)
+Ficheiros modificados:
+  - views/catalog/product-detail.ejs, routes/index.js
+Notas: Schema Product já trata availability via schema-product.ejs (OutOfStock).
+       Peças relacionadas ordenadas por stock DESC → updated_at DESC.
 ```
 
 ---
