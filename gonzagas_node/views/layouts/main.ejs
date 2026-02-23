@@ -104,6 +104,45 @@
   <!-- metas dinâmicas injetadas por view (extractMetas) -->
   <%- typeof metas !== 'undefined' ? metas : '' %>
 
+  <% if (typeof ogType !== 'undefined' && ogType === 'product' && typeof product !== 'undefined' && product) { %>
+  <% 
+    const _baseUrl = 'https://artnshine.pt';
+    const _canonical = typeof canonicalUrl !== 'undefined' ? canonicalUrl : (_baseUrl + '/catalog/product/' + (product.slug || product.id));
+    let _mainImg = 'placeholder-image.png';
+    if (product.image_url) _mainImg = product.image_url;
+    else if (product.images && product.images.length > 0) _mainImg = (typeof product.images[0] === 'string' ? product.images[0] : (product.images[0].image_filename || product.images[0]));
+    const _mainImageUrl = _baseUrl + '/media/products/' + _mainImg;
+    const _price = (product.sale_price && parseFloat(product.sale_price) > 0) ? parseFloat(product.sale_price).toFixed(2) : (product.price ? parseFloat(product.price).toFixed(2) : '0');
+    const _availability = (product.current_stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+    const _desc = (product.description || (product.name + ' — joia artesanal em prata 925')).replace(/"/g, '&quot;');
+  %>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": "<%= _canonical %>#product",
+    "name": "<%= product.name %>",
+    "description": "<%= _desc %>",
+    "sku": "<%= product.reference || product.id %>",
+    "brand": {
+      "@type": "Brand",
+      "name": "Gonzaga's Art & Shine"
+    },
+    "image": ["<%= _mainImageUrl %>"],
+    "offers": {
+      "@type": "Offer",
+      "@id": "<%= _canonical %>#offer",
+      "url": "<%= _canonical %>",
+      "priceCurrency": "EUR",
+      "price": "<%= _price %>",
+      "availability": "<%= _availability %>",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": { "@id": "https://artnshine.pt/#organization" }
+    }
+  }
+  </script>
+  <% } %>
+
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
