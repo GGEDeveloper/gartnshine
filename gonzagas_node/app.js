@@ -27,8 +27,15 @@ app.set('trust proxy', trustProxy === '1' || trustProxy === 'true' ? 1 : (trustP
 
 // WWW → non-WWW redirect (U3) — deve estar antes de qualquer outro middleware
 app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production' && req.hostname === 'www.artnshine.pt') {
-    return res.redirect(301, 'https://artnshine.pt' + req.originalUrl);
+  if (process.env.NODE_ENV === 'production') {
+    const host = req.get('host') || '';
+    if (host.toLowerCase().startsWith('www.')) {
+      const cleanHost = host
+        .replace(/^www\./i, '')
+        .replace(/:443$/, '')
+        .replace(/:80$/, '');
+      return res.redirect(301, 'https://' + cleanHost + req.originalUrl);
+    }
   }
   next();
 });
@@ -330,7 +337,7 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: config.baseUrl,
+  origin: process.env.BASE_URL || 'https://artnshine.pt',
   credentials: true
 }));
 
