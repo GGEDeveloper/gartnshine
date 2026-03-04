@@ -9,11 +9,11 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #ddd;
+    background: var(--color-secondary, rgba(11, 16, 22, 0.98));
+    border: 1px solid var(--border-soft, rgba(255,255,255,0.1));
     border-top: none;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     z-index: 1000;
     max-height: 300px;
     overflow-y: auto;
@@ -32,7 +32,7 @@
 }
 
 .search-result-item:hover {
-    background: var(--surface-1);
+    background: var(--surface-1, rgba(192, 160, 128, 0.1));
     text-decoration: none;
 }
 
@@ -48,13 +48,13 @@
     margin: 0 0 4px 0;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text, #f4f6f8);
 }
 
 .search-result-info p {
     margin: 0 0 4px 0;
     font-size: 12px;
-    color: #666;
+    color: var(--color-text-muted, #aab3bf);
 }
 
 .search-result-info .price {
@@ -71,7 +71,7 @@
 .search-no-results, .search-loading {
     padding: 16px;
     text-align: center;
-    color: #666;
+    color: var(--color-text-muted, #aab3bf);
     font-size: 14px;
 }
 

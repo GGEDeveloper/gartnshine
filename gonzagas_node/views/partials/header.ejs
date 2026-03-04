@@ -139,6 +139,16 @@
 </nav>
 
 <style>
+/* Header search expand - critical base (carrega sempre com o header) */
+.header-search-wrapper { display: flex; align-items: center; }
+.mobile-search-toggle { display: flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px; background: none; border: none; color: #c0a080; cursor: pointer; border-radius: 8px; }
+.mobile-search-toggle:hover { background: rgba(192,160,128,0.1); }
+.header-search { display: none; align-items: center; position: relative; }
+.header-search.expanded { display: flex !important; }
+.mobile-search-close { display: flex; align-items: center; justify-content: center; position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; padding: 0; background: none; border: none; color: #c0a080; cursor: pointer; border-radius: 6px; }
+.mobile-search-close:hover { background: rgba(192,160,128,0.15); }
+.mobile-search-toggle[aria-expanded="true"] { display: none !important; }
+
 /* Mobile Header Responsive */
 @media (max-width: 768px) {
   .desktop-nav {
@@ -363,46 +373,57 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Mobile search expand/collapse (Opção B)
+  // Search expand/collapse (mobile + desktop)
   const searchToggle = document.getElementById('mobile-search-toggle');
   const searchClose = document.getElementById('mobile-search-close');
   const headerSearch = document.getElementById('header-search');
-  const searchInput = headerSearch?.querySelector('.search-input');
+
+  function getSearchInput() {
+    return document.querySelector('#header-search .search-input, #header-search input[name="search"], #header-search input[type="search"]');
+  }
 
   function expandSearch() {
     if (!headerSearch) return;
     headerSearch.classList.add('expanded');
-    searchToggle?.setAttribute('aria-expanded', 'true');
-    searchInput?.focus();
+    if (searchToggle) searchToggle.setAttribute('aria-expanded', 'true');
+    var inp = getSearchInput();
+    if (inp) { inp.focus(); }
     document.body.classList.add('mobile-search-expanded');
   }
 
   function collapseSearch() {
     if (!headerSearch) return;
     headerSearch.classList.remove('expanded');
-    searchToggle?.setAttribute('aria-expanded', 'false');
-    searchInput?.blur();
+    if (searchToggle) searchToggle.setAttribute('aria-expanded', 'false');
+    var inp = getSearchInput();
+    if (inp) { inp.blur(); }
     document.body.classList.remove('mobile-search-expanded');
   }
 
-  searchToggle?.addEventListener('click', function(e) {
-    e.preventDefault();
-    expandSearch();
-  });
+  if (searchToggle) {
+    searchToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      expandSearch();
+    });
+  }
 
-  searchClose?.addEventListener('click', function(e) {
-    e.preventDefault();
-    collapseSearch();
-  });
+  if (searchClose) {
+    searchClose.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      collapseSearch();
+    });
+  }
 
   document.addEventListener('click', function(e) {
-    if (!headerSearch?.classList.contains('expanded')) return;
-    if (headerSearch.contains(e.target) || searchToggle?.contains(e.target)) return;
+    if (!headerSearch || !headerSearch.classList.contains('expanded')) return;
+    if (headerSearch.contains(e.target) || (searchToggle && searchToggle.contains(e.target))) return;
     collapseSearch();
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && headerSearch?.classList.contains('expanded')) {
+    if (e.key === 'Escape' && headerSearch && headerSearch.classList.contains('expanded')) {
       collapseSearch();
     }
   });
