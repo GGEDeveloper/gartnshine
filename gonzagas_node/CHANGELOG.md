@@ -1,5 +1,32 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2025-03-04] - Header Search: Ícone Expandível (Mobile + Desktop)
+
+### 🔍 **Pesquisa no Header - Padrão Unificado**
+
+#### **Problema resolvido**
+- No mobile: botão de navegação e barra de pesquisa "embrulhados" no topo direito
+- No desktop: barra de pesquisa ocupava grande parte do ecrã
+
+#### **Solução implementada (Opção B)**
+- **Mobile e Desktop**: ícone de pesquisa (lupa) que expande ao clicar
+- **Estado inicial**: Logo | Nav | 🔍 | ☰ (mobile) ou Logo | Nav | 🔍 (desktop)
+- **Ao clicar na lupa**: barra de pesquisa expande com animação
+- **Fechar**: botão ×, clique fora ou tecla Escape
+
+#### **Ficheiros alterados**
+- `views/partials/header.ejs` — estrutura HTML (wrapper, ícone, barra expandível, botão fechar)
+- `public/css/frontend-mobile.css` — estilos mobile e desktop para o padrão expand-on-click
+- `views/layouts/main.ejs` — Font Awesome para ícones (lupa, ×)
+
+#### **Detalhes técnicos**
+- Desktop: barra expandida com `max-width: 320px`, `min-width: 200px`
+- Mobile: barra full-width quando expandida
+- Compatível com `advanced-search.js` (sugestões e resultados)
+- Acessibilidade: `aria-expanded`, `aria-label` nos botões
+
+---
+
 ## [2025-07-18] - Arquitetura Modular & UI/UX Improvements
 
 ### 🏗️ **Arquitetura Modular Implementada**

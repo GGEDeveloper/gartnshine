@@ -42,9 +42,17 @@
       </ul>
     </nav>
 
-    <!-- Search Box -->
-    <div class="header-search">
-      <input type="search" name="search" class="search-input" placeholder="Pesquisar produtos..." autocomplete="off" aria-label="Pesquisar produtos">
+    <!-- Search: desktop full bar, mobile icon that expands -->
+    <div class="header-search-wrapper">
+      <button type="button" class="mobile-search-toggle" id="mobile-search-toggle" aria-label="Abrir pesquisa" aria-expanded="false">
+        <i class="fas fa-search" aria-hidden="true"></i>
+      </button>
+      <div class="header-search" id="header-search">
+        <input type="search" name="search" class="search-input" placeholder="Pesquisar produtos..." autocomplete="off" aria-label="Pesquisar produtos">
+        <button type="button" class="mobile-search-close" id="mobile-search-close" aria-label="Fechar pesquisa">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
     
     <!-- Mobile Navigation Toggle -->
@@ -353,6 +361,50 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       this.parentNode.classList.toggle('open');
     });
+  });
+
+  // Mobile search expand/collapse (Opção B)
+  const searchToggle = document.getElementById('mobile-search-toggle');
+  const searchClose = document.getElementById('mobile-search-close');
+  const headerSearch = document.getElementById('header-search');
+  const searchInput = headerSearch?.querySelector('.search-input');
+
+  function expandSearch() {
+    if (!headerSearch) return;
+    headerSearch.classList.add('expanded');
+    searchToggle?.setAttribute('aria-expanded', 'true');
+    searchInput?.focus();
+    document.body.classList.add('mobile-search-expanded');
+  }
+
+  function collapseSearch() {
+    if (!headerSearch) return;
+    headerSearch.classList.remove('expanded');
+    searchToggle?.setAttribute('aria-expanded', 'false');
+    searchInput?.blur();
+    document.body.classList.remove('mobile-search-expanded');
+  }
+
+  searchToggle?.addEventListener('click', function(e) {
+    e.preventDefault();
+    expandSearch();
+  });
+
+  searchClose?.addEventListener('click', function(e) {
+    e.preventDefault();
+    collapseSearch();
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!headerSearch?.classList.contains('expanded')) return;
+    if (headerSearch.contains(e.target) || searchToggle?.contains(e.target)) return;
+    collapseSearch();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && headerSearch?.classList.contains('expanded')) {
+      collapseSearch();
+    }
   });
 });
 </script>

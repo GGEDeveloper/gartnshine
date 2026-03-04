@@ -18,7 +18,7 @@ public/
 
 views/
 ├── partials/         # Componentes reutilizáveis
-│   ├── header.ejs
+│   ├── header.ejs    # Header com pesquisa expandível (ícone → barra ao clicar)
 │   ├── footer.ejs
 │   └── navigation.ejs
 └── pages/
@@ -148,6 +148,16 @@ views/
 2. Verifique se há erros no console do navegador (F12 > Console)
 3. Confirme se o arquivo CSS está sendo carregado corretamente
 
+## 🔍 Header e Pesquisa
+
+### Pesquisa expandível (mobile + desktop)
+O header usa um ícone de pesquisa (lupa) que expande ao clicar:
+- **Estado inicial**: ícone compacto
+- **Ao clicar**: barra de pesquisa com input e botão fechar
+- **Fechar**: ×, clique fora ou Escape
+
+Ficheiros: `views/partials/header.ejs`, `public/css/frontend-mobile.css`
+
 ## 📱 Responsividade
 
 ### Media Queries
@@ -195,4 +205,4 @@ views/
 Para problemas ou dúvidas, entre em contato com a equipe de desenvolvimento.
 
 ---
-Atualizado em: Maio de 2025
+Atualizado em: Março de 2025
