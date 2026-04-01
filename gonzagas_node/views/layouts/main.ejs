@@ -108,10 +108,12 @@
   <% 
     const _baseUrl = 'https://artnshine.pt';
     const _canonical = typeof canonicalUrl !== 'undefined' ? canonicalUrl : (_baseUrl + '/catalog/product/' + (product.slug || product.id));
-    let _mainImg = 'placeholder-image.png';
+    let _mainImg = null;
     if (product.image_url) _mainImg = product.image_url;
     else if (product.images && product.images.length > 0) _mainImg = (typeof product.images[0] === 'string' ? product.images[0] : (product.images[0].image_filename || product.images[0]));
-    const _mainImageUrl = _baseUrl + '/media/products/' + _mainImg;
+    const _mainImageUrl = _mainImg
+      ? (_baseUrl + '/media/products/' + _mainImg)
+      : (_baseUrl + '/images/imagem-nao-disponivel.svg');
     const _price = (product.sale_price && parseFloat(product.sale_price) > 0) ? parseFloat(product.sale_price).toFixed(2) : (product.price ? parseFloat(product.price).toFixed(2) : '0');
     const _availability = (product.current_stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
     const _desc = (product.description || (product.name + ' — joia artesanal em prata 925')).replace(/"/g, '&quot;');

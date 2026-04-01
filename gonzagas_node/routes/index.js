@@ -6,6 +6,7 @@ const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
+const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -52,7 +53,7 @@ router.get('/', async (req, res) => {
     }
     
     // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
-    const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/placeholder-image.png';
+    const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/imagem-nao-disponivel.svg';
     
     console.log(`Rendering index with ${mediaFiles.length} media files`);
     console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
@@ -306,6 +307,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       whatsappData,
       whatsappNotifyMsg,
       relatedProducts,
+      catalogBackUrl: safeCatalogReturnUrl(req.query.return),
       layout: 'layouts/main',
       title: `${product.name} - Gonzaga's Art & Shine`,
       siteTitle: 'Gonzaga\'s Art & Shine',

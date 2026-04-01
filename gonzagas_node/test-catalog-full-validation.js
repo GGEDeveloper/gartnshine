@@ -423,11 +423,20 @@ class CatalogFullValidation {
         
         const response = await this.page.evaluate(async () => {
           try {
-            const res = await fetch('/api/catalog/filter?families=1');
+            const res = await fetch('/api/catalog/filter?families=1&per_page=5');
+            let json = null;
+            if (res.ok) {
+              try {
+                json = await res.json();
+              } catch (e) {
+                json = null;
+              }
+            }
             return {
               status: res.status,
               ok: res.ok,
-              hasData: res.ok
+              hasFacets: !!(json && json.facets && typeof json.facets.families === 'object'),
+              hasTotalPages: !!(json && typeof json.total_pages === 'number')
             };
           } catch (e) {
             return { error: e.message };
@@ -445,6 +454,8 @@ class CatalogFullValidation {
         
         if (response.status === 429) {
           this.log('API rate limited (expected in test environment)', 'warning');
+        } else if (response.ok && (!response.hasFacets || !response.hasTotalPages)) {
+          throw new Error('Filter API response missing facets or total_pages');
         }
       }, false);
 

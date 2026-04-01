@@ -83,6 +83,41 @@
     </div>
   </div>
 
+  <!-- Valor potencial de inventário (stock × preço de venda) -->
+  <div class="row g-3 g-md-4 mt-1">
+    <div class="col-12">
+      <div class="card stat-card border-start border-4 border-info">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h6 class="text-muted mb-2">Valor potencial (vender todo o stock ao preço de venda atual)</h6>
+              <h2 class="mb-1 text-info">
+                <% if (stats.inventoryPotentialRevenue != null && typeof stats.inventoryPotentialRevenue === 'number') { %>
+                  <%= Number(stats.inventoryPotentialRevenue).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' }) %>
+                <% } else { %>
+                  —
+                <% } %>
+              </h2>
+              <p class="text-muted mb-0 small">
+                Unidades totais em stock:
+                <% if (stats.inventoryTotalUnits != null && typeof stats.inventoryTotalUnits === 'number') { %>
+                  <%= stats.inventoryTotalUnits.toLocaleString('pt-PT') %>
+                <% } else { %>
+                  —
+                <% } %>
+              </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+              <a href="/admin/export/inventory-stock.xlsx" class="btn btn-outline-info btn-lg">
+                <i class="fas fa-file-excel me-2"></i>Descarregar inventário (XLSX)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Quick Actions Mobile -->
   <div class="d-flex gap-2 mb-3 d-md-none flex-wrap">
     <a href="/admin/quick-product" class="btn btn-primary flex-grow-1 py-3">
@@ -228,6 +263,8 @@
   .bg-warning { background-color: #f6c23e !important; }
   .bg-danger { background-color: #e74a3b !important; }
   .bg-info { background-color: #36b9cc !important; }
+  .border-info { border-color: #36b9cc !important; }
+  .text-info { color: #36b9cc !important; }
   
   .card {
     border: none;

@@ -107,7 +107,7 @@ class CatalogImagesTester {
       // Test image URLs
       const imageUrls = images.filter(img => img.src).map(img => img.src);
       const validUrls = imageUrls.filter(url => 
-        url.includes('/media/products/') || url.includes('placeholder')
+        url.includes('/media/products/') || url.includes('/images/imagem-nao-disponivel') || url.includes('placeholder')
       );
 
       console.log(`✅ ${validUrls.length}/${imageUrls.length} images have valid URLs`);
@@ -171,6 +171,7 @@ class CatalogImagesTester {
       const validPaths = imagePaths.filter(path => 
         path.expectedPath && (
           path.expectedPath.startsWith('/media/products/') ||
+          path.expectedPath.includes('/images/imagem-nao-disponivel') ||
           path.expectedPath.includes('placeholder')
         )
       );

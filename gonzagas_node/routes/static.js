@@ -7,10 +7,7 @@ router.get('/favicon.ico', (req, res) => {
   res.status(204).end(); // Retorna 204 No Content
 });
 
-// Rota para imagens estáticas
-router.get('/images/:filename', (req, res) => {
-  const { filename } = req.params;
-  res.status(404).send('Not Found');
-});
+// Imagens em /images/* são servidas por express.static('public') em app.js.
+// Não interceptar aqui — uma rota 404 bloqueava placeholder e todos os ficheiros em public/images.
 
 module.exports = router;

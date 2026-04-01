@@ -353,11 +353,18 @@
 </style>
 
 <div class="product-detail-container">
-    <nav class="breadcrumbs">
-        <a href="/">Início</a> > 
-        <a href="/catalog">Catálogo</a> > 
+    <% var catBack = (typeof catalogBackUrl !== 'undefined' && catalogBackUrl) ? catalogBackUrl : '/catalog'; %>
+    <% var hasCtx = typeof catalogBackUrl !== 'undefined' && catalogBackUrl && catalogBackUrl !== '/catalog'; %>
+    <nav class="breadcrumbs" aria-label="Navegação">
+        <a href="/">Início</a> &gt; 
+        <a href="<%= catBack %>">Catálogo</a> &gt; 
         <%= product.name %>
     </nav>
+    <% if (hasCtx) { %>
+    <p class="product-back-catalog mb-3">
+        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #A8A8A8);">&larr; Voltar ao catálogo (filtros)</a>
+    </p>
+    <% } %>
     
     <div class="product-detail-grid">
         <!-- Left: Image Gallery -->
@@ -376,24 +383,22 @@
                     });
                 }
                 
-                // If no images, use placeholder
-                if (allImages.length === 0) {
-                    allImages.push('placeholder-image.png');
-                }
-                
-                const mainImage = allImages[0];
+                const hasGalleryImages = allImages.length > 0;
+                const placeholderImg = '/images/imagem-nao-disponivel.svg';
+                const mainMediaSrc = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
+                const mainLinkHref = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
             %>
             
             <div class="product-main-image">
-                <a href="/media/products/<%= mainImage %>" 
+                <a href="<%= mainLinkHref %>" 
                    class="glightbox product-image-link" 
                    data-glightbox="type: image; title: <%= product.name %>"
                    data-gallery="product-gallery">
-                    <img src="/media/products/<%= mainImage %>" 
+                    <img src="<%= mainMediaSrc %>" 
                          alt="<%= product.name %>" 
                          id="mainProductImage"
                          loading="eager"
-                         onerror="this.src='/images/placeholder-image.png'">
+                         onerror="this.onerror=null;this.src='<%= placeholderImg %>';">
                 </a>
             </div>
             
@@ -410,7 +415,7 @@
                         <img src="/media/products/<%= img %>" 
                              alt="<%= product.name %> - Imagem <%= index + 1 %>" 
                              loading="lazy"
-                             onerror="this.src='/images/placeholder-image.png'">
+                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
                     </a>
                 </div>
                 <% }); %>
@@ -505,7 +510,8 @@
         <div class="related-products-grid">
             <% relatedProducts.forEach(function(rp) { %>
             <a href="/catalog/product/<%= rp.slug || rp.id %>" class="related-product-card">
-                <img src="<%= rp.image_url ? '/media/products/' + rp.image_url : '/images/placeholder-image.png' %>" 
+                <img src="<%= rp.image_url ? '/media/products/' + rp.image_url : '/images/imagem-nao-disponivel.svg' %>" 
+                     onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';"
                      alt="<%= rp.name %> — joia artesanal prata 925" loading="lazy">
                 <div class="related-info">
                     <div class="related-name"><%= rp.name %></div>

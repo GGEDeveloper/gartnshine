@@ -111,6 +111,56 @@ class Product extends BaseModel {
   }
 
   /**
+   * Valor potencial se todo o stock atual for vendido ao preço de venda (Σ preço × stock).
+   */
+  static async getInventoryPotentialSummary() {
+    try {
+      const [rows] = await this.pool.query(`
+        SELECT
+          COALESCE(SUM(COALESCE(sale_price, 0) * COALESCE(current_stock, 0)), 0) AS potential_revenue,
+          COALESCE(SUM(COALESCE(current_stock, 0)), 0) AS total_units
+        FROM ${this.tableName}
+      `);
+      const r = rows[0];
+      return {
+        potentialRevenue: parseFloat(r.potential_revenue) || 0,
+        totalUnits: parseInt(r.total_units, 10) || 0
+      };
+    } catch (error) {
+      console.error('Error getting inventory potential summary:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Linhas para export (referência, nome, preço, stock, subtotal).
+   */
+  static async getInventoryExportRows() {
+    try {
+      const [rows] = await this.pool.query(`
+        SELECT
+          reference,
+          name,
+          COALESCE(sale_price, 0) AS sale_price,
+          COALESCE(current_stock, 0) AS stock,
+          COALESCE(sale_price, 0) * COALESCE(current_stock, 0) AS line_total
+        FROM ${this.tableName}
+        ORDER BY reference ASC
+      `);
+      return rows.map((row) => ({
+        reference: row.reference,
+        name: row.name,
+        sale_price: parseFloat(row.sale_price) || 0,
+        stock: parseInt(row.stock, 10) || 0,
+        line_total: parseFloat(row.line_total) || 0
+      }));
+    } catch (error) {
+      console.error('Error getting inventory export rows:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get active products visible in the catalog with pagination and image.
    */
   static async getActiveForCatalog(limit = 12, offset = 0, options = {}) {

@@ -25,6 +25,13 @@
         apiEndpoint: '/api/catalog/filter'
       });
 
+      if (window.__INITIAL_FACETS__ && window.catalogFilters) {
+        window.catalogFilters.updateFilterCounts({
+          families: window.__INITIAL_FACETS__.families || {}
+        });
+        window.catalogFilters.updateFacetCounts(window.__INITIAL_FACETS__);
+      }
+
       window.catalogLazyLoad = new CatalogLazyLoad({
         imageSelector: '.product-image.lazy-load',
         rootMargin: '50px'

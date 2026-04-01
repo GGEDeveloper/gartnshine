@@ -26,14 +26,19 @@ class CatalogSort {
       this.sortSelect.addEventListener('change', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (window.catalogFilters) {
+          window.catalogFilters.currentPage = 1;
+          window.catalogFilters.applyFilters();
+          return;
+        }
         this.sort(e.target.value);
       }, true);
     }
 
-    // Check URL params for sort
+    // URL sort já aplicado no servidor quando a página é renderizada; evita reordenar só a página atual
     const urlParams = new URLSearchParams(window.location.search);
     const sortParam = urlParams.get('sort');
-    if (sortParam && this.sortSelect) {
+    if (sortParam && this.sortSelect && !window.catalogFilters) {
       this.sortSelect.value = sortParam;
       this.sort(sortParam);
     }

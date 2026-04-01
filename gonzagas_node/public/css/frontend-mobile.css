@@ -388,14 +388,49 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   }
 
   .filter-option {
-    padding: 0.5rem 0;
+    padding: 0.25rem 0;
+  }
+
+  .family-tree-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .family-tree-toggle-spacer {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+
+  .family-tree-bulk-btn {
+    min-height: 44px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.7rem;
+  }
+
+  .family-tree-toolbar {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .filter-label {
     min-height: 44px;
     display: flex;
     align-items: center;
-    padding-left: 0.5rem;
+  }
+
+  .catalog-chips {
+    line-height: 1.5;
+  }
+
+  .catalog-chip-remove {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .btn-filter-apply, .btn-filter-clear {

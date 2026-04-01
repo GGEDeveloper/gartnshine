@@ -7,11 +7,13 @@ class CatalogFilters {
     this.container = options.container || document.getElementById('products-grid');
     this.form = options.form || document.getElementById('catalog-filters');
     this.resultsCount = options.resultsCount || document.querySelector('.results-count .count-number');
+    this.paginationWrap = document.getElementById('catalog-pagination-wrap');
     this.apiEndpoint = options.apiEndpoint || '/api/catalog/filter';
     this.debounceDelay = options.debounceDelay || 300;
     this.debounceTimer = null;
     this.isLoading = false;
-    
+    this.currentPage = 1;
+
     this.init();
   }
 
@@ -24,38 +26,63 @@ class CatalogFilters {
     // Prevent default form submission
     this.form.addEventListener('submit', (e) => {
       e.preventDefault();
+      this.currentPage = 1;
       this.applyFilters();
     });
 
-    // Auto-apply filters on change (with debounce)
-    const filterInputs = this.form.querySelectorAll('input[type="checkbox"], input[type="radio"]');
-    filterInputs.forEach(input => {
-      input.addEventListener('change', () => {
-        this.debouncedApply();
-      });
-    });
-
-    // Handle "All Families" checkbox
-    const allFamiliesCheckbox = document.getElementById('all-families');
-    if (allFamiliesCheckbox) {
-      allFamiliesCheckbox.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          const familyCheckboxes = this.form.querySelectorAll('.family-filter');
-          familyCheckboxes.forEach(cb => cb.checked = false);
+    this.form.addEventListener('change', e => {
+      const t = e.target;
+      if (!t) return;
+      this.currentPage = 1;
+      if (t.id === 'all-families') {
+        if (t.checked) {
+          this.form.querySelectorAll('.family-filter').forEach(cb => {
+            cb.checked = false;
+            cb.indeterminate = false;
+          });
         }
         this.debouncedApply();
+        return;
+      }
+      if (t.classList && t.classList.contains('family-filter')) {
+        const allFam = document.getElementById('all-families');
+        if (t.checked && allFam) allFam.checked = false;
+        this.applyFamilyTreeCascade(t);
+        this.debouncedApply();
+        return;
+      }
+      this.debouncedApply();
+    });
+
+    const perPageSelect = document.getElementById('catalog-per-page');
+    if (perPageSelect) {
+      perPageSelect.addEventListener('change', () => {
+        this.currentPage = 1;
+        this.applyFilters();
       });
     }
 
-    // Handle family checkboxes
-    const familyCheckboxes = this.form.querySelectorAll('.family-filter');
-    familyCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
-        if (allFamiliesCheckbox) {
-          allFamiliesCheckbox.checked = false;
-        }
+    this.form.querySelectorAll('.family-tree-toggle').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        this.toggleFamilyBranch(btn);
       });
     });
+
+    const expandAllBtn = document.getElementById('family-tree-expand-all');
+    const collapseAllBtn = document.getElementById('family-tree-collapse-all');
+    if (expandAllBtn) {
+      expandAllBtn.addEventListener('click', e => {
+        e.preventDefault();
+        this.setAllFamilyBranchesExpanded(true);
+      });
+    }
+    if (collapseAllBtn) {
+      collapseAllBtn.addEventListener('click', e => {
+        e.preventDefault();
+        this.setAllFamilyBranchesExpanded(false);
+      });
+    }
 
     // Clear filters button
     const clearBtn = this.form.querySelector('.btn-filter-clear');
@@ -65,6 +92,196 @@ class CatalogFilters {
         this.clearFilters();
       });
     }
+
+    this.bindChipRemoval();
+    this.syncAllFamilyIndeterminate();
+    this.refreshChips();
+  }
+
+  bindChipRemoval() {
+    const wrap = document.getElementById('catalog-chips');
+    if (!wrap || wrap.dataset.chipBound === '1') return;
+    wrap.dataset.chipBound = '1';
+    wrap.addEventListener('click', e => {
+      const btn = e.target.closest('.catalog-chip-remove');
+      if (!btn) return;
+      e.preventDefault();
+      const kind = btn.getAttribute('data-chip-kind');
+      if (kind === 'search') {
+        const si = this.form.querySelector('input[name="search"]');
+        if (si) si.value = '';
+      } else if (kind === 'price') {
+        const r = this.form.querySelector('#price-all');
+        if (r) r.checked = true;
+      } else if (kind === 'family') {
+        const id = btn.getAttribute('data-chip-id');
+        const cb = id && this.form.querySelector('#family-' + id);
+        if (cb) {
+          cb.checked = false;
+          this.applyFamilyTreeCascade(cb);
+        }
+        const checked = this.form.querySelectorAll('.family-filter:checked');
+        const allFam = document.getElementById('all-families');
+        if (allFam && checked.length === 0) allFam.checked = true;
+      } else if (kind === 'color') {
+        const v = btn.getAttribute('data-chip-value');
+        this.uncheckFacetByValue('.facet-color', v);
+      } else if (kind === 'material') {
+        const v = btn.getAttribute('data-chip-value');
+        this.uncheckFacetByValue('.facet-material', v);
+      } else if (kind === 'style') {
+        const v = btn.getAttribute('data-chip-value');
+        this.uncheckFacetByValue('.facet-style', v);
+      }
+      this.currentPage = 1;
+      this.applyFilters();
+    });
+  }
+
+  uncheckFacetByValue(selector, encodedValue) {
+    if (encodedValue == null || encodedValue === '') return;
+    let decoded;
+    try {
+      decoded = decodeURIComponent(encodedValue);
+    } catch (err) {
+      return;
+    }
+    this.form.querySelectorAll(selector).forEach(inp => {
+      if (inp.value === decoded) inp.checked = false;
+    });
+  }
+
+  getDirectChildByClass(parent, cls) {
+    if (!parent || !parent.children) return null;
+    for (let i = 0; i < parent.children.length; i++) {
+      const el = parent.children[i];
+      if (el.classList && el.classList.contains(cls)) return el;
+    }
+    return null;
+  }
+
+  getFamilyCheckboxFromTreeNode(nodeEl) {
+    const row = this.getDirectChildByClass(nodeEl, 'family-tree-row');
+    return row ? row.querySelector('input.family-filter') : null;
+  }
+
+  hasCheckedAncestorFamily(checkbox) {
+    let wrap = checkbox.closest('.family-tree-node');
+    if (!wrap) return false;
+    let parent = wrap.parentElement && wrap.parentElement.closest('.family-tree-node');
+    while (parent) {
+      const pcb = this.getFamilyCheckboxFromTreeNode(parent);
+      if (pcb && pcb.checked) return true;
+      parent = parent.parentElement && parent.parentElement.closest('.family-tree-node');
+    }
+    return false;
+  }
+
+  getTopLevelSelectedFamilyIds(ids) {
+    if (!ids || !ids.length) return [];
+    const out = [];
+    ids.forEach(rawId => {
+      const id = typeof rawId === 'number' ? rawId : parseInt(rawId, 10);
+      if (Number.isNaN(id)) return;
+      const cb = this.form.querySelector(`#family-${id}`);
+      if (!cb || !cb.checked) return;
+      if (!this.hasCheckedAncestorFamily(cb)) out.push(id);
+    });
+    return out;
+  }
+
+  toggleFamilyBranch(btn) {
+    const node = btn.closest('.family-tree-node');
+    if (!node) return;
+    const childWrap = this.getDirectChildByClass(node, 'family-tree-children');
+    if (!childWrap) return;
+    const expanded = btn.getAttribute('aria-expanded') !== 'false';
+    if (expanded) {
+      childWrap.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      btn.classList.add('is-collapsed');
+    } else {
+      childWrap.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      btn.classList.remove('is-collapsed');
+    }
+  }
+
+  setAllFamilyBranchesExpanded(expanded) {
+    const forest = this.form.querySelector('.filter-family-tree-forest');
+    if (!forest) return;
+    forest.querySelectorAll('.family-tree-children').forEach(wrap => {
+      wrap.hidden = !expanded;
+    });
+    forest.querySelectorAll('.family-tree-toggle').forEach(btn => {
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      btn.classList.toggle('is-collapsed', !expanded);
+    });
+  }
+
+  applyFamilyTreeCascade(checkbox) {
+    const node = checkbox.closest('.family-tree-node');
+    if (!node) return;
+    if (checkbox.checked) {
+      node.querySelectorAll('input.family-filter').forEach(cb => {
+        cb.checked = true;
+        cb.indeterminate = false;
+      });
+    } else {
+      const childWrap = this.getDirectChildByClass(node, 'family-tree-children');
+      if (childWrap) {
+        childWrap.querySelectorAll('input.family-filter').forEach(cb => {
+          cb.checked = false;
+          cb.indeterminate = false;
+        });
+      }
+    }
+    this.syncAllFamilyIndeterminate();
+  }
+
+  syncAllFamilyIndeterminate() {
+    const forest = this.form.querySelector('.filter-family-tree-forest');
+    if (!forest) return;
+    const roots = [...forest.children].filter(
+      el => el.classList && el.classList.contains('family-tree-node')
+    );
+    const walk = nodeEl => {
+      const childWrap = this.getDirectChildByClass(nodeEl, 'family-tree-children');
+      const childNodes = childWrap
+        ? [...childWrap.children].filter(
+            el => el.classList && el.classList.contains('family-tree-node')
+          )
+        : [];
+      childNodes.forEach(walk);
+      const parentCb = this.getFamilyCheckboxFromTreeNode(nodeEl);
+      if (!parentCb) return;
+      if (childNodes.length === 0) {
+        parentCb.indeterminate = false;
+        return;
+      }
+      let allChecked = true;
+      let noneChecked = true;
+      for (let i = 0; i < childNodes.length; i++) {
+        const cb = this.getFamilyCheckboxFromTreeNode(childNodes[i]);
+        if (!cb) continue;
+        if (cb.checked) noneChecked = false;
+        else if (cb.indeterminate) {
+          noneChecked = false;
+          allChecked = false;
+        } else allChecked = false;
+      }
+      if (allChecked) {
+        parentCb.checked = true;
+        parentCb.indeterminate = false;
+      } else if (noneChecked) {
+        parentCb.checked = false;
+        parentCb.indeterminate = false;
+      } else {
+        parentCb.checked = false;
+        parentCb.indeterminate = true;
+      }
+    };
+    roots.forEach(walk);
   }
 
   debouncedApply() {
@@ -75,12 +292,24 @@ class CatalogFilters {
   }
 
   getFilterData() {
-    const formData = new FormData(this.form);
     const data = {
       families: [],
       price_range: 'all',
-      search: ''
+      search: '',
+      sort: 'default',
+      per_page: '24',
+      page: this.currentPage || 1
     };
+
+    const sortSelect = document.getElementById('catalog-sort');
+    if (sortSelect) {
+      data.sort = sortSelect.value || 'default';
+    }
+
+    const perPageSelect = document.getElementById('catalog-per-page');
+    if (perPageSelect) {
+      data.per_page = perPageSelect.value || '24';
+    }
 
     // Get selected families
     const familyInputs = this.form.querySelectorAll('.family-filter:checked');
@@ -99,6 +328,19 @@ class CatalogFilters {
     if (searchInput) {
       data.search = searchInput.value.trim();
     }
+
+    data.colors = [];
+    this.form.querySelectorAll('.facet-color:checked').forEach(inp => {
+      if (inp.value) data.colors.push(inp.value);
+    });
+    data.materials = [];
+    this.form.querySelectorAll('.facet-material:checked').forEach(inp => {
+      if (inp.value) data.materials.push(inp.value);
+    });
+    data.styles = [];
+    this.form.querySelectorAll('.facet-style:checked').forEach(inp => {
+      if (inp.value) data.styles.push(inp.value);
+    });
 
     return data;
   }
@@ -122,6 +364,14 @@ class CatalogFilters {
       if (filterData.search) {
         queryParams.append('search', filterData.search);
       }
+      filterData.colors.forEach(c => queryParams.append('colors', c));
+      filterData.materials.forEach(m => queryParams.append('materials', m));
+      filterData.styles.forEach(s => queryParams.append('styles', s));
+      if (filterData.sort && filterData.sort !== 'default') {
+        queryParams.append('sort', filterData.sort);
+      }
+      queryParams.append('per_page', filterData.per_page);
+      queryParams.append('page', String(filterData.page));
 
       const url = `${this.apiEndpoint}?${queryParams.toString()}`;
       const response = await fetch(url, {
@@ -139,8 +389,10 @@ class CatalogFilters {
       const data = await response.json();
       
       // Update URL without reload
-      const newUrl = `/catalog${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+      const catalogParams = new URLSearchParams(queryParams.toString());
+      const newUrl = `/catalog${catalogParams.toString() ? '?' + catalogParams.toString() : ''}`;
       window.history.pushState({}, '', newUrl);
+      window.__CATALOG_RETURN_PATH__ = newUrl;
 
       // Update products grid
       this.updateProductsGrid(data.products);
@@ -152,6 +404,16 @@ class CatalogFilters {
       if (data.filterCounts) {
         this.updateFilterCounts(data.filterCounts);
       }
+      if (data.facets) {
+        this.updateFacetCounts(data.facets);
+      }
+      this.refreshChips();
+
+      this.renderPaginationNav({
+        page: data.page || 1,
+        total_pages: data.total_pages || 1,
+        per_page: data.per_page || 24
+      });
 
     } catch (error) {
       console.error('Error applying filters:', error);
@@ -163,8 +425,12 @@ class CatalogFilters {
   }
 
   clearFilters() {
+    this.currentPage = 1;
     // Reset form
-    this.form.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    this.form.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+      if (cb.classList && cb.classList.contains('family-filter')) cb.indeterminate = false;
+    });
     this.form.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
     
     // Check "All Families"
@@ -221,25 +487,50 @@ class CatalogFilters {
       if (window.catalogGrid) {
         window.catalogGrid.refresh();
       }
+      if (window.catalogSort && typeof window.catalogSort.refresh === 'function') {
+        window.catalogSort.refresh();
+      }
     }, 300);
   }
 
+  priceHtml(product) {
+    const hide =
+      typeof window.__CATALOG_SETTINGS__ !== 'undefined' &&
+      window.__CATALOG_SETTINGS__.hideCatalogPrices === true;
+    if (hide) {
+      return '<span class="text-muted fst-italic">Preço sob consulta</span>';
+    }
+    return (
+      product.formatted_sale_price ||
+      '<span class="text-muted fst-italic">Preço sob consulta</span>'
+    );
+  }
+
+  productDetailHref(product) {
+    const slugOrId = encodeURIComponent(product.slug || product.id);
+    const ret =
+      typeof window.__CATALOG_RETURN_PATH__ === 'string' && window.__CATALOG_RETURN_PATH__
+        ? window.__CATALOG_RETURN_PATH__
+        : '/catalog';
+    return `/catalog/product/${slugOrId}?return=${encodeURIComponent(ret)}`;
+  }
+
   generateProductHTML(product, index) {
-    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/placeholder-image.png';
-    const productLink = `/catalog/product/${product.id}`;
-    
+    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
+    const href = this.productDetailHref(product);
+
     return `
       <div class="product-item" data-product-id="${product.id}" data-aos="fade-up" data-aos-delay="${index * 50}">
         <div class="product-card">
           <div class="product-image-container">
-            <a href="/catalog/product/${product.id}" class="product-image-link">
+            <a href="${href}" class="product-image-link">
               <img src="${imageUrl}" 
                    alt="${this.escapeHtml(product.name)}" 
                    class="product-image lazy-loaded"
                    loading="lazy"
-                   onerror="this.src='/images/placeholder-image.png'">
+                   onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
               <div class="product-overlay">
-                <a href="/catalog/product/${product.id}" class="btn-quick-view">
+                <a href="${href}" class="btn-quick-view">
                   <i class="fas fa-eye"></i> Ver Detalhes
                 </a>
               </div>
@@ -252,12 +543,58 @@ class CatalogFilters {
             ${product.family_name ? `<p class="product-family"><small class="text-highlight">${this.escapeHtml(product.family_name)}</small></p>` : ''}
             <h3 class="product-title">${this.escapeHtml(product.name || 'Produto')}</h3>
             <p class="product-price">
-              ${product.formatted_sale_price || '<span class="text-muted fst-italic">Preço sob consulta</span>'}
+              ${this.priceHtml(product)}
             </p>
           </div>
         </div>
       </div>
     `;
+  }
+
+  renderPaginationNav({ page, total_pages }) {
+    if (!this.paginationWrap) return;
+    if (total_pages <= 1) {
+      this.paginationWrap.innerHTML = '';
+      return;
+    }
+
+    const start = Math.max(1, page - 2);
+    const end = Math.min(total_pages, page + 2);
+    const parts = ['<div class="catalog-pagination">'];
+
+    if (page > 1) {
+      parts.push(
+        `<button type="button" class="pagination-btn" data-catalog-page="${page - 1}" aria-label="Página anterior"><i class="fas fa-chevron-left"></i></button>`
+      );
+    }
+    for (let pi = start; pi <= end; pi++) {
+      if (pi === page) {
+        parts.push(`<span class="pagination-btn active" aria-current="page">${pi}</span>`);
+      } else {
+        parts.push(`<button type="button" class="pagination-btn" data-catalog-page="${pi}">${pi}</button>`);
+      }
+    }
+    if (page < total_pages) {
+      parts.push(
+        `<button type="button" class="pagination-btn" data-catalog-page="${page + 1}" aria-label="Página seguinte"><i class="fas fa-chevron-right"></i></button>`
+      );
+    }
+    parts.push('</div>');
+    parts.push(
+      `<p class="catalog-pagination-meta text-muted small mt-2 mb-0">Página ${page} de ${total_pages}</p>`
+    );
+    this.paginationWrap.innerHTML = parts.join('');
+
+    this.paginationWrap.querySelectorAll('[data-catalog-page]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = parseInt(btn.getAttribute('data-catalog-page'), 10);
+        if (!isNaN(p)) {
+          this.currentPage = p;
+          this.applyFilters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
   }
 
   updateResultsCount(count) {
@@ -271,20 +608,115 @@ class CatalogFilters {
   }
 
   updateFilterCounts(counts) {
-    // Update family filter counts if provided
     if (counts.families) {
       Object.keys(counts.families).forEach(familyId => {
         const label = document.querySelector(`label[for="family-${familyId}"]`);
         if (label) {
-          const countSpan = label.querySelector('.filter-count') || document.createElement('span');
-          countSpan.className = 'filter-count';
-          countSpan.textContent = ` (${counts.families[familyId]})`;
-          if (!label.querySelector('.filter-count')) {
+          let countSpan = label.querySelector('.filter-count');
+          if (!countSpan) {
+            countSpan = document.createElement('span');
+            countSpan.className = 'filter-count';
             label.appendChild(countSpan);
           }
+          countSpan.textContent = ` (${counts.families[familyId]})`;
         }
       });
     }
+  }
+
+  updateFacetCounts(facets) {
+    if (!facets) return;
+    const applyDim = (dim, className) => {
+      const map = facets[dim];
+      if (!map) return;
+      this.form.querySelectorAll(className).forEach(inp => {
+        const k = inp.getAttribute('data-facet-key');
+        if (!k) return;
+        const info = map[k];
+        const count = info && typeof info === 'object' ? info.count : info;
+        const label = this.form.querySelector(`label[for="${inp.id}"]`);
+        if (!label || count === undefined) return;
+        let countSpan = label.querySelector('.filter-count');
+        if (!countSpan) {
+          countSpan = document.createElement('span');
+          countSpan.className = 'filter-count';
+          label.appendChild(countSpan);
+        }
+        countSpan.textContent = ` (${count})`;
+      });
+    };
+    applyDim('colors', '.facet-color');
+    applyDim('materials', '.facet-material');
+    applyDim('styles', '.facet-style');
+  }
+
+  refreshChips() {
+    const wrap = document.getElementById('catalog-chips');
+    if (!wrap || !this.form) return;
+
+    const fd = this.getFilterData();
+    const names = typeof window.__CATALOG_FAMILY_NAMES__ === 'object' && window.__CATALOG_FAMILY_NAMES__
+      ? window.__CATALOG_FAMILY_NAMES__
+      : {};
+    const chips = [];
+
+    const chipEl = (textHtml, btnAttrs) =>
+      `<span class="catalog-chip"><span class="catalog-chip-text">${textHtml}</span><button type="button" class="catalog-chip-remove" aria-label="Remover filtro" ${btnAttrs}><i class="fas fa-times" aria-hidden="true"></i></button></span>`;
+
+    if (fd.search && fd.search.length >= 2) {
+      chips.push({
+        html: chipEl(`Pesquisa: ${this.escapeHtml(fd.search)}`, 'data-chip-kind="search"')
+      });
+    }
+    if (fd.price_range && fd.price_range !== 'all') {
+      const labels = { '0-50': '≤ €50', '50-100': '€50–€100', '100+': '≥ €100' };
+      chips.push({
+        html: chipEl(
+          `Preço: ${this.escapeHtml(labels[fd.price_range] || fd.price_range)}`,
+          'data-chip-kind="price"'
+        )
+      });
+    }
+    const familyChipIds = this.getTopLevelSelectedFamilyIds(fd.families);
+    familyChipIds.forEach(id => {
+      const nm = names[String(id)] || names[id] || `Família #${id}`;
+      chips.push({
+        html: chipEl(this.escapeHtml(nm), `data-chip-kind="family" data-chip-id="${String(id)}"`)
+      });
+    });
+    fd.colors.forEach(v =>
+      chips.push({
+        html: chipEl(
+          `Cor: ${this.escapeHtml(v)}`,
+          `data-chip-kind="color" data-chip-value="${encodeURIComponent(v)}"`
+        )
+      })
+    );
+    fd.materials.forEach(v =>
+      chips.push({
+        html: chipEl(
+          `Material: ${this.escapeHtml(v)}`,
+          `data-chip-kind="material" data-chip-value="${encodeURIComponent(v)}"`
+        )
+      })
+    );
+    fd.styles.forEach(v =>
+      chips.push({
+        html: chipEl(
+          `Estilo: ${this.escapeHtml(v)}`,
+          `data-chip-kind="style" data-chip-value="${encodeURIComponent(v)}"`
+        )
+      })
+    );
+
+    if (chips.length === 0) {
+      wrap.innerHTML = '';
+      wrap.classList.remove('has-chips');
+      return;
+    }
+    wrap.classList.add('has-chips');
+    wrap.innerHTML =
+      '<span class="catalog-chips-label">Filtros:</span> ' + chips.map(c => c.html).join(' ');
   }
 
   showLoading() {

@@ -24,6 +24,40 @@ const Checkpoint = require('../models/Checkpoint');
 
 console.log('--- routes/admin.js: All controllers, middleware, and models loaded ---');
 
+const XLSX = require('xlsx');
+
+/** Stats para o dashboard (produtos, famílias, stock, valor potencial de inventário). */
+async function loadDashboardStats() {
+  const [
+    totalProducts,
+    totalFamilies,
+    lowStockProducts,
+    outOfStockProducts,
+    recentProducts,
+    inventorySummary
+  ] = await Promise.all([
+    Product.count(),
+    ProductFamily.count(),
+    Product.countLowStock(),
+    Product.countOutOfStock(),
+    Product.getRecent(5),
+    Product.getInventoryPotentialSummary()
+  ]);
+  return {
+    products: totalProducts,
+    families: totalFamilies,
+    lowStock: lowStockProducts,
+    outOfStock: outOfStockProducts,
+    recentProducts,
+    recentTransactions: [],
+    orders: 0,
+    users: 0,
+    revenue: '0.00',
+    inventoryPotentialRevenue: inventorySummary.potentialRevenue,
+    inventoryTotalUnits: inventorySummary.totalUnits
+  };
+}
+
 // TEST ROUTE - Placed at the very beginning of route definitions
 router.get('/test-route', (req, res) => {
   console.log('--- routes/admin.js: /test-route HIT ---');
@@ -102,29 +136,11 @@ router.use('/settings', settingsAdminRouter);
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
   try {
-    const [totalProducts, totalFamilies, lowStockProducts, outOfStockProducts, recentProducts, recentTransactions] = await Promise.all([
-      Product.count(),
-      ProductFamily.count(),
-      Product.countLowStock(),
-      Product.countOutOfStock(),
-      Product.getRecent(5),
-      []
-    ]);
-
+    const stats = await loadDashboardStats();
     res.render('admin/dashboard', {
       title: 'Painel',
       user: req.session.user,
-      stats: {
-        products: totalProducts,
-        families: totalFamilies,
-        lowStock: lowStockProducts,
-        outOfStock: outOfStockProducts,
-        recentProducts,
-        recentTransactions,
-        orders: 0,
-        users: 0,
-        revenue: '0.00'
-      }
+      stats
     });
   } catch (error) {
     console.error('Error loading dashboard stats:', error);
@@ -132,7 +148,19 @@ router.get('/', adminSessionRequired, async (req, res) => {
     res.render('admin/dashboard', {
       title: 'Painel',
       user: req.session.user,
-      stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
+      stats: {
+        products: 'N/A',
+        families: 'N/A',
+        lowStock: 'N/A',
+        outOfStock: 'N/A',
+        orders: 'N/A',
+        users: 'N/A',
+        revenue: 'N/A',
+        recentProducts: [],
+        recentTransactions: [],
+        inventoryPotentialRevenue: null,
+        inventoryTotalUnits: null
+      },
       error_msg: req.flash('error_msg')
     });
   }
@@ -141,40 +169,67 @@ router.get('/', adminSessionRequired, async (req, res) => {
 // Alias for dashboard
 router.get('/dashboard', adminSessionRequired, async (req, res) => {
   try {
-    const [totalProducts, totalFamilies, lowStockProducts, outOfStockProducts, recentProducts, recentTransactions] = await Promise.all([
-      Product.count(),
-      ProductFamily.count(),
-      Product.countLowStock(),
-      Product.countOutOfStock(),
-      Product.getRecent(5),
-      []
-    ]);
-
+    const stats = await loadDashboardStats();
     res.render('admin/dashboard', {
       title: 'Painel',
       user: req.session.user,
-      stats: {
-        products: totalProducts,
-        families: totalFamilies,
-        lowStock: lowStockProducts,
-        outOfStock: outOfStockProducts,
-        recentProducts,
-        recentTransactions,
-        orders: 0,
-        users: 0,
-        revenue: '0.00'
-      }
+      stats
     });
   } catch (error) {
     console.error('Error loading dashboard stats:', error);
     req.flash('error_msg', 'Failed to load dashboard data.');
-    // Render with N/A on error to prevent breaking the page, and show flash message
     res.render('admin/dashboard', {
       title: 'Painel',
       user: req.session.user,
-      stats: { products: 'N/A', families: 'N/A', lowStock: 'N/A', orders: 'N/A', users: 'N/A', revenue: 'N/A' },
-      error_msg: req.flash('error_msg') 
+      stats: {
+        products: 'N/A',
+        families: 'N/A',
+        lowStock: 'N/A',
+        outOfStock: 'N/A',
+        orders: 'N/A',
+        users: 'N/A',
+        revenue: 'N/A',
+        recentProducts: [],
+        recentTransactions: [],
+        inventoryPotentialRevenue: null,
+        inventoryTotalUnits: null
+      },
+      error_msg: req.flash('error_msg')
     });
+  }
+});
+
+// Export Excel: produtos, preço venda, stock, subtotais
+router.get('/export/inventory-stock.xlsx', adminSessionRequired, async (req, res) => {
+  try {
+    const rows = await Product.getInventoryExportRows();
+    const sheetData = rows.map((r) => ({
+      'Referência': r.reference,
+      'Nome': r.name,
+      'Preço venda (€)': r.sale_price,
+      Stock: r.stock,
+      'Subtotal (€)': r.line_total
+    }));
+    const totalSum = rows.reduce((s, r) => s + r.line_total, 0);
+    sheetData.push({
+      'Referência': '',
+      'Nome': '',
+      'Preço venda (€)': '',
+      Stock: 'TOTAL',
+      'Subtotal (€)': totalSum
+    });
+    const ws = XLSX.utils.json_to_sheet(sheetData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventário');
+    const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    const filename = `inventario-stock-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(Buffer.from(buf));
+  } catch (error) {
+    console.error('Inventory XLSX export error:', error);
+    req.flash('error_msg', 'Erro ao gerar o ficheiro Excel.');
+    res.redirect('/admin/dashboard');
   }
 });
 

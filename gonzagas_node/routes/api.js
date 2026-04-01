@@ -3,6 +3,13 @@ const router = express.Router();
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const { isAuthenticated } = require('../middleware/auth');
+const {
+  parseSelectedFamilyIds,
+  parseMultiParam,
+  normalizeFacetKeys,
+  normalizePerPage
+} = require('../utils/catalogFilterUtils');
+const { runCatalogQuery } = require('../services/catalogQueryService');
 
 // Public API routes
 // Get featured products
@@ -72,7 +79,7 @@ router.get('/search', async (req, res) => {
       name: p.name,
       reference: p.reference,
       price_formatted: `€${parseFloat(p.sale_price || 0).toFixed(2)}`,
-      image_url: '/images/placeholder.jpg',
+      image_url: '/images/imagem-nao-disponivel.svg',
       url: `/catalog/product/${p.id}`,
       in_stock: p.current_stock > 0
     }));
@@ -117,92 +124,61 @@ router.get('/search/suggestions', async (req, res) => {
 // Filter products endpoint
 router.get('/catalog/filter', async (req, res) => {
   try {
-    const { families, price_range, search, page = 1, limit = 1000 } = req.query;
-    
-    const hideOutOfStock = res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock;
-    let products = await Product.getActiveForCatalog(parseInt(limit) * 3, 0, { hideOutOfStock: !!hideOutOfStock });
-    
-    // Parse and expand family IDs (include descendants when parent selected)
-    let selectedFamilyIds = [];
-    if (families && families !== 'all') {
-      selectedFamilyIds = Array.isArray(families)
-        ? families.map(id => parseInt(id)).filter(n => !isNaN(n))
-        : [parseInt(families)].filter(n => !isNaN(n));
-    }
-    if (selectedFamilyIds.length > 0) {
-      const flatFamilies = await ProductFamily.getAll();
-      const expandedIds = ProductFamily.getFamilyIdsWithDescendants(flatFamilies, selectedFamilyIds);
-      products = products.filter(p => expandedIds.includes(p.family_id));
-    }
-    
-    // Filter by price range
-    if (price_range && price_range !== 'all') {
-      const [min, max] = price_range.split('-').map(v => v.replace('+', ''));
-      const minPrice = parseFloat(min) || 0;
-      const maxPrice = max ? parseFloat(max) : Infinity;
-      
-      products = products.filter(product => {
-        const price = parseFloat(product.sale_price) || 0;
-        return price >= minPrice && price <= maxPrice;
-      });
-    }
-    
-    // Filter by search term
-    if (search && search.trim().length >= 2) {
-      const searchTerm = search.trim().toLowerCase();
-      products = products.filter(product => {
-        const name = (product.name || '').toLowerCase();
-        const reference = (product.reference || '').toLowerCase();
-        const familyName = (product.family_name || '').toLowerCase();
-        return name.includes(searchTerm) || 
-               reference.includes(searchTerm) || 
-               familyName.includes(searchTerm);
-      });
-    }
-    
-    // Format prices
-    products = products.map(product => ({
-      ...product,
-      formatted_sale_price: product.sale_price ? 
-        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
-        null,
-      formatted_purchase_price: product.purchase_price ?
-        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
-        null,
-      is_new: false, // Can be enhanced with date logic
-      on_sale: product.sale_price && product.purchase_price && 
-               parseFloat(product.sale_price) < parseFloat(product.purchase_price)
-    }));
-    
-    const allProducts = await Product.getActiveForCatalog(10000, 0, { hideOutOfStock: !!hideOutOfStock });
-    const filterCounts = {
-      families: {}
-    };
-    
-    // Count products per family
-    const allFamilies = await ProductFamily.getAll();
-    allFamilies.forEach(family => {
-      const count = allProducts.filter(p => p.family_id === family.id).length;
-      if (count > 0) {
-        filterCounts.families[family.id] = count;
-      }
+    const { families, price_range, search, sort: sortParam } = req.query;
+
+    const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
+    const flatFamilies = await ProductFamily.getAll();
+    const selectedFamilyIds = parseSelectedFamilyIds(families);
+    const expandedFamilyIds =
+      selectedFamilyIds.length > 0
+        ? ProductFamily.getFamilyIdsWithDescendants(flatFamilies, selectedFamilyIds)
+        : [];
+
+    const colorsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'colors'));
+    const materialsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'materials'));
+    const stylesNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'styles'));
+
+    const sortType =
+      sortParam && String(sortParam).trim() ? String(sortParam).trim() : 'default';
+    const perPage = normalizePerPage(req.query.per_page);
+
+    const result = await runCatalogQuery({
+      hideOutOfStock,
+      expandedFamilyIds,
+      price_range,
+      search,
+      colorsNormalized,
+      materialsNormalized,
+      stylesNormalized,
+      sortType,
+      page: req.query.page,
+      perPage
     });
-    
+
+    const filterCounts = { families: result.facets.families || {} };
+
     res.json({
       success: true,
-      products: products,
-      count: products.length,
-      filterCounts: filterCounts,
-      hasMore: products.length === parseInt(limit)
+      products: result.products,
+      count: result.count,
+      page: result.page,
+      per_page: result.perPage,
+      total_pages: result.total_pages,
+      filterCounts,
+      facets: result.facets,
+      hasMore: result.page < result.total_pages
     });
-    
   } catch (error) {
     console.error('Catalog filter API error:', error);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: 'Failed to filter products',
       products: [],
-      count: 0
+      count: 0,
+      page: 1,
+      per_page: 24,
+      total_pages: 1,
+      facets: { families: {}, colors: {}, materials: {}, styles: {} }
     });
   }
 });

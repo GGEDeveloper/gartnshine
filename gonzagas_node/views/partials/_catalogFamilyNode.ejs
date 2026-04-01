@@ -1,0 +1,32 @@
+<% 
+  var hasCh = node.children && node.children.length;
+  var checkedIds = typeof familyCheckboxCheckedIds !== 'undefined' && familyCheckboxCheckedIds ? familyCheckboxCheckedIds : [];
+  var childOpen = false;
+  var ffc = typeof initialFacets !== 'undefined' && initialFacets && initialFacets.families && initialFacets.families[node.id] != null
+    ? initialFacets.families[node.id] : null;
+%>
+<div class="family-tree-node" data-family-id="<%= node.id %>">
+  <div class="family-tree-row">
+    <% if (hasCh) { %>
+    <button type="button"
+            class="family-tree-toggle<%= childOpen ? '' : ' is-collapsed' %>"
+            aria-expanded="<%= childOpen ? 'true' : 'false' %>"
+            aria-controls="family-branch-<%= node.id %>"
+            id="family-toggle-<%= node.id %>"
+            title="Abrir ou fechar subcategorias"></button>
+    <% } else { %>
+    <span class="family-tree-toggle-spacer" aria-hidden="true"></span>
+    <% } %>
+    <input type="checkbox" id="family-<%= node.id %>" name="families" value="<%= node.id %>"
+           class="filter-checkbox family-filter"
+           <%= checkedIds.indexOf(node.id) >= 0 ? 'checked' : '' %>>
+    <label for="family-<%= node.id %>" class="filter-label family-tree-label"><%= node.name %><% if (ffc != null) { %> <span class="filter-count">(<%= ffc %>)</span><% } %></label>
+  </div>
+  <% if (hasCh) { %>
+  <div class="family-tree-children" id="family-branch-<%= node.id %>" role="group" aria-label="Subcategorias de <%= node.name %>"<%= childOpen ? '' : ' hidden' %>>
+    <% node.children.forEach(function (ch) { %>
+      <%- include('./_catalogFamilyNode', { node: ch, depth: (depth || 0) + 1, initialFacets: typeof initialFacets !== 'undefined' ? initialFacets : null, familyCheckboxCheckedIds: checkedIds }) %>
+    <% }); %>
+  </div>
+  <% } %>
+</div>

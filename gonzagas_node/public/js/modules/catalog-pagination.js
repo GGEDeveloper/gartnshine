@@ -178,7 +178,7 @@ class CatalogPagination {
   }
 
   generateProductHTML(product, index) {
-    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/placeholder-image.png';
+    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
     const productLink = `/catalog/product/${product.id}`;
     
     return `
@@ -192,7 +192,7 @@ class CatalogPagination {
                    loading="lazy"
                    data-src="${imageUrl}"
                    style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
-                   onerror="this.src='/images/placeholder-image.png'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
+                   onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
               <div class="product-overlay">
                 <a href="/catalog/product/${product.id}" class="btn-quick-view">
                   <i class="fas fa-eye"></i> Ver Detalhes

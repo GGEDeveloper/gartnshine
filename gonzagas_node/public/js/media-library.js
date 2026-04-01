@@ -266,7 +266,7 @@ class MediaLibrary {
                     <img src="${thumbUrl}" 
                          alt="${file.alt_text || filename}"
                          loading="lazy"
-                         onerror="this.src='/images/placeholder-image.png'">
+                         onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
                     
                     <!-- Selection Checkbox -->
                     <div class="media-checkbox" onclick="event.stopPropagation()">

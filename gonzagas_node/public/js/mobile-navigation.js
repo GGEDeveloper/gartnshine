@@ -332,7 +332,7 @@ class MobileNavigationV2 {
         container.innerHTML = products.map(product => `
             <a href="/catalog/product/${product.id}" class="featured-mini-item">
                 <div class="featured-mini-image">
-                    <img src="${product.main_image ? `/uploads/products/${product.main_image}` : '/images/placeholder.jpg'}" 
+                    <img src="${product.main_image ? `/uploads/products/${product.main_image}` : '/images/imagem-nao-disponivel.svg'}" 
                          alt="${product.name}" loading="lazy">
                 </div>
                 <div class="featured-mini-info">
@@ -382,7 +382,7 @@ class MobileNavigationV2 {
             container.innerHTML = results.map(product => `
                 <a href="/catalog/product/${product.id}" class="nav-search-item">
                     <div class="nav-search-image">
-                        <img src="${product.image_url || '/images/placeholder.jpg'}" 
+                        <img src="${product.image_url || '/images/imagem-nao-disponivel.svg'}" 
                              alt="${product.name}" loading="lazy">
                     </div>
                     <div class="nav-search-info">

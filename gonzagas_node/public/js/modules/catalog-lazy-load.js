@@ -115,7 +115,7 @@ class CatalogLazyLoad {
       console.warn('No image source found for image:', img);
       this.removeSkeleton(img);
       // Set placeholder
-      img.src = '/images/placeholder-image.png';
+      img.src = '/images/imagem-nao-disponivel.svg';
       img.style.opacity = '1';
       img.style.visibility = 'visible';
       img.style.display = 'block';
@@ -161,7 +161,7 @@ class CatalogLazyLoad {
 
     newImg.onerror = () => {
       console.error('Error loading image:', imageSrc);
-      img.src = '/images/placeholder-image.png';
+      img.src = '/images/imagem-nao-disponivel.svg';
       img.classList.add(this.loadedClass);
       this.removeSkeleton(img);
       img.style.opacity = '1';

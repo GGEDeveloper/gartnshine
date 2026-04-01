@@ -19,12 +19,11 @@ class CatalogSearch {
       return;
     }
 
-    // Check URL for search param
+    // URL com search: input já vem preenchido pelo servidor; com filtros AJAX, sincronizar uma vez
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    if (searchParam) {
+    if (searchParam && window.catalogFilters) {
       this.searchInput.value = searchParam;
-      this.performSearch(searchParam);
     }
 
     // Setup event listeners
@@ -56,13 +55,19 @@ class CatalogSearch {
   }
 
   performSearch(query) {
-    const searchTerm = query.trim().toLowerCase();
-    
-    if (searchTerm.length < this.minLength && searchTerm.length > 0) {
+    const raw = query.trim();
+    const searchTerm = raw.toLowerCase();
+
+    if (searchTerm.length > 0 && searchTerm.length < this.minLength) {
       return;
     }
 
-    // Update URL
+    if (window.catalogFilters) {
+      window.catalogFilters.currentPage = 1;
+      window.catalogFilters.applyFilters();
+      return;
+    }
+
     const url = new URL(window.location);
     if (searchTerm.length >= this.minLength) {
       url.searchParams.set('search', searchTerm);
@@ -71,7 +76,6 @@ class CatalogSearch {
     }
     window.history.pushState({}, '', url);
 
-    // Filter products
     if (searchTerm.length >= this.minLength) {
       this.filterProducts(searchTerm);
     } else {
@@ -157,6 +161,9 @@ class CatalogSearch {
 
   clearSearch() {
     this.searchInput.value = '';
+    if (window.catalogFilters) {
+      window.catalogFilters.currentPage = 1;
+    }
     this.performSearch('');
   }
 
