@@ -136,7 +136,7 @@ router.get('/catalog/filter', async (req, res) => {
 
     const colorsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'colors'));
     const materialsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'materials'));
-    const stylesNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'styles'));
+    const stylesNormalized = [];
 
     const sortType =
       sortParam && String(sortParam).trim() ? String(sortParam).trim() : 'default';

@@ -372,14 +372,37 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     min-height: 44px;
   }
 
-  /* Sidebar drawer - mobile */
+  /* Sidebar drawer - mobile: scroll só no conteúdo (árvore de famílias tocável) */
   .catalog-sidebar.filter-drawer {
     width: 100%;
     max-width: 100%;
     top: 0;
     height: 100vh;
+    max-height: 100vh;
+    padding: 0;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .catalog-sidebar.filter-drawer .sidebar-header {
+    flex-shrink: 0;
     padding: 1rem;
     padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .catalog-sidebar.filter-drawer .sidebar-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding: 1rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
   .sidebar-close {
@@ -396,6 +419,15 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     min-height: 44px;
     width: 44px;
     height: 44px;
+    touch-action: manipulation;
+  }
+
+  .family-tree-row {
+    align-items: center;
+  }
+
+  .family-tree-label {
+    touch-action: manipulation;
   }
 
   .family-tree-toggle-spacer {

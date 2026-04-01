@@ -23,7 +23,7 @@
     <label for="family-<%= node.id %>" class="filter-label family-tree-label"><%= node.name %><% if (ffc != null) { %> <span class="filter-count">(<%= ffc %>)</span><% } %></label>
   </div>
   <% if (hasCh) { %>
-  <div class="family-tree-children" id="family-branch-<%= node.id %>" role="group" aria-label="Subcategorias de <%= node.name %>"<%= childOpen ? '' : ' hidden' %>>
+  <div class="family-tree-children<%= childOpen ? '' : ' is-collapsed-branch' %>" id="family-branch-<%= node.id %>" role="group" aria-label="Subcategorias de <%= node.name %>"<%= childOpen ? '' : ' hidden' %>>
     <% node.children.forEach(function (ch) { %>
       <%- include('./_catalogFamilyNode', { node: ch, depth: (depth || 0) + 1, initialFacets: typeof initialFacets !== 'undefined' ? initialFacets : null, familyCheckboxCheckedIds: checkedIds }) %>
     <% }); %>

@@ -71,10 +71,9 @@
             </div>
           </div>
 
-          <% var fLabels = typeof facetOptionLabels !== 'undefined' && facetOptionLabels ? facetOptionLabels : { colors: [], materials: [], styles: [] }; %>
+          <% var fLabels = typeof facetOptionLabels !== 'undefined' && facetOptionLabels ? facetOptionLabels : { colors: [], materials: [] }; %>
           <% var selC = typeof selectedColors !== 'undefined' ? selectedColors : []; %>
           <% var selM = typeof selectedMaterials !== 'undefined' ? selectedMaterials : []; %>
-          <% var selS = typeof selectedStyles !== 'undefined' ? selectedStyles : []; %>
 
           <% if (fLabels.colors && fLabels.colors.length) { %>
           <div class="filter-section">
@@ -110,26 +109,6 @@
                     class="filter-checkbox facet-material" data-facet-key="<%= fk %>"
                     <%= selM.some(function(c) { return String(c).trim().toLowerCase() === fk; }) ? 'checked' : '' %>>
                   <label for="mat-<%= fk.replace(/[^a-z0-9]+/gi, '-') %>" class="filter-label"><%= lab %><% if (mCnt != null) { %><span class="filter-count"> (<%= mCnt %>)</span><% } %></label>
-                </div>
-              <% }); %>
-            </div>
-          </div>
-          <% } %>
-
-          <% if (fLabels.styles && fLabels.styles.length) { %>
-          <div class="filter-section">
-            <h4 class="filter-title">Estilo</h4>
-            <div class="filter-options">
-              <% fLabels.styles.forEach(function(lab) { 
-                   var fk = helpers.facetKey(lab);
-                   var sInf = typeof initialFacets !== 'undefined' && initialFacets && initialFacets.styles && initialFacets.styles[fk];
-                   var sCnt = sInf && typeof sInf === 'object' ? sInf.count : null;
-              %>
-                <div class="filter-option">
-                  <input type="checkbox" id="style-<%= fk.replace(/[^a-z0-9]+/gi, '-') %>" name="styles" value="<%= lab %>"
-                    class="filter-checkbox facet-style" data-facet-key="<%= fk %>"
-                    <%= selS.some(function(c) { return String(c).trim().toLowerCase() === fk; }) ? 'checked' : '' %>>
-                  <label for="style-<%= fk.replace(/[^a-z0-9]+/gi, '-') %>" class="filter-label"><%= lab %><% if (sCnt != null) { %><span class="filter-count"> (<%= sCnt %>)</span><% } %></label>
                 </div>
               <% }); %>
             </div>
@@ -212,7 +191,6 @@
           }
           appendMulti(pairs, 'colors', qp.colors);
           appendMulti(pairs, 'materials', qp.materials);
-          appendMulti(pairs, 'styles', qp.styles);
           return '/catalog?' + pairs.join('&');
         }
       %>

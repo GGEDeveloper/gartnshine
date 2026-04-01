@@ -10,8 +10,7 @@ const CATALOG_QUERY_KEYS = [
   'page',
   'per_page',
   'colors',
-  'materials',
-  'styles'
+  'materials'
 ];
 
 function serializeCatalogQuery(query) {

@@ -27,10 +27,9 @@ class CatalogController {
           familiesTree: [],
           familyCheckboxCheckedIds: [],
           products: [],
-          facetOptionLabels: { colors: [], materials: [], styles: [] },
+          facetOptionLabels: { colors: [], materials: [] },
           selectedColors: [],
           selectedMaterials: [],
-          selectedStyles: [],
           catalogReturnPath: '/catalog',
           catalogPagination: null,
           initialFacets: null,
@@ -52,7 +51,7 @@ class CatalogController {
 
       const colorsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'colors'));
       const materialsNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'materials'));
-      const stylesNormalized = normalizeFacetKeys(parseMultiParam(req.query, 'styles'));
+      const stylesNormalized = [];
 
       const sortType =
         req.query.sort && String(req.query.sort).trim() ? String(req.query.sort).trim() : 'default';
@@ -70,6 +69,8 @@ class CatalogController {
         page: req.query.page,
         perPage
       });
+
+      if (result.facets) result.facets.styles = {};
 
       const productCounts = await familyProductCounts(hideOutOfStock);
       const familiesWithProducts = flatFamilies.filter(f => {
@@ -93,6 +94,7 @@ class CatalogController {
         selectedFamilyIds.length > 0 ? expandedFamilyIds : [];
 
       const facetOptionLabels = await listFacetOptionLabels(hideOutOfStock);
+      if (facetOptionLabels) facetOptionLabels.styles = [];
 
       const familyNameById = {};
       flatFamilies.forEach(f => {
@@ -101,7 +103,6 @@ class CatalogController {
 
       const selectedColors = parseMultiParam(req.query, 'colors');
       const selectedMaterials = parseMultiParam(req.query, 'materials');
-      const selectedStyles = parseMultiParam(req.query, 'styles');
 
       res.render('public/catalog', {
         title: 'Catálogo',
@@ -114,7 +115,6 @@ class CatalogController {
         selectedFamilyIds,
         selectedColors,
         selectedMaterials,
-        selectedStyles,
         queryParams: req.query,
         catalogPagination: {
           page: result.page,

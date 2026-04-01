@@ -65,6 +65,7 @@ class CatalogFilters {
     this.form.querySelectorAll('.family-tree-toggle').forEach(btn => {
       btn.addEventListener('click', e => {
         e.preventDefault();
+        e.stopPropagation();
         this.toggleFamilyBranch(btn);
       });
     });
@@ -74,12 +75,14 @@ class CatalogFilters {
     if (expandAllBtn) {
       expandAllBtn.addEventListener('click', e => {
         e.preventDefault();
+        e.stopPropagation();
         this.setAllFamilyBranchesExpanded(true);
       });
     }
     if (collapseAllBtn) {
       collapseAllBtn.addEventListener('click', e => {
         e.preventDefault();
+        e.stopPropagation();
         this.setAllFamilyBranchesExpanded(false);
       });
     }
@@ -129,9 +132,6 @@ class CatalogFilters {
       } else if (kind === 'material') {
         const v = btn.getAttribute('data-chip-value');
         this.uncheckFacetByValue('.facet-material', v);
-      } else if (kind === 'style') {
-        const v = btn.getAttribute('data-chip-value');
-        this.uncheckFacetByValue('.facet-style', v);
       }
       this.currentPage = 1;
       this.applyFilters();
@@ -190,32 +190,43 @@ class CatalogFilters {
     return out;
   }
 
+  setFamilyBranchExpanded(childWrap, btn, open) {
+    if (!childWrap) return;
+    if (open) {
+      childWrap.hidden = false;
+      childWrap.classList.remove('is-collapsed-branch');
+    } else {
+      childWrap.hidden = true;
+      childWrap.classList.add('is-collapsed-branch');
+    }
+    if (btn) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.classList.toggle('is-collapsed', !open);
+    }
+  }
+
   toggleFamilyBranch(btn) {
+    const now = Date.now();
+    const last = parseInt(btn.getAttribute('data-toggle-ts') || '0', 10);
+    if (now - last < 320) return;
+    btn.setAttribute('data-toggle-ts', String(now));
+
     const node = btn.closest('.family-tree-node');
     if (!node) return;
     const childWrap = this.getDirectChildByClass(node, 'family-tree-children');
     if (!childWrap) return;
-    const expanded = btn.getAttribute('aria-expanded') !== 'false';
-    if (expanded) {
-      childWrap.hidden = true;
-      btn.setAttribute('aria-expanded', 'false');
-      btn.classList.add('is-collapsed');
-    } else {
-      childWrap.hidden = false;
-      btn.setAttribute('aria-expanded', 'true');
-      btn.classList.remove('is-collapsed');
-    }
+    const isOpen = btn.getAttribute('aria-expanded') !== 'false';
+    this.setFamilyBranchExpanded(childWrap, btn, !isOpen);
   }
 
   setAllFamilyBranchesExpanded(expanded) {
     const forest = this.form.querySelector('.filter-family-tree-forest');
     if (!forest) return;
-    forest.querySelectorAll('.family-tree-children').forEach(wrap => {
-      wrap.hidden = !expanded;
-    });
-    forest.querySelectorAll('.family-tree-toggle').forEach(btn => {
-      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      btn.classList.toggle('is-collapsed', !expanded);
+    forest.querySelectorAll('.family-tree-children').forEach(childWrap => {
+      const node = childWrap.closest('.family-tree-node');
+      const row = node && this.getDirectChildByClass(node, 'family-tree-row');
+      const toggleBtn = row && row.querySelector('.family-tree-toggle');
+      this.setFamilyBranchExpanded(childWrap, toggleBtn, expanded);
     });
   }
 
@@ -337,10 +348,6 @@ class CatalogFilters {
     this.form.querySelectorAll('.facet-material:checked').forEach(inp => {
       if (inp.value) data.materials.push(inp.value);
     });
-    data.styles = [];
-    this.form.querySelectorAll('.facet-style:checked').forEach(inp => {
-      if (inp.value) data.styles.push(inp.value);
-    });
 
     return data;
   }
@@ -366,7 +373,6 @@ class CatalogFilters {
       }
       filterData.colors.forEach(c => queryParams.append('colors', c));
       filterData.materials.forEach(m => queryParams.append('materials', m));
-      filterData.styles.forEach(s => queryParams.append('styles', s));
       if (filterData.sort && filterData.sort !== 'default') {
         queryParams.append('sort', filterData.sort);
       }
@@ -647,7 +653,6 @@ class CatalogFilters {
     };
     applyDim('colors', '.facet-color');
     applyDim('materials', '.facet-material');
-    applyDim('styles', '.facet-style');
   }
 
   refreshChips() {
@@ -697,14 +702,6 @@ class CatalogFilters {
         html: chipEl(
           `Material: ${this.escapeHtml(v)}`,
           `data-chip-kind="material" data-chip-value="${encodeURIComponent(v)}"`
-        )
-      })
-    );
-    fd.styles.forEach(v =>
-      chips.push({
-        html: chipEl(
-          `Estilo: ${this.escapeHtml(v)}`,
-          `data-chip-kind="style" data-chip-value="${encodeURIComponent(v)}"`
         )
       })
     );
