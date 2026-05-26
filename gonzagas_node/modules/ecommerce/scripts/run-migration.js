@@ -6,7 +6,11 @@ const { pool } = require('../../../config/database');
 
 async function run() {
   const migrationsDir = path.join(__dirname, '../sql/migrations');
-  const files = ['006_ecommerce_unified.sql', '007_ecommerce_alter_existing.sql'];
+  const files = [
+    '006_ecommerce_unified.sql',
+    '007_ecommerce_alter_existing.sql',
+    '008_ecommerce_alter_customers.sql',
+  ];
 
   for (const file of files) {
     const sqlPath = path.join(migrationsDir, file);

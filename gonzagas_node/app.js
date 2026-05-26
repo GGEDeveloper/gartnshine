@@ -501,6 +501,11 @@ const server = app.listen(app.get('port'), () => {
 });
 */
 
+// Módulos e-commerce e pagamentos — ANTES dos routers principais para que
+// res.locals.ecommerceEnabled chegue ao catálogo e restantes views públicas
+const { initializeModules } = require('./config/modules');
+initializeModules(app);
+
 // Routers principais - registrados apenas uma vez, fora de qualquer função
 const staticRouter = require('./routes/static');
 app.use(staticRouter);
@@ -514,10 +519,6 @@ const userRightsRouter = require('./routes/user-rights');
 app.use(userRightsRouter);
 const seoRouter = require('./routes/seo');
 app.use(seoRouter);
-
-// Módulos e-commerce e pagamentos (registados em config/modules.js)
-const { initializeModules } = require('./config/modules');
-initializeModules(app);
 
 // API — módulo Instagram (rotas específicas antes do router /api genérico)
 const instagramModule = require('./modules/instagram');

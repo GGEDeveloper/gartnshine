@@ -285,3 +285,85 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+
+/* ─── MOBILE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ecommerce-checkout-page { padding: 1.5rem 0 2.5rem; }
+
+  .ecommerce-checkout-page h1 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+
+  .ecommerce-checkout-page h2 {
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* iOS zoom prevention — inputs min 16px */
+  .ecommerce-checkout-page .form-control,
+  .ecommerce-checkout-page .form-select,
+  .ecommerce-checkout-page textarea.form-control {
+    font-size: 16px !important;
+    min-height: 48px;
+  }
+
+  .ecommerce-checkout-page textarea.form-control { min-height: 80px; }
+
+  /* Summary full width on mobile */
+  .ecommerce-checkout-page .checkout-summary {
+    padding: 1.1rem 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Submit button always full width */
+  .ecommerce-checkout-page .btn-primary,
+  #checkout-submit {
+    width: 100% !important;
+    padding: 0.95rem 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* Shipping methods easier to tap */
+  .ecommerce-checkout-page .form-check {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+  .ecommerce-checkout-page .form-check:last-child { border-bottom: none; }
+  .ecommerce-checkout-page .form-check-input { width: 20px; height: 20px; margin-top: 0; }
+  .ecommerce-checkout-page .form-check-label { padding-left: 0.5rem; font-size: 0.95rem; }
+
+  /* Success / Cancel full-screen friendly */
+  .ecommerce-success-page,
+  .ecommerce-cancel-page {
+    padding: 3rem 1.25rem 3rem;
+    min-height: 50vh;
+  }
+
+  .ecommerce-success-page h1,
+  .ecommerce-cancel-page h1 {
+    font-size: 1.55rem;
+    letter-spacing: 0.1em;
+  }
+
+  .ecommerce-success-page .btn-outline-light,
+  .ecommerce-cancel-page .btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 0.9rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ecommerce-checkout-page h1 { font-size: 1.3rem; }
+  .ecommerce-success-page h1, .ecommerce-cancel-page h1 { font-size: 1.35rem; }
+}
+
+/* ─── Account pages mobile ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .ecommerce-account-wrap { padding: 2rem 0 3rem; }
+  .ecommerce-account-wrap h1 { font-size: 1.5rem; letter-spacing: 0.1em; }
+  .ecommerce-account-wrap .btn { min-height: 48px; font-size: 16px; }
+  .account-orders-page h1 { font-size: 1.5rem; }
+  .account-orders-page .table thead th { font-size: 0.72rem; padding: 0.65rem 0.75rem; }
+  .account-orders-page .table tbody td { padding: 0.65rem 0.75rem; font-size: 0.85rem; }
+}

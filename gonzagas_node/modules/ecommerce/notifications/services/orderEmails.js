@@ -2,10 +2,19 @@ const events = require('../../events');
 const EcommerceSettings = require('../../settings/models/EcommerceSettings');
 
 function registerListeners() {
+  events.on('order.created', async (order) => {
+    console.log(`[ecommerce] Order created: ${order.order_number} (€${order.total_amount})`);
+    try {
+      await sendAdminNotification(order, 'Novo pedido');
+    } catch (err) {
+      console.warn('[ecommerce] Order created notification failed:', err.message);
+    }
+  });
+
   events.on('order.paid', async (order) => {
     console.log(`[ecommerce] Order paid: ${order.order_number}`);
     try {
-      await sendAdminNotification(order);
+      await sendAdminNotification(order, 'Pagamento confirmado');
     } catch (err) {
       console.warn('[ecommerce] Admin notification failed:', err.message);
     }
@@ -16,7 +25,7 @@ function registerListeners() {
   });
 }
 
-async function sendAdminNotification(order) {
+async function sendAdminNotification(order, subjectPrefix = 'Novo pedido pago') {
   const email = await EcommerceSettings.get('order_notification_email');
   if (!email) return;
   try {
@@ -34,8 +43,8 @@ async function sendAdminNotification(order) {
     await transporter.sendMail({
       from: process.env.SMTP_FROM || email,
       to: email,
-      subject: `Novo pedido ${order.order_number}`,
-      text: `Novo pedido pago: ${order.order_number}\nTotal: €${order.total_amount}\nCliente: ${order.customer_name} (${order.customer_email})`,
+      subject: `${subjectPrefix} ${order.order_number}`,
+      text: `Pedido: ${order.order_number}\nTotal: €${order.total_amount}\nCliente: ${order.customer_name} (${order.customer_email})\nEstado pagamento: ${order.payment_status}`,
     });
   } catch (err) {
     console.warn('[orderEmails]', err.message);

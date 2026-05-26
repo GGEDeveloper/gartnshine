@@ -20,14 +20,14 @@
           <tbody id="cart-items-body">
             <% cart.items.forEach(function(item) { %>
               <tr data-product-id="<%= item.productId %>">
-                <td><%= item.name %></td>
-                <td>€<%= item.unitPrice.toFixed(2) %></td>
-                <td>
+                <td data-label="Produto"><%= item.name %></td>
+                <td data-label="Preço unit.">€<%= item.unitPrice.toFixed(2) %></td>
+                <td data-label="Quantidade">
                   <input type="number" min="1" max="<%= item.maxStock %>" value="<%= item.quantity %>"
                          class="form-control form-control-sm cart-qty-input" style="max-width:80px">
                 </td>
-                <td>€<%= item.totalPrice.toFixed(2) %></td>
-                <td>
+                <td data-label="Total">€<%= item.totalPrice.toFixed(2) %></td>
+                <td data-label="">
                   <button type="button" class="btn btn-sm btn-outline-danger cart-remove-btn">Remover</button>
                 </td>
               </tr>

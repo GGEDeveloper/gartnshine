@@ -11,6 +11,7 @@
     "db:reset": "node scripts/init-db.js",
     "db:migrate": "node scripts/run-migrations.js",
     "db:ecommerce": "node modules/ecommerce/scripts/run-migration.js",
+    "test:ecommerce": "node scripts/dev-ecommerce-validate.js",
     "db:test": "node -e 'require(\"./config/database\").testConnection().then(console.log).catch(console.error)'",
     "db:create-cookie-table": "node scripts/create-cookie-table.js",
     "db:create-user-rights-table": "node scripts/create-user-rights-table.js",

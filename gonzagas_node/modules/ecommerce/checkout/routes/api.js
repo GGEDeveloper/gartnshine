@@ -25,6 +25,7 @@ router.post('/submit', async (req, res) => {
   try {
     const sessionId = cartService.ensureSessionId(req, res);
     const order = await checkoutService.submitCheckout(sessionId, req.body);
+    await cartService.clearSession(sessionId);
     const paymentConfig = await EcommerceSettings.getPaymentConfig();
 
     let payment = { mode: paymentConfig.mode, redirectUrl: null };
