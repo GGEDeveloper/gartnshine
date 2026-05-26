@@ -93,6 +93,27 @@ Armazena os usuários do sistema.
 | created_at | TIMESTAMP | Data de criação |
 | updated_at | TIMESTAMP | Data de atualização |
 
+## E-commerce (loja online)
+
+Schema em **`modules/ecommerce/sql/migrations/`** (006 + 007 + 008). Não usar `database/migrations/sales/` (UUID deprecated).
+
+| Tabela | Descrição |
+|--------|-----------|
+| `ecommerce_settings` | IVA, Stripe, portes, `ecommerce_enabled` |
+| `cart_sessions` | Carrinhos guest |
+| `orders` / `order_items` | Pedidos e linhas |
+| `order_status_history` | Histórico de estados |
+| `payments` | Pagamentos (Stripe) |
+| `customers` | Contas cliente (opcional; migração 008 alarga tabela existente) |
+| `shipping_methods` | Métodos de envio |
+
+```bash
+npm run db:ecommerce    # aplicar migrações e-commerce
+npm run test:ecommerce  # validar fluxo (servidor activo)
+```
+
+Ver `modules/ecommerce/README.md` e `database/README.md`.
+
 ## Scripts de Banco de Dados
 
 ### Inicialização do Banco

@@ -65,7 +65,7 @@
 
 #### **Base de dados**
 - Schema unificado INT em `modules/ecommerce/sql/migrations/006_ecommerce_unified.sql`
-- Migração de upgrade para instalações existentes: `007_ecommerce_alter_existing.sql`
+- Migração de upgrade para instalações existentes: `007_ecommerce_alter_existing.sql`, `008_ecommerce_alter_customers.sql`
 - Comando: `npm run db:ecommerce`
 - Schema UUID em `database/migrations/sales/` marcado como **deprecated**
 
@@ -95,9 +95,14 @@
 - Conta cliente: registo + histórico pedidos
 - Admin: login, lista/detalhe pedidos, settings e-commerce
 - Catálogo: botão add-to-cart visível com loja activa
+
+#### **Pendente antes de go-live**
 - Teste Stripe em modo `test` + webhook
-- Emails SMTP de confirmação
-- Executar `npm run db:ecommerce` em produção/staging
+- Emails SMTP de confirmação (requer `SMTP_HOST`)
+- Executar `npm run db:ecommerce` em produção/staging após deploy
+
+#### **Documentação deploy/DB (2026-05-26)**
+- `DATABASE.md`, `PRODUCTION_SETUP.md`, `DEPLOYMENT.md`, `docs/MODULAR_ARCHITECTURE.md`
 
 #### **Correcção de migração**
 - Script `run-migration.js` ignora comentários SQL por linha (evita saltar o primeiro `ALTER` em 007)

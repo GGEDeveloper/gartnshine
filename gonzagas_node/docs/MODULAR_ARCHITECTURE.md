@@ -4,6 +4,20 @@
 
 Este documento descreve a arquitetura modular implementada no sistema Gonzaga's Art & Shine, desenvolvida para melhorar a manutenibilidade, escalabilidade e organização do código frontend.
 
+### Módulos backend (Node.js)
+
+Além do JS frontend em `public/js/modules/`, o servidor usa módulos em `gonzagas_node/modules/`:
+
+| Módulo | Path | Função |
+|--------|------|--------|
+| **ecommerce** | `modules/ecommerce/` | Carrinho, checkout, pedidos, settings, admin |
+| **payments** | `modules/payments/` | Stripe (`disabled` / `test` / `live`) |
+| **products**, **inventory**, … | `modules/*/` | Catálogo e stock |
+
+Registo: `config/modules.js` → `initializeModules(app)` em `app.js` (**antes** dos routers principais, para `ecommerceEnabled` chegar ao catálogo).
+
+Documentação: `modules/ecommerce/README.md` · Migração: `npm run db:ecommerce` · Testes: `npm run test:ecommerce`
+
 ## 🎯 **Objetivos da Arquitetura**
 
 1. **Modularidade**: Código organizado em módulos independentes
