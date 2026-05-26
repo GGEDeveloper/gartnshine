@@ -630,22 +630,58 @@ body.showcase-theme .catalog-search-input:focus {
   box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1) !important;
 }
 
-/* ——— Product cards — grid ——— */
+/* ——— Product cards — grid (alta especificidade vs catalog-enhanced + dark-luxe) ——— */
+
+/* Card shell — vence catalog-enhanced .products-grid:not(.list-view) .product-card */
+body.showcase-theme .products-grid:not(.list-view) .product-card,
+body.showcase-theme .catalog-grid:not(.list-view) .product-card,
+body.showcase-theme .products-grid .product-card,
+body.showcase-theme .catalog-grid .product-card,
+body.showcase-theme .product-item .product-card,
 body.showcase-theme .product-card {
-  background: rgba(12, 12, 12, 0.85) !important;
+  background: rgba(12, 12, 12, 0.88) !important;
   border: 1px solid var(--igp-border) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 12px !important;
+  max-width: none !important;
+  width: 100% !important;
+  overflow: hidden !important;
 }
 
+body.showcase-theme .products-grid:not(.list-view) .product-card:hover,
+body.showcase-theme .catalog-grid:not(.list-view) .product-card:hover,
+body.showcase-theme .products-grid .product-card:hover,
+body.showcase-theme .catalog-grid .product-card:hover,
+body.showcase-theme .product-item .product-card:hover,
 body.showcase-theme .product-card:hover {
   border-color: rgba(201, 168, 76, 0.45) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 16px rgba(201, 168, 76, 0.08) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 16px rgba(201, 168, 76, 0.1) !important;
   transform: translateY(-4px) !important;
 }
 
-/* Container de imagem */
+/* Info — vence dark-luxe .products-grid .product-info { background: rgba(6,10,15) } */
+body.showcase-theme .products-grid .product-info,
+body.showcase-theme .catalog-grid .product-info,
+body.showcase-theme .product-item .product-info,
+body.showcase-theme .product-card .product-info {
+  background: transparent !important;
+  padding: 0.85rem 0.75rem 1rem !important;
+  text-align: left !important;
+}
+
+/* Imagem — catálogo (container) + coleção/home ( .product-image ) */
 body.showcase-theme .product-image-container {
   background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08) !important;
+}
+
+body.showcase-theme .product-card .product-image {
+  background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08) !important;
+}
+
+body.showcase-theme .product-card .product-image img {
+  object-fit: cover !important;
 }
 
 /* Overlay "Ver Detalhes" */
@@ -667,43 +703,86 @@ body.showcase-theme .btn-quick-view:hover {
 }
 
 /* Badges */
+body.showcase-theme .product-badge.badge-new,
 body.showcase-theme .badge-new {
   background: var(--igp-gold) !important;
   color: #0a0a0a !important;
 }
 
+body.showcase-theme .product-badge.badge-sale,
 body.showcase-theme .badge-sale {
   background: rgba(201, 168, 76, 0.18) !important;
   color: var(--igp-gold) !important;
   border: 1px solid var(--igp-border) !important;
 }
 
-/* Info do card */
-body.showcase-theme .product-reference {
+/* Tipografia do card — vence dark-luxe .product-reference/.product-price { color: muted } */
+body.showcase-theme .products-grid .product-reference,
+body.showcase-theme .catalog-grid .product-reference,
+body.showcase-theme .product-card .product-reference {
   color: var(--igp-muted) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
 }
 
+body.showcase-theme .text-highlight,
 body.showcase-theme .product-family .text-highlight,
 body.showcase-theme .product-family small {
   color: var(--igp-gold) !important;
 }
 
-body.showcase-theme .product-title {
+body.showcase-theme .products-grid .product-family,
+body.showcase-theme .catalog-grid .product-family,
+body.showcase-theme .product-card .product-family {
+  color: var(--igp-gold) !important;
+  margin-bottom: 0.35rem !important;
+}
+
+body.showcase-theme .products-grid .product-title,
+body.showcase-theme .catalog-grid .product-title,
+body.showcase-theme .product-card .product-title,
+body.showcase-theme .product-card .product-info h3 {
   font-family: Georgia, 'Times New Roman', Times, serif !important;
   font-weight: 400 !important;
-  letter-spacing: 0.03em !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.35 !important;
   color: var(--igp-cream) !important;
 }
 
-body.showcase-theme .product-price {
+body.showcase-theme .products-grid .product-price,
+body.showcase-theme .catalog-grid .product-price,
+body.showcase-theme .product-card .product-price {
   color: var(--igp-gold) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+
+body.showcase-theme .product-price .sale-price,
+body.showcase-theme .sale-price {
+  color: var(--igp-gold) !important;
+  font-weight: 600 !important;
+}
+
+body.showcase-theme .product-price .original-price,
+body.showcase-theme .original-price {
+  color: var(--igp-muted) !important;
+  opacity: 0.7 !important;
 }
 
 body.showcase-theme .product-price .text-muted,
 body.showcase-theme .product-price .fst-italic {
   color: var(--igp-muted) !important;
   font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+/* Botão add-to-cart dentro do card */
+body.showcase-theme .product-card .btn-add-to-cart {
+  margin-top: 0.65rem !important;
 }
 
 /* Sem resultados */
