@@ -140,16 +140,58 @@ curl -s http://localhost:3000/ | grep 'brand-showcase'
 
 ---
 
-## 📱 Responsividade
+## 📱 Responsividade (mobile-first)
+
+### Ficheiros principais
+| Ficheiro | Cobertura mobile |
+|----------|------------------|
+| `frontend-mobile.css` | Base mobile: header, hero, catálogo (2-col grid), featured carousel, footer, product detail, safe-area |
+| `brand-showcase.css` | Overrides showcase: IG strip, collection, about, privacy/terms, search, product detail, e-commerce btn |
+| `cart.css` | Carrinho: tabela → cards; summary full-width |
+| `checkout.css` | Checkout, success/cancel, account: inputs 16px, botões full-width |
 
 ### Breakpoints
 | Breakpoint | Uso |
 |------------|-----|
-| `1200px` | Desktop grande |
-| `1024px` | Desktop |
-| `768px` | Tablet / mobile menu activo |
-| `576px` | Mobile |
-| `480px` | Mobile pequeno |
+| `768px` | Mobile / drawer nav; catálogo 2 colunas; search 2 colunas |
+| `520px` | IG grid → 2 colunas (homepage strip) |
+| `480px` | Phones pequenos; search/related → 1 coluna |
+
+### Touch targets
+- Mínimo **44px** para botões, links de nav, filtros e `.btn-add-to-cart` (`--touch-min` em `frontend-mobile.css`)
+- Inputs de formulário: **16px** font-size em checkout/cart (evita zoom automático no iOS)
+
+### Carrinho mobile
+- Em `≤768px`, a tabela de `/cart` converte-se em **cards empilhados** (thead oculto)
+- Cada `<td>` usa `data-label="..."` — o CSS mostra o label via `::before`
+
+---
+
+## ✅ Validação em desenvolvimento
+
+Não existe passo de build (sem bundler). Com o servidor activo (`npm start` ou `npm run dev`):
+
+```bash
+cd gonzagas_node
+
+# E-commerce end-to-end (19 checks)
+npm run test:ecommerce
+
+# Catálogo + BD
+npm run validate:catalog
+
+# Tema activo
+curl -s http://localhost:3000/ | grep 'showcase-theme'
+curl -s http://localhost:3000/ | grep 'data-theme'   # deve ser data-theme="dark"
+
+# Search sem HTML duplicado (deve imprimir 1)
+curl -s "http://localhost:3000/search?q=prata" | grep -c '<!DOCTYPE'
+
+# Assets e-commerce servidos
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/ecommerce/css/cart.css
+```
+
+Password do site em dev: `0009` (cookie `sitePassword` se necessário em scripts manuais).
 
 ---
 

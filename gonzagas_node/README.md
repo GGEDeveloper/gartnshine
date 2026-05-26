@@ -243,6 +243,7 @@ npm run start:prod           # Iniciar com PM2
 node scripts/create_production_dump.js     # Criar dump SQL
 node scripts/create-gonzaga-admin.js       # Criar utilizador admin
 npm run db:ecommerce                       # Migração schema e-commerce
+npm run test:ecommerce                     # Validar fluxo (servidor activo)
 
 # Manutenção
 npm run backup               # Backup automático
@@ -354,8 +355,9 @@ Para questões técnicas, melhorias ou suporte:
 - ✅ Sistema de notificações elegante
 - ✅ Funcionalidade "preços sob consulta"
 - ⏳ Stripe end-to-end, webhooks e emails — configuráveis, testar antes de go-live
-- ⏳ Estilização final do carrinho/checkout — integração visual pendente
-- ✅ Design responsivo e moderno (catálogo)
+- ✅ Tema showcase (dourado/cream) em todo o site + e-commerce UI alinhada
+- ✅ Mobile-first: cart cards, checkout full-width, touch targets 44px
+- ✅ Design responsivo e moderno (catálogo + loja)
 - ✅ Segurança e performance optimizados
 - ✅ Documentação actualizada
 - ✅ Pronto para produção (catálogo); loja online após activar + migrar DB

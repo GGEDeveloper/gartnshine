@@ -1,5 +1,26 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-05-26] - Mobile showcase + validação
+
+### 📱 **Pass mobile completo (showcase + e-commerce)**
+
+#### **CSS mobile**
+- `frontend-mobile.css`: cores `#c0a080` → `var(--igp-gold)`; regras para IG strip, search, e-commerce, collection, privacy/terms, about, error; safe-area para cart/checkout
+- `brand-showcase.css`: bloco `@media (max-width: 768px/480px)` para todas as páginas showcase (IG strip, collection, about, privacy/terms, search, product detail, btn-add-to-cart)
+- `cart.css`: tabela → cards empilhados em mobile (`data-label` + `::before`); summary e CTA 100% largura
+- `checkout.css`: inputs 16px (iOS), submit full-width, success/cancel empilhados, account pages
+- `cart.ejs`: `data-label` em cada `<td>` para labels legíveis no layout card
+- `mobile-header.ejs`: dropdown links/ícones com `var(--igp-gold)`
+
+#### **Validado localmente (2026-05-26)**
+- `npm run test:ecommerce` — **19/19** (cart API, checkout submit, success, account, admin orders/settings, add-to-cart no catálogo)
+- `npm run validate:catalog` — OK (328 produtos, 18 famílias)
+- Smoke HTTP: 18 rotas públicas + 4 assets CSS → **200**
+- Estrutural: `data-theme="dark"`, `body.showcase-theme`, search sem HTML duplicado, privacy sem fundo claro
+- **Nota:** não existe `npm run build` — app Node/Express; validação = `npm start` + scripts acima
+
+---
+
 ## [2026-05-26] - Tema Showcase + E-commerce UI
 
 ### 🎨 **Alinhamento visual completo do site (showcase dark-gold)**
@@ -61,13 +82,19 @@
 #### **Conta cliente (opcional)**
 - `/account/login`, `/account/register`, `/account/orders`, `/account/logout`
 
-#### **Validado localmente (2026-05-26)**
-- Carrinho API + página
-- Checkout com carrinho preenchido
-- Submissão de pedido com `payment_mode=disabled`
-- Rotas admin protegidas (302 sem sessão)
+#### **Correcções dev (2026-05-26, sessão 2)**
+- `initializeModules()` movido **antes** dos routers em `app.js` — botão "Adicionar ao carrinho" no catálogo
+- Migração `008_ecommerce_alter_customers.sql` — colunas conta cliente em tabela `customers` existente
+- Carrinho limpo após checkout submit
+- Script `npm run test:ecommerce` — validação automática (19 checks)
 
-#### **Pendente antes de go-live**
+#### **Validado localmente (2026-05-26)**
+- Carrinho API + página + PATCH/DELETE
+- Checkout com carrinho preenchido
+- Submissão de pedido com `payment_mode=disabled` + carrinho vazio após
+- Conta cliente: registo + histórico pedidos
+- Admin: login, lista/detalhe pedidos, settings e-commerce
+- Catálogo: botão add-to-cart visível com loja activa
 - Teste Stripe em modo `test` + webhook
 - Emails SMTP de confirmação
 - Executar `npm run db:ecommerce` em produção/staging

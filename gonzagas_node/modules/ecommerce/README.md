@@ -22,7 +22,7 @@ Pagamentos Stripe vivem em **`../payments/`** (registry + webhook).
 
 ## Schema
 
-**Fonte única:** `sql/migrations/006_ecommerce_unified.sql` + `007_ecommerce_alter_existing.sql`
+**Fonte única:** `sql/migrations/006_ecommerce_unified.sql` + `007_ecommerce_alter_existing.sql` + `008_ecommerce_alter_customers.sql`
 
 O schema UUID em `database/migrations/sales/` está **deprecated** (incompatível com `products.id` INT).
 
@@ -34,7 +34,21 @@ npm run db:ecommerce
 node modules/ecommerce/scripts/run-migration.js
 ```
 
-**Instalações existentes** com tabela `orders` antiga: a migração 007 adiciona colunas em falta (`billing_*`, `shipping_*`, `subtotal`, etc.). Idempotente — ignora colunas já existentes.
+**Instalações existentes** com tabelas antigas:
+- `007` — adiciona colunas em falta em `orders` / `order_items`
+- `008` — adiciona `password_hash`, `first_name`, etc. em `customers`
+
+Idempotente — ignora colunas já existentes.
+
+## Validar em dev
+
+Com o servidor a correr (`npm start`):
+
+```bash
+npm run test:ecommerce
+```
+
+Esperado: **19/19 passed** (carrinho, checkout, conta, admin, botão no catálogo).
 
 ## Activar loja
 
@@ -82,7 +96,20 @@ curl -s -b /tmp/cjar -X POST http://localhost:3000/api/checkout/submit \
 # esperado: {"success":true,"order":{...},"payment":{"mode":"disabled",...}}
 ```
 
-Validado em 2026-05-26: carrinho, checkout, submit com `payment_mode=disabled`.
+Validado em 2026-05-26: `npm run test:ecommerce` — **19/19** (carrinho, checkout, submit, success, account, admin, add-to-cart).
+
+## UI / CSS
+
+Estilos em **`modules/ecommerce/public/css/`** (servidos em `/ecommerce/css/*`):
+
+| Ficheiro | Páginas |
+|----------|---------|
+| `cart.css` | `/cart`, header cart badge |
+| `checkout.css` | `/checkout`, success, cancel, account forms |
+
+Integração visual com **tema showcase** (`brand-showcase.css` + `body.showcase-theme`): botão `.btn-add-to-cart`, forms Bootstrap, header badge.
+
+Mobile (`≤768px`): tabela do carrinho → cards com `data-label`; checkout submit full-width; inputs 16px (iOS).
 
 ## Limitações conhecidas
 
@@ -90,8 +117,7 @@ Validado em 2026-05-26: carrinho, checkout, submit com `payment_mode=disabled`.
 - **Emails** — dependem de SMTP configurado; não testados automaticamente
 - **Fulfillment / stock** — baixa de stock via webhook após pagamento confirmado; testar com Stripe test
 - **Envio CTT** — placeholder flat rate; integração CTT futura
-- **UI** — markup mínimo em `public/css/cart.css`, `checkout.css`; estilização final delegada ao branch de styling
-- **Conta cliente** — opcional; registo/login não cobertos por testes automáticos
+- **Conta cliente** — opcional; registo coberto por `npm run test:ecommerce`
 
 ## Variáveis de ambiente (`.env`)
 
