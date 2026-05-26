@@ -30,7 +30,7 @@ Ver documentação completa em **[modules/ecommerce/README.md](./modules/ecommer
 - **Filtros avançados** por categoria, preço, disponibilidade
 - **Galeria de imagens** com zoom e navegação suave
 - **Sistema "Preços sob consulta"** - toggle para ocultar/mostrar preços
-- **Tema escuro** com nuances psicadélicas e geométricas
+- **Tema showcase** — dourado (#c9a84c) + cream (#f0ece4) sobre fundo escuro (#0a0a0a), psicadélico e geométrico
 
 ### 🔐 **Área Administrativa**
 - **Gestão completa de produtos** (CRUD com upload de imagens)

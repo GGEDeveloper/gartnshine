@@ -1,5 +1,38 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-05-26] - Tema Showcase + E-commerce UI
+
+### 🎨 **Alinhamento visual completo do site (showcase dark-gold)**
+
+#### **Tema showcase (`brand-showcase.css` + `body.showcase-theme`)**
+- Toda a paleta do site passa a usar dourado (#c9a84c) + cream (#f0ece4) sobre fundo escuro (#0a0a0a)
+- `body.showcase-theme` redireciona variáveis legadas `--color-accent/highlight/text` para gold/cream — qualquer CSS que use `var(--color-*)` herda automaticamente
+- `data-theme="dark"` corrigido (era `"[object Object]"` devido a `theme: {...}` passado como objecto nas rotas)
+- CSS estático usa `no-cache` em desenvolvimento; `immutable` só em produção
+- `app.version` dinâmico (`Date.now()`) em dev para cache busting automático
+
+#### **Páginas corrigidas**
+- **Privacy Policy + Terms of Service**: CSS inline com tema claro totalmente substituído por showcase dark
+- **Search results**: Removida estrutura HTML duplicada (`<!DOCTYPE>/<html>/<body>` dentro do layout); estilos showcase aplicados
+- **Collection page**: Estilos showcase para cabeçalho, divider geométrico dourado, controlos de sort, nav de coleções
+- **Product detail**: Valores hardcoded `#C0C0C0/#A8A8A8/#B87333` migrados para `var(--color-*)` que herdam gold
+- **About page**: `.about-connect`, `.social-links-large`, `h3` com gold/muted showcase
+- **error.ejs**: Guards defensivos `title`/`message`; estilo refeito showcase dark; `title:` adicionado a 3 chamadas `render('error')` que faltavam
+
+#### **E-commerce UI — showcase theme**
+- `cart.css` reescrito: tabela dark com cabeçalho gold, qty input com focus ring dourado, cart-summary glass card, btn gold
+- `checkout.css` reescrito: form inputs dark/gold focus, h2 secções gold, checkout-summary glass, submit btn gold, páginas success/cancel centradas com ícone ✦ dourado
+- `brand-showcase.css`: `.btn-add-to-cart` outline → fill gold no hover; `.header-cart-badge` gold bg; Bootstrap `.form-control` global override para showcasetheme
+- Account pages (`/account/login`, `/account/register`, `/account/orders`): h1 Georgia + underline gold, tabela showcase
+- `checkout-success.ejs` / `checkout-cancel.ejs`: adicionado `<link>` para `checkout.css`
+
+#### **Instagram strip na homepage**
+- Secção "No Instagram" com 6 posts reais via Instagram Graph API
+- Partial `partials/_ig-strip.ejs`; rota home com `instagramModule.fetchInstagramFeed(6)`
+- Cache de 5 minutos em `mediaService.js`
+
+---
+
 ## [2026-05-26] - E-commerce Modular (core)
 
 ### 🛒 **Loja online modular**
@@ -37,7 +70,6 @@
 #### **Pendente antes de go-live**
 - Teste Stripe em modo `test` + webhook
 - Emails SMTP de confirmação
-- Estilização visual do carrinho/checkout (branch de styling)
 - Executar `npm run db:ecommerce` em produção/staging
 
 #### **Correcção de migração**
