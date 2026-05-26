@@ -1,0 +1,58 @@
+/**
+ * Ponte: instagram-preview.css na home (body não é .ig-preview-body).
+ * Carregar depois de instagram-preview.css e antes de brand-showcase.css.
+ *
+ * O wrapper .home-ig-preview-main envolve só a secção featured (hero fica full-bleed).
+ */
+
+/* Largura / padding alinhados a .ig-preview-main */
+body.showcase-theme .home-ig-preview-main {
+  width: 100%;
+  max-width: min(1320px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.75rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+/* Hero com vídeo: sem padding/margens negativos de .ig-hero do lab */
+body.showcase-theme .hero.ig-hero {
+  padding: 0;
+  margin: 0 0 clamp(1.75rem, 4vw, 2.75rem);
+  text-align: center;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 0 0 clamp(0, 2vw, 1.25rem) clamp(0, 2vw, 1.25rem);
+  overflow: hidden;
+}
+
+body.showcase-theme .hero.ig-hero .ig-hero-noise {
+  z-index: 3;
+}
+
+body.showcase-theme .hero.ig-hero .hero-video-container,
+body.showcase-theme .hero.ig-hero .hero-image-backdrop {
+  border-radius: inherit;
+}
+
+body.showcase-theme .hero.ig-hero .hero-content {
+  position: relative;
+  z-index: 4;
+}
+
+body.showcase-theme .hero.ig-hero .ig-hero-line {
+  margin-top: 1.25rem;
+}
+
+/* Cabeçalho featured: estilo lab em vez do divisor geométrico duplicado */
+body.showcase-theme .home-ig-preview-main .ig-collections-head .geometric-divider {
+  display: none;
+}
+
+body.showcase-theme .home-ig-preview-main .ig-collections-head .ig-collections-sub {
+  margin-top: 0.35rem;
+}
+
+/* Título featured: mesma cadência que .ig-collections-title no lab (brand-showcase usa 0.2em) */
+body.showcase-theme .home-ig-preview-main .section-header h2.ig-collections-title {
+  letter-spacing: 0.35em !important;
+  font-size: clamp(1.75rem, 4vw, 2.35rem) !important;
+  margin: 0 0 0.5rem !important;
+}

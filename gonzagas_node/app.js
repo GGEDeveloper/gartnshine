@@ -92,6 +92,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://cdn.jsdelivr.net", "https://code.jquery.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
+      mediaSrc: ["'self'", "data:", "https:", "blob:"],
       connectSrc: ["'self'", "https://www.google-analytics.com"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"]
@@ -305,14 +306,19 @@ app.use(helmet({
         "blob:", 
         ...devSources,
         'https://ui-avatars.com', 
-        'https://cdn.jsdelivr.net' // ajax-loader.gif do Slick Carousel
+        'https://cdn.jsdelivr.net', // ajax-loader.gif do Slick Carousel
+        'https://*.cdninstagram.com',
+        'https://*.fbcdn.net'
       ],
       mediaSrc: [
-        "'self'", 
+        "'self'",
         'https://artnshine.pt',
-        "data:", 
-        "blob:", 
-        ...devSources
+        'data:',
+        'blob:',
+        ...devSources,
+        'https://*.cdninstagram.com',
+        'https://*.fbcdn.net',
+        'https://*.instagram.com'
       ],
       formAction: [
         "'self'", 
@@ -501,6 +507,10 @@ const userRightsRouter = require('./routes/user-rights');
 app.use(userRightsRouter);
 const seoRouter = require('./routes/seo');
 app.use(seoRouter);
+
+// API — módulo Instagram (rotas específicas antes do router /api genérico)
+const instagramModule = require('./modules/instagram');
+app.use('/api/instagram', instagramModule.routes);
 
 // API routes
 const apiRouter = require('./routes/api');

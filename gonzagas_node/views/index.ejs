@@ -1,6 +1,6 @@
-<main>
+<% var igHome = typeof useInstagramPreviewCssOnHome !== 'undefined' && useInstagramPreviewCssOnHome; %>
     <!-- Hero: vídeo de fundo + texto "Elegância que nasce da terra" encostado ao topo -->
-    <section class="hero">
+    <section class="hero<%= igHome ? ' ig-hero' : '' %>">
       <div class="hero-video-container">
         <video class="hero-video" autoplay muted loop playsinline>
           <source src="/media/gallery/WhatsApp Video 2025-04-05 at 19.12.38_fdb30c78.mp4" type="video/mp4">
@@ -8,17 +8,22 @@
         <div class="hero-video-overlay"></div>
       </div>
       <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/imagem-nao-disponivel.svg" %>');"></div>
+      <% if (igHome) { %><div class="ig-hero-noise" aria-hidden="true"></div><% } %>
       <div class="hero-content">
         <h1 class="hero-title visually-hidden">Joias Artesanais em Prata 925 — Gonzaga's Art & Shine</h1>
+        <% if (igHome) { %><p class="ig-hero-brand">Gonzaga&apos;s Art &amp; Shine</p><% } %>
         <p class="hero-tagline"><%= siteDescription %></p>
+        <% if (igHome) { %><div class="ig-hero-line" aria-hidden="true"></div><% } %>
       </div>
     </section>
     
     <!-- Featured Products -->
     <% if (featured && featured.length > 0) { %>
-    <section class="featured-section">
-      <div class="section-header">
-        <h2>Featured Pieces</h2>
+    <% if (igHome) { %><div class="home-ig-preview-main"><% } %>
+    <section class="featured-section<%= igHome ? ' ig-collections' : '' %>">
+      <div class="section-header<%= igHome ? ' ig-collections-head' : '' %>">
+        <h2<%= igHome ? ' class="ig-collections-title"' : '' %>>Featured Pieces</h2>
+        <% if (igHome) { %><p class="ig-collections-sub">Prata &amp; pedras naturais — design alternativo</p><% } %>
         <div class="geometric-divider">
           <span></span>
           <span></span>
@@ -36,10 +41,8 @@
       </div>
 
     </section>
+    <% if (igHome) { %></div><% } %>
     <% } %>
-    
-
-</main>
 
 <script type="application/ld+json">
 {

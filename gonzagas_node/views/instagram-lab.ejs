@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Instagram — Laboratório API | Gonzaga's Art & Shine</title>
+  <link rel="stylesheet" href="/css/instagram-lab.css">
+</head>
+<body class="lab-body">
+  <div class="lab-wrap">
+    <header class="lab-header">
+      <h1>Laboratório Instagram</h1>
+      <p>Demonstração das capacidades do módulo: media (Instagram Login), comentários e resumo (Graph API com token de página).</p>
+      <nav class="lab-nav" aria-label="Navegação">
+        <a href="/instagram">Feed no site</a>
+        <a href="/instagram-preview">Pré-visualização visual</a>
+        <a href="https://www.instagram.com/gonzagaartnshine/" target="_blank" rel="noopener noreferrer">Perfil Instagram</a>
+      </nav>
+    </header>
+
+    <% if (typeof mediaError !== 'undefined' && mediaError) { %>
+    <section class="lab-section" aria-live="polite">
+      <div class="lab-banner warn">Não foi possível carregar a lista de media (<code><%= mediaError %></code>).</div>
+    </section>
+    <% } %>
+
+    <section class="lab-section" aria-labelledby="cap-h">
+      <h2 id="cap-h">Capacidades em tempo real</h2>
+      <% var ig = caps && caps.instagramLogin; var fb = caps && caps.facebookGraph; %>
+      <dl class="cap-grid">
+        <dt>Instagram Login</dt>
+        <dd><%= ig && ig.enabled ? 'activo' : 'inactivo' %> — <%= ig && ig.host %></dd>
+        <dt>Graph API (Facebook)</dt>
+        <dd><%= fb && fb.enabled ? 'activo' : 'inactivo' %> — <%= fb && fb.host %></dd>
+        <dt>Page token</dt>
+        <dd><%= fb && fb.configured && fb.configured.pageAccessToken ? 'configurado' : 'não configurado' %></dd>
+        <dt>INSTAGRAM_USER_ID</dt>
+        <dd><%= fb && fb.configured && fb.configured.instagramUserId ? 'definido' : 'ausente' %></dd>
+      </dl>
+      <% if (ig && ig.capabilities && ig.capabilities.length) { %>
+      <p class="cap-list"><strong>Login:</strong> <%= ig.capabilities.join(', ') %>.</p>
+      <% } %>
+      <% if (fb && fb.enabled && fb.capabilities && fb.capabilities.length) { %>
+      <p class="cap-list"><strong>Facebook:</strong> <%= fb.capabilities.join(', ') %>.</p>
+      <% } %>
+      <% if (!fb || !fb.enabled) { %>
+      <div class="lab-banner" style="margin-top:1rem;">
+        Para ver <strong>gostos</strong>, <strong>contagem de comentários</strong> e <strong>lista de comentários</strong>, define <code>FACEBOOK_PAGE_ACCESS_TOKEN</code> ou <code>INSTAGRAM_PAGE_ACCESS_TOKEN</code> no <code>.env</code> (token de página com acesso ao Instagram Business). Ver <code>modules/instagram/README.md</code>.
+      </div>
+      <% } %>
+    </section>
+
+    <section class="lab-section" aria-labelledby="posts-h">
+      <h2 id="posts-h">Últimas publicações + engagement</h2>
+      <% if (typeof items !== 'undefined' && items.length) { %>
+        <% items.forEach(function (row) {
+          var m = row.media;
+          var isVideo = m.media_type === 'VIDEO';
+          var imgUrl = isVideo && m.thumbnail_url ? m.thumbnail_url : m.media_url;
+          var cap = (m.caption || '').slice(0, 120);
+          if ((m.caption || '').length > 120) cap += '…';
+          var s = row.summary;
+        %>
+        <article class="lab-card">
+          <div class="lab-card-head">
+            <% if (imgUrl) { %>
+            <img class="lab-thumb" src="<%= imgUrl %>" alt="" loading="lazy" decoding="async">
+            <% } else { %>
+            <div class="lab-thumb" style="background:#222;"></div>
+            <% } %>
+            <div>
+              <div class="lab-meta">
+                <code><%= m.id %></code> · <%= m.media_type %>
+                <% if (m.permalink) { %>
+                · <a href="<%= m.permalink %>" target="_blank" rel="noopener noreferrer" style="color:var(--lab-gold);">Abrir no Instagram</a>
+                <% } %>
+              </div>
+              <% if (cap) { %><p class="lab-meta" style="margin-top:0.5rem;color:var(--lab-cream);"><%= cap %></p><% } %>
+              <% if (row.fbSkipped) { %>
+              <p class="lab-stats"><span>Engagement API desligado (sem Page token)</span></p>
+              <% } else if (s) { %>
+              <div class="lab-stats">
+                <% if (typeof s.like_count !== 'undefined' && s.like_count !== null) { %><span>Gostos <strong><%= s.like_count %></strong></span><% } %>
+                <% if (typeof s.comments_count !== 'undefined' && s.comments_count !== null) { %><span>Comentários <strong><%= s.comments_count %></strong></span><% } %>
+                <% if (typeof s.is_comment_enabled !== 'undefined' && s.is_comment_enabled !== null) { %><span>Comentários <strong><%= s.is_comment_enabled ? 'abertos' : 'fechados' %></strong></span><% } %>
+              </div>
+              <% } %>
+              <% if (row.summaryErr) { %>
+              <p class="lab-err">Resumo: <%= row.summaryErr %></p>
+              <% } %>
+              <% if (row.commentsErr) { %>
+              <p class="lab-err">Comentários: <%= row.commentsErr %></p>
+              <% } %>
+            </div>
+          </div>
+          <% if (row.comments && row.comments.length) { %>
+          <div class="lab-comments">
+            <h3>Comentários (amostra)</h3>
+            <% row.comments.forEach(function (c) {
+              var when = c.timestamp ? String(c.timestamp).replace('T', ' ').slice(0, 16) : '';
+            %>
+            <div class="lab-comment">
+              <span class="who">@<%= c.username || '?' %></span>
+              <% if (when) { %><span class="when"><%= when %></span><% } %>
+              <% if (typeof c.like_count !== 'undefined' && c.like_count !== null) { %><span class="when"> · <%= c.like_count %> gostos</span><% } %>
+              <p class="txt"><%= c.text || '' %></p>
+            </div>
+            <% }); %>
+          </div>
+          <% } %>
+        </article>
+        <% }); %>
+      <% } else if (!mediaError) { %>
+      <p class="lab-meta">Sem publicações para mostrar.</p>
+      <% } %>
+    </section>
+
+    <section class="lab-section lab-api-ref" aria-labelledby="api-h">
+      <h2 id="api-h">Endpoints JSON (mesmo servidor)</h2>
+      <code>GET /api/instagram/capabilities</code>
+      <code>GET /api/instagram/media/&lt;id&gt;/comments?limit=25</code>
+      <code>GET /api/instagram/media/&lt;id&gt;/summary</code>
+      <code>GET /api/instagram/media/&lt;id&gt;/insights?metrics=engagement,impressions</code>
+    </section>
+  </div>
+</body>
+</html>

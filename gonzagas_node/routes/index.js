@@ -7,6 +7,12 @@ const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
+const {
+  fetchInstagramFeed,
+  fetchInstagramPosts,
+  fetchInstagramReels
+} = require('../services/instagram');
+const instagramModule = require('../modules/instagram');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -68,6 +74,8 @@ router.get('/', async (req, res) => {
       heroImage,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
+      showcaseTheme: true,
+      useInstagramPreviewCssOnHome: process.env.HOME_IG_PREVIEW_CSS === 'true',
       theme: {
         colorPrimary: '#05070a',
         colorSecondary: '#0b1016',
@@ -478,6 +486,116 @@ router.get('/api/nav-featured', async (req, res) => {
       message: 'Failed to load navigation featured products'
     });
   }
+});
+
+// Instagram layout preview (standalone, sem layout do site)
+router.get('/instagram-preview', async (req, res) => {
+  let instagramPosts = [];
+  let instagramReels = [];
+  let instagramPreviewError = false;
+  try {
+    [instagramPosts, instagramReels] = await Promise.all([
+      fetchInstagramPosts(8),
+      fetchInstagramReels(4)
+    ]);
+  } catch (err) {
+    instagramPreviewError = true;
+    console.error('Instagram preview route:', err.code || '', err.message);
+  }
+  res.render('instagram-preview', {
+    layout: false,
+    instagramPosts,
+    instagramReels,
+    instagramPreviewError
+  });
+});
+
+// Instagram — laboratório (comentários / resumo / capacidades; noindex)
+router.get('/instagram-lab', async (req, res) => {
+  const caps = instagramModule.getCapabilities();
+  let mediaError = null;
+  let media = [];
+  try {
+    media = await instagramModule.fetchInstagramFeed(9);
+  } catch (err) {
+    mediaError = err.code || 'load_failed';
+    console.error('Instagram lab media:', err.message);
+  }
+
+  const items = [];
+  const slice = media.slice(0, 8);
+  const fbOn = caps.facebookGraph && caps.facebookGraph.enabled;
+
+  if (fbOn && slice.length) {
+    for (const m of slice) {
+      let summary = null;
+      let summaryErr = null;
+      let comments = [];
+      let commentsErr = null;
+      try {
+        summary = await instagramModule.fetchMediaEngagementSummary(m.id);
+      } catch (e) {
+        summaryErr = e.message;
+      }
+      try {
+        const pack = await instagramModule.fetchCommentsForMedia(m.id, {
+          limit: 5
+        });
+        comments = pack.data || [];
+      } catch (e) {
+        commentsErr = e.message;
+      }
+      items.push({
+        media: m,
+        summary,
+        summaryErr,
+        comments,
+        commentsErr,
+        fbSkipped: false
+      });
+    }
+  } else {
+    for (const m of slice) {
+      items.push({
+        media: m,
+        summary: null,
+        summaryErr: null,
+        comments: [],
+        commentsErr: null,
+        fbSkipped: true
+      });
+    }
+  }
+
+  res.render('instagram-lab', {
+    layout: false,
+    caps,
+    items,
+    mediaError
+  });
+});
+
+// Instagram feed (graph.instagram.com)
+router.get('/instagram', async (req, res) => {
+  const base = (process.env.BASE_URL || 'https://artnshine.pt').replace(/\/$/, '');
+  let posts = [];
+  let instagramError = null;
+  try {
+    posts = await fetchInstagramFeed(9);
+  } catch (err) {
+    const code = err.code;
+    instagramError = code === 'INSTAGRAM_NO_TOKEN' ? 'not_configured' : 'load_failed';
+    console.error('Instagram feed route:', code || 'error', err.message);
+  }
+  res.render('instagram', {
+    title: 'Instagram',
+    metaDescription:
+      'Últimas publicações de Gonzaga\'s Art & Shine no Instagram — joias em prata e inspiração natural.',
+    canonicalUrl: `${base}/instagram`,
+    posts,
+    instagramError,
+    showcaseTheme: true
+  });
 });
 
 // About page

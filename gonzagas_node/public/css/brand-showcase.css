@@ -1,0 +1,342 @@
+/**
+ * Tema "showcase" — mesma paleta que /instagram-preview (dourado #c9a84c, cream #f0ece4, fundo #0a0a0a + gradientes).
+ * Activado com body.showcase-theme (res.locals.showcaseTheme nas rotas home + /instagram).
+ * Carregar depois de dark-luxe.css.
+ */
+
+body.showcase-theme {
+  --igp-bg: #0a0a0a;
+  --igp-gold: #c9a84c;
+  --igp-cream: #f0ece4;
+  --igp-muted: rgba(240, 236, 228, 0.55);
+  --igp-green-wash: rgba(107, 128, 104, 0.06);
+  --igp-border: rgba(201, 168, 76, 0.18);
+  background-color: var(--igp-bg) !important;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(201, 168, 76, 0.12), transparent 55%),
+    radial-gradient(ellipse 90% 50% at 100% 40%, var(--igp-green-wash), transparent 45%),
+    radial-gradient(ellipse 70% 40% at 0% 80%, rgba(201, 168, 76, 0.05), transparent 50%) !important;
+  background-attachment: fixed !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme main.flex-shrink-0 {
+  background: transparent;
+}
+
+body.showcase-theme .main-header {
+  background: rgba(10, 10, 10, 0.92) !important;
+  border-bottom: 1px solid var(--igp-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+body.showcase-theme .nav-menu a {
+  color: rgba(240, 236, 228, 0.82) !important;
+}
+
+body.showcase-theme .nav-menu a:hover,
+body.showcase-theme .nav-menu a.active {
+  color: var(--igp-gold) !important;
+  text-shadow: 0 0 12px rgba(201, 168, 76, 0.25) !important;
+}
+
+body.showcase-theme .logo h1 {
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .search-input {
+  background: rgba(18, 18, 18, 0.9) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .main-footer,
+body.showcase-theme footer {
+  background: rgba(8, 8, 8, 0.96) !important;
+  border-top: 1px solid var(--igp-border) !important;
+}
+
+body.showcase-theme .main-footer a,
+body.showcase-theme footer a {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .main-footer a:hover,
+body.showcase-theme footer a:hover {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .hero-video-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.35) 0%,
+    rgba(10, 10, 10, 0.55) 100%
+  ) !important;
+}
+
+body.showcase-theme .hero-tagline {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  color: var(--igp-cream) !important;
+  border: 1px solid rgba(201, 168, 76, 0.28) !important;
+  background: rgba(10, 10, 10, 0.42) !important;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.75) !important;
+  letter-spacing: 0.14em !important;
+}
+
+body.showcase-theme .featured-section {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+body.showcase-theme .section-header h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .featured-section .geometric-divider span {
+  width: 28px !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold)) !important;
+  opacity: 0.9 !important;
+}
+
+body.showcase-theme .featured-carousel .slick-prev:before,
+body.showcase-theme .featured-carousel .slick-next:before {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li button:before {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li.slick-active button:before {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .featured-carousel .product-card,
+body.showcase-theme .featured-carousel .product-item {
+  border: 1px solid var(--igp-border) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42) !important;
+}
+
+body.showcase-theme .featured-carousel .product-card:hover {
+  border-color: rgba(201, 168, 76, 0.38) !important;
+}
+
+body.showcase-theme .instagram-page {
+  color: var(--igp-cream);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+body.showcase-theme .instagram-hero {
+  text-align: center;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 auto clamp(1.5rem, 4vw, 2.5rem);
+  max-width: min(1320px, 100%);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 0 0 clamp(0, 2vw, 1.25rem) clamp(0, 2vw, 1.25rem);
+  position: relative;
+  overflow: hidden;
+}
+
+body.showcase-theme .instagram-hero-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+}
+
+body.showcase-theme .instagram-hero h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .instagram-hero-lead {
+  margin: 0 auto;
+  max-width: 420px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--igp-muted);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-lab-teaser {
+  margin: 1.25rem 0 0;
+  font-size: 0.85rem;
+}
+
+body.showcase-theme .instagram-lab-teaser a {
+  color: var(--igp-gold);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+body.showcase-theme .instagram-lab-teaser a:hover {
+  text-decoration: underline;
+}
+
+body.showcase-theme .instagram-lab-teaser-hint {
+  color: var(--igp-muted);
+}
+
+body.showcase-theme .instagram-divider {
+  margin-top: 1.25rem;
+}
+
+body.showcase-theme .instagram-page .geometric-divider {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+body.showcase-theme .instagram-page .geometric-divider span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold));
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+body.showcase-theme .instagram-grid-section {
+  max-width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem);
+}
+
+body.showcase-theme .instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.1rem);
+}
+
+@media (max-width: 900px) {
+  body.showcase-theme .instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  body.showcase-theme .instagram-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.showcase-theme .instagram-card {
+  background: rgba(18, 22, 20, 0.75);
+  border: 1px solid var(--igp-border);
+  border-radius: clamp(10px, 1.5vw, 14px);
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+body.showcase-theme .instagram-card:hover {
+  border-color: rgba(201, 168, 76, 0.38);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.48);
+  transform: translateY(-2px);
+}
+
+body.showcase-theme .instagram-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+body.showcase-theme .instagram-card-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #111;
+}
+
+body.showcase-theme .instagram-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.showcase-theme .instagram-card:hover .instagram-card-img {
+  transform: scale(1.03);
+}
+
+body.showcase-theme .instagram-card-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  background: #161616;
+}
+
+body.showcase-theme .instagram-type-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+}
+
+body.showcase-theme .instagram-card-caption {
+  margin: 0;
+  padding: 0.75rem 0.85rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(240, 236, 228, 0.9);
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-message {
+  max-width: 560px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+  color: var(--igp-muted);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-message a {
+  color: var(--igp-gold);
+}
+
+body.showcase-theme .instagram-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.showcase-theme .mobile-nav,
+body.showcase-theme .mobile-nav-content {
+  background: rgba(10, 10, 10, 0.98) !important;
+  border-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .mobile-nav-link {
+  color: rgba(240, 236, 228, 0.88) !important;
+}
+
+body.showcase-theme .mobile-nav-link:hover,
+body.showcase-theme .mobile-nav-link.active {
+  color: var(--igp-gold) !important;
+}
