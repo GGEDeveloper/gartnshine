@@ -74,7 +74,6 @@ router.get('/', async (req, res) => {
       igPosts,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      useInstagramPreviewCssOnHome: process.env.HOME_IG_PREVIEW_CSS === 'true',
       theme: 'dark'
     });
   } catch (error) {
@@ -473,114 +472,10 @@ router.get('/api/nav-featured', async (req, res) => {
   }
 });
 
-// Instagram layout preview (standalone, sem layout do site)
-router.get('/instagram-preview', async (req, res) => {
-  let instagramPosts = [];
-  let instagramReels = [];
-  let instagramPreviewError = false;
-  try {
-    [instagramPosts, instagramReels] = await Promise.all([
-      instagramModule.fetchInstagramPosts(8),
-      instagramModule.fetchInstagramReels(4)
-    ]);
-  } catch (err) {
-    instagramPreviewError = true;
-    console.error('Instagram preview route:', err.code || '', err.message);
-  }
-  res.render('instagram-preview', {
-    layout: false,
-    instagramPosts,
-    instagramReels,
-    instagramPreviewError
-  });
-});
-
-// Instagram — laboratório (comentários / resumo / capacidades; noindex)
-router.get('/instagram-lab', async (req, res) => {
-  const caps = instagramModule.getCapabilities();
-  let mediaError = null;
-  let media = [];
-  try {
-    media = await instagramModule.fetchInstagramFeed(9);
-  } catch (err) {
-    mediaError = err.code || 'load_failed';
-    console.error('Instagram lab media:', err.message);
-  }
-
-  const items = [];
-  const slice = media.slice(0, 8);
-  const fbOn = caps.facebookGraph && caps.facebookGraph.enabled;
-
-  if (fbOn && slice.length) {
-    for (const m of slice) {
-      let summary = null;
-      let summaryErr = null;
-      let comments = [];
-      let commentsErr = null;
-      try {
-        summary = await instagramModule.fetchMediaEngagementSummary(m.id);
-      } catch (e) {
-        summaryErr = e.message;
-      }
-      try {
-        const pack = await instagramModule.fetchCommentsForMedia(m.id, {
-          limit: 5
-        });
-        comments = pack.data || [];
-      } catch (e) {
-        commentsErr = e.message;
-      }
-      items.push({
-        media: m,
-        summary,
-        summaryErr,
-        comments,
-        commentsErr,
-        fbSkipped: false
-      });
-    }
-  } else {
-    for (const m of slice) {
-      items.push({
-        media: m,
-        summary: null,
-        summaryErr: null,
-        comments: [],
-        commentsErr: null,
-        fbSkipped: true
-      });
-    }
-  }
-
-  res.render('instagram-lab', {
-    layout: false,
-    caps,
-    items,
-    mediaError
-  });
-});
-
-// Instagram feed (graph.instagram.com)
-router.get('/instagram', async (req, res) => {
-  const base = (process.env.BASE_URL || 'https://artnshine.pt').replace(/\/$/, '');
-  let posts = [];
-  let instagramError = null;
-  try {
-    posts = await instagramModule.fetchInstagramFeed(9);
-  } catch (err) {
-    const code = err.code;
-    instagramError = code === 'INSTAGRAM_NO_TOKEN' ? 'not_configured' : 'load_failed';
-    console.error('Instagram feed route:', code || 'error', err.message);
-  }
-  res.render('instagram', {
-    title: 'Instagram',
-    metaDescription:
-      'Últimas publicações de Gonzaga\'s Art & Shine no Instagram — joias em prata e inspiração natural.',
-    canonicalUrl: `${base}/instagram`,
-    posts,
-    instagramError
-  });
-});
+// Redirects para URLs antigas (bookmarks, links externos)
+router.get('/instagram', (req, res) => res.redirect(301, '/collections'));
+router.get('/instagram-preview', (req, res) => res.redirect(301, '/collections'));
+router.get('/instagram-lab', (req, res) => res.redirect(301, '/collections'));
 
 // About page
 router.get('/about', (req, res) => {

@@ -1,9 +1,9 @@
-<% var _igPosts = (typeof igPosts !== 'undefined' && Array.isArray(igPosts)) ? igPosts : []; %>
-<% if (_igPosts.length > 0) { %>
+<% var _mediaPosts = (typeof igPosts !== 'undefined' && Array.isArray(igPosts)) ? igPosts : []; %>
+<% if (_mediaPosts.length > 0) { %>
 <section class="ig-strip-section">
   <div class="ig-strip-header section-header">
-    <h2>No Instagram</h2>
-    <p class="ig-strip-lead">Últimas publicações de Gonzaga&apos;s Art &amp; Shine</p>
+    <h2>Do Atelier</h2>
+    <p class="ig-strip-lead">Prata, pedras naturais e inspiração — o nosso universo criativo</p>
     <div class="geometric-divider">
       <span></span>
       <span></span>
@@ -12,7 +12,7 @@
   </div>
 
   <div class="instagram-grid ig-strip-grid">
-    <% _igPosts.forEach(function (post) {
+    <% _mediaPosts.forEach(function (post) {
       var isVideo = post.media_type === 'VIDEO';
       var imgUrl = isVideo && post.thumbnail_url ? post.thumbnail_url : post.media_url;
       var cap = post.caption || '';
@@ -20,7 +20,7 @@
       var isCarousel = post.media_type === 'CAROUSEL_ALBUM';
     %>
     <article class="instagram-card">
-      <a href="<%= post.permalink %>" class="instagram-card-link" target="_blank" rel="noopener noreferrer" aria-label="Ver publicação no Instagram">
+      <a href="<%= post.permalink %>" class="instagram-card-link" target="_blank" rel="noopener noreferrer" aria-label="Ver publicação">
         <div class="instagram-card-image-wrap">
           <% if (imgUrl) { %>
           <img src="<%= imgUrl %>" alt="" loading="lazy" decoding="async" class="instagram-card-img">
@@ -46,8 +46,7 @@
   </div>
 
   <div class="ig-strip-cta">
-    <a href="/instagram" class="ig-strip-cta-link">Ver todas as publicações &rarr;</a>
-    <a href="https://www.instagram.com/gonzagaartnshine/" target="_blank" rel="noopener noreferrer" class="ig-strip-cta-link ig-strip-cta-external">Seguir no Instagram</a>
+    <a href="/collections" class="ig-strip-cta-link">Explorar Coleções &rarr;</a>
   </div>
 </section>
 <% } %>
