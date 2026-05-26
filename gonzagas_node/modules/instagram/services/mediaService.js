@@ -6,7 +6,7 @@ const instagramLoginClient = require('../clients/instagramLoginClient');
 
 let previewCache = { at: 0, data: null };
 let previewInflight = null;
-const PREVIEW_CACHE_MS = 3000;
+const PREVIEW_CACHE_MS = 5 * 60 * 1000; // 5 minutes
 const PREVIEW_FETCH_LIMIT = 55;
 
 async function getPreviewMediaBatch() {

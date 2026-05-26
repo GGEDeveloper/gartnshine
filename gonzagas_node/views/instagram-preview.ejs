@@ -74,9 +74,9 @@
         <div class="ig-spotlight-inner">
           <div class="ig-spotlight-media ig-reel-media">
             <% if (sVid) { %>
-            <video class="ig-reel-video" data-src="<%- sVid %>" <% if (sThumb) { %>poster="<%- sThumb %>"<% } %> muted playsinline loop disablePictureInPicture preload="none"></video>
+            <video class="ig-reel-video" data-src="<%= sVid %>" <% if (sThumb) { %>poster="<%= sThumb %>"<% } %> muted playsinline loop disablePictureInPicture preload="none"></video>
             <% } else if (sThumb) { %>
-            <img class="ig-spotlight-fallback-img" src="<%- sThumb %>" alt="">
+            <img class="ig-spotlight-fallback-img" src="<%= sThumb %>" alt="">
             <% } %>
             <div class="ig-reel-play-overlay" aria-hidden="true"><span class="ig-reel-play-icon">&#9654;</span></div>
             <button type="button" class="ig-reel-play-toggle" aria-label="Reproduzir vídeo"><span class="ig-reel-play-icon">&#9654;</span></button>
@@ -105,9 +105,9 @@
             <div class="ig-reel-card-inner">
               <div class="ig-reel-media ig-reel-aspect">
                 <% if (vid) { %>
-                <video class="ig-reel-video" data-src="<%- vid %>" <% if (thumb) { %>poster="<%- thumb %>"<% } %> muted playsinline loop disablePictureInPicture preload="none"></video>
+                <video class="ig-reel-video" data-src="<%= vid %>" <% if (thumb) { %>poster="<%= thumb %>"<% } %> muted playsinline loop disablePictureInPicture preload="none"></video>
                 <% } else if (thumb) { %>
-                <img class="ig-reel-fallback-img" src="<%- thumb %>" alt="">
+                <img class="ig-reel-fallback-img" src="<%= thumb %>" alt="">
                 <% } %>
                 <div class="ig-reel-play-overlay" aria-hidden="true"><span class="ig-reel-play-icon">&#9654;</span></div>
                 <button type="button" class="ig-reel-play-toggle" aria-label="Reproduzir vídeo"><span class="ig-reel-play-icon">&#9654;</span></button>

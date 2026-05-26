@@ -7,11 +7,6 @@ const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
-const {
-  fetchInstagramFeed,
-  fetchInstagramPosts,
-  fetchInstagramReels
-} = require('../services/instagram');
 const instagramModule = require('../modules/instagram');
 
 // Home page - Showcase page with featured products and media gallery
@@ -61,8 +56,6 @@ router.get('/', async (req, res) => {
     // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
     const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/imagem-nao-disponivel.svg';
     
-    console.log(`Rendering index with ${mediaFiles.length} media files`);
-    console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
       title: 'Art&Shine — Elegância que nasce da terra',
       layout: 'layouts/main',
@@ -113,10 +106,8 @@ router.get('/collections', async (req, res) => {
         await fs.access(possiblePath);
         files = await fs.readdir(possiblePath);
         mediaPath = possiblePath;
-        console.log(`Using media path: ${mediaPath}`);
         break;
       } catch (err) {
-        console.log(`Path not found: ${possiblePath}`);
         continue;
       }
     }
@@ -495,8 +486,8 @@ router.get('/instagram-preview', async (req, res) => {
   let instagramPreviewError = false;
   try {
     [instagramPosts, instagramReels] = await Promise.all([
-      fetchInstagramPosts(8),
-      fetchInstagramReels(4)
+      instagramModule.fetchInstagramPosts(8),
+      instagramModule.fetchInstagramReels(4)
     ]);
   } catch (err) {
     instagramPreviewError = true;
@@ -581,7 +572,7 @@ router.get('/instagram', async (req, res) => {
   let posts = [];
   let instagramError = null;
   try {
-    posts = await fetchInstagramFeed(9);
+    posts = await instagramModule.fetchInstagramFeed(9);
   } catch (err) {
     const code = err.code;
     instagramError = code === 'INSTAGRAM_NO_TOKEN' ? 'not_configured' : 'load_failed';
