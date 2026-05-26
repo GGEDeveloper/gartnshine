@@ -27,6 +27,7 @@ async function run() {
     for (const statement of statements) {
       try {
         await pool.query(statement);
+        console.log('  OK:', statement.slice(0, 70).replace(/\s+/g, ' '));
       } catch (err) {
         if (
           err.code === 'ER_TABLE_EXISTS_ERROR' ||

@@ -1,4 +1,4 @@
--- Extend existing orders table (one ALTER per statement; comments on their own line only)
+-- Extend existing orders table (one ALTER per statement)
 
 ALTER TABLE `orders` ADD COLUMN `customer_country` varchar(100) DEFAULT 'Portugal' AFTER `customer_postal_code`;
 

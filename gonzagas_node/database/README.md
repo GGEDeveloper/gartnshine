@@ -17,11 +17,13 @@ database/
 │   ├── purchasing/        # Módulo de compras e fornecedores
 │   │   └── 001_create_suppliers.sql
 │   │
-│   └── sales/             # Módulo de vendas e clientes
-│       └── 001_create_customers.sql
+│   └── sales/             # DEPRECATED — ver modules/ecommerce/sql/
+│       └── 001_create_customers.sql  (UUID, não usar)
 │
 └── README.md              # Esta documentação
 ```
+
+> **E-commerce (pedidos online):** o schema activo está em **`modules/ecommerce/sql/migrations/`**, não em `database/migrations/sales/`. Executar `npm run db:ecommerce` a partir de `gonzagas_node/`.
 
 ## Módulos
 
@@ -62,14 +64,21 @@ Gestão de compras e fornecedores:
 
 ### Sales
 
-Gestão de vendas e clientes:
+> **Deprecated.** O ficheiro `001_create_customers.sql` usa UUID e não é compatível com o catálogo actual (`products.id` INT).
 
-- `customers`: Cadastro de clientes
-- `customer_orders`: Pedidos de clientes
-- `customer_order_items`: Itens dos pedidos
-- `invoices`: Faturas
-- `invoice_items`: Itens das faturas
-- `payments`: Pagamentos
+**Usar em vez disso:** `modules/ecommerce/sql/migrations/006_ecommerce_unified.sql`
+
+Tabelas do e-commerce activo:
+
+- `ecommerce_settings`: definições da loja (IVA, Stripe, portes)
+- `cart_sessions`: carrinhos guest
+- `orders` / `order_items`: pedidos online
+- `order_status_history`: histórico de estados
+- `payments`: pagamentos (Stripe)
+- `customers`: contas cliente (opcional)
+- `shipping_methods`: métodos de envio
+
+Migração: `npm run db:ecommerce` (a partir de `gonzagas_node/`).
 
 ## Convenções
 

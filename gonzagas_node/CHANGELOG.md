@@ -1,5 +1,50 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-05-26] - E-commerce Modular (core)
+
+### 🛒 **Loja online modular**
+
+#### **Arquitectura**
+- Novo módulo `modules/ecommerce/` com submódulos: cart, checkout, orders, settings, shipping, fulfillment, admin, accounts, notifications, analytics, jobs
+- Novo módulo `modules/payments/` com provider Stripe (`disabled` / `test` / `live`)
+- Registo em `config/modules.js`; inicialização via `initializeModules(app)` em `app.js`
+
+#### **Base de dados**
+- Schema unificado INT em `modules/ecommerce/sql/migrations/006_ecommerce_unified.sql`
+- Migração de upgrade para instalações existentes: `007_ecommerce_alter_existing.sql`
+- Comando: `npm run db:ecommerce`
+- Schema UUID em `database/migrations/sales/` marcado como **deprecated**
+
+#### **Rotas públicas**
+- `/cart`, `/checkout`, `/checkout/success`, `/checkout/cancel`
+- API: `/api/cart/*`, `/api/checkout/prepare`, `/api/checkout/submit`
+- Webhook: `POST /webhooks/stripe`
+
+#### **Admin**
+- `/admin/settings/ecommerce` — activar loja, IVA, Stripe, portes
+- `/admin/orders`, `/admin/orders/:id` — gestão de pedidos
+- Dashboard usa estatísticas reais de pedidos quando e-commerce activo
+
+#### **Conta cliente (opcional)**
+- `/account/login`, `/account/register`, `/account/orders`, `/account/logout`
+
+#### **Validado localmente (2026-05-26)**
+- Carrinho API + página
+- Checkout com carrinho preenchido
+- Submissão de pedido com `payment_mode=disabled`
+- Rotas admin protegidas (302 sem sessão)
+
+#### **Pendente antes de go-live**
+- Teste Stripe em modo `test` + webhook
+- Emails SMTP de confirmação
+- Estilização visual do carrinho/checkout (branch de styling)
+- Executar `npm run db:ecommerce` em produção/staging
+
+#### **Correcção de migração**
+- Script `run-migration.js` ignora comentários SQL por linha (evita saltar o primeiro `ALTER` em 007)
+
+---
+
 ## [2025-03-04] - Header Search: Ícone Expandível (Mobile + Desktop)
 
 ### 🔍 **Pesquisa no Header - Padrão Unificado**

@@ -1,9 +1,65 @@
-<div class="container py-4">
+<style>
+.account-orders-page h1 {
+  color: var(--igp-cream, #f0ece4);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.85rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.account-orders-page h1::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--igp-gold, #c9a84c);
+  margin: 0.65rem 0 1.5rem;
+  opacity: 0.7;
+}
+.account-orders-page .logout-link { color: var(--igp-muted, rgba(240,236,228,0.55)); font-size: 0.85rem; }
+.account-orders-page .logout-link a { color: var(--igp-gold, #c9a84c); text-decoration: none; }
+.account-orders-page .logout-link a:hover { color: #e0bc5a; text-decoration: underline; }
+.account-orders-page .table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--igp-border, rgba(201,168,76,0.18));
+}
+.account-orders-page .table {
+  background: rgba(10,10,10,0.88);
+  color: var(--igp-cream, #f0ece4);
+  margin-bottom: 0;
+  --bs-table-bg: rgba(10,10,10,0.88);
+  --bs-table-striped-bg: rgba(201,168,76,0.04);
+  --bs-table-border-color: rgba(201,168,76,0.08);
+  --bs-table-color: var(--igp-cream, #f0ece4);
+}
+.account-orders-page .table thead th {
+  background: rgba(201,168,76,0.08);
+  color: var(--igp-gold, #c9a84c);
+  border-bottom: 1px solid var(--igp-border, rgba(201,168,76,0.18));
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.85rem 1rem;
+  font-weight: 500;
+}
+.account-orders-page .table tbody td {
+  color: var(--igp-cream, #f0ece4);
+  border-color: rgba(201,168,76,0.08);
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+.account-orders-page .text-muted { color: var(--igp-muted, rgba(240,236,228,0.55)) !important; }
+</style>
+
+<div class="container py-4 account-orders-page">
   <h1>Os meus pedidos</h1>
-  <p><a href="/account/logout">Terminar sessão</a></p>
+  <p class="logout-link"><a href="/account/logout">Terminar sessão</a></p>
 
   <% if (!orders.length) { %>
-    <p class="text-muted">Ainda não tem pedidos.</p>
+    <p class="text-muted" style="color:var(--igp-muted,rgba(240,236,228,0.55))!important; margin-top:2rem;">Ainda não tem pedidos.</p>
   <% } else { %>
     <div class="table-responsive">
       <table class="table table-striped">

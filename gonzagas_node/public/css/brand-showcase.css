@@ -1067,3 +1067,119 @@ body.showcase-theme .collection-link:hover {
   color: var(--igp-gold);
   background: rgba(201,168,76,0.06);
 }
+
+/* =====================================================================
+   E-COMMERCE — showcase theme overrides
+   ===================================================================== */
+
+/* ── Botão "Adicionar ao carrinho" — product cards + detail ── */
+body.showcase-theme .btn-add-to-cart,
+body.showcase-theme button.btn-add-to-cart {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--igp-border);
+  color: var(--igp-cream);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  margin-top: 0.6rem;
+}
+
+body.showcase-theme .btn-add-to-cart:hover,
+body.showcase-theme button.btn-add-to-cart:hover {
+  background: var(--igp-gold);
+  border-color: var(--igp-gold);
+  color: #0a0a0a;
+  box-shadow: 0 3px 12px rgba(201,168,76,0.3);
+}
+
+body.showcase-theme .btn-add-to-cart:active,
+body.showcase-theme button.btn-add-to-cart:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Estado "adicionado" (classe injectada pelo JS) */
+body.showcase-theme .btn-add-to-cart.added,
+body.showcase-theme button.btn-add-to-cart.added {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--igp-gold);
+  color: var(--igp-gold);
+}
+
+/* Na página de detalhe o botão é maior */
+body.showcase-theme .product-actions .btn-add-to-cart {
+  padding: 0.85rem 2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+}
+
+/* ── Header — ícone carrinho ──────────────────────────────── */
+body.showcase-theme .header-cart-link {
+  color: var(--igp-cream) !important;
+  transition: color 0.2s;
+}
+
+body.showcase-theme .header-cart-link:hover {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .header-cart-badge {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  font-weight: 700;
+}
+
+/* ── Formulários Bootstrap dentro do tema showcase ────────── */
+body.showcase-theme .form-control,
+body.showcase-theme .form-select {
+  background: rgba(8,8,8,0.8);
+  border-color: var(--igp-border);
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .form-control:focus,
+body.showcase-theme .form-select:focus {
+  background: rgba(12,12,12,0.9);
+  border-color: var(--igp-gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .form-label {
+  color: var(--igp-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+}
+
+body.showcase-theme .form-check-label {
+  color: var(--igp-muted);
+}
+
+body.showcase-theme .form-check-input {
+  background-color: rgba(8,8,8,0.8);
+  border-color: var(--igp-border);
+}
+
+body.showcase-theme .form-check-input:checked {
+  background-color: var(--igp-gold);
+  border-color: var(--igp-gold);
+}
+
+/* ── Alert/mensagens dentro do showcase ───────────────────── */
+body.showcase-theme .alert-danger {
+  background: rgba(200, 60, 60, 0.12);
+  border-color: rgba(200, 60, 60, 0.3);
+  color: #f08080;
+}
+
+body.showcase-theme .alert-success {
+  background: rgba(80, 180, 100, 0.1);
+  border-color: rgba(80, 180, 100, 0.25);
+  color: #7dd98a;
+}
