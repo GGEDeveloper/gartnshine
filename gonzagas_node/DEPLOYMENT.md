@@ -107,6 +107,20 @@ ENABLE_CSRF=true
 2. Clique em "Run NPM Install"
 3. Aguarde a instalação das dependências
 
+> **Nota:** Não existe `npm run build` — a app é Node.js + EJS, sem bundler.
+
+### 2.5b. Migração E-commerce (loja online)
+
+Via SSH, no directório `gonzagas_node/`:
+
+```bash
+npm run db:ecommerce
+```
+
+Depois de iniciar a app, validar (opcional): `npm run test:ecommerce` (19/19 esperado).
+
+Activar no admin: `/admin/settings/ecommerce`. Ver `modules/ecommerce/README.md`.
+
 ### 2.6. Iniciando a Aplicação
 
 1. No gerenciador de aplicações Node.js, localize sua aplicação

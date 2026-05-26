@@ -7,6 +7,7 @@ const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
+const instagramModule = require('../modules/instagram');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -54,9 +55,13 @@ router.get('/', async (req, res) => {
     
     // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
     const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/imagem-nao-disponivel.svg';
+
+    // Instagram strip — non-blocking; silently degrades to empty array on any error
+    let igPosts = [];
+    try {
+      igPosts = await instagramModule.fetchInstagramFeed(6);
+    } catch (_) {}
     
-    console.log(`Rendering index with ${mediaFiles.length} media files`);
-    console.log('Featured products for template:', JSON.stringify(featured, null, 2)); // Log featured products
     res.render('index', { 
       title: 'Art&Shine — Elegância que nasce da terra',
       layout: 'layouts/main',
@@ -66,15 +71,10 @@ router.get('/', async (req, res) => {
       families: families || [],
       mediaFiles: mediaFiles || [],
       heroImage,
+      igPosts,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      theme: {
-        colorPrimary: '#05070a',
-        colorSecondary: '#0b1016',
-        colorAccent: '#A8A8A8',
-        colorText: '#f4f6f8',
-        colorHighlight: '#C0C0C0'
-      }
+      theme: 'dark'
     });
   } catch (error) {
     console.error('Error loading home page:', error);
@@ -105,10 +105,8 @@ router.get('/collections', async (req, res) => {
         await fs.access(possiblePath);
         files = await fs.readdir(possiblePath);
         mediaPath = possiblePath;
-        console.log(`Using media path: ${mediaPath}`);
         break;
       } catch (err) {
-        console.log(`Path not found: ${possiblePath}`);
         continue;
       }
     }
@@ -142,13 +140,7 @@ router.get('/collections', async (req, res) => {
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      theme: {
-        colorPrimary: '#05070a',
-        colorSecondary: '#0b1016',
-        colorAccent: '#A8A8A8',
-        colorText: '#f4f6f8',
-        colorHighlight: '#C0C0C0'
-      },
+      theme: 'dark',
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });
@@ -237,7 +229,7 @@ router.get('/catalog/product/:idOrSlug', async (req, res) => {
     const id = results.length > 0 ? results[0].id : idOrSlug;
     
     if (results.length === 0) {
-      return res.status(404).render('error', { message: 'Produto não encontrado' });
+      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado' });
     }
     
     const product = results[0];
@@ -319,7 +311,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     
   } catch (error) {
     console.error('Product error:', error);
-    res.status(500).render('error', { message: 'Erro interno' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro interno' });
   }
 });
 
@@ -449,7 +441,7 @@ router.get('/search', async (req, res) => {
     
   } catch (error) {
     console.error('Search results error:', error);
-    res.status(500).render('error', { message: 'Erro ao carregar resultados' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados' });
   }
 });
 
@@ -479,6 +471,11 @@ router.get('/api/nav-featured', async (req, res) => {
     });
   }
 });
+
+// Redirects para URLs antigas (bookmarks, links externos)
+router.get('/instagram', (req, res) => res.redirect(301, '/collections'));
+router.get('/instagram-preview', (req, res) => res.redirect(301, '/collections'));
+router.get('/instagram-lab', (req, res) => res.redirect(301, '/collections'));
 
 // About page
 router.get('/about', (req, res) => {

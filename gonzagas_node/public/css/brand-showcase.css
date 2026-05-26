@@ -1,0 +1,1647 @@
+/**
+ * brand-showcase.css — tema dourado do atelier (gold #c9a84c, cream #f0ece4, fundo #0a0a0a + gradientes).
+ * Activado com body.showcase-theme (res.locals.showcaseTheme nas rotas públicas).
+ * Carregar depois de dark-luxe.css.
+ */
+
+body.showcase-theme {
+  --igp-bg: #0a0a0a;
+  --igp-gold: #c9a84c;
+  --igp-cream: #f0ece4;
+  --igp-muted: rgba(240, 236, 228, 0.55);
+  --igp-green-wash: rgba(107, 128, 104, 0.06);
+  --igp-border: rgba(201, 168, 76, 0.18);
+
+  /* Redirecionar paleta legada para showcase — qualquer CSS que use var(--color-*) herda automaticamente */
+  --color-highlight: #c9a84c;   /* era #C0C0C0 prata */
+  --color-accent: #c9a84c;      /* era #A8A8A8 */
+  --color-accent-alt: #c9a84c;  /* era #B87333 bronze */
+  --color-text: #f0ece4;        /* cream em vez de branco frio */
+  --color-text-muted: rgba(240, 236, 228, 0.55);
+  --border-soft: rgba(201, 168, 76, 0.15);
+  --border-strong: rgba(201, 168, 76, 0.35);
+
+  background-color: var(--igp-bg) !important;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(201, 168, 76, 0.12), transparent 55%),
+    radial-gradient(ellipse 90% 50% at 100% 40%, var(--igp-green-wash), transparent 45%),
+    radial-gradient(ellipse 70% 40% at 0% 80%, rgba(201, 168, 76, 0.05), transparent 50%) !important;
+  background-attachment: fixed !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme main.flex-shrink-0 {
+  background: transparent;
+}
+
+body.showcase-theme .main-header {
+  background: rgba(10, 10, 10, 0.92) !important;
+  border-bottom: 1px solid var(--igp-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+body.showcase-theme .nav-menu a {
+  color: rgba(240, 236, 228, 0.82) !important;
+}
+
+body.showcase-theme .nav-menu a:hover,
+body.showcase-theme .nav-menu a.active {
+  color: var(--igp-gold) !important;
+  text-shadow: 0 0 12px rgba(201, 168, 76, 0.25) !important;
+}
+
+body.showcase-theme .logo h1 {
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .search-input {
+  background: rgba(18, 18, 18, 0.9) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .main-footer,
+body.showcase-theme footer {
+  background: rgba(8, 8, 8, 0.96) !important;
+  border-top: 1px solid var(--igp-border) !important;
+}
+
+body.showcase-theme .main-footer a,
+body.showcase-theme footer a {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .main-footer a:hover,
+body.showcase-theme footer a:hover {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .hero-video-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.35) 0%,
+    rgba(10, 10, 10, 0.55) 100%
+  ) !important;
+}
+
+body.showcase-theme .hero-tagline {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  color: var(--igp-cream) !important;
+  border: 1px solid rgba(201, 168, 76, 0.28) !important;
+  background: rgba(10, 10, 10, 0.42) !important;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.75) !important;
+  letter-spacing: 0.14em !important;
+}
+
+body.showcase-theme .featured-section {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+  background: transparent !important;
+}
+
+body.showcase-theme .section-header h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .featured-section .geometric-divider span {
+  width: 28px !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold)) !important;
+  opacity: 0.9 !important;
+}
+
+body.showcase-theme .featured-carousel .slick-prev:before,
+body.showcase-theme .featured-carousel .slick-next:before {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li button:before {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li.slick-active button:before {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .featured-carousel .product-card,
+body.showcase-theme .featured-carousel .product-item {
+  border: 1px solid var(--igp-border) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42) !important;
+}
+
+body.showcase-theme .featured-carousel .product-card:hover {
+  border-color: rgba(201, 168, 76, 0.38) !important;
+}
+
+body.showcase-theme .instagram-page {
+  color: var(--igp-cream);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+body.showcase-theme .instagram-hero {
+  text-align: center;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 auto clamp(1.5rem, 4vw, 2.5rem);
+  max-width: min(1320px, 100%);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 0 0 clamp(0, 2vw, 1.25rem) clamp(0, 2vw, 1.25rem);
+  position: relative;
+  overflow: hidden;
+}
+
+body.showcase-theme .instagram-hero-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+}
+
+body.showcase-theme .instagram-hero h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .instagram-hero-lead {
+  margin: 0 auto;
+  max-width: 420px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--igp-muted);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-divider {
+  margin-top: 1.25rem;
+}
+
+body.showcase-theme .instagram-page .geometric-divider {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+body.showcase-theme .instagram-page .geometric-divider span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold));
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+body.showcase-theme .instagram-grid-section {
+  max-width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem);
+}
+
+body.showcase-theme .instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.1rem);
+}
+
+@media (max-width: 900px) {
+  body.showcase-theme .instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  body.showcase-theme .instagram-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.showcase-theme .instagram-card {
+  background: rgba(18, 22, 20, 0.75);
+  border: 1px solid var(--igp-border);
+  border-radius: clamp(10px, 1.5vw, 14px);
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+body.showcase-theme .instagram-card:hover {
+  border-color: rgba(201, 168, 76, 0.38);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.48);
+  transform: translateY(-2px);
+}
+
+body.showcase-theme .instagram-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+body.showcase-theme .instagram-card-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #111;
+}
+
+body.showcase-theme .instagram-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.showcase-theme .instagram-card:hover .instagram-card-img {
+  transform: scale(1.03);
+}
+
+body.showcase-theme .instagram-card-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  background: #161616;
+}
+
+body.showcase-theme .instagram-type-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+}
+
+body.showcase-theme .instagram-card-caption {
+  margin: 0;
+  padding: 0.75rem 0.85rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(240, 236, 228, 0.9);
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-message {
+  max-width: 560px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+  color: var(--igp-muted);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body.showcase-theme .instagram-message a {
+  color: var(--igp-gold);
+}
+
+body.showcase-theme .instagram-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.showcase-theme .mobile-nav,
+body.showcase-theme .mobile-nav-content {
+  background: rgba(10, 10, 10, 0.98) !important;
+  border-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .mobile-nav-link {
+  color: rgba(240, 236, 228, 0.88) !important;
+}
+
+body.showcase-theme .mobile-nav-link:hover,
+body.showcase-theme .mobile-nav-link.active {
+  color: var(--igp-gold) !important;
+}
+
+/* ——— ig-collections (scope correcto) ——— */
+body.showcase-theme .featured-section.ig-collections {
+  margin-bottom: clamp(2.5rem, 7vw, 4.5rem);
+}
+
+/* ——— /collections ——— */
+body.showcase-theme .collections-page {
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .collections-title h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .collections-subtitle {
+  color: var(--igp-muted);
+}
+
+body.showcase-theme .collections-header .geometric-divider span {
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold));
+}
+
+body.showcase-theme .gallery-item {
+  background: rgba(201, 168, 76, 0.04);
+  border-color: var(--igp-border);
+}
+
+body.showcase-theme .gallery-item:hover {
+  border-color: rgba(201, 168, 76, 0.35);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* ——— /about ——— */
+body.showcase-theme .about-page {
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .about-header h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .about-header .geometric-divider span {
+  background: linear-gradient(90deg, #6b8068, var(--igp-gold));
+}
+
+body.showcase-theme .about-content h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--igp-gold);
+}
+
+body.showcase-theme .about-content p,
+body.showcase-theme .about-story p {
+  color: var(--igp-muted);
+}
+
+body.showcase-theme .about-connect {
+  border-color: var(--igp-border);
+  background: rgba(8, 8, 8, 0.5);
+}
+
+body.showcase-theme .about-connect h2,
+body.showcase-theme .about-connect h3 {
+  color: var(--igp-gold);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+}
+
+body.showcase-theme .about-connect p {
+  color: var(--igp-muted);
+}
+
+/* About — h3 genéricos */
+body.showcase-theme .about-page h3 {
+  color: var(--igp-gold);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+}
+
+/* Social links — versão grande na página About */
+body.showcase-theme .social-links-large a,
+body.showcase-theme .about-social a {
+  color: var(--igp-cream);
+  border-color: var(--igp-border);
+  background: rgba(201, 168, 76, 0.04);
+  transition: all 0.3s ease;
+}
+
+body.showcase-theme .social-links-large a:hover,
+body.showcase-theme .about-social a:hover {
+  color: var(--igp-gold);
+  border-color: rgba(201, 168, 76, 0.45);
+  background: rgba(201, 168, 76, 0.1);
+  text-decoration: none;
+}
+
+body.showcase-theme .social-links-large i,
+body.showcase-theme .about-social i {
+  color: var(--igp-gold);
+}
+
+/* About header — subtitle / subheader */
+body.showcase-theme .about-header p,
+body.showcase-theme .about-header .subtitle {
+  color: var(--igp-muted);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+/* About — values/philosophy list items */
+body.showcase-theme .about-values li,
+body.showcase-theme .about-philosophy li {
+  color: var(--igp-muted);
+}
+body.showcase-theme .about-values li::before,
+body.showcase-theme .about-philosophy li::before {
+  color: var(--igp-gold);
+}
+
+/* ══════════════════════════════════════════════
+   /catalog — tema showcase completo
+   ══════════════════════════════════════════════ */
+
+/* Layout */
+body.showcase-theme .catalog-main {
+  background: transparent;
+  color: var(--igp-cream);
+}
+
+/* Header do catálogo */
+body.showcase-theme .catalog-header {
+  border-bottom-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .page-title {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.15em !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .page-title::after {
+  display: none !important;
+}
+
+body.showcase-theme .page-subtitle,
+body.showcase-theme .sort-label {
+  color: var(--igp-muted) !important;
+}
+
+/* Botão filtros */
+body.showcase-theme .filter-toggle-btn {
+  background: rgba(201, 168, 76, 0.08) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .filter-toggle-btn:hover,
+body.showcase-theme .filter-toggle-btn.active {
+  background: var(--igp-gold) !important;
+  border-color: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 4px 14px rgba(201, 168, 76, 0.3) !important;
+}
+
+/* Ordenação e view-toggle */
+body.showcase-theme .sort-select {
+  background: rgba(10, 10, 10, 0.9) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .sort-select:hover,
+body.showcase-theme .sort-select:focus {
+  border-color: rgba(201, 168, 76, 0.5) !important;
+  outline: none;
+}
+
+body.showcase-theme .view-toggle {
+  background: rgba(10, 10, 10, 0.9) !important;
+  border-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .view-btn {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .view-btn.active,
+body.showcase-theme .view-btn:hover {
+  color: var(--igp-gold) !important;
+  background: rgba(201, 168, 76, 0.1) !important;
+}
+
+/* Sidebar / filtros */
+body.showcase-theme .catalog-sidebar.filter-drawer {
+  background: rgba(8, 8, 8, 0.98) !important;
+  border-right-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .sidebar-header {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-bottom-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .sidebar-title {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .sidebar-close {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .sidebar-close:hover {
+  background: rgba(201, 168, 76, 0.12) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .filter-title,
+body.showcase-theme .filter-title-families {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .filter-label {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .filter-label:hover {
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .filter-checkbox,
+body.showcase-theme .filter-radio {
+  accent-color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .filter-section {
+  border-bottom-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .family-tree-all-row {
+  border-bottom-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .family-tree-bulk-btn {
+  color: var(--igp-muted) !important;
+  border-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .family-tree-bulk-btn:hover {
+  color: var(--igp-cream) !important;
+  border-color: rgba(201, 168, 76, 0.4) !important;
+  background: rgba(201, 168, 76, 0.06) !important;
+}
+
+/* Pesquisa */
+body.showcase-theme .catalog-search-input {
+  background: rgba(201, 168, 76, 0.04) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .catalog-search-input::placeholder {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .catalog-search-input:focus {
+  border-color: rgba(201, 168, 76, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1) !important;
+}
+
+/* ——— Product cards — grid (alta especificidade vs catalog-enhanced + dark-luxe) ——— */
+
+/* Card shell — vence catalog-enhanced .products-grid:not(.list-view) .product-card */
+body.showcase-theme .products-grid:not(.list-view) .product-card,
+body.showcase-theme .catalog-grid:not(.list-view) .product-card,
+body.showcase-theme .products-grid .product-card,
+body.showcase-theme .catalog-grid .product-card,
+body.showcase-theme .product-item .product-card,
+body.showcase-theme .product-card {
+  background: rgba(12, 12, 12, 0.88) !important;
+  border: 1px solid var(--igp-border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+  border-radius: 12px !important;
+  max-width: none !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+body.showcase-theme .products-grid:not(.list-view) .product-card:hover,
+body.showcase-theme .catalog-grid:not(.list-view) .product-card:hover,
+body.showcase-theme .products-grid .product-card:hover,
+body.showcase-theme .catalog-grid .product-card:hover,
+body.showcase-theme .product-item .product-card:hover,
+body.showcase-theme .product-card:hover {
+  border-color: rgba(201, 168, 76, 0.45) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 16px rgba(201, 168, 76, 0.1) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Info — vence dark-luxe .products-grid .product-info { background: rgba(6,10,15) } */
+body.showcase-theme .products-grid .product-info,
+body.showcase-theme .catalog-grid .product-info,
+body.showcase-theme .product-item .product-info,
+body.showcase-theme .product-card .product-info {
+  background: transparent !important;
+  padding: 0.85rem 0.75rem 1rem !important;
+  text-align: left !important;
+}
+
+/* Imagem — catálogo (container) + coleção/home ( .product-image ) */
+body.showcase-theme .product-image-container {
+  background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08) !important;
+}
+
+body.showcase-theme .product-card .product-image {
+  background: rgba(10, 10, 10, 0.7) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08) !important;
+}
+
+body.showcase-theme .product-card .product-image img {
+  object-fit: cover !important;
+}
+
+/* Overlay "Ver Detalhes" */
+body.showcase-theme .product-overlay {
+  background: rgba(0, 0, 0, 0.72) !important;
+}
+
+body.showcase-theme .btn-quick-view {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+body.showcase-theme .btn-quick-view:hover {
+  background: #e0bc5a !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 4px 14px rgba(201, 168, 76, 0.35) !important;
+}
+
+/* Badges */
+body.showcase-theme .product-badge.badge-new,
+body.showcase-theme .badge-new {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+}
+
+body.showcase-theme .product-badge.badge-sale,
+body.showcase-theme .badge-sale {
+  background: rgba(201, 168, 76, 0.18) !important;
+  color: var(--igp-gold) !important;
+  border: 1px solid var(--igp-border) !important;
+}
+
+/* Tipografia do card — vence dark-luxe .product-reference/.product-price { color: muted } */
+body.showcase-theme .products-grid .product-reference,
+body.showcase-theme .catalog-grid .product-reference,
+body.showcase-theme .product-card .product-reference {
+  color: var(--igp-muted) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+}
+
+body.showcase-theme .text-highlight,
+body.showcase-theme .product-family .text-highlight,
+body.showcase-theme .product-family small {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .products-grid .product-family,
+body.showcase-theme .catalog-grid .product-family,
+body.showcase-theme .product-card .product-family {
+  color: var(--igp-gold) !important;
+  margin-bottom: 0.35rem !important;
+}
+
+body.showcase-theme .products-grid .product-title,
+body.showcase-theme .catalog-grid .product-title,
+body.showcase-theme .product-card .product-title,
+body.showcase-theme .product-card .product-info h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 400 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.35 !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .products-grid .product-price,
+body.showcase-theme .catalog-grid .product-price,
+body.showcase-theme .product-card .product-price {
+  color: var(--igp-gold) !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+
+body.showcase-theme .product-price .sale-price,
+body.showcase-theme .sale-price {
+  color: var(--igp-gold) !important;
+  font-weight: 600 !important;
+}
+
+body.showcase-theme .product-price .original-price,
+body.showcase-theme .original-price {
+  color: var(--igp-muted) !important;
+  opacity: 0.7 !important;
+}
+
+body.showcase-theme .product-price .text-muted,
+body.showcase-theme .product-price .fst-italic {
+  color: var(--igp-muted) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+/* Botão add-to-cart dentro do card */
+body.showcase-theme .product-card .btn-add-to-cart {
+  margin-top: 0.65rem !important;
+}
+
+/* Sem resultados */
+body.showcase-theme .no-products {
+  background: rgba(201, 168, 76, 0.03) !important;
+  border-color: var(--igp-border) !important;
+}
+
+body.showcase-theme .no-products h3 {
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .no-products p {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .no-products a {
+  color: var(--igp-gold) !important;
+}
+
+/* ——— Product detail ——— */
+body.showcase-theme .product-title {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .product-price {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .product-description {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .breadcrumbs a {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .breadcrumbs a:hover {
+  color: var(--igp-gold) !important;
+}
+
+
+/* ── Instagram Strip (homepage) ─────────────────────────────── */
+body.showcase-theme .ig-strip-section {
+  padding: 4rem 1.5rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body.showcase-theme .ig-strip-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+body.showcase-theme .ig-strip-header h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: 0.18em;
+  color: var(--igp-cream);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+body.showcase-theme .ig-strip-lead {
+  color: var(--igp-muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+
+body.showcase-theme .ig-strip-section .geometric-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.75rem auto 0;
+}
+
+body.showcase-theme .ig-strip-section .geometric-divider span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--igp-gold);
+  opacity: 0.6;
+}
+
+body.showcase-theme .ig-strip-section .geometric-divider span:nth-child(2) {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--igp-gold);
+  opacity: 0.9;
+}
+
+/* Grid layout: 3 cols desktop → 2 tablet → 1 mobile */
+body.showcase-theme .ig-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  body.showcase-theme .ig-strip-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  body.showcase-theme .ig-strip-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CTA row */
+body.showcase-theme .ig-strip-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+body.showcase-theme .ig-strip-cta-link {
+  color: var(--igp-gold);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+
+body.showcase-theme .ig-strip-cta-link:hover {
+  border-bottom-color: var(--igp-gold);
+  opacity: 0.85;
+}
+
+body.showcase-theme .ig-strip-cta-external::after {
+  content: ' ↗';
+  font-size: 0.8em;
+}
+
+/* ——— Featured Pieces: anular estilos "antigos" do dark-luxe ——— */
+
+/* Título ig-collections: letter-spacing próprio (0.35em) vs genérico da secção (0.2em) */
+body.showcase-theme .section-header h2.ig-collections-title {
+  letter-spacing: 0.35em !important;
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-weight: 300 !important;
+  text-transform: uppercase !important;
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .section-header h2.ig-collections-title::after {
+  display: none !important;
+}
+
+/* Subtítulo ig-collections */
+body.showcase-theme .ig-collections-sub {
+  color: var(--igp-muted) !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.12em !important;
+}
+
+/* Remover sublinhado prateado do título (dark-luxe .section-header h2::after) */
+body.showcase-theme .featured-section .section-header h2::after {
+  display: none !important;
+}
+
+/* Fundo do card e info: showcase, em vez do rgba escuro do main.css/dark-luxe */
+body.showcase-theme .featured-carousel .product-card {
+  background: rgba(201, 168, 76, 0.04) !important;
+  border: 1px solid var(--igp-border) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38) !important;
+}
+
+body.showcase-theme .featured-carousel .product-card:hover {
+  background: rgba(201, 168, 76, 0.07) !important;
+  border-color: rgba(201, 168, 76, 0.35) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.showcase-theme .featured-carousel .product-info {
+  background: transparent !important;
+  padding: 0.85rem 0.75rem 1rem;
+}
+
+/* Referência, família, preço — cores showcase */
+body.showcase-theme .featured-carousel .product-reference {
+  color: var(--igp-muted) !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+body.showcase-theme .featured-carousel .product-family small {
+  color: var(--igp-gold) !important;
+  font-size: 0.8rem;
+}
+
+body.showcase-theme .featured-carousel .product-price {
+  color: var(--igp-cream) !important;
+}
+
+body.showcase-theme .featured-carousel .product-price .sale-price {
+  color: var(--igp-gold) !important;
+  font-weight: 500;
+}
+
+body.showcase-theme .featured-carousel .product-price .text-muted {
+  color: var(--igp-muted) !important;
+}
+
+/* Slick arrows e dots — dourado */
+body.showcase-theme .featured-carousel .slick-prev:before,
+body.showcase-theme .featured-carousel .slick-next:before {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li button:before {
+  color: var(--igp-muted) !important;
+}
+
+body.showcase-theme .featured-carousel .slick-dots li.slick-active button:before {
+  color: var(--igp-gold) !important;
+}
+
+
+/* =====================================================================
+   COLLECTION PAGE (/collection/:id)
+   ===================================================================== */
+
+body.showcase-theme .collection-page { background: transparent; }
+
+body.showcase-theme .collection-header {
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+}
+
+body.showcase-theme .collection-title h1 {
+  color: var(--igp-cream);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+body.showcase-theme .collection-description {
+  color: var(--igp-muted);
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0.75rem auto 0;
+  line-height: 1.7;
+}
+
+/* Geometric divider em dourado */
+body.showcase-theme .geometric-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 1rem auto;
+}
+body.showcase-theme .geometric-divider span {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--igp-gold);
+  opacity: 0.7;
+}
+body.showcase-theme .geometric-divider span:nth-child(2) {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+  border: 1px solid var(--igp-gold);
+  transform: rotate(45deg);
+}
+
+/* Filter controls */
+body.showcase-theme .filter-controls {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--igp-border);
+  margin-bottom: 1.5rem;
+}
+body.showcase-theme .filter-controls label {
+  color: var(--igp-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-right: 0.5rem;
+}
+body.showcase-theme .filter-controls select,
+body.showcase-theme #sort-select {
+  background: rgba(10,10,10,0.9);
+  border: 1px solid var(--igp-border);
+  color: var(--igp-cream);
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+body.showcase-theme .filter-controls select:focus,
+body.showcase-theme #sort-select:focus {
+  border-color: var(--igp-gold);
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+}
+
+/* No products */
+body.showcase-theme .no-products {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--igp-muted);
+}
+body.showcase-theme .no-products p { margin-bottom: 1.5rem; }
+body.showcase-theme .no-products .btn-primary {
+  background: var(--igp-gold);
+  color: #0a0a0a;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Collection navigation */
+body.showcase-theme .collection-nav {
+  padding: 2.5rem 1.5rem;
+  border-top: 1px solid var(--igp-border);
+  text-align: center;
+}
+body.showcase-theme .collection-nav h3 {
+  color: var(--igp-gold);
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+body.showcase-theme .collection-link {
+  display: inline-block;
+  margin: 0.3rem 0.5rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--igp-border);
+  border-radius: 20px;
+  color: var(--igp-cream);
+  text-decoration: none;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  transition: all 0.25s ease;
+}
+body.showcase-theme .collection-link:hover {
+  border-color: var(--igp-gold);
+  color: var(--igp-gold);
+  background: rgba(201,168,76,0.06);
+}
+
+/* =====================================================================
+   E-COMMERCE — showcase theme overrides
+   ===================================================================== */
+
+/* ── Botão "Adicionar ao carrinho" — product cards + detail ── */
+body.showcase-theme .btn-add-to-cart,
+body.showcase-theme button.btn-add-to-cart {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--igp-border);
+  color: var(--igp-cream);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  margin-top: 0.6rem;
+}
+
+body.showcase-theme .btn-add-to-cart:hover,
+body.showcase-theme button.btn-add-to-cart:hover {
+  background: var(--igp-gold);
+  border-color: var(--igp-gold);
+  color: #0a0a0a;
+  box-shadow: 0 3px 12px rgba(201,168,76,0.3);
+}
+
+body.showcase-theme .btn-add-to-cart:active,
+body.showcase-theme button.btn-add-to-cart:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Estado "adicionado" (classe injectada pelo JS) */
+body.showcase-theme .btn-add-to-cart.added,
+body.showcase-theme button.btn-add-to-cart.added {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--igp-gold);
+  color: var(--igp-gold);
+}
+
+/* Na página de detalhe o botão é maior */
+body.showcase-theme .product-actions .btn-add-to-cart {
+  padding: 0.85rem 2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+}
+
+/* ── Header — ícone carrinho ──────────────────────────────── */
+body.showcase-theme .header-cart-link {
+  color: var(--igp-cream) !important;
+  transition: color 0.2s;
+}
+
+body.showcase-theme .header-cart-link:hover {
+  color: var(--igp-gold) !important;
+}
+
+body.showcase-theme .header-cart-badge {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  font-weight: 700;
+}
+
+/* ── Header — conta cliente ───────────────────────────────── */
+.header-container {
+  gap: 0.5rem;
+}
+
+.header-account-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.header-account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--igp-cream) !important;
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.header-account-link:hover {
+  color: var(--igp-gold) !important;
+}
+
+.header-account-register-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.55);
+  border-radius: 4px;
+  color: var(--igp-gold) !important;
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.header-account-register-btn:hover {
+  background: var(--igp-gold);
+  color: #0a0a0a !important;
+}
+
+.header-account-label {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .header-account-label {
+    display: inline;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-account-register-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* Banners conta (cart, checkout, success) */
+.account-nav-banner {
+  margin-bottom: 1.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: 8px;
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.account-nav-banner p {
+  margin: 0;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.65));
+  font-size: 0.9rem;
+}
+
+.account-nav-banner a {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+}
+
+.account-nav-banner a:hover {
+  color: #e0bc5a;
+  text-decoration: underline;
+}
+
+.account-nav-banner-cta,
+.account-success-register .account-nav-banner-cta {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.account-nav-hint {
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+}
+
+.account-nav-hint a {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+}
+
+.account-nav-hint a:hover {
+  text-decoration: underline;
+}
+
+.account-nav-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.account-nav-link {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.account-nav-link-muted {
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55)) !important;
+}
+
+.account-nav-btn {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 4px;
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+/* ── Formulários Bootstrap dentro do tema showcase ────────── */
+body.showcase-theme .form-control,
+body.showcase-theme .form-select {
+  background: rgba(8,8,8,0.8);
+  border-color: var(--igp-border);
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .form-control:focus,
+body.showcase-theme .form-select:focus {
+  background: rgba(12,12,12,0.9);
+  border-color: var(--igp-gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  color: var(--igp-cream);
+}
+
+body.showcase-theme .form-label {
+  color: var(--igp-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+}
+
+body.showcase-theme .form-check-label {
+  color: var(--igp-muted);
+}
+
+body.showcase-theme .form-check-input {
+  background-color: rgba(8,8,8,0.8);
+  border-color: var(--igp-border);
+}
+
+body.showcase-theme .form-check-input:checked {
+  background-color: var(--igp-gold);
+  border-color: var(--igp-gold);
+}
+
+/* ── Alert/mensagens dentro do showcase ───────────────────── */
+body.showcase-theme .alert-danger {
+  background: rgba(200, 60, 60, 0.12);
+  border-color: rgba(200, 60, 60, 0.3);
+  color: #f08080;
+}
+
+body.showcase-theme .alert-success {
+  background: rgba(80, 180, 100, 0.1);
+  border-color: rgba(80, 180, 100, 0.25);
+  color: #7dd98a;
+}
+
+/* =====================================================================
+   MOBILE — showcase theme (todas as páginas)
+   max-width: 768px / 480px
+   ===================================================================== */
+
+@media (max-width: 768px) {
+
+  /* ── Geral: secções e títulos ─────────────────────────────── */
+  body.showcase-theme .ig-collections-title {
+    font-size: 1.5rem !important;
+    letter-spacing: 0.22em !important;
+  }
+
+  body.showcase-theme .ig-collections-sub { font-size: 0.85rem; }
+
+  body.showcase-theme .section-header { padding: 0 1rem; }
+
+  /* ── IG strip (homepage) ─────────────────────────────────── */
+  body.showcase-theme .ig-strip-section { padding: 2rem 1rem 1.5rem; }
+
+  body.showcase-theme .ig-strip-header h2 {
+    font-size: 1.4rem;
+    letter-spacing: 0.18em;
+  }
+
+  body.showcase-theme .ig-strip-lead { font-size: 0.82rem; }
+
+  body.showcase-theme .ig-strip-cta {
+    flex-direction: column;
+    gap: 0.85rem;
+    align-items: stretch;
+  }
+
+  body.showcase-theme .ig-strip-cta-link {
+    text-align: center;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--igp-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+
+  /* Instagram cards em strip: 2 colunas (já definido no grid, reforçar caption) */
+  body.showcase-theme .instagram-card-caption {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+  }
+
+  /* ── Collections page ─────────────────────────────────────── */
+  body.showcase-theme .collection-header { padding: 2rem 1rem 1.25rem; }
+
+  body.showcase-theme .collection-title h1 {
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+  }
+
+  body.showcase-theme .collection-description { font-size: 0.9rem; }
+
+  body.showcase-theme .filter-controls { padding: 0.75rem 1rem; }
+
+  body.showcase-theme .filter-controls select,
+  body.showcase-theme #sort-select {
+    width: 100%;
+    font-size: 16px; /* iOS zoom prevention */
+    min-height: 44px;
+  }
+
+  body.showcase-theme .filter-container { flex-direction: column; gap: 0.5rem; }
+
+  body.showcase-theme .collection-nav { padding: 2rem 1rem; }
+
+  body.showcase-theme .collection-link {
+    font-size: 0.82rem;
+    padding: 0.4rem 0.85rem;
+  }
+
+  /* ── About page ───────────────────────────────────────────── */
+  body.showcase-theme .about-connect {
+    padding: 2rem 1rem;
+    border-radius: 0;
+  }
+
+  body.showcase-theme .social-links-large { gap: 0.75rem; }
+
+  body.showcase-theme .social-links-large a {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Privacy / Terms ──────────────────────────────────────── */
+  body.showcase-theme .privacy-policy-container,
+  body.showcase-theme .terms-container { padding: 1rem 0 1.5rem; }
+
+  body.showcase-theme .privacy-policy-content,
+  body.showcase-theme .terms-content {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+    margin: 0 0.5rem 1rem;
+  }
+
+  body.showcase-theme .privacy-title,
+  body.showcase-theme .terms-title {
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+  }
+
+  body.showcase-theme .privacy-actions,
+  body.showcase-theme .terms-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.showcase-theme .privacy-actions .btn,
+  body.showcase-theme .terms-actions .btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 1rem;
+    min-height: 48px;
+  }
+
+  body.showcase-theme .rights-grid { grid-template-columns: 1fr; }
+
+  /* ── Search results ───────────────────────────────────────── */
+  body.showcase-theme .search-results-page { padding: 0; }
+
+  body.showcase-theme .search-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  body.showcase-theme .search-title { font-size: 1.3rem; }
+
+  body.showcase-theme .search-controls {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  body.showcase-theme #sortBy {
+    width: 100%;
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  /* Sidebar filtros → drawer / toggle */
+  body.showcase-theme .search-filters {
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  body.showcase-theme .filter-group { margin-bottom: 1rem; }
+
+  body.showcase-theme .btn-clear-filters,
+  body.showcase-theme .btn-apply-price {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+  }
+
+  body.showcase-theme .price-input {
+    font-size: 16px;
+    min-height: 40px;
+  }
+
+  /* Search result cards: 2 col mobile */
+  body.showcase-theme .search-results-page .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  body.showcase-theme .search-results-page .product-info {
+    padding: 0.65rem !important;
+  }
+
+  body.showcase-theme .search-results-page .product-name {
+    font-size: 0.82rem !important;
+  }
+
+  body.showcase-theme .search-results-page .product-price {
+    font-size: 0.9rem !important;
+  }
+
+  /* Pagination botões mais largos */
+  body.showcase-theme .pagination { flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  body.showcase-theme .page-btn,
+  body.showcase-theme .page-number {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 0.35rem 0.65rem;
+  }
+
+  /* ── Product detail (inline CSS override) ─────────────────── */
+  body.showcase-theme .product-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  body.showcase-theme .product-gallery-section { position: static !important; }
+
+  body.showcase-theme .related-products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  /* ── E-commerce: btn-add-to-cart ──────────────────────────── */
+  body.showcase-theme .btn-add-to-cart,
+  body.showcase-theme button.btn-add-to-cart {
+    min-height: 44px;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+
+  /* ── Catalog sidebar: filter drawer full-screen no showcase ── */
+  body.showcase-theme .catalog-sidebar {
+    padding: 1rem;
+  }
+
+  body.showcase-theme .catalog-header {
+    padding: 0 0.75rem;
+  }
+
+  /* ── About page: product card na coleção ─────────────────── */
+  body.showcase-theme .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* ── 480px: phones pequenos ──────────────────────────────── */
+@media (max-width: 480px) {
+
+  body.showcase-theme .collection-title h1 { font-size: 1.25rem; }
+  body.showcase-theme .ig-strip-header h2 { font-size: 1.2rem; }
+  body.showcase-theme .privacy-title,
+  body.showcase-theme .terms-title { font-size: 1.2rem; }
+
+  /* IG strip: 1 coluna em phones muito pequenos */
+  body.showcase-theme .ig-strip-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem;
+  }
+
+  /* Search: 1 coluna em ecrãs pequenos */
+  body.showcase-theme .search-results-page .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Related products: 1 col */
+  body.showcase-theme .related-products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

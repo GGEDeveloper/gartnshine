@@ -14,8 +14,9 @@ const activeModules = [
   'suppliers',
   'products',
   'inventory',
-  'sales',
-  'financial'
+  'ecommerce',
+  'payments',
+  'financial',
 ];
 
 // Objeto para armazenar os módulos carregados
@@ -77,16 +78,14 @@ function getModuleRoutes() {
  * Inicializa os serviços dos módulos
  * @param {Object} app - Instância do Express
  */
-async function initializeModules(app) {
+function initializeModules(app) {
   try {
-    // Inicializa cada módulo
     for (const [moduleName, module] of Object.entries(modules)) {
       if (typeof module.initialize === 'function') {
         console.log(`🔧 Inicializando módulo: ${moduleName}`);
-        await module.initialize(app);
+        module.initialize(app);
       }
     }
-    
     console.log('✅ Todos os módulos foram inicializados com sucesso!');
   } catch (error) {
     console.error('❌ Erro ao inicializar os módulos:', error);

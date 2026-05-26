@@ -24,6 +24,7 @@
      - [4.5.4 Excluir Família](#454-excluir-família)
 5. [Relatórios](#5-relatórios)
 6. [Configurações do Sistema](#6-configurações-do-sistema)
+   - [6.1 E-commerce e Pedidos Online](#61-e-commerce-e-pedidos-online)
 7. [Solução de Problemas Comuns e Erros Esperados (Perspectiva Técnica)](#7-solução-de-problemas-comuns-e-erros-esperados-perspectiva-técnica)
 8. [Gerenciamento de Checkpoints (Backup e Restauração)](#8-gerenciamento-de-checkpoints-backup-e-restauração)
    - [8.1 Listar Checkpoints](#81-listar-checkpoints)
@@ -64,6 +65,7 @@ As informações tipicamente apresentadas no dashboard incluem:
     - **Total de Famílias**: Número total de famílias (ou categorias) de produtos criadas.
     - **Produtos com Baixo Estoque**: Contagem de produtos cujo estoque atual está acima de zero, mas abaixo de um limite pré-definido (por exemplo, menos de 5 unidades). Isso ajuda a identificar itens que podem precisar de reposição em breve.
     - **Produtos Fora de Estoque**: Contagem de produtos com estoque zero ou negativo, indicando indisponibilidade imediata.
+    - **Pedidos / Receita** (quando e-commerce activo): totais de pedidos e receita agregada no dashboard.
 
 - **Listas de Atividades Recentes:**
     - **Produtos Recentes**: Uma lista dos últimos produtos que foram adicionados ou atualizados no sistema (geralmente os 5 mais recentes). Para cada produto, são exibidos detalhes como imagem, nome, referência, preço de venda e estoque atual.
@@ -105,7 +107,9 @@ Ao realizar um ajuste manual, você normalmente precisará fornecer as seguintes
 
 As tabelas `product_sales` (para registrar detalhes de vendas individuais) e `product_purchases` (para registrar detalhes de compras de fornecedores) existem no banco de dados. No entanto, a funcionalidade de "Ajuste Manual de Estoque" descrita acima, ao usar tipos como `Saída por Venda` ou `Entrada por Compra`, **atualiza diretamente o inventário e registra a transação de estoque, mas não cria automaticamente um registro correspondente e detalhado nas tabelas `product_sales` ou `product_purchases` através desta interface do painel de admin.**
 
-Se a sua operação requer o registro detalhado em `product_sales` ou `product_purchases` (por exemplo, para contabilidade detalhada, informações do cliente na venda, dados do fornecedor na compra), essa funcionalidade pode precisar ser acessada por outros meios (se implementada, por exemplo, através de uma seção "Pedidos" ou "Compras" dedicada que ainda não está totalmente operacional) ou gerenciada externamente ao fluxo de ajuste de estoque.
+Se a sua operação requer o registro detalhado em `product_sales` ou `product_purchases` (por exemplo, para contabilidade detalhada, informações do cliente na venda, dados do fornecedor na compra), essa funcionalidade pode precisar ser acessada por outros meios ou gerenciada externamente ao fluxo de ajuste de estoque.
+
+**Pedidos online:** vendas feitas pelo checkout da loja são registadas nas tabelas `orders` e `order_items` (módulo e-commerce). A baixa automática de stock após pagamento confirmado (Stripe) é feita pelo submódulo `fulfillment` — ver secção [6.1 E-commerce e Pedidos Online](#61-e-commerce-e-pedidos-online).
 
 ## Gerenciamento de Produtos
 
@@ -228,6 +232,57 @@ Configure alertas automáticos para:
 - Vendas acima da média
 - Novos pedidos recebidos
 - Atualizações do sistema
+
+### 6.1 E-commerce e Pedidos Online
+
+A loja online é um módulo separado (`modules/ecommerce/`). Requer migração de base de dados antes de activar.
+
+#### Activar a loja
+
+1. No servidor, executar: `npm run db:ecommerce` (dentro de `gonzagas_node/`)
+2. Admin → **Configurações** → **E-commerce** (`/admin/settings/ecommerce`)
+3. Marcar **Activar loja online**
+4. Configurar:
+   - **IVA** — preços com ou sem IVA incluído (`prices_include_tax`)
+   - **Portes** — valor fixo (integração CTT futura)
+   - **Stripe** — modo `disabled` (sem pagamento online), `test` ou `live`
+
+Com `payment_mode=disabled`, os clientes concluem pedidos no checkout sem redirect para Stripe; o pagamento é tratado manualmente.
+
+#### Gerir pedidos
+
+1. Admin → **Pedidos** (`/admin/orders`)
+2. Lista com número, cliente, total, estado e data
+3. Detalhe do pedido (`/admin/orders/:id`): moradas, linhas, histórico de estado
+
+Estados típicos: `pending`, `paid`, `processing`, `shipped`, `delivered`, `cancelled`.
+
+#### Conta cliente (site público)
+
+Com a loja activa, os visitantes vêem no header **Entrar** e **Criar conta** (ou **Pedidos** se tiverem sessão). Também disponível no menu mobile e footer.
+
+- Registo/login opcional — checkout funciona como convidado
+- Após pedido guest, a página de sucesso convida a criar conta com o email usado
+- Clientes autenticados veem histórico em `/account/orders`
+
+Validação: `npm run test:ecommerce` (29 checks).
+
+#### Stripe (go-live)
+
+1. Preencher chaves publishable/secret no admin ou `.env`
+2. Definir `payment_mode=test` e testar checkout
+3. Configurar webhook Stripe apontando para `POST /webhooks/stripe`
+4. Após validação, mudar para `payment_mode=live`
+
+#### Problemas comuns
+
+| Erro | Causa provável | Solução |
+|------|----------------|---------|
+| `Unknown column 'billing_address_line1'` | Migração 007 não aplicada | `npm run db:ecommerce` |
+| Checkout redirecciona para `/cart` | Carrinho vazio ou loja desactivada | Adicionar produto; activar e-commerce |
+| Pedido sem baixa de stock | Pagamento ainda não confirmado (Stripe) | Confirmar webhook ou usar fulfillment manual |
+
+Documentação técnica: `gonzagas_node/modules/ecommerce/README.md`
 
 ## 7. Solução de Problemas Comuns e Erros Esperados (Perspectiva Técnica)
 
@@ -437,4 +492,4 @@ Se você deseja remover um checkpoint específico (por exemplo, para liberar esp
 4.  O arquivo de backup físico será removido do servidor e o registro será excluído do sistema.
 
 ---
-Última atualização: Maio 2025
+Última atualização: Maio 2026 (secção e-commerce)

@@ -1,5 +1,4 @@
-<main>
-    <!-- Hero: vídeo de fundo + texto "Elegância que nasce da terra" encostado ao topo -->
+    <!-- Hero: vídeo de fundo + texto "Elegância que nasce da terra" -->
     <section class="hero">
       <div class="hero-video-container">
         <video class="hero-video" autoplay muted loop playsinline>
@@ -13,12 +12,13 @@
         <p class="hero-tagline"><%= siteDescription %></p>
       </div>
     </section>
-    
+
     <!-- Featured Products -->
     <% if (featured && featured.length > 0) { %>
-    <section class="featured-section">
-      <div class="section-header">
-        <h2>Featured Pieces</h2>
+    <section class="featured-section ig-collections">
+      <div class="section-header ig-collections-head">
+        <h2 class="ig-collections-title">Featured Pieces</h2>
+        <p class="ig-collections-sub">Prata &amp; pedras naturais — design alternativo</p>
         <div class="geometric-divider">
           <span></span>
           <span></span>
@@ -37,9 +37,8 @@
 
     </section>
     <% } %>
-    
 
-</main>
+<%- include('partials/_media-strip', { igPosts: typeof igPosts !== 'undefined' ? igPosts : [] }) %>
 
 <script type="application/ld+json">
 {

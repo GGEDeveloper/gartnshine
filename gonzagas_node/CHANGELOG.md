@@ -1,5 +1,138 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-05-26] - Conta cliente: navegação integrada
+
+### 👤 **Conta cliente no site público**
+
+#### **Navegação**
+- Partial `_customerAccountNav.ejs` — header (Entrar + **Criar conta**), menu mobile, footer
+- Carrinho, checkout e success — CTAs para login/registo; `returnTo` preservado
+- Checkout pré-preenche dados se sessão cliente activa
+- Success convida a criar conta com email do pedido (guest)
+
+#### **Rotas / sessão**
+- `/account` → redirect login ou pedidos
+- `requireEcommerceEnabled` nas rotas de conta
+- Redirect se já autenticado; logout limpa sessão
+
+#### **Fix**
+- Middleware `ecommerceEnabled` / `customerLoggedIn` movido **antes** das rotas e-commerce (header correcto em `/cart`, `/checkout`, `/account`)
+
+#### **Validado**
+- `npm run test:ecommerce` — **29/29** (incl. conta: header, footer, cart/checkout CTAs, login/logout, returnTo)
+- `npm run validate:catalog` — OK
+
+---
+
+## [2026-05-26] - Mobile showcase + validação
+
+### 📱 **Pass mobile completo (showcase + e-commerce)**
+
+#### **CSS mobile**
+- `frontend-mobile.css`: cores `#c0a080` → `var(--igp-gold)`; regras para IG strip, search, e-commerce, collection, privacy/terms, about, error; safe-area para cart/checkout
+- `brand-showcase.css`: bloco `@media (max-width: 768px/480px)` para todas as páginas showcase (IG strip, collection, about, privacy/terms, search, product detail, btn-add-to-cart)
+- `cart.css`: tabela → cards empilhados em mobile (`data-label` + `::before`); summary e CTA 100% largura
+- `checkout.css`: inputs 16px (iOS), submit full-width, success/cancel empilhados, account pages
+- `cart.ejs`: `data-label` em cada `<td>` para labels legíveis no layout card
+- `mobile-header.ejs`: dropdown links/ícones com `var(--igp-gold)`
+
+#### **Validado localmente (2026-05-26)**
+- `npm run test:ecommerce` — **19/19** (cart API, checkout submit, success, account, admin orders/settings, add-to-cart no catálogo)
+- `npm run validate:catalog` — OK (328 produtos, 18 famílias)
+- Smoke HTTP: 18 rotas públicas + 4 assets CSS → **200**
+- Estrutural: `data-theme="dark"`, `body.showcase-theme`, search sem HTML duplicado, privacy sem fundo claro
+- **Nota:** não existe `npm run build` — app Node/Express; validação = `npm start` + scripts acima
+
+---
+
+## [2026-05-26] - Tema Showcase + E-commerce UI
+
+### 🎨 **Alinhamento visual completo do site (showcase dark-gold)**
+
+#### **Tema showcase (`brand-showcase.css` + `body.showcase-theme`)**
+- Toda a paleta do site passa a usar dourado (#c9a84c) + cream (#f0ece4) sobre fundo escuro (#0a0a0a)
+- `body.showcase-theme` redireciona variáveis legadas `--color-accent/highlight/text` para gold/cream — qualquer CSS que use `var(--color-*)` herda automaticamente
+- `data-theme="dark"` corrigido (era `"[object Object]"` devido a `theme: {...}` passado como objecto nas rotas)
+- CSS estático usa `no-cache` em desenvolvimento; `immutable` só em produção
+- `app.version` dinâmico (`Date.now()`) em dev para cache busting automático
+
+#### **Páginas corrigidas**
+- **Privacy Policy + Terms of Service**: CSS inline com tema claro totalmente substituído por showcase dark
+- **Search results**: Removida estrutura HTML duplicada (`<!DOCTYPE>/<html>/<body>` dentro do layout); estilos showcase aplicados
+- **Collection page**: Estilos showcase para cabeçalho, divider geométrico dourado, controlos de sort, nav de coleções
+- **Product detail**: Valores hardcoded `#C0C0C0/#A8A8A8/#B87333` migrados para `var(--color-*)` que herdam gold
+- **About page**: `.about-connect`, `.social-links-large`, `h3` com gold/muted showcase
+- **error.ejs**: Guards defensivos `title`/`message`; estilo refeito showcase dark; `title:` adicionado a 3 chamadas `render('error')` que faltavam
+
+#### **E-commerce UI — showcase theme**
+- `cart.css` reescrito: tabela dark com cabeçalho gold, qty input com focus ring dourado, cart-summary glass card, btn gold
+- `checkout.css` reescrito: form inputs dark/gold focus, h2 secções gold, checkout-summary glass, submit btn gold, páginas success/cancel centradas com ícone ✦ dourado
+- `brand-showcase.css`: `.btn-add-to-cart` outline → fill gold no hover; `.header-cart-badge` gold bg; Bootstrap `.form-control` global override para showcasetheme
+- Account pages (`/account/login`, `/account/register`, `/account/orders`): h1 Georgia + underline gold, tabela showcase
+- `checkout-success.ejs` / `checkout-cancel.ejs`: adicionado `<link>` para `checkout.css`
+
+#### **Instagram strip na homepage**
+- Secção "No Instagram" com 6 posts reais via Instagram Graph API
+- Partial `partials/_ig-strip.ejs`; rota home com `instagramModule.fetchInstagramFeed(6)`
+- Cache de 5 minutos em `mediaService.js`
+
+---
+
+## [2026-05-26] - E-commerce Modular (core)
+
+### 🛒 **Loja online modular**
+
+#### **Arquitectura**
+- Novo módulo `modules/ecommerce/` com submódulos: cart, checkout, orders, settings, shipping, fulfillment, admin, accounts, notifications, analytics, jobs
+- Novo módulo `modules/payments/` com provider Stripe (`disabled` / `test` / `live`)
+- Registo em `config/modules.js`; inicialização via `initializeModules(app)` em `app.js`
+
+#### **Base de dados**
+- Schema unificado INT em `modules/ecommerce/sql/migrations/006_ecommerce_unified.sql`
+- Migração de upgrade para instalações existentes: `007_ecommerce_alter_existing.sql`, `008_ecommerce_alter_customers.sql`
+- Comando: `npm run db:ecommerce`
+- Schema UUID em `database/migrations/sales/` marcado como **deprecated**
+
+#### **Rotas públicas**
+- `/cart`, `/checkout`, `/checkout/success`, `/checkout/cancel`
+- API: `/api/cart/*`, `/api/checkout/prepare`, `/api/checkout/submit`
+- Webhook: `POST /webhooks/stripe`
+
+#### **Admin**
+- `/admin/settings/ecommerce` — activar loja, IVA, Stripe, portes
+- `/admin/orders`, `/admin/orders/:id` — gestão de pedidos
+- Dashboard usa estatísticas reais de pedidos quando e-commerce activo
+
+#### **Conta cliente (opcional)**
+- `/account/login`, `/account/register`, `/account/orders`, `/account/logout`
+
+#### **Correcções dev (2026-05-26, sessão 2)**
+- `initializeModules()` movido **antes** dos routers em `app.js` — botão "Adicionar ao carrinho" no catálogo
+- Migração `008_ecommerce_alter_customers.sql` — colunas conta cliente em tabela `customers` existente
+- Carrinho limpo após checkout submit
+- Script `npm run test:ecommerce` — validação automática (19 checks)
+
+#### **Validado localmente (2026-05-26)**
+- Carrinho API + página + PATCH/DELETE
+- Checkout com carrinho preenchido
+- Submissão de pedido com `payment_mode=disabled` + carrinho vazio após
+- Conta cliente: registo + histórico pedidos
+- Admin: login, lista/detalhe pedidos, settings e-commerce
+- Catálogo: botão add-to-cart visível com loja activa
+
+#### **Pendente antes de go-live**
+- Teste Stripe em modo `test` + webhook
+- Emails SMTP de confirmação (requer `SMTP_HOST`)
+- Executar `npm run db:ecommerce` em produção/staging após deploy
+
+#### **Documentação deploy/DB (2026-05-26)**
+- `DATABASE.md`, `PRODUCTION_SETUP.md`, `DEPLOYMENT.md`, `docs/MODULAR_ARCHITECTURE.md`
+
+#### **Correcção de migração**
+- Script `run-migration.js` ignora comentários SQL por linha (evita saltar o primeiro `ALTER` em 007)
+
+---
+
 ## [2025-03-04] - Header Search: Ícone Expandível (Mobile + Desktop)
 
 ### 🔍 **Pesquisa no Header - Padrão Unificado**

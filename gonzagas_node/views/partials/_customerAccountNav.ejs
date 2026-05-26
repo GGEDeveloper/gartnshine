@@ -1,0 +1,57 @@
+<% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
+  <% var isLoggedIn = typeof customerLoggedIn !== 'undefined' && customerLoggedIn; %>
+  <% if (typeof accountNavContext !== 'undefined' && accountNavContext === 'mobile') { %>
+    <% if (isLoggedIn) { %>
+      <a href="/account/orders" class="mobile-nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/account/orders' ? 'active' : '' %>">
+        <i class="fas fa-user"></i>
+        <span>Os meus pedidos</span>
+      </a>
+      <a href="/account/logout" class="mobile-nav-link">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Terminar sessão</span>
+      </a>
+    <% } else { %>
+      <a href="/account/login" class="mobile-nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/account/login' ? 'active' : '' %>">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Entrar</span>
+      </a>
+      <a href="/account/register" class="mobile-nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/account/register' ? 'active' : '' %>">
+        <i class="fas fa-user-plus"></i>
+        <span>Criar conta</span>
+      </a>
+    <% } %>
+  <% } else if (typeof accountNavContext !== 'undefined' && accountNavContext === 'footer') { %>
+    <% if (isLoggedIn) { %>
+      <li><a href="/account/orders"><i class="fas fa-box"></i> Os meus pedidos</a></li>
+      <li><a href="/account/logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a></li>
+    <% } else { %>
+      <li><a href="/account/login"><i class="fas fa-sign-in-alt"></i> Entrar</a></li>
+      <li><a href="/account/register"><i class="fas fa-user-plus"></i> Criar conta</a></li>
+    <% } %>
+  <% } else if (typeof accountNavContext !== 'undefined' && accountNavContext === 'inline') { %>
+    <div class="account-nav-inline">
+      <% if (isLoggedIn) { %>
+        <a href="/account/orders" class="account-nav-link">Os meus pedidos</a>
+        <a href="/account/logout" class="account-nav-link account-nav-link-muted">Sair</a>
+      <% } else { %>
+        <a href="/account/login" class="account-nav-link">Entrar</a>
+        <a href="/account/register" class="account-nav-btn">Criar conta</a>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="header-account-nav" aria-label="Conta cliente">
+      <% if (isLoggedIn) { %>
+        <a href="/account/orders" class="header-account-link" title="Os meus pedidos" aria-label="Os meus pedidos">
+          <i class="fas fa-user" aria-hidden="true"></i>
+          <span class="header-account-label">Pedidos</span>
+        </a>
+      <% } else { %>
+        <a href="/account/login" class="header-account-link" title="Entrar" aria-label="Entrar na conta">
+          <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+          <span class="header-account-label">Entrar</span>
+        </a>
+        <a href="/account/register" class="header-account-register-btn">Criar conta</a>
+      <% } %>
+    </div>
+  <% } %>
+<% } %>

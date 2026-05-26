@@ -1,0 +1,107 @@
+<div class="container-fluid">
+  <h1 class="h3 mb-4">Configurações E-commerce</h1>
+
+  <% if (messages && messages.success && messages.success.length) { %>
+    <div class="alert alert-success"><%= messages.success[0] %></div>
+  <% } %>
+
+  <form method="post" action="/admin/settings/ecommerce">
+    <div class="card mb-4">
+      <div class="card-header">Geral</div>
+      <div class="card-body">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="ecommerce_enabled" name="ecommerce_enabled"
+                 <%= settings.ecommerce_enabled ? 'checked' : '' %>>
+          <label class="form-check-label" for="ecommerce_enabled">Activar loja online</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="maintenance_mode" name="maintenance_mode"
+                 <%= settings.maintenance_mode ? 'checked' : '' %>>
+          <label class="form-check-label" for="maintenance_mode">Modo manutenção checkout</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Preços e IVA</div>
+      <div class="card-body">
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="prices_include_tax" name="prices_include_tax"
+                 <%= settings.prices_include_tax !== false ? 'checked' : '' %>>
+          <label class="form-check-label" for="prices_include_tax">Preços no catálogo incluem IVA</label>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Taxa IVA (%)</label>
+          <input type="number" step="0.01" class="form-control" name="tax_rate" value="<%= settings.tax_rate || 23 %>">
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Envio <small class="text-muted">(integração transportadora em revisão)</small></div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Modo</label>
+          <select class="form-select" name="shipping_mode">
+            <option value="flat_rate" <%= settings.shipping_mode === 'flat_rate' ? 'selected' : '' %>>Taxa fixa</option>
+            <option value="table" <%= settings.shipping_mode === 'table' ? 'selected' : '' %>>Tabela (futuro)</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Portes grátis acima de (€)</label>
+            <input type="number" step="0.01" class="form-control" name="free_shipping_threshold" value="<%= settings.free_shipping_threshold || 75 %>">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Standard (€)</label>
+            <input type="number" step="0.01" class="form-control" name="standard_shipping_cost" value="<%= settings.standard_shipping_cost || 5.99 %>">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Expresso (€)</label>
+            <input type="number" step="0.01" class="form-control" name="express_shipping_cost" value="<%= settings.express_shipping_cost || 12.99 %>">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Pagamentos (Stripe)</div>
+      <div class="card-body">
+        <div class="alert alert-info">Configure a conta Stripe no go-live. Com modo <code>disabled</code>, pedidos ficam pendentes sem redirect.</div>
+        <div class="mb-3">
+          <label class="form-label">Modo pagamento</label>
+          <select class="form-select" name="payment_mode">
+            <option value="disabled" <%= settings.payment_mode === 'disabled' ? 'selected' : '' %>>Disabled</option>
+            <option value="test" <%= settings.payment_mode === 'test' ? 'selected' : '' %>>Test</option>
+            <option value="live" <%= settings.payment_mode === 'live' ? 'selected' : '' %>>Live</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Stripe Publishable Key</label>
+          <input type="text" class="form-control" name="stripe_publishable_key" value="<%= settings.stripe_publishable_key || '' %>">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Stripe Secret Key</label>
+          <input type="password" class="form-control" name="stripe_secret_key" value="<%= settings.stripe_secret_key || '' %>">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Stripe Webhook Secret</label>
+          <input type="password" class="form-control" name="stripe_webhook_secret" value="<%= settings.stripe_webhook_secret || '' %>">
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Notificações</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Email admin (novos pedidos)</label>
+          <input type="email" class="form-control" name="order_notification_email" value="<%= settings.order_notification_email || '' %>">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/settings" class="btn btn-secondary ms-2">Voltar</a>
+  </form>
+</div>

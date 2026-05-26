@@ -1,4 +1,4 @@
-<div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>">
+<div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>" data-product-id="<%= product.id %>">
   <div class="product-image">
     <% 
       const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
@@ -40,5 +40,10 @@
         <% } %>
       <% } %>
     </p>
+    <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled && product.current_stock > 0 && !(typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
+      <button type="button" class="btn btn-sm btn-outline-light btn-add-to-cart mt-2" data-product-id="<%= product.id %>">
+        Adicionar ao carrinho
+      </button>
+    <% } %>
   </div>
 </div>

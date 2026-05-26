@@ -42,6 +42,10 @@
             Termos de Uso
           </a>
         </li>
+        <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
+          <% var accountNavContext = 'footer'; %>
+          <%- include('_customerAccountNav') %>
+        <% } %>
       </ul>
     </div>
   </div>
