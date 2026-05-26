@@ -28,6 +28,9 @@
     <div class="alert alert-danger"><%= messages.error[0] %></div>
   <% } %>
   <form method="post" action="/account/register">
+    <% if (typeof returnTo !== 'undefined' && returnTo) { %>
+      <input type="hidden" name="returnTo" value="<%= returnTo %>">
+    <% } %>
     <div class="mb-3">
       <label class="form-label">Nome</label>
       <input type="text" name="firstName" class="form-control" required>
@@ -38,7 +41,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Email</label>
-      <input type="email" name="email" class="form-control" required>
+      <input type="email" name="email" class="form-control" required value="<%= typeof prefillEmail !== 'undefined' ? prefillEmail : '' %>">
     </div>
     <div class="mb-3">
       <label class="form-label">Telefone</label>

@@ -9,6 +9,14 @@
     <% } else { %>
       <p class="text-success">Pagamento confirmado.</p>
     <% } %>
+    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn && order.customer_email) { %>
+      <p class="account-success-register mt-3">
+        <a href="/account/register?email=<%= encodeURIComponent(order.customer_email) %>&returnTo=/account/orders" class="account-nav-banner-cta">Criar conta</a>
+        com este email para acompanhar o pedido <strong><%= order.order_number %></strong>.
+      </p>
+    <% } else if (typeof customerLoggedIn !== 'undefined' && customerLoggedIn) { %>
+      <p class="account-nav-hint mt-3"><a href="/account/orders">Ver todos os meus pedidos</a></p>
+    <% } %>
   <% } else { %>
     <p>Obrigado pela sua compra.</p>
   <% } %>

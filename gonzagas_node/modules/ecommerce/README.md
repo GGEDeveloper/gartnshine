@@ -48,9 +48,19 @@ Com o servidor a correr (`npm start`):
 npm run test:ecommerce
 ```
 
-Esperado: **19/19 passed** (carrinho, checkout, conta, admin, botão no catálogo).
+Esperado: **29/29 passed** (carrinho, checkout, conta, admin, botão no catálogo).
 
-## Activar loja
+## Conta cliente (opcional)
+
+| Rota | Descrição |
+|------|-----------|
+| `/account/login` | Entrar |
+| `/account/register` | Criar conta |
+| `/account/orders` | Histórico de pedidos (requer sessão) |
+| `/account/logout` | Terminar sessão |
+
+**Navegação:** quando a loja está activa, o header mostra **Entrar** + **Criar conta** (ou **Pedidos** se sessão iniciada). Links também no menu mobile, footer, carrinho, checkout e página de sucesso (convite a registar após pedido guest).
+
 
 1. Executar migração (`npm run db:ecommerce`)
 2. Admin → **Settings** → **E-commerce** → **Activar loja online**
@@ -96,7 +106,7 @@ curl -s -b /tmp/cjar -X POST http://localhost:3000/api/checkout/submit \
 # esperado: {"success":true,"order":{...},"payment":{"mode":"disabled",...}}
 ```
 
-Validado em 2026-05-26: `npm run test:ecommerce` — **19/19** (carrinho, checkout, submit, success, account, admin, add-to-cart).
+Validado em 2026-05-26: `npm run test:ecommerce` — **29/29** (carrinho, checkout, conta cliente, admin, add-to-cart, navegação header/footer/mobile).
 
 ## UI / CSS
 

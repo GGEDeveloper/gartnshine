@@ -56,10 +56,15 @@
 
 <div class="container py-4 account-orders-page">
   <h1>Os meus pedidos</h1>
-  <p class="logout-link"><a href="/account/logout">Terminar sessão</a></p>
+  <% if (typeof customerEmail !== 'undefined' && customerEmail) { %>
+    <p class="account-nav-hint"><%= customerEmail %> · <a href="/account/logout">Terminar sessão</a></p>
+  <% } else { %>
+    <p class="logout-link"><a href="/account/logout">Terminar sessão</a></p>
+  <% } %>
 
   <% if (!orders.length) { %>
     <p class="text-muted" style="color:var(--igp-muted,rgba(240,236,228,0.55))!important; margin-top:2rem;">Ainda não tem pedidos.</p>
+    <p class="account-nav-hint"><a href="/catalog">Continuar a comprar</a></p>
   <% } else { %>
     <div class="table-responsive">
       <table class="table table-striped">

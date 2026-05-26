@@ -4,6 +4,7 @@ const router = express.Router();
 const checkoutService = require('../services/checkoutService');
 const cartService = require('../../cart/services/cartService');
 const Order = require('../../orders/models/Order');
+const Customer = require('../../accounts/models/Customer');
 const { requireEcommerceEnabled } = require('../../cart/middleware/requireEcommerceEnabled');
 
 function viewPath(name) {
@@ -18,9 +19,14 @@ router.get('/checkout', requireEcommerceEnabled, async (req, res, next) => {
       return res.redirect('/cart');
     }
     const prepared = await checkoutService.prepareCheckout(sessionId, 'standard');
+    let customer = null;
+    if (req.session.customerId) {
+      customer = await Customer.findById(req.session.customerId);
+    }
     res.render(viewPath('checkout.ejs'), {
       title: 'Checkout',
       ...prepared,
+      customer,
     });
   } catch (err) {
     next(err);

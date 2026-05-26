@@ -28,6 +28,9 @@
     <div class="alert alert-danger"><%= messages.error[0] %></div>
   <% } %>
   <form method="post" action="/account/login">
+    <% if (typeof returnTo !== 'undefined' && returnTo) { %>
+      <input type="hidden" name="returnTo" value="<%= returnTo %>">
+    <% } %>
     <div class="mb-3">
       <label class="form-label">Email</label>
       <input type="email" name="email" class="form-control" required>

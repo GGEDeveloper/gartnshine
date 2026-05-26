@@ -92,6 +92,7 @@ A loja é activada por `ecommerce_enabled = true` na base de dados (via `/admin/
 - `res.locals.ecommerceEnabled = true` injectado globalmente
 - Botão `.btn-add-to-cart` aparece nos product cards e detalhe
 - Link carrinho + badge `.header-cart-badge` aparecem no header
+- **Conta cliente:** `.header-account-nav` com **Entrar** + **Criar conta** (guest) ou link **Pedidos** (sessão activa); mesmo links no menu mobile e footer (`_customerAccountNav.ejs`)
 
 ### Classes semânticas principais
 ```
@@ -104,6 +105,10 @@ A loja é activada por `ecommerce_enabled = true` na base de dados (via `/admin/
 .btn-add-to-cart           — botão "Adicionar ao carrinho" (cards + detalhe)
 .header-cart-link          — ícone carrinho no header
 .header-cart-badge         — badge contador no ícone
+.header-account-nav        — bloco Entrar / Criar conta / Pedidos
+.header-account-register-btn — botão Criar conta no header
+.account-nav-banner        — CTA conta no cart/checkout
+.account-nav-hint          — hint sessão activa / links secundários
 ```
 
 ### Estilo do botão "Adicionar ao carrinho"
@@ -174,7 +179,7 @@ Não existe passo de build (sem bundler). Com o servidor activo (`npm start` ou 
 ```bash
 cd gonzagas_node
 
-# E-commerce end-to-end (19 checks)
+# E-commerce end-to-end (29 checks — carrinho, checkout, conta cliente, admin)
 npm run test:ecommerce
 
 # Catálogo + BD

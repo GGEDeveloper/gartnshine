@@ -2,20 +2,31 @@
   <div class="container py-4">
     <h1>Checkout</h1>
 
+    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn) { %>
+      <div class="account-nav-banner account-nav-banner--checkout">
+        <p>Comprar como convidado ou <a href="/account/login?returnTo=/checkout">entrar</a> · <a href="/account/register?returnTo=/checkout" class="account-nav-banner-cta">criar conta</a></p>
+      </div>
+    <% } else if (typeof customerLoggedIn !== 'undefined' && customerLoggedIn) { %>
+      <p class="account-nav-hint">Sessão iniciada como <strong><%= customerEmail %></strong> · <a href="/account/orders">Os meus pedidos</a></p>
+    <% } %>
+
     <form id="checkout-form" class="row g-3">
       <div class="col-md-6">
         <h2>Dados de contacto</h2>
         <div class="mb-3">
           <label class="form-label">Nome *</label>
-          <input type="text" name="customerName" class="form-control" required>
+          <input type="text" name="customerName" class="form-control" required
+                 value="<%= typeof customer !== 'undefined' && customer ? [customer.first_name, customer.last_name].filter(Boolean).join(' ') : '' %>">
         </div>
         <div class="mb-3">
           <label class="form-label">Email *</label>
-          <input type="email" name="customerEmail" class="form-control" required>
+          <input type="email" name="customerEmail" class="form-control" required
+                 value="<%= typeof customer !== 'undefined' && customer ? customer.email : (typeof customerEmail !== 'undefined' ? customerEmail : '') %>">
         </div>
         <div class="mb-3">
           <label class="form-label">Telefone *</label>
-          <input type="tel" name="customerPhone" class="form-control" required>
+          <input type="tel" name="customerPhone" class="form-control" required
+                 value="<%= typeof customer !== 'undefined' && customer ? (customer.phone || '') : '' %>">
         </div>
 
         <h2 class="mt-4">Morada de faturação</h2>

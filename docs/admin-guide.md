@@ -257,6 +257,16 @@ Com `payment_mode=disabled`, os clientes concluem pedidos no checkout sem redire
 
 Estados típicos: `pending`, `paid`, `processing`, `shipped`, `delivered`, `cancelled`.
 
+#### Conta cliente (site público)
+
+Com a loja activa, os visitantes vêem no header **Entrar** e **Criar conta** (ou **Pedidos** se tiverem sessão). Também disponível no menu mobile e footer.
+
+- Registo/login opcional — checkout funciona como convidado
+- Após pedido guest, a página de sucesso convida a criar conta com o email usado
+- Clientes autenticados veem histórico em `/account/orders`
+
+Validação: `npm run test:ecommerce` (29 checks).
+
 #### Stripe (go-live)
 
 1. Preencher chaves publishable/secret no admin ou `.env`

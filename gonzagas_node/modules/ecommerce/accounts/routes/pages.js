@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Customer = require('../models/Customer');
+const { requireEcommerceEnabled } = require('../../cart/middleware/requireEcommerceEnabled');
+
+router.use(requireEcommerceEnabled);
 
 function requireCustomer(req, res, next) {
   if (!req.session.customerId) {
@@ -9,11 +12,29 @@ function requireCustomer(req, res, next) {
   next();
 }
 
-router.get('/login', (req, res) => {
-  res.render('modules/ecommerce/account-login', { title: 'Entrar', messages: req.flash() });
+function redirectIfLoggedIn(req, res, next) {
+  if (req.session.customerId) {
+    return res.redirect('/account/orders');
+  }
+  next();
+}
+
+router.get('/', (req, res) => {
+  if (req.session.customerId) {
+    return res.redirect('/account/orders');
+  }
+  res.redirect('/account/login');
 });
 
-router.post('/login', async (req, res, next) => {
+router.get('/login', redirectIfLoggedIn, (req, res) => {
+  res.render('modules/ecommerce/account-login', {
+    title: 'Entrar',
+    messages: req.flash(),
+    returnTo: req.query.returnTo || null,
+  });
+});
+
+router.post('/login', redirectIfLoggedIn, async (req, res, next) => {
   try {
     const customer = await Customer.findByEmail(req.body.email);
     if (!customer || !(await Customer.verifyPassword(customer, req.body.password))) {
@@ -22,17 +43,26 @@ router.post('/login', async (req, res, next) => {
     }
     req.session.customerId = customer.id;
     req.session.customerEmail = customer.email;
+    const returnTo = req.body.returnTo || req.query.returnTo;
+    if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+      return res.redirect(returnTo);
+    }
     res.redirect('/account/orders');
   } catch (err) {
     next(err);
   }
 });
 
-router.get('/register', (req, res) => {
-  res.render('modules/ecommerce/account-register', { title: 'Registar', messages: req.flash() });
+router.get('/register', redirectIfLoggedIn, (req, res) => {
+  res.render('modules/ecommerce/account-register', {
+    title: 'Registar',
+    messages: req.flash(),
+    prefillEmail: req.query.email || '',
+    returnTo: req.query.returnTo || null,
+  });
 });
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', redirectIfLoggedIn, async (req, res, next) => {
   try {
     const existing = await Customer.findByEmail(req.body.email);
     if (existing) {
@@ -48,6 +78,10 @@ router.post('/register', async (req, res, next) => {
     });
     req.session.customerId = customer.id;
     req.session.customerEmail = customer.email;
+    const returnTo = req.body.returnTo || req.query.returnTo;
+    if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+      return res.redirect(returnTo);
+    }
     res.redirect('/account/orders');
   } catch (err) {
     next(err);
@@ -60,6 +94,7 @@ router.get('/orders', requireCustomer, async (req, res, next) => {
     res.render('modules/ecommerce/account-orders', {
       title: 'Os meus pedidos',
       orders,
+      customerEmail: req.session.customerEmail,
     });
   } catch (err) {
     next(err);

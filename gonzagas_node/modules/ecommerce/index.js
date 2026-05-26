@@ -17,6 +17,27 @@ const cartService = require('./cart/services/cartService');
 const EcommerceSettings = require('./settings/models/EcommerceSettings');
 
 function initialize(app) {
+  // Locals ANTES das rotas — senão /cart, /checkout e /account não recebem ecommerceEnabled no header
+  app.use(async (req, res, next) => {
+    try {
+      res.locals.ecommerceEnabled = await EcommerceSettings.isEnabled();
+      res.locals.customerLoggedIn = !!req.session?.customerId;
+      res.locals.customerEmail = req.session?.customerEmail || null;
+      if (req.cookies?.cart_session_id) {
+        const cart = await cartService.getCart(req.cookies.cart_session_id);
+        res.locals.cartItemCount = cart.itemCount;
+      } else {
+        res.locals.cartItemCount = 0;
+      }
+    } catch {
+      res.locals.ecommerceEnabled = false;
+      res.locals.customerLoggedIn = false;
+      res.locals.customerEmail = null;
+      res.locals.cartItemCount = 0;
+    }
+    next();
+  });
+
   const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 200,
@@ -42,22 +63,6 @@ function initialize(app) {
   });
 
   cronTasks.registerJobs();
-
-  app.use(async (req, res, next) => {
-    try {
-      res.locals.ecommerceEnabled = await EcommerceSettings.isEnabled();
-      if (req.cookies?.cart_session_id) {
-        const cart = await cartService.getCart(req.cookies.cart_session_id);
-        res.locals.cartItemCount = cart.itemCount;
-      } else {
-        res.locals.cartItemCount = 0;
-      }
-    } catch {
-      res.locals.ecommerceEnabled = false;
-      res.locals.cartItemCount = 0;
-    }
-    next();
-  });
 }
 
 async function getDashboardStats() {

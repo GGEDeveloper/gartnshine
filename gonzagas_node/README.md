@@ -18,7 +18,7 @@ Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**
 - **Pedidos** com histórico de estado e numeração automática
 - **Admin de pedidos** (`/admin/orders`) e **definições da loja** (`/admin/settings/ecommerce`)
 - **Pagamentos Stripe** configuráveis: `disabled` / `test` / `live` (módulo `modules/payments/`)
-- **Conta cliente opcional** (`/account/login`, `/account/register`, `/account/orders`)
+- **Conta cliente opcional** — header **Entrar** / **Criar conta**, menu mobile, footer; histórico em `/account/orders`
 - **IVA configurável** (`prices_include_tax` nas definições e-commerce)
 - Activar/desactivar loja sem afectar o catálogo
 

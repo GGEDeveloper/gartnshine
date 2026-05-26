@@ -1214,6 +1214,146 @@ body.showcase-theme .header-cart-badge {
   font-weight: 700;
 }
 
+/* ── Header — conta cliente ───────────────────────────────── */
+.header-container {
+  gap: 0.5rem;
+}
+
+.header-account-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.header-account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--igp-cream) !important;
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.header-account-link:hover {
+  color: var(--igp-gold) !important;
+}
+
+.header-account-register-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.55);
+  border-radius: 4px;
+  color: var(--igp-gold) !important;
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.header-account-register-btn:hover {
+  background: var(--igp-gold);
+  color: #0a0a0a !important;
+}
+
+.header-account-label {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .header-account-label {
+    display: inline;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-account-register-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* Banners conta (cart, checkout, success) */
+.account-nav-banner {
+  margin-bottom: 1.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: 8px;
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.account-nav-banner p {
+  margin: 0;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.65));
+  font-size: 0.9rem;
+}
+
+.account-nav-banner a {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+}
+
+.account-nav-banner a:hover {
+  color: #e0bc5a;
+  text-decoration: underline;
+}
+
+.account-nav-banner-cta,
+.account-success-register .account-nav-banner-cta {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.account-nav-hint {
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+}
+
+.account-nav-hint a {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+}
+
+.account-nav-hint a:hover {
+  text-decoration: underline;
+}
+
+.account-nav-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.account-nav-link {
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.account-nav-link-muted {
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55)) !important;
+}
+
+.account-nav-btn {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 4px;
+  color: var(--igp-gold, #c9a84c);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
 /* ── Formulários Bootstrap dentro do tema showcase ────────── */
 body.showcase-theme .form-control,
 body.showcase-theme .form-select {

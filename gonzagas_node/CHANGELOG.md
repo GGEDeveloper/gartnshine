@@ -1,5 +1,29 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-05-26] - Conta cliente: navegação integrada
+
+### 👤 **Conta cliente no site público**
+
+#### **Navegação**
+- Partial `_customerAccountNav.ejs` — header (Entrar + **Criar conta**), menu mobile, footer
+- Carrinho, checkout e success — CTAs para login/registo; `returnTo` preservado
+- Checkout pré-preenche dados se sessão cliente activa
+- Success convida a criar conta com email do pedido (guest)
+
+#### **Rotas / sessão**
+- `/account` → redirect login ou pedidos
+- `requireEcommerceEnabled` nas rotas de conta
+- Redirect se já autenticado; logout limpa sessão
+
+#### **Fix**
+- Middleware `ecommerceEnabled` / `customerLoggedIn` movido **antes** das rotas e-commerce (header correcto em `/cart`, `/checkout`, `/account`)
+
+#### **Validado**
+- `npm run test:ecommerce` — **29/29** (incl. conta: header, footer, cart/checkout CTAs, login/logout, returnTo)
+- `npm run validate:catalog` — OK
+
+---
+
 ## [2026-05-26] - Mobile showcase + validação
 
 ### 📱 **Pass mobile completo (showcase + e-commerce)**

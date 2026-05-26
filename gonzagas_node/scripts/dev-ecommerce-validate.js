@@ -74,6 +74,13 @@ async function main() {
     record(`GET ${path}`, expect.includes(r.status), `status ${r.status}`);
   }
 
+  r = await req('GET', '/cart');
+  record(
+    'Cart page account CTA',
+    typeof r.data === 'string' && r.data.includes('account-nav-banner'),
+    'banner present'
+  );
+
   // Add to cart (product id 9 — known in dev DB; fallback tries a few ids)
   let productId = 9;
   for (const id of [9, 8, 5, 10, 11]) {
@@ -91,6 +98,13 @@ async function main() {
 
   r = await req('GET', '/checkout');
   record('GET /checkout (filled)', r.status === 200, `status ${r.status}`);
+  record(
+    'Checkout account CTA (guest)',
+    r.status === 200 &&
+      typeof r.data === 'string' &&
+      (r.data.includes('account-nav-banner') || r.data.includes('account-nav-hint')),
+    'cta present'
+  );
 
   r = await req('POST', '/api/checkout/prepare', { shippingMethodCode: 'standard' });
   record('POST /api/checkout/prepare', r.status === 200 && r.data.success, `total=${r.data?.totals?.total}`);
@@ -119,6 +133,11 @@ async function main() {
   if (orderNum) {
     r = await req('GET', `/checkout/success?order=${encodeURIComponent(orderNum)}`);
     record('GET /checkout/success', r.status === 200, `status ${r.status}`);
+    record(
+      'Success register CTA (guest)',
+      r.status === 200 && typeof r.data === 'string' && r.data.includes('/account/register'),
+      `order ${orderNum}`
+    );
   }
 
   // Customer account
@@ -192,6 +211,60 @@ async function main() {
     'Catalog product add-to-cart button',
     catalogHtml.includes('btn-add-to-cart'),
     `status ${catalogRes.status}`
+  );
+
+  const homeRes = await fetch(BASE + '/');
+  const homeHtml = await homeRes.text();
+  record(
+    'Header Criar conta link',
+    homeHtml.includes('/account/register') && homeHtml.includes('Criar conta'),
+    `status ${homeRes.status}`
+  );
+
+  const footerRes = await fetch(BASE + '/');
+  const footerHtml = await footerRes.text();
+  record(
+    'Footer account links',
+    footerHtml.includes('/account/login') && footerHtml.includes('/account/register'),
+    'present'
+  );
+
+  record(
+    'Footer account links',
+    footerHtml.includes('/account/login') && footerHtml.includes('/account/register'),
+    'present'
+  );
+
+  // Deep account navigation
+  const accountRoot = await fetch(`${BASE}/account`, { redirect: 'manual' });
+  record('GET /account redirect', accountRoot.status === 302, `status ${accountRoot.status}`);
+
+  const loggedInHome = await fetch(BASE + '/', { headers: { Cookie: cookieJar } });
+  const loggedInHtml = await loggedInHome.text();
+  record(
+    'Logged-in header (Pedidos, no register btn)',
+    loggedInHtml.includes('/account/orders') && !loggedInHtml.includes('header-account-register-btn'),
+    'header state ok'
+  );
+
+  const loginWhenAuthed = await fetch(`${BASE}/account/login`, {
+    headers: { Cookie: cookieJar },
+    redirect: 'manual',
+  });
+  record(
+    'Login redirect when authed',
+    loginWhenAuthed.status === 302 &&
+      (loginWhenAuthed.headers.get('location') || '').includes('/account/orders'),
+    `status ${loginWhenAuthed.status}`
+  );
+
+  await fetch(`${BASE}/account/logout`, { headers: { Cookie: cookieJar }, redirect: 'manual' });
+  const ordersAfterLogout = await fetch(`${BASE}/account/orders`, { redirect: 'manual' });
+  record(
+    'Logout clears session',
+    ordersAfterLogout.status === 302 &&
+      (ordersAfterLogout.headers.get('location') || '').includes('/account/login'),
+    `status ${ordersAfterLogout.status}`
   );
 
   const failed = results.filter((x) => !x.ok);
