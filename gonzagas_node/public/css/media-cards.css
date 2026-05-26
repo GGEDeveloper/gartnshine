@@ -1,6 +1,5 @@
 /*
- * Stylesheet para /instagram-preview (layout: false, standalone).
- * Também carregado na home quando HOME_IG_PREVIEW_CSS=true.
+ * media-cards.css — estilos para cards de media do atelier (galeria, strip da home).
  * As variáveis --igp-* estão definidas em variables.css (fonte única).
  */
 

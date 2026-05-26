@@ -1,6 +1,6 @@
 /**
- * Tema "showcase" — mesma paleta que /instagram-preview (dourado #c9a84c, cream #f0ece4, fundo #0a0a0a + gradientes).
- * Activado com body.showcase-theme (res.locals.showcaseTheme nas rotas home + /instagram).
+ * brand-showcase.css — tema dourado do atelier (gold #c9a84c, cream #f0ece4, fundo #0a0a0a + gradientes).
+ * Activado com body.showcase-theme (res.locals.showcaseTheme nas rotas públicas).
  * Carregar depois de dark-luxe.css.
  */
 
@@ -176,25 +176,6 @@ body.showcase-theme .instagram-hero-lead {
   line-height: 1.55;
   color: var(--igp-muted);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-
-body.showcase-theme .instagram-lab-teaser {
-  margin: 1.25rem 0 0;
-  font-size: 0.85rem;
-}
-
-body.showcase-theme .instagram-lab-teaser a {
-  color: var(--igp-gold);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-body.showcase-theme .instagram-lab-teaser a:hover {
-  text-decoration: underline;
-}
-
-body.showcase-theme .instagram-lab-teaser-hint {
-  color: var(--igp-muted);
 }
 
 body.showcase-theme .instagram-divider {

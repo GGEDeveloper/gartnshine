@@ -1,6 +1,6 @@
 /**
- * Ponte: instagram-preview.css na home (body não é .ig-preview-body).
- * Carregar depois de instagram-preview.css e antes de brand-showcase.css.
+ * media-bridge.css — ponte entre media-cards.css e brand-showcase.css na home.
+ * Carregar depois de media-cards.css e antes de brand-showcase.css.
  *
  * O wrapper .home-ig-preview-main envolve só a secção featured (hero fica full-bleed).
  */
@@ -50,7 +50,7 @@ body.showcase-theme .home-ig-preview-main .ig-collections-head .ig-collections-s
   margin-top: 0.35rem;
 }
 
-/* Título featured: dimensões do lab; letter-spacing vem de instagram-preview.css (0.35em) */
+/* Título featured: letter-spacing vem de media-cards.css (0.35em) */
 body.showcase-theme .home-ig-preview-main .section-header h2.ig-collections-title {
   font-size: clamp(1.75rem, 4vw, 2.35rem) !important;
   margin: 0 0 0.5rem !important;
