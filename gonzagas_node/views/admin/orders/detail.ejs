@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div class="mb-4">
+    <a href="/admin/orders" class="btn btn-sm btn-outline-secondary">&larr; Voltar</a>
+  </div>
+
+  <h1 class="h3">Pedido <%= order.order_number %></h1>
+  <p class="text-muted"><%= new Date(order.created_at).toLocaleString('pt-PT') %></p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Cliente</div>
+        <div class="card-body">
+          <p><strong><%= order.customer_name %></strong><br>
+          <%= order.customer_email %><br>
+          <%= order.customer_phone || '' %></p>
+          <p><%= order.shipping_address_line1 %><br>
+          <%= order.shipping_postal_code %> <%= order.shipping_city %><br>
+          <%= order.shipping_country %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Resumo</div>
+        <div class="card-body">
+          <p>Subtotal: €<%= parseFloat(order.subtotal).toFixed(2) %></p>
+          <p>IVA: €<%= parseFloat(order.tax_amount).toFixed(2) %></p>
+          <p>Portes: €<%= parseFloat(order.shipping_amount).toFixed(2) %></p>
+          <p class="h5">Total: €<%= parseFloat(order.total_amount).toFixed(2) %></p>
+          <p>Estado: <strong><%= order.status %></strong> / Pagamento: <strong><%= order.payment_status %></strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">Itens</div>
+    <div class="card-body table-responsive">
+      <table class="table table-sm">
+        <thead><tr><th>Produto</th><th>Ref</th><th>Qtd</th><th>Preço</th><th>Total</th></tr></thead>
+        <tbody>
+          <% (order.items || []).forEach(function(item) { %>
+            <tr>
+              <td><%= item.product_name %></td>
+              <td><%= item.product_reference %></td>
+              <td><%= item.quantity %></td>
+              <td>€<%= parseFloat(item.unit_price).toFixed(2) %></td>
+              <td>€<%= parseFloat(item.total_price).toFixed(2) %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">Acções</div>
+    <div class="card-body">
+      <form method="post" action="/admin/orders/<%= order.id %>/status" class="row g-2 align-items-end mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Alterar estado</label>
+          <select name="status" class="form-select">
+            <% ['pending','confirmed','processing','shipped','delivered','cancelled'].forEach(function(s) { %>
+              <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="text" name="notes" class="form-control" placeholder="Notas">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+      </form>
+
+      <% if (order.status !== 'cancelled') { %>
+        <form method="post" action="/admin/orders/<%= order.id %>/cancel" onsubmit="return confirm('Cancelar pedido?');">
+          <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar pedido</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div>

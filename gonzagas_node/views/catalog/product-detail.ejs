@@ -70,12 +70,12 @@
     }
     
     .product-thumbnail:hover {
-        border-color: var(--color-highlight, #C0C0C0);
+        border-color: var(--color-highlight, #c9a84c);
         transform: scale(1.05);
     }
     
     .product-thumbnail.active {
-        border-color: var(--color-accent, #A8A8A8);
+        border-color: var(--color-accent, #c9a84c);
     }
     
     .product-thumbnail img {
@@ -129,15 +129,15 @@
     }
     
     .product-availability.available {
-        background: rgba(192, 192, 192, 0.15);
-        color: #C0C0C0;
-        border: 1px solid #A8A8A8;
+        background: rgba(201, 168, 76, 0.12);
+        color: var(--color-highlight, #c9a84c);
+        border: 1px solid var(--color-accent, #c9a84c);
     }
     
     .product-availability.on-order {
-        background: rgba(184, 115, 51, 0.2);
-        color: #B87333;
-        border: 1px solid #B87333;
+        background: rgba(201, 168, 76, 0.1);
+        color: var(--color-accent-alt, #c9a84c);
+        border: 1px solid var(--color-accent-alt, #c9a84c);
     }
     
     .product-availability.out-of-stock {
@@ -174,7 +174,7 @@
     .related-products-section {
         margin-top: 3rem;
         padding-top: 2rem;
-        border-top: 1px solid rgba(168, 168, 168, 0.15);
+        border-top: 1px solid rgba(201, 168, 76, 0.15);
     }
     
     .related-products-section h3 {
@@ -190,10 +190,10 @@
     }
     
     .related-product-card {
-        background: rgba(20, 20, 20, 0.5);
+        background: rgba(12, 12, 12, 0.85);
         border-radius: 10px;
         overflow: hidden;
-        border: 1px solid rgba(168, 168, 168, 0.1);
+        border: 1px solid rgba(201, 168, 76, 0.12);
         transition: all 0.3s ease;
         text-decoration: none;
         color: inherit;
@@ -202,9 +202,10 @@
     
     .related-product-card:hover {
         transform: translateY(-4px);
-        border-color: rgba(168, 168, 168, 0.3);
+        border-color: rgba(201, 168, 76, 0.35);
         text-decoration: none;
         color: inherit;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
     
     .related-product-card img {
@@ -229,7 +230,7 @@
     
     .related-product-card .related-price {
         font-size: 0.85rem;
-        color: var(--color-highlight, #C0C0C0);
+        color: var(--color-highlight, #c9a84c);
     }
     
     .related-product-card .related-stock {
@@ -362,7 +363,7 @@
     </nav>
     <% if (hasCtx) { %>
     <p class="product-back-catalog mb-3">
-        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #A8A8A8);">&larr; Voltar ao catálogo (filtros)</a>
+        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #c9a84c);">&larr; Voltar ao catálogo (filtros)</a>
     </p>
     <% } %>
     
@@ -474,6 +475,11 @@
             
             <div class="product-actions">
                 <% if (product.current_stock > 0) { %>
+                <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
+                <button type="button" class="btn-add-to-cart" data-product-id="<%= product.id %>" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:1rem 2rem;border:1px solid rgba(201,162,39,0.5);background:transparent;color:inherit;border-radius:4px;cursor:pointer;width:100%;margin-bottom:0.5rem;">
+                    🛒 Adicionar ao carrinho
+                </button>
+                <% } %>
                 <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
                    class="btn-whatsapp" 
                    target="_blank"

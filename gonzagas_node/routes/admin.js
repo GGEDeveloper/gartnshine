@@ -28,6 +28,16 @@ const XLSX = require('xlsx');
 
 /** Stats para o dashboard (produtos, famílias, stock, valor potencial de inventário). */
 async function loadDashboardStats() {
+  let orderStats = { orders: 0, revenue: '0.00' };
+  try {
+    const ecommerce = require('../modules/ecommerce');
+    if (typeof ecommerce.getDashboardStats === 'function') {
+      orderStats = await ecommerce.getDashboardStats();
+    }
+  } catch (err) {
+    console.warn('Dashboard e-commerce stats unavailable:', err.message);
+  }
+
   const [
     totalProducts,
     totalFamilies,
@@ -50,9 +60,9 @@ async function loadDashboardStats() {
     outOfStock: outOfStockProducts,
     recentProducts,
     recentTransactions: [],
-    orders: 0,
+    orders: orderStats.orders,
     users: 0,
-    revenue: '0.00',
+    revenue: orderStats.revenue,
     inventoryPotentialRevenue: inventorySummary.potentialRevenue,
     inventoryTotalUnits: inventorySummary.totalUnits
   };

@@ -44,6 +44,8 @@
     <% if (igHome) { %></div><% } %>
     <% } %>
 
+<%- include('partials/_ig-strip', { igPosts: typeof igPosts !== 'undefined' ? igPosts : [] }) %>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

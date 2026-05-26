@@ -50,9 +50,8 @@ body.showcase-theme .home-ig-preview-main .ig-collections-head .ig-collections-s
   margin-top: 0.35rem;
 }
 
-/* Título featured: mesma cadência que .ig-collections-title no lab (brand-showcase usa 0.2em) */
+/* Título featured: dimensões do lab; letter-spacing vem de instagram-preview.css (0.35em) */
 body.showcase-theme .home-ig-preview-main .section-header h2.ig-collections-title {
-  letter-spacing: 0.35em !important;
   font-size: clamp(1.75rem, 4vw, 2.35rem) !important;
   margin: 0 0 0.5rem !important;
 }

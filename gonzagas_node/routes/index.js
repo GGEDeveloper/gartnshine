@@ -55,6 +55,12 @@ router.get('/', async (req, res) => {
     
     // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
     const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/imagem-nao-disponivel.svg';
+
+    // Instagram strip — non-blocking; silently degrades to empty array on any error
+    let igPosts = [];
+    try {
+      igPosts = await instagramModule.fetchInstagramFeed(6);
+    } catch (_) {}
     
     res.render('index', { 
       title: 'Art&Shine — Elegância que nasce da terra',
@@ -65,17 +71,11 @@ router.get('/', async (req, res) => {
       families: families || [],
       mediaFiles: mediaFiles || [],
       heroImage,
+      igPosts,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      showcaseTheme: true,
       useInstagramPreviewCssOnHome: process.env.HOME_IG_PREVIEW_CSS === 'true',
-      theme: {
-        colorPrimary: '#05070a',
-        colorSecondary: '#0b1016',
-        colorAccent: '#A8A8A8',
-        colorText: '#f4f6f8',
-        colorHighlight: '#C0C0C0'
-      }
+      theme: 'dark'
     });
   } catch (error) {
     console.error('Error loading home page:', error);
@@ -141,13 +141,7 @@ router.get('/collections', async (req, res) => {
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',
-      theme: {
-        colorPrimary: '#05070a',
-        colorSecondary: '#0b1016',
-        colorAccent: '#A8A8A8',
-        colorText: '#f4f6f8',
-        colorHighlight: '#C0C0C0'
-      },
+      theme: 'dark',
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });
@@ -236,7 +230,7 @@ router.get('/catalog/product/:idOrSlug', async (req, res) => {
     const id = results.length > 0 ? results[0].id : idOrSlug;
     
     if (results.length === 0) {
-      return res.status(404).render('error', { message: 'Produto não encontrado' });
+      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado' });
     }
     
     const product = results[0];
@@ -318,7 +312,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     
   } catch (error) {
     console.error('Product error:', error);
-    res.status(500).render('error', { message: 'Erro interno' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro interno' });
   }
 });
 
@@ -448,7 +442,7 @@ router.get('/search', async (req, res) => {
     
   } catch (error) {
     console.error('Search results error:', error);
-    res.status(500).render('error', { message: 'Erro ao carregar resultados' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados' });
   }
 });
 
@@ -584,8 +578,7 @@ router.get('/instagram', async (req, res) => {
       'Últimas publicações de Gonzaga\'s Art & Shine no Instagram — joias em prata e inspiração natural.',
     canonicalUrl: `${base}/instagram`,
     posts,
-    instagramError,
-    showcaseTheme: true
+    instagramError
   });
 });
 

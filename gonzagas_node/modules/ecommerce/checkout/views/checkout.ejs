@@ -1,0 +1,124 @@
+<section class="ecommerce-checkout-page">
+  <div class="container py-4">
+    <h1>Checkout</h1>
+
+    <form id="checkout-form" class="row g-3">
+      <div class="col-md-6">
+        <h2>Dados de contacto</h2>
+        <div class="mb-3">
+          <label class="form-label">Nome *</label>
+          <input type="text" name="customerName" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email *</label>
+          <input type="email" name="customerEmail" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Telefone *</label>
+          <input type="tel" name="customerPhone" class="form-control" required>
+        </div>
+
+        <h2 class="mt-4">Morada de faturação</h2>
+        <div class="mb-3">
+          <label class="form-label">Morada *</label>
+          <input type="text" name="billingAddressLine1" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Cidade *</label>
+          <input type="text" name="billingCity" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Código postal *</label>
+          <input type="text" name="billingPostalCode" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">País</label>
+          <input type="text" name="billingCountry" class="form-control" value="Portugal">
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="sameAsBilling" name="sameAsBilling" checked>
+          <label class="form-check-label" for="sameAsBilling">Entrega igual à faturação</label>
+        </div>
+
+        <div id="shipping-fields" style="display:none">
+          <h2>Morada de entrega</h2>
+          <div class="mb-3">
+            <label class="form-label">Morada</label>
+            <input type="text" name="shippingAddressLine1" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Cidade</label>
+            <input type="text" name="shippingCity" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Código postal</label>
+            <input type="text" name="shippingPostalCode" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <h2>Envio</h2>
+        <% shippingMethods.forEach(function(m) { %>
+          <div class="form-check">
+            <input class="form-check-input shipping-method-radio" type="radio" name="shippingMethodCode"
+                   id="ship-<%= m.code %>" value="<%= m.code %>"
+                   <%= m.code === (shippingMethod && shippingMethod.code || 'standard') ? 'checked' : '' %>>
+            <label class="form-check-label" for="ship-<%= m.code %>">
+              <%= m.name %> — €<%= parseFloat(m.price).toFixed(2) %>
+            </label>
+          </div>
+        <% }); %>
+
+        <div class="checkout-summary mt-4 p-3 border rounded">
+          <p>Subtotal: €<%= totals.subtotal.toFixed(2) %></p>
+          <p>Portes: €<%= totals.shipping.toFixed(2) %></p>
+          <p>IVA: €<%= totals.taxAmount.toFixed(2) %></p>
+          <p class="h5">Total: €<%= totals.total.toFixed(2) %></p>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label class="form-label">Notas (opcional)</label>
+          <textarea name="notes" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100" id="checkout-submit">Confirmar pedido</button>
+        <p class="small text-muted mt-2" id="checkout-payment-note"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<link rel="stylesheet" href="/ecommerce/css/checkout.css">
+<script>
+document.getElementById('sameAsBilling').addEventListener('change', function() {
+  document.getElementById('shipping-fields').style.display = this.checked ? 'none' : 'block';
+});
+
+document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+  data.sameAsBilling = form.sameAsBilling.checked;
+  const btn = document.getElementById('checkout-submit');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/checkout/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.error || 'Erro no checkout');
+    if (json.payment && json.payment.redirectUrl) {
+      window.location.href = json.payment.redirectUrl;
+    } else {
+      window.location.href = '/checkout/success?order=' + encodeURIComponent(json.order.orderNumber);
+    }
+  } catch (err) {
+    alert(err.message);
+    btn.disabled = false;
+  }
+});
+</script>

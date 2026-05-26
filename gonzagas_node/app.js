@@ -187,11 +187,16 @@ app.use((req, res, next) => {
   // Dados comuns a todas as views
   res.locals.app = {
     name: 'Gonzaga\'s Art & Shine',
-    version: process.env.APP_VERSION || '1.0.0',
+    version: process.env.APP_VERSION || (process.env.NODE_ENV === 'production' ? '1.0.0' : Date.now().toString()),
     environment: app.get('env'),
     baseUrl: process.env.BASE_URL || 'https://artnshine.pt'
   };
-  
+
+  // Tema showcase (dourado/cream) activo em todas as páginas públicas
+  if (!req.path.startsWith('/admin')) {
+    res.locals.showcaseTheme = true;
+  }
+
   // Flash messages
   res.locals.messages = require('express-messages')(req, res);
   
@@ -390,13 +395,15 @@ app.use(express.static(path.join(__dirname, 'public'), {
     // Set the Content-Type header
     res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
     
-    // Caching específico por tipo de arquivo
-    if (ext.match(/\.(css|js)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=604800, immutable'); // 1 semana
-    } else if (ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 dias
-    } else if (ext.match(/\.(woff|woff2|eot|ttf)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1 ano
+    // Caching específico por tipo de arquivo (apenas em produção)
+    if (process.env.NODE_ENV === 'production') {
+      if (ext.match(/\.(css|js)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=604800, immutable'); // 1 semana
+      } else if (ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 dias
+      } else if (ext.match(/\.(woff|woff2|eot|ttf)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1 ano
+      }
     }
     
     // Adicionar header de compressão para tipos específicos
@@ -507,6 +514,10 @@ const userRightsRouter = require('./routes/user-rights');
 app.use(userRightsRouter);
 const seoRouter = require('./routes/seo');
 app.use(seoRouter);
+
+// Módulos e-commerce e pagamentos (registados em config/modules.js)
+const { initializeModules } = require('./config/modules');
+initializeModules(app);
 
 // API — módulo Instagram (rotas específicas antes do router /api genérico)
 const instagramModule = require('./modules/instagram');

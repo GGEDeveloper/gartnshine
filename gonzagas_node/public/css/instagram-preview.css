@@ -1,13 +1,8 @@
-/* Standalone preview — não afecta o CSS global do site */
-
-:root {
-  --igp-bg: #0a0a0a;
-  --igp-gold: #c9a84c;
-  --igp-cream: #f0ece4;
-  --igp-muted: rgba(240, 236, 228, 0.55);
-  --igp-overlay: rgba(10, 10, 10, 0.55);
-  --igp-gap: 4px;
-}
+/*
+ * Stylesheet para /instagram-preview (layout: false, standalone).
+ * Também carregado na home quando HOME_IG_PREVIEW_CSS=true.
+ * As variáveis --igp-* estão definidas em variables.css (fonte única).
+ */
 
 *,
 *::before,

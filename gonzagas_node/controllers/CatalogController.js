@@ -129,13 +129,7 @@ class CatalogController {
         catalogReturnPath: serializeCatalogQuery(req.query),
         siteTitle: "Gonzaga's Art & Shine",
         siteDescription: 'Elegância que nasce da terra',
-        theme: {
-          colorPrimary: '#05070a',
-          colorSecondary: '#0b1016',
-          colorAccent: '#A8A8A8',
-          colorText: '#f4f6f8',
-          colorHighlight: '#C0C0C0'
-        },
+        theme: 'dark',
         helpers: {
           isFamilySelected: function (familyId) {
             return selectedFamilyIds.includes(familyId) ? 'checked' : '';
@@ -150,6 +144,7 @@ class CatalogController {
     } catch (error) {
       console.error('Error in displayCatalog:', error);
       res.status(500).render('error', {
+        title: 'Erro',
         message: 'Ocorreu um erro ao carregar o catálogo.',
         error: {}
       });
