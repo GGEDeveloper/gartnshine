@@ -76,20 +76,21 @@ body.showcase-theme footer a:hover {
   color: var(--igp-gold) !important;
 }
 
-body.showcase-theme .hero-video-overlay {
+body.showcase-theme .hero-overlay {
   background: linear-gradient(
     180deg,
-    rgba(10, 10, 10, 0.35) 0%,
-    rgba(10, 10, 10, 0.55) 100%
+    rgba(8, 8, 8, 0.32) 0%,
+    rgba(8, 8, 8, 0.50) 55%,
+    rgba(8, 8, 8, 0.74) 100%
   ) !important;
 }
 
 body.showcase-theme .hero-tagline {
   font-family: Georgia, 'Times New Roman', Times, serif !important;
   color: var(--igp-cream) !important;
-  border: 1px solid rgba(201, 168, 76, 0.28) !important;
-  background: rgba(10, 10, 10, 0.42) !important;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(201, 168, 76, 0.30) !important;
+  background: rgba(10, 10, 10, 0.38) !important;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.80) !important;
   letter-spacing: 0.14em !important;
 }
 

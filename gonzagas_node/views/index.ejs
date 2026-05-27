@@ -1,12 +1,7 @@
-    <!-- Hero: vídeo de fundo + texto "Elegância que nasce da terra" -->
+    <!-- Hero: imagem de fundo + tagline -->
     <section class="hero">
-      <div class="hero-video-container">
-        <video class="hero-video" autoplay muted loop playsinline>
-          <source src="/media/gallery/WhatsApp Video 2025-04-05 at 19.12.38_fdb30c78.mp4" type="video/mp4">
-        </video>
-        <div class="hero-video-overlay"></div>
-      </div>
-      <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/imagem-nao-disponivel.svg" %>');"></div>
+      <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-hero.jpg" %>');"></div>
+      <div class="hero-overlay"></div>
       <div class="hero-content">
         <h1 class="hero-title visually-hidden">Joias Artesanais em Prata 925 — Gonzaga's Art & Shine</h1>
         <p class="hero-tagline"><%= siteDescription %></p>
