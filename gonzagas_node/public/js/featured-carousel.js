@@ -16,6 +16,11 @@
       return;
     }
 
+    const carouselWrap = carousel.closest('.featured-carousel-wrap');
+    const dotsContainer = carouselWrap
+      ? carouselWrap.querySelector('.featured-carousel-dots')
+      : null;
+
     // Check if Slick is available
     if (typeof $ === 'undefined' || !$.fn.slick) {
       console.error('[Featured Carousel] jQuery or Slick not available');
@@ -38,6 +43,7 @@
       speed: 600,
       arrows: true,
       dots: true,
+      appendDots: dotsContainer ? $(dotsContainer) : $(carousel),
       cssEase: 'cubic-bezier(0.4, 0, 0.2, 1)',
       
       // Responsive breakpoints

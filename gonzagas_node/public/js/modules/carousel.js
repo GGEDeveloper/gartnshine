@@ -83,8 +83,19 @@ window.GonzagaCarousel = (function() {
     }
 
     try {
+      const carouselWrap = carouselElement.closest('.featured-carousel-wrap');
+      const dotsContainer = carouselWrap
+        ? carouselWrap.querySelector('.featured-carousel-dots')
+        : null;
+      const config = {
+        ...DEFAULT_CONFIG,
+        appendDots: dotsContainer ? $(dotsContainer) : $(carouselElement)
+      };
       const $carousel = $(carouselElement);
-      $carousel.slick(DEFAULT_CONFIG);
+      if ($carousel.hasClass('slick-initialized')) {
+        $carousel.slick('unslick');
+      }
+      $carousel.slick(config);
       
       carouselInstances.set('featured', $carousel);
       GonzagaUtils.log(MODULE_NAME, 'Featured carousel initialized successfully');
@@ -190,9 +201,7 @@ window.GonzagaCarousel = (function() {
     }
 
     try {
-      // Initialize featured carousel if it exists
-      initFeaturedCarousel();
-      
+      // Featured carousel is initialized by featured-carousel.js (external dots container)
       isInitialized = true;
       GonzagaUtils.log(MODULE_NAME, 'Carousel module initialized successfully');
     } catch (error) {

@@ -39,7 +39,6 @@ router.get('/', async (req, res) => {
     const galleryPath = path.join(__dirname, '../public/media/gallery');
     let mediaFiles = [];
     
-    let galleryVideos = [];
     try {
       const files = await fs.readdir(galleryPath);
       mediaFiles = files.filter(file => {
@@ -50,19 +49,14 @@ router.get('/', async (req, res) => {
         type: 'image',
         path: `/media/gallery/${file}`
       }));
-      galleryVideos = files.filter(file => {
-        const ext = path.extname(file).toLowerCase();
-        return ['.mp4', '.mov', '.webm'].includes(ext);
-      }).map(file => ({
-        filename: file,
-        path: `/media/gallery/${encodeURIComponent(file)}`,
-      }));
     } catch (error) {
       console.error('Error reading gallery directory:', error);
     }
     
-    // Hero image: primeira imagem da galeria (poster/fallback; placeholders podem estar vazios)
-    const heroImage = mediaFiles.length > 0 ? mediaFiles[0].path : '/images/imagem-nao-disponivel.svg';
+    // Hero image: placeholder dedicado ou primeira imagem da galeria
+    const heroImage = mediaFiles.length > 0
+      ? mediaFiles[0].path
+      : '/images/placeholder-hero.jpg';
 
     // Instagram strip — non-blocking; silently degrades to empty array on any error
     let igPosts = [];
@@ -78,7 +72,6 @@ router.get('/', async (req, res) => {
       featured: featured || [],
       families: families || [],
       mediaFiles: mediaFiles || [],
-      galleryVideos: galleryVideos || [],
       heroImage,
       igPosts,
       siteTitle: 'Gonzaga\'s Art & Shine',

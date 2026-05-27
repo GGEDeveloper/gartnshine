@@ -283,28 +283,30 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   }
 }
 
-/* ===== HERO MOBILE ===== */
+/* ===== HERO MOBILE (alinhado com homepage.css) ===== */
 @media (max-width: 768px) {
   .hero {
-    height: 55vh;
-    min-height: 260px;
+    height: clamp(220px, 42vh, 340px) !important;
+    min-height: 0 !important;
     padding: 0;
   }
 
   .hero .hero-content {
-    padding: max(1rem, env(safe-area-inset-top)) 0.75rem 0;
+    padding: max(0.85rem, env(safe-area-inset-top)) 1rem 0.85rem !important;
+    transform: none !important;
+    max-width: none !important;
   }
 
   .hero-tagline {
-    font-size: clamp(0.9rem, 4.5vw, 1.15rem);
-    padding: 0.5rem 1rem;
+    font-size: clamp(0.82rem, 3.8vw, 1rem);
+    padding: 0.55rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
-    height: 50vh;
-    min-height: 220px;
+    height: clamp(200px, 38vh, 280px) !important;
+    min-height: 0 !important;
   }
 }
 
@@ -521,16 +523,16 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 /* ===== FEATURED / HOMEPAGE MOBILE ===== */
 @media (max-width: 768px) {
   .featured-section {
-    padding: 1.5rem 0;
+    padding: 1.15rem 0 1.35rem;
   }
 
   .section-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
-  .featured-carousel {
-    padding: 0 10px;
-    margin: 20px auto;
+  .featured-carousel-wrap {
+    padding: 0 0.35rem;
+    margin: 0 auto;
   }
 
   .slick-slide {
@@ -681,7 +683,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 /* ===== LANDSCAPE MOBILE ===== */
 @media (max-width: 768px) and (orientation: landscape) {
   .hero {
-    min-height: 70vh;
+    height: clamp(200px, 55vh, 320px) !important;
+    min-height: 0 !important;
   }
 
   .mobile-nav {

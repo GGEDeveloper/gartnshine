@@ -76,13 +76,23 @@ body.showcase-theme footer a:hover {
   color: var(--igp-gold) !important;
 }
 
-body.showcase-theme .hero-overlay {
+body.showcase-theme .hero-scrim {
   background: linear-gradient(
     180deg,
-    rgba(8, 8, 8, 0.32) 0%,
-    rgba(8, 8, 8, 0.50) 55%,
-    rgba(8, 8, 8, 0.74) 100%
+    rgba(8, 8, 8, 0.26) 0%,
+    rgba(8, 8, 8, 0.46) 55%,
+    rgba(8, 8, 8, 0.70) 100%
   ) !important;
+}
+
+body.showcase-theme .hero .hero-content {
+  max-width: none !important;
+  transform: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 body.showcase-theme .hero-tagline {
@@ -95,9 +105,10 @@ body.showcase-theme .hero-tagline {
 }
 
 body.showcase-theme .featured-section {
-  padding-top: clamp(2.5rem, 6vw, 4rem);
-  padding-bottom: clamp(3rem, 8vw, 5rem);
+  padding-top: clamp(1.25rem, 3vw, 2rem);
+  padding-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
   background: transparent !important;
+  overflow: visible !important;
 }
 
 body.showcase-theme .section-header h2 {
@@ -120,12 +131,14 @@ body.showcase-theme .featured-carousel .slick-next:before {
   color: var(--igp-gold) !important;
 }
 
-body.showcase-theme .featured-carousel .slick-dots li button:before {
+body.showcase-theme .featured-carousel-dots .slick-dots li button:before {
   color: var(--igp-muted) !important;
+  opacity: 0.5 !important;
 }
 
-body.showcase-theme .featured-carousel .slick-dots li.slick-active button:before {
+body.showcase-theme .featured-carousel-dots .slick-dots li.slick-active button:before {
   color: var(--igp-gold) !important;
+  opacity: 1 !important;
 }
 
 body.showcase-theme .featured-carousel .product-card,
@@ -336,7 +349,15 @@ body.showcase-theme .mobile-nav-link.active {
 
 /* ——— ig-collections (scope correcto) ——— */
 body.showcase-theme .featured-section.ig-collections {
-  margin-bottom: clamp(2.5rem, 7vw, 4.5rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+body.showcase-theme .ig-collections-head {
+  margin-bottom: clamp(0.75rem, 2vw, 1.1rem) !important;
+}
+
+body.showcase-theme .ig-collections-sub {
+  margin-top: 0.2rem !important;
 }
 
 /* ——— /collections ——— */
@@ -812,7 +833,7 @@ body.showcase-theme .breadcrumbs a:hover {
 
 /* ── Instagram Strip (homepage) ─────────────────────────────── */
 body.showcase-theme .ig-strip-section {
-  padding: 4rem 1.5rem 3rem;
+  padding: clamp(2rem, 4vw, 2.75rem) 1.25rem clamp(1.75rem, 3vw, 2.5rem);
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -955,7 +976,7 @@ body.showcase-theme .featured-carousel .product-card:hover {
 
 body.showcase-theme .featured-carousel .product-info {
   background: transparent !important;
-  padding: 0.85rem 0.75rem 1rem;
+  padding: 0.55rem 0.6rem 0.65rem;
 }
 
 /* Referência, família, preço — cores showcase */
@@ -989,12 +1010,14 @@ body.showcase-theme .featured-carousel .slick-next:before {
   color: var(--igp-gold) !important;
 }
 
-body.showcase-theme .featured-carousel .slick-dots li button:before {
+body.showcase-theme .featured-carousel-dots .slick-dots li button:before {
   color: var(--igp-muted) !important;
+  opacity: 0.5 !important;
 }
 
-body.showcase-theme .featured-carousel .slick-dots li.slick-active button:before {
+body.showcase-theme .featured-carousel-dots .slick-dots li.slick-active button:before {
   color: var(--igp-gold) !important;
+  opacity: 1 !important;
 }
 
 
@@ -1645,4 +1668,16 @@ body.showcase-theme .alert-success {
   body.showcase-theme .related-products-grid {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* Featured carousel dots — fora do track (appendDots), override slick-theme.css */
+body.showcase-theme .featured-carousel-dots .slick-dots {
+  position: static !important;
+  bottom: auto !important;
+  top: auto !important;
+  transform: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

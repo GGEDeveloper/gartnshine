@@ -1,7 +1,7 @@
     <!-- Hero: imagem de fundo + tagline -->
     <section class="hero">
       <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-hero.jpg" %>');"></div>
-      <div class="hero-overlay"></div>
+      <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-content">
         <h1 class="hero-title visually-hidden">Joias Artesanais em Prata 925 — Gonzaga's Art & Shine</h1>
         <p class="hero-tagline"><%= siteDescription %></p>
@@ -22,73 +22,21 @@
       </div>
 
       <!-- Slick Carousel -->
-      <div class="featured-carousel">
-        <% featured.forEach((product, index) => { %>
-          <div class="slick-slide">
-            <%- include('partials/_productCardHomepage', {product: product, index: index}) %>
-          </div>
-        <% }); %>
+      <div class="featured-carousel-wrap">
+        <div class="featured-carousel">
+          <% featured.forEach((product, index) => { %>
+            <div class="slick-slide">
+              <%- include('partials/_productCardHomepage', {product: product, index: index}) %>
+            </div>
+          <% }); %>
+        </div>
+        <div class="featured-carousel-dots" aria-label="Navegação Featured Pieces"></div>
       </div>
 
     </section>
     <% } %>
 
 <%- include('partials/_media-strip', { igPosts: typeof igPosts !== 'undefined' ? igPosts : [] }) %>
-
-<% if (typeof galleryVideos !== 'undefined' && galleryVideos.length > 0) { %>
-<section class="brand-videos-section" aria-label="Vídeos da marca">
-  <div class="brand-videos-inner">
-    <% galleryVideos.forEach(function(v, i) { %>
-    <div class="brand-video-wrap" style="<%= galleryVideos.length > 1 ? 'max-width:' + Math.floor(94/galleryVideos.length) + 'vw' : '' %>">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="none"
-        class="brand-video"
-        aria-label="Gonzaga's Art & Shine"
-      >
-        <source src="<%= v.path %>" type="video/mp4">
-      </video>
-    </div>
-    <% }); %>
-  </div>
-</section>
-
-<style>
-.brand-videos-section {
-  width: 100%;
-  overflow: hidden;
-  background: #000;
-  padding: 0;
-  line-height: 0;
-}
-.brand-videos-inner {
-  display: flex;
-  justify-content: center;
-  gap: 0;
-  width: 100%;
-}
-.brand-video-wrap {
-  flex: 1;
-  min-width: 0;
-  max-width: 100vw;
-  position: relative;
-  overflow: hidden;
-}
-.brand-video {
-  width: 100%;
-  height: 70vh;
-  object-fit: cover;
-  display: block;
-  filter: brightness(0.88) saturate(1.1);
-}
-@media (max-width: 640px) {
-  .brand-video { height: 50vw; min-height: 200px; }
-}
-</style>
-<% } %>
 
 <script type="application/ld+json">
 {

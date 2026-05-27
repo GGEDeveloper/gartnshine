@@ -114,7 +114,7 @@ body.ig-preview-body {
 
 .ig-collections-head {
   text-align: center;
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1.1rem);
 }
 
 .ig-collections-title {
