@@ -2,9 +2,9 @@
   <% var isLoggedIn = typeof customerLoggedIn !== 'undefined' && customerLoggedIn; %>
   <% if (typeof accountNavContext !== 'undefined' && accountNavContext === 'mobile') { %>
     <% if (isLoggedIn) { %>
-      <a href="/account/orders" class="mobile-nav-link <%= typeof currentPath !== 'undefined' && currentPath === '/account/orders' ? 'active' : '' %>">
+      <a href="/account/orders" class="mobile-nav-link <%= typeof currentPath !== 'undefined' && currentPath.startsWith('/account') ? 'active' : '' %>">
         <i class="fas fa-user"></i>
-        <span>Os meus pedidos</span>
+        <span>A minha conta</span>
       </a>
       <a href="/account/logout" class="mobile-nav-link">
         <i class="fas fa-sign-out-alt"></i>
@@ -43,7 +43,7 @@
       <% if (isLoggedIn) { %>
         <a href="/account/orders" class="header-account-link" title="Os meus pedidos" aria-label="Os meus pedidos">
           <i class="fas fa-user" aria-hidden="true"></i>
-          <span class="header-account-label">Pedidos</span>
+          <span class="header-account-label">Conta</span>
         </a>
       <% } else { %>
         <a href="/account/login" class="header-account-link" title="Entrar" aria-label="Entrar na conta">

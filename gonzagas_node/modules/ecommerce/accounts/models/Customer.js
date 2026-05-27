@@ -33,10 +33,8 @@ async function findByGoogleId(googleId) {
 }
 
 async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avatarUrl }) {
-  // 1. Já existe conta com este google_id
   let customer = await findByGoogleId(googleId);
   if (customer) {
-    // Actualizar avatar se mudou
     if (avatarUrl && avatarUrl !== customer.avatar_url) {
       await pool.query('UPDATE customers SET avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [
         avatarUrl,
@@ -46,7 +44,6 @@ async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avat
     return findById(customer.id);
   }
 
-  // 2. Conta local com o mesmo email — ligar Google
   if (email) {
     customer = await findByEmail(email);
     if (customer) {
@@ -58,7 +55,6 @@ async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avat
     }
   }
 
-  // 3. Criar conta nova via Google
   const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || null;
   const [result] = await pool.query(
     `INSERT INTO customers (email, google_id, auth_provider, avatar_url, first_name, last_name, name)
@@ -70,10 +66,79 @@ async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avat
 
 async function getOrdersByEmail(email) {
   const [rows] = await pool.query(
-    'SELECT * FROM orders WHERE customer_email = ? ORDER BY created_at DESC LIMIT 50',
+    `SELECT o.*,
+            COUNT(oi.id) AS item_count
+     FROM orders o
+     LEFT JOIN order_items oi ON oi.order_id = o.id
+     WHERE o.customer_email = ?
+     GROUP BY o.id
+     ORDER BY o.created_at DESC
+     LIMIT 20`,
     [email]
   );
   return rows;
+}
+
+async function getOrderByIdForEmail(orderId, email) {
+  const [rows] = await pool.query(
+    'SELECT * FROM orders WHERE id = ? AND customer_email = ? LIMIT 1',
+    [orderId, email]
+  );
+  return rows[0] || null;
+}
+
+async function getOrderItems(orderId) {
+  const [rows] = await pool.query(
+    'SELECT * FROM order_items WHERE order_id = ? ORDER BY id ASC',
+    [orderId]
+  );
+  return rows;
+}
+
+async function updateProfile(id, data) {
+  const displayName = [data.firstName, data.lastName].filter(Boolean).join(' ').trim() || null;
+  await pool.query(
+    `UPDATE customers SET
+       first_name = ?,
+       last_name = ?,
+       name = ?,
+       phone = ?,
+       billing_address_line1 = ?,
+       billing_city = ?,
+       billing_postal_code = ?,
+       billing_country = ?,
+       shipping_address_line1 = ?,
+       shipping_city = ?,
+       shipping_postal_code = ?,
+       shipping_country = ?,
+       updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [
+      data.firstName || null,
+      data.lastName || null,
+      displayName,
+      data.phone || null,
+      data.billingAddressLine1 || null,
+      data.billingCity || null,
+      data.billingPostalCode || null,
+      data.billingCountry || 'Portugal',
+      data.shippingAddressLine1 || null,
+      data.shippingCity || null,
+      data.shippingPostalCode || null,
+      data.shippingCountry || 'Portugal',
+      id,
+    ]
+  );
+  return findById(id);
+}
+
+async function changePassword(id, newPassword) {
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await pool.query(
+    'UPDATE customers SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [passwordHash, id]
+  );
+  return findById(id);
 }
 
 module.exports = {
@@ -84,4 +149,8 @@ module.exports = {
   findById,
   verifyPassword,
   getOrdersByEmail,
+  getOrderByIdForEmail,
+  getOrderItems,
+  updateProfile,
+  changePassword,
 };
