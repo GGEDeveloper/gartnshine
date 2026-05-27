@@ -488,55 +488,71 @@ app.use((req, res, next) => {
 });
 
 // ── Protecção global do site com password ────────────────────────────────────
-// SITE_PASSWORD definida em .env (default: 0009)
-const SITE_PASSWORD = process.env.SITE_PASSWORD || '0009';
+// Activa sempre que SITE_PASSWORD esteja definido no .env
+const SITE_PASSWORD = (process.env.SITE_PASSWORD || '').trim();
 
 const SITE_PASS_BYPASS = [
-  /^\/admin(\/|$)/,           // admin tem autenticação própria
-  /^\/site-password$/,        // própria página de password
-  /^\/webhooks\//,            // Stripe webhooks não têm sessão
+  /^\/admin(\/|$)/,      // admin tem autenticação própria
+  /^\/account(\/|$)/,   // área de cliente: registo/login sem gate
+  /^\/api\/cart/,        // carrinho: API usada antes do checkout
+  /^\/api\/checkout/,   // checkout API
+  /^\/webhooks\//,       // Stripe webhooks não têm sessão de browser
   /^\/sitemap\.xml$/,
   /^\/robots\.txt$/,
   /^\/health$/,
   /^\/ping$/,
 ];
 
-const SITE_PASS_ASSET_EXT = /\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot|mp4|mov)$/i;
+const SITE_PASS_ASSET_EXT = /\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot|mp4|mov|webm)$/i;
 
-app.use((req, res, next) => {
-  // Bypass para activos estáticos
-  if (SITE_PASS_ASSET_EXT.test(req.path)) return next();
-  // Bypass para rotas de sistema
-  if (SITE_PASS_BYPASS.some((re) => re.test(req.path))) return next();
+const renderSitePassword = (res, error) => {
+  // layout: false — standalone HTML sem wrapper do express-ejs-layouts
+  res.render('site-password', { layout: false, title: 'Acesso', error: error || null });
+};
 
-  // Já autenticado (sessão ou cookie)
-  if (req.session.siteAccess) return next();
-  if (req.cookies && req.cookies.siteAccess === SITE_PASSWORD) {
-    req.session.siteAccess = true;
-    return next();
-  }
+if (SITE_PASSWORD.length > 0) {
+  app.use((req, res, next) => {
+    // Bypass para activos estáticos
+    if (SITE_PASS_ASSET_EXT.test(req.path)) return next();
+    // Bypass para rotas de sistema
+    if (SITE_PASS_BYPASS.some((re) => re.test(req.path))) return next();
 
-  // POST — verificar password
-  if (req.method === 'POST' && req.path === '/site-password') {
-    const submitted = req.body.sitePassword || '';
-    if (submitted === SITE_PASSWORD) {
-      req.session.siteAccess = true;
-      const redirectTo = req.session.siteReturnTo || '/';
-      delete req.session.siteReturnTo;
-      return res.redirect(redirectTo);
+    // Já autenticado via sessão
+    if (req.session && req.session.siteAccess) return next();
+
+    // Já autenticado via cookie persistente (30 dias)
+    if (req.cookies && req.cookies.siteAccess === SITE_PASSWORD) {
+      if (req.session) req.session.siteAccess = true;
+      return next();
     }
-    return res.render('site-password', { title: 'Acesso', error: 'Password incorrecta.' });
-  }
 
-  // GET /site-password — mostrar formulário
-  if (req.method === 'GET' && req.path === '/site-password') {
-    return res.render('site-password', { title: 'Acesso', error: null });
-  }
+    // POST para /site-password — verificar password
+    if (req.method === 'POST' && req.path === '/site-password') {
+      const submitted = (req.body && req.body.sitePassword) || '';
+      if (submitted === SITE_PASSWORD) {
+        if (req.session) req.session.siteAccess = true;
+        res.cookie('siteAccess', SITE_PASSWORD, {
+          httpOnly: true,
+          sameSite: 'lax',
+          maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dias
+        });
+        const redirectTo = (req.session && req.session.siteReturnTo) || '/';
+        if (req.session) delete req.session.siteReturnTo;
+        return res.redirect(redirectTo);
+      }
+      return renderSitePassword(res, 'Password incorrecta.');
+    }
 
-  // Guardar URL pedida e pedir password
-  req.session.siteReturnTo = req.originalUrl;
-  return res.render('site-password', { title: 'Acesso', error: null });
-});
+    // GET /site-password — só mostrar formulário (sem guardar returnTo)
+    if (req.method === 'GET' && req.path === '/site-password') {
+      return renderSitePassword(res, null);
+    }
+
+    // Qualquer outra rota: guardar URL e pedir password
+    if (req.session) req.session.siteReturnTo = req.originalUrl;
+    return renderSitePassword(res, null);
+  });
+}
 
 /* // Comentado para evitar dupla inicialização do servidor. server.js é o responsável.
 // Inicialização direta do servidor Express
