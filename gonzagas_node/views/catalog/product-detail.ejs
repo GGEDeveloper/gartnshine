@@ -476,9 +476,19 @@
             <div class="product-actions">
                 <% if (product.current_stock > 0) { %>
                 <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
-                <button type="button" class="btn-add-to-cart" data-product-id="<%= product.id %>" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:1rem 2rem;border:1px solid rgba(201,162,39,0.5);background:transparent;color:inherit;border-radius:4px;cursor:pointer;width:100%;margin-bottom:0.5rem;">
-                    🛒 Adicionar ao carrinho
-                </button>
+                <div class="product-add-wrap">
+                  <% if (product.current_stock > 1) { %>
+                  <div class="product-qty-stepper" data-max="<%= product.current_stock %>">
+                    <button type="button" class="detail-qty-btn detail-qty-minus" disabled aria-label="Diminuir">−</button>
+                    <span class="detail-qty-value">1</span>
+                    <button type="button" class="detail-qty-btn detail-qty-plus" <%= product.current_stock <= 1 ? 'disabled' : '' %> aria-label="Aumentar">+</button>
+                    <small class="detail-qty-stock">(<%= product.current_stock %> disponíveis)</small>
+                  </div>
+                  <% } %>
+                  <button type="button" class="btn-add-to-cart" data-product-id="<%= product.id %>" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:1rem 2rem;border:1px solid rgba(201,162,39,0.5);background:transparent;color:inherit;border-radius:4px;cursor:pointer;width:100%;margin-bottom:0.5rem;">
+                      🛒 Adicionar ao carrinho
+                  </button>
+                </div>
                 <% } %>
                 <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
                    class="btn-whatsapp" 

@@ -13,11 +13,19 @@ async function getSessionItems(sessionId) {
 
 async function enrichItems(rows) {
   const items = [];
+  const toRemove = [];
+
   for (const row of rows) {
     const product = await productAdapter.findByIdForCart(row.product_id);
-    if (!product || !product.isActive) continue;
+    if (!product || !product.isActive) {
+      toRemove.push(row.product_id);
+      continue;
+    }
     const qty = Math.min(parseInt(row.quantity, 10) || 1, product.currentStock || 0);
-    if (qty <= 0) continue;
+    if (qty <= 0) {
+      toRemove.push(row.product_id);
+      continue;
+    }
     items.push({
       productId: product.id,
       reference: product.reference,
@@ -29,6 +37,17 @@ async function enrichItems(rows) {
       maxStock: product.currentStock,
     });
   }
+
+  // Limpar itens esgotados/inactivos da BD (para não acumular entradas mortas)
+  if (toRemove.length && rows.length > 0) {
+    const sessionId = rows[0]?.id || null;
+    if (sessionId) {
+      for (const pid of toRemove) {
+        await pool.query('DELETE FROM cart_sessions WHERE id = ? AND product_id = ?', [sessionId, pid]).catch(() => {});
+      }
+    }
+  }
+
   return items;
 }
 
@@ -69,7 +88,7 @@ async function addItem(sessionId, productId, quantity) {
 
 async function updateItem(sessionId, productId, quantity) {
   const product = await productAdapter.findByIdForCart(productId);
-  if (!product) throw new Error('Produto não encontrado');
+  if (!product || !product.isActive) throw new Error('Produto indisponível');
 
   const qty = parseInt(quantity, 10);
   if (!qty || qty <= 0) {

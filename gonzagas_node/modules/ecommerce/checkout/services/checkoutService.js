@@ -28,6 +28,18 @@ async function submitCheckout(sessionId, formData) {
   const prepared = await prepareCheckout(sessionId, shippingCode);
   const { cart, totals, shippingMethod } = prepared;
 
+  // Verificar stock no momento do submit (previne oversell)
+  for (const item of cart.items) {
+    if (item.quantity > item.maxStock) {
+      throw new Error(
+        `"${item.name}" tem apenas ${item.maxStock} unidade(s) disponíve${item.maxStock === 1 ? 'l' : 'is'}. Atualize o carrinho antes de continuar.`
+      );
+    }
+    if (item.maxStock <= 0) {
+      throw new Error(`"${item.name}" ficou esgotado. Remova-o do carrinho antes de continuar.`);
+    }
+  }
+
   const order = await Order.createFromCheckout(
     {
       customerEmail: formData.customerEmail,
