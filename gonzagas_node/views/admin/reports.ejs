@@ -1,0 +1,123 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center mb-4 gap-3">
+    <h1 class="h3 mb-0">Rentabilidade</h1>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card bg-dark border-secondary text-white h-100">
+        <div class="card-body">
+          <div class="text-muted small mb-1">Receita total</div>
+          <div class="h4 mb-0 text-warning">€<%= parseFloat(stats.total_revenue || 0).toFixed(2) %></div>
+          <div class="text-muted small mt-1"><%= stats.total_orders %> pedidos pagos</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card bg-dark border-secondary text-white h-100">
+        <div class="card-body">
+          <div class="text-muted small mb-1">Valor médio por pedido</div>
+          <div class="h4 mb-0">€<%= parseFloat(stats.avg_order_value || 0).toFixed(2) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card bg-dark border-secondary text-white h-100">
+        <div class="card-body">
+          <div class="text-muted small mb-1">Stock em inventário</div>
+          <div class="h4 mb-0 text-info">€<%= parseFloat(inventory.stock_value_sale || 0).toFixed(2) %></div>
+          <div class="text-muted small mt-1"><%= inventory.total_units %> unidades · custo €<%= parseFloat(inventory.stock_value_cost || 0).toFixed(2) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card bg-dark border-secondary text-white h-100">
+        <div class="card-body">
+          <div class="text-muted small mb-1">IVA cobrado</div>
+          <div class="h4 mb-0">€<%= parseFloat(stats.total_tax || 0).toFixed(2) %></div>
+          <div class="text-muted small mt-1">Envios €<%= parseFloat(stats.total_shipping || 0).toFixed(2) %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Top vendidos -->
+    <% if (topSold && topSold.length > 0) { %>
+    <div class="col-12 col-md-5">
+      <div class="card bg-dark border-secondary text-white">
+        <div class="card-header border-secondary">
+          <strong>Top produtos vendidos</strong>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-dark table-sm mb-0">
+            <thead><tr><th>Produto</th><th class="text-end">Unid.</th><th class="text-end">Receita</th></tr></thead>
+            <tbody>
+              <% topSold.forEach(function(p) { %>
+              <tr>
+                <td><small><%= p.product_name %><br><span class="text-muted"><%= p.product_reference %></span></small></td>
+                <td class="text-end"><%= p.units_sold %></td>
+                <td class="text-end text-warning">€<%= parseFloat(p.revenue || 0).toFixed(2) %></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Margem por produto -->
+    <div class="col-12 col-md-<%= (topSold && topSold.length > 0) ? '7' : '12' %>">
+      <div class="card bg-dark border-secondary text-white">
+        <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+          <strong>Margem por produto (activos)</strong>
+          <small class="text-muted"><%= products.length %> produtos</small>
+        </div>
+        <div class="card-body p-0" style="max-height:480px;overflow-y:auto">
+          <table class="table table-dark table-sm table-hover mb-0">
+            <thead class="sticky-top bg-dark">
+              <tr>
+                <th>Produto</th>
+                <th class="text-end">Compra</th>
+                <th class="text-end">Venda</th>
+                <th class="text-end">Margem €</th>
+                <th class="text-end">Margem %</th>
+                <th class="text-end">Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% products.forEach(function(p) { %>
+              <tr>
+                <td>
+                  <a href="/admin/products/edit/<%= p.id %>" class="text-light text-decoration-none"><%= p.name %></a>
+                  <% if (p.family_name) { %><br><small class="text-muted"><%= p.family_name %></small><% } %>
+                </td>
+                <td class="text-end text-muted">€<%= parseFloat(p.purchase_price || 0).toFixed(2) %></td>
+                <td class="text-end">€<%= parseFloat(p.sale_price || 0).toFixed(2) %></td>
+                <td class="text-end <%= p.margin > 0 ? 'text-success' : 'text-danger' %>">
+                  €<%= parseFloat(p.margin || 0).toFixed(2) %>
+                </td>
+                <td class="text-end">
+                  <% if (p.margin_pct !== null && p.margin_pct !== undefined) { %>
+                    <span class="badge <%= p.margin_pct >= 30 ? 'bg-success' : p.margin_pct >= 10 ? 'bg-warning text-dark' : 'bg-danger' %>">
+                      <%= p.margin_pct %>%
+                    </span>
+                  <% } else { %>
+                    <span class="text-muted">—</span>
+                  <% } %>
+                </td>
+                <td class="text-end"><%= p.current_stock %></td>
+              </tr>
+              <% }); %>
+              <% if (!products.length) { %>
+              <tr><td colspan="6" class="text-center text-muted py-3">Sem produtos activos</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -471,19 +471,13 @@ app.locals.theme = {
 // Add user to all routes
 app.use((req, res, next) => {
   try {
-    // Garantir que a sessão seja salva
     if (req.session) {
-      // Manter o acesso ao site ativo
-      req.session.siteAccess = true;
-      
-      // Se o usuário estiver autenticado, adicionar aos locais
       if (req.session.user) {
         res.locals.user = req.session.user;
       } else {
         res.locals.user = null;
       }
     } else {
-      console.log('Sessão não disponível');
       res.locals.user = null;
     }
     next();
@@ -491,6 +485,57 @@ app.use((req, res, next) => {
     console.error('Erro no middleware de usuário:', error);
     next(error);
   }
+});
+
+// ── Protecção global do site com password ────────────────────────────────────
+// SITE_PASSWORD definida em .env (default: 0009)
+const SITE_PASSWORD = process.env.SITE_PASSWORD || '0009';
+
+const SITE_PASS_BYPASS = [
+  /^\/admin(\/|$)/,           // admin tem autenticação própria
+  /^\/site-password$/,        // própria página de password
+  /^\/webhooks\//,            // Stripe webhooks não têm sessão
+  /^\/sitemap\.xml$/,
+  /^\/robots\.txt$/,
+  /^\/health$/,
+  /^\/ping$/,
+];
+
+const SITE_PASS_ASSET_EXT = /\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot|mp4|mov)$/i;
+
+app.use((req, res, next) => {
+  // Bypass para activos estáticos
+  if (SITE_PASS_ASSET_EXT.test(req.path)) return next();
+  // Bypass para rotas de sistema
+  if (SITE_PASS_BYPASS.some((re) => re.test(req.path))) return next();
+
+  // Já autenticado (sessão ou cookie)
+  if (req.session.siteAccess) return next();
+  if (req.cookies && req.cookies.siteAccess === SITE_PASSWORD) {
+    req.session.siteAccess = true;
+    return next();
+  }
+
+  // POST — verificar password
+  if (req.method === 'POST' && req.path === '/site-password') {
+    const submitted = req.body.sitePassword || '';
+    if (submitted === SITE_PASSWORD) {
+      req.session.siteAccess = true;
+      const redirectTo = req.session.siteReturnTo || '/';
+      delete req.session.siteReturnTo;
+      return res.redirect(redirectTo);
+    }
+    return res.render('site-password', { title: 'Acesso', error: 'Password incorrecta.' });
+  }
+
+  // GET /site-password — mostrar formulário
+  if (req.method === 'GET' && req.path === '/site-password') {
+    return res.render('site-password', { title: 'Acesso', error: null });
+  }
+
+  // Guardar URL pedida e pedir password
+  req.session.siteReturnTo = req.originalUrl;
+  return res.render('site-password', { title: 'Acesso', error: null });
 });
 
 /* // Comentado para evitar dupla inicialização do servidor. server.js é o responsável.
