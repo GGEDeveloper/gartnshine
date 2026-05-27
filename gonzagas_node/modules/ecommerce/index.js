@@ -8,6 +8,7 @@ const checkoutPageRoutes = require('./checkout/routes/pages');
 const settingsAdminRoutes = require('./settings/routes/admin');
 const ordersAdminRoutes = require('./admin/routes/orders');
 const accountRoutes = require('./accounts/routes/pages');
+const { passport: googlePassport, setupPassport } = require('./accounts/config/passport');
 const orderEmails = require('./notifications/services/orderEmails');
 const cronTasks = require('./jobs/cronTasks');
 const events = require('./events');
@@ -17,6 +18,11 @@ const cartService = require('./cart/services/cartService');
 const EcommerceSettings = require('./settings/models/EcommerceSettings');
 
 function initialize(app) {
+  // Setup Passport strategies
+  setupPassport();
+  app.use(googlePassport.initialize());
+  // Note: we do NOT use passport.session() — we manage sessions manually via express-session
+
   // Locals ANTES das rotas — senão /cart, /checkout e /account não recebem ecommerceEnabled no header
   app.use(async (req, res, next) => {
     try {

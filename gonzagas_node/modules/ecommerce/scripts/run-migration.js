@@ -10,6 +10,7 @@ async function run() {
     '006_ecommerce_unified.sql',
     '007_ecommerce_alter_existing.sql',
     '008_ecommerce_alter_customers.sql',
+    '009_google_oauth_customers.sql',
   ];
 
   for (const file of files) {

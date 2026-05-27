@@ -93,7 +93,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://cdn.jsdelivr.net", "https://code.jquery.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
       mediaSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      connectSrc: ["'self'", "https://www.google-analytics.com", "https://accounts.google.com"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"]
     }
@@ -313,7 +313,8 @@ app.use(helmet({
         'https://ui-avatars.com', 
         'https://cdn.jsdelivr.net', // ajax-loader.gif do Slick Carousel
         'https://*.cdninstagram.com',
-        'https://*.fbcdn.net'
+        'https://*.fbcdn.net',
+        'https://lh3.googleusercontent.com' // Google user avatars
       ],
       mediaSrc: [
         "'self'",
@@ -338,7 +339,9 @@ app.use(helmet({
         'https://cdn.datatables.net',
         'https://www.googletagmanager.com',
         'https://www.google-analytics.com',
-        'https://analytics.google.com'
+        'https://analytics.google.com',
+        'https://accounts.google.com',
+        'https://oauth2.googleapis.com'
       ]
     }
   },

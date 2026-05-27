@@ -154,3 +154,6 @@ dev-debug.log
 
 # Dev info backups (contain DB dumps)
 _dev-info/db-backups/
+
+# Google OAuth client secrets (never commit)
+docs/client_secret*.json

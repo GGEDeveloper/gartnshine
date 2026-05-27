@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { passport } = require('../config/passport');
 const Customer = require('../models/Customer');
 const { requireEcommerceEnabled } = require('../../cart/middleware/requireEcommerceEnabled');
 
@@ -106,5 +107,43 @@ router.get('/logout', (req, res) => {
   delete req.session.customerEmail;
   res.redirect('/');
 });
+
+// ── Google OAuth ──────────────────────────────────────────────────────────────
+
+// Redirect to Google
+router.get(
+  '/auth/google',
+  (req, res, next) => {
+    // Store returnTo in session so we recover it after OAuth round-trip
+    if (req.query.returnTo && req.query.returnTo.startsWith('/')) {
+      req.session.oauthReturnTo = req.query.returnTo;
+    }
+    next();
+  },
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' })
+);
+
+// Google callback
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/account/login', session: false }),
+  async (req, res) => {
+    try {
+      const customer = req.user;
+      req.session.customerId = customer.id;
+      req.session.customerEmail = customer.email;
+
+      const returnTo = req.session.oauthReturnTo;
+      delete req.session.oauthReturnTo;
+
+      if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+        return res.redirect(returnTo);
+      }
+      res.redirect('/account/orders');
+    } catch (err) {
+      res.redirect('/account/login');
+    }
+  }
+);
 
 module.exports = router;
