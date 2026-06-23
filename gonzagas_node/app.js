@@ -92,7 +92,8 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://cdn.jsdelivr.net", "https://code.jquery.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      mediaSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://www.google-analytics.com", "https://accounts.google.com"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"]
     }
@@ -186,11 +187,16 @@ app.use((req, res, next) => {
   // Dados comuns a todas as views
   res.locals.app = {
     name: 'Gonzaga\'s Art & Shine',
-    version: process.env.APP_VERSION || '1.0.0',
+    version: process.env.APP_VERSION || (process.env.NODE_ENV === 'production' ? '1.0.0' : Date.now().toString()),
     environment: app.get('env'),
     baseUrl: process.env.BASE_URL || 'https://artnshine.pt'
   };
-  
+
+  // Tema showcase (dourado/cream) activo em todas as páginas públicas
+  if (!req.path.startsWith('/admin')) {
+    res.locals.showcaseTheme = true;
+  }
+
   // Flash messages
   res.locals.messages = require('express-messages')(req, res);
   
@@ -305,14 +311,20 @@ app.use(helmet({
         "blob:", 
         ...devSources,
         'https://ui-avatars.com', 
-        'https://cdn.jsdelivr.net' // ajax-loader.gif do Slick Carousel
+        'https://cdn.jsdelivr.net', // ajax-loader.gif do Slick Carousel
+        'https://*.cdninstagram.com',
+        'https://*.fbcdn.net',
+        'https://lh3.googleusercontent.com' // Google user avatars
       ],
       mediaSrc: [
-        "'self'", 
+        "'self'",
         'https://artnshine.pt',
-        "data:", 
-        "blob:", 
-        ...devSources
+        'data:',
+        'blob:',
+        ...devSources,
+        'https://*.cdninstagram.com',
+        'https://*.fbcdn.net',
+        'https://*.instagram.com'
       ],
       formAction: [
         "'self'", 
@@ -327,7 +339,9 @@ app.use(helmet({
         'https://cdn.datatables.net',
         'https://www.googletagmanager.com',
         'https://www.google-analytics.com',
-        'https://analytics.google.com'
+        'https://analytics.google.com',
+        'https://accounts.google.com',
+        'https://oauth2.googleapis.com'
       ]
     }
   },
@@ -384,13 +398,15 @@ app.use(express.static(path.join(__dirname, 'public'), {
     // Set the Content-Type header
     res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
     
-    // Caching específico por tipo de arquivo
-    if (ext.match(/\.(css|js)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=604800, immutable'); // 1 semana
-    } else if (ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 dias
-    } else if (ext.match(/\.(woff|woff2|eot|ttf)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1 ano
+    // Caching específico por tipo de arquivo (apenas em produção)
+    if (process.env.NODE_ENV === 'production') {
+      if (ext.match(/\.(css|js)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=604800, immutable'); // 1 semana
+      } else if (ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 dias
+      } else if (ext.match(/\.(woff|woff2|eot|ttf)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable'); // 1 ano
+      }
     }
     
     // Adicionar header de compressão para tipos específicos
@@ -452,22 +468,19 @@ app.locals.theme = {
   colorHighlight: '#C0C0C0'
 };
 
+// Helper de imagens de produto (variantes otimizadas: full/medium/small/thumb)
+app.locals.productImg = require('./utils/productImageProcessor').productImg;
+
 // Add user to all routes
 app.use((req, res, next) => {
   try {
-    // Garantir que a sessão seja salva
     if (req.session) {
-      // Manter o acesso ao site ativo
-      req.session.siteAccess = true;
-      
-      // Se o usuário estiver autenticado, adicionar aos locais
       if (req.session.user) {
         res.locals.user = req.session.user;
       } else {
         res.locals.user = null;
       }
     } else {
-      console.log('Sessão não disponível');
       res.locals.user = null;
     }
     next();
@@ -476,6 +489,9 @@ app.use((req, res, next) => {
     next(error);
   }
 });
+
+// Protecção por password de site — desactivada em dev
+// Para activar em produção: definir SITE_PASSWORD no .env do servidor
 
 /* // Comentado para evitar dupla inicialização do servidor. server.js é o responsável.
 // Inicialização direta do servidor Express
@@ -487,6 +503,11 @@ const server = app.listen(app.get('port'), () => {
   console.log(`${'='.repeat(50)}\n`);
 });
 */
+
+// Módulos e-commerce e pagamentos — ANTES dos routers principais para que
+// res.locals.ecommerceEnabled chegue ao catálogo e restantes views públicas
+const { initializeModules } = require('./config/modules');
+initializeModules(app);
 
 // Routers principais - registrados apenas uma vez, fora de qualquer função
 const staticRouter = require('./routes/static');
@@ -501,6 +522,10 @@ const userRightsRouter = require('./routes/user-rights');
 app.use(userRightsRouter);
 const seoRouter = require('./routes/seo');
 app.use(seoRouter);
+
+// API — módulo Instagram (rotas específicas antes do router /api genérico)
+const instagramModule = require('./modules/instagram');
+app.use('/api/instagram', instagramModule.routes);
 
 // API routes
 const apiRouter = require('./routes/api');
@@ -557,7 +582,7 @@ app.use((err, req, res, next) => {
       message: err.message,
       stack: err.stack
     } : {}
-  });
+  }, { layout: false });
 });
 
 // Tratamento de erros 404
@@ -566,7 +591,7 @@ app.use((req, res, next) => {
   res.status(404).render('error', {
     title: 'Página não encontrada',
     message: 'A página que você está procurando não existe ou foi movida.'
-  });
+  }, { layout: false });
 });
 
 // Error logging middleware

@@ -1,0 +1,92 @@
+<section class="ecommerce-cart-page">
+  <div class="container py-4">
+    <h1>Carrinho</h1>
+
+    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn) { %>
+      <div class="account-nav-banner">
+        <p>Já tem conta? <a href="/account/login?returnTo=/cart">Entrar</a> ou <a href="/account/register?returnTo=/cart" class="account-nav-banner-cta">Criar conta</a> para acompanhar os seus pedidos.</p>
+      </div>
+    <% } else if (typeof customerLoggedIn !== 'undefined' && customerLoggedIn) { %>
+      <p class="account-nav-hint"><a href="/account/orders">Ver os meus pedidos</a></p>
+    <% } %>
+
+    <div id="cart-content">
+      <% if (!cart.items.length) { %>
+        <div id="cart-empty-state">
+          <p class="text-muted">O carrinho está vazio.</p>
+          <a href="/catalog" class="btn btn-outline-light">Ver catálogo</a>
+        </div>
+      <% } else { %>
+        <div id="cart-items-section">
+          <div class="table-responsive">
+            <table class="table align-middle cart-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Produto</th>
+                  <th class="text-end">Preço</th>
+                  <th class="text-center">Qtd</th>
+                  <th class="text-end">Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cart-items-body">
+                <% cart.items.forEach(function(item) { %>
+                  <tr data-product-id="<%= item.productId %>">
+                    <td class="cart-img-cell" data-label="">
+                      <% if (item.imageFilename) { %>
+                        <img src="/media/products/<%= item.imageFilename %>" alt="<%= item.name %>"
+                             class="cart-product-thumb"
+                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+                      <% } else { %>
+                        <img src="/images/imagem-nao-disponivel.svg" alt="" class="cart-product-thumb">
+                      <% } %>
+                    </td>
+                    <td data-label="Produto">
+                      <span class="cart-item-name"><%= item.name %></span>
+                      <% if (item.reference) { %>
+                        <small class="cart-item-ref d-block">Ref: <%= item.reference %></small>
+                      <% } %>
+                    </td>
+                    <td class="text-end" data-label="Preço">€<%= item.unitPrice.toFixed(2) %></td>
+                    <td class="text-center" data-label="Quantidade">
+                      <div class="cart-qty-stepper" data-max="<%= item.maxStock %>">
+                        <button type="button" class="cart-qty-btn cart-qty-minus" aria-label="Diminuir">−</button>
+                        <span class="cart-qty-value"><%= item.quantity %></span>
+                        <button type="button" class="cart-qty-btn cart-qty-plus" aria-label="Aumentar" <%= item.quantity >= item.maxStock ? 'disabled' : '' %>>+</button>
+                      </div>
+                      <% if (item.quantity >= item.maxStock) { %>
+                        <small class="cart-stock-max">Máximo disponível</small>
+                      <% } %>
+                    </td>
+                    <td class="text-end cart-item-total" data-label="Total">€<%= item.totalPrice.toFixed(2) %></td>
+                    <td data-label="">
+                      <button type="button" class="cart-remove-btn" aria-label="Remover <%= item.name %>">✕</button>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="cart-summary-section" class="cart-summary mt-3">
+          <p>Subtotal: <strong>€<span id="cart-subtotal"><%= totals.subtotal.toFixed(2) %></span></strong></p>
+          <% if (totals.taxAmount > 0) { %>
+            <p id="cart-tax-line">IVA (<%= totals.taxRate %>%<%= totals.pricesIncludeTax ? ' incl.' : '' %>): €<span id="cart-tax"><%= totals.taxAmount.toFixed(2) %></span></p>
+          <% } %>
+          <p class="h5">Total estimado: €<span id="cart-total"><%= totals.total.toFixed(2) %></span></p>
+          <div class="cart-actions mt-3">
+            <a href="/checkout" class="btn btn-primary">Finalizar compra</a>
+            <a href="/catalog" class="btn-continue-shopping">← Continuar a comprar</a>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Toast de feedback (manipulado via JS) -->
+    <div id="cart-toast" class="cart-toast" role="status" aria-live="polite"></div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="/ecommerce/css/cart.css">

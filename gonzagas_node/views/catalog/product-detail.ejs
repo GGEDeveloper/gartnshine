@@ -70,12 +70,12 @@
     }
     
     .product-thumbnail:hover {
-        border-color: var(--color-highlight, #C0C0C0);
+        border-color: var(--color-highlight, #c9a84c);
         transform: scale(1.05);
     }
     
     .product-thumbnail.active {
-        border-color: var(--color-accent, #A8A8A8);
+        border-color: var(--color-accent, #c9a84c);
     }
     
     .product-thumbnail img {
@@ -129,15 +129,15 @@
     }
     
     .product-availability.available {
-        background: rgba(192, 192, 192, 0.15);
-        color: #C0C0C0;
-        border: 1px solid #A8A8A8;
+        background: rgba(201, 168, 76, 0.12);
+        color: var(--color-highlight, #c9a84c);
+        border: 1px solid var(--color-accent, #c9a84c);
     }
     
     .product-availability.on-order {
-        background: rgba(184, 115, 51, 0.2);
-        color: #B87333;
-        border: 1px solid #B87333;
+        background: rgba(201, 168, 76, 0.1);
+        color: var(--color-accent-alt, #c9a84c);
+        border: 1px solid var(--color-accent-alt, #c9a84c);
     }
     
     .product-availability.out-of-stock {
@@ -174,7 +174,7 @@
     .related-products-section {
         margin-top: 3rem;
         padding-top: 2rem;
-        border-top: 1px solid rgba(168, 168, 168, 0.15);
+        border-top: 1px solid rgba(201, 168, 76, 0.15);
     }
     
     .related-products-section h3 {
@@ -190,10 +190,10 @@
     }
     
     .related-product-card {
-        background: rgba(20, 20, 20, 0.5);
+        background: rgba(12, 12, 12, 0.85);
         border-radius: 10px;
         overflow: hidden;
-        border: 1px solid rgba(168, 168, 168, 0.1);
+        border: 1px solid rgba(201, 168, 76, 0.12);
         transition: all 0.3s ease;
         text-decoration: none;
         color: inherit;
@@ -202,9 +202,10 @@
     
     .related-product-card:hover {
         transform: translateY(-4px);
-        border-color: rgba(168, 168, 168, 0.3);
+        border-color: rgba(201, 168, 76, 0.35);
         text-decoration: none;
         color: inherit;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
     
     .related-product-card img {
@@ -229,7 +230,7 @@
     
     .related-product-card .related-price {
         font-size: 0.85rem;
-        color: var(--color-highlight, #C0C0C0);
+        color: var(--color-highlight, #c9a84c);
     }
     
     .related-product-card .related-stock {
@@ -362,7 +363,7 @@
     </nav>
     <% if (hasCtx) { %>
     <p class="product-back-catalog mb-3">
-        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #A8A8A8);">&larr; Voltar ao catálogo (filtros)</a>
+        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #c9a84c);">&larr; Voltar ao catálogo (filtros)</a>
     </p>
     <% } %>
     
@@ -385,37 +386,49 @@
                 
                 const hasGalleryImages = allImages.length > 0;
                 const placeholderImg = '/images/imagem-nao-disponivel.svg';
-                const mainMediaSrc = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
-                const mainLinkHref = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
+                const mainImg = hasGalleryImages ? productImg(allImages[0], 'medium') : { jpg: placeholderImg, webp: null };
+                const mainFullImg = hasGalleryImages ? productImg(allImages[0], 'full') : { jpg: placeholderImg, webp: null };
             %>
-            
+
             <div class="product-main-image">
-                <a href="<%= mainLinkHref %>" 
-                   class="glightbox product-image-link" 
+                <a href="<%= mainFullImg.jpg %>"
+                   class="glightbox product-image-link"
                    data-glightbox="type: image; title: <%= product.name %>"
                    data-gallery="product-gallery">
-                    <img src="<%= mainMediaSrc %>" 
-                         alt="<%= product.name %>" 
-                         id="mainProductImage"
-                         loading="eager"
-                         onerror="this.onerror=null;this.src='<%= placeholderImg %>';">
+                    <picture>
+                        <% if (mainImg.webp) { %><source srcset="<%= mainImg.webp %>" type="image/webp"><% } %>
+                        <img src="<%= mainImg.jpg %>"
+                             alt="<%= product.name %>"
+                             id="mainProductImage"
+                             loading="eager"
+                             onerror="this.onerror=null;this.src='<%= placeholderImg %>';">
+                    </picture>
                 </a>
             </div>
-            
+
             <% if (allImages.length > 1) { %>
             <div class="product-thumbnails">
-                <% allImages.forEach((img, index) => { %>
-                <div class="product-thumbnail <%= index === 0 ? 'active' : '' %>" 
-                     data-image="/media/products/<%= img %>"
+                <% allImages.forEach((img, index) => {
+                    const thumbImg = productImg(img, 'thumb');
+                    const thumbMediumImg = productImg(img, 'medium');
+                    const thumbFullImg = productImg(img, 'full');
+                %>
+                <div class="product-thumbnail <%= index === 0 ? 'active' : '' %>"
+                     data-medium="<%= thumbMediumImg.jpg %>"
+                     data-medium-webp="<%= thumbMediumImg.webp || '' %>"
+                     data-full="<%= thumbFullImg.jpg %>"
                      data-index="<%= index %>">
-                    <a href="/media/products/<%= img %>" 
-                       class="glightbox product-thumbnail-link" 
+                    <a href="<%= thumbFullImg.jpg %>"
+                       class="glightbox product-thumbnail-link"
                        data-glightbox="type: image; title: <%= product.name %>"
                        data-gallery="product-gallery">
-                        <img src="/media/products/<%= img %>" 
-                             alt="<%= product.name %> - Imagem <%= index + 1 %>" 
-                             loading="lazy"
-                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
+                        <picture>
+                            <% if (thumbImg.webp) { %><source srcset="<%= thumbImg.webp %>" type="image/webp"><% } %>
+                            <img src="<%= thumbImg.jpg %>"
+                                 alt="<%= product.name %> - Imagem <%= index + 1 %>"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
+                        </picture>
                     </a>
                 </div>
                 <% }); %>
@@ -474,6 +487,21 @@
             
             <div class="product-actions">
                 <% if (product.current_stock > 0) { %>
+                <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
+                <div class="product-add-wrap">
+                  <% if (product.current_stock > 1) { %>
+                  <div class="product-qty-stepper" data-max="<%= product.current_stock %>">
+                    <button type="button" class="detail-qty-btn detail-qty-minus" disabled aria-label="Diminuir">−</button>
+                    <span class="detail-qty-value">1</span>
+                    <button type="button" class="detail-qty-btn detail-qty-plus" <%= product.current_stock <= 1 ? 'disabled' : '' %> aria-label="Aumentar">+</button>
+                    <small class="detail-qty-stock">(<%= product.current_stock %> disponíveis)</small>
+                  </div>
+                  <% } %>
+                  <button type="button" class="btn-add-to-cart" data-product-id="<%= product.id %>" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:1rem 2rem;border:1px solid rgba(201,162,39,0.5);background:transparent;color:inherit;border-radius:4px;cursor:pointer;width:100%;margin-bottom:0.5rem;">
+                      🛒 Adicionar ao carrinho
+                  </button>
+                </div>
+                <% } %>
                 <a href="https://wa.me/<%= whatsappData.number %>?text=<%= whatsappData.encodedMessage %>" 
                    class="btn-whatsapp" 
                    target="_blank"
@@ -561,17 +589,21 @@
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', function(e) {
                 e.preventDefault();
-                const imageUrl = this.dataset.image;
+                const mediumUrl = this.dataset.medium;
+                const mediumWebpUrl = this.dataset.mediumWebp;
+                const fullUrl = this.dataset.full;
                 const imageIndex = parseInt(this.dataset.index);
-                
-                // Update main image
+
+                // Update main image (variante 'medium' otimizada, não o ficheiro full-size)
                 if (mainImage) {
-                    mainImage.src = imageUrl;
+                    mainImage.src = mediumUrl;
+                    const sourceEl = mainImage.parentElement && mainImage.parentElement.querySelector('source');
+                    if (sourceEl && mediumWebpUrl) sourceEl.srcset = mediumWebpUrl;
                 }
                 if (mainImageLink) {
-                    mainImageLink.href = imageUrl;
+                    mainImageLink.href = fullUrl;
                 }
-                
+
                 // Update active thumbnail
                 thumbnails.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');

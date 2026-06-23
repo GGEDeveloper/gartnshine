@@ -1,24 +1,19 @@
-<main>
-    <!-- Hero: vídeo de fundo + texto "Elegância que nasce da terra" encostado ao topo -->
+    <!-- Hero: imagem de fundo + tagline -->
     <section class="hero">
-      <div class="hero-video-container">
-        <video class="hero-video" autoplay muted loop playsinline>
-          <source src="/media/gallery/WhatsApp Video 2025-04-05 at 19.12.38_fdb30c78.mp4" type="video/mp4">
-        </video>
-        <div class="hero-video-overlay"></div>
-      </div>
-      <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/imagem-nao-disponivel.svg" %>');"></div>
+      <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-hero.jpg" %>');"></div>
+      <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-content">
         <h1 class="hero-title visually-hidden">Joias Artesanais em Prata 925 — Gonzaga's Art & Shine</h1>
         <p class="hero-tagline"><%= siteDescription %></p>
       </div>
     </section>
-    
+
     <!-- Featured Products -->
     <% if (featured && featured.length > 0) { %>
-    <section class="featured-section">
-      <div class="section-header">
-        <h2>Featured Pieces</h2>
+    <section class="featured-section ig-collections">
+      <div class="section-header ig-collections-head">
+        <h2 class="ig-collections-title">Featured Pieces</h2>
+        <p class="ig-collections-sub">Prata &amp; pedras naturais — design alternativo</p>
         <div class="geometric-divider">
           <span></span>
           <span></span>
@@ -27,19 +22,21 @@
       </div>
 
       <!-- Slick Carousel -->
-      <div class="featured-carousel">
-        <% featured.forEach((product, index) => { %>
-          <div class="slick-slide">
-            <%- include('partials/_productCardHomepage', {product: product, index: index}) %>
-          </div>
-        <% }); %>
+      <div class="featured-carousel-wrap">
+        <div class="featured-carousel">
+          <% featured.forEach((product, index) => { %>
+            <div class="slick-slide">
+              <%- include('partials/_productCardHomepage', {product: product, index: index}) %>
+            </div>
+          <% }); %>
+        </div>
+        <div class="featured-carousel-dots" aria-label="Navegação Featured Pieces"></div>
       </div>
 
     </section>
     <% } %>
-    
 
-</main>
+<%- include('partials/_media-strip', { igPosts: typeof igPosts !== 'undefined' ? igPosts : [] }) %>
 
 <script type="application/ld+json">
 {

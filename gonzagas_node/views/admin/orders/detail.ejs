@@ -1,0 +1,161 @@
+<%
+const statusPT = {
+  pending:    'Pendente',
+  confirmed:  'Confirmado',
+  processing: 'A preparar',
+  shipped:    'Enviado',
+  delivered:  'Entregue',
+  cancelled:  'Cancelado'
+};
+const paymentPT = {
+  pending:  'Pendente',
+  paid:     'Pago',
+  failed:   'Falhado',
+  refunded: 'Reembolsado'
+};
+function formatEur(val) {
+  return parseFloat(val || 0).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+}
+%>
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="mb-3">
+    <a href="/admin/orders" class="btn btn-sm btn-outline-secondary">
+      <i class="fas fa-arrow-left me-1"></i> Voltar aos Pedidos
+    </a>
+  </div>
+
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <h1 class="h3 mb-0">Pedido #<%= order.order_number %></h1>
+    <span class="badge badge-stock-in-stock"><%= statusPT[order.status] || order.status %></span>
+    <span class="badge badge-product-inactive"><%= paymentPT[order.payment_status] || order.payment_status %></span>
+  </div>
+  <p class="text-muted small mb-4"><i class="fas fa-clock me-1"></i><%= new Date(order.created_at).toLocaleString('pt-PT') %></p>
+
+  <div class="row g-4">
+    <!-- Cliente -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <h6 class="card-title mb-0"><i class="fas fa-user me-2"></i>Cliente</h6>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong><%= order.customer_name %></strong></p>
+          <p class="mb-1 text-muted"><%= order.customer_email %></p>
+          <% if (order.customer_phone) { %>
+            <p class="mb-3 text-muted"><%= order.customer_phone %></p>
+          <% } %>
+          <hr class="opacity-25">
+          <p class="mb-0 small text-muted"><i class="fas fa-map-marker-alt me-1"></i>Morada de Envio</p>
+          <p class="mb-0 mt-1"><%= order.shipping_address_line1 %></p>
+          <% if (order.shipping_address_line2) { %>
+            <p class="mb-0"><%= order.shipping_address_line2 %></p>
+          <% } %>
+          <p class="mb-0"><%= order.shipping_postal_code %> <%= order.shipping_city %></p>
+          <p class="mb-0"><%= order.shipping_country %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumo financeiro -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <h6 class="card-title mb-0"><i class="fas fa-receipt me-2"></i>Resumo</h6>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm mb-0">
+            <tbody>
+              <tr>
+                <td class="text-muted">Subtotal</td>
+                <td class="text-end fw-semibold"><%= formatEur(order.subtotal) %></td>
+              </tr>
+              <tr>
+                <td class="text-muted">IVA</td>
+                <td class="text-end"><%= formatEur(order.tax_amount) %></td>
+              </tr>
+              <tr>
+                <td class="text-muted">Portes</td>
+                <td class="text-end"><%= formatEur(order.shipping_amount) %></td>
+              </tr>
+              <tr class="border-top">
+                <td class="fw-semibold">Total</td>
+                <td class="text-end fw-bold h5 mb-0"><%= formatEur(order.total_amount) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Itens do Pedido -->
+  <div class="card mt-4">
+    <div class="card-header">
+      <h6 class="card-title mb-0"><i class="fas fa-box me-2"></i>Itens do Pedido</h6>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Referência</th>
+              <th class="text-center">Qtd</th>
+              <th class="text-end">Preço Unit.</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% (order.items || []).forEach(function(item) { %>
+              <tr>
+                <td><%= item.product_name %></td>
+                <td class="text-muted"><%= item.product_reference %></td>
+                <td class="text-center"><%= item.quantity %></td>
+                <td class="text-end"><%= formatEur(item.unit_price) %></td>
+                <td class="text-end fw-semibold"><%= formatEur(item.total_price) %></td>
+              </tr>
+            <% }); %>
+            <% if (!(order.items && order.items.length)) { %>
+              <tr><td colspan="5" class="text-center text-muted py-4">Sem itens.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ações -->
+  <div class="card mt-4">
+    <div class="card-header">
+      <h6 class="card-title mb-0"><i class="fas fa-cog me-2"></i>Ações</h6>
+    </div>
+    <div class="card-body">
+      <form method="post" action="/admin/orders/<%= order.id %>/status" class="row g-3 align-items-end mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Alterar estado</label>
+          <select name="status" class="form-select">
+            <% ['pending','confirmed','processing','shipped','delivered','cancelled'].forEach(function(s) { %>
+              <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= statusPT[s] || s %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Notas (opcional)</label>
+          <input type="text" name="notes" class="form-control" placeholder="Notas internas...">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+        </div>
+      </form>
+
+      <% if (order.status !== 'cancelled') { %>
+        <hr class="opacity-25">
+        <form method="post" action="/admin/orders/<%= order.id %>/cancel" onsubmit="return confirm('Cancelar este pedido?');">
+          <button type="submit" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-times me-1"></i>Cancelar Pedido
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div>

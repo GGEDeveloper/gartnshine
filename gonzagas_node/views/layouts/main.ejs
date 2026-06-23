@@ -193,6 +193,10 @@
 
   <%- style %>
   <link rel="stylesheet" href="/css/dark-luxe.css?v=<%= app.version %>">
+  <link rel="stylesheet" href="/css/media-cards.css?v=<%= app.version %>">
+  <% if (typeof showcaseTheme !== 'undefined' && showcaseTheme) { %>
+  <link rel="stylesheet" href="/css/brand-showcase.css?v=<%= app.version %>">
+  <% } %>
 
   <% if (process.env.GA_TRACKING_ID && (typeof cookieConsent === 'undefined' || cookieConsent === null || (typeof canUseAnalytics === 'function' && canUseAnalytics()))) { %>
   <!-- Google Tag Manager / GA4 -->
@@ -211,7 +215,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.GA_TRACKING_ID %>"></script>
   <% } %>
 </head>
-<body class="d-flex flex-column h-100" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
+<body class="d-flex flex-column h-100<%= typeof showcaseTheme !== 'undefined' && showcaseTheme ? ' showcase-theme' : '' %>" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     
   <%- include('../partials/header') %>
   
@@ -290,6 +294,11 @@
 
     <!-- Analytics Tracking (Client-Side) -->
     <script src="/js/analytics-tracking.js"></script>
+
+    <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
+    <link rel="stylesheet" href="/ecommerce/css/cart.css">
+    <script src="/ecommerce/js/shopping-cart.js" defer></script>
+    <% } %>
 
     <%- script %>
 </body>

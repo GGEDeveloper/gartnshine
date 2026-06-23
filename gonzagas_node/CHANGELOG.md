@@ -1,5 +1,289 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Error: correção layout duplicado
+
+### 🐛 **Páginas de erro desformatadas corrigidas**
+- **Problema**: Páginas de erro apareciam com header/footer duplicados em desktop após erro OAuth
+- **Causa**: `res.render('error')` estava a usar o layout principal por defeito, causando duplicação de elementos
+- **Solução**: Adicionado `{ layout: false }` a todos os `render('error')` em:
+  - `app.js` (error handlers globais)
+  - `modules/ecommerce/admin/routes/orders.js`
+  - `modules/ecommerce/cart/middleware/requireEcommerceEnabled.js`
+  - `routes/admin.js` e `routes/admin/media.js`
+  - `controllers/CatalogController.js`, `CookieConsentController.js`, `UserRightsController.js`
+  - `routes/index.js`
+- **Impacto**: Páginas de erro agora são standalone sem duplicação de layout
+
+---
+
+## [2026-06-23] - Mobile: correções páginas de erro
+
+### 📱 **Páginas de erro - mobile otimizado**
+- **Problema**: Páginas de erro (error.ejs, 404.ejs, 500.ejs) não estavam otimizadas para mobile
+- **Solução**:
+  - Adicionada media query `@media (max-width: 768px)` em todas as páginas de erro
+  - Ajustado padding e max-width para melhor uso de espaço em ecrãs pequenos
+  - Botões com `min-height: 48px` e `width: 100%` para touch targets adequados
+  - Tamanhos de fonte reduzidos para melhor legibilidade em mobile
+
+---
+
+## [2026-06-23] - Mobile: correções header, criar conta e Google OAuth
+
+### 📱 **Header mobile - layout corrigido**
+- **Problema**: Header não ajustava bem o tamanho em mobile devido a max-width fixo e falta de estilos
+- **Solução**: 
+  - Adicionado `.logo-container { flex-shrink: 0 }` para evitar compressão do logo
+  - Adicionado `gap: 0.5rem` ao `.header-container` para consistência
+  - Removido `max-width: 1200px` do header em mobile (`max-width: none`)
+  - Ajustado tamanho do logo com `clamp(1rem, 4vw, 1.25rem)` para responsividade fluida
+
+### 📱 **Página criar conta - mobile otimizado**
+- **Problema**: Formulário com max-width fixo, touch targets pequenos, padding excessivo
+- **Solução**:
+  - Adicionada media query `@media (max-width: 768px)` em `account.css`
+  - `.account-form-wrap` ajustado para `max-width: 100%` com padding lateral
+  - Inputs com `min-height: 44px` e `font-size: 16px` (evita zoom iOS)
+  - Botão Google e botão primário com `min-height: 48px` para touch targets adequados
+  - Padding da página reduzido de `2.5rem 0 3.5rem` para `1.5rem 0 2rem` em mobile
+
+### 🔐 **Google OAuth - correções mobile**
+- **Problema**: Prompt 'select_account' causava problemas em browsers mobile, falta de tratamento de erros
+- **Solução**:
+  - Removido `prompt: 'select_account'` do Passport authenticate (causava inconsistência em mobile)
+  - Adicionado `console.error` e flash message específica no callback OAuth
+  - Melhorado tratamento de erros com mensagem "Erro ao autenticar com Google. Tente novamente."
+- **Nota**: A variável `GOOGLE_CALLBACK_URL` no `.env` deve estar configurada para o domínio de produção (não localhost)
+
+### ✅ **Validado**
+- `node --check` em `modules/ecommerce/accounts/routes/pages.js` — sem erros
+- Sintaxe CSS validada
+
+---
+
+## [2026-06-23] - Bugfix: rotação EXIF de imagens e checkboxes Criar Rápido
+
+### 🐛 **Rotação de imagens 90º counter-clockwise corrigida**
+- **Problema**: Imagens carregadas via Criar Rápido ou edição de produtos apareciam rodadas 90º no sentido anti-horário
+- **Causa**: O pipeline de processamento de imagens (`productImageProcessor.js`) não lidava com metadados EXIF de orientação
+- **Solução**: Adicionado `.rotate()` ao pipeline Sharp em `resizeToJpeg()` e `resizeToWebp()` para correção automática de orientação EXIF
+- **Impacto**: Todas as novas imagens processadas terão orientação correta; para imagens existentes, executar `node scripts/generate-product-image-variants.js --force`
+
+### 🐛 **Checkboxes Criar Rápido inconsistentes corrigidos**
+- **Problema**: Selectores "Ativo", "Visível no Catálogo" e "Destaque" no Criar Rápido não guardavam corretamente o estado após redirect
+- **Causa**: Lógica de pré-seleção usava `!== false` (true para undefined) mas salvamento esperava explicitamente `'1'`
+- **Solução**: Criadas helper functions `normalizeCheckbox()` e `boolToQueryParam()` para normalizar valores de forma consistente em todo o controller
+- **Impacto**: Estado dos checkboxes agora preservado corretamente entre submissões consecutivas no Criar Rápido
+
+### ✅ **Validado**
+- `node --check` em `utils/productImageProcessor.js` e `controllers/QuickProductController.js` — sem erros
+- Sintaxe JavaScript validada
+
+---
+
+## [2026-06-23] - Admin: melhorias de fluxo no Criar Rápido, Produtos e galeria
+
+### ✨ **Criar Produto Rápido — visibilidade + memória de escolha**
+- Adicionados toggles "Ativo", "Visível no Catálogo" e "Destaque" ao formulário (antes hardcoded: ativo+visível sempre ligados, destaque sempre desligado)
+- Após criar um produto, a escolha destes 3 toggles é preservada via query string no redirect e pré-selecionada no formulário seguinte — facilita criar várias peças seguidas com as mesmas definições
+
+### ✨ **Lista de Produtos (admin) — seletor de resultados por página**
+- Novo dropdown "Por página" (10/20/50/100) no formulário de filtros, com auto-submit
+- `ProductController.index` valida o `limit` recebido contra uma lista de valores permitidos (evita valores arbitrários via URL)
+
+### ✨ **Lista de Produtos (admin) — navegação contínua no zoom/lightbox**
+- Ao navegar pela galeria de imagens (GLightbox) e chegar ao fim da página actual, avança automaticamente para a página seguinte e continua a partir da primeira imagem (e o inverso a recuar a partir da primeira imagem da página)
+- Implementado com o evento `slide_changed` do GLightbox (loop interno existente é usado para detectar a transição última→primeira) + `sessionStorage` para reabrir o lightbox na posição certa após o carregamento da nova página
+
+### ✅ **Validado**
+- `node --check` nos controllers alterados
+- Compilação EJS das views alteradas e verificação de sintaxe do bloco `<script>` inline
+
+---
+
+## [2026-06-23] - Pipeline de otimização de imagens de produto
+
+### 🖼️ **Problema**
+Auditoria de performance revelou que as imagens de produto eram sempre servidas na resolução original do upload (por vezes 400-550KB), reutilizada sem alteração em todos os contextos — desde miniaturas de 48px no admin até à imagem principal de 600px no detalhe do produto.
+
+### ✅ **Solução**
+- Novo `utils/productImageProcessor.js` — gera 4 variantes (`full` 1600px, `medium` 800px, `small` 400px, `thumb` 160px) em JPEG + WebP por cada imagem de produto, usando Sharp (com fallback Jimp para ambientes cPanel), seguindo o mesmo padrão já usado na Media Library
+- **O ficheiro original do upload nunca é alterado** — fica em disco intacto como backup/arquivo; todas as variantes são geradas a partir dele
+- Geração automática integrada em `ProductController.store()`/`update()` e `QuickProductController.store()` — toda imagem nova introduzida a partir de agora gera as variantes sem intervenção manual
+- `Product.delete()` passa a apagar também as variantes (8 ficheiros) ao remover um produto, além do original
+- Helper `app.locals.productImg(filename, size)` disponível em todas as views EJS — devolve `{ jpg, webp }` com fallback automático para o placeholder SVG quando não há imagem
+- Views actualizadas para pedir a variante certa por contexto, com `<picture>`+WebP e fallback JPEG: catálogo e homepage (`small`), detalhe de produto (`medium` na imagem principal, `thumb` nas miniaturas, `full` no zoom/lightbox), admin — dashboard/produtos/inventário/formulário (`thumb`/`small`)
+- Script de backfill `scripts/generate-product-image-variants.js` para gerar as variantes das imagens já existentes: `node scripts/generate-product-image-variants.js` (idempotente; usar `--force` para regenerar)
+
+### ✅ **Validado**
+- `node --check` em todos os ficheiros JS novos/alterados
+- Compilação EJS de todas as views alteradas sem erros
+- Teste end-to-end: gerada variante de imagem real, confirmado original byte-a-byte intacto (hash MD5 igual) e miniatura ~18× mais leve (4.4KB vs 80KB)
+- Backfill corrido contra a BD local (308 imagens originais em disco): **301 processadas com sucesso** (2408 ficheiros de variantes gerados, 301×8 — confirmado), **42 falhas** por ficheiro original em falta no disco (ver nota abaixo)
+
+### ⚠️ **Nota: 42 imagens em falta (pré-existente, não introduzido por este trabalho)**
+42 ficheiros referenciados em `product_images` não existem em disco mesmo após recuperação do servidor — afecta **31 produtos** (refs `LTCU0010`–`LTCU0025`, `LTG0001`–`LTG0016`), todos criados via Criar Rápido com nome placeholder "Produto {timestamp}", sugerindo que as imagens nunca chegaram a ser persistidas/migradas correctamente para estes produtos. Estes produtos já mostravam imagem partida (404) antes deste trabalho — fora de âmbito corrigir agora.
+
+---
+
+## [2026-06-23] - Admin: bugs críticos, consistência dark-luxe e tabelas/paginação
+
+### 🐛 **Bugs críticos corrigidos**
+- `admin-dark-luxe.css`: erro de sintaxe no `background` do `<body>` (faltava `linear-gradient(`)
+- Dashboard: tabela "Transações Recentes" tinha 5 colunas no `<thead>` mas só 3 renderizadas no `<tbody>`, e os dados vinham sempre vazios (`recentTransactions: []` hardcoded) — agora usa `inventory_transactions` reais
+- Header admin: avatar/nome sempre "Admin" (hardcoded) → usa utilizador da sessão; removido link morto `/admin/profile`
+- Inventário: controller passava `totalPages`/`currentPage` mas a view nunca renderizava paginação — impossível navegar além da página 1; paginação adicionada
+- Removidos `console.log` de debug e rota `/admin/test-route` deixados em produção (`routes/admin.js`, `InventoryController.js`)
+- Removido `routes/admin/products.js` — ficheiro morto nunca montado, usava Sequelize (inexistente no projeto), com lógica de paginação duplicada e confusa
+
+### 🎨 **Consistência visual com o tema dark-luxe do site**
+- Badges de stock/status (Produtos, Inventário, Famílias) trocados de classes Bootstrap cruas (`bg-success`, `bg-warning`, etc.) para as classes dark-luxe (`badge-stock-in-stock`, `badge-product-active`, etc.)
+- Placeholders de imagem (`bg-light`) trocados por nova classe `.img-placeholder` (dark) em Produtos, Inventário e Famílias
+- Removidas classes Bootstrap 4 obsoletas (`text-gray-800`, `font-weight-bold`, `text-dark` em headers ordenáveis) em 9 views admin
+- Reports e Analytics: removidas classes Bootstrap dark/cores hardcoded (`bg-dark`, `table-dark`, `bg-primary text-white`, etc.) substituídas por cards/stat-cards dark-luxe
+- Orders: status e pagamento traduzidos para PT (`pending` → `Pendente`, etc.) com badges dark-luxe em vez de `bg-secondary`/`bg-info text-dark`
+- Font do admin trocada de `Nunito` (nunca usada no CSS) para `Poppins`/`Inter`, alinhado com o site público
+- Paginação (Produtos + Inventário): reescrita com elipses para listas longas, estados `disabled`, e página activa agora visível (antes quase indistinguível no tema escuro)
+
+### ✅ **Validado**
+- `node --check` em todos os ficheiros JS alterados
+- Compilação EJS de todas as views alteradas sem erros
+
+---
+
+## [2026-05-26] - Conta cliente: navegação integrada
+
+### 👤 **Conta cliente no site público**
+
+#### **Navegação**
+- Partial `_customerAccountNav.ejs` — header (Entrar + **Criar conta**), menu mobile, footer
+- Carrinho, checkout e success — CTAs para login/registo; `returnTo` preservado
+- Checkout pré-preenche dados se sessão cliente activa
+- Success convida a criar conta com email do pedido (guest)
+
+#### **Rotas / sessão**
+- `/account` → redirect login ou pedidos
+- `requireEcommerceEnabled` nas rotas de conta
+- Redirect se já autenticado; logout limpa sessão
+
+#### **Fix**
+- Middleware `ecommerceEnabled` / `customerLoggedIn` movido **antes** das rotas e-commerce (header correcto em `/cart`, `/checkout`, `/account`)
+
+#### **Validado**
+- `npm run test:ecommerce` — **29/29** (incl. conta: header, footer, cart/checkout CTAs, login/logout, returnTo)
+- `npm run validate:catalog` — OK
+
+---
+
+## [2026-05-26] - Mobile showcase + validação
+
+### 📱 **Pass mobile completo (showcase + e-commerce)**
+
+#### **CSS mobile**
+- `frontend-mobile.css`: cores `#c0a080` → `var(--igp-gold)`; regras para IG strip, search, e-commerce, collection, privacy/terms, about, error; safe-area para cart/checkout
+- `brand-showcase.css`: bloco `@media (max-width: 768px/480px)` para todas as páginas showcase (IG strip, collection, about, privacy/terms, search, product detail, btn-add-to-cart)
+- `cart.css`: tabela → cards empilhados em mobile (`data-label` + `::before`); summary e CTA 100% largura
+- `checkout.css`: inputs 16px (iOS), submit full-width, success/cancel empilhados, account pages
+- `cart.ejs`: `data-label` em cada `<td>` para labels legíveis no layout card
+- `mobile-header.ejs`: dropdown links/ícones com `var(--igp-gold)`
+
+#### **Validado localmente (2026-05-26)**
+- `npm run test:ecommerce` — **19/19** (cart API, checkout submit, success, account, admin orders/settings, add-to-cart no catálogo)
+- `npm run validate:catalog` — OK (328 produtos, 18 famílias)
+- Smoke HTTP: 18 rotas públicas + 4 assets CSS → **200**
+- Estrutural: `data-theme="dark"`, `body.showcase-theme`, search sem HTML duplicado, privacy sem fundo claro
+- **Nota:** não existe `npm run build` — app Node/Express; validação = `npm start` + scripts acima
+
+---
+
+## [2026-05-26] - Tema Showcase + E-commerce UI
+
+### 🎨 **Alinhamento visual completo do site (showcase dark-gold)**
+
+#### **Tema showcase (`brand-showcase.css` + `body.showcase-theme`)**
+- Toda a paleta do site passa a usar dourado (#c9a84c) + cream (#f0ece4) sobre fundo escuro (#0a0a0a)
+- `body.showcase-theme` redireciona variáveis legadas `--color-accent/highlight/text` para gold/cream — qualquer CSS que use `var(--color-*)` herda automaticamente
+- `data-theme="dark"` corrigido (era `"[object Object]"` devido a `theme: {...}` passado como objecto nas rotas)
+- CSS estático usa `no-cache` em desenvolvimento; `immutable` só em produção
+- `app.version` dinâmico (`Date.now()`) em dev para cache busting automático
+
+#### **Páginas corrigidas**
+- **Privacy Policy + Terms of Service**: CSS inline com tema claro totalmente substituído por showcase dark
+- **Search results**: Removida estrutura HTML duplicada (`<!DOCTYPE>/<html>/<body>` dentro do layout); estilos showcase aplicados
+- **Collection page**: Estilos showcase para cabeçalho, divider geométrico dourado, controlos de sort, nav de coleções
+- **Product detail**: Valores hardcoded `#C0C0C0/#A8A8A8/#B87333` migrados para `var(--color-*)` que herdam gold
+- **About page**: `.about-connect`, `.social-links-large`, `h3` com gold/muted showcase
+- **error.ejs**: Guards defensivos `title`/`message`; estilo refeito showcase dark; `title:` adicionado a 3 chamadas `render('error')` que faltavam
+
+#### **E-commerce UI — showcase theme**
+- `cart.css` reescrito: tabela dark com cabeçalho gold, qty input com focus ring dourado, cart-summary glass card, btn gold
+- `checkout.css` reescrito: form inputs dark/gold focus, h2 secções gold, checkout-summary glass, submit btn gold, páginas success/cancel centradas com ícone ✦ dourado
+- `brand-showcase.css`: `.btn-add-to-cart` outline → fill gold no hover; `.header-cart-badge` gold bg; Bootstrap `.form-control` global override para showcasetheme
+- Account pages (`/account/login`, `/account/register`, `/account/orders`): h1 Georgia + underline gold, tabela showcase
+- `checkout-success.ejs` / `checkout-cancel.ejs`: adicionado `<link>` para `checkout.css`
+
+#### **Instagram strip na homepage**
+- Secção "No Instagram" com 6 posts reais via Instagram Graph API
+- Partial `partials/_ig-strip.ejs`; rota home com `instagramModule.fetchInstagramFeed(6)`
+- Cache de 5 minutos em `mediaService.js`
+
+---
+
+## [2026-05-26] - E-commerce Modular (core)
+
+### 🛒 **Loja online modular**
+
+#### **Arquitectura**
+- Novo módulo `modules/ecommerce/` com submódulos: cart, checkout, orders, settings, shipping, fulfillment, admin, accounts, notifications, analytics, jobs
+- Novo módulo `modules/payments/` com provider Stripe (`disabled` / `test` / `live`)
+- Registo em `config/modules.js`; inicialização via `initializeModules(app)` em `app.js`
+
+#### **Base de dados**
+- Schema unificado INT em `modules/ecommerce/sql/migrations/006_ecommerce_unified.sql`
+- Migração de upgrade para instalações existentes: `007_ecommerce_alter_existing.sql`, `008_ecommerce_alter_customers.sql`
+- Comando: `npm run db:ecommerce`
+- Schema UUID em `database/migrations/sales/` marcado como **deprecated**
+
+#### **Rotas públicas**
+- `/cart`, `/checkout`, `/checkout/success`, `/checkout/cancel`
+- API: `/api/cart/*`, `/api/checkout/prepare`, `/api/checkout/submit`
+- Webhook: `POST /webhooks/stripe`
+
+#### **Admin**
+- `/admin/settings/ecommerce` — activar loja, IVA, Stripe, portes
+- `/admin/orders`, `/admin/orders/:id` — gestão de pedidos
+- Dashboard usa estatísticas reais de pedidos quando e-commerce activo
+
+#### **Conta cliente (opcional)**
+- `/account/login`, `/account/register`, `/account/orders`, `/account/logout`
+
+#### **Correcções dev (2026-05-26, sessão 2)**
+- `initializeModules()` movido **antes** dos routers em `app.js` — botão "Adicionar ao carrinho" no catálogo
+- Migração `008_ecommerce_alter_customers.sql` — colunas conta cliente em tabela `customers` existente
+- Carrinho limpo após checkout submit
+- Script `npm run test:ecommerce` — validação automática (19 checks)
+
+#### **Validado localmente (2026-05-26)**
+- Carrinho API + página + PATCH/DELETE
+- Checkout com carrinho preenchido
+- Submissão de pedido com `payment_mode=disabled` + carrinho vazio após
+- Conta cliente: registo + histórico pedidos
+- Admin: login, lista/detalhe pedidos, settings e-commerce
+- Catálogo: botão add-to-cart visível com loja activa
+
+#### **Pendente antes de go-live**
+- Teste Stripe em modo `test` + webhook
+- Emails SMTP de confirmação (requer `SMTP_HOST`)
+- Executar `npm run db:ecommerce` em produção/staging após deploy
+
+#### **Documentação deploy/DB (2026-05-26)**
+- `DATABASE.md`, `PRODUCTION_SETUP.md`, `DEPLOYMENT.md`, `docs/MODULAR_ARCHITECTURE.md`
+
+#### **Correcção de migração**
+- Script `run-migration.js` ignora comentários SQL por linha (evita saltar o primeiro `ALTER` em 007)
+
+---
+
 ## [2025-03-04] - Header Search: Ícone Expandível (Mobile + Desktop)
 
 ### 🔍 **Pesquisa no Header - Padrão Unificado**

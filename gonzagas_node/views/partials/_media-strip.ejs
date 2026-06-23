@@ -1,0 +1,52 @@
+<% var _mediaPosts = (typeof igPosts !== 'undefined' && Array.isArray(igPosts)) ? igPosts : []; %>
+<% if (_mediaPosts.length > 0) { %>
+<section class="ig-strip-section">
+  <div class="ig-strip-header section-header">
+    <h2>Do Atelier</h2>
+    <p class="ig-strip-lead">Prata, pedras naturais e inspiração — o nosso universo criativo</p>
+    <div class="geometric-divider">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="instagram-grid ig-strip-grid">
+    <% _mediaPosts.forEach(function (post) {
+      var isVideo = post.media_type === 'VIDEO';
+      var imgUrl = isVideo && post.thumbnail_url ? post.thumbnail_url : post.media_url;
+      var cap = post.caption || '';
+      var shortCap = cap.length > 100 ? cap.slice(0, 100) + '…' : cap;
+      var isCarousel = post.media_type === 'CAROUSEL_ALBUM';
+    %>
+    <article class="instagram-card">
+      <a href="<%= post.permalink %>" class="instagram-card-link" target="_blank" rel="noopener noreferrer" aria-label="Ver publicação">
+        <div class="instagram-card-image-wrap">
+          <% if (imgUrl) { %>
+          <img src="<%= imgUrl %>" alt="" loading="lazy" decoding="async" class="instagram-card-img">
+          <% } else { %>
+          <div class="instagram-card-placeholder" aria-hidden="true"></div>
+          <% } %>
+          <span class="instagram-type-badge" title="<%= post.media_type %>">
+            <% if (isVideo) { %>
+            <i class="fas fa-video" aria-hidden="true"></i><span class="sr-only">Vídeo</span>
+            <% } else if (isCarousel) { %>
+            <i class="fas fa-images" aria-hidden="true"></i><span class="sr-only">Álbum</span>
+            <% } else { %>
+            <i class="fas fa-image" aria-hidden="true"></i><span class="sr-only">Imagem</span>
+            <% } %>
+          </span>
+        </div>
+        <% if (shortCap) { %>
+        <p class="instagram-card-caption"><%= shortCap %></p>
+        <% } %>
+      </a>
+    </article>
+    <% }); %>
+  </div>
+
+  <div class="ig-strip-cta">
+    <a href="/collections" class="ig-strip-cta-link">Explorar Coleções &rarr;</a>
+  </div>
+</section>
+<% } %>

@@ -1,0 +1,106 @@
+<%
+const statusPT = {
+  pending:    'Pendente',
+  confirmed:  'Confirmado',
+  processing: 'A preparar',
+  shipped:    'Enviado',
+  delivered:  'Entregue',
+  cancelled:  'Cancelado'
+};
+const statusBadge = {
+  pending:    'badge-product-inactive',
+  confirmed:  'badge-stock-in-stock',
+  processing: 'badge-stock-low-stock',
+  shipped:    'badge-stock-low-stock',
+  delivered:  'badge-stock-in-stock',
+  cancelled:  'badge-stock-out-of-stock'
+};
+const paymentPT = {
+  pending:    'Pendente',
+  paid:       'Pago',
+  failed:     'Falhado',
+  refunded:   'Reembolsado'
+};
+const paymentBadge = {
+  pending:  'badge-product-inactive',
+  paid:     'badge-stock-in-stock',
+  failed:   'badge-stock-out-of-stock',
+  refunded: 'badge-stock-low-stock'
+};
+%>
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Pedidos</h1>
+    <a href="/admin/settings/ecommerce" class="btn btn-outline-secondary btn-sm">Config. E-commerce</a>
+  </div>
+
+  <form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+      <input type="search" name="search" class="form-control" placeholder="Pesquisar cliente, nº pedido..." value="<%= filters.search || '' %>">
+    </div>
+    <div class="col-md-2">
+      <select name="status" class="form-select">
+        <option value="">Estado</option>
+        <% ['pending','confirmed','processing','shipped','delivered','cancelled'].forEach(function(s) { %>
+          <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= statusPT[s] || s %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <% if (filters.search || filters.status) { %>
+        <a href="/admin/orders" class="btn btn-outline-secondary ms-1">Limpar</a>
+      <% } %>
+    </div>
+  </form>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Nº Pedido</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Pagamento</th>
+              <th>Data</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (!orders.length) { %>
+              <tr><td colspan="7" class="text-center text-muted py-4">Sem pedidos.</td></tr>
+            <% } %>
+            <% orders.forEach(function(o) { %>
+              <tr>
+                <td class="fw-semibold">#<%= o.order_number %></td>
+                <td>
+                  <div><%= o.customer_name %></div>
+                  <small class="text-muted"><%= o.customer_email %></small>
+                </td>
+                <td class="fw-semibold">€<%= parseFloat(o.total_amount).toFixed(2) %></td>
+                <td>
+                  <span class="badge <%= statusBadge[o.status] || 'badge-product-inactive' %>">
+                    <%= statusPT[o.status] || o.status %>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge <%= paymentBadge[o.payment_status] || 'badge-product-inactive' %>">
+                    <%= paymentPT[o.payment_status] || o.payment_status %>
+                  </span>
+                </td>
+                <td><small class="text-muted"><%= new Date(o.created_at).toLocaleString('pt-PT') %></small></td>
+                <td>
+                  <a href="/admin/orders/<%= o.id %>" class="btn btn-sm btn-outline-primary">Ver</a>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted small mt-2">Total: <%= total %> pedido(s)</p>
+</div>

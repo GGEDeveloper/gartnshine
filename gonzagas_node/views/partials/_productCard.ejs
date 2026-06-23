@@ -1,18 +1,24 @@
-<div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>">
+<div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>" data-product-id="<%= product.id %>">
   <div class="product-image">
-    <% 
+    <%
       const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
-      const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
-      /* WebP desativado: ficheiros .webp podem não existir no servidor (só .jpg/.png) */
+      const cardImg = productImg(product.image_url, 'small');
+      const fullImg = productImg(product.image_url, 'full');
     %>
 
     <% if (typeof isCatalogPage !== 'undefined' && isCatalogPage) { %>
-      <a href="<%= imageUrl %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
-        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+      <a href="<%= fullImg.jpg %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
+        <picture>
+          <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
+          <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+        </picture>
       </a>
     <% } else { %>
       <a href="<%= catalogLink %>" class="d-block mb-2" aria-label="Ver produtos da categoria <%= product.family_name || 'Catálogo' %>">
-        <img src="<%= imageUrl %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+        <picture>
+          <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
+          <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+        </picture>
       </a>
     <% } %>
   </div>
@@ -40,5 +46,10 @@
         <% } %>
       <% } %>
     </p>
+    <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled && product.current_stock > 0 && !(typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
+      <button type="button" class="btn btn-sm btn-outline-light btn-add-to-cart mt-2" data-product-id="<%= product.id %>">
+        Adicionar ao carrinho
+      </button>
+    <% } %>
   </div>
 </div>

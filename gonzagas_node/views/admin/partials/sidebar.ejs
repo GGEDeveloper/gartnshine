@@ -9,61 +9,124 @@
   <!-- Sidebar Nav -->
   <nav class="sidebar-nav">
     <ul class="nav flex-column">
+
+      <!-- ── Geral ──────────────────────────────────────── -->
       <li class="nav-item">
         <a class="nav-link <%= (!currentPath || currentPath === '/' || currentPath === '/dashboard') ? 'active' : '' %>" href="/admin/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Painel</span>
         </a>
       </li>
-      
+
+      <!-- ── Catálogo ──────────────────────────────────── -->
+      <li class="nav-section-label">Catálogo</li>
+
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/products')) ? 'active' : '' %>" href="/admin/products">
-          <i class="fas fa-fw fa-box"></i>
+          <i class="fas fa-fw fa-gem"></i>
           <span>Produtos</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/quick-product')) ? 'active' : '' %>" href="/admin/quick-product">
           <i class="fas fa-fw fa-bolt"></i>
           <span>Criar Rápido</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/product-families')) ? 'active' : '' %>" href="/admin/product-families">
           <i class="fas fa-fw fa-tags"></i>
           <span>Categorias e Cores</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/inventory')) ? 'active' : '' %>" href="/admin/inventory">
           <i class="fas fa-fw fa-warehouse"></i>
-          <span>Inventário</span>
+          <span>Inventário / Stock</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/media')) ? 'active' : '' %>" href="/admin/media/library">
           <i class="fas fa-fw fa-images"></i>
           <span>Media</span>
         </a>
       </li>
-      
+
+      <!-- ── Loja ──────────────────────────────────────── -->
+      <li class="nav-section-label">Loja</li>
+
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings')) ? 'active' : '' %>" href="/admin/settings">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/orders')) ? 'active' : '' %>" href="/admin/orders">
+          <i class="fas fa-fw fa-shopping-bag"></i>
+          <span>Pedidos</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings/ecommerce">
+          <i class="fas fa-fw fa-store"></i>
+          <span>Loja Online</span>
+        </a>
+      </li>
+
+      <!-- ── Análise ────────────────────────────────────── -->
+      <li class="nav-section-label">Análise</li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/analytics')) ? 'active' : '' %>" href="/admin/analytics">
+          <i class="fas fa-fw fa-chart-line"></i>
+          <span>Analytics</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/reports')) ? 'active' : '' %>" href="/admin/reports">
+          <i class="fas fa-fw fa-chart-pie"></i>
+          <span>Rentabilidade</span>
+        </a>
+      </li>
+
+      <!-- ── Sistema ────────────────────────────────────── -->
+      <li class="nav-section-label">Sistema</li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/checkpoints')) ? 'active' : '' %>" href="/admin/checkpoints">
+          <i class="fas fa-fw fa-database"></i>
+          <span>Checkpoints DB</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings') && !currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings">
           <i class="fas fa-fw fa-cog"></i>
           <span>Configurações</span>
         </a>
       </li>
-      
-      <li class="nav-item mt-auto">
+
+      <li class="nav-item mt-2">
         <a class="nav-link text-danger" href="/admin/logout">
           <i class="fas fa-fw fa-sign-out-alt"></i>
           <span>Sair</span>
         </a>
       </li>
+
     </ul>
   </nav>
 </aside>
+
+<style>
+.nav-section-label {
+  padding: 1rem 1rem 0.3rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  font-weight: 600;
+  list-style: none;
+  pointer-events: none;
+}
+</style>

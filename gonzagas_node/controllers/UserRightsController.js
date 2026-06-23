@@ -17,7 +17,7 @@ class UserRightsController {
       res.status(500).render('error', { 
         error: 'Erro interno do servidor',
         message: 'Não foi possível carregar a página de direitos do usuário.'
-      });
+      }, { layout: false });
     }
   }
 
@@ -76,7 +76,7 @@ class UserRightsController {
         return res.status(404).render('error', {
           error: 'Solicitação não encontrada',
           message: 'A solicitação não foi encontrada ou já expirou.'
-        });
+        }, { layout: false });
       }
 
       // Processar solicitação baseada no tipo
@@ -110,7 +110,7 @@ class UserRightsController {
       res.status(500).render('error', {
         error: 'Erro interno do servidor',
         message: 'Não foi possível processar a solicitação.'
-      });
+      }, { layout: false });
     }
   }
 
@@ -217,7 +217,7 @@ class UserRightsController {
       res.status(500).render('error', {
         error: 'Erro interno do servidor',
         message: 'Não foi possível carregar as solicitações.'
-      });
+      }, { layout: false });
     }
   }
 

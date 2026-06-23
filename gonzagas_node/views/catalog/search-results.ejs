@@ -1,28 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisa: <%= query %> - Gonzaga's Art & Shine</title>
-    <meta name="robots" content="<%= typeof metaRobots !== 'undefined' && metaRobots ? metaRobots : 'noindex, follow' %>">
-    <% if (typeof canonicalUrl !== 'undefined' && canonicalUrl) { %>
-    <link rel="canonical" href="<%= canonicalUrl %>">
-    <% } %>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Main CSS - variables primeiro para paleta consistente -->
-    <link rel="stylesheet" href="/css/variables.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/catalog.css">
-    <link rel="stylesheet" href="/css/search-results.css">
-    <link rel="stylesheet" href="/css/frontend-mobile.css">
-    <link rel="stylesheet" href="/css/dark-luxe.css">
-</head>
-<body>
-
-<%- include('../partials/header') %>
+<%- style = '<link rel="stylesheet" href="/css/search-results.css?v=' + (app ? app.version : '') + '">' %>
+<style>
+/* Search — showcase theme overrides */
+body.showcase-theme .search-results-page { background: transparent; }
+body.showcase-theme .search-title { color: var(--igp-cream) !important; }
+body.showcase-theme .search-title i { color: var(--igp-gold) !important; }
+body.showcase-theme .search-meta { color: var(--igp-muted) !important; }
+body.showcase-theme .search-filters {
+  background: rgba(8,8,8,0.92) !important;
+  border: 1px solid var(--igp-border) !important;
+  border-radius: 10px;
+}
+body.showcase-theme .filter-title { color: var(--igp-gold) !important; }
+body.showcase-theme .filter-option span { color: var(--igp-muted) !important; }
+body.showcase-theme .filter-option input { accent-color: var(--igp-gold) !important; }
+body.showcase-theme .btn-clear-filters {
+  background: transparent !important;
+  color: var(--igp-gold) !important;
+  border: 1px solid var(--igp-border) !important;
+}
+body.showcase-theme .price-input {
+  background: rgba(201,168,76,0.05) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+body.showcase-theme .btn-apply-price {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+}
+body.showcase-theme .count { color: var(--igp-muted) !important; }
+/* Result cards */
+body.showcase-theme .search-results-page .product-card {
+  background: rgba(12,12,12,0.88) !important;
+  border: 1px solid var(--igp-border) !important;
+}
+body.showcase-theme .search-results-page .product-card:hover {
+  border-color: rgba(201,168,76,0.45) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.55) !important;
+}
+body.showcase-theme .search-results-page .product-info { background: transparent !important; }
+body.showcase-theme .search-results-page .product-name { color: var(--igp-cream) !important; }
+body.showcase-theme .search-results-page .product-ref { color: var(--igp-muted) !important; }
+body.showcase-theme .search-results-page .product-category { color: var(--igp-gold) !important; }
+body.showcase-theme .search-results-page .product-price { color: var(--igp-gold) !important; font-weight: 600 !important; }
+body.showcase-theme .search-results-page .badge-in-stock {
+  background: rgba(201,168,76,0.15) !important;
+  color: var(--igp-gold) !important;
+}
+body.showcase-theme .search-results-page .badge-out-stock {
+  background: rgba(0,0,0,0.7) !important;
+  color: var(--igp-muted) !important;
+  border: 1px solid var(--igp-border) !important;
+}
+/* Sort + view controls */
+body.showcase-theme .search-header { border-bottom-color: var(--igp-border) !important; }
+body.showcase-theme .control-group label { color: var(--igp-muted) !important; }
+body.showcase-theme #sortBy {
+  background: rgba(10,10,10,0.9) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+body.showcase-theme .btn-view { color: var(--igp-muted) !important; background: transparent !important; }
+body.showcase-theme .btn-view.active, body.showcase-theme .btn-view:hover { color: var(--igp-gold) !important; }
+/* Pagination */
+body.showcase-theme .page-btn, body.showcase-theme .page-number {
+  background: rgba(201,168,76,0.06) !important;
+  border-color: var(--igp-border) !important;
+  color: var(--igp-cream) !important;
+}
+body.showcase-theme .page-number.active {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  border-color: var(--igp-gold) !important;
+}
+/* No results */
+body.showcase-theme .no-results h2 { color: var(--igp-cream) !important; }
+body.showcase-theme .no-results p { color: var(--igp-muted) !important; }
+body.showcase-theme .no-results-icon { color: var(--igp-gold) !important; }
+body.showcase-theme .no-results .btn-primary {
+  background: var(--igp-gold) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+}
+/* filters header */
+body.showcase-theme .filters-header { border-bottom-color: var(--igp-border) !important; }
+body.showcase-theme .filters-header h3 { color: var(--igp-gold) !important; }
+</style>
 
 <main class="search-results-page">
     <div class="container">
@@ -224,8 +287,6 @@
     </div>
 </main>
 
-<%- include('../partials/footer') %>
-
 <script>
 // Sort change
 document.getElementById('sortBy')?.addEventListener('change', function() {
@@ -310,7 +371,4 @@ function clearFilters() {
   });
 </script>
 <% } %>
-
-</body>
-</html>
 

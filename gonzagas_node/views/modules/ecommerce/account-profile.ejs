@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="/ecommerce/css/account.css">
+
+<section class="account-page">
+  <div class="container">
+    <div class="account-layout">
+      <%- include('_accountSidebar') %>
+
+      <div class="account-main">
+        <h1>O meu perfil</h1>
+        <p class="account-subtitle">Actualize os seus dados e moradas para checkout mais rápido.</p>
+
+        <% if (messages && messages.error && messages.error.length) { %>
+          <div class="account-alert account-alert--error"><%= messages.error[0] %></div>
+        <% } %>
+        <% if (messages && messages.success && messages.success.length) { %>
+          <div class="account-alert account-alert--success"><%= messages.success[0] %></div>
+        <% } %>
+
+        <form method="post" action="/account/profile">
+          <h2>Dados pessoais</h2>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="profile-firstName">Nome</label>
+              <input type="text" id="profile-firstName" name="firstName" class="form-control" required
+                     value="<%= customer.first_name || '' %>">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="profile-lastName">Apelido</label>
+              <input type="text" id="profile-lastName" name="lastName" class="form-control" required
+                     value="<%= customer.last_name || '' %>">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" value="<%= customer.email %>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="profile-phone">Telefone</label>
+              <input type="tel" id="profile-phone" name="phone" class="form-control"
+                     value="<%= customer.phone || '' %>">
+            </div>
+          </div>
+
+          <h2>Morada de facturação</h2>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="billing-line1">Morada</label>
+              <input type="text" id="billing-line1" name="billingAddressLine1" class="form-control"
+                     value="<%= customer.billing_address_line1 || '' %>">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="billing-postal">Código postal</label>
+              <input type="text" id="billing-postal" name="billingPostalCode" class="form-control"
+                     value="<%= customer.billing_postal_code || '' %>">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="billing-city">Cidade</label>
+              <input type="text" id="billing-city" name="billingCity" class="form-control"
+                     value="<%= customer.billing_city || '' %>">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="billing-country">País</label>
+              <input type="text" id="billing-country" name="billingCountry" class="form-control"
+                     value="<%= customer.billing_country || 'Portugal' %>">
+            </div>
+          </div>
+
+          <h2>Morada de envio</h2>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="shipping-line1">Morada</label>
+              <input type="text" id="shipping-line1" name="shippingAddressLine1" class="form-control"
+                     value="<%= customer.shipping_address_line1 || '' %>">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="shipping-postal">Código postal</label>
+              <input type="text" id="shipping-postal" name="shippingPostalCode" class="form-control"
+                     value="<%= customer.shipping_postal_code || '' %>">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="shipping-city">Cidade</label>
+              <input type="text" id="shipping-city" name="shippingCity" class="form-control"
+                     value="<%= customer.shipping_city || '' %>">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="shipping-country">País</label>
+              <input type="text" id="shipping-country" name="shippingCountry" class="form-control"
+                     value="<%= customer.shipping_country || 'Portugal' %>">
+            </div>
+          </div>
+
+          <% if (typeof canChangePassword !== 'undefined' && canChangePassword) { %>
+          <h2>Alterar password</h2>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" for="current-password">Password actual</label>
+              <input type="password" id="current-password" name="currentPassword" class="form-control" autocomplete="current-password">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="new-password">Nova password</label>
+              <input type="password" id="new-password" name="newPassword" class="form-control" minlength="6" autocomplete="new-password">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="confirm-new-password">Confirmar nova password</label>
+              <input type="password" id="confirm-new-password" name="confirmNewPassword" class="form-control" minlength="6" autocomplete="new-password">
+            </div>
+          </div>
+          <% } else { %>
+          <p class="account-subtitle mt-3">Conta ligada ao Google — password gerida pelo Google.</p>
+          <% } %>
+
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

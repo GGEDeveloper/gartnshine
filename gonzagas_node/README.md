@@ -1,10 +1,10 @@
-# 🎨 Gonzaga's Art & Shine - Sistema de Catálogo Online
+# 🎨 Gonzaga's Art & Shine - Catálogo & Loja Online
 
-> **Catálogo digital profissional para joalharia em prata 925 com inspiração Bali e tendências boho**
+> **Catálogo digital e e-commerce modular para joalharia em prata 925 com inspiração Bali e tendências boho**
 
 ## 🌟 **Visão Geral**
 
-Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**, permitindo gestão completa de inventário e apresentação elegante de produtos de joalharia. O sistema combina um catálogo público protegido por password com uma área administrativa completa para gestão de produtos, stock e preços.
+Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**, permitindo gestão completa de inventário, apresentação elegante de produtos de joalharia e **vendas online modulares** (carrinho, checkout, pedidos). O sistema combina um catálogo público protegido por password com uma área administrativa completa para gestão de produtos, stock, preços e pedidos.
 
 ### 🔗 **Links Oficiais**
 - **Instagram:** [https://www.instagram.com/gonzagaartnshine/](https://www.instagram.com/gonzagaartnshine/)
@@ -12,21 +12,35 @@ Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**
 
 ## ✨ **Características Principais**
 
+### 🛒 **E-commerce (modular)**
+- **Carrinho** com sessão guest (`/cart`, API `/api/cart/*`)
+- **Checkout** guest com morada de facturação/envio (`/checkout`)
+- **Pedidos** com histórico de estado e numeração automática
+- **Admin de pedidos** (`/admin/orders`) e **definições da loja** (`/admin/settings/ecommerce`)
+- **Pagamentos Stripe** configuráveis: `disabled` / `test` / `live` (módulo `modules/payments/`)
+- **Conta cliente opcional** — header **Entrar** / **Criar conta**, menu mobile, footer; histórico em `/account/orders`
+- **IVA configurável** (`prices_include_tax` nas definições e-commerce)
+- Activar/desactivar loja sem afectar o catálogo
+
+Ver documentação completa em **[modules/ecommerce/README.md](./modules/ecommerce/README.md)**.
+
 ### 🛍️ **Catálogo Público**
 - **Protecção por password** (password: `0009`)
 - **Design responsivo** adaptado para mobile e desktop
 - **Filtros avançados** por categoria, preço, disponibilidade
 - **Galeria de imagens** com zoom e navegação suave
 - **Sistema "Preços sob consulta"** - toggle para ocultar/mostrar preços
-- **Tema escuro** com nuances psicadélicas e geométricas
+- **Tema showcase** — dourado (#c9a84c) + cream (#f0ece4) sobre fundo escuro (#0a0a0a), psicadélico e geométrico
 
 ### 🔐 **Área Administrativa**
 - **Gestão completa de produtos** (CRUD com upload de imagens)
 - **Controlo de stock** com histórico de movimentos
 - **Sistema de preços** com histórico de alterações
 - **Gestão de famílias** de produtos (categorias)
+- **Gestão de pedidos online** (listagem, detalhe, estados)
+- **Definições e-commerce** (IVA, Stripe, portes, activação da loja)
 - **Sistema de checkpoints** para backup/restore da base de dados
-- **Dashboard com estatísticas** em tempo real
+- **Dashboard com estatísticas** em tempo real (inclui receita/pedidos quando e-commerce activo)
 - **Sistema de auditoria** completo
 
 ### 🎯 **Funcionalidades Especiais**
@@ -121,6 +135,8 @@ gonzagas_node/
 │   ├── media/          # Imagens de produtos
 │   └── images/         # Assets do site
 ├── routes/             # Definição de rotas
+├── modules/            # Módulos de negócio (ecommerce, payments, instagram, …)
+│   └── ecommerce/      # Carrinho, checkout, pedidos, settings, admin
 ├── middleware/         # Middleware personalizado
 ├── scripts/            # Scripts de manutenção
 └── sql/                # Migrações e esquemas
@@ -136,6 +152,17 @@ gonzagas_node/
 - **`users`** - Utilizadores administrativos
 - **`site_settings`** - Configurações do sistema
 - **`audit_logs`** - Log de auditoria
+
+### **Tabelas E-commerce** (schema em `modules/ecommerce/sql/migrations/`)
+- **`ecommerce_settings`** - IVA, Stripe, portes, flag `ecommerce_enabled`
+- **`cart_sessions`** - Carrinhos guest
+- **`orders`** / **`order_items`** - Pedidos e linhas
+- **`order_status_history`** - Histórico de estados
+- **`payments`** - Registos de pagamento (Stripe)
+- **`customers`** - Contas cliente (opcional)
+- **`shipping_methods`** - Métodos de envio
+
+> **Nota:** O schema UUID em `database/migrations/sales/` está **deprecated**. Usar sempre `modules/ecommerce/sql/`.
 
 ### **Schema Highlights**
 ```sql
@@ -179,6 +206,9 @@ mysql -u root -p < sql/schema.sql
 # Configurar ambiente (copiar de .env.example)
 cp .env.example .env
 
+# Migração e-commerce (obrigatória se usar loja online)
+npm run db:ecommerce
+
 # Iniciar servidor de desenvolvimento
 npm start
 ```
@@ -212,6 +242,8 @@ npm run start:prod           # Iniciar com PM2
 # Base de Dados
 node scripts/create_production_dump.js     # Criar dump SQL
 node scripts/create-gonzaga-admin.js       # Criar utilizador admin
+npm run db:ecommerce                       # Migração schema e-commerce
+npm run test:ecommerce                     # Validar fluxo (servidor activo)
 
 # Manutenção
 npm run backup               # Backup automático
@@ -220,6 +252,7 @@ npm run logs                 # Ver logs do sistema
 
 ## 📖 **Documentação Adicional**
 
+- **[modules/ecommerce/README.md](./modules/ecommerce/README.md)** - E-commerce: activação, Stripe, testes
 - **[PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md)** - Guia completo de instalação em produção
 - **[SISTEMA_NOTIFICACOES.md](./SISTEMA_NOTIFICACOES.md)** - Documentação do sistema de notificações
 - **[README_hide_catalog_prices.md](./README_hide_catalog_prices.md)** - Sistema de preços sob consulta
@@ -236,11 +269,12 @@ npm run logs                 # Ver logs do sistema
 
 ### **Requisitos Técnicos Implementados**
 - ✅ Sistema modular e escalável
+- ✅ Módulo e-commerce isolado (`modules/ecommerce/` + `modules/payments/`)
 - ✅ Base de dados MariaDB optimizada
 - ✅ Sistema de checkpoints para backup/restore
 - ✅ Integração com media files existentes
-- ✅ Painel admin com controlo total
-- ✅ Catalogo dinâmico separado da gestão
+- ✅ Painel admin com controlo total (produtos, stock, pedidos)
+- ✅ Catalogo dinâmico separado da gestão de stock interna
 - ✅ Design responsivo e moderno
 - ✅ Sistema de segurança robusto
 
@@ -311,17 +345,22 @@ Para questões técnicas, melhorias ou suporte:
 
 ## 🏆 **Status do Projecto**
 
-**✅ COMPLETO E FUNCIONAL**
+**✅ CATÁLOGO COMPLETO · E-COMMERCE CORE VALIDADO**
 
 - ✅ Sistema de catálogo público com protecção
 - ✅ Área administrativa completa  
 - ✅ Gestão de produtos, stock e preços
+- ✅ Carrinho, checkout e criação de pedidos (modo `payment_mode=disabled`)
+- ✅ Admin de pedidos e definições e-commerce
 - ✅ Sistema de notificações elegante
 - ✅ Funcionalidade "preços sob consulta"
-- ✅ Design responsivo e moderno
+- ⏳ Stripe end-to-end, webhooks e emails — configuráveis, testar antes de go-live
+- ✅ Tema showcase (dourado/cream) em todo o site + e-commerce UI alinhada
+- ✅ Mobile-first: cart cards, checkout full-width, touch targets 44px
+- ✅ Design responsivo e moderno (catálogo + loja)
 - ✅ Segurança e performance optimizados
-- ✅ Documentação completa
-- ✅ Pronto para produção
+- ✅ Documentação actualizada
+- ✅ Pronto para produção (catálogo); loja online após activar + migrar DB
 
 ---
 

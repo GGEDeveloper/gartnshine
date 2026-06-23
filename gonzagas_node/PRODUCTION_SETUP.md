@@ -58,6 +58,23 @@ cd gonzagas_node
 npm install --production
 ```
 
+### Passo 3b: Migração E-commerce (se usar loja online)
+```bash
+npm run db:ecommerce
+```
+Aplica `006`, `007` e `008` em `modules/ecommerce/sql/migrations/` (idempotente). Obrigatório antes de activar a loja no admin.
+
+### Passo 3c: Validar (opcional, recomendado)
+Não existe passo `npm run build` — a app é Node.js + EJS, sem bundler frontend.
+
+```bash
+npm start &
+npm run test:ecommerce   # esperado: 19/19 passed
+npm run validate:catalog # catálogo OK
+```
+
+Activar loja: Admin → Settings → E-commerce → **Activar loja online**. Stripe: `payment_mode=disabled` até configurar keys.
+
 ### Passo 4: Configurar PM2
 ```bash
 # Instalar PM2 globalmente

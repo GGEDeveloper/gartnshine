@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | Gonzaga's Art & Shine</title>
+  <title><%= typeof title !== 'undefined' ? title : 'Erro' %> | Gonzaga's Art & Shine</title>
   
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico">
@@ -15,66 +15,106 @@
   
   <style>
     :root {
-      --color-primary: #1e1e1e;
-      --color-secondary: #4a3c2d;
-      --color-accent: #6a8c69;
-      --color-text: #f0f0f0;
-      --color-highlight: #9098a3;
+      --igp-bg: #0a0a0a;
+      --igp-gold: #c9a84c;
+      --igp-cream: #f0ece4;
+      --igp-muted: rgba(240,236,228,0.55);
+      --igp-border: rgba(201,168,76,0.18);
     }
-    
     body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
+      font-family: 'Poppins', Georgia, sans-serif;
+      background-color: var(--igp-bg);
+      background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(201,168,76,0.1), transparent 55%);
+      color: var(--igp-cream);
       line-height: 1.6;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    
     .error-container {
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 720px;
+      width: 90%;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background: rgba(12,12,12,0.9);
+      border: 1px solid var(--igp-border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
     }
-    
-    .error-content {
-      padding: 20px;
-    }
-    
+    .error-content { padding: 0; }
     h1 {
-      color: var(--color-primary);
+      color: var(--igp-cream);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 300;
+      letter-spacing: 0.12em;
       margin-top: 0;
+      margin-bottom: 1rem;
     }
-    
+    p { color: var(--igp-muted); margin-bottom: 1.5rem; }
     .btn {
       display: inline-block;
-      padding: 10px 20px;
-      background-color: var(--color-accent);
-      color: white;
+      padding: 0.7rem 1.5rem;
+      background: var(--igp-gold);
+      color: #0a0a0a;
       text-decoration: none;
-      border-radius: 4px;
-      margin-top: 20px;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      font-weight: 500;
+      transition: background 0.25s;
     }
-    
+    .btn:hover { background: #e0bc5a; color: #0a0a0a; }
+    .btn + .btn {
+      background: rgba(201,168,76,0.1);
+      color: var(--igp-cream);
+      border: 1px solid var(--igp-border);
+      margin-left: 0.75rem;
+    }
+    .btn + .btn:hover { background: rgba(201,168,76,0.2); color: var(--igp-cream); }
     .error-details {
-      margin-top: 30px;
-      padding: 15px;
-      background-color: #f8f8f8;
-      border-left: 4px solid var(--color-accent);
+      margin-top: 2rem;
+      padding: 1rem 1.25rem;
+      background: rgba(0,0,0,0.4);
+      border-left: 3px solid var(--igp-gold);
+      border-radius: 4px;
       font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--igp-muted);
       white-space: pre-wrap;
       word-break: break-all;
+    }
+    @media (max-width: 768px) {
+      .error-container {
+        width: 95%;
+        margin: 2rem auto;
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0 0 0;
+        min-height: 48px;
+        padding: 0.85rem 1rem;
+        font-size: 0.95rem;
+      }
+      .btn + .btn {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 <body>
   <div class="error-container">
     <div class="error-content">
-      <h1><%= title %></h1>
-      <p><%= message %></p>
+      <h1><%= typeof title !== 'undefined' ? title : 'Erro' %></h1>
+      <p><%= typeof message !== 'undefined' ? message : 'Ocorreu um erro inesperado.' %></p>
       
       <% if (typeof error !== 'undefined' && Object.keys(error).length > 0) { %>
         <div class="error-details">

@@ -1,0 +1,103 @@
+<link rel="stylesheet" href="/ecommerce/css/account.css">
+
+<section class="account-page">
+  <div class="container">
+    <div class="account-layout">
+      <%- include('_accountSidebar') %>
+
+      <div class="account-main">
+        <% var statusInfo = formatOrderStatus(order.status);
+           var payInfo = formatPaymentStatus(order.payment_status);
+        %>
+
+        <div class="order-detail-header">
+          <div>
+            <h1>Pedido <%= order.order_number %></h1>
+            <p class="account-subtitle">
+              <%= new Date(order.created_at).toLocaleDateString('pt-PT', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }) %>
+            </p>
+          </div>
+          <div>
+            <span class="order-badge order-badge--<%= statusInfo.badge %>"><%= statusInfo.label %></span>
+            <span class="order-badge order-badge--<%= payInfo.badge %>" style="margin-left:0.35rem"><%= payInfo.label %></span>
+          </div>
+        </div>
+
+        <p><a href="/account/orders" class="btn-outline">← Voltar aos pedidos</a></p>
+
+        <h2>Artigos</h2>
+        <div class="account-table-wrap">
+          <table class="account-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Ref.</th>
+                <th>Qtd</th>
+                <th>Preço</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% items.forEach(function(item) { %>
+              <tr>
+                <td data-label="Produto"><%= item.product_name %></td>
+                <td data-label="Ref."><%= item.product_reference || '—' %></td>
+                <td data-label="Qtd"><%= item.quantity %></td>
+                <td data-label="Preço">€<%= parseFloat(item.unit_price || 0).toFixed(2) %></td>
+                <td data-label="Total">€<%= parseFloat(item.total_price || 0).toFixed(2) %></td>
+              </tr>
+              <% }); %>
+              <% if (!items.length) { %>
+              <tr><td colspan="5" style="text-align:center;color:var(--igp-muted)">Sem artigos registados</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="order-detail-totals">
+          <p><span>Subtotal</span><span>€<%= parseFloat(order.subtotal || 0).toFixed(2) %></span></p>
+          <% if (parseFloat(order.tax_amount || 0) > 0) { %>
+          <p><span>IVA</span><span>€<%= parseFloat(order.tax_amount).toFixed(2) %></span></p>
+          <% } %>
+          <% if (parseFloat(order.shipping_amount || 0) > 0) { %>
+          <p><span>Envio</span><span>€<%= parseFloat(order.shipping_amount).toFixed(2) %></span></p>
+          <% } %>
+          <p class="order-total-line"><span>Total</span><span>€<%= parseFloat(order.total_amount || 0).toFixed(2) %></span></p>
+        </div>
+
+        <% if (order.shipping_address_line1 || order.billing_address_line1) { %>
+        <h2>Moradas</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem">
+          <% if (order.shipping_address_line1) { %>
+          <div>
+            <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--igp-gold);margin-bottom:0.5rem">Envio</p>
+            <div class="order-address-block">
+              <% if (order.customer_name) { %><%= order.customer_name %><br><% } %>
+              <%= order.shipping_address_line1 %><br>
+              <% if (order.shipping_address_line2) { %><%= order.shipping_address_line2 %><br><% } %>
+              <%= order.shipping_postal_code %> <%= order.shipping_city %><br>
+              <%= order.shipping_country || 'Portugal' %>
+            </div>
+          </div>
+          <% } %>
+          <% if (order.billing_address_line1) { %>
+          <div>
+            <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--igp-gold);margin-bottom:0.5rem">Facturação</p>
+            <div class="order-address-block">
+              <%= order.billing_address_line1 %><br>
+              <% if (order.billing_address_line2) { %><%= order.billing_address_line2 %><br><% } %>
+              <%= order.billing_postal_code %> <%= order.billing_city %><br>
+              <%= order.billing_country || 'Portugal' %>
+            </div>
+          </div>
+          <% } %>
+        </div>
+        <% } %>
+
+        <% if (order.customer_phone) { %>
+        <p class="account-subtitle mt-3">Telefone: <%= order.customer_phone %></p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

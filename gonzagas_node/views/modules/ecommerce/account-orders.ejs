@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/ecommerce/css/account.css">
+
+<section class="account-page">
+  <div class="container">
+    <div class="account-layout">
+      <%- include('_accountSidebar') %>
+
+      <div class="account-main">
+        <h1>Os meus pedidos</h1>
+        <p class="account-subtitle">Histórico dos seus pedidos na loja.</p>
+
+        <% if (messages && messages.error && messages.error.length) { %>
+          <div class="account-alert account-alert--error"><%= messages.error[0] %></div>
+        <% } %>
+
+        <% if (!orders.length) { %>
+          <div class="account-empty">
+            <p>Ainda não tem pedidos.</p>
+            <p class="mt-3"><a href="/catalog">Ver catálogo</a></p>
+          </div>
+        <% } else { %>
+          <% orders.forEach(function(o) {
+               var statusInfo = formatOrderStatus(o.status);
+               var payInfo = formatPaymentStatus(o.payment_status);
+          %>
+          <article class="order-card">
+            <div class="order-card-header">
+              <span class="order-card-number"><%= o.order_number %></span>
+              <span>
+                <span class="order-badge order-badge--<%= statusInfo.badge %>"><%= statusInfo.label %></span>
+                <span class="order-badge order-badge--<%= payInfo.badge %>" style="margin-left:0.35rem"><%= payInfo.label %></span>
+              </span>
+            </div>
+            <div class="order-card-meta">
+              <span>€<%= parseFloat(o.total_amount || 0).toFixed(2) %></span>
+              <span><%= o.item_count || 0 %> artigo<%= (o.item_count || 0) === 1 ? '' : 's' %></span>
+              <span><%= new Date(o.created_at).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+            </div>
+            <div class="order-card-footer">
+              <a href="/account/orders/<%= o.id %>">Ver detalhes →</a>
+            </div>
+          </article>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

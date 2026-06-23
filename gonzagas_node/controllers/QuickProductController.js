@@ -2,10 +2,19 @@ const path = require('path');
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const ProductColor = require('../models/ProductColor');
+const { processProductImage } = require('../utils/productImageProcessor');
 
 const getColorsSafe = async () => {
   try { return await ProductColor.getActive(); } catch { return []; }
 };
+
+/** Normaliza valores de checkboxes HTML para booleanos de forma consistente */
+const normalizeCheckbox = (value) => {
+  return value === '1' || value === 'on' || value === true || value === 'true';
+};
+
+/** Converte boolean para valor de query param para pré-seleção */
+const boolToQueryParam = (bool) => bool ? '1' : '0';
 
 class QuickProductController {
   /**
@@ -28,6 +37,10 @@ class QuickProductController {
       const colors = await getColorsSafe();
       const preselectedFamilyId = req.query.family_id ? String(req.query.family_id).trim() : null;
       const preselectedColor = req.query.color ? String(req.query.color).trim() : null;
+      // Lembra a última escolha de visibilidade (vinda do redirect após criar um produto); por defeito Ativo+Visível ligados, Destaque desligado
+      const preselectedActive = normalizeCheckbox(req.query.active);
+      const preselectedCatalogVisible = normalizeCheckbox(req.query.catalog_visible);
+      const preselectedFeatured = normalizeCheckbox(req.query.featured);
 
       res.render('admin/quick-product/form', {
         layout: 'admin/layouts/main',
@@ -36,6 +49,9 @@ class QuickProductController {
         colors: colors && colors.length > 0 ? colors : [{ name: 'Prata' }, { name: 'Dourado' }, { name: 'Outro' }],
         preselectedFamilyId,
         preselectedColor,
+        preselectedActive,
+        preselectedCatalogVisible,
+        preselectedFeatured,
         breadcrumbs: res.locals.breadcrumb || [],
         user: req.session?.user || req.user,
         success_msg: req.flash('success_msg'),
@@ -61,7 +77,10 @@ class QuickProductController {
         sale_price,
         color,
         current_stock,
-        description
+        description,
+        is_active,
+        is_catalog_visible,
+        featured
       } = req.body;
 
       if (!sale_price || parseFloat(sale_price) <= 0) {
@@ -83,9 +102,9 @@ class QuickProductController {
         current_stock: parseInt(current_stock, 10) || 0,
         min_stock: 0,
         color: (color || '').trim() || null,
-        is_active: 1,
-        is_catalog_visible: 1,
-        featured: 0
+        is_active: normalizeCheckbox(is_active) ? 1 : 0,
+        is_catalog_visible: normalizeCheckbox(is_catalog_visible) ? 1 : 0,
+        featured: normalizeCheckbox(featured) ? 1 : 0
       };
 
       let images = [];
@@ -103,11 +122,22 @@ class QuickProductController {
         }
       }
 
+      for (const img of images) {
+        try {
+          await processProductImage(img.filename);
+        } catch (err) {
+          console.warn('Falha ao gerar variantes para', img.filename, err.message);
+        }
+      }
+
       const productId = await Product.createProductWithImages(productData, images, userId);
       req.flash('success_msg', `Produto criado com sucesso! Referência: ${productData.reference}`);
       const params = new URLSearchParams();
       if (family_id) params.set('family_id', family_id);
       if (color && (color || '').trim()) params.set('color', color.trim());
+      params.set('active', boolToQueryParam(productData.is_active === 1));
+      params.set('catalog_visible', boolToQueryParam(productData.is_catalog_visible === 1));
+      params.set('featured', boolToQueryParam(productData.featured === 1));
       res.redirect('/admin/quick-product' + (params.toString() ? '?' + params.toString() : ''));
     } catch (error) {
       console.error('QuickProductController.store error:', error);

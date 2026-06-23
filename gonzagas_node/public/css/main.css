@@ -96,6 +96,11 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-container {
+  flex-shrink: 0;
 }
 
 .logo h1 {

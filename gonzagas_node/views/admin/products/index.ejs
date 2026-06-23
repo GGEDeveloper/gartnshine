@@ -1,6 +1,6 @@
 <div class="container-fluid px-3 px-md-4 py-3">
   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
-    <h1 class="h4 mb-0 text-gray-800"><%= title %></h1>
+    <h1 class="h4 mb-0"><%= title %></h1>
     <a href="/admin/products/add" class="btn btn-primary">
       <i class="fas fa-plus me-1"></i> Adicionar Produto
     </a>
@@ -47,6 +47,15 @@
               <option value="out_of_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'out_of_stock' ? 'selected' : '' %>>Fora de Stock</option>
             </select>
           </div>
+          <div class="filter-group compact">
+            <label for="filter-limit">Por página</label>
+            <select id="filter-limit" name="limit" class="form-select form-select-lg" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+              <% const currentLimit = typeof queryParams !== 'undefined' && queryParams.limit ? parseInt(queryParams.limit) : 10; %>
+              <% [10, 20, 50, 100].forEach(function(n) { %>
+                <option value="<%= n %>" <%= currentLimit === n ? 'selected' : '' %>><%= n %></option>
+              <% }); %>
+            </select>
+          </div>
           <div class="filter-group actions">
             <button type="submit" class="btn btn-primary">Filtrar</button>
             <a href="/admin/products" class="btn btn-outline-secondary">Limpar</a>
@@ -65,9 +74,12 @@
             <div class="products-mobile-card">
               <div class="card-top">
                 <% if (product.image_url) { %>
-                  <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="card-img">
+                  <picture>
+                    <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                    <img src="<%= productImg(product.image_url, 'thumb').jpg %>" alt="<%= product.name %>" class="card-img" loading="lazy">
+                  </picture>
                 <% } else { %>
-                  <div class="card-img bg-light d-flex align-items-center justify-content-center"><i class="fas fa-box text-muted"></i></div>
+                  <div class="card-img img-placeholder d-flex align-items-center justify-content-center"><i class="fas fa-gem text-muted"></i></div>
                 <% } %>
                 <div class="card-info">
                   <div class="ref"><%= product.reference %></div>
@@ -76,11 +88,17 @@
                 </div>
               </div>
               <div class="card-badges">
-                <span class="badge bg-<%= product.current_stock > 10 ? 'success' : product.current_stock > 0 ? 'warning' : 'danger' %>"><%= product.current_stock || 0 %> un</span>
-                <span class="badge bg-<%= product.is_active ? 'success' : 'secondary' %>"><%= product.is_active ? 'Ativo' : 'Inativo' %></span>
-                <span class="badge bg-info"><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
+                <% if (product.current_stock > 10) { %>
+                  <span class="badge badge-stock-in-stock"><%= product.current_stock %> un</span>
+                <% } else if (product.current_stock > 0) { %>
+                  <span class="badge badge-stock-low-stock"><%= product.current_stock %> un</span>
+                <% } else { %>
+                  <span class="badge badge-stock-out-of-stock">0 un</span>
+                <% } %>
+                <span class="badge <%= product.is_active ? 'badge-product-active' : 'badge-product-inactive' %>"><%= product.is_active ? 'Ativo' : 'Inativo' %></span>
+                <span class="badge badge-product-inactive"><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
                 <% const cost = parseFloat(product.cost_price || product.purchase_price || 0); const sale = parseFloat(product.sale_price || product.price || 0); const margin = sale > 0 ? ((sale - cost) / sale * 100) : 0; %>
-                <span class="badge bg-<%= margin >= 30 ? 'success' : margin >= 15 ? 'info' : 'secondary' %>" title="Margem"><%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %></span>
+                <span class="badge <%= margin >= 30 ? 'badge-stock-in-stock' : margin >= 15 ? 'badge-stock-low-stock' : 'badge-product-inactive' %>" title="Margem"><%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %></span>
               </div>
               <div class="card-actions">
                 <% let editUrl = '/admin/products/edit/' + product.id; if (typeof queryParams !== 'undefined' && queryParams && Object.keys(queryParams).length) { const params = []; if (queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference)); if (queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category)); if (queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status)); if (queryParams.stock_status) params.push('stock_status=' + encodeURIComponent(queryParams.stock_status)); if (queryParams.sort_by) params.push('sort_by=' + encodeURIComponent(queryParams.sort_by)); if (queryParams.sort_order) params.push('sort_order=' + encodeURIComponent(queryParams.sort_order)); if (params.length) editUrl += '?returnUrl=' + encodeURIComponent('/admin/products?' + params.join('&')); } %>
@@ -105,19 +123,19 @@
           }
           const qp = typeof queryParams !== 'undefined' ? queryParams : {};
         %>
-        <div class="table-responsive products-table-wrapper">
+        <div class="table-responsive products-table-wrapper" id="products-table-wrapper" data-current-page="<%= typeof currentPage !== 'undefined' ? currentPage : 1 %>" data-total-pages="<%= typeof totalPages !== 'undefined' ? totalPages : 1 %>">
               <table class="table table-hover mb-0 datatable" style="width:100%">
                 <thead>
                   <tr>
-                    <th><a href="?<%= buildSortUrl('id','asc',qp) %>" class="text-decoration-none text-dark sortable-th">ID <i class="fas fa-sort<%= qp.sort_by === 'id' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('id','asc',qp) %>" class="text-decoration-none sortable-th">ID <i class="fas fa-sort<%= qp.sort_by === 'id' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th>Imagem</th>
-                    <th><a href="?<%= buildSortUrl('reference','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Referência <i class="fas fa-sort<%= qp.sort_by === 'reference' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-up' %>"></i></a></th>
-                    <th><a href="?<%= buildSortUrl('family_name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Categoria <i class="fas fa-sort<%= qp.sort_by === 'family_name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
-                    <th><a href="?<%= buildSortUrl('name','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Nome <i class="fas fa-sort<%= qp.sort_by === 'name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
-                    <th><a href="?<%= buildSortUrl('sale_price','asc',qp) %>" class="text-decoration-none text-dark sortable-th">Preço <i class="fas fa-sort<%= qp.sort_by === 'sale_price' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('reference','asc',qp) %>" class="text-decoration-none sortable-th">Referência <i class="fas fa-sort<%= qp.sort_by === 'reference' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-up' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('family_name','asc',qp) %>" class="text-decoration-none sortable-th">Categoria <i class="fas fa-sort<%= qp.sort_by === 'family_name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('name','asc',qp) %>" class="text-decoration-none sortable-th">Nome <i class="fas fa-sort<%= qp.sort_by === 'name' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('sale_price','asc',qp) %>" class="text-decoration-none sortable-th">Preço <i class="fas fa-sort<%= qp.sort_by === 'sale_price' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th title="Margem (venda - custo) / venda">Rentab.</th>
-                    <th><a href="?<%= buildSortUrl('current_stock','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Stock <i class="fas fa-sort<%= qp.sort_by === 'current_stock' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-down' %>"></i></a></th>
-                    <th><a href="?<%= buildSortUrl('is_active','desc',qp) %>" class="text-decoration-none text-dark sortable-th">Status <i class="fas fa-sort<%= qp.sort_by === 'is_active' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('current_stock','desc',qp) %>" class="text-decoration-none sortable-th">Stock <i class="fas fa-sort<%= qp.sort_by === 'current_stock' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '-down' %>"></i></a></th>
+                    <th><a href="?<%= buildSortUrl('is_active','desc',qp) %>" class="text-decoration-none sortable-th">Status <i class="fas fa-sort<%= qp.sort_by === 'is_active' ? (qp.sort_order === 'asc' ? '-up' : '-down') : '' %>"></i></a></th>
                     <th class="text-end">Ações</th>
                   </tr>
                 </thead>
@@ -132,23 +150,26 @@
                       <td><%= product.id %></td>
                       <td>
                         <% if (product.image_url) { %>
-                          <a href="/media/products/<%= product.image_url %>" 
-                             class="glightbox product-image-link" 
+                          <a href="<%= productImg(product.image_url, 'full').jpg %>"
+                             class="glightbox product-image-link"
                              data-glightbox="type: image; title: <%= product.name %>"
                              data-gallery="product-gallery"
                              style="display: inline-block; position: relative; width: 50px; height: 50px; cursor: pointer;">
-                            <img src="/media/products/<%= product.image_url %>" 
-                                 alt="<%= product.name %>" 
-                                 class="img-thumbnail" 
-                                 style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
-                                 loading="lazy">
+                            <picture>
+                              <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                              <img src="<%= productImg(product.image_url, 'thumb').jpg %>"
+                                   alt="<%= product.name %>"
+                                   class="img-thumbnail"
+                                   style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
+                                   loading="lazy">
+                            </picture>
                             <div class="zoom-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; pointer-events: none;">
                               <i class="fas fa-search-plus text-white" style="font-size: 16px;"></i>
                             </div>
                           </a>
                         <% } else { %>
-                          <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <i class="fas fa-box text-muted"></i>
+                          <div class="img-placeholder d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 4px;">
+                            <i class="fas fa-gem text-muted"></i>
                           </div>
                         <% } %>
                       </td>
@@ -157,22 +178,26 @@
 <td><%= product.name %></td>
                       <td><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
                       <td>
-                        <% 
+                        <%
                           const cost = parseFloat(product.cost_price || product.purchase_price || 0);
                           const sale = parseFloat(product.sale_price || product.price || 0);
                           const margin = sale > 0 ? ((sale - cost) / sale * 100) : 0;
                         %>
-                        <span class="badge bg-<%= margin >= 30 ? 'success' : margin >= 15 ? 'info' : margin >= 0 ? 'secondary' : 'danger' %>" title="Margem: <%= margin.toFixed(1) %>%">
+                        <span class="badge <%= margin >= 30 ? 'badge-stock-in-stock' : margin >= 15 ? 'badge-stock-low-stock' : 'badge-product-inactive' %>" title="Margem: <%= margin.toFixed(1) %>%">
                           <%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %>
                         </span>
                       </td>
                       <td>
-                        <span class="badge bg-<%= product.current_stock > 10 ? 'success' : product.current_stock > 0 ? 'warning' : 'danger' %>">
-                          <%= product.current_stock || 0 %>
-                        </span>
+                        <% if (product.current_stock > 10) { %>
+                          <span class="badge badge-stock-in-stock"><%= product.current_stock %></span>
+                        <% } else if (product.current_stock > 0) { %>
+                          <span class="badge badge-stock-low-stock"><%= product.current_stock %></span>
+                        <% } else { %>
+                          <span class="badge badge-stock-out-of-stock">0</span>
+                        <% } %>
                       </td>
                       <td>
-                        <span class="badge bg-<%= product.is_active ? 'success' : 'secondary' %>">
+                        <span class="badge <%= product.is_active ? 'badge-product-active' : 'badge-product-inactive' %>">
                           <%= product.is_active ? 'Ativo' : 'Inativo' %>
                         </span>
                       </td>
@@ -212,12 +237,9 @@
             </div>
 
             <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
-              <% 
-                // Helper function to build query string preserving filters and sort
+              <%
                 function buildQueryString(page, limit, queryParams) {
-                  const params = [];
-                  params.push('page=' + encodeURIComponent(page));
-                  params.push('limit=' + encodeURIComponent(limit));
+                  const params = ['page=' + page, 'limit=' + limit];
                   if (queryParams && queryParams.reference) params.push('reference=' + encodeURIComponent(queryParams.reference));
                   if (queryParams && queryParams.category) params.push('category=' + encodeURIComponent(queryParams.category));
                   if (queryParams && queryParams.status) params.push('status=' + encodeURIComponent(queryParams.status));
@@ -227,31 +249,38 @@
                   return params.join('&');
                 }
               %>
-              <nav class="mt-3">
-                <ul class="pagination justify-content-center">
-                  <% if (currentPage > 1) { %>
-                    <li class="page-item">
-                      <a class="page-link" href="?<%= buildQueryString(currentPage - 1, limit, queryParams) %>">Anterior</a>
-                    </li>
-                  <% } %>
-                  
+              <nav class="mt-3" aria-label="Paginação de produtos">
+                <ul class="pagination justify-content-center flex-wrap">
+                  <li class="page-item <%= currentPage <= 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="?<%= buildQueryString(currentPage - 1, limit, queryParams) %>">
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                  </li>
                   <% for (let i = 1; i <= totalPages; i++) { %>
-                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                      <a class="page-link" href="?<%= buildQueryString(i, limit, queryParams) %>"><%= i %></a>
-                    </li>
+                    <% if (totalPages <= 7 || i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) { %>
+                      <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?<%= buildQueryString(i, limit, queryParams) %>"><%= i %></a>
+                      </li>
+                    <% } else if (i === currentPage - 3 || i === currentPage + 3) { %>
+                      <li class="page-item disabled"><span class="page-link">…</span></li>
+                    <% } %>
                   <% } %>
-                  
-                  <% if (currentPage < totalPages) { %>
-                    <li class="page-item">
-                      <a class="page-link" href="?<%= buildQueryString(currentPage + 1, limit, queryParams) %>">Próximo</a>
-                    </li>
-                  <% } %>
+                  <li class="page-item <%= currentPage >= totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="?<%= buildQueryString(currentPage + 1, limit, queryParams) %>">
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  </li>
                 </ul>
+                <p class="text-center text-muted small mt-1">
+                  Página <%= currentPage %> de <%= totalPages %>
+                </p>
               </nav>
             <% } %>
           <% } else { %>
-            <div class="alert alert-info mb-0">
-              Nenhum produto encontrado. <a href="/admin/products/add">Adicionar um novo produto</a>.
+            <div class="text-center py-5">
+              <i class="fas fa-gem fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-2">Nenhum produto encontrado.</p>
+              <a href="/admin/products/add" class="btn btn-primary btn-sm"><i class="fas fa-plus me-1"></i>Adicionar Produto</a>
             </div>
           <% } %>
         </div>
@@ -383,14 +412,52 @@
     });
   }
   
-  // Initialize GLightbox for product images
-  console.log('Setting up GLightbox for product images...');
-  
-  function initProductImageLightbox() {
-    if (typeof GLightbox === 'undefined') {
-      console.error('GLightbox is not loaded');
-      return;
+  var GALLERY_PENDING_KEY = 'admin-products-pending-lightbox-open';
+
+  // Ao chegar ao fim/início da galeria da página atual, avança/recua de página e continua o fluxo
+  function setupContinuousGalleryFlow(lightbox) {
+    var wrapper = document.getElementById('products-table-wrapper');
+    if (!wrapper) return;
+    var currentPage = parseInt(wrapper.dataset.currentPage || '1', 10);
+    var totalPages = parseInt(wrapper.dataset.totalPages || '1', 10);
+
+    function navigateToPage(page, openAt) {
+      try { sessionStorage.setItem(GALLERY_PENDING_KEY, openAt); } catch (e) {}
+      var url = new URL(window.location.href);
+      url.searchParams.set('page', page);
+      window.location.href = url.toString();
     }
+
+    lightbox.on('slide_changed', function (data) {
+      if (!data || !data.prev || !data.current) return;
+      var items = document.querySelectorAll('.product-image-link[data-gallery="product-gallery"]');
+      var lastIndex = items.length - 1;
+      if (lastIndex <= 0) return;
+
+      var prevIndex = data.prev.slideIndex;
+      var curIndex = data.current.slideIndex;
+
+      if (prevIndex === lastIndex && curIndex === 0 && currentPage < totalPages) {
+        navigateToPage(currentPage + 1, 'first');
+      } else if (prevIndex === 0 && curIndex === lastIndex && currentPage > 1) {
+        navigateToPage(currentPage - 1, 'last');
+      }
+    });
+
+    var pending = null;
+    try { pending = sessionStorage.getItem(GALLERY_PENDING_KEY); } catch (e) {}
+    if (pending) {
+      try { sessionStorage.removeItem(GALLERY_PENDING_KEY); } catch (e) {}
+      var items = document.querySelectorAll('.product-image-link[data-gallery="product-gallery"]');
+      if (items.length > 0) {
+        var openIndex = pending === 'last' ? items.length - 1 : 0;
+        setTimeout(function () { lightbox.openAt(openIndex); }, 150);
+      }
+    }
+  }
+
+  function initProductImageLightbox() {
+    if (typeof GLightbox === 'undefined') return;
     
     // Initialize GLightbox with custom configuration
     var lightbox = GLightbox({
@@ -412,11 +479,9 @@
       width: '90vw',
       height: '90vh'
     });
-    
-    console.log('GLightbox initialized successfully for product images');
-    
-    // Initialize DataTables with server-side pagination disabled
-    // Since we're using server-side pagination, DataTables should only handle sorting/searching on current page
+
+    setupContinuousGalleryFlow(lightbox);
+
     if (typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined') {
       var $table = jQuery('.datatable');
       if ($table.length) {
@@ -433,8 +498,6 @@
         // Wait a bit to ensure admin.js has finished initializing
         setTimeout(function() {
           if (jQuery.fn.DataTable.isDataTable('.datatable')) {
-            // Destroy existing DataTable instance
-            console.log('Destroying existing DataTable instance to reconfigure...');
             try {
               var dt = $table.DataTable();
               // Don't clear data, just destroy to preserve table rows
@@ -453,20 +516,11 @@
             }
           }
           
-          // Re-initialize with correct settings (always re-initialize after destroy)
-          console.log('Re-initializing DataTable with correct settings...');
-          // Get fresh reference to table after potential DOM changes
           $table = jQuery('.datatable');
-          // Check if table has rows before initializing
           var rowCount = $table.find('tbody tr').length;
-          console.log('Table rows before DataTable init:', rowCount);
-          
           if ($table.length && !jQuery.fn.DataTable.isDataTable('.datatable')) {
-            // Only initialize if table has data
             if (rowCount > 0) {
               initializeDataTable();
-            } else {
-              console.warn('Table has no rows, skipping DataTable initialization');
             }
           }
         }, 100);
@@ -485,13 +539,9 @@
             dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
                  "<'row'<'col-sm-12'tr>>",  // Remove 'i' (info) and 'p' (pagination) from DOM
             initComplete: function(settings, json) {
-              // Remove immediately after initialization
               removeDataTablesPagination();
             },
             drawCallback: function(settings) {
-              console.log('DataTables drawCallback - GLightbox should auto-detect new images');
-              
-              // Force remove any DataTables pagination/info elements that might appear
               removeDataTablesPagination();
               
               // Re-initialize GLightbox after table redraw

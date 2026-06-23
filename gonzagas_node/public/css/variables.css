@@ -1,9 +1,8 @@
 /**
  * Gonzaga's Art & Shine - Paleta de cores (fonte única)
  * Carregar primeiro para garantir consistência em todo o frontend.
- * 
- * Estilo: preto, elegante, prateado, bronze
- * SEM azul, roxo, violeta ou verde.
+ *
+ * Estilo: preto, elegante, dourado/cream (showcase), prata/bronze (herdado)
  */
 
 :root {
@@ -55,4 +54,14 @@
   --surface-2: #101722;
   --surface-3: #172130;
   --surface-glass: rgba(10, 15, 22, 0.82);
+
+  /* Tema Showcase — dourado/cream (usados em brand-showcase.css e media-cards.css) */
+  --igp-bg: #0a0a0a;
+  --igp-gold: #c9a84c;
+  --igp-cream: #f0ece4;
+  --igp-muted: rgba(240, 236, 228, 0.55);
+  --igp-overlay: rgba(10, 10, 10, 0.55);
+  --igp-border: rgba(201, 168, 76, 0.18);
+  --igp-gap: 4px;
+  --igp-green-wash: rgba(107, 128, 104, 0.06);
 }

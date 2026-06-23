@@ -26,7 +26,7 @@ body.admin-layout-fixed {
 
 /* ===== BODY & LAYOUT ===== */
 body.admin-layout-fixed {
-  background: var(--color-secondary) 35%, #121922 100%) !important;
+  background: linear-gradient(180deg, var(--color-secondary) 35%, #121922 100%) !important;
   color: var(--color-text) !important;
 }
 
@@ -551,15 +551,26 @@ body.admin-layout-fixed .page-link {
   background: rgba(0, 0, 0, 0.9) !important;
   border-color: rgba(192, 192, 192, 0.2) !important;
   color: #C0C0C0 !important;
+  min-width: 36px;
+  text-align: center;
 }
 
 body.admin-layout-fixed .page-link:hover {
-  background: rgba(192, 192, 192, 0.1) !important;
-  color: var(--color-silver-light) !important;
+  background: rgba(192, 192, 192, 0.12) !important;
+  color: #f0f0f0 !important;
+  border-color: rgba(192, 192, 192, 0.4) !important;
 }
 
 body.admin-layout-fixed .page-item.active .page-link {
-  background: var(--color-primary) !important;
+  background: rgba(192, 192, 192, 0.22) !important;
   border-color: #A8A8A8 !important;
-  color: #C0C0C0 !important;
+  color: #f4f6f8 !important;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(192, 192, 192, 0.25) !important;
+}
+
+body.admin-layout-fixed .page-item.disabled .page-link {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-color: rgba(192, 192, 192, 0.1) !important;
+  color: rgba(192, 192, 192, 0.3) !important;
 }

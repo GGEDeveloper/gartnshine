@@ -1,0 +1,14 @@
+<nav class="account-sidebar" aria-label="Menu da conta">
+  <% if (typeof customerEmail !== 'undefined' && customerEmail) { %>
+    <div class="account-sidebar-email"><%= customerEmail %></div>
+  <% } %>
+  <a href="/account/orders" class="<%= typeof accountNavActive === 'orders' ? 'active' : '' %>">
+    <i class="fas fa-box" aria-hidden="true"></i> Os meus pedidos
+  </a>
+  <a href="/account/profile" class="<%= typeof accountNavActive === 'profile' ? 'active' : '' %>">
+    <i class="fas fa-user" aria-hidden="true"></i> O meu perfil
+  </a>
+  <a href="/account/logout" class="account-nav-logout">
+    <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Terminar sessão
+  </a>
+</nav>

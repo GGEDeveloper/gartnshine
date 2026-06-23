@@ -1,7 +1,7 @@
 <div class="container-fluid px-3 px-md-4 py-3">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0 text-gray-800">
-      <i class="fas fa-tags text-primary me-2"></i>Categorias e Cores
+    <h1 class="h3 mb-0">
+      <i class="fas fa-tags me-2"></i>Categorias e Cores
     </h1>
     <a href="/admin/product-families/create" class="btn btn-primary btn-sm">
       <i class="fas fa-plus"></i> Nova Categoria
@@ -28,7 +28,7 @@
     <div class="tab-pane fade show active" id="categories" role="tabpanel">
       <div class="card shadow mb-4">
         <div class="card-header py-2">
-          <h6 class="m-0 font-weight-bold">Categorias (árvore)</h6>
+          <h6 class="m-0 fw-semibold">Categorias (árvore)</h6>
           <small class="text-muted">Suporta subcategorias, sub-subcategorias, etc.</small>
         </div>
         <div class="card-body p-2 p-md-3">
@@ -63,7 +63,7 @@
     <div class="tab-pane fade" id="colors" role="tabpanel">
       <div class="card shadow mb-4">
         <div class="card-header py-2 d-flex justify-content-between align-items-center">
-          <h6 class="m-0 font-weight-bold">Opções de Cor</h6>
+          <h6 class="m-0 fw-semibold">Opções de Cor</h6>
           <button type="button" class="btn btn-sm btn-primary py-2 px-3" data-bs-toggle="modal" data-bs-target="#addColorModal">
             <i class="fas fa-plus"></i> Nova Cor
           </button>
@@ -78,7 +78,7 @@
                       <% if (c.hex_code) { %>
                         <span class="rounded me-2 d-inline-block" style="width:24px;height:24px;background:<%= c.hex_code %>;border:1px solid #ddd;"></span>
                       <% } else { %>
-                        <span class="rounded me-2 d-inline-block bg-secondary" style="width:24px;height:24px;"></span>
+                        <span class="rounded me-2 d-inline-block img-placeholder" style="width:24px;height:24px;"></span>
                       <% } %>
                       <span class="flex-grow-1"><%= c.name %></span>
                       <div>
