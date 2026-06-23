@@ -10,9 +10,9 @@ async function createCustomer(data) {
   const passwordHash = data.password ? await bcrypt.hash(data.password, 10) : null;
   const displayName = [data.firstName, data.lastName].filter(Boolean).join(' ').trim() || null;
   const [result] = await pool.query(
-    `INSERT INTO customers (email, password_hash, first_name, last_name, name, phone)
+    `INSERT INTO customers (email, password_hash, first_name, last_name, phone)
      VALUES (?, ?, ?, ?, ?, ?)`,
-    [data.email, passwordHash, data.firstName, data.lastName, displayName, data.phone || null]
+    [data.email, passwordHash, data.firstName, data.lastName, data.phone || null]
   );
   return findById(result.insertId);
 }
@@ -57,9 +57,9 @@ async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avat
 
   const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || null;
   const [result] = await pool.query(
-    `INSERT INTO customers (email, google_id, auth_provider, avatar_url, first_name, last_name, name)
+    `INSERT INTO customers (email, google_id, auth_provider, avatar_url, first_name, last_name)
      VALUES (?, ?, 'google', ?, ?, ?, ?)`,
-    [email || null, googleId, avatarUrl, firstName, lastName, displayName]
+    [email || null, googleId, avatarUrl, firstName, lastName]
   );
   return findById(result.insertId);
 }
