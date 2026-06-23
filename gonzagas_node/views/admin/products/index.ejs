@@ -129,6 +129,11 @@
           }
           const qp = typeof queryParams !== 'undefined' ? queryParams : {};
         %>
+        <div class="products-image-size-control mb-2 d-none d-md-flex">
+          <label for="productsImageSize" class="mb-0"><i class="fas fa-image me-1"></i> Tamanho da imagem</label>
+          <input type="range" id="productsImageSize" min="32" max="160" step="8" value="50">
+          <span class="products-image-size-value" id="productsImageSizeValue">50px</span>
+        </div>
         <div class="table-responsive products-table-wrapper" id="products-table-wrapper" data-current-page="<%= typeof currentPage !== 'undefined' ? currentPage : 1 %>" data-total-pages="<%= typeof totalPages !== 'undefined' ? totalPages : 1 %>">
               <table class="table table-hover mb-0 datatable" style="width:100%">
                 <thead>
@@ -157,16 +162,16 @@
                       <td>
                         <% if (product.image_url) { %>
                           <a href="<%= productImg(product.image_url, 'full').jpg %>"
-                             class="glightbox product-image-link"
+                             class="glightbox product-image-link product-img-cell"
                              data-glightbox="type: image; title: <%= product.name %>"
                              data-gallery="product-gallery"
-                             style="display: inline-block; position: relative; width: 50px; height: 50px; cursor: pointer;">
+                             style="display: inline-block; position: relative; cursor: pointer;">
                             <picture>
                               <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
                               <img src="<%= productImg(product.image_url, 'thumb').jpg %>"
                                    alt="<%= product.name %>"
                                    class="img-thumbnail"
-                                   style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
+                                   style="object-fit: cover; transition: transform 0.3s ease;"
                                    loading="lazy">
                             </picture>
                             <div class="zoom-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; pointer-events: none;">
@@ -174,7 +179,7 @@
                             </div>
                           </a>
                         <% } else { %>
-                          <div class="img-placeholder d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 4px;">
+                          <div class="img-placeholder product-img-cell d-flex align-items-center justify-content-center" style="border-radius: 4px;">
                             <i class="fas fa-gem text-muted"></i>
                           </div>
                         <% } %>
@@ -579,10 +584,38 @@
     }
   }
   
+  // ===== TAMANHO DA IMAGEM NA TABELA (slider) =====
+  var IMAGE_SIZE_KEY = 'admin-products-image-size';
+
+  function setupImageSizeSlider() {
+    var slider = document.getElementById('productsImageSize');
+    var valueLabel = document.getElementById('productsImageSizeValue');
+    var wrapper = document.getElementById('products-table-wrapper');
+    if (!slider || !wrapper) return;
+
+    function applySize(px) {
+      wrapper.style.setProperty('--products-img-size', px + 'px');
+      if (valueLabel) valueLabel.textContent = px + 'px';
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(IMAGE_SIZE_KEY); } catch (e) {}
+    if (saved) {
+      slider.value = saved;
+    }
+    applySize(slider.value);
+
+    slider.addEventListener('input', function () {
+      applySize(slider.value);
+      try { localStorage.setItem(IMAGE_SIZE_KEY, slider.value); } catch (e) {}
+    });
+  }
+
   // Initialize when DOM is ready
   function init() {
     setupFiltersDrawer();
     setupFilterPersistence();
+    setupImageSizeSlider();
     initProductImageLightbox();
   }
   

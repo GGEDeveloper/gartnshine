@@ -99,6 +99,40 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* ===== SLIDER DE TAMANHO DA IMAGEM =====
+   --products-img-size é actualizada via JS (slider + localStorage); controla
+   a miniatura na coluna "Imagem" e, por consequência, a altura da linha. */
+#products-table-wrapper {
+  --products-img-size: 50px;
+}
+
+.product-img-cell {
+  width: var(--products-img-size) !important;
+  height: var(--products-img-size) !important;
+}
+
+.product-img-cell .img-thumbnail {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.products-image-size-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.products-image-size-control input[type="range"] {
+  width: 160px;
+}
+
+.products-image-size-control .products-image-size-value {
+  font-size: 0.85rem;
+  color: var(--gray-500, #6c757d);
+  min-width: 3.2em;
+}
+
 .products-table-wrapper .table {
   width: 100%;
   min-width: 100%;
@@ -171,11 +205,6 @@
   .products-table-wrapper .table th:nth-child(5),
   .products-table-wrapper .table td:nth-child(5) {
     max-width: 130px;
-  }
-
-  .products-table-wrapper .img-thumbnail {
-    width: 40px !important;
-    height: 40px !important;
   }
 
   .products-table-wrapper .badge {

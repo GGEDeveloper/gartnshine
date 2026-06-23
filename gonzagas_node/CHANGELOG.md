@@ -1,5 +1,18 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: slider de tamanho de imagem na lista de Produtos
+
+### 🖼️ **Tamanho da miniatura ajustável (só nesta página)**
+- Novo slider "Tamanho da imagem" acima da tabela de Produtos (32px–160px), ajusta a miniatura da coluna "Imagem" e, por consequência, a altura da linha — útil para inspecionar imagens com mais detalhe sem abrir o zoom
+- Estado persistido em `localStorage` (`admin-products-image-size`), aplicado via variável CSS `--products-img-size` escopada a `#products-table-wrapper`
+- Removido tamanho fixo (50px inline, e um override de 40px só em ecrãs <992px) que antes ignorava qualquer tentativa de ajuste
+
+### ✅ **Validado**
+- Slider testado via Puppeteer: arrastar para 160px redimensiona a miniatura e a linha; estado sobrevive a reload da página
+- `npm run validate:catalog` — OK (328 produtos)
+
+---
+
 ## [2026-06-23] - Admin: sidebar colapsável + navegação melhorada na edição de produtos
 
 ### 🗂️ **Sidebar: gaveta colapsável em qualquer tamanho de ecrã**
