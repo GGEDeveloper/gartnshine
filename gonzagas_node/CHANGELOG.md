@@ -1,5 +1,31 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: corrige layout desparametrizado da tabela de Produtos
+
+### 🐛 **Causa raiz: `</div>` órfão colapsava ~493px de largura em todo o admin**
+- `views/admin/products/index.ejs` tinha um `</div>` a mais no fim da página, que fechava o `<div id="content">` do layout principal demasiado cedo
+- Isso fazia o `<footer>` escapar da estrutura flex (passava a ser irmão de `#content-wrapper` em vez de filho), e por não ter `position:fixed` roubava ~493px de largura ao conteúdo em **qualquer** tamanho de ecrã — exactamente o "desparametrizado de tamanho e visibilidade" reportado em modo grande/médio
+- Confirmado por inspecção de DOM: `#content-wrapper` media 1166px num ecrã de 1920px (esperado: 1660px), 612px num ecrã de 1366px (esperado: 1106px) — défice constante de 494px em qualquer largura
+
+### 🐛 **CSS da página nunca era aplicado (bug pré-existente, não introduzido agora)**
+- O bloco `<style>` da página era injectado via `locals.styles.push(...)` (array, plural), mas o layout só lê `<%- style %>` (singular) — incompatibilidade total, o que significa que **todo** o CSS de responsividade da tabela, do drawer de filtros mobile e do zoom de imagens nunca chegou a ser aplicado, apesar de descrito em changelogs anteriores
+- CSS movido para um ficheiro real, `public/css/admin-products.css`, referenciado directamente no layout (`views/admin/layouts/main.ejs`), eliminando a dependência do mecanismo avariado
+
+### 🐛 **Tabela desaparecia entre 768px e 991px**
+- `admin-tables-mobile.css` esconde `.table-responsive .table` até 991.98px à espera de uma classe genérica `.table-mobile-cards`, que esta página não usa (usa `.products-mobile-cards`) — nesse intervalo a tabela ficava `display:none` sem nada a substituí-la
+- Adicionado override com maior especificidade em `admin-products.css` para manter a tabela visível até ao breakpoint mobile real da página (767.98px)
+
+### 🎨 **Tabela mais legível em ecrãs médios**
+- Colunas "Categoria" e "Nome" (texto de comprimento variável) passam a truncar com ellipsis em vez de forçar `nowrap` indiscriminado em todas as colunas — reduz a largura mínima necessária da tabela e elimina scroll horizontal desnecessário em ecrãs de 900px+
+- Scroll horizontal interno do `.table-responsive` mantido apenas onde realmente necessário (ecrãs <1024px), sem nunca afectar a largura da página
+
+### ✅ **Validado**
+- Inspecção de DOM via Puppeteer em 1920/1366/1280/1024/992/900/820/768px — largura de `#content-wrapper` confirmada igual a `viewport - 260px` (sidebar) em todos os casos, sem overflow horizontal da página
+- Screenshots visuais em todos os breakpoints — filtros em linha, tabela proporcionada, sem espaço vazio
+- `npm run validate:catalog` — OK (328 produtos)
+
+---
+
 ## [2026-06-23] - Merge: reconciliação com hotfixes de produção (waphix)
 
 ### 🔀 **Merge `origin/main` → branch de desenvolvimento**

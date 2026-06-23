@@ -1,0 +1,276 @@
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem; /* Space between filter groups */
+  align-items: flex-end; /* Align items to the bottom */
+}
+
+.filter-group {
+  flex: 1; /* Allow groups to grow */
+  min-width: 150px; /* Minimum width for each filter group */
+}
+
+.filter-group.compact {
+  flex: 0 1 120px; /* Don't grow, basis of 120px */
+  max-width: 120px;
+}
+
+.filter-group.actions {
+  flex: 0 0 auto; /* Don't grow or shrink */
+  display: flex;
+  gap: 0.5rem; /* Space between action buttons */
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap; /* Prevent labels from wrapping */
+}
+
+/* Product Image Zoom Styles - Using GLightbox */
+.product-image-link {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.product-image-link:hover .zoom-overlay {
+  opacity: 1;
+}
+
+.product-image-link:hover img {
+  transform: scale(1.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.zoom-overlay {
+  pointer-events: none;
+}
+
+/* GLightbox customizations */
+.glightbox-container img {
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  object-fit: contain !important;
+}
+
+/* Esconder completamente qualquer paginação do DataTables */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_paginate *,
+.dataTables_wrapper .dataTables_info * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Remover espaçamento que pode ficar */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
+/* Garantir que apenas nossa paginação server-side seja visível */
+.pagination {
+  display: flex !important;
+}
+
+/* ===== PRODUCTS TABLE RESPONSIVENESS =====
+   Colunas: 1 ID, 2 Imagem, 3 Referência, 4 Categoria, 5 Nome, 6 Preço,
+            7 Rentab., 8 Stock, 9 Status, 10 Ações.
+   Categoria e Nome têm texto de comprimento variável — truncam com ellipsis
+   em vez de forçar nowrap (que inflaciona a largura total da tabela e
+   obriga a scroll horizontal mesmo quando não é necessário). As restantes
+   colunas são estreitas e ficam sempre em nowrap. */
+.products-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.products-table-wrapper .table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+/* admin-tables-mobile.css esconde ".table-responsive .table" até 991.98px à
+   espera de uma classe ".table-mobile-cards" genérica que esta página não usa
+   (usa ".products-mobile-cards"). Sem este override a tabela desaparece entre
+   768px e 991px sem nada para a substituir. Mantemos a tabela visível até ao
+   breakpoint mobile real desta página (767.98px). */
+@media (min-width: 768px) {
+  #products-table-wrapper.table-responsive .table {
+    display: table !important;
+  }
+}
+
+.products-table-wrapper .table th,
+.products-table-wrapper .table td {
+  white-space: nowrap;
+}
+
+.products-table-wrapper .table th:nth-child(4),
+.products-table-wrapper .table td:nth-child(4) {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.products-table-wrapper .table th:nth-child(5),
+.products-table-wrapper .table td:nth-child(5) {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tablets e laptops pequenos (768px - 1200px) */
+@media (max-width: 1200px) and (min-width: 768px) {
+  .products-table-wrapper .table {
+    font-size: 0.85rem;
+  }
+
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .products-table-wrapper .table th:nth-child(5),
+  .products-table-wrapper .table td:nth-child(5) {
+    max-width: 180px;
+  }
+}
+
+/* Laptops muito pequenos e tablets grandes (992px e abaixo) */
+@media (max-width: 992px) {
+  .products-table-wrapper .table {
+    font-size: 0.8rem;
+  }
+
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 0.6rem 0.4rem;
+  }
+
+  .products-table-wrapper .table th:nth-child(4),
+  .products-table-wrapper .table td:nth-child(4) {
+    max-width: 90px;
+  }
+
+  .products-table-wrapper .table th:nth-child(5),
+  .products-table-wrapper .table td:nth-child(5) {
+    max-width: 130px;
+  }
+
+  .products-table-wrapper .img-thumbnail {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .products-table-wrapper .badge {
+    font-size: 0.7rem;
+    padding: 0.25em 0.4em;
+  }
+}
+
+/* Mobile - usar cards em vez de tabela */
+@media (max-width: 767.98px) {
+  .products-table-wrapper .table {
+    display: none !important;
+  }
+
+  .products-mobile-cards {
+    display: block !important;
+  }
+}
+
+/* Desktop - ajustes finos para ecrãs grandes */
+@media (min-width: 1400px) {
+  .products-table-wrapper .table {
+    font-size: 0.9rem;
+  }
+
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* ===== FILTERS DRAWER (MOBILE) ===== */
+@media (max-width: 767.98px) {
+  #filters-container {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: white;
+    z-index: 1050;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+    padding: 1.5rem;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  }
+
+  #filters-container.open {
+    right: 0;
+  }
+
+  #filters-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  #filters-container.open::before {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .filter-group.actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .filter-group.actions .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Botão fechar drawer */
+  .filters-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+  }
+}
