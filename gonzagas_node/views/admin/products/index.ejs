@@ -380,6 +380,87 @@
 .pagination {
   display: flex !important;
 }
+
+/* ===== PRODUCTS TABLE RESPONSIVENESS ===== */
+.products-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.products-table-wrapper .table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+/* Tablets e laptops pequenos (768px - 1200px) */
+@media (max-width: 1200px) and (min-width: 768px) {
+  .products-table-wrapper .table {
+    font-size: 0.85rem;
+  }
+  
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 0.75rem 0.5rem;
+    white-space: nowrap;
+  }
+  
+  .products-table-wrapper .table th:nth-child(6),
+  .products-table-wrapper .table td:nth-child(6) {
+    /* Preço - manter visível */
+  }
+  
+  .products-table-wrapper .table th:nth-child(7),
+  .products-table-wrapper .table td:nth-child(7) {
+    /* Rentabilidade - manter visível */
+  }
+}
+
+/* Laptops muito pequenos e tablets grandes (992px - 1200px) */
+@media (max-width: 992px) {
+  .products-table-wrapper .table {
+    font-size: 0.8rem;
+  }
+  
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 0.6rem 0.4rem;
+  }
+  
+  .products-table-wrapper .img-thumbnail {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .products-table-wrapper .badge {
+    font-size: 0.7rem;
+    padding: 0.25em 0.4em;
+  }
+}
+
+/* Mobile - usar cards em vez de tabela */
+@media (max-width: 767.98px) {
+  .products-table-wrapper .table {
+    display: none !important;
+  }
+  
+  .products-mobile-cards {
+    display: block !important;
+  }
+}
+
+/* Desktop - ajustes finos para ecrãs grandes */
+@media (min-width: 1400px) {
+  .products-table-wrapper .table {
+    font-size: 0.9rem;
+  }
+  
+  .products-table-wrapper .table th,
+  .products-table-wrapper .table td {
+    padding: 1rem 0.75rem;
+  }
+}
 </style>
 `); %>
 

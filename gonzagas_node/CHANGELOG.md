@@ -1,5 +1,18 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: tabela de produtos responsiva
+
+### 📊 **Tabela de produtos - responsividade melhorada**
+- **Problema**: Tabela de produtos no admin ficava ilegível ao reduzir o tamanho da página
+- **Solução**: Adicionado CSS responsivo específico para a tabela de produtos:
+  - Tablets/laptops pequenos (768px-1200px): font-size 0.85rem, padding reduzido
+  - Laptops muito pequenos (992px): font-size 0.8rem, imagens 40px, badges compactos
+  - Mobile (<768px): usa cards em vez de tabela (já existente)
+  - Desktop grande (1400px+): font-size 0.9rem, padding aumentado
+- **Impacto**: Tabela ajusta-se automaticamente ao tamanho do ecrã mantendo legibilidade
+
+---
+
 ## [2026-06-23] - Error: correção layout duplicado
 
 ### 🐛 **Páginas de erro desformatadas corrigidas**
