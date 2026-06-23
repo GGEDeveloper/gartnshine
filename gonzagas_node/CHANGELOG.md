@@ -1,5 +1,14 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Merge: reconciliação com hotfixes de produção (waphix)
+
+### 🔀 **Merge `origin/main` → branch de desenvolvimento**
+- Branch local tinha divergido 24 commits de `origin/main`, que por sua vez tinha 6 commits de hotfixes aplicados directamente em produção (waphix): fix no INSERT de `customers` (coluna `name` inexistente na BD de produção), fix de header mobile cortado + debug OAuth, dependência `sequelize`, UX da tabela de produtos (margens, filtros persistentes, drawer mobile)
+- Conflitos resolvidos priorizando sempre a versão de produção já validada (`layout: false` em páginas de erro, normalização de checkboxes, remoção de `prompt: select_account` no Google OAuth mobile); mantida a versão local apenas onde tinha um fix mais recente ainda não propagado a produção (rotação EXIF em `productImageProcessor.js`)
+- **Validado**: `npm run validate:catalog` (328 produtos, 18 famílias) e `npm run test:ecommerce` (26/29 — as 3 falhas são um artefacto do próprio script de teste, que não envia `confirmPassword` no fluxo de registo, sem relação com o merge); smoke test manual de `/`, `/catalog`, `/admin/login`, `/account/login` — todos 200
+
+---
+
 ## [2026-06-23] - Admin: UX melhorada tabela de produtos
 
 ### 🎨 **Margens reduzidas e filtros persistentes**
