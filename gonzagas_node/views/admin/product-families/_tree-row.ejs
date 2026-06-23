@@ -5,7 +5,7 @@
     <strong><%= f.name %></strong>
   </td>
   <td><small class="text-muted"><%= (f.description || '-').substring(0, 60) %><%= (f.description || '').length > 60 ? '…' : '' %></small></td>
-  <td><span class="badge bg-secondary"><%= f.product_count || 0 %></span></td>
+  <td><span class="badge badge-product-inactive"><%= f.product_count || 0 %></span></td>
   <td style="width: 120px;">
     <a href="/admin/product-families/edit/<%= f.id %>" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i></a>
     <form action="/admin/product-families/delete/<%= f.id %>" method="POST" class="d-inline" onsubmit="return confirm('Eliminar esta categoria?');">

@@ -1,5 +1,30 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: bugs críticos, consistência dark-luxe e tabelas/paginação
+
+### 🐛 **Bugs críticos corrigidos**
+- `admin-dark-luxe.css`: erro de sintaxe no `background` do `<body>` (faltava `linear-gradient(`)
+- Dashboard: tabela "Transações Recentes" tinha 5 colunas no `<thead>` mas só 3 renderizadas no `<tbody>`, e os dados vinham sempre vazios (`recentTransactions: []` hardcoded) — agora usa `inventory_transactions` reais
+- Header admin: avatar/nome sempre "Admin" (hardcoded) → usa utilizador da sessão; removido link morto `/admin/profile`
+- Inventário: controller passava `totalPages`/`currentPage` mas a view nunca renderizava paginação — impossível navegar além da página 1; paginação adicionada
+- Removidos `console.log` de debug e rota `/admin/test-route` deixados em produção (`routes/admin.js`, `InventoryController.js`)
+- Removido `routes/admin/products.js` — ficheiro morto nunca montado, usava Sequelize (inexistente no projeto), com lógica de paginação duplicada e confusa
+
+### 🎨 **Consistência visual com o tema dark-luxe do site**
+- Badges de stock/status (Produtos, Inventário, Famílias) trocados de classes Bootstrap cruas (`bg-success`, `bg-warning`, etc.) para as classes dark-luxe (`badge-stock-in-stock`, `badge-product-active`, etc.)
+- Placeholders de imagem (`bg-light`) trocados por nova classe `.img-placeholder` (dark) em Produtos, Inventário e Famílias
+- Removidas classes Bootstrap 4 obsoletas (`text-gray-800`, `font-weight-bold`, `text-dark` em headers ordenáveis) em 9 views admin
+- Reports e Analytics: removidas classes Bootstrap dark/cores hardcoded (`bg-dark`, `table-dark`, `bg-primary text-white`, etc.) substituídas por cards/stat-cards dark-luxe
+- Orders: status e pagamento traduzidos para PT (`pending` → `Pendente`, etc.) com badges dark-luxe em vez de `bg-secondary`/`bg-info text-dark`
+- Font do admin trocada de `Nunito` (nunca usada no CSS) para `Poppins`/`Inter`, alinhado com o site público
+- Paginação (Produtos + Inventário): reescrita com elipses para listas longas, estados `disabled`, e página activa agora visível (antes quase indistinguível no tema escuro)
+
+### ✅ **Validado**
+- `node --check` em todos os ficheiros JS alterados
+- Compilação EJS de todas as views alteradas sem erros
+
+---
+
 ## [2026-05-26] - Conta cliente: navegação integrada
 
 ### 👤 **Conta cliente no site público**

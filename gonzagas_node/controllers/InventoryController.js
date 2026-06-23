@@ -26,10 +26,6 @@ class InventoryController extends BaseController {
   }
 
   async index(req, res) {
-    console.log('--- InventoryController.index ---');
-    console.log('Raw req.query:', JSON.stringify(req.query, null, 2)); // Log detalhado do req.query
-
-    console.log('>>> InventoryController.index called - Path:', req.path, 'User:', req.user ? req.user.id : 'No user');
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 20;
@@ -41,7 +37,6 @@ class InventoryController extends BaseController {
         status: req.query.status,         // Matches Product.js model
         stock_status: req.query.stock_status // Matches Product.js model
       };
-      console.log('Constructed filterOptions:', JSON.stringify(filterOptions, null, 2)); // Log detalhado das filterOptions
       
       const { products, totalProducts } = await this.Product.getAllWithStock({
         limit,
@@ -76,7 +71,6 @@ class InventoryController extends BaseController {
 
   // Show history for a specific product
   async showProductHistory(req, res) {
-    console.log('>>> InventoryController.showProductHistory called - Product ID:', req.params.productId);
     try {
       const productId = parseInt(req.params.productId);
       if (isNaN(productId)) {
@@ -109,7 +103,6 @@ class InventoryController extends BaseController {
 
   // Process stock adjustment
   async processAdjustment(req, res) {
-    console.log('>>> InventoryController.processAdjustment called - Body:', req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return this.error(res, 'Validation failed for stock adjustment.', 400, errors);

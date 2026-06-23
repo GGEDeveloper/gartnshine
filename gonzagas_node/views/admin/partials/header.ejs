@@ -15,11 +15,10 @@
     <!-- User Dropdown -->
     <div class="dropdown">
       <button class="btn btn-link text-dark p-0 d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://ui-avatars.com/api/?name=Admin&background=4e73df&color=fff" alt="User" class="rounded-circle me-2" width="32" height="32">
-        <span class="d-none d-md-inline">Admin</span>
+        <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user && (user.name || user.email) || 'Admin') %>&background=172130&color=C0C0C0" alt="User" class="rounded-circle me-2" width="32" height="32">
+        <span class="d-none d-md-inline"><%= user && (user.name || user.email) || 'Admin' %></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-        <li><a class="dropdown-item" href="/admin/profile"><i class="fas fa-user me-2"></i> Perfil</a></li>
         <li><a class="dropdown-item" href="/admin/settings"><i class="fas fa-cog me-2"></i> Configurações</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item text-danger" href="/admin/logout"><i class="fas fa-sign-out-alt me-2"></i> Sair</a></li>

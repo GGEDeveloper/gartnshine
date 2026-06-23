@@ -1,6 +1,6 @@
 <!-- Page Content -->
 <div class="container-fluid py-3 py-md-4 px-3 px-md-4">
-  <!-- Stats Cards -->
+  <!-- Stats Cards — linha 1: catálogo -->
   <div class="row g-3 g-md-4">
     <!-- Total Products -->
     <div class="col-12 col-sm-6 col-xl-3">
@@ -12,7 +12,7 @@
               <h3 class="mb-0"><%= stats.products %></h3>
             </div>
             <div class="stat-icon bg-primary">
-              <i class="fas fa-box-open"></i>
+              <i class="fas fa-gem"></i>
             </div>
           </div>
           <div class="mt-3">
@@ -83,23 +83,70 @@
     </div>
   </div>
 
-  <!-- Valor potencial de inventário (stock × preço de venda) -->
+  <!-- Stats Cards — linha 2: loja + inventário -->
   <div class="row g-3 g-md-4 mt-1">
-    <div class="col-12">
-      <div class="card stat-card border-start border-4 border-info">
+    <!-- Pedidos -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
         <div class="card-body">
-          <div class="row align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Pedidos</h6>
+              <h3 class="mb-0"><%= stats.orders != null ? stats.orders : '—' %></h3>
+            </div>
+            <div class="stat-icon" style="background: var(--color-primary); border: 1px solid rgba(192,192,192,0.3); color: #C0C0C0;">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/orders" class="btn btn-sm btn-outline-primary">Ver Pedidos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Receita -->
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted mb-2">Receita</h6>
+              <h3 class="mb-0">
+                <% if (stats.revenue != null && stats.revenue !== 'N/A') { %>
+                  €<%= parseFloat(stats.revenue).toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+                <% } else { %>
+                  —
+                <% } %>
+              </h3>
+            </div>
+            <div class="stat-icon" style="background: var(--color-primary); border: 1px solid rgba(184,115,51,0.4); color: #D4B85C;">
+              <i class="fas fa-euro-sign"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="/admin/reports" class="btn btn-sm btn-outline-primary">Rentabilidade</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Valor potencial de inventário -->
+    <div class="col-12 col-xl-6">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <div class="row align-items-center h-100">
             <div class="col-md-8">
-              <h6 class="text-muted mb-2">Valor potencial (vender todo o stock ao preço de venda atual)</h6>
-              <h2 class="mb-1 text-info">
+              <h6 class="text-muted mb-2">Valor potencial de inventário</h6>
+              <h3 class="mb-1">
                 <% if (stats.inventoryPotentialRevenue != null && typeof stats.inventoryPotentialRevenue === 'number') { %>
                   <%= Number(stats.inventoryPotentialRevenue).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' }) %>
                 <% } else { %>
                   —
                 <% } %>
-              </h2>
+              </h3>
               <p class="text-muted mb-0 small">
-                Unidades totais em stock:
+                Unidades em stock:
                 <% if (stats.inventoryTotalUnits != null && typeof stats.inventoryTotalUnits === 'number') { %>
                   <%= stats.inventoryTotalUnits.toLocaleString('pt-PT') %>
                 <% } else { %>
@@ -108,8 +155,8 @@
               </p>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-              <a href="/admin/export/inventory-stock.xlsx" class="btn btn-outline-info btn-lg">
-                <i class="fas fa-file-excel me-2"></i>Descarregar inventário (XLSX)
+              <a href="/admin/export/inventory-stock.xlsx" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-file-excel me-1"></i>Exportar XLSX
               </a>
             </div>
           </div>
@@ -119,7 +166,7 @@
   </div>
 
   <!-- Quick Actions Mobile -->
-  <div class="d-flex gap-2 mb-3 d-md-none flex-wrap">
+  <div class="d-flex gap-2 mt-3 mb-3 d-md-none flex-wrap">
     <a href="/admin/quick-product" class="btn btn-primary flex-grow-1 py-3">
       <i class="fas fa-bolt me-2"></i>Criar Produto Rápido
     </a>
@@ -128,7 +175,7 @@
     </a>
   </div>
 
-  <!-- Charts and Recent Activity -->
+  <!-- Produtos Recentes + Movimentos de Inventário -->
   <div class="row mt-3 mt-md-4 g-3 g-md-4">
     <!-- Recent Products -->
     <div class="col-xl-6">
@@ -141,24 +188,26 @@
             <ul class="list-group list-group-flush">
               <% stats.recentProducts.forEach(product => { %>
                 <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                  <a href="/admin/products/edit/<%= product.id %>" class="d-flex align-items-center text-decoration-none text-dark flex-grow-1">
+                  <a href="/admin/products/edit/<%= product.id %>" class="d-flex align-items-center text-decoration-none flex-grow-1">
                     <% if (product.image_url) { %>
                       <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="rounded me-3" style="width: 48px; height: 48px; object-fit: cover;">
                     <% } else { %>
-                      <div class="bg-light rounded d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;"><i class="fas fa-box text-muted"></i></div>
+                      <div class="rounded d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(0,0,0,0.6); border: 1px solid rgba(192,192,192,0.15);">
+                        <i class="fas fa-gem text-muted"></i>
+                      </div>
                     <% } %>
                     <div>
                       <h6 class="mb-0"><%= product.name %></h6>
                       <small class="text-muted">Ref: <%= product.reference %></small>
                     </div>
                   </a>
-                  <span class="badge bg-primary rounded-pill ms-2"><%= product.current_stock ?? 0 %></span>
+                  <span class="badge rounded-pill ms-2"><%= product.current_stock ?? 0 %></span>
                 </li>
               <% }) %>
             </ul>
           <% } else { %>
             <div class="text-center py-4">
-              <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+              <i class="fas fa-gem fa-3x text-muted mb-3"></i>
               <p class="text-muted mb-0">Nenhum produto adicionado recentemente</p>
             </div>
           <% } %>
@@ -166,53 +215,43 @@
       </div>
     </div>
 
-    <!-- Recent Transactions -->
+    <!-- Movimentos de Inventário Recentes -->
     <div class="col-xl-6">
       <div class="card mb-4">
-        <div class="card-header">
-          <h6 class="card-title mb-0">Transações Recentes</h6>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="card-title mb-0">Movimentos de Inventário Recentes</h6>
+          <a href="/admin/inventory" class="btn btn-sm btn-outline-secondary">Ver tudo</a>
         </div>
         <div class="card-body p-0">
           <% if (stats.recentTransactions && stats.recentTransactions.length > 0) { %>
             <div class="table-responsive">
-              <table class="table table-hover align-middle">
+              <table class="table table-hover align-middle mb-0">
                 <thead>
                   <tr>
                     <th>Produto</th>
                     <th>Tipo</th>
+                    <th class="text-end">Qtd</th>
                     <th>Data</th>
-                    <th>Detalhes</th>
-                    <th>Quantidade</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% stats.recentTransactions.forEach(transaction => { %>
+                  <% stats.recentTransactions.forEach(function(t) { %>
                     <tr>
                       <td>
-                        <div class="d-flex align-items-center">
-                          <% if (transaction.product_image_url) { %>
-                            <img src="/media/products/<%= transaction.product_image_url %>" alt="<%= transaction.product_name %>" class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                          <% } else { %>
-                            <div class="bg-light d-flex align-items-center justify-content-center img-thumbnail me-2" style="width: 40px; height: 40px;">
-                              <i class="fas fa-box text-muted"></i>
-                            </div>
-                          <% } %>
-                          <div>
-                            <div class="fw-bold"><%= transaction.product_name %></div>
-                            <small class="text-muted">Ref: <%= transaction.product_reference %></small>
-                          </div>
-                        </div>
+                        <div class="fw-semibold" style="font-size: 0.85rem;"><%= t.product_name %></div>
+                        <small class="text-muted">Ref: <%= t.product_reference %></small>
                       </td>
                       <td>
-                        <% if (transaction.type === 'in') { %>
-                          <span class="badge bg-success-soft text-success">Entrada</span>
-                        <% } else if (transaction.type === 'out') { %>
-                          <span class="badge bg-danger-soft text-danger">Saída</span>
+                        <% if (t.movement_type === 'in' || t.type === 'in') { %>
+                          <span class="badge badge-stock-in-stock">Entrada</span>
+                        <% } else if (t.movement_type === 'out' || t.type === 'out') { %>
+                          <span class="badge badge-stock-out-of-stock">Saída</span>
                         <% } else { %>
-                          <span class="badge bg-secondary-soft text-secondary"><%= transaction.type %></span>
+                          <span class="badge badge-product-inactive"><%= t.movement_type || t.type %></span>
                         <% } %>
                       </td>
-                      <td><%= transaction.quantity %></td>
+                      <td class="text-end fw-semibold"><%= t.quantity %></td>
+                      <td><small class="text-muted"><%= new Date(t.created_at).toLocaleDateString('pt-PT') %></small></td>
                     </tr>
                   <% }) %>
                 </tbody>
@@ -221,7 +260,7 @@
           <% } else { %>
             <div class="text-center py-4">
               <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
-              <p class="text-muted mb-0">Nenhuma transação recente</p>
+              <p class="text-muted mb-0">Nenhum movimento de inventário recente</p>
             </div>
           <% } %>
         </div>
@@ -229,80 +268,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .stat-card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  }
-  
-  .stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-  }
-  
-  .stat-icon i {
-    line-height: 1;
-  }
-  
-  .bg-primary { background-color: #4e73df !important; }
-  .bg-success { background-color: #1cc88a !important; }
-  .bg-warning { background-color: #f6c23e !important; }
-  .bg-danger { background-color: #e74a3b !important; }
-  .bg-info { background-color: #36b9cc !important; }
-  .border-info { border-color: #36b9cc !important; }
-  .text-info { color: #36b9cc !important; }
-  
-  .card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    margin-bottom: 1.5rem;
-  }
-  
-  .card-header {
-    background-color: #f8f9fc;
-    border-bottom: 1px solid #e3e6f0;
-    padding: 1rem 1.25rem;
-  }
-  
-  .card-title {
-    font-weight: 600;
-    color: #4e73df;
-    margin-bottom: 0;
-  }
-  
-  .table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    color: #5a5c69;
-    border-top: none;
-    padding: 1rem;
-  }
-  
-  .table td {
-    padding: 1rem;
-    vertical-align: middle;
-  }
-  
-  .badge {
-    font-weight: 500;
-    padding: 0.35em 0.65em;
-    font-size: 0.75em;
-  }
-</style>

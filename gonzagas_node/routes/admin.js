@@ -1,4 +1,3 @@
-console.log('--- LOADING routes/admin.js ---');
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
@@ -21,10 +20,28 @@ const { guestSessionRequired, adminSessionRequired, roleRequired } = require('..
 
 // Models
 const Checkpoint = require('../models/Checkpoint');
-
-console.log('--- routes/admin.js: All controllers, middleware, and models loaded ---');
+const { pool } = require('../config/database');
 
 const XLSX = require('xlsx');
+
+/** Últimos movimentos de inventário para o dashboard. */
+async function getRecentInventoryMovements(limit = 5) {
+  try {
+    const [rows] = await pool.query(
+      `SELECT it.id, it.transaction_type AS movement_type, it.quantity, it.created_at,
+              p.name AS product_name, p.reference AS product_reference
+       FROM inventory_transactions it
+       LEFT JOIN products p ON p.id = it.product_id
+       ORDER BY it.created_at DESC
+       LIMIT ?`,
+      [limit]
+    );
+    return rows;
+  } catch (err) {
+    console.warn('Dashboard inventory movements unavailable:', err.message);
+    return [];
+  }
+}
 
 /** Stats para o dashboard (produtos, famílias, stock, valor potencial de inventário). */
 async function loadDashboardStats() {
@@ -44,14 +61,16 @@ async function loadDashboardStats() {
     lowStockProducts,
     outOfStockProducts,
     recentProducts,
-    inventorySummary
+    inventorySummary,
+    recentTransactions
   ] = await Promise.all([
     Product.count(),
     ProductFamily.count(),
     Product.countLowStock(),
     Product.countOutOfStock(),
     Product.getRecent(5),
-    Product.getInventoryPotentialSummary()
+    Product.getInventoryPotentialSummary(),
+    getRecentInventoryMovements(5)
   ]);
   return {
     products: totalProducts,
@@ -59,21 +78,13 @@ async function loadDashboardStats() {
     lowStock: lowStockProducts,
     outOfStock: outOfStockProducts,
     recentProducts,
-    recentTransactions: [],
+    recentTransactions,
     orders: orderStats.orders,
-    users: 0,
     revenue: orderStats.revenue,
     inventoryPotentialRevenue: inventorySummary.potentialRevenue,
     inventoryTotalUnits: inventorySummary.totalUnits
   };
 }
-
-// TEST ROUTE - Placed at the very beginning of route definitions
-router.get('/test-route', (req, res) => {
-  console.log('--- routes/admin.js: /test-route HIT ---');
-  res.send('Admin test route works!');
-});
-
 
 // Middleware para adicionar currentPath e breadcrumb a todas as rotas do admin
 const adminMiddleware = (req, res, next) => {

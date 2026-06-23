@@ -6,7 +6,7 @@
   <!-- KPIs -->
   <div class="row g-3 mb-4">
     <div class="col-6 col-md-3">
-      <div class="card bg-dark border-secondary text-white h-100">
+      <div class="card h-100">
         <div class="card-body">
           <div class="text-muted small mb-1">Receita total</div>
           <div class="h4 mb-0 text-warning">€<%= parseFloat(stats.total_revenue || 0).toFixed(2) %></div>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="col-6 col-md-3">
-      <div class="card bg-dark border-secondary text-white h-100">
+      <div class="card h-100">
         <div class="card-body">
           <div class="text-muted small mb-1">Valor médio por pedido</div>
           <div class="h4 mb-0">€<%= parseFloat(stats.avg_order_value || 0).toFixed(2) %></div>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="col-6 col-md-3">
-      <div class="card bg-dark border-secondary text-white h-100">
+      <div class="card h-100">
         <div class="card-body">
           <div class="text-muted small mb-1">Stock em inventário</div>
           <div class="h4 mb-0 text-info">€<%= parseFloat(inventory.stock_value_sale || 0).toFixed(2) %></div>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="col-6 col-md-3">
-      <div class="card bg-dark border-secondary text-white h-100">
+      <div class="card h-100">
         <div class="card-body">
           <div class="text-muted small mb-1">IVA cobrado</div>
           <div class="h4 mb-0">€<%= parseFloat(stats.total_tax || 0).toFixed(2) %></div>
@@ -46,12 +46,12 @@
     <!-- Top vendidos -->
     <% if (topSold && topSold.length > 0) { %>
     <div class="col-12 col-md-5">
-      <div class="card bg-dark border-secondary text-white">
-        <div class="card-header border-secondary">
+      <div class="card">
+        <div class="card-header">
           <strong>Top produtos vendidos</strong>
         </div>
         <div class="card-body p-0">
-          <table class="table table-dark table-sm mb-0">
+          <table class="table table-sm mb-0">
             <thead><tr><th>Produto</th><th class="text-end">Unid.</th><th class="text-end">Receita</th></tr></thead>
             <tbody>
               <% topSold.forEach(function(p) { %>
@@ -70,14 +70,14 @@
 
     <!-- Margem por produto -->
     <div class="col-12 col-md-<%= (topSold && topSold.length > 0) ? '7' : '12' %>">
-      <div class="card bg-dark border-secondary text-white">
-        <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <strong>Margem por produto (activos)</strong>
           <small class="text-muted"><%= products.length %> produtos</small>
         </div>
         <div class="card-body p-0" style="max-height:480px;overflow-y:auto">
-          <table class="table table-dark table-sm table-hover mb-0">
-            <thead class="sticky-top bg-dark">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="sticky-top">
               <tr>
                 <th>Produto</th>
                 <th class="text-end">Compra</th>
@@ -91,7 +91,7 @@
               <% products.forEach(function(p) { %>
               <tr>
                 <td>
-                  <a href="/admin/products/edit/<%= p.id %>" class="text-light text-decoration-none"><%= p.name %></a>
+                  <a href="/admin/products/edit/<%= p.id %>" class="text-decoration-none"><%= p.name %></a>
                   <% if (p.family_name) { %><br><small class="text-muted"><%= p.family_name %></small><% } %>
                 </td>
                 <td class="text-end text-muted">€<%= parseFloat(p.purchase_price || 0).toFixed(2) %></td>
