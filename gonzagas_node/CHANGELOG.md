@@ -1,5 +1,25 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: melhorias de fluxo no Criar Rápido, Produtos e galeria
+
+### ✨ **Criar Produto Rápido — visibilidade + memória de escolha**
+- Adicionados toggles "Ativo", "Visível no Catálogo" e "Destaque" ao formulário (antes hardcoded: ativo+visível sempre ligados, destaque sempre desligado)
+- Após criar um produto, a escolha destes 3 toggles é preservada via query string no redirect e pré-selecionada no formulário seguinte — facilita criar várias peças seguidas com as mesmas definições
+
+### ✨ **Lista de Produtos (admin) — seletor de resultados por página**
+- Novo dropdown "Por página" (10/20/50/100) no formulário de filtros, com auto-submit
+- `ProductController.index` valida o `limit` recebido contra uma lista de valores permitidos (evita valores arbitrários via URL)
+
+### ✨ **Lista de Produtos (admin) — navegação contínua no zoom/lightbox**
+- Ao navegar pela galeria de imagens (GLightbox) e chegar ao fim da página actual, avança automaticamente para a página seguinte e continua a partir da primeira imagem (e o inverso a recuar a partir da primeira imagem da página)
+- Implementado com o evento `slide_changed` do GLightbox (loop interno existente é usado para detectar a transição última→primeira) + `sessionStorage` para reabrir o lightbox na posição certa após o carregamento da nova página
+
+### ✅ **Validado**
+- `node --check` nos controllers alterados
+- Compilação EJS das views alteradas e verificação de sintaxe do bloco `<script>` inline
+
+---
+
 ## [2026-06-23] - Pipeline de otimização de imagens de produto
 
 ### 🖼️ **Problema**

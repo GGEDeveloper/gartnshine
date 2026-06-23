@@ -79,6 +79,28 @@
           <textarea class="form-control" id="description" name="description" rows="2" placeholder="Breve descrição..."></textarea>
         </div>
 
+        <!-- Visibilidade -->
+        <div class="row g-2 mt-2">
+          <div class="col-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" <%= preselectedActive !== false ? 'checked' : '' %>>
+              <label class="form-check-label" for="is_active">Ativo</label>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="is_catalog_visible" name="is_catalog_visible" value="1" <%= preselectedCatalogVisible !== false ? 'checked' : '' %>>
+              <label class="form-check-label" for="is_catalog_visible">Visível no Catálogo</label>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="featured" name="featured" value="1" <%= preselectedFeatured === true ? 'checked' : '' %>>
+              <label class="form-check-label" for="featured">Destaque</label>
+            </div>
+          </div>
+        </div>
+
         <!-- Imagem (câmara ou ficheiro) -->
         <div class="mt-3">
           <label class="form-label">Imagem <small class="text-muted">(opcional)</small></label>

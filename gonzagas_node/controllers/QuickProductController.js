@@ -29,6 +29,10 @@ class QuickProductController {
       const colors = await getColorsSafe();
       const preselectedFamilyId = req.query.family_id ? String(req.query.family_id).trim() : null;
       const preselectedColor = req.query.color ? String(req.query.color).trim() : null;
+      // Lembra a última escolha de visibilidade (vinda do redirect após criar um produto); por defeito Ativo+Visível ligados, Destaque desligado
+      const preselectedActive = req.query.active === '0' ? false : true;
+      const preselectedCatalogVisible = req.query.catalog_visible === '0' ? false : true;
+      const preselectedFeatured = req.query.featured === '1';
 
       res.render('admin/quick-product/form', {
         layout: 'admin/layouts/main',
@@ -37,6 +41,9 @@ class QuickProductController {
         colors: colors && colors.length > 0 ? colors : [{ name: 'Prata' }, { name: 'Dourado' }, { name: 'Outro' }],
         preselectedFamilyId,
         preselectedColor,
+        preselectedActive,
+        preselectedCatalogVisible,
+        preselectedFeatured,
         breadcrumbs: res.locals.breadcrumb || [],
         user: req.session?.user || req.user,
         success_msg: req.flash('success_msg'),
@@ -62,7 +69,10 @@ class QuickProductController {
         sale_price,
         color,
         current_stock,
-        description
+        description,
+        is_active,
+        is_catalog_visible,
+        featured
       } = req.body;
 
       if (!sale_price || parseFloat(sale_price) <= 0) {
@@ -84,9 +94,9 @@ class QuickProductController {
         current_stock: parseInt(current_stock, 10) || 0,
         min_stock: 0,
         color: (color || '').trim() || null,
-        is_active: 1,
-        is_catalog_visible: 1,
-        featured: 0
+        is_active: is_active === '1' ? 1 : 0,
+        is_catalog_visible: is_catalog_visible === '1' ? 1 : 0,
+        featured: featured === '1' ? 1 : 0
       };
 
       let images = [];
@@ -117,6 +127,9 @@ class QuickProductController {
       const params = new URLSearchParams();
       if (family_id) params.set('family_id', family_id);
       if (color && (color || '').trim()) params.set('color', color.trim());
+      params.set('active', productData.is_active ? '1' : '0');
+      params.set('catalog_visible', productData.is_catalog_visible ? '1' : '0');
+      params.set('featured', productData.featured ? '1' : '0');
       res.redirect('/admin/quick-product' + (params.toString() ? '?' + params.toString() : ''));
     } catch (error) {
       console.error('QuickProductController.store error:', error);

@@ -29,8 +29,10 @@ class ProductController extends BaseController {
   async index(req, res) {
     console.log('ProductController.index - query params:', req.query);
     try {
+      const ALLOWED_LIMITS = [10, 20, 50, 100];
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
+      const requestedLimit = parseInt(req.query.limit);
+      const limit = ALLOWED_LIMITS.includes(requestedLimit) ? requestedLimit : 10;
       const offset = (page - 1) * limit;
 
       const filterOptions = {

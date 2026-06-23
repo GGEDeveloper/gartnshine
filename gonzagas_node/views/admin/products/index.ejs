@@ -47,6 +47,15 @@
               <option value="out_of_stock" <%= typeof queryParams !== 'undefined' && queryParams.stock_status === 'out_of_stock' ? 'selected' : '' %>>Fora de Stock</option>
             </select>
           </div>
+          <div class="filter-group compact">
+            <label for="filter-limit">Por página</label>
+            <select id="filter-limit" name="limit" class="form-select form-select-lg" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+              <% const currentLimit = typeof queryParams !== 'undefined' && queryParams.limit ? parseInt(queryParams.limit) : 10; %>
+              <% [10, 20, 50, 100].forEach(function(n) { %>
+                <option value="<%= n %>" <%= currentLimit === n ? 'selected' : '' %>><%= n %></option>
+              <% }); %>
+            </select>
+          </div>
           <div class="filter-group actions">
             <button type="submit" class="btn btn-primary">Filtrar</button>
             <a href="/admin/products" class="btn btn-outline-secondary">Limpar</a>
@@ -114,7 +123,7 @@
           }
           const qp = typeof queryParams !== 'undefined' ? queryParams : {};
         %>
-        <div class="table-responsive products-table-wrapper">
+        <div class="table-responsive products-table-wrapper" id="products-table-wrapper" data-current-page="<%= typeof currentPage !== 'undefined' ? currentPage : 1 %>" data-total-pages="<%= typeof totalPages !== 'undefined' ? totalPages : 1 %>">
               <table class="table table-hover mb-0 datatable" style="width:100%">
                 <thead>
                   <tr>
@@ -403,6 +412,50 @@
     });
   }
   
+  var GALLERY_PENDING_KEY = 'admin-products-pending-lightbox-open';
+
+  // Ao chegar ao fim/início da galeria da página atual, avança/recua de página e continua o fluxo
+  function setupContinuousGalleryFlow(lightbox) {
+    var wrapper = document.getElementById('products-table-wrapper');
+    if (!wrapper) return;
+    var currentPage = parseInt(wrapper.dataset.currentPage || '1', 10);
+    var totalPages = parseInt(wrapper.dataset.totalPages || '1', 10);
+
+    function navigateToPage(page, openAt) {
+      try { sessionStorage.setItem(GALLERY_PENDING_KEY, openAt); } catch (e) {}
+      var url = new URL(window.location.href);
+      url.searchParams.set('page', page);
+      window.location.href = url.toString();
+    }
+
+    lightbox.on('slide_changed', function (data) {
+      if (!data || !data.prev || !data.current) return;
+      var items = document.querySelectorAll('.product-image-link[data-gallery="product-gallery"]');
+      var lastIndex = items.length - 1;
+      if (lastIndex <= 0) return;
+
+      var prevIndex = data.prev.slideIndex;
+      var curIndex = data.current.slideIndex;
+
+      if (prevIndex === lastIndex && curIndex === 0 && currentPage < totalPages) {
+        navigateToPage(currentPage + 1, 'first');
+      } else if (prevIndex === 0 && curIndex === lastIndex && currentPage > 1) {
+        navigateToPage(currentPage - 1, 'last');
+      }
+    });
+
+    var pending = null;
+    try { pending = sessionStorage.getItem(GALLERY_PENDING_KEY); } catch (e) {}
+    if (pending) {
+      try { sessionStorage.removeItem(GALLERY_PENDING_KEY); } catch (e) {}
+      var items = document.querySelectorAll('.product-image-link[data-gallery="product-gallery"]');
+      if (items.length > 0) {
+        var openIndex = pending === 'last' ? items.length - 1 : 0;
+        setTimeout(function () { lightbox.openAt(openIndex); }, 150);
+      }
+    }
+  }
+
   function initProductImageLightbox() {
     if (typeof GLightbox === 'undefined') return;
     
@@ -426,7 +479,9 @@
       width: '90vw',
       height: '90vh'
     });
-    
+
+    setupContinuousGalleryFlow(lightbox);
+
     if (typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined') {
       var $table = jQuery('.datatable');
       if ($table.length) {
