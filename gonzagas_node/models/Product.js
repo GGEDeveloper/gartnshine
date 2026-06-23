@@ -416,6 +416,16 @@ class Product extends BaseModel {
     }
   }
 
+  /** Devolve o id do produto anterior e seguinte (por ordem de id), ignorando buracos deixados por remoções. */
+  static async getAdjacentIds(id) {
+    const [prevRows] = await pool.query('SELECT id FROM products WHERE id < ? ORDER BY id DESC LIMIT 1', [id]);
+    const [nextRows] = await pool.query('SELECT id FROM products WHERE id > ? ORDER BY id ASC LIMIT 1', [id]);
+    return {
+      prevId: prevRows[0] ? prevRows[0].id : null,
+      nextId: nextRows[0] ? nextRows[0].id : null,
+    };
+  }
+
   // Get recent products
   static async getRecent(limit = 5) {
     try {

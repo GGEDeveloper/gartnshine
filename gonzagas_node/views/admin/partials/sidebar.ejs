@@ -12,7 +12,7 @@
 
       <!-- ── Geral ──────────────────────────────────────── -->
       <li class="nav-item">
-        <a class="nav-link <%= (!currentPath || currentPath === '/' || currentPath === '/dashboard') ? 'active' : '' %>" href="/admin/dashboard">
+        <a class="nav-link <%= (!currentPath || currentPath === '/' || currentPath === '/dashboard') ? 'active' : '' %>" href="/admin/dashboard" title="Painel">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Painel</span>
         </a>
@@ -22,35 +22,35 @@
       <li class="nav-section-label">Catálogo</li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/products')) ? 'active' : '' %>" href="/admin/products">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/products')) ? 'active' : '' %>" href="/admin/products" title="Produtos">
           <i class="fas fa-fw fa-gem"></i>
           <span>Produtos</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/quick-product')) ? 'active' : '' %>" href="/admin/quick-product">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/quick-product')) ? 'active' : '' %>" href="/admin/quick-product" title="Criar Rápido">
           <i class="fas fa-fw fa-bolt"></i>
           <span>Criar Rápido</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/product-families')) ? 'active' : '' %>" href="/admin/product-families">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/product-families')) ? 'active' : '' %>" href="/admin/product-families" title="Categorias e Cores">
           <i class="fas fa-fw fa-tags"></i>
           <span>Categorias e Cores</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/inventory')) ? 'active' : '' %>" href="/admin/inventory">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/inventory')) ? 'active' : '' %>" href="/admin/inventory" title="Inventário / Stock">
           <i class="fas fa-fw fa-warehouse"></i>
           <span>Inventário / Stock</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/media')) ? 'active' : '' %>" href="/admin/media/library">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/media')) ? 'active' : '' %>" href="/admin/media/library" title="Media">
           <i class="fas fa-fw fa-images"></i>
           <span>Media</span>
         </a>
@@ -60,14 +60,14 @@
       <li class="nav-section-label">Loja</li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/orders')) ? 'active' : '' %>" href="/admin/orders">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/orders')) ? 'active' : '' %>" href="/admin/orders" title="Pedidos">
           <i class="fas fa-fw fa-shopping-bag"></i>
           <span>Pedidos</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings/ecommerce">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings/ecommerce" title="Loja Online">
           <i class="fas fa-fw fa-store"></i>
           <span>Loja Online</span>
         </a>
@@ -77,14 +77,14 @@
       <li class="nav-section-label">Análise</li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/analytics')) ? 'active' : '' %>" href="/admin/analytics">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/analytics')) ? 'active' : '' %>" href="/admin/analytics" title="Analytics">
           <i class="fas fa-fw fa-chart-line"></i>
           <span>Analytics</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/reports')) ? 'active' : '' %>" href="/admin/reports">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/reports')) ? 'active' : '' %>" href="/admin/reports" title="Rentabilidade">
           <i class="fas fa-fw fa-chart-pie"></i>
           <span>Rentabilidade</span>
         </a>
@@ -94,21 +94,21 @@
       <li class="nav-section-label">Sistema</li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/checkpoints')) ? 'active' : '' %>" href="/admin/checkpoints">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/checkpoints')) ? 'active' : '' %>" href="/admin/checkpoints" title="Checkpoints DB">
           <i class="fas fa-fw fa-database"></i>
           <span>Checkpoints DB</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings') && !currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings') && !currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings" title="Configurações">
           <i class="fas fa-fw fa-cog"></i>
           <span>Configurações</span>
         </a>
       </li>
 
       <li class="nav-item mt-2">
-        <a class="nav-link text-danger" href="/admin/logout">
+        <a class="nav-link text-danger" href="/admin/logout" title="Sair">
           <i class="fas fa-fw fa-sign-out-alt"></i>
           <span>Sair</span>
         </a>

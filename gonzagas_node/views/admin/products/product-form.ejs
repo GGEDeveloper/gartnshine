@@ -3,6 +3,13 @@
 <script src="/js/media-picker.js"></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var f=document.getElementById("productForm");if(f&&window.initCameraForForm)initCameraForForm(f,{imageInputName:"images",multiple:true,mobileOnly:false});});</script>
 <div class="container-fluid px-3 px-md-4 py-3">
+<%
+  const safeBackUrl = typeof backUrl !== 'undefined' && backUrl ? backUrl : '/admin/products';
+  const safeReturnTo = typeof returnTo !== 'undefined' ? returnTo : '';
+  const safePrevId = typeof prevId !== 'undefined' ? prevId : null;
+  const safeNextId = typeof nextId !== 'undefined' ? nextId : null;
+  const navUrl = (id) => '/admin/products/edit/' + id + (safeReturnTo ? '?returnTo=' + encodeURIComponent(safeReturnTo) : '');
+%>
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
         <h1 class="h4 mb-0"><%= title %></h1>
         <% if (product && product.id) { %>
@@ -11,6 +18,29 @@
             </a>
         <% } %>
     </div>
+
+    <% if (product && product.id) { %>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-2 mb-3 product-nav-toolbar">
+        <a href="<%= safeBackUrl %>" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <a href="<%= safePrevId ? navUrl(safePrevId) : '#' %>" class="btn btn-outline-secondary <%= safePrevId ? '' : 'disabled' %>" <%= safePrevId ? '' : 'aria-disabled="true" tabindex="-1"' %> title="Produto anterior (ID <%= safePrevId || '-' %>)">
+                <i class="fas fa-chevron-left"></i> Anterior
+            </a>
+            <form class="product-jump-form d-flex align-items-center gap-1" onsubmit='event.preventDefault(); var id=this.jumpId.value.trim(); if(!id) return; window.location.href="/admin/products/edit/"+encodeURIComponent(id)+<%- JSON.stringify(safeReturnTo ? "?returnTo=" + encodeURIComponent(safeReturnTo) : "") %>;'>
+                <label for="jumpId" class="visually-hidden">Ir para ID</label>
+                <input type="number" min="1" id="jumpId" name="jumpId" class="form-control form-control-sm" style="width: 90px;" placeholder="ID" value="<%= product.id %>">
+                <button type="submit" class="btn btn-outline-secondary btn-sm" title="Ir para o produto com este ID">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Ir
+                </button>
+            </form>
+            <a href="<%= safeNextId ? navUrl(safeNextId) : '#' %>" class="btn btn-outline-secondary <%= safeNextId ? '' : 'disabled' %>" <%= safeNextId ? '' : 'aria-disabled="true" tabindex="-1"' %> title="Próximo produto (ID <%= safeNextId || '-' %>)">
+                Próximo <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+    <% } %>
 
     <%- include('../partials/flash-messages') %>
 
@@ -472,13 +502,13 @@
           
                 <!-- Botões -->
                 <div class="form-group d-flex flex-column flex-sm-row justify-content-between gap-2">
-                    <a href="<%= typeof backUrl !== 'undefined' ? backUrl : '/admin/products' %>" class="btn btn-secondary">
+                    <a href="<%= safeBackUrl %>" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </a>
                     <div>
                         <% if (product && product.id) { %>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="btn btn-danger me-2"
                                 data-notification="Produto excluído com sucesso!"
                                 data-notification-type="success"
@@ -487,8 +517,8 @@
                 <i class="fas fa-trash"></i> Excluir
               </button>
             <% } %>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="btn btn-primary"
                             data-notification="Produto salvo com sucesso!"
                             data-notification-type="success"
@@ -500,6 +530,29 @@
         </form>
       </div>
     </div>
+
+    <% if (product && product.id) { %>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-2 mb-3 product-nav-toolbar">
+        <a href="<%= safeBackUrl %>" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <a href="<%= safePrevId ? navUrl(safePrevId) : '#' %>" class="btn btn-outline-secondary <%= safePrevId ? '' : 'disabled' %>" <%= safePrevId ? '' : 'aria-disabled="true" tabindex="-1"' %> title="Produto anterior (ID <%= safePrevId || '-' %>)">
+                <i class="fas fa-chevron-left"></i> Anterior
+            </a>
+            <form class="product-jump-form d-flex align-items-center gap-1" onsubmit='event.preventDefault(); var id=this.jumpId.value.trim(); if(!id) return; window.location.href="/admin/products/edit/"+encodeURIComponent(id)+<%- JSON.stringify(safeReturnTo ? "?returnTo=" + encodeURIComponent(safeReturnTo) : "") %>;'>
+                <label for="jumpIdBottom" class="visually-hidden">Ir para ID</label>
+                <input type="number" min="1" id="jumpIdBottom" name="jumpId" class="form-control form-control-sm" style="width: 90px;" placeholder="ID" value="<%= product.id %>">
+                <button type="submit" class="btn btn-outline-secondary btn-sm" title="Ir para o produto com este ID">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Ir
+                </button>
+            </form>
+            <a href="<%= safeNextId ? navUrl(safeNextId) : '#' %>" class="btn btn-outline-secondary <%= safeNextId ? '' : 'disabled' %>" <%= safeNextId ? '' : 'aria-disabled="true" tabindex="-1"' %> title="Próximo produto (ID <%= safeNextId || '-' %>)">
+                Próximo <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+    <% } %>
   </div>
 
 <script>

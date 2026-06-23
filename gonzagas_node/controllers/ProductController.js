@@ -276,24 +276,30 @@ class ProductController extends BaseController {
         }
       }
 
-      const [productFamilies, colors] = await Promise.all([ProductFamily.getAll(), getColorsSafe()]);
-      
+      const [productFamilies, colors, adjacentIds] = await Promise.all([
+        ProductFamily.getAll(),
+        getColorsSafe(),
+        Product.getAdjacentIds(productId),
+      ]);
+
       let backUrl = '/admin/products';
       if (returnTo && (returnTo.includes('/admin/products') || returnTo.includes('/catalog/product'))) {
         backUrl = returnTo;
       } else if (req.session.productListQueryParams) {
         backUrl = '/admin/products?' + req.session.productListQueryParams;
       }
-      
+
       res.render('admin/products/product-form', {
         layout: 'admin/layouts/main',
         title: `Edit Product: ${product.name}`,
         product,
         productFamilies,
         colors: colors || [],
-        isNew: false, 
+        isNew: false,
         backUrl: backUrl, // Pass backUrl to view
         returnTo: returnTo, // Pass returnTo for form submission
+        prevId: adjacentIds.prevId,
+        nextId: adjacentIds.nextId,
         breadcrumbs: res.locals.breadcrumb,
         user: req.user,
         csrfToken: req.csrfToken ? req.csrfToken() : null,
@@ -420,44 +426,27 @@ class ProductController extends BaseController {
 
       await generateVariantsFor(allNewImages);
 
+      // Após gravar, permanece na própria página de edição (em vez de voltar para a
+      // lista) — o utilizador usa o botão "Voltar" quando quiser sair, e esse botão
+      // continua a respeitar os filtros/ordenação/página de onde veio.
+      const buildEditUrl = (returnTo) => '/admin/products/edit/' + productId + (returnTo ? '?returnTo=' + encodeURIComponent(returnTo) : '');
+
       try {
         console.log(`Attempting to update product ${productId} with userId: ${userId}`);
         await Product.updateProductWithImages(productId, productData, allNewImages, userId);
         req.flash('success_msg', 'Product updated successfully!');
-        
-        // Preservar filtros e página após update
-        // Priority: returnTo (from form/route) > query params from session > default
+
         const returnTo = res.locals.returnTo || req.body.returnTo || '';
-        let redirectUrl = '/admin/products';
-        
-        if (returnTo) {
-          redirectUrl = returnTo;
-        } else {
-          const queryParams = req.session.productListQueryParams || '';
-          redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
-        }
-        
-        delete req.session.productListQueryParams; // Limpar após usar
-        res.redirect(redirectUrl);
+        res.redirect(buildEditUrl(returnTo));
       } catch (error) {
         if (error.code === 'ER_NO_REFERENCED_ROW_2' && error.sqlMessage && error.sqlMessage.includes('CONSTRAINT `fk_products_updated_by`')) {
           console.warn(`Update failed for product ${productId} due to invalid updated_by user ID: ${userId}. Attempting to save product with updated_by set to NULL.`);
           try {
             await Product.updateProductWithImages(productId, productData, allNewImages, null); // Retry with userId = null
             req.flash('warning_msg', `Product updated. However, the 'updated by' user (ID ${userId}) was not found, so this information was not recorded for this update.`);
-            // Preservar filtros e página após update
+
             const returnTo = res.locals.returnTo || req.body.returnTo || '';
-            let redirectUrl = '/admin/products';
-            
-            if (returnTo) {
-              redirectUrl = returnTo;
-            } else {
-              const queryParams = req.session.productListQueryParams || '';
-              redirectUrl = queryParams ? `/admin/products?${queryParams}` : '/admin/products';
-            }
-            
-            delete req.session.productListQueryParams;
-            res.redirect(redirectUrl);
+            res.redirect(buildEditUrl(returnTo));
           } catch (retryError) {
             console.error(`Error updating product ${productId} even after attempting with updated_by = NULL:`, retryError);
             req.flash('error_msg', `Product update failed. User ID ${userId} may be invalid. (Details: ${retryError.message})`);

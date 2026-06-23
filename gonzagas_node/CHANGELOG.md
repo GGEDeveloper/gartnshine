@@ -1,5 +1,30 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: sidebar colapsável + navegação melhorada na edição de produtos
+
+### 🗂️ **Sidebar: gaveta colapsável em qualquer tamanho de ecrã**
+- **Causa**: existiam **4 scripts diferentes** a competir pelo mesmo botão de toggle (`admin.js`, `admin-mobile-complete-solution.js`, `admin-mobile-buttons-fix.js`, e um `admin-mobile-fix.js` morto nem chegava a ser carregado), cada um a clonar o botão e substituir os listeners dos outros, usando classes inconsistentes (`sidebar-toggled` vs `sidebar-open` vs `.sidebar.open`) — comportamento instável e imprevisível
+- Consolidado num único controlador em `admin.js`, com `admin-layout-fix-definitive.css` como única fonte de verdade para o layout sidebar/conteúdo
+- **Desktop (≥992px)**: a sidebar pode agora ser encolhida para um modo "rail" de ícones (76px) através do botão de toggle; estado guardado em `localStorage` e restaurado entre sessões
+- **Mobile/tablet (<992px)**: mantém-se o auto-hide (gaveta escondida por defeito), agora com um único overlay/backdrop, fecho por clique fora, Escape, clique num link de navegação, ou swipe
+- Removidos os 3 scripts mortos/conflituosos (`admin-mobile-complete-solution.js`, `admin-mobile-buttons-fix.js`, `admin-mobile-fix.js`) e o bloco CSS duplicado equivalente em `admin.css`
+- Tooltips nativos (`title`) adicionados a cada item do menu, visíveis quando a sidebar está no modo rail
+
+### 📝 **Edição de Produto: permanece na página após gravar + navegação entre produtos**
+- **Guardar mantém na página**: após gravar com sucesso, deixa de redirecionar para a lista — fica no formulário de edição (com mensagem de sucesso), preservando o `returnTo` para quando o utilizador quiser voltar
+- **Botão "Voltar"** (topo e fundo da página) reverte realmente para a página anterior; se vier da lista de Produtos, preserva filtros, ordenação e página — corrigido um bug onde o parâmetro `returnUrl` da lista era ignorado por um valor por defeito definido demasiado cedo no middleware da rota
+- **Navegação Anterior/Próximo** (topo e fundo): avança/recua para o produto com o id anterior/seguinte existente na BD (ignora buracos deixados por remoções), novo método `Product.getAdjacentIds()`; desactivado nas pontas (primeiro/último produto)
+- **Caixa "Ir para ID"**: campo numérico + botão para saltar directamente para o produto com esse id
+- Todos os links de navegação (Anterior/Próximo/Ir) preservam o `returnTo` corrente, para que o "Voltar" continue válido depois de navegar entre vários produtos
+
+### ✅ **Validado**
+- Inspecção de DOM via Puppeteer: sidebar colapsada mede 76px e persiste após reload; gaveta mobile abre/fecha com backdrop, Escape e clique fora
+- Fluxo completo testado: lista filtrada → editar → gravar (fica na página) → Anterior/Próximo/Ir para ID → Voltar (filtros preservados)
+- Comportamento de fronteira confirmado: "Anterior" desactivado no primeiro produto (id 1), "Próximo" desactivado no último (id 334)
+- `npm run validate:catalog` — OK (328 produtos)
+
+---
+
 ## [2026-06-23] - Admin: corrige layout desparametrizado da tabela de Produtos
 
 ### 🐛 **Causa raiz: `</div>` órfão colapsava ~493px de largura em todo o admin**

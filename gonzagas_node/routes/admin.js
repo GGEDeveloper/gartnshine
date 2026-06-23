@@ -388,8 +388,10 @@ router.post('/products/create',
   ProductController.store
 );
 router.get('/products/edit/:id', adminSessionRequired, (req, res, next) => {
-  // Capture returnTo parameter from query string
-  res.locals.returnTo = req.query.returnTo || '/admin/products';
+  // Capture returnTo/returnUrl parameter from query string (sem valor por
+  // defeito aqui — deixa o controller decidir o fallback, senão nunca chega
+  // a olhar para req.query.returnUrl)
+  res.locals.returnTo = req.query.returnTo || req.query.returnUrl || '';
   next();
 }, ProductController.edit);
 

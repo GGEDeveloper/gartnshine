@@ -874,65 +874,9 @@ a:hover {
 /* Responsive Adjustments for Admin    */
 /* =================================== */
 
-/* Styles for screens smaller than 992px (Bootstrap lg breakpoint) */
-@media (max-width: 991.98px) {
-  .sidebar {
-    position: fixed; /* Make sidebar fixed for overlay effect */
-    top: 0;
-    left: 0;
-    height: 100vh; /* Full height */
-    width: var(--sidebar-width); /* Use existing width variable */
-    z-index: 1030; /* Ensure it's above most content, below modals if any */
-    background-color: var(--dark); /* Or your sidebar's background color */
-    transform: translateX(-100%); /* Start hidden off-screen */
-    transition: transform 0.3s ease-in-out;
-    overflow-y: auto; /* Allow scrolling within sidebar if content is long */
-  }
-
-  /* When sidebar is toggled ON (body has .sidebar-toggled class from JS) */
-  /* The JS adds .sidebar-toggled to body when sidebar should be hidden/compact */
-  body.sidebar-toggled .sidebar {
-    transform: translateX(-100%); /* Slide out */
-  }
-
-  body:not(.sidebar-toggled) .sidebar {
-    transform: translateX(0); /* Slide in */
-    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Optional: add shadow when open */
-  }
-
-  .main {
-    padding-left: 0; /* Remove desktop padding for sidebar */
-    transition: margin-left 0.3s ease-in-out; /* Smooth transition if needed */
-  }
-
-  /* Optional: Add an overlay to the main content when sidebar is open on mobile */
-  body:not(.sidebar-toggled):not(.body-auth)::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1029; /* Below sidebar, above content */
-    display: block;
-  }
-  
-  /* Ensure the overlay is removed when sidebar is closed */
-  body.sidebar-toggled::before {
-    display: none;
-  }
-
-  /* Adjust header if necessary, e.g., if sidebar overlaps it */
-  /* .header {
-    If your header is fixed, you might need to adjust its z-index or width
-  } */
-
-  /* Make sure main content is not shifted when overlay is active */
-  /* body:not(.sidebar-toggled) .main {
-     No margin shift needed if sidebar is an overlay
-  } */
-}
+/* Layout da sidebar em mobile/tablet (<992px) e o modo "rail" colapsado do
+   desktop vivem inteiramente em admin-layout-fix-definitive.css (fonte única
+   de verdade, carregada depois deste ficheiro com maior especificidade). */
 
 /* Further adjustments for very small screens if needed */
 @media (max-width: 575.98px) {
