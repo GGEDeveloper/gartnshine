@@ -20,6 +20,13 @@ const config = require('./config/config');
 // Inicializa o aplicativo Express
 const app = express();
 
+// Carimbo gerado no arranque do processo — usado como cache-buster (?v=) para
+// CSS/JS estáticos. Os ficheiros estáticos são servidos com Cache-Control
+// "immutable" por até 1 semana em produção; sem este carimbo a mudar a cada
+// deploy/restart, browsers que já visitaram o admin ficam presos a versões
+// antigas de admin.js/admin.css mesmo depois de um redeploy.
+const SERVER_BOOT_VERSION = Date.now().toString();
+
 // Trust proxy - CRÍTICO em produção (nginx/Cloudflare): usa X-Forwarded-For para IP real
 // Sem isto, todos os utilizadores partilham o mesmo IP do proxy → rate limit dispara para todos
 const trustProxy = process.env.TRUST_PROXY;
@@ -187,7 +194,10 @@ app.use((req, res, next) => {
   // Dados comuns a todas as views
   res.locals.app = {
     name: 'Gonzaga\'s Art & Shine',
-    version: process.env.APP_VERSION || (process.env.NODE_ENV === 'production' ? '1.0.0' : Date.now().toString()),
+    // APP_VERSION (env) permite fixar a versão manualmente; sem isso, usa o
+    // carimbo de arranque do processo para garantir cache-busting automático
+    // a cada deploy/restart, mesmo em produção.
+    version: process.env.APP_VERSION || SERVER_BOOT_VERSION,
     environment: app.get('env'),
     baseUrl: process.env.BASE_URL || 'https://artnshine.pt'
   };

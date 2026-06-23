@@ -1,5 +1,23 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Fix crítico: cache "immutable" impedia que redeploys chegassem aos browsers
+
+### 🐛 **Causa raiz: botão da sidebar "não funcionava" após redeploy em produção**
+- `app.locals.app.version`, usado para cache-busting (`?v=...`) nos CSS/JS, estava **fixo em `'1.0.0'` em produção** — nunca mudava entre deploys, a menos que alguém bombasse manualmente a env var `APP_VERSION`
+- Combinado com `Cache-Control: public, max-age=604800, immutable` (1 semana, sem revalidação) nos ficheiros estáticos em produção, isto significa que **qualquer browser que já tivesse visitado o admin ficava preso à versão antiga de `admin.js`/CSS por até 7 dias após um redeploy** — o botão da sidebar continuava a correr a lógica antiga (das versões anteriores a este trabalho) mesmo depois do código novo estar no servidor
+- O layout do admin (`views/admin/layouts/main.ejs`) nem usava `?v=` nos seus `<link>`/`<script>` locais — único entre os layouts do site, o público (`views/layouts/main.ejs`) já tinha esse cache-busting (também afectado pelo mesmo `app.version` estático)
+- **Suspeita**: este é provavelmente a causa de fundo de várias correções documentadas neste changelog que "não pareciam aplicar-se" após deploy, ao longo do histórico do projecto
+
+### ✅ **Correção**
+- `app.version` passa a usar um carimbo temporal gerado no arranque do processo (`Date.now()` calculado uma vez, fora do request handler) em **todos** os ambientes — cada deploy/restart do servidor gera uma versão nova automaticamente, sem intervenção manual; `APP_VERSION` (env) continua a poder fixar um valor manualmente se algum dia for necessário
+- Adicionado `?v=<%= app.version %>` a todos os `<link>`/`<script>` locais do layout do admin (antes sem nenhum cache-busting)
+
+### ✅ **Validado**
+- Arranque em `NODE_ENV=production`: confirmado que `admin.js` e todos os CSS do admin são pedidos com `?v=<timestamp do arranque>`, apesar de continuarem a ser servidos com `Cache-Control: ... immutable`
+- Sidebar (colapsar/expandir, gaveta mobile) testada de novo em modo produção — funciona
+
+---
+
 ## [2026-06-23] - Admin: slider de tamanho de imagem na lista de Produtos
 
 ### 🖼️ **Tamanho da miniatura ajustável (só nesta página)**
