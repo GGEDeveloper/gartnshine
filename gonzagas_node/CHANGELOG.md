@@ -1,5 +1,16 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: UX melhorada tabela de produtos
+
+### 🎨 **Margens reduzidas e filtros persistentes**
+- **Margens laterais**: Reduzidas de px-3/px-md-4 para px-2/px-md-3 para maximizar espaço
+- **Persistência de filtros**: Filtros agora são salvos em localStorage e restaurados ao voltar à página
+- **Drawer de filtros em mobile**: Filtros agora ficam numa gaveta lateral em mobile para não ocupar espaço
+- **UX melhorada**: Ao editar um produto e voltar, filtros e ordenação são mantidos
+- **Botão "Limpar"**: Remove filtros do localStorage para reset completo
+
+---
+
 ## [2026-06-23] - Admin: tabela de produtos responsiva
 
 ### 📊 **Tabela de produtos - responsividade melhorada**

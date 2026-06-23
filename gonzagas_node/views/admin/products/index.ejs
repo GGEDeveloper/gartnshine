@@ -1,4 +1,4 @@
-<div class="container-fluid px-3 px-md-4 py-3">
+<div class="container-fluid px-2 px-md-3 py-3">
   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
     <h1 class="h4 mb-0"><%= title %></h1>
     <a href="/admin/products/add" class="btn btn-primary">
@@ -9,10 +9,16 @@
   <%- include('../partials/flash-messages') %>
 
   <div class="card mb-3">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="card-title mb-0">Filtros</h5>
+      <button type="button" class="btn btn-sm btn-outline-secondary d-md-none" id="toggle-filters-drawer">
+        <i class="fas fa-filter"></i> Filtros
+      </button>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="filters-container">
+      <button type="button" class="btn btn-sm btn-outline-secondary filters-close-btn d-md-none" id="close-filters-drawer">
+        <i class="fas fa-times"></i>
+      </button>
       <form id="product-filters" class="table-filters" method="GET" action="/admin/products">
         <div class="filter-row">
           <div class="filter-group">
@@ -461,6 +467,74 @@
     padding: 1rem 0.75rem;
   }
 }
+
+/* ===== FILTERS DRAWER (MOBILE) ===== */
+@media (max-width: 767.98px) {
+  #filters-container {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: white;
+    z-index: 1050;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+    padding: 1.5rem;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  }
+  
+  #filters-container.open {
+    right: 0;
+  }
+  
+  #filters-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  #filters-container.open::before {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+  }
+  
+  .filter-group {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-group.actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .filter-group.actions .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Botão fechar drawer */
+  .filters-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+  }
+}
 </style>
 `); %>
 
@@ -468,13 +542,79 @@
 (function() {
   'use strict';
   
+  // ===== FILTERS DRAWER (MOBILE) =====
+  function setupFiltersDrawer() {
+    const toggleBtn = document.getElementById('toggle-filters-drawer');
+    const closeBtn = document.getElementById('close-filters-drawer');
+    const filtersContainer = document.getElementById('filters-container');
+    
+    if (!toggleBtn || !closeBtn || !filtersContainer) return;
+    
+    // Open drawer
+    toggleBtn.addEventListener('click', function() {
+      filtersContainer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    // Close drawer
+    closeBtn.addEventListener('click', function() {
+      filtersContainer.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+    
+    // Close drawer when clicking overlay
+    filtersContainer.addEventListener('click', function(e) {
+      if (e.target === filtersContainer) {
+        filtersContainer.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+  
   // Ensure filters persist when form is submitted
   function setupFilterPersistence() {
     const filterForm = document.getElementById('product-filters');
     if (!filterForm) return;
     
-    // When form is submitted, ensure page is reset to 1 but filters are preserved
+    // Save filter state to localStorage
+    function saveFilters() {
+      const formData = new FormData(filterForm);
+      const filters = {};
+      formData.forEach((value, key) => {
+        if (value) filters[key] = value;
+      });
+      try {
+        localStorage.setItem('admin-products-filters', JSON.stringify(filters));
+      } catch (e) {}
+    }
+    
+    // Load filter state from localStorage
+    function loadFilters() {
+      try {
+        const saved = localStorage.getItem('admin-products-filters');
+        if (saved) {
+          const filters = JSON.parse(saved);
+          Object.keys(filters).forEach(key => {
+            const input = filterForm.querySelector(`[name="${key}"]`);
+            if (input) {
+              if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = true;
+              } else {
+                input.value = filters[key];
+              }
+            }
+          });
+        }
+      } catch (e) {}
+    }
+    
+    // Load filters on page load
+    loadFilters();
+    
+    // Save filters when form is submitted
     filterForm.addEventListener('submit', function(e) {
+      saveFilters();
+      
       // Add hidden input for page=1 to ensure we start from page 1 when filters change
       // Remove any existing page input first
       const existingPageInput = filterForm.querySelector('input[name="page"]');
@@ -491,6 +631,16 @@
       
       // Form will submit normally with all fields including page=1
     });
+    
+    // Clear filters button
+    const clearBtn = filterForm.querySelector('a[href="/admin/products"]');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function(e) {
+        try {
+          localStorage.removeItem('admin-products-filters');
+        } catch (e) {}
+      });
+    }
   }
   
   var GALLERY_PENDING_KEY = 'admin-products-pending-lightbox-open';
@@ -676,6 +826,7 @@
   
   // Initialize when DOM is ready
   function init() {
+    setupFiltersDrawer();
     setupFilterPersistence();
     initProductImageLightbox();
   }
