@@ -1,5 +1,110 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Admin: UX melhorada tabela de produtos
+
+### 🎨 **Margens reduzidas e filtros persistentes**
+- **Margens laterais**: Reduzidas de px-3/px-md-4 para px-2/px-md-3 para maximizar espaço
+- **Persistência de filtros**: Filtros agora são salvos em localStorage e restaurados ao voltar à página
+- **Drawer de filtros em mobile**: Filtros agora ficam numa gaveta lateral em mobile para não ocupar espaço
+- **UX melhorada**: Ao editar um produto e voltar, filtros e ordenação são mantidos
+- **Botão "Limpar"**: Remove filtros do localStorage para reset completo
+
+---
+
+## [2026-06-23] - Admin: tabela de produtos responsiva
+
+### 📊 **Tabela de produtos - responsividade melhorada**
+- **Problema**: Tabela de produtos no admin ficava ilegível ao reduzir o tamanho da página
+- **Solução**: Adicionado CSS responsivo específico para a tabela de produtos:
+  - Tablets/laptops pequenos (768px-1200px): font-size 0.85rem, padding reduzido
+  - Laptops muito pequenos (992px): font-size 0.8rem, imagens 40px, badges compactos
+  - Mobile (<768px): usa cards em vez de tabela (já existente)
+  - Desktop grande (1400px+): font-size 0.9rem, padding aumentado
+- **Impacto**: Tabela ajusta-se automaticamente ao tamanho do ecrã mantendo legibilidade
+
+---
+
+## [2026-06-23] - Error: correção layout duplicado
+
+### 🐛 **Páginas de erro desformatadas corrigidas**
+- **Problema**: Páginas de erro apareciam com header/footer duplicados em desktop após erro OAuth
+- **Causa**: `res.render('error')` estava a usar o layout principal por defeito, causando duplicação de elementos
+- **Solução**: Adicionado `{ layout: false }` a todos os `render('error')` em:
+  - `app.js` (error handlers globais)
+  - `modules/ecommerce/admin/routes/orders.js`
+  - `modules/ecommerce/cart/middleware/requireEcommerceEnabled.js`
+  - `routes/admin.js` e `routes/admin/media.js`
+  - `controllers/CatalogController.js`, `CookieConsentController.js`, `UserRightsController.js`
+  - `routes/index.js`
+- **Impacto**: Páginas de erro agora são standalone sem duplicação de layout
+
+---
+
+## [2026-06-23] - Mobile: correções páginas de erro
+
+### 📱 **Páginas de erro - mobile otimizado**
+- **Problema**: Páginas de erro (error.ejs, 404.ejs, 500.ejs) não estavam otimizadas para mobile
+- **Solução**:
+  - Adicionada media query `@media (max-width: 768px)` em todas as páginas de erro
+  - Ajustado padding e max-width para melhor uso de espaço em ecrãs pequenos
+  - Botões com `min-height: 48px` e `width: 100%` para touch targets adequados
+  - Tamanhos de fonte reduzidos para melhor legibilidade em mobile
+
+---
+
+## [2026-06-23] - Mobile: correções header, criar conta e Google OAuth
+
+### 📱 **Header mobile - layout corrigido**
+- **Problema**: Header não ajustava bem o tamanho em mobile devido a max-width fixo e falta de estilos
+- **Solução**: 
+  - Adicionado `.logo-container { flex-shrink: 0 }` para evitar compressão do logo
+  - Adicionado `gap: 0.5rem` ao `.header-container` para consistência
+  - Removido `max-width: 1200px` do header em mobile (`max-width: none`)
+  - Ajustado tamanho do logo com `clamp(1rem, 4vw, 1.25rem)` para responsividade fluida
+
+### 📱 **Página criar conta - mobile otimizado**
+- **Problema**: Formulário com max-width fixo, touch targets pequenos, padding excessivo
+- **Solução**:
+  - Adicionada media query `@media (max-width: 768px)` em `account.css`
+  - `.account-form-wrap` ajustado para `max-width: 100%` com padding lateral
+  - Inputs com `min-height: 44px` e `font-size: 16px` (evita zoom iOS)
+  - Botão Google e botão primário com `min-height: 48px` para touch targets adequados
+  - Padding da página reduzido de `2.5rem 0 3.5rem` para `1.5rem 0 2rem` em mobile
+
+### 🔐 **Google OAuth - correções mobile**
+- **Problema**: Prompt 'select_account' causava problemas em browsers mobile, falta de tratamento de erros
+- **Solução**:
+  - Removido `prompt: 'select_account'` do Passport authenticate (causava inconsistência em mobile)
+  - Adicionado `console.error` e flash message específica no callback OAuth
+  - Melhorado tratamento de erros com mensagem "Erro ao autenticar com Google. Tente novamente."
+- **Nota**: A variável `GOOGLE_CALLBACK_URL` no `.env` deve estar configurada para o domínio de produção (não localhost)
+
+### ✅ **Validado**
+- `node --check` em `modules/ecommerce/accounts/routes/pages.js` — sem erros
+- Sintaxe CSS validada
+
+---
+
+## [2026-06-23] - Bugfix: rotação EXIF de imagens e checkboxes Criar Rápido
+
+### 🐛 **Rotação de imagens 90º counter-clockwise corrigida**
+- **Problema**: Imagens carregadas via Criar Rápido ou edição de produtos apareciam rodadas 90º no sentido anti-horário
+- **Causa**: O pipeline de processamento de imagens (`productImageProcessor.js`) não lidava com metadados EXIF de orientação
+- **Solução**: Adicionado `.rotate()` ao pipeline Sharp em `resizeToJpeg()` e `resizeToWebp()` para correção automática de orientação EXIF
+- **Impacto**: Todas as novas imagens processadas terão orientação correta; para imagens existentes, executar `node scripts/generate-product-image-variants.js --force`
+
+### 🐛 **Checkboxes Criar Rápido inconsistentes corrigidos**
+- **Problema**: Selectores "Ativo", "Visível no Catálogo" e "Destaque" no Criar Rápido não guardavam corretamente o estado após redirect
+- **Causa**: Lógica de pré-seleção usava `!== false` (true para undefined) mas salvamento esperava explicitamente `'1'`
+- **Solução**: Criadas helper functions `normalizeCheckbox()` e `boolToQueryParam()` para normalizar valores de forma consistente em todo o controller
+- **Impacto**: Estado dos checkboxes agora preservado corretamente entre submissões consecutivas no Criar Rápido
+
+### ✅ **Validado**
+- `node --check` em `utils/productImageProcessor.js` e `controllers/QuickProductController.js` — sem erros
+- Sintaxe JavaScript validada
+
+---
+
 ## [2026-06-23] - Admin: melhorias de fluxo no Criar Rápido, Produtos e galeria
 
 ### ✨ **Criar Produto Rápido — visibilidade + memória de escolha**

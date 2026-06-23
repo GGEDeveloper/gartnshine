@@ -37,7 +37,8 @@ async function run() {
         if (
           err.code === 'ER_TABLE_EXISTS_ERROR' ||
           err.code === 'ER_DUP_ENTRY' ||
-          err.code === 'ER_DUP_FIELDNAME'
+          err.code === 'ER_DUP_FIELDNAME' ||
+          err.code === 'ER_DUP_KEYNAME'
         ) {
           continue;
         }

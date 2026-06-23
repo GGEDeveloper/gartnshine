@@ -582,7 +582,7 @@ app.use((err, req, res, next) => {
       message: err.message,
       stack: err.stack
     } : {}
-  });
+  }, { layout: false });
 });
 
 // Tratamento de erros 404
@@ -591,7 +591,7 @@ app.use((req, res, next) => {
   res.status(404).render('error', {
     title: 'Página não encontrada',
     message: 'A página que você está procurando não existe ou foi movida.'
-  });
+  }, { layout: false });
 });
 
 // Error logging middleware

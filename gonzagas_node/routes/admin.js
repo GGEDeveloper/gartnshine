@@ -489,7 +489,7 @@ router.get('/checkpoints', adminSessionRequired, async (req, res) => {
     res.status(500).render('error', {
       title: 'Erro',
       message: 'Falha ao carregar checkpoints.'
-    });
+    }, { layout: false });
   }
 });
 

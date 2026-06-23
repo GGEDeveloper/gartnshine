@@ -193,7 +193,7 @@ class CookieConsentController extends BaseController {
       res.status(500).render('error', {
         title: 'Erro',
         message: 'Erro ao carregar configurações de privacidade'
-      });
+      }, { layout: false });
     }
   }
 

@@ -9,7 +9,7 @@ const fs = require('fs');
 
 // Lista de módulos ativos
 const activeModules = [
-  'core',
+
   'clients',
   'suppliers',
   'products',

@@ -3,6 +3,14 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Customer = require('../models/Customer');
 
 function setupPassport() {
+  const clientID = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  
+  if (!clientID || !clientSecret || clientID.includes('CHANGE_ME')) {
+    console.warn('[passport] Google OAuth desactivado — GOOGLE_CLIENT_ID/SECRET em falta no .env');
+    return;
+  }
+  
   passport.use(
     new GoogleStrategy(
       {
@@ -12,6 +20,12 @@ function setupPassport() {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
+          console.log('[Google OAuth] Profile received:', {
+            id: profile.id,
+            email: profile.emails?.[0]?.value,
+            name: profile.name?.givenName + ' ' + profile.name?.familyName
+          });
+
           const email = profile.emails?.[0]?.value;
           const firstName = profile.name?.givenName || '';
           const lastName = profile.name?.familyName || '';
@@ -25,8 +39,10 @@ function setupPassport() {
             avatarUrl,
           });
 
+          console.log('[Google OAuth] Customer found/created:', customer.id);
           return done(null, customer);
         } catch (err) {
+          console.error('[Google OAuth] Error in strategy:', err);
           return done(err);
         }
       }

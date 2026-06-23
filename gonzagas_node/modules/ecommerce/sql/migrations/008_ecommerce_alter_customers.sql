@@ -22,4 +22,4 @@ ALTER TABLE `customers` ADD COLUMN `shipping_postal_code` varchar(20) DEFAULT NU
 
 ALTER TABLE `customers` ADD COLUMN `shipping_country` varchar(100) DEFAULT 'Portugal' AFTER `shipping_postal_code`;
 
-ALTER TABLE `customers` ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1 AFTER `marketing_consent`;
+ALTER TABLE `customers` ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1 AFTER `shipping_country`;

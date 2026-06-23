@@ -258,7 +258,7 @@ router.get(
     }
     next();
   },
-  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' })
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 router.get(
@@ -266,6 +266,8 @@ router.get(
   passport.authenticate('google', { failureRedirect: '/account/login', session: false }),
   async (req, res) => {
     try {
+      console.log('[Google OAuth] Callback received, req.user:', req.user);
+      
       const customer = req.user;
       req.session.customerId = customer.id;
       req.session.customerEmail = customer.email;
@@ -273,11 +275,15 @@ router.get(
       const returnTo = req.session.oauthReturnTo;
       delete req.session.oauthReturnTo;
 
+      console.log('[Google OAuth] Redirecting to:', returnTo || '/account/orders');
+
       if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
         return res.redirect(returnTo);
       }
       res.redirect('/account/orders');
     } catch (err) {
+      console.error('[Google OAuth] Callback error:', err);
+      req.flash('error', 'Erro ao autenticar com Google. Tente novamente.');
       res.redirect('/account/login');
     }
   }

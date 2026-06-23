@@ -147,7 +147,7 @@ class CatalogController {
         title: 'Erro',
         message: 'Ocorreu um erro ao carregar o catálogo.',
         error: {}
-      });
+      }, { layout: false });
     }
   }
 }

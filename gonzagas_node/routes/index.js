@@ -118,7 +118,7 @@ router.get('/collections', async (req, res) => {
       return res.status(500).render('error', {
         title: 'Error',
         message: 'Media directory not found.'
-      });
+      }, { layout: false });
     }
     
     // Filter only image files and exclude banner-about.jpg
@@ -166,7 +166,7 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
       return res.status(404).render('error', {
         title: 'Not Found',
         message: 'Collection not found.'
-      });
+      }, { layout: false });
     }
 
     // 301 redirect from numeric ID to slug URL when slug exists
@@ -191,7 +191,7 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
     res.status(500).render('error', {
       title: 'Error',
       message: 'Failed to load the collection.'
-    });
+    }, { layout: false });
   }
 });
 
@@ -231,7 +231,7 @@ router.get('/catalog/product/:idOrSlug', async (req, res) => {
     const id = results.length > 0 ? results[0].id : idOrSlug;
     
     if (results.length === 0) {
-      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado' });
+      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado' }, { layout: false });
     }
     
     const product = results[0];
@@ -313,7 +313,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     
   } catch (error) {
     console.error('Product error:', error);
-    res.status(500).render('error', { title: 'Erro', message: 'Erro interno' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro interno' }, { layout: false });
   }
 });
 
@@ -443,7 +443,7 @@ router.get('/search', async (req, res) => {
     
   } catch (error) {
     console.error('Search results error:', error);
-    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados' });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados' }, { layout: false });
   }
 });
 

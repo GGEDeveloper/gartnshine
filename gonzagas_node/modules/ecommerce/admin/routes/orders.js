@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const order = await Order.findByIdWithItems(parseInt(req.params.id, 10));
-    if (!order) return res.status(404).render('error', { title: '404', message: 'Pedido não encontrado' });
+    if (!order) return res.status(404).render('error', { title: '404', message: 'Pedido não encontrado' }, { layout: false });
     res.render('admin/orders/detail', { title: `Pedido ${order.order_number}`, order });
   } catch (err) {
     next(err);

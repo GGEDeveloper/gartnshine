@@ -83,7 +83,7 @@ router.get('/media/library', adminSessionRequired, async (req, res) => {
             title: 'Erro',
             message: 'Erro ao carregar biblioteca de media',
             error: process.env.NODE_ENV === 'development' ? error : {}
-        });
+        }, { layout: false });
     }
 });
 
