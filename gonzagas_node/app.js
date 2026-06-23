@@ -468,6 +468,9 @@ app.locals.theme = {
   colorHighlight: '#C0C0C0'
 };
 
+// Helper de imagens de produto (variantes otimizadas: full/medium/small/thumb)
+app.locals.productImg = require('./utils/productImageProcessor').productImg;
+
 // Add user to all routes
 app.use((req, res, next) => {
   try {

@@ -6,6 +6,19 @@ const ProductColor = require('../models/ProductColor');
 const getColorsSafe = async () => { try { return await ProductColor.getActive(); } catch { return []; } };
 const { body, validationResult } = require('express-validator');
 const path = require('path'); // For image path manipulation
+const { processProductImage } = require('../utils/productImageProcessor');
+
+/** Gera as variantes (full/medium/small/thumb) para cada imagem nova/seleccionada. Nunca bloqueia o fluxo em caso de erro. */
+async function generateVariantsFor(images) {
+  for (const img of images) {
+    if (!img || !img.filename) continue;
+    try {
+      await processProductImage(img.filename);
+    } catch (err) {
+      console.warn('Falha ao gerar variantes para', img.filename, err.message);
+    }
+  }
+}
 
 class ProductController extends BaseController {
   constructor() {
@@ -169,7 +182,9 @@ class ProductController extends BaseController {
       if (mainImage) {
         images.unshift(mainImage);
       }
-      
+
+      await generateVariantsFor(images);
+
       await Product.createProductWithImages(productData, images, req.user.id);
       
       req.flash('success_msg', 'Product created successfully!');
@@ -400,6 +415,8 @@ class ProductController extends BaseController {
         console.error('Critical: User ID not found in req.user or req.session.user in ProductController.update');
       }
       console.log(`ProductController.update: Using userId: ${userId}`);
+
+      await generateVariantsFor(allNewImages);
 
       try {
         console.log(`Attempting to update product ${productId} with userId: ${userId}`);

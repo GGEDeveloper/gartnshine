@@ -65,7 +65,10 @@
             <div class="products-mobile-card">
               <div class="card-top">
                 <% if (product.image_url) { %>
-                  <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="card-img">
+                  <picture>
+                    <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                    <img src="<%= productImg(product.image_url, 'thumb').jpg %>" alt="<%= product.name %>" class="card-img" loading="lazy">
+                  </picture>
                 <% } else { %>
                   <div class="card-img img-placeholder d-flex align-items-center justify-content-center"><i class="fas fa-gem text-muted"></i></div>
                 <% } %>
@@ -138,16 +141,19 @@
                       <td><%= product.id %></td>
                       <td>
                         <% if (product.image_url) { %>
-                          <a href="/media/products/<%= product.image_url %>" 
-                             class="glightbox product-image-link" 
+                          <a href="<%= productImg(product.image_url, 'full').jpg %>"
+                             class="glightbox product-image-link"
                              data-glightbox="type: image; title: <%= product.name %>"
                              data-gallery="product-gallery"
                              style="display: inline-block; position: relative; width: 50px; height: 50px; cursor: pointer;">
-                            <img src="/media/products/<%= product.image_url %>" 
-                                 alt="<%= product.name %>" 
-                                 class="img-thumbnail" 
-                                 style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
-                                 loading="lazy">
+                            <picture>
+                              <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                              <img src="<%= productImg(product.image_url, 'thumb').jpg %>"
+                                   alt="<%= product.name %>"
+                                   class="img-thumbnail"
+                                   style="width: 50px; height: 50px; object-fit: cover; transition: transform 0.3s ease;"
+                                   loading="lazy">
+                            </picture>
                             <div class="zoom-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; pointer-events: none;">
                               <i class="fas fa-search-plus text-white" style="font-size: 16px;"></i>
                             </div>

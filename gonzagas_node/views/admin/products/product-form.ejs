@@ -364,11 +364,12 @@
                                 <% product.images.forEach((img, index) => { %>
                                     <div class="col-md-3 col-sm-4 col-6">
                                         <div class="card h-100 <%= img.is_primary ? 'border-primary border-2' : '' %>" style="position: relative;">
-                                            <img src="/media/products/<%= img.image_filename %>" 
-                                                 class="card-img-top" 
-                                                 alt="Imagem <%= index + 1 %>" 
+                                            <img src="<%= productImg(img.image_filename, 'small').jpg %>"
+                                                 class="card-img-top"
+                                                 alt="Imagem <%= index + 1 %>"
                                                  style="height: 150px; object-fit: cover; cursor: pointer;"
-                                                 onclick="openImageModal('/media/products/<%= img.image_filename %>')">
+                                                 loading="lazy"
+                                                 onclick="openImageModal('<%= productImg(img.image_filename, 'full').jpg %>')">
                                             <div class="card-body p-2">
                                                 <% if (img.is_primary) { %>
                                                     <span class="badge bg-primary mb-2">
@@ -410,11 +411,12 @@
                         <div class="mb-3">
                             <h6 class="mb-2">Imagem Atual</h6>
                             <div class="card" style="max-width: 200px;">
-                                <img src="/media/products/<%= product.image_url %>" 
-                                     class="card-img-top" 
-                                     alt="<%= product.name %>" 
+                                <img src="<%= productImg(product.image_url, 'small').jpg %>"
+                                     class="card-img-top"
+                                     alt="<%= product.name %>"
                                      style="height: 150px; object-fit: cover; cursor: pointer;"
-                                     onclick="openImageModal('/media/products/<%= product.image_url %>')">
+                                     loading="lazy"
+                                     onclick="openImageModal('<%= productImg(product.image_url, 'full').jpg %>')">
                                 <div class="card-body p-2">
                                     <span class="badge bg-primary">
                                         <i class="fas fa-star"></i> Imagem Principal

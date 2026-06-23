@@ -190,7 +190,10 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                   <a href="/admin/products/edit/<%= product.id %>" class="d-flex align-items-center text-decoration-none flex-grow-1">
                     <% if (product.image_url) { %>
-                      <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="rounded me-3" style="width: 48px; height: 48px; object-fit: cover;">
+                      <picture>
+                        <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                        <img src="<%= productImg(product.image_url, 'thumb').jpg %>" alt="<%= product.name %>" class="rounded me-3" style="width: 48px; height: 48px; object-fit: cover;" loading="lazy">
+                      </picture>
                     <% } else { %>
                       <div class="rounded d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(0,0,0,0.6); border: 1px solid rgba(192,192,192,0.15);">
                         <i class="fas fa-gem text-muted"></i>

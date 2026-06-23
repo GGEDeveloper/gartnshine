@@ -2,6 +2,7 @@ const path = require('path');
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const ProductColor = require('../models/ProductColor');
+const { processProductImage } = require('../utils/productImageProcessor');
 
 const getColorsSafe = async () => {
   try { return await ProductColor.getActive(); } catch { return []; }
@@ -100,6 +101,14 @@ class QuickProductController {
         const imgFile = Array.isArray(req.files.image) ? req.files.image[0] : req.files.image;
         if (imgFile?.filename) {
           images = [{ filename: imgFile.filename, is_primary: true }];
+        }
+      }
+
+      for (const img of images) {
+        try {
+          await processProductImage(img.filename);
+        } catch (err) {
+          console.warn('Falha ao gerar variantes para', img.filename, err.message);
         }
       }
 

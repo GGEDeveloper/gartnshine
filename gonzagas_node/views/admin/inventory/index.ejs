@@ -116,7 +116,10 @@
               <div class="inventory-mobile-card">
                 <div class="card-top">
                   <% if (product.image_url) { %>
-                    <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="card-img">
+                    <picture>
+                      <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                      <img src="<%= productImg(product.image_url, 'thumb').jpg %>" alt="<%= product.name %>" class="card-img" loading="lazy">
+                    </picture>
                   <% } else { %>
                     <div class="card-img img-placeholder d-flex align-items-center justify-content-center"><i class="fas fa-gem text-muted"></i></div>
                   <% } %>
@@ -171,7 +174,10 @@
                     <td><%= product.id %></td>
                     <td class="column-image">
                       <% if (product.image_url) { %>
-                        <img src="/media/products/<%= product.image_url %>" alt="<%= product.name %>" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                        <picture>
+                          <source srcset="<%= productImg(product.image_url, 'thumb').webp %>" type="image/webp">
+                          <img src="<%= productImg(product.image_url, 'thumb').jpg %>" alt="<%= product.name %>" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" loading="lazy">
+                        </picture>
                       <% } else { %>
                         <div class="img-placeholder d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 4px;">
                           <i class="fas fa-gem text-muted"></i>

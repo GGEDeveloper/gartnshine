@@ -386,37 +386,49 @@
                 
                 const hasGalleryImages = allImages.length > 0;
                 const placeholderImg = '/images/imagem-nao-disponivel.svg';
-                const mainMediaSrc = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
-                const mainLinkHref = hasGalleryImages ? '/media/products/' + allImages[0] : placeholderImg;
+                const mainImg = hasGalleryImages ? productImg(allImages[0], 'medium') : { jpg: placeholderImg, webp: null };
+                const mainFullImg = hasGalleryImages ? productImg(allImages[0], 'full') : { jpg: placeholderImg, webp: null };
             %>
-            
+
             <div class="product-main-image">
-                <a href="<%= mainLinkHref %>" 
-                   class="glightbox product-image-link" 
+                <a href="<%= mainFullImg.jpg %>"
+                   class="glightbox product-image-link"
                    data-glightbox="type: image; title: <%= product.name %>"
                    data-gallery="product-gallery">
-                    <img src="<%= mainMediaSrc %>" 
-                         alt="<%= product.name %>" 
-                         id="mainProductImage"
-                         loading="eager"
-                         onerror="this.onerror=null;this.src='<%= placeholderImg %>';">
+                    <picture>
+                        <% if (mainImg.webp) { %><source srcset="<%= mainImg.webp %>" type="image/webp"><% } %>
+                        <img src="<%= mainImg.jpg %>"
+                             alt="<%= product.name %>"
+                             id="mainProductImage"
+                             loading="eager"
+                             onerror="this.onerror=null;this.src='<%= placeholderImg %>';">
+                    </picture>
                 </a>
             </div>
-            
+
             <% if (allImages.length > 1) { %>
             <div class="product-thumbnails">
-                <% allImages.forEach((img, index) => { %>
-                <div class="product-thumbnail <%= index === 0 ? 'active' : '' %>" 
-                     data-image="/media/products/<%= img %>"
+                <% allImages.forEach((img, index) => {
+                    const thumbImg = productImg(img, 'thumb');
+                    const thumbMediumImg = productImg(img, 'medium');
+                    const thumbFullImg = productImg(img, 'full');
+                %>
+                <div class="product-thumbnail <%= index === 0 ? 'active' : '' %>"
+                     data-medium="<%= thumbMediumImg.jpg %>"
+                     data-medium-webp="<%= thumbMediumImg.webp || '' %>"
+                     data-full="<%= thumbFullImg.jpg %>"
                      data-index="<%= index %>">
-                    <a href="/media/products/<%= img %>" 
-                       class="glightbox product-thumbnail-link" 
+                    <a href="<%= thumbFullImg.jpg %>"
+                       class="glightbox product-thumbnail-link"
                        data-glightbox="type: image; title: <%= product.name %>"
                        data-gallery="product-gallery">
-                        <img src="/media/products/<%= img %>" 
-                             alt="<%= product.name %> - Imagem <%= index + 1 %>" 
-                             loading="lazy"
-                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
+                        <picture>
+                            <% if (thumbImg.webp) { %><source srcset="<%= thumbImg.webp %>" type="image/webp"><% } %>
+                            <img src="<%= thumbImg.jpg %>"
+                                 alt="<%= product.name %> - Imagem <%= index + 1 %>"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
+                        </picture>
                     </a>
                 </div>
                 <% }); %>
@@ -577,17 +589,21 @@
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', function(e) {
                 e.preventDefault();
-                const imageUrl = this.dataset.image;
+                const mediumUrl = this.dataset.medium;
+                const mediumWebpUrl = this.dataset.mediumWebp;
+                const fullUrl = this.dataset.full;
                 const imageIndex = parseInt(this.dataset.index);
-                
-                // Update main image
+
+                // Update main image (variante 'medium' otimizada, não o ficheiro full-size)
                 if (mainImage) {
-                    mainImage.src = imageUrl;
+                    mainImage.src = mediumUrl;
+                    const sourceEl = mainImage.parentElement && mainImage.parentElement.querySelector('source');
+                    if (sourceEl && mediumWebpUrl) sourceEl.srcset = mediumWebpUrl;
                 }
                 if (mainImageLink) {
-                    mainImageLink.href = imageUrl;
+                    mainImageLink.href = fullUrl;
                 }
-                
+
                 // Update active thumbnail
                 thumbnails.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');

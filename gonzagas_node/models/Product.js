@@ -2,6 +2,7 @@ const { pool } = require('../config/database');
 const BaseModel = require('./BaseModel');
 const path = require('path');
 const fs = require('fs').promises;
+const { deleteProductImageVariants } = require('../utils/productImageProcessor');
 
 class Product extends BaseModel {
   static tableName = 'products';
@@ -829,6 +830,7 @@ class Product extends BaseModel {
           } catch (e) {
             if (e.code !== 'ENOENT') console.warn('Could not delete product image:', filePath, e.message);
           }
+          await deleteProductImageVariants(filename);
         }
       }
       const sql = `DELETE FROM ${this.tableName} WHERE ${this.primaryKey} = ?`;

@@ -1,5 +1,30 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-23] - Pipeline de otimização de imagens de produto
+
+### 🖼️ **Problema**
+Auditoria de performance revelou que as imagens de produto eram sempre servidas na resolução original do upload (por vezes 400-550KB), reutilizada sem alteração em todos os contextos — desde miniaturas de 48px no admin até à imagem principal de 600px no detalhe do produto.
+
+### ✅ **Solução**
+- Novo `utils/productImageProcessor.js` — gera 4 variantes (`full` 1600px, `medium` 800px, `small` 400px, `thumb` 160px) em JPEG + WebP por cada imagem de produto, usando Sharp (com fallback Jimp para ambientes cPanel), seguindo o mesmo padrão já usado na Media Library
+- **O ficheiro original do upload nunca é alterado** — fica em disco intacto como backup/arquivo; todas as variantes são geradas a partir dele
+- Geração automática integrada em `ProductController.store()`/`update()` e `QuickProductController.store()` — toda imagem nova introduzida a partir de agora gera as variantes sem intervenção manual
+- `Product.delete()` passa a apagar também as variantes (8 ficheiros) ao remover um produto, além do original
+- Helper `app.locals.productImg(filename, size)` disponível em todas as views EJS — devolve `{ jpg, webp }` com fallback automático para o placeholder SVG quando não há imagem
+- Views actualizadas para pedir a variante certa por contexto, com `<picture>`+WebP e fallback JPEG: catálogo e homepage (`small`), detalhe de produto (`medium` na imagem principal, `thumb` nas miniaturas, `full` no zoom/lightbox), admin — dashboard/produtos/inventário/formulário (`thumb`/`small`)
+- Script de backfill `scripts/generate-product-image-variants.js` para gerar as variantes das imagens já existentes: `node scripts/generate-product-image-variants.js` (idempotente; usar `--force` para regenerar)
+
+### ✅ **Validado**
+- `node --check` em todos os ficheiros JS novos/alterados
+- Compilação EJS de todas as views alteradas sem erros
+- Teste end-to-end: gerada variante de imagem real, confirmado original byte-a-byte intacto (hash MD5 igual) e miniatura ~18× mais leve (4.4KB vs 80KB)
+- Backfill corrido contra a BD local (308 imagens originais em disco): **301 processadas com sucesso** (2408 ficheiros de variantes gerados, 301×8 — confirmado), **42 falhas** por ficheiro original em falta no disco (ver nota abaixo)
+
+### ⚠️ **Nota: 42 imagens em falta (pré-existente, não introduzido por este trabalho)**
+42 ficheiros referenciados em `product_images` não existem em disco mesmo após recuperação do servidor — afecta **31 produtos** (refs `LTCU0010`–`LTCU0025`, `LTG0001`–`LTG0016`), todos criados via Criar Rápido com nome placeholder "Produto {timestamp}", sugerindo que as imagens nunca chegaram a ser persistidas/migradas correctamente para estes produtos. Estes produtos já mostravam imagem partida (404) antes deste trabalho — fora de âmbito corrigir agora.
+
+---
+
 ## [2026-06-23] - Admin: bugs críticos, consistência dark-luxe e tabelas/paginação
 
 ### 🐛 **Bugs críticos corrigidos**
