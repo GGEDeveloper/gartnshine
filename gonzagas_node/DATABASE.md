@@ -26,8 +26,12 @@ Armazena os produtos da loja.
 | family_id | INT | Chave estrangeira para product_families |
 | name | VARCHAR(200) | Nome do produto |
 | description | TEXT | Descrição detalhada |
-| sale_price | DECIMAL(10,2) | Preço de venda |
+| sale_price | DECIMAL(10,2) | Preço de venda (com ou sem IVA, dependendo de prices_include_tax) |
+| base_price | DECIMAL(10,2) | Preço base (sem IVA) - enviado ao Stripe |
 | purchase_price | DECIMAL(10,2) | Preço de custo |
+| cost_price | DECIMAL(10,2) | Preço de custo alternativo |
+| tax_rate | DECIMAL(5,2) | Taxa de IVA em % (default 23.00) |
+| prices_include_tax | BOOLEAN | Indica se sale_price inclui IVA (default TRUE) |
 | current_stock | INT | Quantidade em stock |
 | style | VARCHAR(100) | Estilo do produto |
 | material | VARCHAR(100) | Material principal |
@@ -101,7 +105,7 @@ Schema em **`modules/ecommerce/sql/migrations/`** (006 + 007 + 008). Não usar `
 |--------|-----------|
 | `ecommerce_settings` | IVA, Stripe, portes, `ecommerce_enabled` |
 | `cart_sessions` | Carrinhos guest |
-| `orders` / `order_items` | Pedidos e linhas |
+| `orders` / `order_items` | Pedidos e linhas (order_items inclui base_price) |
 | `order_status_history` | Histórico de estados |
 | `payments` | Pagamentos (Stripe) |
 | `customers` | Contas cliente (opcional; migração 008 alarga tabela existente) |

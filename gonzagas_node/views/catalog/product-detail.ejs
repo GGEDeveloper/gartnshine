@@ -462,6 +462,8 @@
             
             <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
                 <div class="product-price">Preço sob consulta</div>
+            <% } else if (product.formatted_sale_price) { %>
+                <div class="product-price"><%= product.formatted_sale_price %></div>
             <% } else if (product.sale_price) { %>
                 <div class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></div>
             <% } else { %>

@@ -102,7 +102,7 @@
                   <span class="badge badge-stock-out-of-stock">0 un</span>
                 <% } %>
                 <span class="badge <%= product.is_active ? 'badge-product-active' : 'badge-product-inactive' %>"><%= product.is_active ? 'Ativo' : 'Inativo' %></span>
-                <span class="badge badge-product-inactive"><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
+                <span class="badge badge-product-inactive"><%= parseFloat(product.sale_price || product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></span>
                 <% const cost = parseFloat(product.cost_price || product.purchase_price || 0); const sale = parseFloat(product.sale_price || product.price || 0); const margin = sale > 0 ? ((sale - cost) / sale * 100) : 0; %>
                 <span class="badge <%= margin >= 30 ? 'badge-stock-in-stock' : margin >= 15 ? 'badge-stock-low-stock' : 'badge-product-inactive' %>" title="Margem"><%= margin >= 0 ? margin.toFixed(0) + '%' : '-' %></span>
               </div>
@@ -187,7 +187,7 @@
                       <td><%= product.reference || 'N/A' %></td>
 <td><%= product.family_name || '' %></td>
 <td><%= product.name %></td>
-                      <td><%= parseFloat(product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
+                      <td><%= parseFloat(product.sale_price || product.price || 0).toLocaleString('pt-PT', {style: 'currency', currency: 'EUR'}) %></td>
                       <td>
                         <%
                           const cost = parseFloat(product.cost_price || product.purchase_price || 0);

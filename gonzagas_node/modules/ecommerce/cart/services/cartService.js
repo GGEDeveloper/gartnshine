@@ -31,6 +31,8 @@ async function enrichItems(rows) {
       reference: product.reference,
       name: product.name,
       unitPrice: product.salePrice,
+      basePrice: product.basePrice,
+      taxRate: product.taxRate,
       quantity: qty,
       totalPrice: Math.round(product.salePrice * qty * 100) / 100,
       imageFilename: product.imageFilename,

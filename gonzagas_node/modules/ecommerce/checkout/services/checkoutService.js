@@ -23,69 +23,88 @@ async function prepareCheckout(sessionId, shippingMethodCode) {
   return { cart, totals, shippingMethod: method, shippingMethods: methods, settings };
 }
 
-async function submitCheckout(sessionId, formData) {
+async function submitCheckout(sessionId, formData, connection) {
+  const conn = connection || pool;
   const shippingCode = formData.shippingMethodCode || 'standard';
-  const prepared = await prepareCheckout(sessionId, shippingCode);
-  const { cart, totals, shippingMethod } = prepared;
 
-  // Verificar stock no momento do submit (previne oversell)
-  for (const item of cart.items) {
-    if (item.quantity > item.maxStock) {
-      throw new Error(
-        `"${item.name}" tem apenas ${item.maxStock} unidade(s) disponíve${item.maxStock === 1 ? 'l' : 'is'}. Atualize o carrinho antes de continuar.`
+  await conn.beginTransaction();
+  try {
+    const prepared = await prepareCheckout(sessionId, shippingCode);
+    const { cart, totals, shippingMethod } = prepared;
+
+    // Verificar stock com SELECT FOR UPDATE (previne race condition)
+    for (const item of cart.items) {
+      const [stockRows] = await conn.query(
+        'SELECT current_stock FROM products WHERE id = ? FOR UPDATE',
+        [item.productId]
       );
+      const currentStock = stockRows[0]?.current_stock || 0;
+
+      if (item.quantity > currentStock) {
+        await conn.rollback();
+        throw new Error(
+          `"${item.name}" tem apenas ${currentStock} unidade(s) disponíve${currentStock === 1 ? 'l' : 'is'}. Atualize o carrinho antes de continuar.`
+        );
+      }
+      if (currentStock <= 0) {
+        await conn.rollback();
+        throw new Error(`"${item.name}" ficou esgotado. Remova-o do carrinho antes de continuar.`);
+      }
     }
-    if (item.maxStock <= 0) {
-      throw new Error(`"${item.name}" ficou esgotado. Remova-o do carrinho antes de continuar.`);
-    }
+
+    const order = await Order.createFromCheckout(
+      {
+        customerEmail: formData.customerEmail,
+        customerName: formData.customerName,
+        customerPhone: formData.customerPhone,
+        billingAddressLine1: formData.billingAddressLine1,
+        billingAddressLine2: formData.billingAddressLine2,
+        billingCity: formData.billingCity,
+        billingPostalCode: formData.billingPostalCode,
+        billingCountry: formData.billingCountry || 'Portugal',
+        shippingAddressLine1: formData.sameAsBilling
+          ? formData.billingAddressLine1
+          : formData.shippingAddressLine1,
+        shippingAddressLine2: formData.sameAsBilling
+          ? formData.billingAddressLine2
+          : formData.shippingAddressLine2,
+        shippingCity: formData.sameAsBilling ? formData.billingCity : formData.shippingCity,
+        shippingPostalCode: formData.sameAsBilling
+          ? formData.billingPostalCode
+          : formData.shippingPostalCode,
+        shippingCountry: formData.sameAsBilling
+          ? formData.billingCountry || 'Portugal'
+          : formData.shippingCountry || 'Portugal',
+        shippingMethodCode: shippingMethod?.code || shippingCode,
+        subtotal: totals.subtotal,
+        taxAmount: totals.taxAmount,
+        shippingAmount: totals.shipping,
+        totalAmount: totals.total,
+        currency: 'EUR',
+        paymentMethod: formData.paymentMethod || 'stripe',
+        notes: formData.notes,
+        cartSessionId: sessionId,
+      },
+      cart.items.map((i) => ({
+        productId: i.productId,
+        reference: i.reference,
+        quantity: i.quantity,
+        unitPrice: i.unitPrice,
+        basePrice: i.basePrice,
+        totalPrice: i.totalPrice,
+        name: i.name,
+        imageFilename: i.imageFilename,
+      })),
+      conn
+    );
+
+    await conn.commit();
+    events.emit('order.created', order);
+    return order;
+  } catch (err) {
+    await conn.rollback();
+    throw err;
   }
-
-  const order = await Order.createFromCheckout(
-    {
-      customerEmail: formData.customerEmail,
-      customerName: formData.customerName,
-      customerPhone: formData.customerPhone,
-      billingAddressLine1: formData.billingAddressLine1,
-      billingAddressLine2: formData.billingAddressLine2,
-      billingCity: formData.billingCity,
-      billingPostalCode: formData.billingPostalCode,
-      billingCountry: formData.billingCountry || 'Portugal',
-      shippingAddressLine1: formData.sameAsBilling
-        ? formData.billingAddressLine1
-        : formData.shippingAddressLine1,
-      shippingAddressLine2: formData.sameAsBilling
-        ? formData.billingAddressLine2
-        : formData.shippingAddressLine2,
-      shippingCity: formData.sameAsBilling ? formData.billingCity : formData.shippingCity,
-      shippingPostalCode: formData.sameAsBilling
-        ? formData.billingPostalCode
-        : formData.shippingPostalCode,
-      shippingCountry: formData.sameAsBilling
-        ? formData.billingCountry || 'Portugal'
-        : formData.shippingCountry || 'Portugal',
-      shippingMethodCode: shippingMethod?.code || shippingCode,
-      subtotal: totals.subtotal,
-      taxAmount: totals.taxAmount,
-      shippingAmount: totals.shipping,
-      totalAmount: totals.total,
-      currency: 'EUR',
-      paymentMethod: formData.paymentMethod || 'stripe',
-      notes: formData.notes,
-      cartSessionId: sessionId,
-    },
-    cart.items.map((i) => ({
-      productId: i.productId,
-      reference: i.reference,
-      quantity: i.quantity,
-      unitPrice: i.unitPrice,
-      totalPrice: i.totalPrice,
-      name: i.name,
-      imageFilename: i.imageFilename,
-    }))
-  );
-
-  events.emit('order.created', order);
-  return order;
 }
 
 module.exports = { prepareCheckout, submitCheckout };

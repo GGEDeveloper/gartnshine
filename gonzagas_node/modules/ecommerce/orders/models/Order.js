@@ -71,14 +71,15 @@ async function createFromCheckout(data, items, connection) {
   for (const item of items) {
     await conn.query(
       `INSERT INTO order_items
-       (order_id, product_id, product_reference, quantity, unit_price, total_price, product_name, product_image)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+       (order_id, product_id, product_reference, quantity, unit_price, base_price, total_price, product_name, product_image)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         orderId,
         item.productId,
         item.reference,
         item.quantity,
         item.unitPrice,
+        item.basePrice,
         item.totalPrice,
         item.name,
         item.imageFilename,

@@ -21,7 +21,7 @@ async function createCheckoutSession(order) {
     price_data: {
       currency: (order.currency || 'eur').toLowerCase(),
       product_data: { name: item.product_name || item.name },
-      unit_amount: Math.round(parseFloat(item.unit_price) * 100),
+      unit_amount: Math.round(parseFloat(item.base_price || item.unit_price) * 100),
     },
     quantity: item.quantity,
   }));
@@ -73,7 +73,7 @@ async function handleWebhook(rawBody, signature) {
   if (config.stripeWebhookSecret) {
     event = stripe.webhooks.constructEvent(rawBody, signature, config.stripeWebhookSecret);
   } else {
-    event = JSON.parse(rawBody.toString());
+    throw new Error('Stripe webhook secret not configured');
   }
 
   if (event.type === 'checkout.session.completed') {
