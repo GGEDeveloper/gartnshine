@@ -139,6 +139,11 @@ const globalLimiter = rateLimit({
 
 app.use(globalLimiter);
 
+// Webhook da Stripe precisa do corpo em formato raw para verificar a assinatura
+// (stripe.webhooks.constructEvent). Tem de ser montado ANTES do express.json()
+// global, senão o corpo já vem parseado/consumido e a verificação falha sempre.
+require('./modules/payments').mountWebhookRoute(app);
+
 // Middleware básico
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -6,8 +6,14 @@ function registerDefaultProviders() {
   registry.registerProvider('stripe', stripeProvider);
 }
 
-function initialize(app) {
-  registerDefaultProviders();
+let webhookRouteMounted = false;
+
+// Tem de ser chamado ANTES do express.json() global em app.js: o corpo do
+// webhook precisa de chegar em raw bytes para stripe.webhooks.constructEvent
+// conseguir verificar a assinatura.
+function mountWebhookRoute(app) {
+  if (webhookRouteMounted) return;
+  webhookRouteMounted = true;
 
   const webhookRouter = express.Router();
   webhookRouter.post(
@@ -28,8 +34,13 @@ function initialize(app) {
   app.use('/webhooks/stripe', webhookRouter);
 }
 
+function initialize() {
+  registerDefaultProviders();
+}
+
 module.exports = {
   initialize,
+  mountWebhookRoute,
   registerProvider: registry.registerProvider,
   getProvider: registry.getProvider,
   listProviders: registry.listProviders,
