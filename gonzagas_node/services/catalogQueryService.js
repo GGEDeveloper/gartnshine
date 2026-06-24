@@ -132,10 +132,17 @@ function formatRow(row, settings = {}) {
   let displayPurchasePrice = row.purchase_price;
 
   if (pricesIncludeTax && displayPrice) {
+    // Preço na BD é base (sem IVA), mostrar com IVA
     displayPrice = parseFloat(displayPrice) * (1 + taxRate);
+  } else if (!pricesIncludeTax && displayPrice) {
+    // Preço na BD já tem IVA, mostrar sem IVA (base)
+    displayPrice = parseFloat(displayPrice) / (1 + taxRate);
   }
+
   if (pricesIncludeTax && displayPurchasePrice) {
     displayPurchasePrice = parseFloat(displayPurchasePrice) * (1 + taxRate);
+  } else if (!pricesIncludeTax && displayPurchasePrice) {
+    displayPurchasePrice = parseFloat(displayPurchasePrice) / (1 + taxRate);
   }
 
   const formatted_sale_price = displayPrice
