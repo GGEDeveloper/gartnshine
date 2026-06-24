@@ -11,7 +11,7 @@ async function createCustomer(data) {
   const displayName = [data.firstName, data.lastName].filter(Boolean).join(' ').trim() || null;
   const [result] = await pool.query(
     `INSERT INTO customers (email, password_hash, first_name, last_name, phone)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?)`,
     [data.email, passwordHash, data.firstName, data.lastName, data.phone || null]
   );
   return findById(result.insertId);
@@ -58,7 +58,7 @@ async function findOrCreateByGoogle({ googleId, email, firstName, lastName, avat
   const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || null;
   const [result] = await pool.query(
     `INSERT INTO customers (email, google_id, auth_provider, avatar_url, first_name, last_name)
-     VALUES (?, ?, 'google', ?, ?, ?, ?)`,
+     VALUES (?, ?, 'google', ?, ?, ?)`,
     [email || null, googleId, avatarUrl, firstName, lastName]
   );
   return findById(result.insertId);
