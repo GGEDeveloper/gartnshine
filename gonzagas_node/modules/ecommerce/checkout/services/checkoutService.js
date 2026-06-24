@@ -1,3 +1,4 @@
+const { pool } = require('../../../../config/database');
 const EcommerceSettings = require('../../settings/models/EcommerceSettings');
 const pricingService = require('../../settings/services/pricingService');
 const shippingService = require('../../shipping/services/shippingService');
