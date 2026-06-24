@@ -89,12 +89,13 @@ async function createFromCheckout(data, items, connection) {
 
   await addStatusHistory(orderId, null, 'pending', 'Order created', 'checkout', conn);
 
-  return findByIdWithItems(orderId);
+  return findByIdWithItems(orderId, conn);
 }
 
 async function findByIdWithItems(orderId, connection) {
   const conn = connection || pool;
-  const order = await findById(orderId);
+  const [orderRows] = await conn.query('SELECT * FROM orders WHERE id = ? LIMIT 1', [orderId]);
+  const order = orderRows[0] || null;
   if (!order) return null;
   const [items] = await conn.query('SELECT * FROM order_items WHERE order_id = ?', [orderId]);
   return { ...order, items };

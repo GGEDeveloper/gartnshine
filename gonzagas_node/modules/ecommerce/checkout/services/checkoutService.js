@@ -25,7 +25,8 @@ async function prepareCheckout(sessionId, shippingMethodCode) {
 }
 
 async function submitCheckout(sessionId, formData, connection) {
-  const conn = connection || pool;
+  const conn = connection || (await pool.getConnection());
+  const ownsConnection = !connection;
   const shippingCode = formData.shippingMethodCode || 'standard';
 
   await conn.beginTransaction();
@@ -42,13 +43,11 @@ async function submitCheckout(sessionId, formData, connection) {
       const currentStock = stockRows[0]?.current_stock || 0;
 
       if (item.quantity > currentStock) {
-        await conn.rollback();
         throw new Error(
           `"${item.name}" tem apenas ${currentStock} unidade(s) disponíve${currentStock === 1 ? 'l' : 'is'}. Atualize o carrinho antes de continuar.`
         );
       }
       if (currentStock <= 0) {
-        await conn.rollback();
         throw new Error(`"${item.name}" ficou esgotado. Remova-o do carrinho antes de continuar.`);
       }
     }
@@ -105,6 +104,8 @@ async function submitCheckout(sessionId, formData, connection) {
   } catch (err) {
     await conn.rollback();
     throw err;
+  } finally {
+    if (ownsConnection) conn.release();
   }
 }
 

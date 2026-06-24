@@ -13,8 +13,8 @@ async function recordSale(productId, quantity, unitPrice, orderNumber, connectio
     await conn.query(
       `INSERT INTO inventory_transactions
        (product_id, transaction_type, quantity, unit_price, total_amount, notes, created_by)
-       VALUES (?, 'sale', ?, ?, ?, ?, ?)`,
-      [productId, -Math.abs(quantity), unitPrice, totalAmount, `Online order ${orderNumber}`, 'ecommerce']
+       VALUES (?, 'sale', ?, ?, ?, ?, NULL)`,
+      [productId, -Math.abs(quantity), unitPrice, totalAmount, `Online order ${orderNumber}`]
     );
   } catch (err) {
     if (err.code !== 'ER_NO_SUCH_TABLE') throw err;
@@ -32,7 +32,7 @@ async function restoreStock(productId, quantity, orderNumber, connection) {
     await conn.query(
       `INSERT INTO inventory_transactions
        (product_id, transaction_type, quantity, unit_price, total_amount, notes, created_by)
-       VALUES (?, 'adjustment', ?, 0, 0, ?, 'ecommerce')`,
+       VALUES (?, 'adjustment', ?, 0, 0, ?, NULL)`,
       [productId, Math.abs(quantity), `Stock restored — order ${orderNumber} cancelled/refunded`]
     );
   } catch (err) {
