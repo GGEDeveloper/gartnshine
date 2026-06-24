@@ -12,6 +12,7 @@ const {
   listFacetOptionLabels,
   familyProductCounts
 } = require('../services/catalogQueryService');
+const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 
 class CatalogController {
   static async displayCatalog(req, res) {
@@ -57,6 +58,8 @@ class CatalogController {
         req.query.sort && String(req.query.sort).trim() ? String(req.query.sort).trim() : 'default';
       const perPage = normalizePerPage(req.query.per_page);
 
+      const ecommerceSettings = await EcommerceSettings.getAll();
+
       const result = await runCatalogQuery({
         hideOutOfStock,
         expandedFamilyIds,
@@ -67,7 +70,8 @@ class CatalogController {
         stylesNormalized,
         sortType,
         page: req.query.page,
-        perPage
+        perPage,
+        settings: ecommerceSettings
       });
 
       if (result.facets) result.facets.styles = {};

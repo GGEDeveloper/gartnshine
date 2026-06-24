@@ -124,13 +124,27 @@ function orderBySql(sortType) {
   }
 }
 
-function formatRow(row) {
-  const formatted_sale_price = row.sale_price
-    ? new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(row.sale_price))
+function formatRow(row, settings = {}) {
+  const pricesIncludeTax = settings.prices_include_tax !== false;
+  const taxRate = parseFloat(settings.tax_rate ?? 23) / 100;
+
+  let displayPrice = row.sale_price;
+  let displayPurchasePrice = row.purchase_price;
+
+  if (pricesIncludeTax && displayPrice) {
+    displayPrice = parseFloat(displayPrice) * (1 + taxRate);
+  }
+  if (pricesIncludeTax && displayPurchasePrice) {
+    displayPurchasePrice = parseFloat(displayPurchasePrice) * (1 + taxRate);
+  }
+
+  const formatted_sale_price = displayPrice
+    ? new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(displayPrice)
     : null;
-  const formatted_purchase_price = row.purchase_price
-    ? new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(row.purchase_price))
+  const formatted_purchase_price = displayPurchasePrice
+    ? new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(displayPurchasePrice)
     : null;
+
   return {
     ...row,
     formatted_sale_price,
@@ -200,6 +214,7 @@ async function facetColorLike(baseWhere, baseParams, column) {
  * @param {string} opts.sortType
  * @param {number} opts.page
  * @param {number} opts.perPage
+ * @param {object} opts.settings
  */
 async function runCatalogQuery(opts) {
   const {
@@ -212,7 +227,8 @@ async function runCatalogQuery(opts) {
     stylesNormalized,
     sortType,
     page,
-    perPage
+    perPage,
+    settings = {}
   } = opts;
 
   const main = buildWhereClause({
@@ -289,7 +305,7 @@ async function runCatalogQuery(opts) {
   ]);
 
   return {
-    products: rows.map(formatRow),
+    products: rows.map(row => formatRow(row, settings)),
     count: totalFiltered,
     page: p,
     perPage,
