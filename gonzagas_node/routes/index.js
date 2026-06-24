@@ -8,6 +8,7 @@ const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
 const instagramModule = require('../modules/instagram');
+const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -17,17 +18,26 @@ router.get('/', async (req, res) => {
     
     try {
       featured = await Product.getFeatured();
+      const ecommerceSettings = await EcommerceSettings.getAll();
+      const pricesIncludeTax = ecommerceSettings.prices_include_tax !== false;
+      const taxRate = parseFloat(ecommerceSettings.tax_rate ?? 23) / 100;
 
       // Format prices for featured products
-      featured = featured.map(product => ({
-        ...product,
-        formatted_sale_price: product.sale_price ? 
-          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
-          null,
-        formatted_purchase_price: product.purchase_price ?
-          new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
-          null
-      }));
+      featured = featured.map(product => {
+        let displayPrice = product.sale_price;
+        if (!pricesIncludeTax && displayPrice) {
+          displayPrice = parseFloat(displayPrice) * (1 + taxRate);
+        }
+        return {
+          ...product,
+          formatted_sale_price: displayPrice ?
+            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(displayPrice) :
+            null,
+          formatted_purchase_price: product.purchase_price ?
+            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
+            null
+        };
+      });
 
       families = await ProductFamily.getAll();
     } catch (dbError) {

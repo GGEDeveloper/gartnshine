@@ -10,6 +10,7 @@ const {
   normalizePerPage
 } = require('../utils/catalogFilterUtils');
 const { runCatalogQuery } = require('../services/catalogQueryService');
+const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 
 // Public API routes
 // Get featured products
@@ -188,35 +189,44 @@ router.get('/catalog/product/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
     const product = await Product.getById(productId);
-    
+
     if (!product || !product.is_active) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Product not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
       });
     }
-    
+
+    const ecommerceSettings = await EcommerceSettings.getAll();
+    const pricesIncludeTax = ecommerceSettings.prices_include_tax !== false;
+    const taxRate = parseFloat(ecommerceSettings.tax_rate ?? 23) / 100;
+
+    let displayPrice = product.sale_price;
+    if (!pricesIncludeTax && displayPrice) {
+      displayPrice = parseFloat(displayPrice) * (1 + taxRate);
+    }
+
     // Format prices
     const formattedProduct = {
       ...product,
-      formatted_sale_price: product.sale_price ? 
-        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.sale_price)) :
+      formatted_sale_price: displayPrice ?
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(displayPrice) :
         null,
       formatted_purchase_price: product.purchase_price ?
         new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(parseFloat(product.purchase_price)) :
         null
     };
-    
+
     res.json({
       success: true,
       ...formattedProduct
     });
-    
+
   } catch (error) {
     console.error('Catalog product API error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to get product' 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get product'
     });
   }
 });
