@@ -101,7 +101,6 @@ async function updateProfile(id, data) {
     `UPDATE customers SET
        first_name = ?,
        last_name = ?,
-       name = ?,
        phone = ?,
        billing_address_line1 = ?,
        billing_city = ?,
@@ -116,7 +115,6 @@ async function updateProfile(id, data) {
     [
       data.firstName || null,
       data.lastName || null,
-      displayName,
       data.phone || null,
       data.billingAddressLine1 || null,
       data.billingCity || null,
