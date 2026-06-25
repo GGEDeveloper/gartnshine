@@ -217,6 +217,18 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     align-items: center;
     justify-content: center;
   }
+
+  /* Conta cliente no header (brand-showcase.css) — em ecrãs ≤768px o botão
+     "Criar conta" mantém sempre o texto visível (uppercase, ~50-60px) e
+     soma-se a logo+pesquisa+carrinho+hambúrguer, excedendo a largura
+     disponível em telefones de 320-360px e cortando o hambúrguer (último
+     item flex, dentro de um container com overflow-x: hidden). Os mesmos
+     links já existem na gaveta do menu mobile (accountNavContext="mobile"
+     em header.ejs), por isso esconder aqui é seguro — não perde
+     funcionalidade. */
+  .header-account-nav {
+    display: none !important;
+  }
 }
 
 /* Desktop: mesmo padrão mobile - ícone que expande ao clicar */

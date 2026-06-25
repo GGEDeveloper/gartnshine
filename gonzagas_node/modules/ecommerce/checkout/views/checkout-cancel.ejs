@@ -2,8 +2,16 @@
 <section class="ecommerce-cancel-page container py-5 text-center">
   <h1>Pagamento cancelado</h1>
   <% if (order) { %>
-    <p>O pedido <strong><%= order.order_number %></strong> ficou pendente de pagamento.</p>
+    <p>O pedido <strong><%= order.order_number %></strong> ficou pendente de pagamento — ainda não foi cobrado nada e o stock não foi reservado.</p>
   <% } %>
-  <p>Pode tentar novamente ou contactar-nos via WhatsApp.</p>
-  <a href="/checkout" class="btn btn-primary mt-3">Voltar ao checkout</a>
+  <% if (typeof retryError !== 'undefined' && retryError) { %>
+    <p class="text-danger">Não foi possível gerar um novo link de pagamento. Tente de novo ou contacte-nos via WhatsApp.</p>
+  <% } %>
+  <% if (canRetry) { %>
+    <a href="/checkout/retry/<%= order.order_number %>" class="btn btn-primary mt-3">Pagar agora</a>
+    <a href="/cart" class="btn btn-outline-secondary mt-3 ms-2">Voltar ao carrinho</a>
+  <% } else { %>
+    <p>Pode tentar novamente ou contactar-nos via WhatsApp.</p>
+    <a href="/cart" class="btn btn-primary mt-3">Voltar ao carrinho</a>
+  <% } %>
 </section>

@@ -18,6 +18,20 @@ async function getItems(orderId) {
   return rows;
 }
 
+/** Encomenda mais recente ainda por pagar para este carrinho — usada para retomar o pagamento
+ * quando o cliente volta da Stripe (cancelado/cartão recusado/botão "voltar") com o carrinho
+ * já limpo, em vez de o mandar para um carrinho vazio sem hipótese de continuar. */
+async function findPendingByCartSession(cartSessionId) {
+  if (!cartSessionId) return null;
+  const [rows] = await pool.query(
+    `SELECT * FROM orders
+     WHERE cart_session_id = ? AND status = 'pending' AND payment_status = 'pending'
+     ORDER BY created_at DESC LIMIT 1`,
+    [cartSessionId]
+  );
+  return rows[0] || null;
+}
+
 async function addStatusHistory(orderId, oldStatus, newStatus, notes, changedBy, connection) {
   const conn = connection || pool;
   await conn.query(
@@ -177,6 +191,7 @@ module.exports = {
   findById,
   findByOrderNumber,
   getItems,
+  findPendingByCartSession,
   createFromCheckout,
   findByIdWithItems,
   updateStatus,
