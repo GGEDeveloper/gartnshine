@@ -1019,3 +1019,45 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     height: 2px !important;
   }
 }
+
+/* ===== HEADER MOBILE MUITO PEQUENO (≤360px) ===== */
+@media (max-width: 360px) {
+  .header-container {
+    padding: 0.3rem 0.4rem;
+    gap: 0.15rem;
+  }
+
+  .logo-container {
+    flex-shrink: 3;
+    max-width: 100px;
+  }
+
+  .logo h1 {
+    font-size: clamp(0.65rem, 2.8vw, 0.85rem);
+  }
+
+  .mobile-search-toggle {
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 0.4rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  .header-cart-link {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    font-size: 0.9rem !important;
+    margin-left: 0.15rem !important;
+  }
+
+  .mobile-nav-toggle {
+    padding: 0.2rem !important;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .hamburger-line {
+    width: 16px !important;
+    height: 2px !important;
+  }
+}
