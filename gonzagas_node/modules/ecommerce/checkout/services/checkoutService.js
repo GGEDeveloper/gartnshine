@@ -19,7 +19,7 @@ async function prepareCheckout(sessionId, shippingMethodCode) {
   );
 
   const totals = pricingService.calculateCartTotals(cart.items, shippingCost, settings);
-  const methods = await shippingService.getActiveMethods();
+  const methods = await shippingService.getActiveMethods(settings);
 
   return { cart, totals, shippingMethod: method, shippingMethods: methods, settings };
 }

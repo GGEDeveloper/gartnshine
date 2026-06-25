@@ -27,7 +27,7 @@ Armazena os produtos da loja.
 | name | VARCHAR(200) | Nome do produto |
 | description | TEXT | Descrição detalhada |
 | sale_price | DECIMAL(10,2) | Preço de venda (com ou sem IVA, dependendo de prices_include_tax) |
-| base_price | DECIMAL(10,2) | Preço base (sem IVA) - enviado ao Stripe |
+| base_price | DECIMAL(10,2) | Preço base (sem IVA) - usado para relatórios de margem/custo |
 | purchase_price | DECIMAL(10,2) | Preço de custo |
 | cost_price | DECIMAL(10,2) | Preço de custo alternativo |
 | tax_rate | DECIMAL(5,2) | Taxa de IVA em % (default 23.00) |

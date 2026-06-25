@@ -1,10 +1,24 @@
 const { pool } = require('../../../../config/database');
 
-async function getActiveMethods() {
+async function getActiveMethods(settings) {
   const [rows] = await pool.query(
     'SELECT * FROM shipping_methods WHERE is_active = 1 ORDER BY sort_order ASC, id ASC'
   );
-  return rows;
+  if (!settings) return rows;
+
+  // O preço apresentado tem de refletir o que está definido em
+  // ecommerce_settings (admin), não o valor estático gravado em
+  // shipping_methods.price — caso contrário o rádio de seleção mostra um
+  // valor diferente do resumo de totais, que já usa o override da settings.
+  return rows.map((row) => {
+    if (row.code === 'standard' && settings.standard_shipping_cost != null) {
+      return { ...row, price: parseFloat(settings.standard_shipping_cost) };
+    }
+    if (row.code === 'express' && settings.express_shipping_cost != null) {
+      return { ...row, price: parseFloat(settings.express_shipping_cost) };
+    }
+    return row;
+  });
 }
 
 async function getByCode(code) {

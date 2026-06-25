@@ -82,8 +82,26 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     overflow-x: hidden;
   }
 
+  /* Em ecrãs muito estreitos o logo não pode empurrar o hambúrguer para
+     fora da área visível (header-container tem overflow-x: hidden). Sem
+     isto, .logo-container { flex-shrink: 0 } em main.css mantém a largura
+     intrínseca do título e o hambúrguer, por ser o último item flex, fica
+     cortado. */
+  .logo-container {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
   .logo h1 {
-    font-size: clamp(1rem, 4vw, 1.25rem);
+    font-size: clamp(0.85rem, 4vw, 1.25rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-nav-toggle {
+    flex-shrink: 0;
   }
 
   /* Search wrapper: icon + expandable bar */

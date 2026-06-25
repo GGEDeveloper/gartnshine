@@ -1,5 +1,33 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-25] - Checkout/Stripe: transações, webhook, IVA e portes
+
+### 🐛 **Checkout e fulfillment partidos**
+- `checkoutService.submitCheckout` chamava `pool.beginTransaction()` — método que não existe no `pool` (só em connections de `pool.getConnection()`) — o checkout falhava sempre. Corrigido para `getConnection()`/`beginTransaction()`/`commit()`/`rollback()`/`release()`.
+- `orderFulfillmentService.fulfillPaidOrder` (chamado pelo webhook da Stripe) corria sem transação própria — o `SELECT ... FOR UPDATE` não bloqueava nada, risco de duplo processamento em retries da Stripe. Agora abre a sua própria transação.
+- `Order.createFromCheckout` lia a order recém-criada com uma connection diferente da transação aberta, antes do `commit()` — devolvia `null` e rebentava o checkout. Corrigido para reutilizar a connection da transação.
+- `inventoryAdapter` enviava `created_by: 'ecommerce'` (string) para uma coluna `int` — erro SQL sempre que um pagamento era confirmado. Corrigido para `NULL`.
+
+### 🐛 **Webhook da Stripe nunca verificava a assinatura**
+- `express.json()` global em `app.js` corria **antes** da rota `/webhooks/stripe` ser montada — o corpo chegava já parseado/consumido, e `stripe.webhooks.constructEvent` falhava sempre a verificação de assinatura. A rota do webhook passou a ser montada com `express.raw()` explicitamente **antes** do `express.json()` global (`modules/payments.mountWebhookRoute(app)`).
+
+### 🐛 **Stripe cobrava sem IVA**
+- `createCheckoutSession` enviava `item.base_price` (preço sem IVA) como valor da linha, sem `automatic_tax`/`tax_rates` configurado na sessão — o cliente era cobrado ~23% menos do que o total mostrado no checkout. Corrigido para enviar o preço **com IVA** (`unit_price`, ou `base_price * (1 + tax_rate)` quando `prices_include_tax = false`).
+
+### 🐛 **Preço de envio no checkout não refletia a admin**
+- O rádio de seleção de método de envio mostrava `shipping_methods.price` (valor estático da migração, nunca atualizado), enquanto o resumo de totais já usava o override de `ecommerce_settings.standard_shipping_cost`/`express_shipping_cost`. `shippingService.getActiveMethods(settings)` passou a aplicar o mesmo override antes de devolver os métodos à view.
+
+### 🐛 **Carrossel de destaques na homepage não abria o produto**
+- O link da imagem no carrossel "destaques" apontava para `/catalog?family=...` (catálogo da família), nunca para a página de detalhe do produto. Corrigido para `/catalog/product/:slug`.
+
+### 🎨 **Hambúrguer cortado em ecrãs mobile pequenos**
+- `.logo-container` com `flex-shrink: 0` mantinha a largura total do título, e combinado com `overflow-x: hidden` no `.header-container`, em ecrãs muito estreitos o hambúrguer (último item flex) ficava cortado. Logo passa a encolher com `text-overflow: ellipsis` em mobile.
+
+### ✅ **Validado**
+- Smoke test manual contra BD local: checkout cria order sem debitar stock prematuramente; pagamento confirma e debita stock; reenvio do webhook é idempotente; race condition de stock faz rollback sem order órfã; 5 checkouts sequenciais não esgotam o pool (`connectionLimit: 3`); valor calculado para a Stripe coincide com `order.total_amount`; preço de envio no checkout reflete alteração em tempo real na admin.
+
+---
+
 ## [2026-06-23] - Fix crítico: cache "immutable" impedia que redeploys chegassem aos browsers
 
 ### 🐛 **Causa raiz: botão da sidebar "não funcionava" após redeploy em produção**

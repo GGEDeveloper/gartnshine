@@ -6,9 +6,9 @@
       <%
         const cardImg = productImg(product.image_url, 'small');
         const imageUrl = cardImg.jpg;
-        const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
+        const productLink = `/catalog/product/${product.slug || product.id}`;
       %>
-      <a href="<%= catalogLink %>"
+      <a href="<%= productLink %>"
          class="product-image-link">
         <picture>
           <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
