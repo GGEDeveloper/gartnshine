@@ -16,7 +16,8 @@ const EcommerceSettings = require('../modules/ecommerce/settings/models/Ecommerc
 // Get featured products
 router.get('/products/featured', async (req, res) => {
   try {
-    const featured = await Product.getFeatured();
+    const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
+    const featured = await Product.getFeatured(null, hideOutOfStock);
     res.json({ success: true, data: featured });
   } catch (error) {
     console.error('API Error:', error);

@@ -295,14 +295,15 @@ class Product extends BaseModel {
   }
 
   // Get featured products
-  static async getFeatured(limit = null) {
+  static async getFeatured(limit = null, hideOutOfStock = false) {
     try {
+      const stockFilter = hideOutOfStock ? 'AND p.current_stock > 0' : '';
       const [rows] = await pool.query(`
-        SELECT p.*, f.name as family_name, 
+        SELECT p.*, f.name as family_name,
                (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
         FROM products p
         JOIN product_families f ON p.family_id = f.id
-        WHERE p.is_active = 1 AND p.featured = 1
+        WHERE p.is_active = 1 AND p.featured = 1 ${stockFilter}
         ORDER BY p.reference
     `);
       return rows;

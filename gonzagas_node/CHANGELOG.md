@@ -1,5 +1,24 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-25] - Hambúrguer mobile, stock nos destaques, retomar pagamento Stripe
+
+### 🎨 **Hambúrguer continuava cortado em telemóveis pequenos**
+- A correção anterior (logo com ellipsis) era insuficiente: `.header-account-nav` (ícone "Conta"/botão "Criar conta", em `brand-showcase.css`, sem media query mobile e com `flex-shrink: 0`) continuava a ocupar ~50-80px fixos no header, excedendo a largura disponível em ecrãs de 320-360px e cortando o hambúrguer (último item flex, dentro de `.header-container` com `overflow-x: hidden`). Os mesmos links de conta já existem na gaveta do menu mobile (`accountNavContext="mobile"`), por isso `.header-account-nav` passa a `display: none !important` em `≤768px` — sem perda de funcionalidade.
+
+### 🐛 **Produtos sem stock apareciam nos destaques mesmo com a setting ativa**
+- A setting `hide_out_of_stock` (admin) já era respeitada no catálogo (`services/catalogQueryService.js`) mas não no carrossel de destaques da homepage, na API `/api/products/featured`, no preview `/api/nav-featured`, nem nos "produtos relacionados" mostrados quando um produto está esgotado. `Product.getFeatured()` passou a aceitar um segundo parâmetro `hideOutOfStock`, aplicado em todos estes pontos.
+
+### 🐛 **Encomenda ficava "bloqueada" se o pagamento na Stripe falhasse e o cliente voltasse**
+- O carrinho é limpo logo após a encomenda ser criada (`pending`/`pending`), **antes** de se saber se o pagamento na Stripe vai correr bem. Se o cliente tivesse um erro (cartão recusado, cancelou, ou usou o botão "voltar" do browser), `GET /checkout` via o carrinho vazio e mandava-o sempre para `/cart`, sem rasto da encomenda nem forma de retomar o pagamento.
+- Agora: `GET /checkout` com carrinho vazio procura uma encomenda `pending`/`pending` associada à mesma sessão de carrinho (`Order.findPendingByCartSession`) e, se existir, mostra a página de cancelamento com a encomenda e um botão **"Pagar agora"**.
+- Novo: `GET /checkout/retry/:orderNumber` gera uma nova sessão de checkout da Stripe para uma encomenda já criada (sem a recriar) e redireciona para lá. Se a encomenda já não estiver pendente (paga, cancelada ou expirada pelo cron de 30 min) ou a Stripe não estiver configurada, mostra mensagem de erro em vez de rebentar.
+
+### ✅ **Validado**
+- `Product.getFeatured(null, true)` testado contra BD local: 10 destaques → 3 com stock, nenhum com `current_stock <= 0`.
+- Fluxo de retomar pagamento testado contra BD local: encomenda criada, carrinho limpo, `findPendingByCartSession` encontra a encomenda correta para retomar.
+
+---
+
 ## [2026-06-25] - Checkout/Stripe: transações, webhook, IVA e portes
 
 ### 🐛 **Checkout e fulfillment partidos**

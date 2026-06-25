@@ -17,7 +17,8 @@ router.get('/', async (req, res) => {
     let families = [];
     
     try {
-      featured = await Product.getFeatured();
+      const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
+      featured = await Product.getFeatured(null, hideOutOfStock);
       const ecommerceSettings = await EcommerceSettings.getAll();
       const pricesIncludeTax = ecommerceSettings.prices_include_tax !== false;
       const taxRate = parseFloat(ecommerceSettings.tax_rate ?? 23) / 100;
@@ -287,13 +288,14 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
 
     let relatedProducts = [];
     if (product.current_stock <= 0 && product.family_id) {
+      const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
       const [related] = await pool.execute(`
         SELECT p.id, p.name, p.sale_price, p.current_stock,
                (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC LIMIT 1) as image_url,
                pf.name as family_name
         FROM products p
         LEFT JOIN product_families pf ON p.family_id = pf.id
-        WHERE p.family_id = ? AND p.id != ? AND p.is_active = 1
+        WHERE p.family_id = ? AND p.id != ? AND p.is_active = 1 ${hideOutOfStock ? 'AND p.current_stock > 0' : ''}
         ORDER BY p.current_stock DESC, p.updated_at DESC
         LIMIT 4
       `, [product.family_id, product.id]);
@@ -461,12 +463,13 @@ router.get('/search', async (req, res) => {
 router.get('/api/nav-featured', async (req, res) => {
   try {
     const { pool } = require('../config/database');
+    const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
     const [featured] = await pool.query(`
       SELECT p.id, p.reference, p.name, p.sale_price,
-             (SELECT pi.image_filename FROM product_images pi 
+             (SELECT pi.image_filename FROM product_images pi
               WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as main_image
       FROM products p
-      WHERE p.is_active = 1 AND p.featured = 1
+      WHERE p.is_active = 1 AND p.featured = 1 ${hideOutOfStock ? 'AND p.current_stock > 0' : ''}
       ORDER BY p.created_at DESC
       LIMIT 3
     `);
