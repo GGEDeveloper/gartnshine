@@ -63,6 +63,10 @@ async function main() {
     process.exitCode = 1;
   } finally {
     await pool.end();
+    // config/database.js mantém um setInterval de health-check vivo para
+    // sempre — sem isto o script "termina" mas o processo Node nunca sai
+    // (fica a tentar usar o pool já fechado a cada intervalo, indefinidamente).
+    process.exit(process.exitCode || 0);
   }
 }
 
