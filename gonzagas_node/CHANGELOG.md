@@ -1,5 +1,23 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-26] - Header mobile: consolidar fonte única de CSS (hambúrguer continuava a cortar)
+
+### 🐛 **Causa raiz real do hambúrguer cortado em mobile**
+- Apesar de várias rondas de ajustes em `public/css/frontend-mobile.css` (esconder carrinho/conta, encolher logo/ícones em ≤375px e ≤360px), o problema persistia. Causa: `views/partials/header.ejs` tinha um `<style>` inline de ~190 linhas (renderizado no `<body>`, depois de todos os `<link>` do `<head>`) com `!important` em quase tudo, definindo `.mobile-nav-toggle`, `.hamburger`, `.hamburger-line` e toda a gaveta (`.mobile-nav*`) **em paralelo** com `frontend-mobile.css`. Por estar mais tarde no documento, o inline ganhava os empates de especificidade — tornando imprevisível qual das duas fontes "ganhava" em cada browser/breakpoint, e fazendo com que sucessivas correções no ficheiro CSS não tivessem efeito visível garantido.
+- Encontrado também: uma 4ª definição duplicada de `.header-cart-link` mais a meio do `frontend-mobile.css` (secção "E-COMMERCE MOBILE"), que continuaria a reverter o `display:none` do carrinho mesmo depois de consolidar o resto.
+
+### ✅ **Consolidação**
+- Removido por completo o `<style>` inline de `header.ejs` — todo o seu conteúdo (gaveta de navegação completa, hambúrguer, hide do `.desktop-nav`, hide do hambúrguer/gaveta em desktop) foi movido para `frontend-mobile.css`, que passa a ser a **única fonte de verdade** para o header mobile.
+- Substituídos os 3 blocos escalonados (`≤768px`, `≤375px`, `≤360px`, cada um a encolher mais elementos) por **um único bloco `≤768px`**: carrinho e conta cliente ficam sempre escondidos no header em mobile (já duplicados na gaveta), restando apenas logo (encolhe com ellipsis) + ícone de pesquisa + hambúrguer — cabe com ~200px de margem mesmo a 320px de largura.
+- Removida a definição duplicada de `.header-cart-link` na secção e-commerce.
+
+### ✅ **Validado**
+- `header.ejs` renderiza sem erros via `ejs.renderFile` (com e sem `ecommerceEnabled`); confirmado que `<style>` deixou de aparecer no HTML gerado e que os botões continuam no DOM (só escondidos via CSS).
+- Chaves `{`/`}` do CSS final balanceadas (1136 linhas, profundidade final 0).
+- Conta de largura no pior caso real (320px): padding 24px + pesquisa 40px + hambúrguer 44px + gaps ~13px = 121px fixos, sobram ~200px para o logo.
+
+---
+
 ## [2026-06-25] - Imagens de produto: backfill, fluxo mais robusto e fix no script
 
 ### ✅ **Backfill corrido contra a BD local**
