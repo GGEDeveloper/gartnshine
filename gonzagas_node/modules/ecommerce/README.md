@@ -78,6 +78,12 @@ Com a loja desactivada, rotas de carrinho/checkout não são expostas ao públic
 
 Webhook: `POST /webhooks/stripe` (configurar URL e secret no admin / `.env`).
 
+**Importante:** a rota do webhook é montada em `app.js` **antes** do `express.json()` global (via `modules/payments`.`mountWebhookRoute(app)`), porque a verificação de assinatura da Stripe (`stripe.webhooks.constructEvent`) precisa do corpo em raw bytes. Não mover o `require('./modules/payments').mountWebhookRoute(app)` para depois do `express.json()`.
+
+**IVA na sessão Stripe:** a sessão não usa `automatic_tax`/`tax_rates` — o IVA é embutido manualmente no `unit_amount` de cada linha (`modules/payments/stripe/index.js`), respeitando `prices_include_tax` e `tax_rate` de `ecommerce_settings`. O valor enviado é sempre o preço **com IVA** (o mesmo que o cliente vê no resumo do checkout), nunca o `base_price`.
+
+**Preço dos métodos de envio:** `shippingService.getActiveMethods(settings)` sobrepõe `shipping_methods.price` com `standard_shipping_cost`/`express_shipping_cost` de `ecommerce_settings` — é essa a fonte de verdade mostrada ao cliente, não o valor estático gravado na tabela.
+
 ## Rotas principais
 
 | Rota | Descrição |

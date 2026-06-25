@@ -16,15 +16,27 @@ async function createCheckoutSession(order) {
   const stripe = getStripeClient(config.stripeSecretKey);
   if (!stripe) throw new Error('Stripe not configured');
 
+  // O valor cobrado pela Stripe tem de ser o valor com IVA (o mesmo que o
+  // cliente viu no resumo do checkout), não o base_price (sem IVA) — a
+  // sessão da Stripe não tem automatic_tax/tax_rates configurado, por isso
+  // qualquer IVA tem de já estar embutido no unit_amount de cada linha.
+  const settings = await EcommerceSettings.getAll();
+  const pricesIncludeTax = settings.prices_include_tax !== false;
+  const taxRate = parseFloat(settings.tax_rate ?? 23) / 100;
+
   const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-  const lineItems = (order.items || []).map((item) => ({
-    price_data: {
-      currency: (order.currency || 'eur').toLowerCase(),
-      product_data: { name: item.product_name || item.name },
-      unit_amount: Math.round(parseFloat(item.base_price || item.unit_price) * 100),
-    },
-    quantity: item.quantity,
-  }));
+  const lineItems = (order.items || []).map((item) => {
+    const netOrGrossPrice = parseFloat(item.unit_price ?? item.base_price ?? 0);
+    const grossUnitPrice = pricesIncludeTax ? netOrGrossPrice : netOrGrossPrice * (1 + taxRate);
+    return {
+      price_data: {
+        currency: (order.currency || 'eur').toLowerCase(),
+        product_data: { name: item.product_name || item.name },
+        unit_amount: Math.round(grossUnitPrice * 100),
+      },
+      quantity: item.quantity,
+    };
+  });
 
   if (parseFloat(order.shipping_amount) > 0) {
     lineItems.push({
