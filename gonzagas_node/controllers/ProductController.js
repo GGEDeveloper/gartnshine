@@ -8,16 +8,25 @@ const { body, validationResult } = require('express-validator');
 const path = require('path'); // For image path manipulation
 const { processProductImage } = require('../utils/productImageProcessor');
 
-/** Gera as variantes (full/medium/small/thumb) para cada imagem nova/seleccionada. Nunca bloqueia o fluxo em caso de erro. */
+/**
+ * Gera as variantes (full/medium/small/thumb) para cada imagem nova/seleccionada.
+ * Nunca bloqueia o fluxo em caso de erro (produto continua a gravar-se) — mas
+ * devolve os ficheiros que falharam para o caller poder avisar o admin via
+ * flash, em vez de a falha ficar só num console.warn que ninguém vê.
+ */
 async function generateVariantsFor(images) {
+  const failed = [];
   for (const img of images) {
     if (!img || !img.filename) continue;
     try {
-      await processProductImage(img.filename);
+      const result = await processProductImage(img.filename);
+      if (!result.ok) failed.push(img.filename);
     } catch (err) {
       console.warn('Falha ao gerar variantes para', img.filename, err.message);
+      failed.push(img.filename);
     }
   }
+  return failed;
 }
 
 class ProductController extends BaseController {
@@ -185,10 +194,13 @@ class ProductController extends BaseController {
         images.unshift(mainImage);
       }
 
-      await generateVariantsFor(images);
+      const failedVariants = await generateVariantsFor(images);
 
       await Product.createProductWithImages(productData, images, req.user.id);
-      
+
+      if (failedVariants.length) {
+        req.flash('error_msg', `Produto criado, mas falhou o processamento de ${failedVariants.length} imagem(ns) (${failedVariants.join(', ')}). Tente re-enviar essas imagens.`);
+      }
       req.flash('success_msg', 'Product created successfully!');
       res.redirect('/admin/products');
     } catch (error) {
@@ -424,7 +436,7 @@ class ProductController extends BaseController {
       }
       console.log(`ProductController.update: Using userId: ${userId}`);
 
-      await generateVariantsFor(allNewImages);
+      const failedVariants = await generateVariantsFor(allNewImages);
 
       // Após gravar, permanece na própria página de edição (em vez de voltar para a
       // lista) — o utilizador usa o botão "Voltar" quando quiser sair, e esse botão
@@ -434,6 +446,9 @@ class ProductController extends BaseController {
       try {
         console.log(`Attempting to update product ${productId} with userId: ${userId}`);
         await Product.updateProductWithImages(productId, productData, allNewImages, userId);
+        if (failedVariants.length) {
+          req.flash('error_msg', `Produto atualizado, mas falhou o processamento de ${failedVariants.length} imagem(ns) (${failedVariants.join(', ')}). Tente re-enviar essas imagens.`);
+        }
         req.flash('success_msg', 'Product updated successfully!');
 
         const returnTo = res.locals.returnTo || req.body.returnTo || '';

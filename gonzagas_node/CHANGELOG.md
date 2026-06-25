@@ -1,5 +1,21 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-25] - Imagens de produto: backfill, fluxo mais robusto e fix no script
+
+### ✅ **Backfill corrido contra a BD local**
+- `node scripts/generate-product-image-variants.js`: **301 imagens já tinham todas as variantes, 0 precisaram de ser processadas, 42 falharam** — todas as 42 falhas são `Original não encontrado`, dos 18 produtos `LTG...` criados em 2026-04-01 (antes da feature de tratamento de imagens existir, introduzida a 2026-06-23). Os ficheiros originais desses produtos nunca foram comitados ao git (confirmado via `git log --all`) — não existem neste ambiente. **Para corrigir, é necessário correr o mesmo script diretamente no servidor de produção (waphix)**, onde os originais podem realmente existir em disco.
+
+### 🐛 **Falha no processamento de imagem ficava invisível**
+- `processProductImage()` já era chamado em todos os pontos de upload (`ProductController.store/update`, `QuickProductController.store`), mas se o Sharp/Jimp falhasse a gerar uma variante, o produto gravava-se sem mais nada — a falha só ficava num `console.warn` nos logs do servidor, que ninguém via. Agora os três pontos de upload recolhem os ficheiros que falharam e mostram um `flash error_msg` ao admin ("Produto criado/atualizado, mas falhou o processamento de N imagem(ns)...") para ele saber que precisa de re-enviar essa imagem.
+
+### 🐛 **Script de backfill nunca terminava por si só**
+- `config/database.js` mantém um `setInterval` de health-check da BD vivo para sempre; o script chamava `pool.end()` no fim mas nunca `process.exit()`, por isso o processo Node ficava "pendurado" indefinidamente (a tentar usar o pool já fechado a cada intervalo) mesmo depois de imprimir "Concluído" — parecia preso quando na realidade já tinha terminado o trabalho. Adicionado `process.exit()` explícito no `finally`.
+
+### 📖 **Documentação**
+- README.md: nova secção "Imagens de produto" a documentar o pipeline, o script de backfill, e o comportamento em caso de falha.
+
+---
+
 ## [2026-06-25] - Hambúrguer mobile, stock nos destaques, retomar pagamento Stripe
 
 ### 🎨 **Hambúrguer continuava cortado em telemóveis pequenos**

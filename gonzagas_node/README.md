@@ -248,7 +248,19 @@ npm run test:ecommerce                     # Validar fluxo (servidor activo)
 # Manutenção
 npm run backup               # Backup automático
 npm run logs                 # Ver logs do sistema
+
+# Imagens de produto
+node scripts/generate-product-image-variants.js           # Backfill — gera full/medium/small/thumb (jpg+webp) para imagens sem variantes
+node scripts/generate-product-image-variants.js --force    # Regenera mesmo que já existam
 ```
+
+### Imagens de produto
+
+Toda a imagem de produto (criação ou edição, em `/admin/products` e `/admin/quick-product`) passa por `utils/productImageProcessor.js`, que gera automaticamente 4 tamanhos (`full` 1600px, `medium`/`small` 800/400px em quadrado, `thumb` 160px) em JPEG + WebP, usando Sharp (com fallback para Jimp puro-JS se Sharp não estiver disponível no servidor). O original nunca é alterado.
+
+Se o processamento falhar para alguma imagem (ficheiro corrompido, Sharp/Jimp indisponíveis), o produto continua a gravar-se normalmente — não bloqueia o fluxo — mas o admin vê um aviso (`flash error_msg`) com o(s) nome(s) do(s) ficheiro(s) que falharam, em vez de a falha ficar só num `console.warn` invisível.
+
+Para produtos criados **antes** desta feature (ou cujas imagens foram copiadas/restauradas manualmente sem passar pelo upload do admin), corre o backfill acima — é idempotente, salta tudo o que já tem as 8 variantes, e só falha se o ficheiro original não existir em `public/media/products/`.
 
 ## 📖 **Documentação Adicional**
 

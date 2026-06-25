@@ -122,15 +122,21 @@ class QuickProductController {
         }
       }
 
+      const failedVariants = [];
       for (const img of images) {
         try {
-          await processProductImage(img.filename);
+          const result = await processProductImage(img.filename);
+          if (!result.ok) failedVariants.push(img.filename);
         } catch (err) {
           console.warn('Falha ao gerar variantes para', img.filename, err.message);
+          failedVariants.push(img.filename);
         }
       }
 
       const productId = await Product.createProductWithImages(productData, images, userId);
+      if (failedVariants.length) {
+        req.flash('error_msg', `Produto criado, mas falhou o processamento de ${failedVariants.length} imagem(ns) (${failedVariants.join(', ')}). Tente re-enviar essas imagens.`);
+      }
       req.flash('success_msg', `Produto criado com sucesso! Referência: ${productData.reference}`);
       const params = new URLSearchParams();
       if (family_id) params.set('family_id', family_id);
