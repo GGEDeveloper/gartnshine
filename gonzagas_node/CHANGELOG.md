@@ -1,5 +1,24 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-06-26] - Admin: escolher imagem de fundo do Hero da homepage
+
+### ✨ **Nova funcionalidade**
+- Antes: a imagem de fundo do hero era sempre a primeira imagem (por ordem do sistema de ficheiros, não controlável) encontrada em `public/media/gallery/`, sem nenhuma forma de o admin escolher ou ver qual estava em uso.
+- Agora, em **Admin → Settings → Imagem de fundo do Hero**:
+  - Mostra a imagem **atualmente em uso** (com preview), incluindo quando é o fallback automático.
+  - Permite **escolher** qualquer imagem já existente na galeria (grid de thumbnails, clicar e gravar).
+  - Permite **enviar uma imagem nova** diretamente para usar como hero (fica também disponível na galeria geral).
+  - Botão para **voltar ao automático** (limpa a escolha, volta ao comportamento antigo).
+- Nova coluna `site_settings.hero_image` (`sql/add_hero_image.sql`, idempotente). `NULL` = fallback automático (comportamento antigo preservado).
+- Se a imagem escolhida deixar de existir em disco (apagada manualmente), `routes/index.js` deteta e cai automaticamente no fallback em vez de mostrar uma imagem partida.
+
+### ✅ **Validado**
+- `SiteSettings.updateHeroImage()` testado contra BD local: define, lê e repõe a `NULL` corretamente.
+- Lógica de fallback de `routes/index.js` replicada e testada isoladamente: escolha explícita é respeitada; se apontar para um ficheiro inexistente, cai para a primeira imagem da galeria.
+- View `settings-form.ejs` renderizada via `ejs.renderFile` em 3 cenários (sem escolha, com escolha, galeria vazia) sem erros.
+
+---
+
 ## [2026-06-25] - Imagens de produto: backfill, fluxo mais robusto e fix no script
 
 ### ✅ **Backfill corrido contra a BD local**
