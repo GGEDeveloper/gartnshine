@@ -262,6 +262,12 @@ Se o processamento falhar para alguma imagem (ficheiro corrompido, Sharp/Jimp in
 
 Para produtos criados **antes** desta feature (ou cujas imagens foram copiadas/restauradas manualmente sem passar pelo upload do admin), corre o backfill acima — é idempotente, salta tudo o que já tem as 8 variantes, e só falha se o ficheiro original não existir em `public/media/products/`.
 
+### Imagem de fundo do Hero (homepage)
+
+Em **Admin → Settings → Imagem de fundo do Hero**: mostra qual o ficheiro atualmente em uso, permite escolher uma imagem já existente em `public/media/gallery/` ou enviar uma nova (fica disponível na galeria geral também). Guardado em `site_settings.hero_image`.
+
+Sem nenhuma escolhida (`hero_image = NULL`), `routes/index.js` usa automaticamente a primeira imagem encontrada na pasta da galeria (ordem do sistema de ficheiros, não alfabética) — comportamento que já existia antes desta feature, mantido como fallback. Se a imagem escolhida for apagada do disco manualmente, cai também neste fallback automático em vez de mostrar uma imagem partida.
+
 ## 📖 **Documentação Adicional**
 
 - **[modules/ecommerce/README.md](./modules/ecommerce/README.md)** - E-commerce: activação, Stripe, testes

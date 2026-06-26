@@ -67,6 +67,15 @@ class SiteSettings {
     }
   }
 
+  /** Define a imagem de fundo do hero (caminho público, ex: /media/gallery/x.jpg). null = volta ao fallback automático. */
+  static async updateHeroImage(heroImagePath) {
+    await pool.query(
+      'UPDATE site_settings SET hero_image = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1',
+      [heroImagePath || null]
+    );
+    return { success: true };
+  }
+
   // Optional: Method to ensure the settings row exists
   static async initializeSettings() {
     try {

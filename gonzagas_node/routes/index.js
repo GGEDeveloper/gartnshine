@@ -64,10 +64,14 @@ router.get('/', async (req, res) => {
       console.error('Error reading gallery directory:', error);
     }
     
-    // Hero image: placeholder dedicado ou primeira imagem da galeria
-    const heroImage = mediaFiles.length > 0
-      ? mediaFiles[0].path
-      : '/images/placeholder-hero.jpg';
+    // Hero image: escolhida no admin (Settings > hero_image) se ainda existir
+    // na galeria, senão primeira imagem da galeria, senão placeholder.
+    const configuredHeroImage = res.locals.siteSettings && res.locals.siteSettings.hero_image;
+    const configuredHeroExists = configuredHeroImage
+      && mediaFiles.some((m) => m.path === configuredHeroImage);
+    const heroImage = configuredHeroExists
+      ? configuredHeroImage
+      : (mediaFiles.length > 0 ? mediaFiles[0].path : '/images/placeholder-hero.jpg');
 
     // Instagram strip — non-blocking; silently degrades to empty array on any error
     let igPosts = [];
