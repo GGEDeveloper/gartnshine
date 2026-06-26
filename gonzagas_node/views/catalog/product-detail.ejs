@@ -251,11 +251,50 @@
         line-height: 1.6;
         color: var(--color-text, #ddd);
     }
-    
+
     .product-description h3 {
         font-size: 1.25rem;
         margin-bottom: 0.75rem;
         color: var(--color-primary, #f5f5f5);
+    }
+
+    .product-specifications {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: rgba(20, 20, 20, 0.3);
+        border-radius: 8px;
+        border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    .product-specifications h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+        color: var(--color-highlight, #c9a84c);
+    }
+
+    .specs-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .specs-list li {
+        padding: 0.5rem 0;
+        color: var(--color-text, #ddd);
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .specs-list li:last-child {
+        border-bottom: none;
+    }
+
+    .specs-list strong {
+        color: var(--color-highlight, #c9a84c);
+        margin-right: 0.5rem;
     }
     
     .product-actions {
@@ -484,6 +523,26 @@
                 <div class="product-description">
                     <h3>Descrição</h3>
                     <p><%= product.description %></p>
+                </div>
+            <% } %>
+
+            <% if (product.weight || product.dimensions || product.material || product.style) { %>
+                <div class="product-specifications">
+                    <h3>Especificações</h3>
+                    <ul class="specs-list">
+                        <% if (product.weight) { %>
+                            <li><strong>Peso:</strong> <%= product.weight %></li>
+                        <% } %>
+                        <% if (product.dimensions) { %>
+                            <li><strong>Dimensões:</strong> <%= product.dimensions %></li>
+                        <% } %>
+                        <% if (product.material) { %>
+                            <li><strong>Material:</strong> <%= product.material %></li>
+                        <% } %>
+                        <% if (product.style) { %>
+                            <li><strong>Estilo:</strong> <%= product.style %></li>
+                        <% } %>
+                    </ul>
                 </div>
             <% } %>
             
