@@ -28,7 +28,8 @@ body {
   text-shadow: 0 0 14px rgba(160, 160, 160, 0.28);
 }
 
-.logo h1 {
+.logo h1,
+.logo .logo-text {
   color: var(--color-text);
   letter-spacing: 0.95px;
   font-weight: 700;

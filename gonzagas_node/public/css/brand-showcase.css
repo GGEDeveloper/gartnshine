@@ -50,7 +50,8 @@ body.showcase-theme .nav-menu a.active {
   text-shadow: 0 0 12px rgba(201, 168, 76, 0.25) !important;
 }
 
-body.showcase-theme .logo h1 {
+body.showcase-theme .logo h1,
+body.showcase-theme .logo .logo-text {
   color: var(--igp-cream) !important;
 }
 
@@ -1203,88 +1204,7 @@ body.showcase-theme .product-actions .btn-add-to-cart {
   letter-spacing: 0.12em;
 }
 
-/* ── Header — ícone carrinho ──────────────────────────────── */
-body.showcase-theme .header-cart-link {
-  color: var(--igp-cream) !important;
-  transition: color 0.2s;
-}
-
-body.showcase-theme .header-cart-link:hover {
-  color: var(--igp-gold) !important;
-}
-
-body.showcase-theme .header-cart-badge {
-  background: var(--igp-gold) !important;
-  color: #0a0a0a !important;
-  font-weight: 700;
-}
-
-/* ── Header — conta cliente ───────────────────────────────── */
-.header-container {
-  gap: 0.5rem;
-}
-
-.header-account-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.header-account-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--igp-cream) !important;
-  text-decoration: none;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.35rem 0.5rem;
-  border-radius: 4px;
-  transition: color 0.2s;
-}
-
-.header-account-link:hover {
-  color: var(--igp-gold) !important;
-}
-
-.header-account-register-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(201, 168, 76, 0.55);
-  border-radius: 4px;
-  color: var(--igp-gold) !important;
-  text-decoration: none;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
-}
-
-.header-account-register-btn:hover {
-  background: var(--igp-gold);
-  color: #0a0a0a !important;
-}
-
-.header-account-label {
-  display: none;
-}
-
-@media (min-width: 992px) {
-  .header-account-label {
-    display: inline;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-account-register-btn {
-    padding: 0.35rem 0.5rem;
-    font-size: 0.65rem;
-  }
-}
+/* ── Header — tipografia e ícones em public/css/header.css ── */
 
 /* Banners conta (cart, checkout, success) */
 .account-nav-banner {

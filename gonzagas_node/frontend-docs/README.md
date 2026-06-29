@@ -1,6 +1,6 @@
 # Documentação do Frontend - Gonzaga's Art & Shine
 
-> Actualizado: Maio 2026
+> Actualizado: Junho 2026
 
 ## 📁 Estrutura de Ficheiros CSS
 
@@ -17,8 +17,14 @@ public/css/
 ├── instagram-preview.css   # Página /instagram
 ├── home-ig-preview-bridge.css  # Bridge para IG preview na homepage
 ├── search-results.css      # Página /search (estilos base)
-├── frontend-mobile.css     # Responsividade e header mobile
+├── frontend-mobile.css     # Responsividade global (páginas, catálogo, hero)
+├── header.css              # Header público — tipografia, ícones, gaveta mobile (ÚLTIMO no stack)
 └── admin.css               # Painel administrativo (não usa showcase)
+
+public/js/
+├── header.js               # Pesquisa expansível (mobile) + dropdown admin
+├── frontend-mobile-navigation-fix.js  # Gaveta mobile (overlay, swipe, hamburger)
+└── modules/navigation.js   # Active nav por pathname + scroll no header
 
 modules/ecommerce/public/css/
 ├── cart.css                # Carrinho (/cart) + header-cart-link/badge
@@ -53,10 +59,10 @@ As variáveis legadas `--color-accent`, `--color-highlight`, `--color-text` tamb
 ### Ordem de carregamento (layout principal `layouts/main.ejs`)
 1. `variables.css`
 2. `main.css`
-3. `dark-luxe.css`
-4. CSS específico de página (homepage, catalog, etc.)
-5. `instagram-preview.css` + `home-ig-preview-bridge.css` (só homepage com IG preview)
-6. **`brand-showcase.css`** — sempre por último no stack público
+3. CSS específico de página (homepage, catalog, `frontend-mobile.css`, etc.)
+4. `dark-luxe.css`
+5. `brand-showcase.css` (quando `showcaseTheme` activo)
+6. **`header.css`** — sempre por último no stack público (sobrescreve header em showcase/mobile)
 
 ### Cache de CSS (desenvolvimento vs produção)
 - **Desenvolvimento** (`NODE_ENV != production`): `Cache-Control: no-cache, no-store, must-revalidate` + `app.version = Date.now()` para cache busting automático
@@ -150,7 +156,8 @@ curl -s http://localhost:3000/ | grep 'brand-showcase'
 ### Ficheiros principais
 | Ficheiro | Cobertura mobile |
 |----------|------------------|
-| `frontend-mobile.css` | Base mobile: header, hero, catálogo (2-col grid), featured carousel, footer, product detail, safe-area |
+| `header.css` | Header: logo, nav, toolbar, ícones, gaveta mobile, pesquisa |
+| `frontend-mobile.css` | Páginas: hero, catálogo (2-col grid), featured carousel, footer, product detail, safe-area |
 | `brand-showcase.css` | Overrides showcase: IG strip, collection, about, privacy/terms, search, product detail, e-commerce btn |
 | `cart.css` | Carrinho: tabela → cards; summary full-width |
 | `checkout.css` | Checkout, success/cancel, account: inputs 16px, botões full-width |
@@ -158,9 +165,13 @@ curl -s http://localhost:3000/ | grep 'brand-showcase'
 ### Breakpoints
 | Breakpoint | Uso |
 |------------|-----|
-| `768px` | Mobile / drawer nav; catálogo 2 colunas; search 2 colunas |
-| `520px` | IG grid → 2 colunas (homepage strip) |
+| `380px` | Phones muito estreitos — ícones e logo compactos |
 | `480px` | Phones pequenos; search/related → 1 coluna |
+| `520px` | IG grid → 2 colunas (homepage strip) |
+| `768px` | Mobile / drawer nav; catálogo 2 colunas; pesquisa por ícone |
+| `769–991px` | Tablet — nav desktop compacta, logo `Art&Shine`, pesquisa visível |
+| `992px` | Desktop — logo completo, label "Conta" no header |
+| `1200px` | Desktop largo — nav e pesquisa com mais espaço |
 
 ### Touch targets
 - Mínimo **44px** para botões, links de nav, filtros e `.btn-add-to-cart` (`--touch-min` em `frontend-mobile.css`)
@@ -202,10 +213,45 @@ Password do site em dev: `0009` (cookie `sitePassword` se necessário em scripts
 
 ## 🔍 Header
 
-- **Desktop**: Logo → Nav → Search (expansível) → Carrinho (condicional)
-- **Mobile**: Logo → Hamburger; Search expansível inline
-- Ficheiros: `views/partials/header.ejs`, `views/partials/mobile-header.ejs`, `public/css/frontend-mobile.css`
-- Pesquisa: ícone lupa → expande; fechar com ×, clique fora ou Escape
+Ficheiro activo: `views/partials/header.ejs` (incluído em `layouts/main.ejs`).
+
+### Estrutura
+```
+[ Logo ]  [ Nav desktop — centrada ]  [ header-toolbar: pesquisa | carrinho | conta | ☰ ]
+```
+
+### Navegação
+- Links em **português**: Início → Coleções → Catálogo (condicional) → Sobre
+- Estado activo via `currentPath` (não `title`)
+- Admin: dropdown desktop (hover) + sub-links na gaveta mobile
+
+### Tipografia
+| Elemento | Fonte |
+|----------|-------|
+| Logo | Cinzel — `Art&Shine` (mobile/tablet) ou nome completo (desktop ≥992px) |
+| Nav / pesquisa / conta | Source Sans 3, uppercase na nav desktop |
+
+### Ícones (`.header-icon-btn`)
+Pesquisa, carrinho, hambúrguer e fechar partilham tamanhos por breakpoint (42px mobile → 36px desktop).
+
+### Pesquisa
+- **Desktop/tablet:** barra sempre visível; autocomplete via `advanced-search.js`
+- **Mobile:** ícone lupa → overlay no header; fechar com ×, clique fora ou Escape (`header.js`)
+
+### E-commerce no header
+- `.header-cart-link` + `.header-cart-badge`
+- `.header-account-nav` (desktop ≥992px; oculto em mobile — links na gaveta via `_customerAccountNav.ejs`)
+
+### Ficheiros
+| Ficheiro | Função |
+|----------|--------|
+| `views/partials/header.ejs` | Markup EJS |
+| `public/css/header.css` | Estilos e breakpoints do header |
+| `public/js/header.js` | Pesquisa mobile + dropdown admin |
+| `public/js/frontend-mobile-navigation-fix.js` | Gaveta mobile |
+| `public/js/modules/navigation.js` | Highlight nav + scroll sticky |
+
+> **Legado/arquivo:** `mobile-header.ejs`, `enhanced-nav.ejs`, `header-v2.ejs` — não usar.
 
 ---
 

@@ -10,94 +10,34 @@ window.GonzagaNavigation = (function() {
   let isInitialized = false;
 
   /**
-   * Initialize mobile menu functionality
-   */
-  function initMobileMenu() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-
-    if (!menuToggle || !navMenu) {
-      GonzagaUtils.log(MODULE_NAME, 'Mobile menu elements not found');
-      return;
-    }
-
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      
-      // Transform hamburger to X
-      const spans = menuToggle.querySelectorAll('span');
-      if (spans.length >= 3) {
-        spans[0].classList.toggle('rotate-45');
-        spans[0].classList.toggle('translate-y-2.5');
-        spans[1].classList.toggle('opacity-0');
-        spans[2].classList.toggle('-rotate-45');
-        spans[2].classList.toggle('-translate-y-2.5');
-      }
-
-      GonzagaUtils.log(MODULE_NAME, 'Mobile menu toggled');
-    });
-  }
-
-  /**
-   * Initialize dropdown menus
-   */
-  function initDropdowns() {
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-    if (!dropdownToggles.length) {
-      GonzagaUtils.log(MODULE_NAME, 'No dropdown toggles found');
-      return;
-    }
-
-    dropdownToggles.forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        const parent = toggle.parentElement;
-        
-        // Se o link tiver um href e não for apenas '#', permite a navegação
-        if (toggle.getAttribute('href') && toggle.getAttribute('href') !== '#') {
-          return; // Permite o comportamento padrão do link
-        }
-        
-        e.preventDefault();
-        
-        // Fecha todos os outros dropdowns
-        document.querySelectorAll('.dropdown').forEach(item => {
-          if (item !== parent) item.classList.remove('open');
-        });
-        
-        // Toggle this dropdown
-        parent.classList.toggle('open');
-        
-        GonzagaUtils.log(MODULE_NAME, 'Dropdown toggled');
-      });
-    });
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown').forEach(item => {
-          item.classList.remove('open');
-        });
-      }
-    });
-  }
-
-  /**
-   * Highlight active navigation item
+   * Highlight active navigation item (desktop + mobile drawer)
    */
   function highlightActiveNav() {
     const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-menu a');
 
-    navLinks.forEach(link => {
+    const isHome = currentPath === '/' || currentPath === '/index.html';
+    const isCollections = currentPath === '/collections' || currentPath.startsWith('/collection/');
+    const isCatalog = currentPath === '/catalog' || currentPath.startsWith('/catalog/');
+    const isAbout = currentPath === '/about';
+    const isCart = currentPath === '/cart';
+    const isAdmin = currentPath.startsWith('/admin');
+
+    const matchers = [
+      { test: (href) => href === '/' && isHome, href: '/' },
+      { test: (href) => href === '/collections' && isCollections, href: '/collections' },
+      { test: (href) => href === '/catalog' && isCatalog, href: '/catalog' },
+      { test: (href) => href === '/about' && isAbout, href: '/about' },
+      { test: (href) => href === '/cart' && isCart, href: '/cart' },
+      { test: (href) => href === '/admin' && isAdmin, href: '/admin' }
+    ];
+
+    document.querySelectorAll('.nav-menu a, .mobile-nav-link[href]').forEach(link => {
       const href = link.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('mailto:')) return;
+
       link.classList.remove('active');
-      
-      if (href && currentPath.includes(href) && href !== '/') {
-        link.classList.add('active');
-      } else if (href === '/' && (currentPath === '/' || currentPath === '/index.html')) {
-        link.classList.add('active');
-      }
+      const match = matchers.find(m => m.href === href && m.test(href));
+      if (match) link.classList.add('active');
     });
 
     GonzagaUtils.log(MODULE_NAME, `Active nav highlighted for path: ${currentPath}`);
@@ -107,7 +47,7 @@ window.GonzagaNavigation = (function() {
    * Initialize scroll effects for navigation
    */
   function initScrollEffects() {
-    const header = document.querySelector('header, .navbar');
+    const header = document.querySelector('.main-header');
     if (!header) return;
 
     let lastScrollY = window.scrollY;
@@ -115,14 +55,13 @@ window.GonzagaNavigation = (function() {
 
     function updateHeader() {
       const scrollY = window.scrollY;
-      
+
       if (scrollY > 100) {
         header.classList.add('scrolled');
       } else {
         header.classList.remove('scrolled');
       }
 
-      // Hide/show on scroll
       if (scrollY > lastScrollY && scrollY > 200) {
         header.classList.add('hidden');
       } else {
@@ -154,11 +93,9 @@ window.GonzagaNavigation = (function() {
     }
 
     try {
-      initMobileMenu();
-      initDropdowns();
       highlightActiveNav();
       initScrollEffects();
-      
+
       isInitialized = true;
       GonzagaUtils.log(MODULE_NAME, 'Navigation module initialized successfully');
     } catch (error) {
@@ -170,26 +107,14 @@ window.GonzagaNavigation = (function() {
    * Destroy navigation (cleanup)
    */
   function destroy() {
-    // Remove event listeners and cleanup
-    const menuToggle = document.querySelector('.menu-toggle');
-    if (menuToggle) {
-      menuToggle.replaceWith(menuToggle.cloneNode(true));
-    }
-
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-    dropdownToggles.forEach(toggle => {
-      toggle.replaceWith(toggle.cloneNode(true));
-    });
-
     isInitialized = false;
     GonzagaUtils.log(MODULE_NAME, 'Navigation module destroyed');
   }
 
-  // Public API
   return {
     init,
     destroy,
     highlightActiveNav,
     isInitialized: () => isInitialized
   };
-})(); 
+})();

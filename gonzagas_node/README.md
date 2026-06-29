@@ -18,7 +18,8 @@ Sistema web completo desenvolvido especificamente para **Gonzaga's Art & Shine**
 - **Pedidos** com histórico de estado e numeração automática
 - **Admin de pedidos** (`/admin/orders`) e **definições da loja** (`/admin/settings/ecommerce`)
 - **Pagamentos Stripe** configuráveis: `disabled` / `test` / `live` (módulo `modules/payments/`)
-- **Conta cliente opcional** — header **Entrar** / **Criar conta**, menu mobile, footer; histórico em `/account/orders`
+- **Conta cliente opcional** — header **Entrar** / **Criar conta** (desktop), menu mobile e footer; histórico em `/account/orders`
+- **Header unificado** — nav em português, estados activos por `currentPath`, `header.css` + `header.js` modulares
 - **IVA configurável** (`prices_include_tax` nas definições e-commerce)
 - Activar/desactivar loja sem afectar o catálogo
 
@@ -77,9 +78,13 @@ Ver documentação completa em **[modules/ecommerce/README.md](./modules/ecommer
 ```
 public/js/modules/
 ├── utils.js        - Utilitários (debounce, throttle, DOM)
-├── navigation.js   - Sistema de navegação e scroll
+├── navigation.js   - Highlight nav + scroll no header
 ├── ui.js          - Componentes UI (loading, lightbox)
 └── carousel.js    - Sistema de carrosséis
+
+public/js/
+├── header.js       - Pesquisa expansível (mobile) + dropdown admin
+└── frontend-mobile-navigation-fix.js  - Gaveta mobile do header
 ```
 
 #### **Module Manager**
@@ -98,6 +103,9 @@ public/js/modules/
 - Botões padronizados
 - Cards de produtos
 - Sistema grid responsivo
+
+/* public/css/header.css — carregar por último no layout público */
+- Header: logo, nav PT, toolbar, ícones unificados, gaveta mobile
 ```
 
 ### 📱 **Interface Mobile Otimizada**
