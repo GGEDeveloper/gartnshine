@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Este documento descreve o procedimento padrão para fazer deploy das alterações do repositório local para o servidor de produção em `dominios.pt`.
+Este documento descreve o procedimento padrão para fazer deploy das alterações do repositório local para o servidor de produção, alojado na **waphix**.
 
 ## 🔄 Fluxo de Trabalho
 
@@ -26,20 +26,20 @@ git commit -m "tipo: descrição breve das alterações
 git push origin main
 ```
 
-### 2. **Deployment no Servidor** (dominios.pt)
+### 2. **Deployment no Servidor** (waphix)
 
 #### A. Conectar ao Servidor
 
 ```bash
-# SSH para o servidor
-ssh artnshin@cpanel159.dominios.pt
+# SSH para o servidor waphix (dados de acesso: ver gestor de credenciais interno)
+ssh <user>@<host-waphix>
 ```
 
 #### B. Procedimento de Atualização
 
 ```bash
 # 1. Navegar para o diretório do projeto
-cd /home/artnshin/artnshine.pt
+cd <caminho-do-projeto-no-waphix>
 
 # 2. Criar backup antes de atualizar (RECOMENDADO)
 cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
@@ -91,7 +91,7 @@ pkill -f "node.*server.js"
 
 # Iniciar a aplicação (se necessário configurar manualmente)
 cd gonzagas_node
-source /home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/bin/activate
+source <caminho-do-nodevenv-no-waphix>/bin/activate
 node server.js
 ```
 

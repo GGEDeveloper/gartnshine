@@ -1,18 +1,19 @@
-# 🚀 Comandos de Deployment - Servidor dominios.pt
+# 🚀 Comandos de Deployment - Servidor waphix
 
 ## 📋 Comandos Rápidos para Deployment
 
 ### 1. **Conectar ao Servidor**
 
 ```bash
-ssh artnshin@cpanel159.dominios.pt
+# Dados de acesso: ver gestor de credenciais interno
+ssh <user>@<host-waphix>
 ```
 
 ### 2. **Procedimento Completo de Atualização**
 
 ```bash
 # Navegar para o diretório do projeto
-cd /home/artnshin/artnshine.pt
+cd <caminho-do-projeto-no-waphix>
 
 # Criar backup (RECOMENDADO)
 cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S)
@@ -42,7 +43,7 @@ git status
 
 ```bash
 # Se houver conflitos, descartar alterações locais
-cd /home/artnshin/artnshine.pt
+cd <caminho-do-projeto-no-waphix>
 git checkout -- gonzagas_node/public/css/catalog-enhanced.css
 git reset --hard origin/main
 ```
@@ -57,8 +58,8 @@ git reset --hard origin/main
 
 **Via Terminal (se necessário):**
 ```bash
-cd /home/artnshin/artnshine.pt/gonzagas_node
-source /home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/bin/activate
+cd <caminho-do-projeto-no-waphix>/gonzagas_node
+source <caminho-do-nodevenv-no-waphix>/bin/activate
 # Reiniciar via cPanel é preferível
 ```
 
@@ -67,7 +68,7 @@ source /home/artnshin/nodevenv/artnshine.pt/gonzagas_node/18/bin/activate
 ## ⚡ Comando Único (Copy-Paste)
 
 ```bash
-cd /home/artnshin/artnshine.pt && cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S) && git checkout -- . && git fetch origin && git checkout main && git reset --hard origin/main && git log --oneline -1 && cd gonzagas_node && chmod 755 server.js && chmod -R 755 public/ views/ controllers/ models/ && cd .. && git status
+cd <caminho-do-projeto-no-waphix> && cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S) && git checkout -- . && git fetch origin && git checkout main && git reset --hard origin/main && git log --oneline -1 && cd gonzagas_node && chmod 755 server.js && chmod -R 755 public/ views/ controllers/ models/ && cd .. && git status
 ```
 
 ## 🔧 Resolver Alterações Locais Não Desejadas
@@ -76,7 +77,7 @@ Se houver muitos ficheiros modificados que não devem estar modificados:
 
 ```bash
 # Descartar TODAS as alterações locais
-cd /home/artnshin/artnshine.pt
+cd <caminho-do-projeto-no-waphix>
 git checkout -- .
 
 # Ou descartar apenas ficheiros específicos
