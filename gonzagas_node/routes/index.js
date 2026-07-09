@@ -323,7 +323,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       siteTitle: 'Gonzaga\'s Art & Shine',
       metaDescription: metaDesc,
       canonicalUrl: `${baseUrl}/catalog/product/${productSlugOrId}`,
-      ogImage: product.images && product.images.length > 0 ? `${baseUrl}/uploads/products/${product.images[0]}` : undefined,
+      ogImage: product.images && product.images.length > 0 ? `${baseUrl}/media/products/${product.images[0].replace(/\.[^.]+$/, '')}-medium.jpg` : undefined,
       ogType: 'product'
     });
     

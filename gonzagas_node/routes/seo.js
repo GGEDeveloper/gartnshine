@@ -211,14 +211,18 @@ router.get('/feed/products.xml', async (req, res) => {
     let products;
     try {
       [products] = await pool.execute(`
-        SELECT 
+        SELECT
           p.id, p.name, p.slug, p.reference, p.description,
           p.sale_price, p.current_stock, p.material, p.weight,
           pf.name as family_name,
-          (SELECT pi.image_filename 
-           FROM product_images pi 
-           WHERE pi.product_id = p.id AND pi.is_primary = 1 
-           LIMIT 1) as main_image
+          (SELECT pi.image_filename
+           FROM product_images pi
+           WHERE pi.product_id = p.id AND pi.is_primary = 1
+           LIMIT 1) as main_image,
+          (SELECT pi.image_filename
+           FROM product_images pi
+           WHERE pi.product_id = p.id AND pi.is_primary = 0
+           ORDER BY pi.id ASC LIMIT 1) as secondary_image
         FROM products p
         LEFT JOIN product_families pf ON p.family_id = pf.id
         WHERE p.is_active = 1
@@ -262,12 +266,16 @@ router.get('/feed/products.xml', async (req, res) => {
     <link>${baseUrl}</link>
     <description>Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.</description>`;
 
+    const mediumImageUrl = (filename) =>
+      `${baseUrl}/media/products/${filename.replace(/\.[^.]+$/, '')}-medium.jpg`;
+
     for (const product of products) {
       const productPath = product.slug || product.id;
       const productUrl = `${baseUrl}/catalog/product/${productPath}`;
       const imageUrl = product.main_image
-        ? `${baseUrl}/uploads/products/${product.main_image}`
+        ? mediumImageUrl(product.main_image)
         : `${baseUrl}/images/og-artnshine.jpg`;
+      const additionalImageUrl = product.secondary_image ? mediumImageUrl(product.secondary_image) : null;
       const price = product.sale_price ? parseFloat(product.sale_price).toFixed(2) : '0.00';
       const availability = product.current_stock > 0 ? 'in_stock' : 'out_of_stock';
       const desc = product.description
@@ -280,7 +288,8 @@ router.get('/feed/products.xml', async (req, res) => {
       <title>${escXml(product.name)}</title>
       <description>${desc}</description>
       <link>${productUrl}</link>
-      <g:image_link>${imageUrl}</g:image_link>
+      <g:image_link>${imageUrl}</g:image_link>${additionalImageUrl ? `
+      <g:additional_image_link>${additionalImageUrl}</g:additional_image_link>` : ''}
       <g:price>${price} EUR</g:price>
       <g:availability>${availability}</g:availability>
       <g:condition>new</g:condition>
