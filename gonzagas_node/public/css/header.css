@@ -232,6 +232,29 @@ body.showcase-theme .main-header .logo-text {
   display: none;
 }
 
+/* Gaveta mobile: sempre fora do ecrã por omissão, em qualquer largura,
+   para não haver breakpoint "órfão" sem regra de posicionamento. */
+.main-header + .mobile-nav,
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 1050;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(8, 8, 8, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow-y: auto;
+}
+
+.mobile-nav.frontend-nav-active,
+.mobile-nav.active {
+  left: 0 !important;
+}
+
 .main-header .mobile-search-close {
   position: absolute;
   right: 0.25rem;
@@ -405,28 +428,6 @@ body.showcase-theme .main-header .logo-text {
 
   .main-header .mobile-nav-toggle {
     display: inline-flex !important;
-  }
-
-  /* Gaveta mobile */
-  .main-header + .mobile-nav,
-  .mobile-nav {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    z-index: 1050;
-    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(8, 8, 8, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    overflow-y: auto;
-  }
-
-  .mobile-nav.frontend-nav-active,
-  .mobile-nav.active {
-    left: 0 !important;
   }
 
   .mobile-nav-content {

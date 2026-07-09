@@ -1,10 +1,14 @@
 # Changelog - Gonzaga's Art & Shine
 
-## [2026-07-09] - Fix: flash do menu mobile sobreposto ao nav desktop (FOUC)
+## [2026-07-09] - Fix: flash do menu mobile sobreposto ao nav desktop (FOUC + breakpoint órfão)
 
-### 🐛 **Bug**
+### 🐛 **Bug (parte 1 — FOUC, commit `02deb9e`)**
 - Desde o refactor `94c92d9` ("refactor(header): unificar nav PT..."), o menu mobile (`nav#mobile-nav`) e a regra que esconde o nav desktop em ecrãs pequenos passaram a viver só em `public/css/header.css`, que é o **último** de 15 stylesheets carregados em `views/layouts/main.ejs`. Até esse ficheiro carregar, o `mobile-nav` renderizava sem `position: fixed`, aparecendo no fluxo normal do documento — empurrado logo abaixo do header, sobreposto à imagem do hero — e o nav desktop ficava visível ao mesmo tempo.
-- Corrigido reintroduzindo um `<style>` crítico inline em `views/partials/header.ejs`, logo a seguir ao markup do `mobile-nav`, com as regras mínimas (`position: fixed; left: -100%`, `z-index`, `display:none` do `.desktop-nav` em mobile) — garantindo que a gaveta nasce sempre escondida antes do `header.css` externo carregar, independentemente da ordem/latência dos outros stylesheets.
+- Corrigido reintroduzindo um `<style>` crítico inline em `views/partials/header.ejs`, logo a seguir ao markup do `mobile-nav`.
+
+### 🐛 **Bug (parte 2 — breakpoint órfão, este commit)**
+- A correção da parte 1 ainda escondia a gaveta apenas dentro de `@media (max-width: 768px)`, tal como o `header.css`. Entre **769px e 991px** (tablet) não existia nenhuma regra de posicionamento para `.mobile-nav` — só é escondida via `display:none !important` a partir de `min-width: 992px`. Nessa janela intermédia a gaveta ficava sempre visível, em fluxo normal, com o nav desktop também visível (o padrão exato do bug reportado, mesmo após o deploy da parte 1).
+- Corrigido: `position: fixed; left: -100%; z-index: 1050; ...` do `.mobile-nav` passou a ser uma regra **base, sem media query**, tanto em `public/css/header.css` como no `<style>` crítico de `views/partials/header.ejs`. A gaveta fica sempre fora do ecrã por omissão, em qualquer largura; só a classe `.active`/`.frontend-nav-active` (aplicada via JS, só quando o botão hambúrguer existe, escondido fora de mobile) a revela.
 
 ---
 
