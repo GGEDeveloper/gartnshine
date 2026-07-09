@@ -213,7 +213,7 @@ router.get('/feed/products.xml', async (req, res) => {
       [products] = await pool.execute(`
         SELECT
           p.id, p.name, p.slug, p.reference, p.description,
-          p.sale_price, p.current_stock, p.material, p.weight,
+          p.sale_price, p.current_stock, p.material, p.weight, p.color,
           pf.name as family_name,
           (SELECT pi.image_filename
            FROM product_images pi
@@ -282,6 +282,10 @@ router.get('/feed/products.xml', async (req, res) => {
         ? escXml(product.description.substring(0, 5000))
         : escXml(`${product.name} — Joia artesanal Gonzaga's Art & Shine. ${product.material || 'Prata 925'} com pedras naturais.`);
 
+      const familyLower = (product.family_name || '').toLowerCase();
+      const color = product.color
+        || (familyLower.includes('latão') ? 'Dourado' : 'Prateado');
+
       feed += `
     <item>
       <g:id>${escXml(product.reference || String(product.id))}</g:id>
@@ -297,6 +301,9 @@ router.get('/feed/products.xml', async (req, res) => {
       <g:mpn>${escXml(product.reference || String(product.id))}</g:mpn>
       <g:product_type>${escXml(product.family_name || 'Joias')}</g:product_type>
       <g:google_product_category>188</g:google_product_category>
+      <g:color>${escXml(color)}</g:color>
+      <g:gender>unisex</g:gender>
+      <g:age_group>adult</g:age_group>
       <g:shipping>
         <g:country>PT</g:country>
         <g:service>Standard</g:service>
