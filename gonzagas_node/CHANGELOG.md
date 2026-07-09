@@ -1,5 +1,13 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-07-09] - Fix: flash do menu mobile sobreposto ao nav desktop (FOUC)
+
+### 🐛 **Bug**
+- Desde o refactor `94c92d9` ("refactor(header): unificar nav PT..."), o menu mobile (`nav#mobile-nav`) e a regra que esconde o nav desktop em ecrãs pequenos passaram a viver só em `public/css/header.css`, que é o **último** de 15 stylesheets carregados em `views/layouts/main.ejs`. Até esse ficheiro carregar, o `mobile-nav` renderizava sem `position: fixed`, aparecendo no fluxo normal do documento — empurrado logo abaixo do header, sobreposto à imagem do hero — e o nav desktop ficava visível ao mesmo tempo.
+- Corrigido reintroduzindo um `<style>` crítico inline em `views/partials/header.ejs`, logo a seguir ao markup do `mobile-nav`, com as regras mínimas (`position: fixed; left: -100%`, `z-index`, `display:none` do `.desktop-nav` em mobile) — garantindo que a gaveta nasce sempre escondida antes do `header.css` externo carregar, independentemente da ordem/latência dos outros stylesheets.
+
+---
+
 ## [2026-06-26] - Admin: escolher imagem de fundo do Hero da homepage
 
 ### ✨ **Nova funcionalidade**

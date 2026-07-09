@@ -161,3 +161,26 @@
     </div>
   </div>
 </nav>
+
+<style>
+  /* Critical CSS: evita FOUC da gaveta mobile antes de header.css carregar */
+  @media (max-width: 768px) {
+    .main-header .desktop-nav {
+      display: none !important;
+    }
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 1050;
+      overflow-y: auto;
+    }
+    .mobile-nav.frontend-nav-active,
+    .mobile-nav.active {
+      left: 0 !important;
+    }
+  }
+</style>
