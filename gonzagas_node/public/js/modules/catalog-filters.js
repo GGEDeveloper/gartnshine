@@ -522,7 +522,7 @@ class CatalogFilters {
   }
 
   generateProductHTML(product, index) {
-    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
+    const imageUrl = product.image_url ? `/media/products/${product.image_url.replace(/\.[^.]+$/, '')}-medium.jpg` : '/images/imagem-nao-disponivel.svg';
     const href = this.productDetailHref(product);
 
     return `

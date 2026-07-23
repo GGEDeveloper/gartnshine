@@ -599,7 +599,7 @@
         <div class="related-products-grid">
             <% relatedProducts.forEach(function(rp) { %>
             <a href="/catalog/product/<%= rp.slug || rp.id %>" class="related-product-card">
-                <img src="<%= rp.image_url ? '/media/products/' + rp.image_url : '/images/imagem-nao-disponivel.svg' %>" 
+                <img src="<%= rp.image_url ? '/media/products/' + rp.image_url.replace(/\.[^.]+$/, '') + '-medium.jpg' : '/images/imagem-nao-disponivel.svg' %>"
                      onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';"
                      alt="<%= rp.name %> — joia artesanal prata 925" loading="lazy">
                 <div class="related-info">

@@ -146,7 +146,7 @@ class CatalogQuickView {
   }
 
   renderProduct(product, container) {
-    const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
+    const imageUrl = product.image_url ? `/media/products/${product.image_url.replace(/\.[^.]+$/, '')}-medium.jpg` : '/images/imagem-nao-disponivel.svg';
     const priceDisplay = product.formatted_sale_price || '<span class="text-muted fst-italic">Preço sob consulta</span>';
 
     container.innerHTML = `

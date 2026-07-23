@@ -262,7 +262,7 @@
                 <div class="product-card">
                   <div class="product-image-container">
                     <% 
-                      const imageUrl = product.image_url ? `/media/products/${product.image_url}` : '/images/imagem-nao-disponivel.svg';
+                      const imageUrl = product.image_url ? `/media/products/${product.image_url.replace(/\.[^.]+$/, '')}-medium.jpg` : '/images/imagem-nao-disponivel.svg';
                       const slugOrId = product.slug || product.id;
                       const productHref = '/catalog/product/' + encodeURIComponent(slugOrId) + '?return=' + encodeURIComponent(retPath);
                     %>
