@@ -135,6 +135,20 @@ class ProductFamily {
     }
   }
 
+  /** Define (ou limpa, com null) a imagem de destaque usada em /collection/:id */
+  static async updateHeroImage(id, heroImage) {
+    try {
+      const [result] = await pool.query(
+        'UPDATE product_families SET hero_image = ? WHERE id = ?',
+        [heroImage, id]
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error('Error updating product family hero image:', error);
+      throw error;
+    }
+  }
+
   // Delete a product family (e descendentes em cascata - primeiro os filhos)
   static async delete(id) {
     try {

@@ -1033,6 +1033,25 @@ body.showcase-theme .collection-header {
   text-align: center;
 }
 
+/* Cabeçalho com imagem de destaque escolhida no admin (hero_image da família) */
+body.showcase-theme .collection-header.has-background {
+  position: relative;
+  padding: clamp(4rem, 10vw, 7rem) 1.5rem clamp(3rem, 7vw, 5rem);
+}
+
+body.showcase-theme .collection-header.has-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.72);
+  z-index: 1;
+}
+
+body.showcase-theme .collection-header.has-background > * {
+  position: relative;
+  z-index: 2;
+}
+
 body.showcase-theme .collection-title h1 {
   color: var(--igp-cream);
   font-family: Georgia, 'Times New Roman', serif;

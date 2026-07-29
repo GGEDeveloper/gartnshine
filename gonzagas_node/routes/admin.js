@@ -19,6 +19,9 @@ const QuickProductController = require('../controllers/QuickProductController');
 
 // Middleware
 const { guestSessionRequired, adminSessionRequired, roleRequired } = require('../middleware/authMiddleware');
+const { createGalleryUpload } = require('../middleware/galleryUpload');
+
+const familyHeroUpload = createGalleryUpload('family');
 
 // Models
 const Checkpoint = require('../models/Checkpoint');
@@ -323,6 +326,11 @@ router.get('/product-families/create', adminSessionRequired, ProductFamilyContro
 router.post('/product-families/create', adminSessionRequired, ProductFamilyController.createFamily);
 router.get('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.showEditForm);
 router.post('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.updateFamily);
+router.post('/product-families/edit/:id/hero-image',
+  adminSessionRequired,
+  familyHeroUpload.single('hero_image_file'),
+  ProductFamilyController.updateHeroImage
+);
 router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyController.deleteFamily);
 router.post('/product-families/colors/create', adminSessionRequired, ProductFamilyController.createColor);
 router.post('/product-families/colors/edit/:id', adminSessionRequired, ProductFamilyController.updateColor);

@@ -1,5 +1,6 @@
 const ProductFamily = require('../models/ProductFamily');
 const ProductColor = require('../models/ProductColor');
+const { listGalleryImages } = require('../utils/galleryLibrary');
 
 let getColorsSafe = async () => {
   try {
@@ -90,11 +91,13 @@ exports.showEditForm = async (req, res) => {
     const excludeIds = ProductFamily.getDescendantIds(flat, familyId);
     const tree = ProductFamily.buildTree(flat.filter(f => !excludeIds.includes(f.id)));
     const parentOptions = buildParentOptions(tree);
+    const galleryImages = await listGalleryImages();
     res.render('admin/product-families/family-form', {
       title: 'Editar Categoria',
       family,
       isNew: false,
       parentOptions,
+      galleryImages,
       canEditCode: Number(family.product_count || 0) === 0,
       layout: 'admin/layouts/main',
       breadcrumb: res.locals.breadcrumb || [],
@@ -133,6 +136,47 @@ exports.updateFamily = async (req, res) => {
     console.error('Error updating product family:', error);
     req.flash('error_msg', 'Falha ao atualizar categoria. ' + (error.message || ''));
     res.redirect(`/admin/product-families/edit/${familyId}`);
+  }
+};
+
+/** POST /admin/product-families/edit/:id/hero-image — escolher da galeria, enviar nova, ou remover. */
+exports.updateHeroImage = async (req, res) => {
+  const familyId = parseInt(req.params.id, 10);
+  const backToForm = `/admin/product-families/edit/${familyId}`;
+  try {
+    const family = await ProductFamily.getById(familyId);
+    if (!family) {
+      req.flash('error_msg', 'Categoria não encontrada.');
+      return res.redirect('/admin/product-families');
+    }
+
+    let heroImagePath;
+    if (req.file) {
+      heroImagePath = `/media/gallery/${req.file.filename}`;
+    } else if (req.body.hero_image_existing) {
+      const galleryImages = await listGalleryImages();
+      const match = galleryImages.find((img) => img.path === req.body.hero_image_existing);
+      if (!match) {
+        req.flash('error_msg', 'Imagem selecionada não foi encontrada na galeria.');
+        return res.redirect(backToForm);
+      }
+      heroImagePath = match.path;
+    } else if (req.body.remove_hero_image === '1') {
+      heroImagePath = null;
+    } else {
+      req.flash('error_msg', 'Escolha uma imagem existente ou envie uma nova.');
+      return res.redirect(backToForm);
+    }
+
+    await ProductFamily.updateHeroImage(familyId, heroImagePath);
+    req.flash('success_msg', heroImagePath
+      ? 'Imagem de destaque atualizada.'
+      : 'Imagem de destaque removida.');
+    res.redirect(backToForm);
+  } catch (error) {
+    console.error('Error updating family hero image:', error);
+    req.flash('error_msg', 'Falha ao atualizar a imagem de destaque. ' + (error.message || ''));
+    res.redirect(backToForm);
   }
 };
 
