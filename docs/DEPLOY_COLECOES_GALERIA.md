@@ -2,7 +2,7 @@
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `c069153` → `9c7b051` em `main`
+**Alcance:** commits `c069153` → `5dd9fe2` em `main`
 
 ---
 
@@ -26,7 +26,7 @@
 
 ## Contexto do que vai ser instalado
 
-Novas funcionalidades e várias correções. As três migrações são
+Novas funcionalidades e várias correções. As quatro migrações são
 **aditivas** (só acrescentam colunas/tabela nova) — nenhuma linha de dados
 existente é lida, alterada ou apagada.
 
@@ -35,6 +35,7 @@ existente é lida, alterada ou apagada.
 | `006_add_family_hero_and_gallery.sql` | Coluna `product_families.hero_image` (nullable) + tabela nova `gallery_items` |
 | `007_add_section_backgrounds.sql` | Colunas `site_settings.featured_background` e `media_strip_background` (nullable) |
 | `008_collection_params.sql` | Colunas `product_families.card_image`, `seo_title` e `seo_description` (nullable) |
+| `009_curated_collections.sql` | Tabelas novas `collections` e `collection_products` (coleções curadas) |
 
 Todas são idempotentes (verificam se já existem antes de criar), por isso
 podem ser corridas mais do que uma vez sem efeito duplicado.
@@ -103,7 +104,7 @@ e isso perder-se-ia.
 
 ```bash
 git merge --ff-only origin/main
-git log --oneline -1                  # deve mostrar 9c7b051 (ou mais recente)
+git log --oneline -1                  # deve mostrar 5dd9fe2 (ou mais recente)
 ```
 
 ---
@@ -121,6 +122,9 @@ docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
 
 docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
   < sql/migrations/008_collection_params.sql
+
+docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
+  < sql/migrations/009_curated_collections.sql
 ```
 
 Cada uma deve imprimir uma linha `Migration 00X completed: ...`.
@@ -132,13 +136,15 @@ docker exec mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" -e "
 SHOW COLUMNS FROM product_families WHERE Field IN
   ('hero_image','card_image','seo_title','seo_description');
 SHOW COLUMNS FROM site_settings LIKE '%background%';
-SHOW TABLES LIKE 'gallery_items';"
+SHOW TABLES LIKE 'gallery_items';
+SHOW TABLES LIKE 'collection%';"
 ```
 
 **Esperado:** as quatro colunas em `product_families`
 (`hero_image`, `card_image`, `seo_title`, `seo_description`), as duas de
-`site_settings` (`featured_background`, `media_strip_background`) e a tabela
-`gallery_items`. Se faltar alguma, **parar e reportar**.
+`site_settings` (`featured_background`, `media_strip_background`) e as tabelas
+`gallery_items`, `collections` e `collection_products`. Se faltar alguma,
+**parar e reportar**.
 
 ---
 
@@ -217,8 +223,10 @@ Depois, verificar no browser:
 | `https://artnshine.pt/` | Secção "Explorar Coleções" com **fotografias** nos cartões (não blocos pretos) e botão "Ver galeria completa" |
 | `https://artnshine.pt/collection/1` | Preços reais visíveis (antes dizia sempre "Preço sob consulta") e cabeçalho com imagem |
 | `/admin` → menu lateral | Tem **Coleções** e **Galeria**. **Não** deve ter "Media" |
-| `/admin/collections-admin` | Dois separadores legíveis; cada coleção mostra duas miniaturas (Cabeçalho / Cartão) marcadas "(auto)" |
-| `/admin/collections-admin/1` | Editor com nome, descrição, título e descrição de SEO, e um selector para cada uma das duas imagens |
+| `/admin` → menu lateral | Tem **Coleções**, **Galeria** e **Aspeto do Site** |
+| `/admin/collections` | Área das coleções curadas (vazia no início — é normal, ainda não existe nenhuma) |
+| `/admin/site-appearance` | Dois separadores legíveis: imagens das categorias e fundos da página inicial |
+| `https://artnshine.pt/collection/99999` | Dá **404 depressa**. Antes deste deploy o pedido ficava pendurado sem resposta |
 | `/admin/gallery` | Lista as imagens semeadas no Passo 4 |
 | `/admin/products` → editar um produto → "Adicionar da biblioteca" | Continua a abrir e a listar imagens (usa a API de media, que foi mantida) |
 
