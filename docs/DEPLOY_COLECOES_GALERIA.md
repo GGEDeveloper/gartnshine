@@ -2,7 +2,7 @@
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `c069153` → `66484c2` em `main`
+**Alcance:** commits `c069153` → `fd35ac0` em `main`
 
 ---
 
@@ -102,7 +102,7 @@ e isso perder-se-ia.
 
 ```bash
 git merge --ff-only origin/main
-git log --oneline -1                  # deve mostrar 66484c2
+git log --oneline -1                  # deve mostrar fd35ac0 (ou mais recente)
 ```
 
 ---
@@ -207,10 +207,12 @@ Depois, verificar no browser:
 |---|---|
 | `https://artnshine.pt/collections` | Mostra as imagens da galeria (não "Coleção em Preparação") |
 | Clicar numa imagem da galeria | Abre a ampliação (antes não abria — estava bloqueada) |
-| `https://artnshine.pt/` | Nova secção "Explorar Coleções" com cartões e botão "Ver galeria completa" |
-| `https://artnshine.pt/collection/1` | Preços reais visíveis (antes dizia sempre "Preço sob consulta") |
-| `/admin` → Categorias → editar uma | Existe o bloco "Imagem de destaque da coleção" |
-| `/admin` → Galeria | Nova área, lista as imagens semeadas no Passo 4 |
+| `https://artnshine.pt/` | Secção "Explorar Coleções" com **fotografias** nos cartões (não blocos pretos) e botão "Ver galeria completa" |
+| `https://artnshine.pt/collection/1` | Preços reais visíveis (antes dizia sempre "Preço sob consulta") e cabeçalho com imagem |
+| `/admin` → menu lateral | Tem **Coleções** e **Galeria**. **Não** deve ter "Media" |
+| `/admin/collections-admin` | Dois separadores: "Capas das coleções" e "Fundos da página inicial", ambos legíveis |
+| `/admin/gallery` | Lista as imagens semeadas no Passo 4 |
+| `/admin/products` → editar um produto → "Adicionar da biblioteca" | Continua a abrir e a listar imagens (usa a API de media, que foi mantida) |
 
 Confirmar por fim que **nenhum dado se perdeu** — repetir a contagem do Passo 1:
 
@@ -251,11 +253,15 @@ gunzip < /srv/backups/artnshine/pre_colecoes_<STAMP>.sql.gz \
 
 ## Notas sobre os dados
 
-- As **imagens de destaque das coleções** começam todas vazias em produção.
-  Isso é o esperado: as páginas mostram o cabeçalho em texto, como sempre
-  fizeram, e ficam mais ricas à medida que forem sendo definidas no admin.
-- A **secção "Explorar Coleções"** na página inicial já funciona sem imagens
-  definidas (os cartões usam um degradê discreto).
+- As **capas das coleções** começam todas vazias em produção — é o esperado.
+  Sem capa definida, tanto os cartões da página inicial como o cabeçalho da
+  página da coleção usam automaticamente uma fotografia de uma peça dessa
+  coleção, por isso nada aparece vazio. Definir capas no admin
+  (`/admin/collections-admin`) é opcional e serve para escolher melhor a
+  imagem.
+- A página **`/admin/media/library` deixou de existir** (dava 404). Era um
+  segundo painel a gerir as mesmas imagens que a Galeria. Se alguém tiver esse
+  endereço nos favoritos, passa a usar `/admin/gallery`.
 - Os **fundos das secções** (`featured_background`, `media_strip_background`)
   começam a NULL — sem alteração visual até alguém escolher uma imagem.
 - Nada neste deploy altera produtos, encomendas, clientes ou stock.
