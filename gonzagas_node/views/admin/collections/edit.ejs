@@ -1,0 +1,154 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex justify-content-between align-items-start gap-2 mb-4 flex-wrap">
+    <div>
+      <a href="/admin/collections-admin" class="small text-decoration-none">← Todas as coleções</a>
+      <h1 class="h3 mb-0 mt-1"><%= family.name %></h1>
+      <small class="text-muted"><%= family.product_count %> peça<%= Number(family.product_count) === 1 ? '' : 's' %></small>
+    </div>
+    <a href="/collection/<%= family.slug || family.id %>" target="_blank" rel="noopener"
+       class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-external-link-alt"></i> Ver página pública
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <div class="row g-3">
+
+    <!-- Textos -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-header py-2">
+          <h6 class="m-0 fw-semibold">Nome e descrição</h6>
+          <small class="text-muted">Aparecem no cabeçalho da página da coleção.</small>
+        </div>
+        <div class="card-body">
+          <form action="/admin/collections-admin/<%= family.id %>/content" method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nome <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="name" name="name" required maxlength="100"
+                     value="<%= family.name %>">
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Descrição</label>
+              <textarea class="form-control" id="description" name="description" rows="4"
+                        placeholder="Ex: Anéis em prata 925 trabalhada à mão, com pedras naturais."><%= family.description || '' %></textarea>
+              <small class="text-muted">Mostrada sob o título. Deixar vazio esconde o parágrafo.</small>
+            </div>
+
+            <hr>
+
+            <p class="fw-semibold mb-1">SEO</p>
+            <small class="text-muted d-block mb-3">
+              Só para os motores de busca e partilhas. Deixar vazio usa o nome e a descrição acima.
+            </small>
+
+            <div class="mb-3">
+              <label for="seo_title" class="form-label">Título para SEO</label>
+              <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="255"
+                     value="<%= family.seo_title || '' %>"
+                     placeholder="<%= family.name %>">
+              <small class="text-muted">Recomendado até ~60 caracteres.</small>
+            </div>
+
+            <div class="mb-3">
+              <label for="seo_description" class="form-label">Descrição para SEO</label>
+              <textarea class="form-control" id="seo_description" name="seo_description" rows="3"
+                        maxlength="320"><%= family.seo_description || '' %></textarea>
+              <small class="text-muted">Recomendado até ~155 caracteres.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Guardar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagens -->
+    <div class="col-12 col-lg-6">
+      <%
+        const imagens = [
+          { titulo: 'Imagem do cabeçalho',
+            desc: 'Fundo do topo da página desta coleção.',
+            current: family.hero_image,
+            action: '/admin/collections-admin/' + family.id + '/hero-image',
+            existingField: 'hero_image_existing',
+            fileField: 'hero_image_file',
+            removeField: 'remove_hero_image' },
+          { titulo: 'Imagem do cartão',
+            desc: 'Cartão desta coleção na secção "Explorar Coleções" da página inicial.',
+            current: family.card_image,
+            action: '/admin/collections-admin/' + family.id + '/card-image',
+            existingField: 'card_image_existing',
+            fileField: 'card_image_file',
+            removeField: 'remove_card_image' }
+        ];
+        const autoImage = family.fallback_image ? productImg(family.fallback_image, 'small').jpg : null;
+      %>
+
+      <% imagens.forEach(function(img) { %>
+        <div class="card mb-3">
+          <div class="card-header py-2">
+            <h6 class="m-0 fw-semibold"><%= img.titulo %></h6>
+            <small class="text-muted"><%= img.desc %></small>
+          </div>
+          <div class="card-body">
+            <% if (img.current) { %>
+              <img src="<%= encodeURI(img.current) %>" alt="<%= img.titulo %>" loading="lazy"
+                   onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                   class="mb-2" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px;">
+            <% } else if (autoImage) { %>
+              <img src="<%= encodeURI(autoImage) %>" alt="Imagem automática" loading="lazy"
+                   onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                   class="mb-2" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px; opacity: 0.75;">
+              <small class="text-muted d-block mb-2">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                Automática — foto de uma peça desta coleção. Escolha uma imagem para substituir.
+              </small>
+            <% } else { %>
+              <div class="mb-2" style="width: 100%; height: 120px; border-radius: 6px;
+                          background: rgba(255,255,255,0.05); display: flex; align-items: center;
+                          justify-content: center; color: #6c757d;">
+                Sem imagem
+              </div>
+            <% } %>
+
+            <%- include('../partials/_image-picker', {
+                  action: img.action,
+                  existingField: img.existingField,
+                  fileField: img.fileField,
+                  removeField: img.removeField,
+                  current: img.current,
+                  galleryImages: galleryImages,
+                  label: img.current ? 'Mudar imagem' : 'Escolher imagem'
+                }) %>
+          </div>
+        </div>
+      <% }); %>
+
+      <p class="text-muted small">
+        As imagens vêm da <a href="/admin/gallery">Galeria</a>. Enviar uma nova aqui também a
+        coloca na pasta da galeria, ficando disponível para as outras coleções.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Realce da miniatura escolhida, em qualquer selector desta página.
+  document.addEventListener('change', function (e) {
+    const radio = e.target;
+    if (!radio.matches('.image-picker input[type="radio"]')) return;
+    const form = radio.closest('form');
+    if (!form) return;
+    form.querySelectorAll('input[type="radio"]').forEach(function (r) {
+      if (r.nextElementSibling) {
+        r.nextElementSibling.style.borderColor = r.checked ? '#c9a84c' : 'transparent';
+      }
+    });
+  });
+</script>

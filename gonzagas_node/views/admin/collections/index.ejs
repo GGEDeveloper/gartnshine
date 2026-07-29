@@ -26,53 +26,60 @@
     <!-- ── Capas das coleções ─────────────────────────────────── -->
     <div class="tab-pane fade show active" id="tab-capas" role="tabpanel">
       <p class="text-muted">
-        A capa aparece no cabeçalho da página da coleção e no cartão da página inicial.
-        Sem capa escolhida é usada automaticamente uma fotografia de uma peça dessa coleção.
+        Cada coleção tem nome, descrição, textos de SEO e duas imagens: uma para o cabeçalho
+        da sua página e outra para o cartão na página inicial. O que não for definido usa
+        automaticamente uma fotografia de uma peça dessa coleção.
       </p>
 
       <div class="row g-3">
         <% families.forEach(function(fam) {
-             const inUse = fam.hero_image
-               || (fam.fallback_image ? productImg(fam.fallback_image, 'small').jpg : null);
+             const auto = fam.fallback_image ? productImg(fam.fallback_image, 'small').jpg : null;
+             const heroShown = fam.hero_image || auto;
+             const cardShown = fam.card_image || fam.hero_image || auto;
+             const definidos = [
+               fam.description ? 'descrição' : null,
+               (fam.seo_title || fam.seo_description) ? 'SEO' : null
+             ].filter(Boolean);
         %>
           <div class="col-12 col-lg-6 col-xxl-4">
-            <div class="card h-100">
+            <a href="/admin/collections-admin/<%= fam.id %>"
+               class="card h-100 text-decoration-none collection-admin-card">
               <div class="card-body p-3">
-                <div class="d-flex gap-3 mb-2">
-                  <% if (inUse) { %>
-                    <img src="<%= encodeURI(inUse) %>" alt="Capa de <%= fam.name %>" loading="lazy"
-                         onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
-                         style="width: 120px; height: 78px; object-fit: cover; border-radius: 6px; flex-shrink: 0;">
-                  <% } else { %>
-                    <div style="width: 120px; height: 78px; border-radius: 6px; flex-shrink: 0;
-                                background: rgba(255,255,255,0.05); display: flex; align-items: center;
-                                justify-content: center; color: #6c757d;">
-                      <i class="fas fa-image"></i>
+                <div class="d-flex gap-2 mb-2">
+                  <% [{ src: heroShown, own: !!fam.hero_image, rot: 'Cabeçalho' },
+                      { src: cardShown, own: !!fam.card_image, rot: 'Cartão' }].forEach(function(im) { %>
+                    <div style="flex: 1; min-width: 0;">
+                      <% if (im.src) { %>
+                        <img src="<%= encodeURI(im.src) %>" alt="<%= im.rot %> de <%= fam.name %>" loading="lazy"
+                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                             style="width: 100%; height: 70px; object-fit: cover; border-radius: 5px;
+                                    opacity: <%= im.own ? '1' : '0.6' %>;">
+                      <% } else { %>
+                        <div style="width: 100%; height: 70px; border-radius: 5px;
+                                    background: rgba(255,255,255,0.05); display: flex; align-items: center;
+                                    justify-content: center; color: #6c757d;">
+                          <i class="fas fa-image"></i>
+                        </div>
+                      <% } %>
+                      <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">
+                        <%= im.rot %><%= im.own ? '' : ' (auto)' %>
+                      </small>
                     </div>
-                  <% } %>
-                  <div class="min-width-0">
-                    <h6 class="mb-1 text-truncate"><%= fam.name %></h6>
-                    <small class="text-muted d-block"><%= fam.product_count %> peça<%= Number(fam.product_count) === 1 ? '' : 's' %></small>
-                    <small class="<%= fam.hero_image ? 'text-success' : 'text-muted' %>">
-                      <%= fam.hero_image ? 'Capa definida' : 'Automática (foto de uma peça)' %>
-                    </small>
-                  </div>
+                  <% }); %>
                 </div>
 
-                <%- include('../partials/_image-picker', {
-                      action: '/admin/product-families/edit/' + fam.id + '/hero-image',
-                      existingField: 'hero_image_existing',
-                      fileField: 'hero_image_file',
-                      removeField: 'remove_hero_image',
-                      current: fam.hero_image,
-                      galleryImages: galleryImages,
-                      label: fam.hero_image ? 'Mudar capa' : 'Definir capa'
-                    }) %>
-
-                <a href="/collection/<%= fam.slug || fam.id %>" target="_blank" rel="noopener"
-                   class="small text-decoration-none">Ver página pública →</a>
+                <h6 class="mb-1 text-truncate"><%= fam.name %></h6>
+                <small class="text-muted d-block">
+                  <%= fam.product_count %> peça<%= Number(fam.product_count) === 1 ? '' : 's' %>
+                  <% if (definidos.length > 0) { %>
+                    · <span class="text-success"><%= definidos.join(' e ') %></span>
+                  <% } %>
+                </small>
+                <small class="d-inline-block mt-2" style="color: var(--igp-gold, #c9a84c);">
+                  Parametrizar →
+                </small>
               </div>
-            </div>
+            </a>
           </div>
         <% }); %>
       </div>

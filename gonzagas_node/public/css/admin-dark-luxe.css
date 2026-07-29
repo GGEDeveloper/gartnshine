@@ -597,3 +597,27 @@ body.admin-layout-fixed .page-item.disabled .page-link {
   border-color: rgba(192, 192, 192, 0.1) !important;
   color: rgba(201, 168, 76, 0.45) !important;
 }
+
+/* ===== CARTÃO DE COLEÇÃO (área Coleções) ===== */
+body.admin-layout-fixed .collection-admin-card {
+  transition: border-color var(--duration-fast, 0.3s) ease,
+              transform var(--duration-fast, 0.3s) ease;
+}
+
+body.admin-layout-fixed .collection-admin-card:hover,
+body.admin-layout-fixed .collection-admin-card:focus-visible {
+  border-color: rgba(201, 168, 76, 0.55) !important;
+  transform: translateY(-2px);
+}
+
+body.admin-layout-fixed .collection-admin-card h6 {
+  color: var(--igp-cream, #f0ece4) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.admin-layout-fixed .collection-admin-card,
+  body.admin-layout-fixed .collection-admin-card:hover {
+    transition: none;
+    transform: none;
+  }
+}

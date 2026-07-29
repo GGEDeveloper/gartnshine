@@ -52,9 +52,11 @@
 
       <div class="collections-showcase-grid">
         <% showcaseFamilies.forEach(function(fam) {
-          // Imagem escolhida no admin; sem ela, uma foto de produto da própria
-          // coleção — para a secção nunca aparecer como blocos pretos.
-          const tileImage = fam.hero_image
+          // Imagem própria do cartão; se não houver, a do cabeçalho da coleção;
+          // se também não houver, uma foto de peça — para a secção nunca
+          // aparecer como blocos pretos.
+          const tileImage = fam.card_image
+            || fam.hero_image
             || (fam.fallback_image ? productImg(fam.fallback_image, 'medium').jpg : null);
         %>
           <a class="collection-tile<%= tileImage ? ' has-image' : '' %>"

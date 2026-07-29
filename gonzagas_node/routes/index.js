@@ -180,11 +180,15 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
     const slugOrId = family.slug || family.id;
 
     res.render('collection', {
-      title: family.name,
+      // Textos de SEO definidos no admin ganham ao que é derivado do conteúdo.
+      title: family.seo_title || family.name,
       family,
       products,
       families,
-      metaDescription: family.description ? family.description.substring(0, 155).replace(/"/g, "'") + '...' : 'Coleção ' + family.name + ' — joias artesanais em prata 925 e pedras naturais. Gonzaga\'s Art & Shine, elegância que nasce da terra.',
+      metaDescription: family.seo_description
+        || (family.description
+              ? family.description.substring(0, 155).replace(/"/g, "'") + '...'
+              : 'Coleção ' + family.name + ' — joias artesanais em prata 925 e pedras naturais. Gonzaga\'s Art & Shine, elegância que nasce da terra.'),
       canonicalUrl: 'https://artnshine.pt/collection/' + slugOrId
     });
   } catch (error) {

@@ -83,7 +83,13 @@ class ProductFamily {
   static async getByIdWithProductCount(id) {
     try {
       const [rows] = await pool.query(`
-        SELECT f.*, COUNT(p.id) as product_count
+        SELECT f.*, COUNT(p.id) as product_count,
+               (SELECT pi.image_filename
+                  FROM product_images pi
+                  JOIN products p2 ON p2.id = pi.product_id
+                 WHERE p2.family_id = f.id AND p2.is_active = 1
+                 ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                 LIMIT 1) AS fallback_image
         FROM product_families f
         LEFT JOIN products p ON f.id = p.family_id
         WHERE f.id = ?
@@ -152,7 +158,7 @@ class ProductFamily {
   static async getForHomeShowcase(limit = 6) {
     try {
       const [rows] = await pool.query(
-        `SELECT f.id, f.name, f.slug, f.hero_image,
+        `SELECT f.id, f.name, f.slug, f.hero_image, f.card_image,
                 COUNT(p.id) AS product_count,
                 (SELECT pi.image_filename
                    FROM product_images pi
@@ -162,8 +168,8 @@ class ProductFamily {
                   LIMIT 1) AS fallback_image
          FROM product_families f
          JOIN products p ON p.family_id = f.id AND p.is_active = 1
-         GROUP BY f.id, f.name, f.slug, f.hero_image
-         ORDER BY (f.hero_image IS NULL), product_count DESC, f.name ASC
+         GROUP BY f.id, f.name, f.slug, f.hero_image, f.card_image
+         ORDER BY (COALESCE(f.card_image, f.hero_image) IS NULL), product_count DESC, f.name ASC
          LIMIT ?`,
         [limit]
       );
@@ -184,6 +190,40 @@ class ProductFamily {
       return result.affectedRows > 0;
     } catch (error) {
       console.error('Error updating product family hero image:', error);
+      throw error;
+    }
+  }
+
+  /** Define (ou limpa, com null) a imagem do cartão da página inicial. */
+  static async updateCardImage(id, cardImage) {
+    try {
+      const [result] = await pool.query(
+        'UPDATE product_families SET card_image = ? WHERE id = ?',
+        [cardImage, id]
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error('Error updating product family card image:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Atualiza os campos de conteúdo editáveis na área Coleções.
+   * Deliberadamente não toca em code/parent_id — esses continuam a ser
+   * geridos em "Categorias e Cores", onde a hierarquia é visível.
+   */
+  static async updateContent(id, { name, description, seoTitle, seoDescription }) {
+    try {
+      const [result] = await pool.query(
+        `UPDATE product_families
+            SET name = ?, description = ?, seo_title = ?, seo_description = ?
+          WHERE id = ?`,
+        [name, description || null, seoTitle || null, seoDescription || null, id]
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error('Error updating product family content:', error);
       throw error;
     }
   }
