@@ -64,4 +64,12 @@
   --igp-border: rgba(201, 168, 76, 0.18);
   --igp-gap: 4px;
   --igp-green-wash: rgba(107, 128, 104, 0.06);
+
+  /* Movimento — duração e easing partilhados.
+     --ease-premium é o mesmo valor já usado em JS (GonzagaConfig.ui.animations
+     .easing, para o botão "voltar ao topo"); ter o token evita cópias soltas. */
+  --duration-fast: 0.3s;
+  --duration-slow: 0.6s;
+  --ease-standard: ease;
+  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
 }

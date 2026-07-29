@@ -125,6 +125,164 @@
   overflow: visible;
 }
 
+.featured-section.has-background {
+  position: relative;
+}
+
+.featured-section.has-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.85); /* overlay escuro para legibilidade */
+  z-index: 1;
+}
+
+.featured-section.has-background > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== EXPLORAR COLEÇÕES ===== */
+.collections-showcase {
+  padding: clamp(2rem, 5vw, 3.5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.collections-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+.collection-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 200px;
+  padding: 1.25rem;
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: 4px;
+  background-color: #0b1016;
+  background-size: cover;
+  background-position: center;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform var(--duration-slow, 0.6s) var(--ease-premium, cubic-bezier(0.23, 1, 0.32, 1)),
+              border-color var(--duration-fast, 0.3s) ease;
+}
+
+/* Véu escuro: mais forte em baixo, para o texto ler bem sobre qualquer foto */
+.collection-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 7, 10, 0.88) 0%, rgba(5, 7, 10, 0.45) 55%, rgba(5, 7, 10, 0.25) 100%);
+  transition: background var(--duration-fast, 0.3s) ease;
+}
+
+/* Sem imagem definida no admin: textura discreta em vez de um vazio */
+.collection-tile:not(.has-image)::before {
+  background: linear-gradient(145deg, rgba(201, 168, 76, 0.09) 0%, rgba(5, 7, 10, 0.9) 60%);
+}
+
+.collection-tile:hover,
+.collection-tile:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(201, 168, 76, 0.55);
+}
+
+.collection-tile:hover::before {
+  background: linear-gradient(to top, rgba(5, 7, 10, 0.92) 0%, rgba(5, 7, 10, 0.5) 60%, rgba(5, 7, 10, 0.2) 100%);
+}
+
+.collection-tile:focus-visible {
+  outline: 2px solid var(--igp-gold, #c9a84c);
+  outline-offset: 3px;
+}
+
+.collection-tile-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.collection-tile-name {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--igp-cream, #f0ece4);
+}
+
+.collection-tile-count {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+}
+
+.collections-showcase-cta {
+  text-align: center;
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+.btn-collections-gallery {
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 2px;
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--igp-gold, #c9a84c);
+  transition: background var(--duration-fast, 0.3s) ease,
+              color var(--duration-fast, 0.3s) ease,
+              border-color var(--duration-fast, 0.3s) ease;
+}
+
+.btn-collections-gallery:hover,
+.btn-collections-gallery:focus-visible {
+  background: var(--igp-gold, #c9a84c);
+  border-color: var(--igp-gold, #c9a84c);
+  color: #05070a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-tile,
+  .collection-tile::before,
+  .btn-collections-gallery {
+    transition: none;
+  }
+  .collection-tile:hover,
+  .collection-tile:focus-visible {
+    transform: none;
+  }
+}
+
+/* ===== MEDIA STRIP SECTION ===== */
+.ig-strip-section.has-background {
+  position: relative;
+}
+
+.ig-strip-section.has-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.75); /* overlay mais claro */
+  z-index: 1;
+}
+
+.ig-strip-section.has-background > * {
+  position: relative;
+  z-index: 2;
+}
+
 .section-header {
   text-align: center;
   margin-bottom: clamp(0.75rem, 2vw, 1.1rem);

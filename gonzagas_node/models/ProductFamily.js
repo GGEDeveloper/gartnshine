@@ -135,6 +135,30 @@ class ProductFamily {
     }
   }
 
+  /**
+   * Coleções a mostrar na secção "Explorar Coleções" da página inicial.
+   * Só famílias com produtos activos (as de topo não têm produtos directos,
+   * seriam links para páginas vazias). As que têm imagem de destaque definida
+   * no admin aparecem primeiro, para a secção ficar visualmente completa.
+   */
+  static async getForHomeShowcase(limit = 6) {
+    try {
+      const [rows] = await pool.query(
+        `SELECT f.id, f.name, f.slug, f.hero_image, COUNT(p.id) AS product_count
+         FROM product_families f
+         JOIN products p ON p.family_id = f.id AND p.is_active = 1
+         GROUP BY f.id, f.name, f.slug, f.hero_image
+         ORDER BY (f.hero_image IS NULL), product_count DESC, f.name ASC
+         LIMIT ?`,
+        [limit]
+      );
+      return rows;
+    } catch (error) {
+      console.error('Error getting families for home showcase:', error);
+      return [];
+    }
+  }
+
   /** Define (ou limpa, com null) a imagem de destaque usada em /collection/:id */
   static async updateHeroImage(id, heroImage) {
     try {

@@ -36,6 +36,38 @@
     </section>
     <% } %>
 
+    <!-- Explorar Coleções -->
+    <% if (typeof showcaseFamilies !== 'undefined' && showcaseFamilies.length > 0) { %>
+    <section class="collections-showcase" aria-labelledby="collections-showcase-title">
+      <div class="section-header ig-collections-head">
+        <h2 class="ig-collections-title" id="collections-showcase-title">Explorar Coleções</h2>
+        <p class="ig-collections-sub">Cada peça nasce de uma família de materiais e formas</p>
+        <div class="geometric-divider">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="collections-showcase-grid">
+        <% showcaseFamilies.forEach(function(fam) { %>
+          <a class="collection-tile<%= fam.hero_image ? ' has-image' : '' %>"
+             href="/collection/<%= fam.slug || fam.id %>"
+             <% if (fam.hero_image) { %>style="background-image: url('<%= encodeURI(fam.hero_image) %>');"<% } %>>
+            <span class="collection-tile-body">
+              <span class="collection-tile-name"><%= fam.name %></span>
+              <span class="collection-tile-count"><%= fam.product_count %> peça<%= fam.product_count === 1 ? '' : 's' %></span>
+            </span>
+          </a>
+        <% }); %>
+      </div>
+
+      <div class="collections-showcase-cta">
+        <a href="/collections" class="btn-collections-gallery">Ver galeria completa</a>
+      </div>
+    </section>
+    <% } %>
+
 <%- include('partials/_media-strip', { igPosts: typeof igPosts !== 'undefined' ? igPosts : [] }) %>
 
 <script type="application/ld+json">

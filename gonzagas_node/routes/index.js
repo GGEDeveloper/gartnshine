@@ -17,7 +17,8 @@ router.get('/', async (req, res) => {
   try {
     let featured = [];
     let families = [];
-    
+    let showcaseFamilies = [];
+
     try {
       const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
       featured = await Product.getFeatured(null, hideOutOfStock);
@@ -43,6 +44,7 @@ router.get('/', async (req, res) => {
       });
 
       families = await ProductFamily.getAll();
+      showcaseFamilies = await ProductFamily.getForHomeShowcase(6);
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue without database data
@@ -80,14 +82,15 @@ router.get('/', async (req, res) => {
     try {
       igPosts = await instagramModule.fetchInstagramFeed(6);
     } catch (_) {}
-    
-    res.render('index', { 
+
+    res.render('index', {
       title: 'Art&Shine — Elegância que nasce da terra',
       layout: 'layouts/main',
       metaDescription: 'Joias artesanais em prata 925 e pedras naturais. Descubra a coleção Gonzaga\'s Art & Shine — elegância que nasce da terra, feita em Portugal.',
       canonicalUrl: 'https://artnshine.pt/',
       featured: featured || [],
       families: families || [],
+      showcaseFamilies: showcaseFamilies || [],
       mediaFiles: mediaFiles || [],
       heroImage,
       igPosts,
