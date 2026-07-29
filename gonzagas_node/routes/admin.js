@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+const Inventory = require('../models/Inventory');
+const Report = require('../models/Report');
 
 // Standard Modules
 const path = require('path');
@@ -20,28 +22,8 @@ const { guestSessionRequired, adminSessionRequired, roleRequired } = require('..
 
 // Models
 const Checkpoint = require('../models/Checkpoint');
-const { pool } = require('../config/database');
 
 const XLSX = require('xlsx');
-
-/** Últimos movimentos de inventário para o dashboard. */
-async function getRecentInventoryMovements(limit = 5) {
-  try {
-    const [rows] = await pool.query(
-      `SELECT it.id, it.transaction_type AS movement_type, it.quantity, it.created_at,
-              p.name AS product_name, p.reference AS product_reference
-       FROM inventory_transactions it
-       LEFT JOIN products p ON p.id = it.product_id
-       ORDER BY it.created_at DESC
-       LIMIT ?`,
-      [limit]
-    );
-    return rows;
-  } catch (err) {
-    console.warn('Dashboard inventory movements unavailable:', err.message);
-    return [];
-  }
-}
 
 /** Stats para o dashboard (produtos, famílias, stock, valor potencial de inventário). */
 async function loadDashboardStats() {
@@ -70,7 +52,7 @@ async function loadDashboardStats() {
     Product.countOutOfStock(),
     Product.getRecent(5),
     Product.getInventoryPotentialSummary(),
-    getRecentInventoryMovements(5)
+    Inventory.getRecentForDashboard(5)
   ]);
   return {
     products: totalProducts,
@@ -542,65 +524,20 @@ router.post('/checkpoints/delete/:id', adminSessionRequired, async (req, res) =>
 // ── Relatório de rentabilidade ────────────────────────────────────────────────
 router.get('/reports', adminSessionRequired, async (req, res) => {
   try {
-    const { pool } = require('../config/database');
-
-    // Produtos: margem por peça
-    const [products] = await pool.query(`
-      SELECT p.id, p.reference, p.name,
-             p.sale_price, p.purchase_price, p.current_stock,
-             f.name AS family_name,
-             ROUND(p.sale_price - p.purchase_price, 2) AS margin,
-             CASE WHEN p.purchase_price > 0
-               THEN ROUND((p.sale_price - p.purchase_price) / p.purchase_price * 100, 1)
-               ELSE NULL END AS margin_pct
-      FROM products p
-      LEFT JOIN product_families f ON p.family_id = f.id
-      WHERE p.is_active = 1
-      ORDER BY margin_pct DESC NULLS LAST, p.name ASC
-      LIMIT 200
-    `).catch(() => [[]]);
-
-    // Resumo de pedidos pagos
-    const [orderStats] = await pool.query(`
-      SELECT
-        COUNT(*) AS total_orders,
-        COALESCE(SUM(total_amount), 0) AS total_revenue,
-        COALESCE(AVG(total_amount), 0) AS avg_order_value,
-        COALESCE(SUM(tax_amount), 0) AS total_tax,
-        COALESCE(SUM(shipping_amount), 0) AS total_shipping
-      FROM orders
-      WHERE status IN ('paid','processing','shipped','delivered')
-    `).catch(() => [[{ total_orders: 0, total_revenue: 0, avg_order_value: 0, total_tax: 0, total_shipping: 0 }]]);
-
-    // Top produtos vendidos
-    const [topSold] = await pool.query(`
-      SELECT oi.product_name, oi.product_reference,
-             SUM(oi.quantity) AS units_sold,
-             SUM(oi.total_price) AS revenue
-      FROM order_items oi
-      JOIN orders o ON o.id = oi.order_id
-      WHERE o.status IN ('paid','processing','shipped','delivered')
-      GROUP BY oi.product_reference, oi.product_name
-      ORDER BY units_sold DESC
-      LIMIT 10
-    `).catch(() => [[]]);
-
-    // Valor total em inventário
-    const [invValue] = await pool.query(`
-      SELECT
-        COALESCE(SUM(current_stock * sale_price), 0) AS stock_value_sale,
-        COALESCE(SUM(current_stock * purchase_price), 0) AS stock_value_cost,
-        SUM(current_stock) AS total_units
-      FROM products WHERE is_active = 1
-    `).catch(() => [[{ stock_value_sale: 0, stock_value_cost: 0, total_units: 0 }]]);
+    const [products, stats, topSold, inventory] = await Promise.all([
+      Report.getProductMargins(200),
+      Report.getOrderStats(),
+      Report.getTopSoldProducts(10),
+      Report.getInventoryValue()
+    ]);
 
     res.render('admin/reports', {
       title: 'Relatório de Rentabilidade',
       currentPath: '/reports',
       products,
-      stats: orderStats[0],
+      stats,
       topSold,
-      inventory: invValue[0],
+      inventory,
     });
   } catch (err) {
     console.error('Error loading reports:', err);

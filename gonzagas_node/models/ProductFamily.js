@@ -32,6 +32,31 @@ class ProductFamily {
     }
   }
 
+  /**
+   * Famílias para o sitemap.xml. Faz fallback sem `slug` para bases sem
+   * essa coluna ainda migrada.
+   */
+  static async getAllForSitemap() {
+    try {
+      const [rows] = await pool.execute(`
+        SELECT id, name, slug, updated_at
+        FROM product_families
+        ORDER BY updated_at DESC
+      `);
+      return rows;
+    } catch (error) {
+      if (error.message && error.message.includes("Unknown column 'slug'")) {
+        const [rows] = await pool.execute(`
+          SELECT id, name, updated_at
+          FROM product_families
+          ORDER BY updated_at DESC
+        `);
+        return rows;
+      }
+      throw error;
+    }
+  }
+
   static async getByIdOrSlug(idOrSlug) {
     try {
       const isNumeric = /^\d+$/.test(String(idOrSlug));

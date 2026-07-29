@@ -865,6 +865,90 @@ class Product extends BaseModel {
       return [];
     }
   }
+
+  /**
+   * Produtos ativos para o sitemap.xml (com imagem principal).
+   * Faz fallback sem `slug` para bases sem essa coluna ainda migrada.
+   */
+  static async getAllForSitemap() {
+    try {
+      const [rows] = await pool.execute(`
+        SELECT
+          p.id, p.name, p.slug, p.reference, p.updated_at,
+          (SELECT pi.image_filename
+           FROM product_images pi
+           WHERE pi.product_id = p.id AND pi.is_primary = 1
+           LIMIT 1) as main_image
+        FROM products p
+        WHERE p.is_active = 1
+        ORDER BY p.updated_at DESC
+      `);
+      return rows;
+    } catch (error) {
+      if (error.message && error.message.includes("Unknown column 'slug'")) {
+        const [rows] = await pool.execute(`
+          SELECT
+            p.id, p.name, p.reference, p.updated_at,
+            (SELECT pi.image_filename
+             FROM product_images pi
+             WHERE pi.product_id = p.id AND pi.is_primary = 1
+             LIMIT 1) as main_image
+          FROM products p
+          WHERE p.is_active = 1
+          ORDER BY p.updated_at DESC
+        `);
+        return rows;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Produtos ativos para o feed do Google Merchant Center.
+   * Faz fallback sem `slug`/`color` para bases sem essas colunas ainda migradas.
+   */
+  static async getAllForMerchantFeed() {
+    try {
+      const [rows] = await pool.execute(`
+        SELECT
+          p.id, p.name, p.slug, p.reference, p.description,
+          p.sale_price, p.current_stock, p.material, p.weight, p.color,
+          pf.name as family_name,
+          (SELECT pi.image_filename
+           FROM product_images pi
+           WHERE pi.product_id = p.id AND pi.is_primary = 1
+           LIMIT 1) as main_image,
+          (SELECT pi.image_filename
+           FROM product_images pi
+           WHERE pi.product_id = p.id AND pi.is_primary = 0
+           ORDER BY pi.id ASC LIMIT 1) as secondary_image
+        FROM products p
+        LEFT JOIN product_families pf ON p.family_id = pf.id
+        WHERE p.is_active = 1
+        ORDER BY p.id ASC
+      `);
+      return rows;
+    } catch (error) {
+      if (error.message && error.message.includes("Unknown column 'slug'")) {
+        const [rows] = await pool.execute(`
+          SELECT
+            p.id, p.name, p.reference, p.description,
+            p.sale_price, p.current_stock, p.material, p.weight,
+            pf.name as family_name,
+            (SELECT pi.image_filename
+             FROM product_images pi
+             WHERE pi.product_id = p.id AND pi.is_primary = 1
+             LIMIT 1) as main_image
+          FROM products p
+          LEFT JOIN product_families pf ON p.family_id = pf.id
+          WHERE p.is_active = 1
+          ORDER BY p.id ASC
+        `);
+        return rows;
+      }
+      throw error;
+    }
+  }
 }
 
 module.exports = Product;

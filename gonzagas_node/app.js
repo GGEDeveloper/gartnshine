@@ -90,25 +90,7 @@ app.use(compression({
   threshold: 1024 // Só comprimir files > 1KB
 }));
 
-// 2. Security headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://cdn.jsdelivr.net", "https://code.jquery.com"],
-      imgSrc: ["'self'", "data:", "https:", "blob:"],
-      mediaSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://www.google-analytics.com", "https://accounts.google.com"],
-      frameSrc: ["'none'"],
-      objectSrc: ["'none'"]
-    }
-  },
-  crossOriginEmbedderPolicy: false // Para compatibilidade
-}));
-
-// 3. Rate limiting global (configurável via .env)
+// 2. Rate limiting global (configurável via .env)
 // RATE_LIMIT_WINDOW_MS, RATE_LIMIT_API_MAX, RATE_LIMIT_PUBLIC_MAX, RATE_LIMIT_ADMIN_MAX
 const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000;
 const RATE_LIMIT_API_MAX = parseInt(process.env.RATE_LIMIT_API_MAX, 10) || 2500;
@@ -598,51 +580,6 @@ app.use((err, req, res, next) => {
       stack: err.stack
     } : {}
   }, { layout: false });
-});
-
-// Tratamento de erros 404
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - 404 Not Found: ${req.url}`);
-  res.status(404).render('error', {
-    title: 'Página não encontrada',
-    message: 'A página que você está procurando não existe ou foi movida.'
-  }, { layout: false });
-});
-
-// Error logging middleware
-app.use((err, req, res, next) => {
-  console.error(`${new Date().toISOString()} - Error:`, err);
-  next(err);
-});
-
-// Tratamento de erros global
-app.use((err, req, res, next) => {
-  console.error('Erro não tratado:', err);
-  
-  // Define as variáveis de resposta
-  const statusCode = err.status || 500;
-  const message = app.get('env') === 'development' ? err.message : 'Ocorreu um erro no servidor';
-  const stack = app.get('env') === 'development' ? err.stack : null;
-  
-  // Log do erro
-  console.error(`[${new Date().toISOString()}] Erro: ${message}`);
-  console.error(stack || 'No stack trace available');
-  
-  // Resposta para requisições de API
-  if (req.originalUrl.startsWith('/api/')) {
-    return res.status(statusCode).json({
-      success: false,
-      error: message,
-      ...(app.get('env') === 'development' && { stack })
-    });
-  }
-  
-  // Renderiza a página de erro
-  res.status(statusCode).render('error/500', {
-    title: 'Erro no servidor',
-    message,
-    stack: app.get('env') === 'development' ? err.stack : null
-  });
 });
 
 // Exporta o app para testes

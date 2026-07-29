@@ -1,5 +1,9 @@
 # Documentação de Implantação - Gonzaga's Art & Shine
 
+> Este é o guia de deploy canónico. `DEPLOY_CPANEL.md` e `PRODUCTION_SETUP.md`
+> (movidos para `docs/old/`) descreviam fluxos duplicados ou não usados
+> (ex.: PM2 + Nginx manual) e foram arquivados.
+
 Este documento fornece instruções detalhadas para implantar a aplicação Node.js no cPanel do Dominios.pt.
 
 ## Pré-requisitos

@@ -410,6 +410,27 @@ class Inventory extends BaseModel {
   }
 
   /**
+   * Movimentações mais recentes para o dashboard admin
+   */
+  static async getRecentForDashboard(limit = 5) {
+    try {
+      const [rows] = await this.pool.query(
+        `SELECT it.id, it.transaction_type AS movement_type, it.quantity, it.created_at,
+                p.name AS product_name, p.reference AS product_reference
+         FROM inventory_transactions it
+         LEFT JOIN products p ON p.id = it.product_id
+         ORDER BY it.created_at DESC
+         LIMIT ?`,
+        [limit]
+      );
+      return rows;
+    } catch (error) {
+      console.warn('Dashboard inventory movements unavailable:', error.message);
+      return [];
+    }
+  }
+
+  /**
    * Obtém o stock atual de um produto
    */
   static async getCurrentStock(productId) {
