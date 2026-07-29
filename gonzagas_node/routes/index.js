@@ -9,6 +9,7 @@ const ProductController = require('../controllers/ProductController'); // Added 
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
 const instagramModule = require('../modules/instagram');
 const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
+const { formatRow } = require('../services/catalogQueryService');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -189,10 +190,12 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
       return res.redirect(301, `/collection/${family.slug}`);
     }
     
-    const products = await Product.getByFamily(family.id);
+    const rawProducts = await Product.getByFamily(family.id);
+    const ecommerceSettings = await EcommerceSettings.getAll();
+    const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
     const families = await ProductFamily.getAll();
     const slugOrId = family.slug || family.id;
-    
+
     res.render('collection', {
       title: family.name,
       family,

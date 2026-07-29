@@ -3,7 +3,7 @@
   <!-- Collection header -->
   <section class="collection-header">
     <div class="collection-title">
-      <h1><%= family.name %> Collection</h1>
+      <h1><%= family.name %></h1>
       <div class="geometric-divider">
         <span></span>
         <span></span>
@@ -19,10 +19,10 @@
   <section class="filter-controls">
     <div class="filter-container">
       <div class="sort-by">
-        <label for="sort-select">Sort By:</label>
+        <label for="sort-select">Ordenar por:</label>
         <select id="sort-select">
-          <option value="name-asc">Name: A to Z</option>
-          <option value="name-desc">Name: Z to A</option>
+          <option value="name-asc">Nome: A-Z</option>
+          <option value="name-desc">Nome: Z-A</option>
         </select>
       </div>
     </div>
@@ -37,8 +37,8 @@
         <% }); %>
       <% } else { %>
         <div class="no-products">
-          <p>No products found in this collection.</p>
-          <a href="/" class="btn btn-primary">Return to Home</a>
+          <p>Não foram encontrados produtos nesta coleção.</p>
+          <a href="/" class="btn btn-primary">Voltar ao início</a>
         </div>
       <% } %>
     </div>
@@ -46,7 +46,7 @@
   
   <!-- Collection navigation -->
   <section class="collection-nav">
-    <h3>Other Collections</h3>
+    <h3>Outras Coleções</h3>
     <div class="collections-list">
       <% families.forEach(otherFamily => { %>
         <% if (otherFamily.id !== family.id) { %>
