@@ -3,7 +3,7 @@
 Antes ou imediatamente após o deploy destas melhorias (Fases 1 a 5) para o servidor de produção (`dominios.pt`), execute os seguintes passos obrigatórios.
 
 ## 1. Variáveis de Ambiente
-No servidor (cPanel / Terminal), aceda ao ficheiro `.env` e garanta que estas duas variáveis estão definidas:
+No servidor (stack Docker no waphix), aceda ao ficheiro `.env` da stack e garanta que estas duas variáveis estão definidas:
 
 ```env
 # Essencial para o Sitemap.xml e Canonical URLs

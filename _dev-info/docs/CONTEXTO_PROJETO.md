@@ -1,16 +1,16 @@
 # Contexto do Projeto - Gonzaga's Art & Shine
 
-**Última atualização:** 2025-02-11
+**Última atualização:** 2026-07-29
 
 ## Ambiente
 
 | Item | Detalhes |
 |------|----------|
 | **OS** | WSL (Windows Subsystem for Linux) em Windows 10 |
-| **Deploy** | dominios.pt |
-| **CI/CD** | GitHub |
-| **Hosting** | cPanel (presumido) |
-| **Base de dados** | MariaDB/MySQL |
+| **Deploy** | Servidor próprio "waphix", Docker Compose (container `artnshine-app` + `mariadb`, Nginx Proxy Manager, DNS Cloudflare/DDNS) |
+| **CI/CD** | GitHub (push manual + pull no servidor) |
+| **Hosting** | Self-hosted (waphix) — **cPanel descontinuado**, não usar guias antigos de dominios.pt/cPanel (arquivados em `docs/old/legacy-cpanel-dominios/`) |
+| **Base de dados** | MariaDB (container `mariadb` separado, DB `artnshin_gonzagas_db`) |
 
 ## Stack Tecnológico
 

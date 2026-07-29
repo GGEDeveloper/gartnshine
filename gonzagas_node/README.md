@@ -290,7 +290,7 @@ Sem nenhuma escolhida (`hero_image = NULL`), `routes/index.js` usa automaticamen
 - **Marca:** Gonzaga's Art & Shine
 - **Operações:** Venda de joalharia, principalmente prata 925
 - **Estilo:** Tendências Bali e boho
-- **Hosting:** cPanel hosting
+- **Hosting:** Self-hosted (Docker Compose no servidor waphix — ver DEPLOYMENT.md)
 - **Tema:** Escuro, baseado na natureza/floresta, com nuances psicadélicas e geométricas
 
 ### **Requisitos Técnicos Implementados**
@@ -394,4 +394,4 @@ Para questões técnicas, melhorias ou suporte:
 *Sistema desenvolvido especificamente para joalharia em prata 925 com inspiração Bali/Boho*
 
 **Tech Stack:** Node.js + Express + MariaDB + Bootstrap 5 + EJS  
-**Deploy Ready:** ✅ cPanel + PM2 + Nginx/Apache
+**Deploy Ready:** ✅ Docker Compose (waphix) + Nginx Proxy Manager

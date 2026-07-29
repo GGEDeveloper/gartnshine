@@ -346,6 +346,11 @@ Esta seção é direcionada a desenvolvedores e IAs de codificação para auxili
 
 7.X. Erro 'Cannot find module' (ex: 'uuid') no Ambiente de Produção (cPanel/Passenger)
 
+> ⚠️ **Obsoleto:** esta secção descreve um problema específico do antigo
+> hosting cPanel/Phusion Passenger, que já não é usado (produção corre
+> em Docker Compose no waphix — ver `gonzagas_node/DEPLOYMENT.md`).
+> Mantido apenas como referência histórica.
+
 **Sintoma:** A aplicação Node.js falha ao iniciar no servidor de produção (hospedado com cPanel e Phusion Passenger), e os logs do Passenger exibem um erro como `Error: Cannot find module 'nome_do_modulo'` (por exemplo, `Error: Cannot find module 'uuid'`). Mesmo após listar o módulo no `package.json`, executar `npm install` no servidor e tentar reiniciar a aplicação via cPanel, o erro persiste. Frequentemente, o PID (Process ID) da aplicação nos logs do Passenger não muda, indicando que um processo antigo está sendo reutilizado ou que as atualizações não estão sendo carregadas corretamente.
 
 **Causas Comuns e Diagnóstico:**

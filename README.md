@@ -32,10 +32,10 @@ Este é um catálogo online moderno e responsivo desenvolvido para exibir a cole
 
 ## 📋 Requisitos
 
-- **Node.js**: 18.x ou superior
+- **Node.js**: 18.x ou superior (produção corre em `node:20-alpine`)
 - **MySQL/MariaDB**: 8.0+ ou 10.5+
 - **NPM**: 9.x ou superior
-- **cPanel** (para deployment em produção)
+- **Docker Compose** (para deployment em produção — ver secção Deployment)
 
 ## 🔧 Instalação
 
@@ -88,36 +88,23 @@ gartnshine-2/
 │   ├── views/             # Templates EJS
 │   └── scripts/           # Scripts utilitários
 ├── docs/                   # Documentação
-│   ├── DEPLOYMENT_PROCEDURE.md
-│   ├── DEPLOYMENT_COMMANDS.md
+│   ├── old/               # Documentação arquivada/obsoleta
 │   └── DATABASE.md
 └── README.md              # Este ficheiro
 ```
 
 ## 🚀 Deployment
 
-### Servidor de Produção (dominios.pt)
+### Servidor de Produção (waphix — Docker Compose)
 
-Ver documentação completa em:
-- `docs/DEPLOYMENT_PROCEDURE.md` - Procedimento detalhado
-- `docs/DEPLOYMENT_COMMANDS.md` - Comandos rápidos
+A produção **não usa cPanel** (descontinuado). Corre num servidor próprio
+("waphix") via Docker Compose: container `artnshine-app` + `mariadb`,
+atrás de Nginx Proxy Manager, com DNS Cloudflare/DDNS.
 
-**Comando rápido:**
-```bash
-cd /home/artnshin/artnshine.pt && \
-cp -r gonzagas_node gonzagas_node_backup_$(date +%Y%m%d_%H%M%S) && \
-git checkout -- . && \
-git fetch origin && \
-git checkout main && \
-git reset --hard origin/main && \
-cd gonzagas_node && \
-chmod 755 server.js && \
-chmod -R 755 public/ views/ controllers/ models/ && \
-cd .. && \
-git status
-```
+Ver documentação completa em [`gonzagas_node/DEPLOYMENT.md`](gonzagas_node/DEPLOYMENT.md).
 
-Depois reiniciar a aplicação via cPanel.
+Guias antigos de cPanel/dominios.pt (obsoletos, mantidos só como
+histórico) estão arquivados em `docs/old/legacy-cpanel-dominios/`.
 
 ## 🎨 Design e Temas
 
@@ -149,8 +136,7 @@ Depois reiniciar a aplicação via cPanel.
 ## 📚 Documentação Adicional
 
 - `docs/DATABASE.md` - Estrutura da base de dados
-- `docs/DEPLOYMENT_PROCEDURE.md` - Procedimento de deployment
-- `docs/DEPLOYMENT_COMMANDS.md` - Comandos de deployment
+- `gonzagas_node/DEPLOYMENT.md` - Procedimento de deployment (waphix/Docker)
 - `docs/admin-guide.md` - Guia do painel administrativo
 
 ## 🛠️ Scripts Disponíveis
