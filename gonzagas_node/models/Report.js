@@ -19,7 +19,7 @@ class Report {
          FROM products p
          LEFT JOIN product_families f ON p.family_id = f.id
          WHERE p.is_active = 1
-         ORDER BY margin_pct DESC NULLS LAST, p.name ASC
+         ORDER BY (margin_pct IS NULL), margin_pct DESC, p.name ASC
          LIMIT ?`,
         [limit]
       );
