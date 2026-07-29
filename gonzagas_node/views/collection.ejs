@@ -1,8 +1,13 @@
 
 <div class="collection-page">
   <!-- Collection header -->
-  <section class="collection-header<%= family.hero_image ? ' has-background' : '' %>"
-           <% if (family.hero_image) { %>style="background-image: url('<%= encodeURI(family.hero_image) %>'); background-size: cover; background-position: center;"<% } %>>
+  <%
+    // Imagem escolhida no admin; sem ela, uma foto de produto desta coleção.
+    const headerImage = family.hero_image
+      || (family.fallback_image ? productImg(family.fallback_image, 'full').jpg : null);
+  %>
+  <section class="collection-header<%= headerImage ? ' has-background' : '' %>"
+           <% if (headerImage) { %>style="background-image: url('<%= encodeURI(headerImage) %>'); background-size: cover; background-position: center;"<% } %>>
     <div class="collection-title">
       <h1><%= family.name %></h1>
       <div class="geometric-divider">

@@ -53,39 +53,14 @@ const upload = multer({
     }
 });
 
-/**
- * GET /admin/media/library
- * Media library page
+/*
+ * A página /admin/media/library foi removida: fazia o mesmo que a área
+ * "Galeria" (/admin/gallery), que além disso controla o que aparece no site.
+ * Para não haver dois painéis a gerir as mesmas imagens, ficou só a Galeria.
+ *
+ * As rotas /admin/api/media/* abaixo MANTÊM-SE: são usadas pelo selector de
+ * imagens do formulário de produtos (public/js/media-picker.js).
  */
-router.get('/media/library', adminSessionRequired, async (req, res) => {
-    try {
-        // Media = galeria apenas (fotos de produtos gerem-se no form de produto)
-        const allFolders = await Media.getFoldersFromFilesystem();
-        const folders = allFolders.filter(f => f.path !== '/products/');
-        let tags = [];
-        try {
-            tags = await Media.getAllTags();
-        } catch (loadErr) {
-            console.warn('Media tags not available:', loadErr.message);
-        }
-        
-        res.render('admin/media/library', {
-            layout: 'admin/layouts/main',
-            title: 'Biblioteca de Media',
-            folders,
-            tags,
-            page: 'media-library',
-            currentPath: '/media/library'
-        });
-    } catch (error) {
-        console.error('Media library page error:', error);
-        res.status(500).render('error', {
-            title: 'Erro',
-            message: 'Erro ao carregar biblioteca de media',
-            error: process.env.NODE_ENV === 'development' ? error : {}
-        }, { layout: false });
-    }
-});
 
 /**
  * GET /admin/api/media

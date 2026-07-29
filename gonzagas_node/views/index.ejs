@@ -51,10 +51,15 @@
       </div>
 
       <div class="collections-showcase-grid">
-        <% showcaseFamilies.forEach(function(fam) { %>
-          <a class="collection-tile<%= fam.hero_image ? ' has-image' : '' %>"
+        <% showcaseFamilies.forEach(function(fam) {
+          // Imagem escolhida no admin; sem ela, uma foto de produto da própria
+          // coleção — para a secção nunca aparecer como blocos pretos.
+          const tileImage = fam.hero_image
+            || (fam.fallback_image ? productImg(fam.fallback_image, 'medium').jpg : null);
+        %>
+          <a class="collection-tile<%= tileImage ? ' has-image' : '' %>"
              href="/collection/<%= fam.slug || fam.id %>"
-             <% if (fam.hero_image) { %>style="background-image: url('<%= encodeURI(fam.hero_image) %>');"<% } %>>
+             <% if (tileImage) { %>style="background-image: url('<%= encodeURI(tileImage) %>');"<% } %>>
             <span class="collection-tile-body">
               <span class="collection-tile-name"><%= fam.name %></span>
               <span class="collection-tile-count"><%= fam.product_count %> peça<%= fam.product_count === 1 ? '' : 's' %></span>

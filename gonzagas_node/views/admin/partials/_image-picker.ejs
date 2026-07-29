@@ -1,0 +1,65 @@
+<%
+/*
+  Selector de imagem reutilizável (escolher da galeria / enviar nova / remover).
+  Parâmetros:
+    action        — URL do POST
+    existingField — nome do campo para a imagem escolhida (ex: 'hero_image_existing')
+    fileField     — nome do campo de upload (ex: 'hero_image_file')
+    current       — caminho da imagem atualmente em uso (ou null)
+    galleryImages — lista de { filename, path }
+    removeField   — (opcional) nome do campo que limpa a imagem
+    label         — texto do botão de abrir
+*/
+const pickerId = 'picker-' + existingField + '-' + (typeof pickerSuffix !== 'undefined' ? pickerSuffix : '');
+%>
+<details class="image-picker mb-2">
+  <summary class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-image"></i> <%= typeof label !== 'undefined' ? label : 'Escolher imagem' %>
+  </summary>
+
+  <div class="border rounded p-2 p-md-3 mt-2">
+    <% if (galleryImages && galleryImages.length > 0) { %>
+      <p class="fw-semibold small mb-2">Escolher da galeria</p>
+      <form action="<%= action %>" method="POST">
+        <div class="d-flex flex-wrap gap-2 mb-2" style="max-height: 260px; overflow-y: auto;">
+          <% galleryImages.forEach(function(img) { %>
+            <label style="cursor: pointer;" title="<%= img.filename %>">
+              <input type="radio" name="<%= existingField %>" value="<%= img.path %>"
+                     class="visually-hidden" <%= current === img.path ? 'checked' : '' %>>
+              <img src="<%= encodeURI(img.path) %>" alt="<%= img.filename %>" loading="lazy"
+                   style="width: 92px; height: 60px; object-fit: cover; border-radius: 5px; border: 3px solid <%= current === img.path ? '#c9a84c' : 'transparent' %>;">
+            </label>
+          <% }); %>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Usar selecionada</button>
+      </form>
+    <% } else { %>
+      <p class="text-muted small">Ainda não há imagens na galeria.</p>
+    <% } %>
+
+    <hr class="my-2">
+
+    <p class="fw-semibold small mb-2">Ou enviar uma nova</p>
+    <form action="<%= action %>" method="POST" enctype="multipart/form-data" class="d-flex gap-2 align-items-start flex-wrap">
+      <input type="file" name="<%= fileField %>" accept="image/jpeg,image/png,image/gif,image/webp"
+             class="form-control form-control-sm" style="max-width: 260px;" required>
+      <button type="submit" class="btn btn-sm btn-primary">Enviar</button>
+    </form>
+
+    <% if (typeof removeField !== 'undefined' && removeField && current) { %>
+      <hr class="my-2">
+      <form action="<%= action %>" method="POST">
+        <input type="hidden" name="<%= removeField %>" value="1">
+        <button type="submit" class="btn btn-sm btn-outline-danger">Remover imagem</button>
+      </form>
+    <% } %>
+  </div>
+</details>
+<%
+/*
+  O realce da miniatura escolhida é tratado por um único listener delegado na
+  página que inclui este partial — repetir um <script> por cada instância
+  duplicaria o código e o listener afectaria os selectores todos ao mesmo
+  tempo (o mesmo `name` aparece em vários formulários).
+*/
+%>

@@ -61,7 +61,15 @@ class ProductFamily {
     try {
       const isNumeric = /^\d+$/.test(String(idOrSlug));
       const [rows] = await pool.query(
-        `SELECT * FROM product_families WHERE ${isNumeric ? 'id' : 'slug'} = ?`,
+        `SELECT f.*,
+                (SELECT pi.image_filename
+                   FROM product_images pi
+                   JOIN products p2 ON p2.id = pi.product_id
+                  WHERE p2.family_id = f.id AND p2.is_active = 1
+                  ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                  LIMIT 1) AS fallback_image
+           FROM product_families f
+          WHERE f.${isNumeric ? 'id' : 'slug'} = ?`,
         [isNumeric ? parseInt(idOrSlug) : idOrSlug]
       );
       return rows.length ? rows[0] : null;
@@ -144,7 +152,14 @@ class ProductFamily {
   static async getForHomeShowcase(limit = 6) {
     try {
       const [rows] = await pool.query(
-        `SELECT f.id, f.name, f.slug, f.hero_image, COUNT(p.id) AS product_count
+        `SELECT f.id, f.name, f.slug, f.hero_image,
+                COUNT(p.id) AS product_count,
+                (SELECT pi.image_filename
+                   FROM product_images pi
+                   JOIN products p2 ON p2.id = pi.product_id
+                  WHERE p2.family_id = f.id AND p2.is_active = 1
+                  ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                  LIMIT 1) AS fallback_image
          FROM product_families f
          JOIN products p ON p.family_id = f.id AND p.is_active = 1
          GROUP BY f.id, f.name, f.slug, f.hero_image
@@ -250,7 +265,13 @@ class ProductFamily {
   static async getAllWithProductCount() {
     try {
       const [rows] = await pool.query(`
-        SELECT f.*, COUNT(p.id) as product_count
+        SELECT f.*, COUNT(p.id) as product_count,
+               (SELECT pi.image_filename
+                  FROM product_images pi
+                  JOIN products p2 ON p2.id = pi.product_id
+                 WHERE p2.family_id = f.id AND p2.is_active = 1
+                 ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                 LIMIT 1) AS fallback_image
         FROM product_families f
         LEFT JOIN products p ON f.id = p.family_id
         GROUP BY f.id

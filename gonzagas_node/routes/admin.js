@@ -143,6 +143,10 @@ router.use('/settings', settingsAdminRouter);
 const galleryAdminRouter = require('./admin/gallery');
 router.use('/gallery', galleryAdminRouter);
 
+// Mount collections router (capas das coleções + fundos da página inicial)
+const collectionsAdminRouter = require('./admin/collections');
+router.use('/collections-admin', collectionsAdminRouter);
+
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
   try {

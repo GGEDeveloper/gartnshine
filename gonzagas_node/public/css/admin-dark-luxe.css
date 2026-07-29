@@ -1,7 +1,9 @@
 /**
  * Admin Dark Luxe - Gonzaga's Art & Shine
- * Mesmo estilo visual do frontend: paleta prata/bronze, fundos escuros
- * Nuances para legibilidade nas tabelas
+ * Mesma paleta do frontend: fundos escuros, texto creme (--igp-cream) e
+ * acentos dourados (--igp-gold). Antes usava prata/cinza, o que fazia o
+ * painel parecer um produto diferente do site.
+ * Nuances para legibilidade nas tabelas.
  */
 
 /* ===== VARIÁVEIS ADMIN (override) ===== */
@@ -15,13 +17,13 @@ body.admin-layout-fixed {
   --gray-300: var(--color-tertiary);
   --gray-400: var(--color-text-muted);
   --gray-500: var(--color-text-muted);
-  --gray-600: #C0C0C0;
+  --gray-600: var(--igp-cream, #f0ece4);
   --gray-700: var(--color-text);
   --gray-800: #f4f6f8;
   --gray-900: var(--color-silver-light);
   --white: #0a0f15;
-  --color-accent: #A8A8A8;
-  --color-highlight: #C0C0C0;
+  --color-accent: var(--igp-gold, #c9a84c);
+  --color-highlight: var(--igp-cream, #f0ece4);
 }
 
 /* ===== BODY & LAYOUT ===== */
@@ -47,13 +49,13 @@ body.admin-layout-fixed .sidebar-nav .nav-link {
 
 body.admin-layout-fixed .sidebar-nav .nav-link:hover {
   background: rgba(192, 192, 192, 0.08) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .sidebar-nav .nav-link.active {
   background: var(--color-primary) !important;
-  color: #C0C0C0 !important;
-  border-left: 3px solid #A8A8A8;
+  color: var(--igp-cream, #f0ece4) !important;
+  border-left: 3px solid var(--igp-gold, #c9a84c);
 }
 
 body.admin-layout-fixed .sidebar-header {
@@ -77,7 +79,7 @@ body.admin-layout-fixed .header .text-gray-500,
 body.admin-layout-fixed .header .text-dark,
 body.admin-layout-fixed .header h5,
 body.admin-layout-fixed .header .btn-link {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .header .nav-link:hover,
@@ -121,12 +123,12 @@ body.admin-layout-fixed .card {
 body.admin-layout-fixed .card-header {
   background: rgba(0, 0, 0, 0.8) !important;
   border-bottom: 1px solid rgba(192, 192, 192, 0.1) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
   font-weight: 600;
 }
 
 body.admin-layout-fixed .card-title {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .card-body {
@@ -145,7 +147,7 @@ body.admin-layout-fixed table.table {
 body.admin-layout-fixed .table th,
 body.admin-layout-fixed .dataTables_wrapper .table th {
   background: rgba(0, 0, 0, 0.95) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
   border-color: rgba(192, 192, 192, 0.15) !important;
   font-weight: 600;
 }
@@ -184,7 +186,7 @@ body.admin-layout-fixed .table-inventory > tbody > tr > td {
 
 body.admin-layout-fixed .table-inventory thead th {
   background: rgba(0, 0, 0, 0.98) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .table-inventory tbody tr:nth-child(even) td {
@@ -201,8 +203,8 @@ body.admin-layout-fixed .table-inventory .text-muted {
 
 body.admin-layout-fixed .table-inventory .badge {
   background: rgba(168, 168, 168, 0.2) !important;
-  color: #C0C0C0 !important;
-  border-color: rgba(192, 192, 192, 0.3) !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
 }
 
 /* Placeholders e imagens em tabelas */
@@ -253,7 +255,7 @@ body.admin-layout-fixed .table-filters {
 }
 
 body.admin-layout-fixed .table-filters label {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .column-modal .modal-content {
@@ -267,7 +269,7 @@ body.admin-layout-fixed .column-modal .modal-header {
 }
 
 body.admin-layout-fixed .column-modal .modal-title {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .column-modal .modal-footer {
@@ -277,8 +279,8 @@ body.admin-layout-fixed .column-modal .modal-footer {
 /* Botões info/danger no admin */
 body.admin-layout-fixed .btn-info {
   background: var(--color-primary) !important;
-  border-color: rgba(192, 192, 192, 0.3) !important;
-  color: #C0C0C0 !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .btn-info:hover {
@@ -299,8 +301,8 @@ body.admin-layout-fixed .btn-danger:hover {
 
 body.admin-layout-fixed .btn-secondary {
   background: rgba(168, 168, 168, 0.2) !important;
-  border-color: rgba(192, 192, 192, 0.3) !important;
-  color: #C0C0C0 !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .btn-secondary:hover {
@@ -310,13 +312,13 @@ body.admin-layout-fixed .btn-secondary:hover {
 
 /* ===== MEDIA LIBRARY ===== */
 body.admin-layout-fixed .dropzone {
-  border: 2px dashed rgba(192, 192, 192, 0.3) !important;
+  border: 2px dashed rgba(201, 168, 76, 0.45) !important;
   background: rgba(0, 0, 0, 0.6) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .dropzone.dragover {
-  border-color: #A8A8A8 !important;
+  border-color: var(--igp-gold, #c9a84c) !important;
   background: rgba(168, 168, 168, 0.15) !important;
 }
 
@@ -330,27 +332,48 @@ body.admin-layout-fixed .media-item {
 }
 
 body.admin-layout-fixed .media-item:hover {
-  border-color: rgba(192, 192, 192, 0.3) !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ===== SEPARADORES (tabs) =====
+   admin.css usa `color: var(--primary)` no separador activo, e no tema escuro
+   --primary é quase preto — o separador seleccionado ficava ilegível sobre o
+   fundo escuro. Passa a usar o dourado da marca. */
+body.admin-layout-fixed .nav-tabs {
+  border-bottom-color: rgba(201, 168, 76, 0.25) !important;
+}
+
+body.admin-layout-fixed .nav-tabs .nav-link {
+  color: var(--color-text-muted, #9aa3ad) !important;
+}
+
+body.admin-layout-fixed .nav-tabs .nav-link.active {
+  color: var(--igp-gold, #c9a84c) !important;
+  border-bottom-color: var(--igp-gold, #c9a84c) !important;
+}
+
+body.admin-layout-fixed .nav-tabs .nav-link:hover {
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 /* ===== BOTÕES ===== */
 body.admin-layout-fixed .btn-primary {
   background: var(--color-primary) !important;
-  border-color: rgba(192, 192, 192, 0.3) !important;
-  color: #C0C0C0 !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .btn-primary:hover {
   background: var(--color-primary) !important;
   color: var(--color-silver-light) !important;
-  border-color: rgba(192, 192, 192, 0.4) !important;
+  border-color: rgba(201, 168, 76, 0.7) !important;
 }
 
 body.admin-layout-fixed .btn-outline-primary,
 body.admin-layout-fixed .btn-outline-secondary {
-  border-color: #A8A8A8 !important;
-  color: #C0C0C0 !important;
+  border-color: var(--igp-gold, #c9a84c) !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed .btn-outline-primary:hover,
@@ -384,7 +407,7 @@ body.admin-layout-fixed .form-control::placeholder {
 
 body.admin-layout-fixed .form-label,
 body.admin-layout-fixed label {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 /* ===== TIPOGRAFIA ===== */
@@ -403,7 +426,7 @@ body.admin-layout-fixed .text-muted {
 }
 
 body.admin-layout-fixed a {
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
 }
 
 body.admin-layout-fixed a:hover {
@@ -420,8 +443,8 @@ body.admin-layout-fixed .footer {
 /* ===== SCROLL TO TOP ===== */
 body.admin-layout-fixed .scroll-to-top {
   background: var(--color-primary) !important;
-  color: #C0C0C0 !important;
-  border: 1px solid rgba(192, 192, 192, 0.3) !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  border: 1px solid rgba(201, 168, 76, 0.45) !important;
 }
 
 body.admin-layout-fixed .scroll-to-top:hover {
@@ -432,8 +455,8 @@ body.admin-layout-fixed .scroll-to-top:hover {
 /* ===== STAT ICONS (dashboard cards) - paleta prata/bronze ===== */
 body.admin-layout-fixed .stat-icon.bg-primary {
   background: var(--color-primary) !important;
-  color: #C0C0C0 !important;
-  border: 1px solid rgba(192, 192, 192, 0.3) !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  border: 1px solid rgba(201, 168, 76, 0.45) !important;
 }
 
 body.admin-layout-fixed .stat-icon.bg-success {
@@ -474,7 +497,7 @@ body.admin-layout-fixed .list-group-item .badge.bg-primary,
 body.admin-layout-fixed .list-group-item .badge.rounded-pill {
   background: rgba(168, 168, 168, 0.35) !important;
   color: #f4f6f8 !important;
-  border: 1px solid rgba(192, 192, 192, 0.4) !important;
+  border: 1px solid rgba(201, 168, 76, 0.7) !important;
 }
 
 /* ===== BOTÕES OUTLINE (success, warning, danger) ===== */
@@ -521,7 +544,7 @@ body.admin-layout-fixed .badge.bg-warning {
 
 body.admin-layout-fixed .alert-info {
   background: rgba(168, 168, 168, 0.15) !important;
-  border-left-color: #A8A8A8 !important;
+  border-left-color: var(--igp-gold, #c9a84c) !important;
   color: var(--color-text) !important;
 }
 
@@ -550,7 +573,7 @@ body.admin-layout-fixed .dataTables_paginate {
 body.admin-layout-fixed .page-link {
   background: rgba(0, 0, 0, 0.9) !important;
   border-color: rgba(192, 192, 192, 0.2) !important;
-  color: #C0C0C0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
   min-width: 36px;
   text-align: center;
 }
@@ -558,12 +581,12 @@ body.admin-layout-fixed .page-link {
 body.admin-layout-fixed .page-link:hover {
   background: rgba(192, 192, 192, 0.12) !important;
   color: #f0f0f0 !important;
-  border-color: rgba(192, 192, 192, 0.4) !important;
+  border-color: rgba(201, 168, 76, 0.7) !important;
 }
 
 body.admin-layout-fixed .page-item.active .page-link {
   background: rgba(192, 192, 192, 0.22) !important;
-  border-color: #A8A8A8 !important;
+  border-color: var(--igp-gold, #c9a84c) !important;
   color: #f4f6f8 !important;
   font-weight: 600;
   box-shadow: 0 0 0 2px rgba(192, 192, 192, 0.25) !important;
@@ -572,5 +595,5 @@ body.admin-layout-fixed .page-item.active .page-link {
 body.admin-layout-fixed .page-item.disabled .page-link {
   background: rgba(0, 0, 0, 0.6) !important;
   border-color: rgba(192, 192, 192, 0.1) !important;
-  color: rgba(192, 192, 192, 0.3) !important;
+  color: rgba(201, 168, 76, 0.45) !important;
 }
