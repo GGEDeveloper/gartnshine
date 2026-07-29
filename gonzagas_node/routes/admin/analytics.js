@@ -95,39 +95,40 @@ router.get('/api/analytics/product/:id', [
  */
 router.post('/api/analytics/track', async (req, res) => {
     try {
-        const {
-            sessionId,
-            eventType,
-            eventCategory,
-            eventAction,
-            eventLabel,
-            eventValue,
-            productId
-        } = req.body;
-        
-        if (!sessionId || !eventType || !eventCategory || !eventAction) {
+        // O cliente (public/js/analytics-tracking.js) envia sempre um lote
+        // { events: [...] }; aceitamos também um evento único no corpo
+        // (sessionId/eventType/... diretos) para compatibilidade.
+        const events = Array.isArray(req.body.events) ? req.body.events : [req.body];
+
+        const validEvents = events.filter(
+            (e) => e && e.sessionId && e.eventType && e.eventCategory && e.eventAction
+        );
+
+        if (validEvents.length === 0) {
             return res.status(400).json({
                 success: false,
                 message: 'Missing required tracking parameters'
             });
         }
-        
-        await Analytics.trackEvent({
-            sessionId,
-            eventType,
-            eventCategory,
-            eventAction,
-            eventLabel,
-            eventValue,
-            pageUrl: req.headers.referer || '/',
+
+        await Promise.all(validEvents.map((event) => Analytics.trackEvent({
+            sessionId: event.sessionId,
+            eventType: event.eventType,
+            eventCategory: event.eventCategory,
+            eventAction: event.eventAction,
+            eventLabel: event.eventLabel,
+            eventValue: event.eventValue,
+            pageUrl: event.url || req.headers.referer || '/',
             userAgent: req.headers['user-agent'],
             ipAddress: req.ip,
-            productId
-        });
-        
+            productId: event.productId
+        })));
+
         res.json({
             success: true,
-            message: 'Event tracked successfully'
+            tracked: validEvents.length,
+            skipped: events.length - validEvents.length,
+            message: 'Event(s) tracked successfully'
         });
         
     } catch (error) {
