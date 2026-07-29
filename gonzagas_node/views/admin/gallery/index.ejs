@@ -1,0 +1,146 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+      <i class="fas fa-images me-2"></i>Galeria
+    </h1>
+    <a href="/collections" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-external-link-alt"></i> Ver página pública
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <p class="text-muted">
+    Estas são as imagens mostradas em <code>/collections</code> (&laquo;Galeria de Peças&raquo;),
+    pela ordem definida aqui. Remover um item tira-o da página mas mantém o ficheiro no servidor.
+  </p>
+
+  <!-- Itens atuais -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 fw-semibold">Na galeria (<%= items.length %>)</h6>
+      <small class="text-muted"><%= items.filter(i => i.is_active).length %> visível(is) ao público</small>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <% if (items.length === 0) { %>
+        <p class="text-muted mb-0">
+          Ainda não há imagens na galeria. Adicione abaixo a partir das já existentes ou envie uma nova.
+        </p>
+      <% } else { %>
+        <div class="row g-3">
+          <% items.forEach(function(item, index) { %>
+            <div class="col-12 col-md-6 col-xl-4">
+              <div class="card h-100 <%= item.is_active ? '' : 'opacity-50' %>">
+                <img src="/media/gallery/<%= encodeURI(item.filename) %>"
+                     alt="<%= item.caption || item.filename %>"
+                     style="height: 160px; object-fit: cover;">
+                <div class="card-body p-2 p-md-3">
+                  <form action="/admin/gallery/<%= item.id %>/edit" method="POST" class="mb-2">
+                    <label class="form-label small mb-1">Legenda</label>
+                    <input type="text" name="caption" class="form-control form-control-sm mb-2"
+                           value="<%= item.caption || '' %>" placeholder="Ex: Anel Serpente em prata 925"
+                           maxlength="255">
+                    <div class="form-check form-switch mb-2">
+                      <input class="form-check-input" type="checkbox" role="switch"
+                             id="active-<%= item.id %>" name="is_active" value="1"
+                             <%= item.is_active ? 'checked' : '' %>>
+                      <label class="form-check-label small" for="active-<%= item.id %>">
+                        Visível ao público
+                      </label>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary w-100">
+                      <i class="fas fa-save"></i> Guardar
+                    </button>
+                  </form>
+
+                  <div class="d-flex gap-1">
+                    <form action="/admin/gallery/<%= item.id %>/move" method="POST" class="flex-fill">
+                      <input type="hidden" name="direction" value="up">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary w-100"
+                              <%= index === 0 ? 'disabled' : '' %> title="Mover para cima">
+                        <i class="fas fa-arrow-up"></i>
+                      </button>
+                    </form>
+                    <form action="/admin/gallery/<%= item.id %>/move" method="POST" class="flex-fill">
+                      <input type="hidden" name="direction" value="down">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary w-100"
+                              <%= index === items.length - 1 ? 'disabled' : '' %> title="Mover para baixo">
+                        <i class="fas fa-arrow-down"></i>
+                      </button>
+                    </form>
+                    <form action="/admin/gallery/<%= item.id %>/delete" method="POST" class="flex-fill"
+                          onsubmit="return confirm('Remover esta imagem da galeria? O ficheiro é mantido no servidor.');">
+                      <button type="submit" class="btn btn-sm btn-outline-danger w-100" title="Remover da galeria">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                  <small class="text-muted d-block mt-2 text-truncate" title="<%= item.filename %>">
+                    <%= item.filename %>
+                  </small>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Adicionar existentes -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2">
+      <h6 class="m-0 fw-semibold">Adicionar imagens já no servidor (<%= available.length %> disponíveis)</h6>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <% if (available.length === 0) { %>
+        <p class="text-muted mb-0">Todas as imagens da pasta da galeria já estão adicionadas.</p>
+      <% } else { %>
+        <form action="/admin/gallery/add" method="POST">
+          <div class="d-flex flex-wrap gap-2 mb-3" style="max-height: 340px; overflow-y: auto;">
+            <% available.forEach(function(img) { %>
+              <label style="cursor: pointer; position: relative;" title="<%= img.filename %>">
+                <input type="checkbox" name="filenames" value="<%= img.filename %>"
+                       class="form-check-input" style="position: absolute; top: 6px; left: 6px; z-index: 2;">
+                <img src="<%= encodeURI(img.path) %>" alt="<%= img.filename %>"
+                     style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #dee2e6;">
+              </label>
+            <% }); %>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Adicionar selecionadas
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Upload novo -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2">
+      <h6 class="m-0 fw-semibold">Enviar imagem nova</h6>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <form action="/admin/gallery/upload" method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
+        <div class="col-12 col-md-5">
+          <label class="form-label small mb-1">Ficheiro</label>
+          <input type="file" name="gallery_file" accept="image/jpeg,image/png,image/gif,image/webp"
+                 class="form-control" required>
+        </div>
+        <div class="col-12 col-md-5">
+          <label class="form-label small mb-1">Legenda (opcional)</label>
+          <input type="text" name="caption" class="form-control" maxlength="255"
+                 placeholder="Ex: Colar de prata com ónix">
+        </div>
+        <div class="col-12 col-md-2">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-upload"></i> Enviar
+          </button>
+        </div>
+        <div class="col-12">
+          <small class="text-muted">JPG, PNG, GIF ou WebP, até 8MB. Fica disponível também para as imagens de destaque.</small>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

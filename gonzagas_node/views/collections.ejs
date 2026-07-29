@@ -18,27 +18,25 @@
     <!-- Gallery Content -->
     <% if (images && images.length > 0) { %>
       <div class="gallery-grid" id="galleryGrid">
-        <% images.forEach((image, index) => { 
-          let imageName = image.filename.replace(/\.[^/.]+$/, '');
-          imageName = imageName.replace(/WhatsApp Image \d{4}-\d{2}-\d{2} at \d{2}\.\d{2}\.\d{2}/, '');
-          imageName = imageName.replace(/_\w{8,}/g, '');
-          imageName = imageName.replace(/\s*\(\d+\)\s*/g, '');
-          imageName = imageName.replace(/\s+/g, ' ').trim();
-          const cleanName = imageName && imageName.length > 2 ? imageName : 'Peça Única';
+        <% images.forEach((image, index) => {
+          // Legenda definida no admin (/admin/gallery); sem legenda usa-se o
+          // texto genérico, em vez de tentar adivinhar a partir do ficheiro.
+          const cleanName = (image.caption && image.caption.trim()) || 'Peça Única';
+          const src = '/media/gallery/' + encodeURI(image.filename);
         %>
           <div class="gallery-item">
-            <a 
-              href="/media/gallery/<%= image.filename %>" 
-              data-lightbox="gallery" 
+            <a
+              href="<%= src %>"
+              data-lightbox="gallery"
               data-title="<%= cleanName %> - Gonzaga's Art & Shine"
               class="gallery-link"
               style="display: block; width: 100%; height: 100%;"
             >
               <div class="gallery-image-container">
-                <img 
-                  src="/media/gallery/<%= image.filename %>" 
+                <img
+                  src="<%= src %>"
                   alt="<%= cleanName %>"
-                  class="gallery-image" 
+                  class="gallery-image"
                   loading="lazy"
                   data-index="<%= index %>"
                 >

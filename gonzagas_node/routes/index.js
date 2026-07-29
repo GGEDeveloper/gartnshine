@@ -10,6 +10,7 @@ const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
 const instagramModule = require('../modules/instagram');
 const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 const { formatRow } = require('../services/catalogQueryService');
+const GalleryItem = require('../models/GalleryItem');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -106,49 +107,14 @@ router.get('/', async (req, res) => {
 // Collections page - Show all media images
 router.get('/collections', async (req, res) => {
   try {
-    // Try multiple possible media paths
-    const possiblePaths = [
-      path.join(__dirname, '../public/media/gallery'), // New dedicated gallery path
-      path.join(__dirname, '../../media'),
-      path.join(__dirname, '../public/media'),
-      path.join(__dirname, '../media')
-    ];
-    
-    let files = [];
-    let mediaPath = '';
-    
-    // Find the first valid path
-    for (const possiblePath of possiblePaths) {
-      try {
-        await fs.access(possiblePath);
-        files = await fs.readdir(possiblePath);
-        mediaPath = possiblePath;
-        break;
-      } catch (err) {
-        continue;
-      }
-    }
-    
-    if (files.length === 0) {
-      console.error('No valid media directory found');
-      return res.status(500).render('error', {
-        title: 'Error',
-        message: 'Media directory not found.'
-      }, { layout: false });
-    }
-    
-    // Filter only image files and exclude banner-about.jpg
-    const imageFiles = files.filter(file => {
-      const ext = path.extname(file).toLowerCase();
-      const isImage = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext);
-      const isNotBanner = !file.toLowerCase().includes('banner-about');
-      return isImage && isNotBanner;
-    }).map(file => ({
-      filename: file,
-      path: `/media/${file}`,
-      url: `/media/${file}`
+    // Galeria curada no admin (/admin/gallery) — ordem e legendas definidas lá.
+    const imageFiles = (await GalleryItem.getAllActive()).map((item) => ({
+      filename: item.filename,
+      caption: item.caption,
+      path: `/media/gallery/${item.filename}`,
+      url: `/media/gallery/${item.filename}`
     }));
-    
+
     res.render('collections', {
       title: 'Galeria de Peças',
       layout: 'layouts/main',

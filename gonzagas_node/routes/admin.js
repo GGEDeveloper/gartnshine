@@ -139,6 +139,10 @@ router.use(adminMiddleware);
 const settingsAdminRouter = require('./admin/settings');
 router.use('/settings', settingsAdminRouter);
 
+// Mount gallery router (curadoria da galeria pública /collections)
+const galleryAdminRouter = require('./admin/gallery');
+router.use('/gallery', galleryAdminRouter);
+
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
   try {

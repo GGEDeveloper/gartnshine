@@ -27,6 +27,19 @@ describe('Rotas públicas', () => {
     expect(res.text).toMatch(/<rss/);
     expect(res.text).toMatch(/base\.google\.com\/ns\/1\.0/);
   });
+
+  test('GET /collections responde 200 com itens da galeria curada', async () => {
+    const res = await request(app).get('/collections').expect(200);
+    // Regressão: a galeria passou a vir da BD (gallery_items); um erro de
+    // query devolveria 200 com o estado vazio "Coleção em Preparação".
+    expect(res.text).toMatch(/class="gallery-item"/);
+  });
+
+  test('GET /collection/:id responde 200 com os produtos da família', async () => {
+    const res = await request(app).get('/collection/1').expect(200);
+    expect(res.text).toMatch(/collection-header/);
+    expect(res.text).toMatch(/product-card/);
+  });
 });
 
 describe('Admin (autenticado)', () => {
