@@ -16,9 +16,10 @@ window.GonzagaConfig = {
   // Module loading order
   moduleLoadOrder: [
     'utils',
-    'navigation', 
+    'navigation',
     'ui',
-    'carousel'
+    'carousel',
+    'motion'
   ],
   
   // Default timeouts

@@ -142,6 +142,36 @@
   z-index: 2;
 }
 
+/* ===== REVELAÇÃO AO SCROLL (módulo motion.js) =====
+   O JS marca os elementos com .will-reveal e depois .is-revealed quando
+   entram no viewport. Sem JS (ou com JS a falhar) nada recebe .will-reveal,
+   por isso o conteúdo fica visível — nunca esconder conteúdo por defeito. */
+.will-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-slow, 0.6s) var(--ease-premium, cubic-bezier(0.23, 1, 0.32, 1)),
+              transform var(--duration-slow, 0.6s) var(--ease-premium, cubic-bezier(0.23, 1, 0.32, 1));
+}
+
+/* Regra autónoma (não `.will-reveal.is-revealed`): assim basta .is-revealed
+   para o conteúdo aparecer, mesmo nos caminhos em que o JS nunca chega a
+   marcar .will-reveal — sem IntersectionObserver, com movimento reduzido, ou
+   se o módulo falhar. Tem de vir depois de .will-reveal para ganhar o empate
+   de especificidade, e ganha a .product-card { opacity: 0 } de main.css
+   porque homepage.css é carregado a seguir. */
+.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .will-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ===== EXPLORAR COLEÇÕES ===== */
 .collections-showcase {
   padding: clamp(2rem, 5vw, 3.5rem) 0 clamp(1.5rem, 4vw, 2.5rem);

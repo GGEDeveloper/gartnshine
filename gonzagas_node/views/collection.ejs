@@ -61,26 +61,9 @@
 </div>
 
 <script>
-  // Intersection Observer for fade-in animations
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-  
-  // Select elements to animate
-  document.querySelectorAll('.product-card').forEach(el => {
-    observer.observe(el);
-  });
-  
+  // A revelação ao scroll dos .product-card é tratada pelo módulo
+  // /js/modules/motion.js (partilhado com a galeria e a página inicial).
+
   // Sort functionality
   const sortSelect = document.getElementById('sort-select');
   const productsGrid = document.querySelector('.products-grid');

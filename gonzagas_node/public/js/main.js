@@ -44,14 +44,15 @@ window.Gonzaga.ModuleManager = (function() {
    * Initialize all modules in correct order
    */
   function initAllModules() {
-    const moduleOrder = window.GonzagaConfig?.moduleLoadOrder || ['utils', 'navigation', 'ui', 'carousel'];
-    
+    const moduleOrder = window.GonzagaConfig?.moduleLoadOrder || ['utils', 'navigation', 'ui', 'carousel', 'motion'];
+
     moduleOrder.forEach(moduleName => {
       const moduleMap = {
         'utils': window.GonzagaUtils,
         'navigation': window.GonzagaNavigation,
         'ui': window.GonzagaUI,
-        'carousel': window.GonzagaCarousel
+        'carousel': window.GonzagaCarousel,
+        'motion': window.GonzagaMotion
       };
 
       const moduleObject = moduleMap[moduleName];

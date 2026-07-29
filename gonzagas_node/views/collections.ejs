@@ -54,53 +54,13 @@
   </div>
 </main>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
-<script>
-(function() {
-  'use strict';
-  
-  console.log('Collections gallery initializing...');
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGallery);
-  } else {
-    initGallery();
-  }
-
-  function initGallery() {
-    if (typeof lightbox !== 'undefined') {
-  lightbox.option({
-        'resizeDuration': 400,
-    'wrapAround': true,
-    'showImageNumberLabel': true,
-        'positionFromTop': 100,
-    'alwaysShowNavOnTouchDevices': true,
-        'fadeDuration': 500,
-        'imageFadeDuration': 500,
-    'disableScrolling': true,
-    'albumLabel': 'Peça %1 de %2',
-    'fitImagesInViewport': true,
-        'maxWidth': 1600,
-        'maxHeight': 1200
-      });
-    }
-    
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    if (galleryItems.length > 0) {
-  const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-            setTimeout(() => {
-        entry.target.style.animationPlayState = 'running';
-            }, index * 50);
-            observer.unobserve(entry.target);
-      }
-    });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-      galleryItems.forEach(item => observer.observe(item));
-    }
-}
-})();
-</script>
+<%
+  /*
+    Esta página carregava o lightbox2 a partir de cdnjs — que a CSP bloqueia
+    (cdnjs só está autorizado para estilos), pelo que a ampliação de imagens
+    nunca chegou a funcionar aqui. Além disso trazia uma cópia própria do
+    jQuery, já carregado no layout. O GLightbox usado no catálogo é carregado
+    globalmente e liga-se sozinho a [data-lightbox], que estes links já têm.
+    A revelação ao scroll é feita por /js/modules/motion.js.
+  */
+%>
