@@ -108,8 +108,14 @@ body.showcase-theme .hero-tagline {
 body.showcase-theme .featured-section {
   padding-top: clamp(1.25rem, 3vw, 2rem);
   padding-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
-  background: transparent !important;
   overflow: visible !important;
+}
+
+/* O `background: transparent !important` tem de saltar as secções com imagem
+   de fundo escolhida no admin (.has-background), senão anulava o
+   background-image posto inline e a escolha não tinha efeito nenhum. */
+body.showcase-theme .featured-section:not(.has-background) {
+  background: transparent !important;
 }
 
 body.showcase-theme .section-header h2 {

@@ -76,6 +76,24 @@ class SiteSettings {
     return { success: true };
   }
 
+  /** Define a imagem de fundo da secção Featured (caminho público, ex: /media/gallery/x.jpg). null = usa background do body. */
+  static async updateFeaturedBackground(imagePath) {
+    await pool.query(
+      'UPDATE site_settings SET featured_background = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1',
+      [imagePath || null]
+    );
+    return { success: true };
+  }
+
+  /** Define a imagem de fundo da secção Media Strip (caminho público, ex: /media/gallery/x.jpg). null = usa background do body. */
+  static async updateMediaStripBackground(imagePath) {
+    await pool.query(
+      'UPDATE site_settings SET media_strip_background = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1',
+      [imagePath || null]
+    );
+    return { success: true };
+  }
+
   // Optional: Method to ensure the settings row exists
   static async initializeSettings() {
     try {

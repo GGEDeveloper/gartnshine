@@ -77,6 +77,18 @@ router.get('/', async (req, res) => {
       ? configuredHeroImage
       : (mediaFiles.length > 0 ? mediaFiles[0].path : '/images/placeholder-hero.jpg');
 
+    // Featured section background: escolhida no admin se ainda existir na galeria, senão null
+    const configuredFeaturedBackground = res.locals.siteSettings && res.locals.siteSettings.featured_background;
+    const configuredFeaturedExists = configuredFeaturedBackground
+      && mediaFiles.some((m) => m.path === configuredFeaturedBackground);
+    const featuredBackground = configuredFeaturedExists ? configuredFeaturedBackground : null;
+
+    // Media strip background: escolhida no admin se ainda existir na galeria, senão null
+    const configuredMediaStripBackground = res.locals.siteSettings && res.locals.siteSettings.media_strip_background;
+    const configuredMediaStripExists = configuredMediaStripBackground
+      && mediaFiles.some((m) => m.path === configuredMediaStripBackground);
+    const mediaStripBackground = configuredMediaStripExists ? configuredMediaStripBackground : null;
+
     // Instagram strip — non-blocking; silently degrades to empty array on any error
     let igPosts = [];
     try {
@@ -93,6 +105,8 @@ router.get('/', async (req, res) => {
       showcaseFamilies: showcaseFamilies || [],
       mediaFiles: mediaFiles || [],
       heroImage,
+      featuredBackground,
+      mediaStripBackground,
       igPosts,
       siteTitle: 'Gonzaga\'s Art & Shine',
       siteDescription: 'Elegância que nasce da terra',

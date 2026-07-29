@@ -1,6 +1,7 @@
 <% var _mediaPosts = (typeof igPosts !== 'undefined' && Array.isArray(igPosts)) ? igPosts : []; %>
 <% if (_mediaPosts.length > 0) { %>
-<section class="ig-strip-section">
+<section class="ig-strip-section<%= typeof mediaStripBackground !== 'undefined' && mediaStripBackground ? ' has-background' : '' %>"
+         <% if (typeof mediaStripBackground !== 'undefined' && mediaStripBackground) { %>style="background-image: url('<%= encodeURI(mediaStripBackground) %>'); background-size: cover; background-position: center;"<% } %>>
   <div class="ig-strip-header section-header">
     <h2>Do Atelier</h2>
     <p class="ig-strip-lead">Prata, pedras naturais e inspiração — o nosso universo criativo</p>

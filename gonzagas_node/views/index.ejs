@@ -10,7 +10,8 @@
 
     <!-- Featured Products -->
     <% if (featured && featured.length > 0) { %>
-    <section class="featured-section ig-collections">
+    <section class="featured-section ig-collections<%= featuredBackground ? ' has-background' : '' %>"
+             <% if (featuredBackground) { %>style="background-image: url('<%= encodeURI(featuredBackground) %>'); background-size: cover; background-position: center;"<% } %>>
       <div class="section-header ig-collections-head">
         <h2 class="ig-collections-title">Featured Pieces</h2>
         <p class="ig-collections-sub">Prata &amp; pedras naturais — design alternativo</p>

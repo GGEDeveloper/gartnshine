@@ -46,6 +46,8 @@ class SiteSettingsController {
 
       const galleryImages = await listGalleryImages();
       const effectiveHeroImage = settings.hero_image || (await getAutoFallbackHeroImage());
+      const effectiveFeaturedBackground = settings.featured_background || null;
+      const effectiveMediaStripBackground = settings.media_strip_background || null;
 
       res.render('admin/settings/settings-form', {
         layout: 'admin/layouts/main', // Or your default admin layout
@@ -53,6 +55,8 @@ class SiteSettingsController {
         settings: settings,
         galleryImages,
         effectiveHeroImage,
+        effectiveFeaturedBackground,
+        effectiveMediaStripBackground,
         csrfToken: req.csrfToken ? req.csrfToken() : null, // Pass CSRF token if you use csurf
         breadcrumbs: [ // Example breadcrumbs
             { name: 'Admin', url: '/admin' },
@@ -104,6 +108,86 @@ class SiteSettingsController {
     } catch (error) {
       console.error('Erro ao atualizar imagem do hero:', error);
       req.flash('error', 'Erro ao atualizar a imagem do hero. Tente novamente.');
+      res.redirect('/admin/settings');
+    }
+  }
+
+  /** POST /admin/settings/featured-background — escolher uma imagem já existente na galeria, ou enviar uma nova. */
+  async updateFeaturedBackground(req, res) {
+    try {
+      let imagePath = null;
+
+      if (req.file) {
+        // Novo upload — multer já gravou o ficheiro em public/media/gallery
+        imagePath = `/media/gallery/${req.file.filename}`;
+      } else if (req.body.featured_background_existing) {
+        // Escolher uma imagem já existente na galeria
+        const candidate = req.body.featured_background_existing;
+        const galleryImages = await listGalleryImages();
+        const match = galleryImages.find((img) => img.path === candidate);
+        if (!match) {
+          req.flash('error', 'Imagem selecionada não foi encontrada na galeria.');
+          return res.redirect('/admin/settings');
+        }
+        imagePath = match.path;
+      } else if (req.body.reset_to_default === '1') {
+        imagePath = null;
+      } else {
+        req.flash('error', 'Escolhe uma imagem da galeria ou envia uma nova.');
+        return res.redirect('/admin/settings');
+      }
+
+      await SiteSettings.updateFeaturedBackground(imagePath);
+      req.flash(
+        'success',
+        imagePath
+          ? 'Imagem de fundo da secção Featured atualizada com sucesso!'
+          : 'Secção Featured voltou a usar o background padrão (do body).'
+      );
+      res.redirect('/admin/settings');
+    } catch (error) {
+      console.error('Erro ao atualizar imagem da secção Featured:', error);
+      req.flash('error', 'Erro ao atualizar a imagem da secção Featured. Tente novamente.');
+      res.redirect('/admin/settings');
+    }
+  }
+
+  /** POST /admin/settings/media-strip-background — escolher uma imagem já existente na galeria, ou enviar uma nova. */
+  async updateMediaStripBackground(req, res) {
+    try {
+      let imagePath = null;
+
+      if (req.file) {
+        // Novo upload — multer já gravou o ficheiro em public/media/gallery
+        imagePath = `/media/gallery/${req.file.filename}`;
+      } else if (req.body.media_strip_background_existing) {
+        // Escolher uma imagem já existente na galeria
+        const candidate = req.body.media_strip_background_existing;
+        const galleryImages = await listGalleryImages();
+        const match = galleryImages.find((img) => img.path === candidate);
+        if (!match) {
+          req.flash('error', 'Imagem selecionada não foi encontrada na galeria.');
+          return res.redirect('/admin/settings');
+        }
+        imagePath = match.path;
+      } else if (req.body.reset_to_default === '1') {
+        imagePath = null;
+      } else {
+        req.flash('error', 'Escolhe uma imagem da galeria ou envia uma nova.');
+        return res.redirect('/admin/settings');
+      }
+
+      await SiteSettings.updateMediaStripBackground(imagePath);
+      req.flash(
+        'success',
+        imagePath
+          ? 'Imagem de fundo da secção Media Strip atualizada com sucesso!'
+          : 'Secção Media Strip voltou a usar o background padrão (do body).'
+      );
+      res.redirect('/admin/settings');
+    } catch (error) {
+      console.error('Erro ao atualizar imagem da secção Media Strip:', error);
+      req.flash('error', 'Erro ao atualizar a imagem da secção Media Strip. Tente novamente.');
       res.redirect('/admin/settings');
     }
   }
