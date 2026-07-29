@@ -37,12 +37,44 @@
     </section>
     <% } %>
 
-    <!-- Explorar Coleções -->
+    <!-- Coleções curadas -->
+    <% if (typeof showcaseCollections !== 'undefined' && showcaseCollections.length > 0) { %>
+    <section class="collections-showcase" aria-labelledby="curated-showcase-title">
+      <div class="section-header ig-collections-head">
+        <h2 class="ig-collections-title" id="curated-showcase-title">Coleções</h2>
+        <p class="ig-collections-sub">Conjuntos escolhidos peça a peça</p>
+        <div class="geometric-divider">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="collections-showcase-grid">
+        <% showcaseCollections.forEach(function(col) {
+          const tileImage = col.card_image
+            || col.hero_image
+            || (col.fallback_image ? productImg(col.fallback_image, 'medium').jpg : null);
+        %>
+          <a class="collection-tile<%= tileImage ? ' has-image' : '' %>"
+             href="/colecao/<%= col.slug %>"
+             <% if (tileImage) { %>style="background-image: url('<%= encodeURI(tileImage) %>');"<% } %>>
+            <span class="collection-tile-body">
+              <span class="collection-tile-name"><%= col.name %></span>
+              <span class="collection-tile-count"><%= col.product_count %> peça<%= Number(col.product_count) === 1 ? '' : 's' %></span>
+            </span>
+          </a>
+        <% }); %>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Explorar por material (categorias) -->
     <% if (typeof showcaseFamilies !== 'undefined' && showcaseFamilies.length > 0) { %>
     <section class="collections-showcase" aria-labelledby="collections-showcase-title">
       <div class="section-header ig-collections-head">
-        <h2 class="ig-collections-title" id="collections-showcase-title">Explorar Coleções</h2>
-        <p class="ig-collections-sub">Cada peça nasce de uma família de materiais e formas</p>
+        <h2 class="ig-collections-title" id="collections-showcase-title">Explorar por Material</h2>
+        <p class="ig-collections-sub">Prata, latão e pedras naturais — por tipo de peça</p>
         <div class="geometric-divider">
           <span></span>
           <span></span>

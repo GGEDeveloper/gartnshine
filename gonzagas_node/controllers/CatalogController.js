@@ -150,8 +150,9 @@ class CatalogController {
       res.status(500).render('error', {
         title: 'Erro',
         message: 'Ocorreu um erro ao carregar o catálogo.',
-        error: {}
-      }, { layout: false });
+        error: {},
+        layout: false
+      });
     }
   }
 }

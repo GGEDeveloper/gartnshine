@@ -143,9 +143,13 @@ router.use('/settings', settingsAdminRouter);
 const galleryAdminRouter = require('./admin/gallery');
 router.use('/gallery', galleryAdminRouter);
 
-// Mount collections router (capas das coleções + fundos da página inicial)
+// Mount curated collections router (conjuntos de peças escolhidas à mão)
 const collectionsAdminRouter = require('./admin/collections');
-router.use('/collections-admin', collectionsAdminRouter);
+router.use('/collections', collectionsAdminRouter);
+
+// Mount site appearance router (imagens das categorias + fundos das secções)
+const siteAppearanceRouter = require('./admin/siteAppearance');
+router.use('/site-appearance', siteAppearanceRouter);
 
 // Rota para o painel de administração
 router.get('/', adminSessionRequired, async (req, res) => {
@@ -488,8 +492,9 @@ router.get('/checkpoints', adminSessionRequired, async (req, res) => {
     console.error('Error loading checkpoints:', error);
     res.status(500).render('error', {
       title: 'Erro',
-      message: 'Falha ao carregar checkpoints.'
-    }, { layout: false });
+      message: 'Falha ao carregar checkpoints.',
+      layout: false
+    });
   }
 });
 

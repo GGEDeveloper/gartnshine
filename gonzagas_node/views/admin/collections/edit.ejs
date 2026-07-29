@@ -1,94 +1,230 @@
 <div class="container-fluid px-3 px-md-4 py-3">
   <div class="d-flex justify-content-between align-items-start gap-2 mb-4 flex-wrap">
     <div>
-      <a href="/admin/collections-admin" class="small text-decoration-none">← Todas as coleções</a>
-      <h1 class="h3 mb-0 mt-1"><%= family.name %></h1>
-      <small class="text-muted"><%= family.product_count %> peça<%= Number(family.product_count) === 1 ? '' : 's' %></small>
+      <a href="/admin/collections" class="small text-decoration-none">← Todas as coleções</a>
+      <h1 class="h3 mb-0 mt-1"><%= collection.name %></h1>
+      <small class="text-muted">
+        <%= products.length %> peça<%= products.length === 1 ? '' : 's' %>
+        <% if (!collection.is_active) { %> · <span class="text-warning">oculta do site</span><% } %>
+      </small>
     </div>
-    <a href="/collection/<%= family.slug || family.id %>" target="_blank" rel="noopener"
-       class="btn btn-outline-secondary btn-sm">
-      <i class="fas fa-external-link-alt"></i> Ver página pública
-    </a>
+    <% if (products.length > 0 && collection.is_active) { %>
+      <a href="/colecao/<%= collection.slug %>" target="_blank" rel="noopener"
+         class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-external-link-alt"></i> Ver página pública
+      </a>
+    <% } %>
   </div>
 
   <%- include('../partials/flash-messages') %>
 
-  <div class="row g-3">
+  <!-- ── Peças da coleção ─────────────────────────────────────── -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2">
+      <h6 class="m-0 fw-semibold">Peças nesta coleção</h6>
+      <small class="text-muted">A ordem aqui é a ordem no site. Retirar uma peça não a apaga.</small>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <% if (products.length === 0) { %>
+        <p class="text-muted mb-0">Ainda sem peças. Escolha-as na secção abaixo.</p>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th style="width: 56px;"></th>
+                <th>Referência / Nome</th>
+                <th>Categoria</th>
+                <th style="width: 150px;">Ordem</th>
+                <th style="width: 60px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% products.forEach(function(p, i) { %>
+                <tr>
+                  <td>
+                    <img src="<%= productImg(p.image_url, 'thumb').jpg %>" alt=""
+                         onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                         style="width: 44px; height: 44px; object-fit: cover; border-radius: 4px;">
+                  </td>
+                  <td>
+                    <div class="small"><%= p.name %></div>
+                    <small class="text-muted"><%= p.reference %></small>
+                    <% if (!p.is_active) { %>
+                      <span class="badge bg-warning text-dark ms-1">inativa</span>
+                    <% } %>
+                  </td>
+                  <td><small class="text-muted"><%= p.family_name || '—' %></small></td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <form action="/admin/collections/<%= collection.id %>/products/<%= p.id %>/move" method="POST">
+                        <input type="hidden" name="direction" value="up">
+                        <button class="btn btn-sm btn-outline-secondary" <%= i === 0 ? 'disabled' : '' %>
+                                title="Subir"><i class="fas fa-arrow-up"></i></button>
+                      </form>
+                      <form action="/admin/collections/<%= collection.id %>/products/<%= p.id %>/move" method="POST">
+                        <input type="hidden" name="direction" value="down">
+                        <button class="btn btn-sm btn-outline-secondary" <%= i === products.length - 1 ? 'disabled' : '' %>
+                                title="Descer"><i class="fas fa-arrow-down"></i></button>
+                      </form>
+                    </div>
+                  </td>
+                  <td>
+                    <form action="/admin/collections/<%= collection.id %>/products/<%= p.id %>/remove" method="POST"
+                          onsubmit="return confirm('Retirar esta peça da coleção?');">
+                      <button class="btn btn-sm btn-outline-danger" title="Retirar da coleção">
+                        <i class="fas fa-xmark"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
 
-    <!-- Textos -->
+  <!-- ── Escolher peças ───────────────────────────────────────── -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2">
+      <h6 class="m-0 fw-semibold">Acrescentar peças</h6>
+      <small class="text-muted">Só aparecem peças ativas que ainda não estão nesta coleção.</small>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <form method="GET" action="/admin/collections/<%= collection.id %>" class="row g-2 mb-3">
+        <div class="col-12 col-md-5">
+          <label for="q" class="form-label small mb-1">Procurar</label>
+          <input type="search" class="form-control form-control-sm" id="q" name="q"
+                 value="<%= filters.q %>" placeholder="Nome ou referência">
+        </div>
+        <div class="col-12 col-md-5">
+          <label for="family" class="form-label small mb-1">Categoria</label>
+          <select class="form-select form-select-sm" id="family" name="family">
+            <option value="">Todas</option>
+            <% families.forEach(function(f) { %>
+              <option value="<%= f.id %>" <%= String(filters.familyId) === String(f.id) ? 'selected' : '' %>>
+                <%= f.name %> (<%= f.product_count %>)
+              </option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-12 col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-sm btn-outline-secondary w-100">Filtrar</button>
+        </div>
+      </form>
+
+      <% if (candidates.length === 0) { %>
+        <p class="text-muted mb-0">
+          <% if (filters.q || filters.familyId) { %>
+            Nenhuma peça corresponde ao filtro.
+          <% } else { %>
+            Todas as peças ativas já estão nesta coleção.
+          <% } %>
+        </p>
+      <% } else { %>
+        <form action="/admin/collections/<%= collection.id %>/products/add" method="POST">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <small class="text-muted"><%= candidates.length %> peça(s) disponível(is)</small>
+            <button type="button" class="btn btn-sm btn-link p-0" id="toggle-all">Selecionar todas</button>
+          </div>
+
+          <div class="row g-2 mb-3" style="max-height: 420px; overflow-y: auto;">
+            <% candidates.forEach(function(p) { %>
+              <div class="col-6 col-md-4 col-xl-3">
+                <label class="d-flex gap-2 align-items-center p-2 border rounded h-100"
+                       style="cursor: pointer;" title="<%= p.name %>">
+                  <input type="checkbox" class="form-check-input flex-shrink-0 candidate"
+                         name="product_ids" value="<%= p.id %>">
+                  <img src="<%= productImg(p.image_url, 'thumb').jpg %>" alt=""
+                       onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                       style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
+                  <span style="min-width: 0;">
+                    <span class="d-block small text-truncate"><%= p.name %></span>
+                    <small class="text-muted"><%= p.reference %></small>
+                  </span>
+                </label>
+              </div>
+            <% }); %>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Acrescentar selecionadas
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ── Textos, SEO e imagens ────────────────────────────────── -->
+  <div class="row g-3">
     <div class="col-12 col-lg-6">
       <div class="card h-100">
         <div class="card-header py-2">
-          <h6 class="m-0 fw-semibold">Nome e descrição</h6>
-          <small class="text-muted">Aparecem no cabeçalho da página da coleção.</small>
+          <h6 class="m-0 fw-semibold">Nome, descrição e SEO</h6>
         </div>
         <div class="card-body">
-          <form action="/admin/collections-admin/<%= family.id %>/content" method="POST">
+          <form action="/admin/collections/<%= collection.id %>/content" method="POST">
             <div class="mb-3">
               <label for="name" class="form-label">Nome <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="name" name="name" required maxlength="100"
-                     value="<%= family.name %>">
+              <input type="text" class="form-control" id="name" name="name" required maxlength="150"
+                     value="<%= collection.name %>">
+              <small class="text-muted">
+                Endereço atual: <code>/colecao/<%= collection.slug %></code> — muda se alterar o nome.
+              </small>
             </div>
 
             <div class="mb-3">
               <label for="description" class="form-label">Descrição</label>
-              <textarea class="form-control" id="description" name="description" rows="4"
-                        placeholder="Ex: Anéis em prata 925 trabalhada à mão, com pedras naturais."><%= family.description || '' %></textarea>
-              <small class="text-muted">Mostrada sob o título. Deixar vazio esconde o parágrafo.</small>
+              <textarea class="form-control" id="description" name="description" rows="3"><%= collection.description || '' %></textarea>
+            </div>
+
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" role="switch" id="is_active"
+                     name="is_active" value="1" <%= collection.is_active ? 'checked' : '' %>>
+              <label class="form-check-label" for="is_active">Visível no site</label>
             </div>
 
             <hr>
-
             <p class="fw-semibold mb-1">SEO</p>
-            <small class="text-muted d-block mb-3">
-              Só para os motores de busca e partilhas. Deixar vazio usa o nome e a descrição acima.
-            </small>
+            <small class="text-muted d-block mb-3">Vazio usa o nome e a descrição acima.</small>
 
             <div class="mb-3">
               <label for="seo_title" class="form-label">Título para SEO</label>
               <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="255"
-                     value="<%= family.seo_title || '' %>"
-                     placeholder="<%= family.name %>">
-              <small class="text-muted">Recomendado até ~60 caracteres.</small>
+                     value="<%= collection.seo_title || '' %>" placeholder="<%= collection.name %>">
             </div>
 
             <div class="mb-3">
               <label for="seo_description" class="form-label">Descrição para SEO</label>
               <textarea class="form-control" id="seo_description" name="seo_description" rows="3"
-                        maxlength="320"><%= family.seo_description || '' %></textarea>
-              <small class="text-muted">Recomendado até ~155 caracteres.</small>
+                        maxlength="320"><%= collection.seo_description || '' %></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-save"></i> Guardar
-            </button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- Imagens -->
     <div class="col-12 col-lg-6">
       <%
         const imagens = [
-          { titulo: 'Imagem do cabeçalho',
-            desc: 'Fundo do topo da página desta coleção.',
-            current: family.hero_image,
-            action: '/admin/collections-admin/' + family.id + '/hero-image',
-            existingField: 'hero_image_existing',
-            fileField: 'hero_image_file',
+          { titulo: 'Imagem do cabeçalho', desc: 'Fundo do topo da página desta coleção.',
+            current: collection.hero_image,
+            action: '/admin/collections/' + collection.id + '/hero-image',
+            existingField: 'hero_image_existing', fileField: 'hero_image_file',
             removeField: 'remove_hero_image' },
-          { titulo: 'Imagem do cartão',
-            desc: 'Cartão desta coleção na secção "Explorar Coleções" da página inicial.',
-            current: family.card_image,
-            action: '/admin/collections-admin/' + family.id + '/card-image',
-            existingField: 'card_image_existing',
-            fileField: 'card_image_file',
+          { titulo: 'Imagem do cartão', desc: 'Cartão desta coleção na página inicial.',
+            current: collection.card_image,
+            action: '/admin/collections/' + collection.id + '/card-image',
+            existingField: 'card_image_existing', fileField: 'card_image_file',
             removeField: 'remove_card_image' }
         ];
-        const autoImage = family.fallback_image ? productImg(family.fallback_image, 'small').jpg : null;
+        const autoImage = products.length > 0 && products[0].image_url
+          ? productImg(products[0].image_url, 'small').jpg : null;
       %>
-
       <% imagens.forEach(function(img) { %>
         <div class="card mb-3">
           <div class="card-header py-2">
@@ -99,47 +235,47 @@
             <% if (img.current) { %>
               <img src="<%= encodeURI(img.current) %>" alt="<%= img.titulo %>" loading="lazy"
                    onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
-                   class="mb-2" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px;">
+                   class="mb-2" style="width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px;">
             <% } else if (autoImage) { %>
-              <img src="<%= encodeURI(autoImage) %>" alt="Imagem automática" loading="lazy"
+              <img src="<%= autoImage %>" alt="Imagem automática" loading="lazy"
                    onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
-                   class="mb-2" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px; opacity: 0.75;">
+                   class="mb-2" style="width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; opacity: 0.75;">
               <small class="text-muted d-block mb-2">
-                <i class="fas fa-wand-magic-sparkles"></i>
-                Automática — foto de uma peça desta coleção. Escolha uma imagem para substituir.
+                Automática — primeira peça da coleção. Escolha uma imagem para substituir.
               </small>
             <% } else { %>
-              <div class="mb-2" style="width: 100%; height: 120px; border-radius: 6px;
+              <div class="mb-2" style="width: 100%; height: 110px; border-radius: 6px;
                           background: rgba(255,255,255,0.05); display: flex; align-items: center;
-                          justify-content: center; color: #6c757d;">
-                Sem imagem
-              </div>
+                          justify-content: center; color: #6c757d;">Sem imagem</div>
             <% } %>
 
             <%- include('../partials/_image-picker', {
-                  action: img.action,
-                  existingField: img.existingField,
-                  fileField: img.fileField,
-                  removeField: img.removeField,
-                  current: img.current,
-                  galleryImages: galleryImages,
+                  action: img.action, existingField: img.existingField,
+                  fileField: img.fileField, removeField: img.removeField,
+                  current: img.current, galleryImages: galleryImages,
                   label: img.current ? 'Mudar imagem' : 'Escolher imagem'
                 }) %>
           </div>
         </div>
       <% }); %>
-
-      <p class="text-muted small">
-        As imagens vêm da <a href="/admin/gallery">Galeria</a>. Enviar uma nova aqui também a
-        coloca na pasta da galeria, ficando disponível para as outras coleções.
-      </p>
     </div>
-
   </div>
 </div>
 
 <script>
-  // Realce da miniatura escolhida, em qualquer selector desta página.
+  // Selecionar / limpar todas as peças candidatas visíveis.
+  (function () {
+    const btn = document.getElementById('toggle-all');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      const boxes = document.querySelectorAll('.candidate');
+      const turnOn = btn.textContent.trim() === 'Selecionar todas';
+      boxes.forEach(function (b) { b.checked = turnOn; });
+      btn.textContent = turnOn ? 'Limpar seleção' : 'Selecionar todas';
+    });
+  })();
+
+  // Realce da miniatura escolhida nos selectores de imagem.
   document.addEventListener('change', function (e) {
     const radio = e.target;
     if (!radio.matches('.image-picker input[type="radio"]')) return;

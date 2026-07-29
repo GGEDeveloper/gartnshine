@@ -1,0 +1,161 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0"><i class="fas fa-palette me-2"></i>Aspeto do Site</h1>
+    <a href="/" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-external-link-alt"></i> Ver site
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <ul class="nav nav-tabs mb-3" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active py-3" data-bs-toggle="tab" data-bs-target="#tab-capas" type="button" role="tab">
+        <i class="fas fa-image me-1"></i> Imagens das categorias
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link py-3" data-bs-toggle="tab" data-bs-target="#tab-fundos" type="button" role="tab">
+        <i class="fas fa-panorama me-1"></i> Fundos da página inicial
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- ── Capas das coleções ─────────────────────────────────── -->
+    <div class="tab-pane fade show active" id="tab-capas" role="tabpanel">
+      <p class="text-muted">
+        Cada coleção tem nome, descrição, textos de SEO e duas imagens: uma para o cabeçalho
+        da sua página e outra para o cartão na página inicial. O que não for definido usa
+        automaticamente uma fotografia de uma peça dessa coleção.
+      </p>
+
+      <div class="row g-3">
+        <% families.forEach(function(fam) {
+             const auto = fam.fallback_image ? productImg(fam.fallback_image, 'small').jpg : null;
+             const heroShown = fam.hero_image || auto;
+             const cardShown = fam.card_image || fam.hero_image || auto;
+             const definidos = [
+               fam.description ? 'descrição' : null,
+               (fam.seo_title || fam.seo_description) ? 'SEO' : null
+             ].filter(Boolean);
+        %>
+          <div class="col-12 col-lg-6 col-xxl-4">
+            <a href="/admin/site-appearance/<%= fam.id %>"
+               class="card h-100 text-decoration-none collection-admin-card">
+              <div class="card-body p-3">
+                <div class="d-flex gap-2 mb-2">
+                  <% [{ src: heroShown, own: !!fam.hero_image, rot: 'Cabeçalho' },
+                      { src: cardShown, own: !!fam.card_image, rot: 'Cartão' }].forEach(function(im) { %>
+                    <div style="flex: 1; min-width: 0;">
+                      <% if (im.src) { %>
+                        <img src="<%= encodeURI(im.src) %>" alt="<%= im.rot %> de <%= fam.name %>" loading="lazy"
+                             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                             style="width: 100%; height: 70px; object-fit: cover; border-radius: 5px;
+                                    opacity: <%= im.own ? '1' : '0.6' %>;">
+                      <% } else { %>
+                        <div style="width: 100%; height: 70px; border-radius: 5px;
+                                    background: rgba(255,255,255,0.05); display: flex; align-items: center;
+                                    justify-content: center; color: #6c757d;">
+                          <i class="fas fa-image"></i>
+                        </div>
+                      <% } %>
+                      <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">
+                        <%= im.rot %><%= im.own ? '' : ' (auto)' %>
+                      </small>
+                    </div>
+                  <% }); %>
+                </div>
+
+                <h6 class="mb-1 text-truncate"><%= fam.name %></h6>
+                <small class="text-muted d-block">
+                  <%= fam.product_count %> peça<%= Number(fam.product_count) === 1 ? '' : 's' %>
+                  <% if (definidos.length > 0) { %>
+                    · <span class="text-success"><%= definidos.join(' e ') %></span>
+                  <% } %>
+                </small>
+                <small class="d-inline-block mt-2" style="color: var(--igp-gold, #c9a84c);">
+                  Parametrizar →
+                </small>
+              </div>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- ── Fundos da página inicial ───────────────────────────── -->
+    <div class="tab-pane fade" id="tab-fundos" role="tabpanel">
+      <p class="text-muted">
+        Imagens de fundo das secções da página inicial. Sem imagem escolhida, cada secção
+        usa o fundo normal do site.
+      </p>
+
+      <div class="row g-3">
+        <%
+          const secoes = [
+            { titulo: 'Hero (topo da página inicial)', desc: 'Imagem grande atrás do nome da marca.',
+              action: '/admin/settings/hero-image', existingField: 'hero_image_existing',
+              fileField: 'hero_image_file', removeField: 'reset_to_default', current: settings.hero_image },
+            { titulo: 'Featured Pieces', desc: 'Fundo da secção das peças em destaque.',
+              action: '/admin/settings/featured-background', existingField: 'featured_background_existing',
+              fileField: 'featured_bg_file', removeField: 'reset_to_default', current: settings.featured_background },
+            { titulo: 'Do Atelier (media strip)', desc: 'Fundo da faixa de fotos do atelier.',
+              action: '/admin/settings/media-strip-background', existingField: 'media_strip_background_existing',
+              fileField: 'media_strip_bg_file', removeField: 'reset_to_default', current: settings.media_strip_background }
+          ];
+        %>
+        <% secoes.forEach(function(s) { %>
+          <div class="col-12 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body p-3">
+                <h6 class="mb-1"><%= s.titulo %></h6>
+                <small class="text-muted d-block mb-2"><%= s.desc %></small>
+
+                <% if (s.current) { %>
+                  <img src="<%= encodeURI(s.current) %>" alt="Fundo de <%= s.titulo %>" loading="lazy"
+                       onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                       class="mb-2" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px;">
+                <% } else { %>
+                  <div class="mb-2" style="width: 100%; height: 110px; border-radius: 6px;
+                              background: rgba(255,255,255,0.05); display: flex; align-items: center;
+                              justify-content: center; color: #6c757d;">
+                    Sem fundo definido
+                  </div>
+                <% } %>
+
+                <%- include('../partials/_image-picker', {
+                      action: s.action,
+                      existingField: s.existingField,
+                      fileField: s.fileField,
+                      removeField: s.removeField,
+                      current: s.current,
+                      galleryImages: galleryImages,
+                      label: s.current ? 'Mudar fundo' : 'Definir fundo'
+                    }) %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Um único listener delegado para o realce da miniatura escolhida, em todos
+  // os selectores da página (cada um vive no seu próprio <form>).
+  document.addEventListener('change', function (e) {
+    const radio = e.target;
+    if (!radio.matches('.image-picker input[type="radio"]')) return;
+    const form = radio.closest('form');
+    if (!form) return;
+    form.querySelectorAll('input[type="radio"]').forEach(function (r) {
+      if (r.nextElementSibling) {
+        r.nextElementSibling.style.borderColor = r.checked ? '#c9a84c' : 'transparent';
+      }
+    });
+  });
+</script>

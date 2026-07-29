@@ -13,7 +13,8 @@ async function requireEcommerceEnabled(req, res, next) {
       return res.status(503).render('error', {
         title: 'Em breve',
         message: 'A loja online estará disponível em breve. Entretanto, contacte-nos via WhatsApp.',
-      }, { layout: false });
+        layout: false
+      });
     }
     next();
   } catch (err) {

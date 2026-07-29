@@ -50,8 +50,8 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <%= (currentPath && currentPath.startsWith('/collections-admin')) ? 'active' : '' %>" href="/admin/collections-admin" title="Coleções">
-          <i class="fas fa-fw fa-layer-group"></i>
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/collections')) ? 'active' : '' %>" href="/admin/collections" title="Coleções">
+          <i class="fas fa-fw fa-gem"></i>
           <span>Coleções</span>
         </a>
       </li>
@@ -60,6 +60,13 @@
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/gallery')) ? 'active' : '' %>" href="/admin/gallery" title="Galeria">
           <i class="fas fa-fw fa-images"></i>
           <span>Galeria</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/site-appearance')) ? 'active' : '' %>" href="/admin/site-appearance" title="Aspeto do Site">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Aspeto do Site</span>
         </a>
       </li>
 

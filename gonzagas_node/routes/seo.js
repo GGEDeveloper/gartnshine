@@ -8,8 +8,9 @@
  *   /                        → index.ejs
  *   /catalog                 → CatalogController
  *   /catalog/product/:id     → catalog/product-detail.ejs
- *   /collections             → collections.ejs  (Galeria de Peças)
- *   /collection/:familyId    → collection.ejs
+ *   /collections             → collections.ejs  (Galeria de Peças — media)
+ *   /collection/:familyId    → collection.ejs   (categoria/família)
+ *   /colecao/:slug           → curated-collection.ejs (coleção curada)
  *   /about                   → about.ejs
  *   /privacy-policy          → privacy-policy.ejs
  *   /terms-of-service        → terms-of-service.ejs
@@ -18,6 +19,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
+const Collection = require('../models/Collection');
 const { formatSitemapDate } = require('../utils/seo-helpers');
 
 // SITEMAP.XML DINÂMICO
@@ -30,9 +32,10 @@ router.get('/sitemap.xml', async (req, res) => {
 
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
 
-    const [products, families] = await Promise.all([
+    const [products, families, curatedCollections] = await Promise.all([
       Product.getAllForSitemap(),
-      ProductFamily.getAllForSitemap()
+      ProductFamily.getAllForSitemap(),
+      Collection.getActiveWithCounts()
     ]);
 
     const today = new Date().toISOString().split('T')[0];
@@ -81,7 +84,20 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.2</priority>
   </url>`;
 
-    // Coleções (/collection/:idOrSlug)
+    // Coleções curadas (/colecao/:slug)
+    for (const col of curatedCollections) {
+      sitemap += `
+
+  <!-- Coleção curada: ${col.name} -->
+  <url>
+    <loc>${baseUrl}/colecao/${col.slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    }
+
+    // Categorias (/collection/:idOrSlug)
     for (const family of families) {
       const lastmod = formatSitemapDate(family.updated_at);
       const familyPath = family.slug || family.id;
@@ -151,6 +167,7 @@ Allow: /catalog
 Allow: /about
 Allow: /collections
 Allow: /collection/
+Allow: /colecao/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /uploads/temp/

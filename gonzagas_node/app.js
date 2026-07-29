@@ -578,8 +578,9 @@ app.use((err, req, res, next) => {
     error: process.env.NODE_ENV === 'development' ? {
       message: err.message,
       stack: err.stack
-    } : {}
-  }, { layout: false });
+    } : {},
+    layout: false
+  });
 });
 
 // Exporta o app para testes

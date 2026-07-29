@@ -40,6 +40,64 @@ describe('Rotas públicas', () => {
     expect(res.text).toMatch(/collection-header/);
     expect(res.text).toMatch(/product-card/);
   });
+
+  test('GET /colecao/:slug inexistente responde 404, não 500', async () => {
+    await request(app).get('/colecao/nao-existe-de-certeza').expect(404);
+  });
+});
+
+describe('Coleções curadas', () => {
+  const Collection = require('../models/Collection');
+  let collectionId;
+
+  afterAll(async () => {
+    if (collectionId) await Collection.delete(collectionId);
+  });
+
+  test('criar coleção gera slug sem acentos e único', async () => {
+    collectionId = await Collection.create({ name: 'Coleção de Teste Automático' });
+    const c = await Collection.getById(collectionId);
+    expect(c.slug).toBe('colecao-de-teste-automatico');
+  });
+
+  test('coleção sem peças não aparece ao público', async () => {
+    const actives = await Collection.getActiveWithCounts();
+    expect(actives.some((c) => c.id === collectionId)).toBe(false);
+  });
+
+  test('acrescentar peças torna a coleção visível e a página responde 200', async () => {
+    const candidates = await Collection.getCandidateProducts(collectionId, { limit: 2 });
+    expect(candidates.length).toBeGreaterThan(0);
+
+    await Collection.addProducts(collectionId, candidates.map((p) => p.id));
+    const products = await Collection.getProducts(collectionId);
+    expect(products.length).toBe(candidates.length);
+
+    const c = await Collection.getById(collectionId);
+    const res = await request(app).get(`/colecao/${c.slug}`).expect(200);
+    expect(res.text).toMatch(/product-card/);
+  });
+
+  test('acrescentar a mesma peça duas vezes não duplica', async () => {
+    const before = (await Collection.getProducts(collectionId)).length;
+    const existing = await Collection.getProducts(collectionId);
+    await Collection.addProducts(collectionId, [existing[0].id]);
+    const after = (await Collection.getProducts(collectionId)).length;
+    expect(after).toBe(before);
+  });
+
+  test('coleção oculta deixa de estar acessível', async () => {
+    const c = await Collection.getById(collectionId);
+    await Collection.updateContent(collectionId, {
+      name: c.name, description: null, seoTitle: null, seoDescription: null, isActive: false
+    });
+    await request(app).get(`/colecao/${c.slug}`).expect(404);
+
+    // repor para os testes seguintes/limpeza
+    await Collection.updateContent(collectionId, {
+      name: c.name, description: null, seoTitle: null, seoDescription: null, isActive: true
+    });
+  });
 });
 
 describe('Admin (autenticado)', () => {

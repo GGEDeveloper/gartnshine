@@ -11,6 +11,7 @@ const instagramModule = require('../modules/instagram');
 const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 const { formatRow } = require('../services/catalogQueryService');
 const GalleryItem = require('../models/GalleryItem');
+const Collection = require('../models/Collection');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -18,6 +19,7 @@ router.get('/', async (req, res) => {
     let featured = [];
     let families = [];
     let showcaseFamilies = [];
+    let showcaseCollections = [];
 
     try {
       const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
@@ -45,6 +47,7 @@ router.get('/', async (req, res) => {
 
       families = await ProductFamily.getAll();
       showcaseFamilies = await ProductFamily.getForHomeShowcase(6);
+      showcaseCollections = await Collection.getActiveWithCounts();
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue without database data
@@ -103,6 +106,7 @@ router.get('/', async (req, res) => {
       featured: featured || [],
       families: families || [],
       showcaseFamilies: showcaseFamilies || [],
+      showcaseCollections: showcaseCollections || [],
       mediaFiles: mediaFiles || [],
       heroImage,
       featuredBackground,
@@ -155,6 +159,52 @@ router.get('/collections', async (req, res) => {
 });
 
 // Collection page - Show products by family
+/**
+ * Coleção curada — conjunto de peças escolhidas à mão no admin.
+ * Endereço próprio (/colecao/) para não colidir com /collection/:id, que são as
+ * categorias e já está indexado, nem com /collections, que é a galeria de media.
+ */
+router.get('/colecao/:slug', async (req, res) => {
+  try {
+    const collection = await Collection.getBySlug(req.params.slug);
+    if (!collection) {
+      return res.status(404).render('error', {
+        title: 'Coleção não encontrada',
+        message: 'Esta coleção não existe ou já não está disponível.',
+        layout: false
+      });
+    }
+
+    const rawProducts = await Collection.getProducts(collection.id);
+    const ecommerceSettings = await EcommerceSettings.getAll();
+    const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
+
+    res.render('curated-collection', {
+      title: collection.seo_title || collection.name,
+      layout: 'layouts/main',
+      collection,
+      products,
+      metaDescription: collection.seo_description
+        || (collection.description
+              ? collection.description.substring(0, 155).replace(/"/g, "'")
+              : `${collection.name} — coleção de joias artesanais Gonzaga's Art & Shine.`),
+      canonicalUrl: 'https://artnshine.pt/colecao/' + collection.slug,
+      user: req.user || null,
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteDescription: 'Elegância que nasce da terra',
+      success_msg: req.flash('success_msg'),
+      error_msg: req.flash('error_msg')
+    });
+  } catch (error) {
+    console.error('Error loading curated collection:', error);
+    res.status(500).render('error', {
+      title: 'Erro',
+      message: 'Falha ao carregar a coleção.',
+      layout: false
+    });
+  }
+});
+
 router.get('/collection/:familyIdOrSlug', async (req, res) => {
   try {
     const { familyIdOrSlug } = req.params;
@@ -164,8 +214,9 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
     if (!family) {
       return res.status(404).render('error', {
         title: 'Not Found',
-        message: 'Collection not found.'
-      }, { layout: false });
+        message: 'Collection not found.',
+        layout: false
+      });
     }
 
     // 301 redirect from numeric ID to slug URL when slug exists
@@ -195,8 +246,9 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
     console.error('Error loading collection:', error);
     res.status(500).render('error', {
       title: 'Error',
-      message: 'Failed to load the collection.'
-    }, { layout: false });
+      message: 'Failed to load the collection.',
+      layout: false
+    });
   }
 });
 
@@ -236,7 +288,7 @@ router.get('/catalog/product/:idOrSlug', async (req, res) => {
     const id = results.length > 0 ? results[0].id : idOrSlug;
     
     if (results.length === 0) {
-      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado' }, { layout: false });
+      return res.status(404).render('error', { title: 'Não encontrado', message: 'Produto não encontrado', layout: false });
     }
     
     const product = results[0];
@@ -319,7 +371,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     
   } catch (error) {
     console.error('Product error:', error);
-    res.status(500).render('error', { title: 'Erro', message: 'Erro interno' }, { layout: false });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro interno', layout: false });
   }
 });
 
@@ -449,7 +501,7 @@ router.get('/search', async (req, res) => {
     
   } catch (error) {
     console.error('Search results error:', error);
-    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados' }, { layout: false });
+    res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar resultados', layout: false });
   }
 });
 
