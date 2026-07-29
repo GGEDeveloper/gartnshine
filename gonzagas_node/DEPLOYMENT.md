@@ -1,191 +1,71 @@
-# Documentação de Implantação - Gonzaga's Art & Shine
+# Deploy — artnshine.pt (produção real: Waphix / Docker Compose)
 
-> Este é o guia de deploy canónico. `DEPLOY_CPANEL.md` e `PRODUCTION_SETUP.md`
-> (movidos para `docs/old/`) descreviam fluxos duplicados ou não usados
-> (ex.: PM2 + Nginx manual) e foram arquivados.
+> Os guias antigos de cPanel (`docs/old/DEPLOYMENT_CPANEL_LEGACY.md`,
+> `docs/old/DEPLOY_CPANEL.md`, `docs/old/PRODUCTION_SETUP.md`) estão
+> **desatualizados e arquivados**. O cPanel foi descontinuado. A produção
+> corre num servidor próprio ("waphix") via Docker Compose.
 
-Este documento fornece instruções detalhadas para implantar a aplicação Node.js no cPanel do Dominios.pt.
+## Onde vive a configuração de infraestrutura
 
-## Pré-requisitos
+Este repositório (`gartnshine-3` / `gonzagas_node/`) contém apenas o
+**código da aplicação**. A configuração da stack (compose, redes, proxy,
+DNS, backups, scripts de arranque) vive **fora deste repositório**, no
+próprio servidor waphix, em `/srv/stacks/artnshine/`.
 
-- Acesso ao cPanel do Dominios.pt
-- Conta de e-mail configurada para envio de e-mails
-- Acesso ao banco de dados MySQL/MariaDB
-- Node.js instalado localmente para desenvolvimento
-- Git instalado localmente
+## Resumo da stack (waphix)
 
-## 1. Configuração das Variáveis de Ambiente
+- **Diretório da stack:** `/srv/stacks/artnshine/`
+- **Compose file:** `/srv/stacks/artnshine/compose.yml`
+- **Código:** repo git próprio em `/srv/stacks/artnshine/app_repo` (branch
+  `main`), com `gonzagas_node/` montado por bind mount para dentro do
+  container
+- **Env vars:** `/srv/stacks/artnshine/.env`
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+### Container da aplicação
 
-### Configurações do Banco de Dados
-```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=seu_usuario_db
-DB_PASSWORD=sua_senha_db
-DB_NAME=nome_do_banco
-```
+- Nome: `artnshine-app`
+- Imagem base: `node:20-alpine` (sem Dockerfile próprio — `npm install` +
+  `node server.js` no arranque, definido no `compose.yml`)
+- Bind mount: `/srv/stacks/artnshine/app_repo/gonzagas_node` → `/app`
+- Porta interna: 3001, com healthcheck configurado
 
-### Configurações do Servidor
-```
-NODE_ENV=production
-PORT=3000
-HOST=0.0.0.0
-SITE_URL=https://artnshine.pt
-```
+### Base de dados
 
-### Autenticação e Sessão
-```
-JWT_SECRET=seu_segredo_jwt_aqui
-JWT_EXPIRES_IN=7d
-SESSION_SECRET=seu_segredo_de_sessao_aqui
-COOKIE_DOMAIN=artnshine.pt
-```
+- Container `mariadb` (stack separada em `/srv/stacks/mariadb`, imagem
+  `mariadb:11.4`, dados em `/srv/data/mariadb/data`)
+- Base do site: `artnshin_gonzagas_db`, utilizador `gartnshine`
+- **Dependência crítica:** `mariadb` tem de estar `healthy` antes de
+  `artnshine-app` arrancar — ver incidente abaixo
 
-### Configurações de E-mail
-```
-EMAIL_SERVICE=seu_servico_email
-EMAIL_HOST=seu_servidor_smtp
-EMAIL_PORT=587
-EMAIL_SECURE=true
-EMAIL_USER=seu_email@exemplo.com
-EMAIL_PASS=sua_senha_de_app
-EMAIL_FROM="Gonzaga's Art & Shine <contato@artnshine.pt>"
-```
+### Rede Docker
 
-### Configurações de Segurança
-```
-CORS_ORIGIN=https://artnshine.pt
-ENABLE_CSRF=true
-```
+Duas redes externas:
+- `backend` (172.19.0.0/16) — liga `artnshine-app` ao `mariadb`
+- `frontend` (172.18.0.0/16) — liga o Nginx Proxy Manager ao `artnshine-app`
 
-## 2. Implantação no cPanel
+### Proxy reverso e DNS
 
-### 2.1. Acessando o cPanel
+- Proxy: Nginx Proxy Manager (container `npm`), proxy host #3 →
+  `artnshine.pt` / `www.artnshine.pt`, SSL via Let's Encrypt
+- DNS: zona própria na Cloudflare, registos A proxied (orange cloud)
+- DDNS: timer systemd `ddns-cloudflare@artnshine.timer` (~5/5 min)
+- Exposição: sem Cloudflare Tunnel — port-forward direto 80/443 no
+  router → `192.168.1.101` (waphix) → NPM → container
 
-1. Acesse o cPanel através do link fornecido pelo Dominios.pt
-2. Faça login com suas credenciais
+### Ordem de arranque (pós-reboot)
 
-### 2.2. Configurando a Aplicação Node.js
+1. `mariadb` sobe primeiro
+2. `artnshine` sobe a seguir
+3. Smoke test: `docker ps | grep artnshine-app`
 
-1. No painel de controle, procure por "Setup Node.js App" e clique nele
-2. Clique em "Create Application"
-3. Preencha os campos:
-   - **Node.js Version**: Selecione a versão LTS mais recente
-   - **Application Mode**: Selecione "Production"
-   - **Application Root**: `/home/artnshin/artnshine.pt`
-   - **Application URL**: Selecione `artnshine.pt`
-   - **Application Startup File**: `server.js`
+Introduzido após incidente real (2026-05-20): `mariadb` não estava de pé
+quando `artnshine-app` arrancou → `EAI_AGAIN mariadb`, healthcheck preso
+em `starting`, site em 502. Corrigido garantindo essa ordem (hoje
+automático via script no próprio servidor).
 
-4. Na seção "Environment Variables", adicione todas as variáveis do seu arquivo `.env`
+## Atualizar código em produção
 
-### 2.3. Configurando o Banco de Dados
-
-1. No cPanel, vá para "MySQL® Databases"
-2. Crie um novo banco de dados
-3. Crie um usuário e conceda todas as permissões a este banco de dados
-4. Atualize as variáveis de ambiente no cPanel com as credenciais do banco de dados
-
-### 2.4. Implantando o Código
-
-#### Opção 1: Usando Git (Recomendado)
-
-1. No cPanel, vá para "Git Version Control"
-2. Clique em "Clone a Repository"
-3. Cole a URL do seu repositório Git
-4. Defina o diretório de implantação como `/home/artnshin/artnshine.pt`
-5. Clique em "Clone"
-
-#### Opção 2: Upload Manual
-
-1. Comprima todos os arquivos do projeto (exceto a pasta `node_modules`)
-2. No cPanel, vá para "File Manager"
-3. Navegue até o diretório `/home/artnshin/artnshine.pt`
-4. Faça upload do arquivo compactado
-5. Extraia os arquivos
-
-### 2.5. Instalando Dependências
-
-1. No gerenciador de aplicações Node.js, localize sua aplicação
-2. Clique em "Run NPM Install"
-3. Aguarde a instalação das dependências
-
-> **Nota:** Não existe `npm run build` — a app é Node.js + EJS, sem bundler.
-
-### 2.5b. Migração E-commerce (loja online)
-
-Via SSH, no directório `gonzagas_node/`:
-
-```bash
-npm run db:ecommerce
-```
-
-Depois de iniciar a app, validar (opcional): `npm run test:ecommerce` (19/19 esperado).
-
-Activar no admin: `/admin/settings/ecommerce`. Ver `modules/ecommerce/README.md`.
-
-### 2.6. Iniciando a Aplicação
-
-1. No gerenciador de aplicações Node.js, localize sua aplicação
-2. Clique em "Start Application" ou "Restart Application"
-3. Verifique os logs para garantir que a aplicação iniciou corretamente
-
-## 3. Configuração do Domínio
-
-### 3.1. Configuração de DNS
-
-1. No cPanel, vá para "Zone Editor"
-2. Verifique se existem registros para `artnshine.pt` e `www.artnshine.pt`
-3. Se necessário, adicione os registros A apontando para o IP do servidor
-
-### 3.2. Configuração de SSL
-
-1. No cPanel, vá para "SSL/TLS"
-2. Em "Install an SSL Certificate", selecione o domínio `artnshine.pt`
-3. Use o "AutoSSL" para obter um certificado Let's Encrypt gratuito
-4. Habilite o "Auto-Redirect to HTTPS" para forçar o uso de HTTPS
-
-## 4. Configuração de E-mail
-
-1. No cPanel, vá para "Email Accounts"
-2. Crie contas de e-mail para `contato@artnshine.pt` e `suporte@artnshine.pt`
-3. Configure um cliente de e-mail ou use o webmail do cPanel
-
-## 5. Monitoramento e Manutenção
-
-### 5.1. Acompanhamento de Logs
-
-1. No gerenciador de aplicações Node.js, clique em "View Logs"
-2. Monite os logs regularmente para identificar erros ou problemas
-
-### 5.2. Atualizações
-
-1. Para atualizar a aplicação, faça push das alterações para o repositório Git
-2. No cPanel, vá para "Git Version Control"
-3. Clique em "Pull" para atualizar os arquivos
-4. Reinicie a aplicação
-
-## 6. Solução de Problemas
-
-### 6.1. Erro 502 Bad Gateway
-
-1. Verifique se a aplicação está em execução
-2. Verifique os logs da aplicação
-3. Verifique se a porta configurada está correta
-
-### 6.2. Arquivos Estáticos Não Carregam
-
-1. Verifique se os arquivos estão no diretório `public`
-2. Verifique as permissões dos arquivos
-3. Verifique os logs do servidor web
-
-### 6.3. Problemas de Banco de Dados
-
-1. Verifique as credenciais do banco de dados
-2. Verifique se o banco de dados está acessível
-3. Verifique os logs do banco de dados
-
-## 7. Contato
-
-Para suporte adicional, entre em contato com a equipe de desenvolvimento.
+O deploy é feito atualizando o `app_repo` dentro do servidor waphix
+(pull da branch `main`) e reiniciando o container `artnshine-app` — os
+detalhes exatos do script de redeploy vivem no próprio servidor, não
+neste repositório.
