@@ -7,7 +7,6 @@
 
 const authController = require('./controllers/authController');
 const userController = require('./controllers/userController');
-const settingsController = require('./controllers/settingsController');
 
 const User = require('./models/User');
 const Role = require('./models/Role');
@@ -15,7 +14,6 @@ const Permission = require('./models/Permission');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const settingsRoutes = require('./routes/settingsRoutes');
 
 const authService = require('./services/authService');
 const userService = require('./services/userService');
@@ -25,22 +23,20 @@ module.exports = {
   // Controllers
   controllers: {
     auth: authController,
-    user: userController,
-    settings: settingsController
+    user: userController
   },
-  
+
   // Models
   models: {
     User,
     Role,
     Permission
   },
-  
+
   // Routes
   routes: {
     auth: authRoutes,
-    user: userRoutes,
-    settings: settingsRoutes
+    user: userRoutes
   },
   
   // Services

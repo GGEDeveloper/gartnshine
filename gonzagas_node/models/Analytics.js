@@ -3,7 +3,7 @@
  * Handles analytics data collection and reporting
  */
 
-const pool = require('../config/database');
+const { pool } = require('../config/database');
 
 class Analytics {
     constructor() {
