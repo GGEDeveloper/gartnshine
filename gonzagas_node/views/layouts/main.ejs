@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <%
+    /* A adesão às transições entre páginas fica INLINE e no topo do <head>,
+       de propósito. Estava em transitions.css, a 16.ª folha de estilo da
+       página, e o resultado media-se: `pageswap` criava a transição mas
+       `pagereveal` chegava sem ela — o documento de destino descartava-a
+       porque a regra ainda não tinha sido descoberta quando foi preciso
+       decidir. As animações continuam em transitions.css; só a adesão é que
+       tem de ser vista cedo. */
+  %>
+  <style>@view-transition { navigation: auto; }</style>
+
   <!-- Google Search Console Verification -->
   <meta name="google-site-verification" content="-_FeGat-XpwLOs3WEoMLcCUnb95_95LgamxM1EZCrHs">
 

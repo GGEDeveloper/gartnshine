@@ -21,9 +21,10 @@
    cancelado deixaria o site esbatido para sempre).
    ===================================================================== */
 
-@view-transition {
-  navigation: auto;
-}
+/* A adesão (`@view-transition { navigation: auto }`) está inline no topo do
+   <head> em views/layouts/main.ejs — tem de ser descoberta antes de este
+   ficheiro, que é o último de dezasseis, chegar a ser lido. Aqui ficam só as
+   animações. */
 
 ::view-transition-old(root) {
   animation: 300ms cubic-bezier(0.55, 0, 1, 0.45) both pagina-sai;
