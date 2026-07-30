@@ -1,0 +1,137 @@
+/**
+ * Transições de navegação — entre páginas e na vertical.
+ *
+ * Princípios seguidos, porque numa loja de joalharia o movimento tem de ser
+ * quase imperceptível:
+ *   - nada dura mais do que meio segundo;
+ *   - nada esconde conteúdo se falhar (ver a nota do fade de entrada);
+ *   - tudo pára com `prefers-reduced-motion`.
+ *
+ * Carregado em último lugar para poder rematar o que os ficheiros antigos
+ * deixaram.
+ */
+
+/* =====================================================================
+   1. TRANSIÇÃO ENTRE PÁGINAS
+   =====================================================================
+   Usa a View Transitions API entre documentos. É CSS puro: onde o browser
+   não suporta, é simplesmente ignorado e a navegação fica como estava —
+   por isso não há risco de a página ficar presa a meio de uma animação,
+   ao contrário do que aconteceria com a versão em JavaScript (um clique
+   cancelado deixaria o site esbatido para sempre).
+   ===================================================================== */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 220ms cubic-bezier(0.4, 0, 1, 1) both pagina-sai;
+}
+
+::view-transition-new(root) {
+  animation: 380ms cubic-bezier(0.23, 1, 0.32, 1) both pagina-entra;
+}
+
+@keyframes pagina-sai {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pagina-entra {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* O cabeçalho é o mesmo em todas as páginas: dar-lhe um nome próprio tira-o
+   da transição do documento, para não piscar a cada navegação. */
+.main-header {
+  view-transition-name: cabecalho;
+}
+
+::view-transition-old(cabecalho),
+::view-transition-new(cabecalho) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ---------------------------------------------------------------------
+   Recurso para browsers sem View Transitions (hoje, sobretudo Firefox).
+   Um fade de entrada em CSS puro, na animação e não na transição: uma
+   animação corre até ao fim sozinha, por isso o conteúdo acaba sempre
+   visível mesmo que algo corra mal a meio.
+   --------------------------------------------------------------------- */
+
+@supports not (view-transition-name: none) {
+  main {
+    animation: 400ms cubic-bezier(0.23, 1, 0.32, 1) both pagina-entra;
+  }
+}
+
+/* =====================================================================
+   2. NAVEGAÇÃO VERTICAL
+   ===================================================================== */
+
+/*
+ * `scroll-behavior: smooth` estava em `main.css` sem qualquer guarda, o que
+ * significa que quem pede movimento reduzido no sistema — muitas vezes por
+ * razões vestibulares — continuava a apanhar o scroll animado. Aqui fica
+ * declarado só para quem não pediu o contrário.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Compensação do cabeçalho fixo ao saltar para uma âncora. Sem isto o
+ * destino fica escondido por baixo da barra do topo.
+ */
+:target {
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 1024px) {
+  :target {
+    scroll-margin-top: 130px;
+  }
+}
+
+/* =====================================================================
+   3. MOVIMENTO REDUZIDO
+   =====================================================================
+   A revelação ao scroll é tratada por `public/js/modules/motion.js`, que já
+   escalona a entrada e se desliga sozinho com movimento reduzido. Aqui fica
+   só o que é de CSS.
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+
+  /* O carrossel de destaques faz scroll suave por CSS — também tem de parar. */
+  .carousel-track {
+    scroll-behavior: auto !important;
+  }
+}
+
+@supports not (view-transition-name: none) {
+  @media (prefers-reduced-motion: reduce) {
+    main {
+      animation: none;
+    }
+  }
+}

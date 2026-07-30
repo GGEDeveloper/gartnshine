@@ -26,7 +26,14 @@ window.GonzagaMotion = (function () {
     '.gallery-grid .gallery-item',
     '.collection-page .product-card',
     '.category-page .product-card',
-    '.collections-showcase .collection-tile'
+    '.collections-showcase .collection-tile',
+    // Secções que entravam de repente, sem qualquer transição:
+    '.manifesto-list li',
+    '.closing-band .closing-title',
+    '.collection-index-card',
+    '.ig-feed-section .ig-feed-item',
+    '.catalog-categories .catalog-category-card',
+    '.category-group-header'
   ].join(', ');
   const REVEAL_STAGGER_MS = 50;
   const REVEAL_STAGGER_MAX = 6; // além disto o atraso acumulado seria notório

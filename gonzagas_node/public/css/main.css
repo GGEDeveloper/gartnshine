@@ -24,7 +24,9 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* `scroll-behavior` mudou-se para transitions.css, onde fica dentro de
+     `prefers-reduced-motion: no-preference` — aqui aplicava-se a toda a
+     gente, incluindo a quem pede menos movimento no sistema. */
 }
 
 body {
