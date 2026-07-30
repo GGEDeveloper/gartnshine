@@ -332,6 +332,31 @@ class Product extends BaseModel {
     }
   }
 
+  /**
+   * Produtos de uma família E das suas subcategorias.
+   *
+   * As famílias de topo (Prata, Latão…) não têm produtos directos — estão todos
+   * nas filhas (Aneis - Prata, etc.). Sem isto, a página de um material ficaria
+   * vazia. Para uma folha o resultado é o mesmo que getByFamily.
+   */
+  static async getByFamilyTree(familyId, limit = 500, offset = 0) {
+    try {
+      const [rows] = await pool.query(`
+        SELECT p.*, f.name as family_name,
+               (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
+        FROM products p
+        JOIN product_families f ON p.family_id = f.id
+        WHERE p.is_active = 1 AND (f.id = ? OR f.parent_id = ?)
+        ORDER BY f.name, p.reference
+        LIMIT ? OFFSET ?
+      `, [familyId, familyId, limit, offset]);
+      return rows;
+    } catch (error) {
+      console.error('Error getting products by family tree:', error);
+      throw error;
+    }
+  }
+
   // Count products by family
   static async countByFamily(familyId) {
     try {

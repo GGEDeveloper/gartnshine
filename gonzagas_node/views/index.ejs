@@ -3,7 +3,7 @@
       <div class="hero-image-backdrop" style="background-image: url('<%= heroImage || "/images/placeholder-hero.jpg" %>');"></div>
       <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-content hero-content--brand">
-        <p class="hero-eyebrow">Prata 925 &middot; Pedras Naturais &middot; Feito à mão</p>
+        <p class="hero-eyebrow">Prata 925 &middot; Latão &middot; Pedras Naturais &middot; Macramé</p>
         <h1 class="hero-title">Gonzaga's<span>Art &amp; Shine</span></h1>
         <div class="geometric-divider hero-divider" aria-hidden="true">
           <span></span>
@@ -25,16 +25,16 @@
     <section class="brand-manifesto" aria-label="O que define as nossas peças">
       <ul class="manifesto-list">
         <li>
-          <span class="manifesto-label">Material</span>
-          <p class="manifesto-text">Prata 925 e latão banhado, com pedras naturais escolhidas peça a peça.</p>
+          <span class="manifesto-label">Selecção</span>
+          <p class="manifesto-text">Escolhemos peça a peça. Só entra no catálogo o que nos convence.</p>
         </li>
         <li>
-          <span class="manifesto-label">Feitura</span>
-          <p class="manifesto-text">Cada peça é trabalhada à mão — nenhuma sai exatamente igual à outra.</p>
+          <span class="manifesto-label">Materiais</span>
+          <p class="manifesto-text">Prata 925, latão e pedras naturais — ónix, ametista, olho-de-tigre, turquesa.</p>
         </li>
         <li>
-          <span class="manifesto-label">Origem</span>
-          <p class="manifesto-text">Desenhadas e acabadas em Portugal, com inspiração em Bali e no boho.</p>
+          <span class="manifesto-label">Estilo</span>
+          <p class="manifesto-text">Inspiração Bali e boho: formas orgânicas e texturas trabalhadas.</p>
         </li>
       </ul>
     </section>
@@ -104,13 +104,13 @@
     </section>
     <% } %>
 
-    <!-- Explorar por material (categorias) -->
-    <% if (typeof showcaseFamilies !== 'undefined' && showcaseFamilies.length > 0) { %>
+    <!-- Explorar por material (famílias de topo: Prata, Latão, Macramé…) -->
+    <% if (typeof showcaseMaterials !== 'undefined' && showcaseMaterials.length > 0) { %>
     <section class="collections-showcase" aria-labelledby="collections-showcase-title">
       <div class="section-header ig-collections-head">
         <p class="section-eyebrow">Catálogo</p>
         <h2 class="ig-collections-title" id="collections-showcase-title">Explorar por Material</h2>
-        <p class="ig-collections-sub">Prata, latão e pedras naturais — por tipo de peça</p>
+        <p class="ig-collections-sub">Prata, latão, macramé e pedras naturais</p>
         <div class="geometric-divider">
           <span></span>
           <span></span>
@@ -119,10 +119,9 @@
       </div>
 
       <div class="collections-showcase-grid">
-        <% showcaseFamilies.forEach(function(fam) {
-          // Imagem própria do cartão; se não houver, a do cabeçalho da coleção;
-          // se também não houver, uma foto de peça — para a secção nunca
-          // aparecer como blocos pretos.
+        <% showcaseMaterials.forEach(function(fam) {
+          // Imagem própria do cartão; se não houver, a do cabeçalho; se também
+          // não houver, uma foto de peça — para nunca aparecer um bloco preto.
           const tileImage = fam.card_image
             || fam.hero_image
             || (fam.fallback_image ? productImg(fam.fallback_image, 'medium').jpg : null);
@@ -132,7 +131,7 @@
              <% if (tileImage) { %>style="background-image: url('<%= encodeURI(tileImage) %>');"<% } %>>
             <span class="collection-tile-body">
               <span class="collection-tile-name"><%= fam.name %></span>
-              <span class="collection-tile-count"><%= fam.product_count %> peça<%= fam.product_count === 1 ? '' : 's' %></span>
+              <span class="collection-tile-count"><%= fam.product_count %> peça<%= Number(fam.product_count) === 1 ? '' : 's' %></span>
             </span>
           </a>
         <% }); %>
@@ -147,11 +146,11 @@
     <!-- Remate: convite final -->
     <section class="closing-band">
       <div class="closing-inner">
-        <p class="section-eyebrow">Peças únicas</p>
+        <p class="section-eyebrow">Fale connosco</p>
         <h2 class="closing-title">Elegância que nasce da terra</h2>
         <p class="closing-text">
-          Cada peça existe uma só vez. Se alguma lhe falar, fale connosco — respondemos
-          sempre, e com gosto.
+          Temos poucas unidades de cada modelo. Se alguma peça lhe falar, diga —
+          respondemos sempre, e com gosto.
         </p>
         <div class="closing-actions">
           <a href="/catalog" class="btn-hero btn-hero--solid">Ver todas as peças</a>

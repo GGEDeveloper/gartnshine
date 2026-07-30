@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
     let families = [];
     let showcaseFamilies = [];
     let showcaseCollections = [];
+    let showcaseMaterials = [];
 
     try {
       const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
@@ -48,6 +49,7 @@ router.get('/', async (req, res) => {
       families = await ProductFamily.getAll();
       showcaseFamilies = await ProductFamily.getForHomeShowcase(6);
       showcaseCollections = await Collection.getActiveWithCounts();
+      showcaseMaterials = await ProductFamily.getMaterialsForHome();
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue without database data
@@ -107,6 +109,7 @@ router.get('/', async (req, res) => {
       families: families || [],
       showcaseFamilies: showcaseFamilies || [],
       showcaseCollections: showcaseCollections || [],
+      showcaseMaterials: showcaseMaterials || [],
       mediaFiles: mediaFiles || [],
       heroImage,
       featuredBackground,
@@ -224,7 +227,7 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
       return res.redirect(301, `/collection/${family.slug}`);
     }
     
-    const rawProducts = await Product.getByFamily(family.id);
+    const rawProducts = await Product.getByFamilyTree(family.id);
     const ecommerceSettings = await EcommerceSettings.getAll();
     const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
     const families = await ProductFamily.getAll();

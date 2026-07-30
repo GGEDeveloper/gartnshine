@@ -180,6 +180,45 @@ class ProductFamily {
     }
   }
 
+  /**
+   * Materiais para a secção "Explorar por Material" da página inicial.
+   *
+   * São as famílias de topo (Prata, Latão, Pedras Naturais, Macramé) — que é o
+   * que "material" significa nesta taxonomia. As filhas são tipo+material
+   * (Aneis - Prata, Brincos - Latão), por isso mostrá-las ali era mostrar tipos
+   * de peça, não materiais.
+   *
+   * Como as famílias de topo não têm produtos directos, a contagem e a imagem
+   * vêm das subcategorias.
+   */
+  static async getMaterialsForHome() {
+    try {
+      const [rows] = await pool.query(
+        `SELECT m.id, m.name, m.slug, m.hero_image, m.card_image,
+                (SELECT COUNT(*)
+                   FROM products p
+                   JOIN product_families c ON c.id = p.family_id
+                  WHERE p.is_active = 1 AND (c.id = m.id OR c.parent_id = m.id)
+                ) AS product_count,
+                (SELECT pi.image_filename
+                   FROM product_images pi
+                   JOIN products p2 ON p2.id = pi.product_id AND p2.is_active = 1
+                   JOIN product_families c2 ON c2.id = p2.family_id
+                  WHERE c2.id = m.id OR c2.parent_id = m.id
+                  ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                  LIMIT 1) AS fallback_image
+           FROM product_families m
+          WHERE m.parent_id IS NULL
+         HAVING product_count > 0
+          ORDER BY product_count DESC, m.name ASC`
+      );
+      return rows;
+    } catch (error) {
+      console.error('Error getting materials for home:', error);
+      return [];
+    }
+  }
+
   /** Define (ou limpa, com null) a imagem de destaque usada em /collection/:id */
   static async updateHeroImage(id, heroImage) {
     try {

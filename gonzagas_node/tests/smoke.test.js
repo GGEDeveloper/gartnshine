@@ -44,6 +44,21 @@ describe('Rotas públicas', () => {
   test('GET /colecao/:slug inexistente responde 404, não 500', async () => {
     await request(app).get('/colecao/nao-existe-de-certeza').expect(404);
   });
+
+  test('página de um material mostra as peças das subcategorias', async () => {
+    // Regressão: as famílias de topo (Prata, Latão…) não têm produtos
+    // directos — todos estão nas filhas. A página delas aparecia vazia,
+    // apesar de estar no sitemap.
+    const ProductFamily = require('../models/ProductFamily');
+    const materiais = await ProductFamily.getMaterialsForHome();
+    expect(materiais.length).toBeGreaterThan(0);
+
+    const material = materiais[0];
+    expect(Number(material.product_count)).toBeGreaterThan(0);
+
+    const res = await request(app).get(`/collection/${material.slug || material.id}`).expect(200);
+    expect(res.text).toMatch(/product-card/);
+  });
 });
 
 describe('Coleções curadas', () => {
