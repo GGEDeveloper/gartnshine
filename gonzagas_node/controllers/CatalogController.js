@@ -108,8 +108,27 @@ class CatalogController {
       const selectedColors = parseMultiParam(req.query, 'colors');
       const selectedMaterials = parseMultiParam(req.query, 'materials');
 
+      // Materiais (categorias de topo) para a entrada do catálogo. Usam as
+      // imagens definidas no admin, com fotografia de uma peça como recurso.
+      // Se falhar não faz cair o catálogo — a secção simplesmente não aparece.
+      let catalogMaterials = [];
+      try {
+        catalogMaterials = await ProductFamily.getMaterialsForHome({ hideOutOfStock });
+      } catch (e) {
+        console.error('Catálogo: falha a carregar materiais:', e.message);
+      }
+
+      // Há filtro activo? Determina se os cartões aparecem grandes ou
+      // encolhidos numa tira, mantendo sempre a navegação por categoria.
+      const filtroActivo = Object.keys(req.query).some(
+        (k) => !['page', 'perPage', 'view'].includes(k)
+              && req.query[k] !== undefined && req.query[k] !== ''
+      );
+
       res.render('public/catalog', {
         title: 'Catálogo',
+        catalogMaterials,
+        filtroActivo,
         currentPath: '/catalog',
         layout: 'layouts/main',
         // A descrição genérica do site era curta e repetia-se noutras páginas.

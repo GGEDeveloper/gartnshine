@@ -213,6 +213,58 @@
         </div>
       </div>
 
+      <%
+        // ===== Categorias =====
+        // Entrada do catálogo. Sem filtro activo aparecem em cartões grandes;
+        // com filtro encolhem para uma tira que continua a servir de
+        // navegação e mostra onde se está, em vez de desaparecerem.
+        const materiais = (typeof catalogMaterials !== 'undefined' && Array.isArray(catalogMaterials))
+          ? catalogMaterials : [];
+        const compacto = typeof filtroActivo !== 'undefined' && filtroActivo;
+        // Que material está seleccionado? O filtro guarda ids de família, que
+        // podem ser subcategorias — sobe-se à raiz para marcar o cartão certo.
+        const idsSeleccionados = (typeof selectedFamilyIds !== 'undefined' && Array.isArray(selectedFamilyIds))
+          ? selectedFamilyIds.map(Number) : [];
+      %>
+      <% if (materiais.length > 0) { %>
+        <section class="catalog-categories<%= compacto ? ' is-compact' : '' %>"
+                 aria-label="Navegar por material">
+          <% if (!compacto) { %>
+            <header class="catalog-categories-header">
+              <p class="section-eyebrow">Explorar por material</p>
+            </header>
+          <% } %>
+
+          <div class="catalog-categories-list">
+            <a href="/catalog"
+               class="catalog-category-card is-all<%= idsSeleccionados.length === 0 ? ' is-active' : '' %>">
+              <span class="catalog-category-media" aria-hidden="true"></span>
+              <span class="catalog-category-body">
+                <span class="catalog-category-name">Ver todos</span>
+                <span class="catalog-category-count"><%= totalCatalogCount %> peças</span>
+              </span>
+            </a>
+
+            <% materiais.forEach(function(m) {
+              const img = m.card_image || m.hero_image
+                || (m.fallback_image ? productImg(m.fallback_image, 'medium').jpg : null);
+              const activo = idsSeleccionados.includes(Number(m.id));
+            %>
+              <a href="/catalog?families=<%= m.id %>"
+                 class="catalog-category-card<%= img ? ' has-image' : '' %><%= activo ? ' is-active' : '' %>">
+                <span class="catalog-category-media"
+                      <% if (img) { %>style="background-image: url('<%= encodeURI(img) %>');"<% } %>
+                      aria-hidden="true"></span>
+                <span class="catalog-category-body">
+                  <span class="catalog-category-name"><%= m.name %></span>
+                  <span class="catalog-category-count"><%= m.product_count %> peças</span>
+                </span>
+              </a>
+            <% }); %>
+          </div>
+        </section>
+      <% } %>
+
       <!-- Catalog Controls (Sort & View) -->
       <div class="catalog-controls">
         <div class="catalog-controls-left">

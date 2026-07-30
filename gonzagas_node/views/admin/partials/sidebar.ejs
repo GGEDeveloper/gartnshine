@@ -64,6 +64,13 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/instagram')) ? 'active' : '' %>" href="/admin/instagram" title="Instagram">
+          <i class="fab fa-fw fa-instagram"></i>
+          <span>Instagram</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/site-appearance')) ? 'active' : '' %>" href="/admin/site-appearance" title="Aspeto do Site">
           <i class="fas fa-fw fa-palette"></i>
           <span>Aspeto do Site</span>

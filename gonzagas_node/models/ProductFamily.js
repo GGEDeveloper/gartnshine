@@ -248,18 +248,28 @@ class ProductFamily {
    * Como as famílias de topo não têm produtos directos, a contagem e a imagem
    * vêm das subcategorias.
    */
-  static async getMaterialsForHome() {
+  /**
+   * Materiais (categorias de topo) com contagem de peças.
+   *
+   * `hideOutOfStock` tem de acompanhar a definição do site: sem isso a
+   * contagem aqui (409) contradizia o total do catálogo (220), e via-se
+   * "Ver todos: 220 peças" ao lado de "Prata: 258 peças" na mesma linha.
+   */
+  static async getMaterialsForHome({ hideOutOfStock = false } = {}) {
+    const filtroStock = hideOutOfStock ? 'AND p.current_stock > 0' : '';
+    const filtroStock2 = hideOutOfStock ? 'AND p2.current_stock > 0' : '';
     try {
       const [rows] = await pool.query(
         `SELECT m.id, m.name, m.slug, m.hero_image, m.card_image,
                 (SELECT COUNT(*)
                    FROM products p
                    JOIN product_families c ON c.id = p.family_id
-                  WHERE p.is_active = 1 AND (c.id = m.id OR c.parent_id = m.id)
+                  WHERE p.is_active = 1 ${filtroStock}
+                    AND (c.id = m.id OR c.parent_id = m.id)
                 ) AS product_count,
                 (SELECT pi.image_filename
                    FROM product_images pi
-                   JOIN products p2 ON p2.id = pi.product_id AND p2.is_active = 1
+                   JOIN products p2 ON p2.id = pi.product_id AND p2.is_active = 1 ${filtroStock2}
                    JOIN product_families c2 ON c2.id = p2.family_id
                   WHERE c2.id = m.id OR c2.parent_id = m.id
                   ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC

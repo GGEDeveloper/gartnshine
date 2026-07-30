@@ -1,0 +1,214 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+      <i class="fab fa-instagram me-2"></i>Instagram
+    </h1>
+    <a href="/galeria" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
+      <i class="fas fa-external-link-alt"></i> Ver página pública
+    </a>
+  </div>
+
+  <%- include('../partials/flash-messages') %>
+
+  <!-- ================= Estado da ligação ================= -->
+  <%
+    const mapaEstado = {
+      desligado:            { cor: 'secondary', texto: 'Não ligado' },
+      ligado:               { cor: 'success',   texto: 'Ligado' },
+      ligado_sem_validade:  { cor: 'warning',   texto: 'Ligado (validade desconhecida)' },
+      a_expirar:            { cor: 'warning',   texto: 'A expirar' },
+      expirado:             { cor: 'danger',    texto: 'Token expirado' }
+    };
+    const e = mapaEstado[status.estado] || mapaEstado.desligado;
+    const dt = (d) => d ? new Date(d).toLocaleString('pt-PT', { dateStyle: 'short', timeStyle: 'short' }) : '—';
+  %>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 fw-semibold">Ligação à conta</h6>
+      <span class="badge bg-<%= e.cor %>"><%= e.texto %></span>
+    </div>
+    <div class="card-body">
+      <% if (status.estado === 'expirado') { %>
+        <div class="alert alert-danger">
+          <strong>O token expirou.</strong> Um token expirado não pode ser renovado —
+          é preciso gerar um novo e colá-lo abaixo. Enquanto isso, o site continua a
+          mostrar as publicações já sincronizadas.
+        </div>
+      <% } else if (status.estado === 'a_expirar') { %>
+        <div class="alert alert-warning">
+          O token expira em <strong><%= status.diasRestantes %> dia(s)</strong>.
+          A renovação automática corre uma vez por dia e deve tratar disto sozinha.
+          Se quiser garantir já, use &laquo;Renovar agora&raquo;.
+        </div>
+      <% } else if (status.estado === 'ligado_sem_validade' && !status.tokenDaBaseDeDados) { %>
+        <div class="alert alert-warning">
+          Está a ser usado o token do ficheiro <code>.env</code> do servidor, cuja validade
+          não é conhecida e que <strong>não pode ser renovado automaticamente</strong>.
+          Cole o token abaixo para passar a ser gerido aqui.
+        </div>
+      <% } %>
+
+      <div class="row g-3 mb-3">
+        <div class="col-6 col-md-3">
+          <div class="text-muted small">Conta</div>
+          <div class="fw-semibold"><%= status.username ? '@' + status.username : '—' %></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-muted small">Token válido até</div>
+          <div class="fw-semibold"><%= dt(status.expiraEm) %></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-muted small">Última sincronização</div>
+          <div class="fw-semibold"><%= dt(status.ultimaSync) %></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-muted small">Publicações lidas</div>
+          <div class="fw-semibold"><%= status.ultimaSyncTotal ?? '—' %></div>
+        </div>
+      </div>
+
+      <% if (status.ultimoErro) { %>
+        <div class="alert alert-danger py-2 small mb-3">
+          <strong>Último erro</strong> (<%= dt(status.ultimoErroEm) %>):
+          <%= status.ultimoErro %>
+        </div>
+      <% } %>
+
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <form method="POST" action="/admin/instagram/sync" class="d-inline">
+          <button type="submit" class="btn btn-primary btn-sm" <%= status.temToken ? '' : 'disabled' %>>
+            <i class="fas fa-sync"></i> Sincronizar agora
+          </button>
+        </form>
+        <form method="POST" action="/admin/instagram/refresh" class="d-inline">
+          <button type="submit" class="btn btn-outline-secondary btn-sm" <%= status.temToken ? '' : 'disabled' %>>
+            <i class="fas fa-clock-rotate-left"></i> Renovar token
+          </button>
+        </form>
+        <% if (status.tokenDaBaseDeDados) { %>
+          <form method="POST" action="/admin/instagram/disconnect" class="d-inline"
+                onsubmit="return confirm('Desligar a conta? As publicações já sincronizadas mantêm-se, mas deixa de haver actualizações.');">
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+              <i class="fas fa-unlink"></i> Desligar conta
+            </button>
+          </form>
+        <% } %>
+      </div>
+
+      <details <%= status.temToken && status.estado !== 'expirado' ? '' : 'open' %>>
+        <summary class="fw-semibold" style="cursor: pointer;">
+          <%= status.tokenDaBaseDeDados ? 'Substituir token' : 'Colar token de acesso' %>
+        </summary>
+        <form method="POST" action="/admin/instagram/token" class="mt-3">
+          <div class="mb-2">
+            <label for="ig-token" class="form-label small text-muted">
+              Token de longa duração da conta do Instagram. É validado antes de ser
+              guardado e passa a ser renovado automaticamente.
+            </label>
+            <textarea id="ig-token" name="token" rows="3" class="form-control font-monospace"
+                      placeholder="IGQ..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-success btn-sm">
+            <i class="fas fa-link"></i> Ligar conta
+          </button>
+        </form>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= Publicações ================= -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <h6 class="m-0 fw-semibold">
+        Publicações (<%= stats.total %>)
+        <span class="text-muted fw-normal small ms-2">
+          <%= stats.visiveis %> no site · <%= stats.escondidos %> escondidas · <%= stats.destacados %> em destaque
+        </span>
+      </h6>
+      <div class="btn-group btn-group-sm">
+        <% [['todos','Todas'],['visiveis','No site'],['escondidos','Escondidas'],['destacados','Destaque']].forEach(function(f) { %>
+          <a href="/admin/instagram?estado=<%= f[0] %>"
+             class="btn btn-outline-secondary <%= estado === f[0] ? 'active' : '' %>"><%= f[1] %></a>
+        <% }); %>
+      </div>
+    </div>
+    <div class="card-body p-2 p-md-3">
+      <p class="text-muted small">
+        As publicações novas aparecem no site automaticamente. Esconda as que não quiser —
+        essa escolha é respeitada nas sincronizações seguintes. As destacadas aparecem primeiro.
+      </p>
+
+      <% if (!media || media.length === 0) { %>
+        <p class="text-muted mb-0">
+          <% if (!status.temToken) { %>
+            Ligue a conta acima para trazer as publicações.
+          <% } else { %>
+            Nada sincronizado ainda. Use &laquo;Sincronizar agora&raquo;.
+          <% } %>
+        </p>
+      <% } else { %>
+        <div class="row g-3">
+          <% media.forEach(function(m) { %>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="card h-100 <%= m.is_hidden ? 'opacity-50' : '' %>">
+                <div class="position-relative">
+                  <img src="<%= m.media_type === 'VIDEO' ? (m.thumbnail_url || m.media_url) : m.media_url %>"
+                       alt="<%= (m.caption || 'Publicação do Instagram').slice(0, 80) %>"
+                       class="card-img-top" style="aspect-ratio: 1; object-fit: cover;"
+                       loading="lazy">
+                  <% if (m.media_type === 'VIDEO') { %>
+                    <span class="badge bg-dark position-absolute top-0 start-0 m-1">
+                      <i class="fas fa-play"></i> Reel
+                    </span>
+                  <% } else if (m.media_type === 'CAROUSEL_ALBUM') { %>
+                    <span class="badge bg-dark position-absolute top-0 start-0 m-1">
+                      <i class="fas fa-images"></i>
+                    </span>
+                  <% } %>
+                  <% if (m.is_featured) { %>
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-1">
+                      <i class="fas fa-star"></i>
+                    </span>
+                  <% } %>
+                  <% if (m.is_hidden) { %>
+                    <span class="badge bg-secondary position-absolute bottom-0 start-0 m-1">Escondida</span>
+                  <% } %>
+                </div>
+                <div class="card-body p-2">
+                  <p class="small text-muted mb-2" style="min-height: 2.4em;">
+                    <%= m.caption ? m.caption.replace(/\s+/g, ' ').slice(0, 60) + (m.caption.length > 60 ? '…' : '') : '(sem legenda)' %>
+                  </p>
+                  <div class="d-flex gap-1 flex-wrap">
+                    <form method="POST" action="/admin/instagram/<%= m.id %>/visibilidade">
+                      <input type="hidden" name="estado" value="<%= estado %>">
+                      <input type="hidden" name="acao" value="<%= m.is_hidden ? 'mostrar' : 'esconder' %>">
+                      <button type="submit" class="btn btn-sm btn-outline-<%= m.is_hidden ? 'success' : 'secondary' %>"
+                              title="<%= m.is_hidden ? 'Mostrar no site' : 'Esconder do site' %>">
+                        <i class="fas fa-<%= m.is_hidden ? 'eye' : 'eye-slash' %>"></i>
+                      </button>
+                    </form>
+                    <form method="POST" action="/admin/instagram/<%= m.id %>/destaque">
+                      <input type="hidden" name="estado" value="<%= estado %>">
+                      <input type="hidden" name="acao" value="<%= m.is_featured ? 'retirar' : 'destacar' %>">
+                      <button type="submit" class="btn btn-sm btn-outline-<%= m.is_featured ? 'warning' : 'secondary' %>"
+                              title="<%= m.is_featured ? 'Retirar destaque' : 'Destacar' %>">
+                        <i class="<%= m.is_featured ? 'fas' : 'far' %> fa-star"></i>
+                      </button>
+                    </form>
+                    <% if (m.permalink) { %>
+                      <a href="<%= m.permalink %>" target="_blank" rel="noopener"
+                         class="btn btn-sm btn-outline-secondary" title="Abrir no Instagram">
+                        <i class="fas fa-external-link-alt"></i>
+                      </a>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>

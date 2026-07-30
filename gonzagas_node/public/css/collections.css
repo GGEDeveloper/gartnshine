@@ -159,3 +159,181 @@
     gap: 1rem;
   }
 }
+
+/* =====================================================================
+   FEED DO INSTAGRAM — acima da galeria da casa
+   =====================================================================
+   Conteúdo vivo (sincronizado da conta) separado da galeria curada por uma
+   divisória com rótulo. Grelha mais densa e quadrada do que a da galeria,
+   para se ler de imediato como "isto vem do Instagram" sem precisar de
+   logótipos nem molduras.
+   ===================================================================== */
+
+.ig-feed-section {
+  margin: 0 0 3rem;
+}
+
+.ig-feed-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ig-feed-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin: 0.4rem 0 0;
+}
+
+.ig-feed-title a {
+  color: var(--igp-cream, #f0ece4);
+  text-decoration: none;
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  padding-bottom: 3px;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.ig-feed-title a:hover,
+.ig-feed-title a:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+  border-bottom-color: var(--igp-gold, #c9a84c);
+}
+
+.ig-feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.ig-feed-item {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.ig-feed-item:hover,
+.ig-feed-item:focus-visible {
+  border-color: var(--igp-gold, #c9a84c);
+}
+
+/* Os destacados no admin ocupam dois espaços, para saltarem à vista sem
+   precisarem de qualquer rótulo. */
+.ig-feed-item.is-featured {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.ig-feed-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.ig-feed-item:hover .ig-feed-image,
+.ig-feed-item:focus-visible .ig-feed-image {
+  transform: scale(1.04);
+}
+
+.ig-feed-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.65);
+  color: var(--igp-cream, #f0ece4);
+  backdrop-filter: blur(4px);
+}
+
+.ig-feed-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.75rem 0.75rem 0.7rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--igp-cream, #f0ece4);
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.85), transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ig-feed-item:hover .ig-feed-caption,
+.ig-feed-item:focus-visible .ig-feed-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Divisória entre o Instagram e a galeria da casa ---------- */
+
+.gallery-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0 0 2.5rem;
+}
+
+.gallery-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+.gallery-divider-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .ig-feed-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+  }
+
+  /* Em ecrãs estreitos um destaque a ocupar 2×2 deixaria uma coluna só —
+     mantém-se do tamanho normal. */
+  .ig-feed-item.is-featured {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .ig-feed-caption {
+    display: none;
+  }
+
+  .gallery-divider {
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .gallery-divider-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ig-feed-image,
+  .ig-feed-caption,
+  .ig-feed-item {
+    transition: none;
+  }
+
+  .ig-feed-item:hover .ig-feed-image {
+    transform: none;
+  }
+}

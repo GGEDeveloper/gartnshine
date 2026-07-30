@@ -147,6 +147,10 @@ router.use('/gallery', galleryAdminRouter);
 const collectionsAdminRouter = require('./admin/collections');
 router.use('/collections', collectionsAdminRouter);
 
+// Mount instagram router (ligação à conta + moderação das publicações)
+const instagramAdminRouter = require('./admin/instagram');
+router.use('/instagram', instagramAdminRouter);
+
 // Mount site appearance router (imagens das categorias + fundos das secções)
 const siteAppearanceRouter = require('./admin/siteAppearance');
 router.use('/site-appearance', siteAppearanceRouter);

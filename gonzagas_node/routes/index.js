@@ -12,6 +12,8 @@ const EcommerceSettings = require('../modules/ecommerce/settings/models/Ecommerc
 const { formatRow } = require('../services/catalogQueryService');
 const GalleryItem = require('../models/GalleryItem');
 const Collection = require('../models/Collection');
+const InstagramAccount = require('../models/InstagramAccount');
+const instagramSync = require('../services/instagramSyncService');
 
 // Home page - Showcase page with featured products and media gallery
 router.get('/', async (req, res) => {
@@ -49,7 +51,7 @@ router.get('/', async (req, res) => {
       families = await ProductFamily.getAll();
       showcaseFamilies = await ProductFamily.getForHomeShowcase(6);
       showcaseCollections = await Collection.getActiveWithCounts();
-      showcaseMaterials = await ProductFamily.getMaterialsForHome();
+      showcaseMaterials = await ProductFamily.getMaterialsForHome({ hideOutOfStock });
     } catch (dbError) {
       console.error('Database error:', dbError);
       // Continue without database data
@@ -146,9 +148,20 @@ router.get('/galeria', async (req, res) => {
       url: `/media/gallery/${item.filename}`
     }));
 
+    // Instagram: nunca pode impedir a galeria de carregar. O serviço já
+    // engole os erros e devolve o que está guardado na base de dados.
+    const instagramMedia = await instagramSync.getMediaPublica(18);
+    let instagramUsername = null;
+    try {
+      const conta = await InstagramAccount.get();
+      instagramUsername = conta.username || null;
+    } catch (_) {}
+
     res.render('collections', {
       title: 'Galeria de Peças',
       layout: 'layouts/main',
+      instagramMedia,
+      instagramUsername,
       metaDescription: 'Galeria de joias artesanais Gonzaga\'s Art & Shine. Prata 925, latão banhado a prata e pedras naturais — ónix, olho-de-tigre, ametista e turquesa.',
       canonicalUrl: 'https://artnshine.pt/galeria',
       images: imageFiles,

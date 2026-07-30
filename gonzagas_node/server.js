@@ -103,4 +103,35 @@ function onListening() {
     : 'port ' + addr.port;
   console.log('Server listening on ' + bind);
   console.log('Environment: ' + process.env.NODE_ENV || 'development');
+  agendarRenovacaoInstagram();
+}
+
+/**
+ * Renovação do token do Instagram: uma vez ao arrancar e depois uma vez por
+ * dia. Os tokens duram 60 dias e só se renovam antes de expirar — sem isto
+ * morrem em silêncio, como aconteceu a 10/07/2026.
+ *
+ * Não pode impedir o servidor de arrancar, por isso todos os erros ficam
+ * contidos aqui. `unref()` evita que o temporizador segure o processo.
+ */
+function agendarRenovacaoInstagram() {
+  const UM_DIA = 24 * 60 * 60 * 1000;
+
+  const tentar = async () => {
+    try {
+      const { renovarSeNecessario } = require('./services/instagramSyncService');
+      const r = await renovarSeNecessario();
+      if (r.renovado) {
+        console.log('[instagram] token renovado com sucesso');
+      } else if (r.motivo && r.motivo !== 'ainda válido' && r.motivo !== 'sem token') {
+        console.warn('[instagram] token não renovado:', r.motivo);
+      }
+    } catch (err) {
+      console.warn('[instagram] verificação do token falhou:', err.message);
+    }
+  };
+
+  // Alguns segundos depois do arranque, para não competir com a ligação à BD.
+  setTimeout(tentar, 15000).unref();
+  setInterval(tentar, UM_DIA).unref();
 }

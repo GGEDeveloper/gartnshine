@@ -15,6 +15,64 @@
       </div>
     </div>
 
+    <%
+      // ===== Instagram =====
+      // Fica por cima da galeria local, separado por uma divisória, porque é
+      // conteúdo vivo (actualiza-se sozinho) e a galeria local é curada peça
+      // a peça. Só aparece se houver alguma coisa para mostrar — se o token
+      // expirar, a secção desaparece e o resto da página fica intacta.
+      const igMedia = (typeof instagramMedia !== 'undefined' && Array.isArray(instagramMedia))
+        ? instagramMedia : [];
+    %>
+    <% if (igMedia.length > 0) { %>
+      <section class="ig-feed-section" aria-labelledby="ig-feed-titulo">
+        <header class="ig-feed-header">
+          <p class="section-eyebrow">Do nosso Instagram</p>
+          <h2 id="ig-feed-titulo" class="ig-feed-title">
+            <a href="https://instagram.com/<%= typeof instagramUsername !== 'undefined' && instagramUsername ? instagramUsername : 'artnshine' %>"
+               target="_blank" rel="noopener noreferrer">
+              @<%= typeof instagramUsername !== 'undefined' && instagramUsername ? instagramUsername : 'artnshine' %>
+            </a>
+          </h2>
+        </header>
+
+        <div class="ig-feed-grid">
+          <% igMedia.forEach(function(m) {
+            const isVideo = m.media_type === 'VIDEO';
+            const thumb = isVideo ? (m.thumbnail_url || m.media_url) : m.media_url;
+            const legenda = (m.caption || '').replace(/\s+/g, ' ').trim();
+            const alt = legenda ? legenda.slice(0, 110) : 'Publicação do Instagram da Gonzaga\'s Art & Shine';
+          %>
+            <a class="ig-feed-item<%= m.is_featured ? ' is-featured' : '' %>"
+               href="<%= m.permalink %>" target="_blank" rel="noopener noreferrer"
+               aria-label="Ver no Instagram: <%= alt %>">
+              <img src="<%= thumb %>" alt="<%= alt %>" loading="lazy" class="ig-feed-image">
+              <% if (isVideo) { %>
+                <span class="ig-feed-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              <% } else if (m.media_type === 'CAROUSEL_ALBUM') { %>
+                <span class="ig-feed-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="8" y="3" width="13" height="13" rx="2"/><path d="M5 7v12a2 2 0 0 0 2 2h12"/>
+                  </svg>
+                </span>
+              <% } %>
+              <% if (legenda) { %>
+                <span class="ig-feed-caption"><%= legenda.slice(0, 70) %><%= legenda.length > 70 ? '…' : '' %></span>
+              <% } %>
+            </a>
+          <% }); %>
+        </div>
+      </section>
+
+      <div class="gallery-divider" role="separator" aria-hidden="true">
+        <span class="gallery-divider-line"></span>
+        <span class="gallery-divider-label">Galeria da casa</span>
+        <span class="gallery-divider-line"></span>
+      </div>
+    <% } %>
+
     <!-- Gallery Content -->
     <% if (images && images.length > 0) { %>
       <div class="gallery-grid" id="galleryGrid">

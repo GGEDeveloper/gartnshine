@@ -1,0 +1,267 @@
+/**
+ * Controlos do catálogo — alinhamento com a linguagem da marca.
+ *
+ * O que existia vinha de um tema genérico: cantos arredondados, negritos
+ * pesados, tipos do sistema e <select> com o aspecto do sistema operativo.
+ * O resto do site é o oposto — arestas vivas, Georgia nos títulos, maiúsculas
+ * espaçadas nas etiquetas e o dourado como único acento.
+ *
+ * Porque é um ficheiro à parte, carregado em último lugar:
+ * `brand-showcase.css` carrega depois de `catalog-enhanced.css` e já
+ * estilizava estes controlos com `body.showcase-theme .sort-select` (0,2,1) e
+ * com `#sort-select` (id), várias delas com `!important`. Escrever aqui, no
+ * fim e com a mesma especificidade, é o que faz estas regras ganharem sem ter
+ * de reescrever os dois ficheiros antigos.
+ *
+ * O `!important` abaixo aparece só onde é preciso vencer um `!important` que
+ * já lá estava — não é preferência, é o que a cascata existente exige.
+ */
+
+/* ---------- Cabeçalho ---------- */
+
+.catalog-header .page-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.catalog-header .page-subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+/* O contador era um bloco com moldura dourada e número a 28px, que competia
+   com o título da página. Passa a nota discreta ao lado do botão. */
+body.showcase-theme .catalog-header .results-count,
+.catalog-header .results-count {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0;
+  background: none !important;
+  border: none !important;
+  border-radius: 0;
+}
+
+.catalog-header .count-number {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--igp-gold, #c9a84c);
+}
+
+.catalog-header .count-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+/* ---------- Botão de filtros ---------- */
+
+body.showcase-theme .filter-toggle-btn,
+.filter-toggle-btn {
+  padding: 0.7rem 1.35rem;
+  min-height: 44px;
+  background: transparent !important;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18)) !important;
+  border-radius: 0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+}
+
+body.showcase-theme .filter-toggle-btn:hover,
+body.showcase-theme .filter-toggle-btn:focus-visible,
+.filter-toggle-btn:hover,
+.filter-toggle-btn:focus-visible {
+  border-color: var(--igp-gold, #c9a84c) !important;
+  color: var(--igp-gold, #c9a84c) !important;
+  background-color: rgba(201, 168, 76, 0.06) !important;
+}
+
+/* ---------- Ordenação e paginação ---------- */
+
+.catalog-controls {
+  border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  padding: 0.85rem 0;
+}
+
+.sort-label {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+/* `appearance: none` tira o aspecto do sistema operativo — era o que mais
+   destoava. A seta é um SVG inline, para não depender de ficheiros de ícones
+   nem de fontes externas (a CSP bloqueia hosts que não os nossos). */
+body.showcase-theme .sort-select,
+body.showcase-theme #sort-select,
+body.showcase-theme #catalog-sort,
+body.showcase-theme #catalog-per-page,
+.sort-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  padding: 0.55rem 2.25rem 0.55rem 0.85rem !important;
+  min-height: 44px;
+  background-color: rgba(10, 10, 10, 0.9) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9a84c' stroke-width='1.4'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.9rem center !important;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18)) !important;
+  border-radius: 0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  transition: border-color 0.25s ease;
+}
+
+body.showcase-theme .sort-select:hover,
+body.showcase-theme .sort-select:focus,
+.sort-select:hover,
+.sort-select:focus {
+  border-color: var(--igp-gold, #c9a84c) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* As opções abrem numa camada do sistema, que não herda o fundo escuro — sem
+   isto ficava texto claro sobre branco em alguns browsers. */
+.sort-select option,
+#catalog-sort option,
+#catalog-per-page option {
+  background-color: #141414;
+  color: #f0ece4;
+}
+
+/* ---------- Alternar grelha/lista ---------- */
+
+body.showcase-theme .view-toggle,
+.view-toggle {
+  background: transparent !important;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18)) !important;
+  border-radius: 0 !important;
+  gap: 0;
+  padding: 0;
+}
+
+body.showcase-theme .view-btn,
+.view-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 0 !important;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.view-btn + .view-btn {
+  border-left: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+body.showcase-theme .view-btn:hover,
+.view-btn:hover {
+  background: rgba(201, 168, 76, 0.06) !important;
+  color: var(--igp-cream, #f0ece4) !important;
+}
+
+body.showcase-theme .view-btn.active,
+.view-btn.active {
+  background: rgba(201, 168, 76, 0.1) !important;
+  color: var(--igp-gold, #c9a84c) !important;
+}
+
+/* ---------- Chips de filtros activos ---------- */
+
+.catalog-chips:empty {
+  display: none;
+}
+
+.catalog-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+}
+
+body.showcase-theme .catalog-chips .chip,
+body.showcase-theme .catalog-chips .catalog-chip,
+.catalog-chips .chip,
+.catalog-chips .catalog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  min-height: 36px;
+  background: rgba(201, 168, 76, 0.08) !important;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18)) !important;
+  border-radius: 0 !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Barra lateral de filtros ---------- */
+
+body.showcase-theme .catalog-sidebar,
+.catalog-sidebar {
+  border-radius: 0 !important;
+}
+
+.catalog-sidebar .filter-section-title,
+.catalog-sidebar .filter-title {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+body.showcase-theme .catalog-search-input,
+.catalog-search-input {
+  border-radius: 0 !important;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18)) !important;
+  background: transparent !important;
+  color: var(--igp-cream, #f0ece4) !important;
+  min-height: 44px;
+}
+
+.catalog-search-input:focus {
+  border-color: var(--igp-gold, #c9a84c) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* ---------- Paginação ---------- */
+
+body.showcase-theme .catalog-pagination .page-link,
+.catalog-pagination .page-link,
+.catalog-pagination a,
+.catalog-pagination span {
+  border-radius: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .catalog-controls {
+    gap: 0.75rem;
+  }
+
+  body.showcase-theme .sort-select,
+  .sort-select {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-toggle-btn,
+  .sort-select,
+  .view-btn {
+    transition: none;
+  }
+}
