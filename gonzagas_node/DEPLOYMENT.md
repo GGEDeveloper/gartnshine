@@ -80,6 +80,7 @@ documento, com backup obrigatório, condições de paragem e rollback:
 | [`docs/DEPLOY_COLECOES_GALERIA.md`](../docs/DEPLOY_COLECOES_GALERIA.md) | Coleções curadas, Galeria, Aspeto do Site, movimento | 006–009 + semeadura da galeria |
 | [`docs/DEPLOY_HOME_NAV_SEO.md`](../docs/DEPLOY_HOME_NAV_SEO.md) | Página inicial, navegação de Coleções, correções de SEO | nenhuma (só código) |
 | [`docs/DEPLOY_CATEGORIAS_GALERIA.md`](../docs/DEPLOY_CATEGORIAS_GALERIA.md) | Separação categoria/coleção/galeria, novos endereços e 301 | nenhuma (script de slugs) |
+| [`docs/DEPLOY_INSTAGRAM_CATALOGO.md`](../docs/DEPLOY_INSTAGRAM_CATALOGO.md) | Feed do Instagram gerido no admin, categorias no catálogo, transições | 010 (aditiva) |
 
 **Regra que vale para todos:** nunca correr `npm run db:init`,
 `npm run db:reset`, `scripts/setup.js` nem importar dumps SQL para produção —
