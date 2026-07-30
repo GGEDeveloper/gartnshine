@@ -5,7 +5,7 @@
       <h1 class="h3 mb-0 mt-1"><%= family.name %></h1>
       <small class="text-muted"><%= family.product_count %> peça<%= Number(family.product_count) === 1 ? '' : 's' %></small>
     </div>
-    <a href="/collection/<%= family.slug || family.id %>" target="_blank" rel="noopener"
+    <a href="/categoria/<%= family.slug || family.id %>" target="_blank" rel="noopener"
        class="btn btn-outline-secondary btn-sm">
       <i class="fas fa-external-link-alt"></i> Ver página pública
     </a>

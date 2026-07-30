@@ -31,8 +31,8 @@
       
       <div class="product-meta">
         <div class="meta-item">
-          <span class="meta-label">Collection:</span>
-          <span class="meta-value"><a href="/collection/<%= product.family_id %>"><%= product.family_name %></a></span>
+          <span class="meta-label">Categoria:</span>
+          <span class="meta-value"><a href="/categoria/<%= product.family_slug || product.family_id %>"><%= product.family_name %></a></span>
         </div>
         
         <% if (product.style) { %>
@@ -72,7 +72,7 @@
       <% } %>
       
       <div class="product-actions">
-        <a href="/collection/<%= product.family_id %>" class="btn btn-outline">Back to Collection</a>
+        <a href="/categoria/<%= product.family_slug || product.family_id %>" class="btn btn-outline">Ver categoria</a>
       </div>
     </div>
   </div>

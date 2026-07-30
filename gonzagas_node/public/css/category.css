@@ -1,0 +1,344 @@
+/**
+ * Páginas de categoria (/categoria/:slug).
+ *
+ * Substituem as antigas /collection/:id. O nome das classes mudou de
+ * .collection-* para .category-* de propósito: categoria e coleção são
+ * conceitos diferentes e partilhar classes foi parte de como se
+ * confundiram. As regras de .collection-header, .collection-title e
+ * .products-grid continuam a valer — a vista mantém esses nomes.
+ */
+
+/* Repõe o que .collection-page dava em main.css antes do rename. */
+.category-page {
+  padding: 2rem 0;
+}
+
+body.showcase-theme .category-page {
+  background: transparent;
+}
+
+.collection-header .section-eyebrow a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  padding-bottom: 2px;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.collection-header .section-eyebrow a:hover,
+.collection-header .section-eyebrow a:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+  border-bottom-color: var(--igp-gold, #c9a84c);
+}
+
+/* ---------- Corpo: índice lateral + conteúdo ---------- */
+
+.category-body {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.category-page--with-index .category-body {
+  display: grid;
+  grid-template-columns: minmax(190px, 220px) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+/* minmax(0, 1fr) acima é deliberado: sem ele a grelha de produtos podia
+   forçar a coluna a ficar mais larga do que o espaço disponível e provocar
+   overflow horizontal. */
+.category-content {
+  min-width: 0;
+}
+
+/* ---------- Índice lateral ---------- */
+
+.category-index {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.category-index-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+.category-index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-index-list li + li {
+  margin-top: 0.15rem;
+}
+
+.category-index-list a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-left: 2px solid transparent;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.category-index-list a:hover,
+.category-index-list a:focus-visible {
+  color: var(--igp-cream, #f0ece4);
+  background-color: rgba(201, 168, 76, 0.06);
+}
+
+.category-index-list a.is-active {
+  color: var(--igp-gold, #c9a84c);
+  border-left-color: var(--igp-gold, #c9a84c);
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.category-index-count {
+  font-size: 0.75rem;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Grupos de subcategoria ---------- */
+
+.category-group {
+  /* Compensa o cabeçalho fixo quando se salta para a âncora. */
+  scroll-margin-top: 110px;
+}
+
+.category-group + .category-group {
+  margin-top: 4rem;
+}
+
+.category-group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+.category-group-header h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--igp-cream, #f0ece4);
+  margin: 0;
+}
+
+.category-group-link {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.category-group-link:hover,
+.category-group-link:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+}
+
+/* ---------- Navegação de fim de página ---------- */
+
+.category-nav {
+  max-width: 1100px;
+  margin: 5rem auto 0;
+  padding: 3rem 1.5rem;
+  border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  text-align: center;
+}
+
+.category-nav-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  margin: 0 0 2rem;
+}
+
+.category-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.category-nav-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.7rem 1.25rem;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  color: var(--igp-cream, #f0ece4);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.category-nav-link:hover,
+.category-nav-link:focus-visible {
+  border-color: var(--igp-gold, #c9a84c);
+  background-color: rgba(201, 168, 76, 0.06);
+  color: var(--igp-gold, #c9a84c);
+}
+
+.category-nav-link-count {
+  font-size: 0.75rem;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  font-variant-numeric: tabular-nums;
+}
+
+.category-nav-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+}
+
+.category-nav-footer a {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.category-nav-footer a:hover,
+.category-nav-footer a:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+}
+
+/* ---------- Tablet e telemóvel ---------- */
+
+@media (max-width: 1024px) {
+  /* O índice fixo lateral não cabe: passa a uma barra horizontal colada ao
+     topo, que continua a permitir saltar entre subcategorias. */
+  .category-page--with-index .category-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .category-index {
+    position: sticky;
+    top: 64px;
+    z-index: 20;
+    max-height: none;
+    overflow: visible;
+    margin: 0 -1.5rem;
+    padding: 0.6rem 0;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  }
+
+  .category-index-title {
+    display: none;
+  }
+
+  .category-index-list {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding: 0 1.5rem;
+    scrollbar-width: none;
+  }
+
+  .category-index-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-index-list li + li {
+    margin-top: 0;
+  }
+
+  .category-index-list a {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    /* 44px de altura mínima para o alvo de toque. */
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .category-index-list a.is-active {
+    border-left-color: transparent;
+    border-bottom-color: var(--igp-gold, #c9a84c);
+  }
+
+  .category-group {
+    scroll-margin-top: 130px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-page {
+    padding: 0;
+  }
+
+  .category-body {
+    padding: 0 1rem;
+  }
+
+  .category-index {
+    margin: 0 -1rem;
+  }
+
+  .category-index-list {
+    padding: 0 1rem;
+  }
+
+  .category-group + .category-group {
+    margin-top: 2.75rem;
+  }
+
+  .category-group-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .category-nav {
+    margin-top: 3rem;
+    padding: 2.25rem 1rem;
+  }
+
+  .category-nav-footer {
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-index-list a,
+  .category-nav-link,
+  .category-group-link {
+    transition: none;
+  }
+}

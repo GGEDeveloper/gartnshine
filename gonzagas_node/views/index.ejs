@@ -13,7 +13,7 @@
         <p class="hero-tagline"><%= siteDescription %></p>
         <div class="hero-actions">
           <a href="/catalog" class="btn-hero btn-hero--solid">Ver catálogo</a>
-          <a href="/collections" class="btn-hero btn-hero--ghost">Galeria de peças</a>
+          <a href="/galeria" class="btn-hero btn-hero--ghost">Galeria de peças</a>
         </div>
       </div>
       <a href="#featured-anchor" class="hero-scroll-cue" aria-label="Descer para as peças em destaque">
@@ -127,7 +127,7 @@
             || (fam.fallback_image ? productImg(fam.fallback_image, 'medium').jpg : null);
         %>
           <a class="collection-tile<%= tileImage ? ' has-image' : '' %>"
-             href="/collection/<%= fam.slug || fam.id %>"
+             href="/categoria/<%= fam.slug || fam.id %>"
              <% if (tileImage) { %>style="background-image: url('<%= encodeURI(tileImage) %>');"<% } %>>
             <span class="collection-tile-body">
               <span class="collection-tile-name"><%= fam.name %></span>
@@ -138,7 +138,7 @@
       </div>
 
       <div class="collections-showcase-cta">
-        <a href="/collections" class="btn-collections-gallery">Ver galeria completa</a>
+        <a href="/galeria" class="btn-collections-gallery">Ver galeria completa</a>
       </div>
     </section>
     <% } %>

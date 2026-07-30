@@ -116,20 +116,53 @@ class ProductFamily {
     }
   }
 
+  /**
+   * Slug único a partir do nome, para o URL /categoria/:slug.
+   *
+   * A coluna `slug` existia desde a migração dos slugs mas nunca era escrita:
+   * `create` e `update` ignoravam-na, por isso as 25 categorias ficaram todas
+   * a NULL e o site servia URLs numéricos (`/collection/16`). Agora é gerado
+   * aqui e garantidamente único, porque a coluna tem índice UNIQUE.
+   */
+  static async buildSlug(name, ignoreId = null) {
+    const base = String(name || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // tira acentos (combining marks)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 170) || 'categoria';
+
+    let slug = base;
+    let n = 2;
+    /* eslint-disable no-await-in-loop */
+    while (true) {
+      const [rows] = await pool.query(
+        `SELECT id FROM product_families WHERE slug = ?${ignoreId ? ' AND id <> ?' : ''} LIMIT 1`,
+        ignoreId ? [slug, ignoreId] : [slug]
+      );
+      if (rows.length === 0) return slug;
+      slug = `${base}-${n}`;
+      n += 1;
+    }
+    /* eslint-enable no-await-in-loop */
+  }
+
   // Create a new product family
   static async create(family) {
     try {
+      const slug = await this.buildSlug(family.name);
       const [result] = await pool.query(`
-        INSERT INTO product_families 
-        (code, name, description, parent_id)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO product_families
+        (code, name, slug, description, parent_id)
+        VALUES (?, ?, ?, ?, ?)
       `, [
         family.code,
         family.name,
+        slug,
         family.description || null,
         family.parent_id ? parseInt(family.parent_id, 10) : null
       ]);
-      
+
       return result.insertId;
     } catch (error) {
       console.error('Error creating product family:', error);
@@ -140,21 +173,32 @@ class ProductFamily {
   // Update a product family
   static async update(id, family) {
     try {
+      // O slug só é regenerado se ainda não existir. Mudar o slug de uma
+      // categoria já indexada partiria os links do Google sem redirect.
+      const [[atual]] = await pool.query(
+        'SELECT slug FROM product_families WHERE id = ?', [id]
+      );
+      const slug = (atual && atual.slug)
+        ? atual.slug
+        : await this.buildSlug(family.name, id);
+
       const [result] = await pool.query(`
         UPDATE product_families SET
         code = ?,
         name = ?,
+        slug = ?,
         description = ?,
         parent_id = ?
         WHERE id = ?
       `, [
         family.code,
         family.name,
+        slug,
         family.description || null,
         family.parent_id ? parseInt(family.parent_id, 10) : null,
         id
       ]);
-      
+
       return result.affectedRows > 0;
     } catch (error) {
       console.error('Error updating product family:', error);
@@ -232,7 +276,58 @@ class ProductFamily {
     }
   }
 
-  /** Define (ou limpa, com null) a imagem de destaque usada em /collection/:id */
+  /**
+   * Navegação hierárquica de uma página de categoria.
+   *
+   * Substitui o antigo "Outras Coleções", que despejava as 25 famílias numa
+   * lista plana — misturando materiais (Latão) com tipos (Aneis - Prata),
+   * chamando-lhes "coleções" e incluindo categorias sem produtos.
+   *
+   * Devolve `{ parent, siblings, children }`, todos já sem categorias vazias:
+   *   - numa categoria de topo (material): `children` são as subcategorias;
+   *   - numa subcategoria: `parent` é o material e `siblings` as irmãs.
+   */
+  static async getNavigation(family) {
+    const comProdutos = `
+      (SELECT COUNT(*)
+         FROM products p
+         JOIN product_families c ON c.id = p.family_id
+        WHERE p.is_active = 1 AND (c.id = f.id OR c.parent_id = f.id)
+      ) AS product_count`;
+
+    try {
+      if (!family.parent_id) {
+        const [children] = await pool.query(
+          `SELECT f.id, f.name, f.slug, ${comProdutos}
+             FROM product_families f
+            WHERE f.parent_id = ?
+           HAVING product_count > 0
+            ORDER BY product_count DESC, f.name ASC`,
+          [family.id]
+        );
+        return { parent: null, siblings: [], children };
+      }
+
+      const [[parent]] = await pool.query(
+        'SELECT id, name, slug FROM product_families WHERE id = ?',
+        [family.parent_id]
+      );
+      const [siblings] = await pool.query(
+        `SELECT f.id, f.name, f.slug, ${comProdutos}
+           FROM product_families f
+          WHERE f.parent_id = ? AND f.id <> ?
+         HAVING product_count > 0
+          ORDER BY f.name ASC`,
+        [family.parent_id, family.id]
+      );
+      return { parent: parent || null, siblings, children: [] };
+    } catch (error) {
+      console.error('Error getting family navigation:', error);
+      return { parent: null, siblings: [], children: [] };
+    }
+  }
+
+  /** Define (ou limpa, com null) a imagem de destaque usada em /categoria/:slug */
   static async updateHeroImage(id, heroImage) {
     try {
       const [result] = await pool.query(

@@ -25,6 +25,7 @@ window.GonzagaMotion = (function () {
   const REVEAL_SELECTOR = [
     '.gallery-grid .gallery-item',
     '.collection-page .product-card',
+    '.category-page .product-card',
     '.collections-showcase .collection-tile'
   ].join(', ');
   const REVEAL_STAGGER_MS = 50;

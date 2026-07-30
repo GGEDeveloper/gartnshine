@@ -158,9 +158,13 @@ diferentes:
 | Rota | O que é | De onde vem |
 |---|---|---|
 | `/catalog` | Catálogo completo, com filtros | `products` |
-| `/collection/:slug` | Página de uma **família** (taxonomia). Inclui os produtos das subcategorias | `product_families` + `products.family_id` |
-| `/colecoes` e `/colecao/:slug` | **Coleções curadas** — conjuntos escolhidos à mão, que podem juntar várias famílias | `collections` + `collection_products` |
-| `/collections` | **Galeria** de fotografias, sem ligação a produtos | `gallery_items` |
+| `/categoria/:slug` | Página de uma **categoria** (taxonomia). Inclui os produtos das subcategorias | `product_families` + `products.family_id` |
+| `/colecoes` e `/colecao/:slug` | **Coleções curadas** — conjuntos escolhidos à mão, que podem juntar várias categorias | `collections` + `collection_products` |
+| `/galeria` | **Galeria** de fotografias, sem ligação a produtos | `gallery_items` |
+
+Endereços antigos, todos com 301 permanente (não voltar a usá-los):
+`/collection/:id` → `/categoria/:slug`, `/collections` → `/galeria`,
+`/instagram*` → `/galeria`.
 
 `product_families` é uma taxonomia de dois níveis: o nível de topo é o
 **material** (Prata, Latão, Macramé, Pedras Naturais) e os filhos são

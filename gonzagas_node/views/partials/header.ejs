@@ -1,13 +1,15 @@
 <%
   const navPath = typeof currentPath !== 'undefined' ? currentPath : '';
   const isHome = navPath === '/' || navPath === '';
-  // Três coisas distintas, três estados: coleções curadas (/colecoes,
-  // /colecao/:slug), galeria de media (/collections) e páginas de
-  // categoria/material (/collection/:id).
-  const isColecoes = navPath === '/colecoes' || navPath.startsWith('/colecao/')
-    || navPath.startsWith('/collection/');
-  const isGaleria = navPath === '/collections';
-  const isCatalog = navPath === '/catalog' || navPath.startsWith('/catalog/');
+  // Três coisas distintas, três estados. As páginas de categoria
+  // (/categoria/:slug) acendem "Catálogo", não "Coleções": categoria é a
+  // taxonomia por onde se navega o catálogo, uma coleção é um conjunto
+  // curado à mão. Antes /collection/:id acendia "Coleções" e era das
+  // origens da confusão entre os dois conceitos.
+  const isColecoes = navPath === '/colecoes' || navPath.startsWith('/colecao/');
+  const isGaleria = navPath === '/galeria';
+  const isCatalog = navPath === '/catalog' || navPath.startsWith('/catalog/')
+    || navPath.startsWith('/categoria/');
   const isAbout = navPath === '/about';
   const isCart = navPath === '/cart';
   const isAdmin = navPath.startsWith('/admin');
@@ -32,7 +34,7 @@
         <% if (catalogEnabled) { %>
         <li><a href="/catalog" class="<%= isCatalog ? 'active' : '' %>">Catálogo</a></li>
         <% } %>
-        <li><a href="/collections" class="<%= isGaleria ? 'active' : '' %>">Galeria</a></li>
+        <li><a href="/galeria" class="<%= isGaleria ? 'active' : '' %>">Galeria</a></li>
         <li><a href="/about" class="<%= isAbout ? 'active' : '' %>">Sobre</a></li>
 
         <% if (typeof user !== 'undefined' && user) { %>
@@ -115,7 +117,7 @@
       </a>
       <% } %>
 
-      <a href="/collections" class="mobile-nav-link <%= isGaleria ? 'active' : '' %>">
+      <a href="/galeria" class="mobile-nav-link <%= isGaleria ? 'active' : '' %>">
         <i class="fas fa-images" aria-hidden="true"></i>
         <span>Galeria</span>
       </a>

@@ -211,6 +211,7 @@
   <link rel="stylesheet" href="/css/brand-showcase.css?v=<%= app.version %>">
   <% } %>
   <link rel="stylesheet" href="/css/header.css?v=<%= app.version %>">
+  <link rel="stylesheet" href="/css/category.css?v=<%= app.version %>">
 
   <% if (process.env.GA_TRACKING_ID && (typeof cookieConsent === 'undefined' || cookieConsent === null || (typeof canUseAnalytics === 'function' && canUseAnalytics()))) { %>
   <!-- Google Tag Manager / GA4 -->
@@ -285,6 +286,7 @@
     <script src="/js/modules/ui.js?v=<%= app.version %>"></script>
     <script src="/js/modules/carousel.js"></script>
     <script src="/js/modules/motion.js"></script>
+    <script src="/js/modules/category-index.js?v=<%= app.version %>"></script>
     <script src="/js/main.js"></script>
     <script src="/js/notifications.js"></script>
     <script src="/js/frontend-mobile-navigation-fix.js"></script>

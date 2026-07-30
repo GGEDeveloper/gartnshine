@@ -28,15 +28,15 @@ describe('Rotas públicas', () => {
     expect(res.text).toMatch(/base\.google\.com\/ns\/1\.0/);
   });
 
-  test('GET /collections responde 200 com itens da galeria curada', async () => {
-    const res = await request(app).get('/collections').expect(200);
+  test('GET /galeria responde 200 com itens da galeria curada', async () => {
+    const res = await request(app).get('/galeria').expect(200);
     // Regressão: a galeria passou a vir da BD (gallery_items); um erro de
     // query devolveria 200 com o estado vazio "Coleção em Preparação".
     expect(res.text).toMatch(/class="gallery-item"/);
   });
 
-  test('GET /collection/:id responde 200 com os produtos da família', async () => {
-    const res = await request(app).get('/collection/1').expect(200);
+  test('GET /categoria/:slug responde 200 com os produtos da categoria', async () => {
+    const res = await request(app).get('/categoria/aneis-prata').expect(200);
     expect(res.text).toMatch(/collection-header/);
     expect(res.text).toMatch(/product-card/);
   });
@@ -56,8 +56,57 @@ describe('Rotas públicas', () => {
     const material = materiais[0];
     expect(Number(material.product_count)).toBeGreaterThan(0);
 
-    const res = await request(app).get(`/collection/${material.slug || material.id}`).expect(200);
+    const res = await request(app).get(`/categoria/${material.slug}`).expect(200);
     expect(res.text).toMatch(/product-card/);
+  });
+
+  test('categoria de topo agrupa por subcategoria e traz índice lateral', async () => {
+    const res = await request(app).get('/categoria/prata').expect(200);
+    expect(res.text).toMatch(/class="category-index"/);
+    expect(res.text).toMatch(/data-index-link=/);
+    expect(res.text).toMatch(/class="category-group"/);
+  });
+
+  test('nenhuma categoria ficou sem slug', async () => {
+    // Regressão: a coluna slug existia mas create/update nunca a escreviam,
+    // por isso as 25 categorias serviam URLs numéricos (/collection/16).
+    const { pool } = require('../config/database');
+    const [[{ semSlug }]] = await pool.query(
+      "SELECT COUNT(*) AS semSlug FROM product_families WHERE slug IS NULL OR slug = ''"
+    );
+    expect(Number(semSlug)).toBe(0);
+  });
+});
+
+describe('Endereços antigos (301)', () => {
+  // Estes 301 são o que impede a perda da autoridade acumulada pelos 23 URLs
+  // de categoria e pela galeria, que estavam indexados no Google.
+  test('/collection/:id redirecciona 301 para /categoria/:slug', async () => {
+    const res = await request(app).get('/collection/16').expect(301);
+    expect(res.headers.location).toBe('/categoria/prata');
+  });
+
+  test('/collection/:slug redirecciona 301 para /categoria/:slug', async () => {
+    const res = await request(app).get('/collection/aneis-prata').expect(301);
+    expect(res.headers.location).toBe('/categoria/aneis-prata');
+  });
+
+  test('/collections redirecciona 301 para /galeria', async () => {
+    const res = await request(app).get('/collections').expect(301);
+    expect(res.headers.location).toBe('/galeria');
+  });
+
+  test('/instagram vai directo a /galeria, sem cadeia de redirects', async () => {
+    const res = await request(app).get('/instagram').expect(301);
+    expect(res.headers.location).toBe('/galeria');
+  });
+
+  test('o sitemap não anuncia os endereços antigos', async () => {
+    const res = await request(app).get('/sitemap.xml').expect(200);
+    expect(res.text).not.toMatch(/artnshine\.pt\/collection\//);
+    expect(res.text).not.toMatch(/artnshine\.pt\/collections</);
+    expect(res.text).toMatch(/artnshine\.pt\/categoria\//);
+    expect(res.text).toMatch(/artnshine\.pt\/galeria</);
   });
 });
 

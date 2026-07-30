@@ -128,8 +128,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Collections page - Show all media images
-router.get('/collections', async (req, res) => {
+/**
+ * GALERIA de fotografias. Não são coleções nem categorias: são imagens
+ * curadas em /admin/gallery, sem ligação a produtos.
+ *
+ * Vivia em /collections, endereço que dizia "coleções" à galeria e ficava
+ * ao lado de /colecoes, que são as coleções a sério — a confusão que este
+ * conjunto de alterações veio eliminar.
+ */
+router.get('/galeria', async (req, res) => {
   try {
     // Galeria curada no admin (/admin/gallery) — ordem e legendas definidas lá.
     const imageFiles = (await GalleryItem.getAllActive()).map((item) => ({
@@ -143,7 +150,7 @@ router.get('/collections', async (req, res) => {
       title: 'Galeria de Peças',
       layout: 'layouts/main',
       metaDescription: 'Galeria de joias artesanais Gonzaga\'s Art & Shine. Prata 925, latão banhado a prata e pedras naturais — ónix, olho-de-tigre, ametista e turquesa.',
-      canonicalUrl: 'https://artnshine.pt/collections',
+      canonicalUrl: 'https://artnshine.pt/galeria',
       images: imageFiles,
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
@@ -161,10 +168,12 @@ router.get('/collections', async (req, res) => {
   }
 });
 
-// Collection page - Show products by family
+/** Endereço antigo da galeria, indexado no Google. */
+router.get('/collections', (req, res) => res.redirect(301, '/galeria'));
+
 /**
- * Índice das coleções curadas. Endereço próprio (/colecoes) porque
- * /collections é a galeria de media, que é outra coisa.
+ * Índice das coleções curadas — conjuntos escolhidos à mão, que podem
+ * atravessar várias categorias.
  */
 router.get('/colecoes', async (req, res) => {
   try {
@@ -261,50 +270,101 @@ function buildFamilyDescription(family, productCount) {
   return base ? `${base} ${contexto}`.substring(0, 158) : contexto.substring(0, 158);
 }
 
-router.get('/collection/:familyIdOrSlug', async (req, res) => {
+/**
+ * Página de CATEGORIA (product_families).
+ *
+ * Uma categoria não é uma coleção: a categoria é a taxonomia a que cada peça
+ * pertence obrigatoriamente (material → tipo+material), enquanto uma coleção
+ * é um conjunto curado à mão que pode atravessar várias categorias e vive em
+ * /colecao/:slug. O endereço antigo era /collection/:id, que dizia "collection"
+ * a uma categoria e servia URLs numéricos — ver o 301 mais abaixo.
+ */
+router.get('/categoria/:slug', async (req, res) => {
   try {
-    const { familyIdOrSlug } = req.params;
-    const isNumeric = /^\d+$/.test(familyIdOrSlug);
-    const family = await ProductFamily.getByIdOrSlug(familyIdOrSlug);
-    
+    const { slug } = req.params;
+    const family = await ProductFamily.getByIdOrSlug(slug);
+
     if (!family) {
       return res.status(404).render('error', {
-        title: 'Not Found',
-        message: 'Collection not found.',
+        title: 'Categoria não encontrada',
+        message: 'Esta categoria não existe ou já não está disponível.',
         layout: false
       });
     }
 
-    // 301 redirect from numeric ID to slug URL when slug exists
-    if (isNumeric && family.slug) {
-      return res.redirect(301, `/collection/${family.slug}`);
+    // Chegar por id a /categoria/16 é um endereço não canónico: redirecciona.
+    if (/^\d+$/.test(slug) && family.slug) {
+      return res.redirect(301, `/categoria/${family.slug}`);
     }
-    
+
     const rawProducts = await Product.getByFamilyTree(family.id);
     const ecommerceSettings = await EcommerceSettings.getAll();
     const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
-    const families = await ProductFamily.getAll();
-    const slugOrId = family.slug || family.id;
+    const nav = await ProductFamily.getNavigation(family);
 
-    res.render('collection', {
+    // Numa categoria de topo os produtos vêm das subcategorias todas, por isso
+    // agrupam-se — é o que dá âncoras ao índice lateral e evita uma grelha
+    // corrida de 200 peças sem qualquer marco visual.
+    let grupos = [];
+    if (!family.parent_id && nav.children.length > 1) {
+      const porFamilia = new Map();
+      products.forEach((p) => {
+        if (!porFamilia.has(p.family_id)) porFamilia.set(p.family_id, []);
+        porFamilia.get(p.family_id).push(p);
+      });
+      grupos = nav.children
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          slug: c.slug,
+          anchor: `cat-${c.slug || c.id}`,
+          products: porFamilia.get(c.id) || []
+        }))
+        .filter((g) => g.products.length > 0);
+    }
+
+    res.render('category', {
       // Textos de SEO definidos no admin ganham ao que é derivado do conteúdo.
       title: family.seo_title || family.name,
       family,
       products,
-      families,
+      grupos,
+      nav,
       // Descrições curtas do admin davam meta descriptions de 30 chars, que o
       // Google trata como conteúdo fino: completa-se com o contexto da família.
       metaDescription: family.seo_description
         || buildFamilyDescription(family, products.length),
-      canonicalUrl: 'https://artnshine.pt/collection/' + slugOrId
+      canonicalUrl: 'https://artnshine.pt/categoria/' + family.slug
     });
   } catch (error) {
-    console.error('Error loading collection:', error);
+    console.error('Error loading category:', error);
     res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load the collection.',
+      title: 'Erro',
+      message: 'Falha ao carregar a categoria.',
       layout: false
     });
+  }
+});
+
+/**
+ * Endereço antigo das categorias. Estavam indexados no Google 23 URLs
+ * numéricos (/collection/16), por isso o 301 é obrigatório — sem ele
+ * perdia-se toda a autoridade acumulada nessas páginas.
+ */
+router.get('/collection/:familyIdOrSlug', async (req, res) => {
+  try {
+    const family = await ProductFamily.getByIdOrSlug(req.params.familyIdOrSlug);
+    if (!family) {
+      return res.status(404).render('error', {
+        title: 'Categoria não encontrada',
+        message: 'Esta categoria não existe ou já não está disponível.',
+        layout: false
+      });
+    }
+    return res.redirect(301, `/categoria/${family.slug || family.id}`);
+  } catch (error) {
+    console.error('Error redirecting legacy collection URL:', error);
+    return res.redirect(301, '/catalog');
   }
 });
 
@@ -360,7 +420,7 @@ router.get('/catalog/product/:idOrSlug', async (req, res) => {
     const param = isNumeric ? parseInt(idOrSlug) : idOrSlug;
 
     const [results] = await pool.execute(`
-      SELECT p.*, pf.name as family_name,
+      SELECT p.*, pf.name as family_name, pf.slug as family_slug,
              GROUP_CONCAT(pi.image_filename ORDER BY pi.is_primary DESC) as images
       FROM products p
       LEFT JOIN product_families pf ON p.family_id = pf.id
@@ -616,9 +676,9 @@ router.get('/api/nav-featured', async (req, res) => {
 });
 
 // Redirects para URLs antigas (bookmarks, links externos)
-router.get('/instagram', (req, res) => res.redirect(301, '/collections'));
-router.get('/instagram-preview', (req, res) => res.redirect(301, '/collections'));
-router.get('/instagram-lab', (req, res) => res.redirect(301, '/collections'));
+router.get('/instagram', (req, res) => res.redirect(301, '/galeria'));
+router.get('/instagram-preview', (req, res) => res.redirect(301, '/galeria'));
+router.get('/instagram-lab', (req, res) => res.redirect(301, '/galeria'));
 
 // About page
 router.get('/about', (req, res) => {

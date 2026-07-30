@@ -8,10 +8,14 @@
  *   /                        → index.ejs
  *   /catalog                 → CatalogController
  *   /catalog/product/:id     → catalog/product-detail.ejs
- *   /collections             → collections.ejs  (Galeria de Peças — media)
- *   /collection/:familyId    → collection.ejs   (categoria/família)
+ *   /galeria                 → collections.ejs  (Galeria de fotografias)
+ *   /categoria/:slug         → category.ejs     (categoria da taxonomia)
  *   /colecoes                → curated-collections.ejs (índice de coleções)
  *   /colecao/:slug           → curated-collection.ejs (coleção curada)
+ *
+ * Categoria, coleção e galeria são três coisas distintas e cada uma tem o
+ * seu endereço. /collection/:id e /collections são os endereços antigos e
+ * fazem 301 — nunca devem voltar ao sitemap.
  *   /about                   → about.ejs
  *   /privacy-policy          → privacy-policy.ejs
  *   /terms-of-service        → terms-of-service.ejs
@@ -67,7 +71,7 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>${baseUrl}/collections</loc>
+    <loc>${baseUrl}/galeria</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -104,15 +108,15 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>`;
     }
 
-    // Categorias (/collection/:idOrSlug)
+    // Categorias (/categoria/:slug)
     for (const family of families) {
       const lastmod = formatSitemapDate(family.updated_at);
       const familyPath = family.slug || family.id;
       sitemap += `
 
-  <!-- Coleção: ${family.name} -->
+  <!-- Categoria: ${family.name} -->
   <url>
-    <loc>${baseUrl}/collection/${familyPath}</loc>
+    <loc>${baseUrl}/categoria/${familyPath}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -175,8 +179,8 @@ router.get('/robots.txt', (req, res) => {
 Allow: /
 Allow: /catalog
 Allow: /about
-Allow: /collections
-Allow: /collection/
+Allow: /galeria
+Allow: /categoria/
 Allow: /colecao/
 Allow: /colecoes
 Disallow: /admin/
