@@ -26,25 +26,77 @@
 }
 
 ::view-transition-old(root) {
-  animation: 220ms cubic-bezier(0.4, 0, 1, 1) both pagina-sai;
+  animation: 300ms cubic-bezier(0.55, 0, 1, 0.45) both pagina-sai;
 }
 
 ::view-transition-new(root) {
-  animation: 380ms cubic-bezier(0.23, 1, 0.32, 1) both pagina-entra;
+  animation: 620ms cubic-bezier(0.16, 1, 0.3, 1) both pagina-entra;
 }
 
+/* A página que sai recua e some-se — dá a sensação de ficar para trás,
+   em vez de simplesmente desaparecer. */
 @keyframes pagina-sai {
   to {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: scale(0.985) translateY(-14px);
   }
 }
 
+/* A que entra sobe e revela-se por baixo de uma máscara que abre de cima
+   para baixo, como um véu a levantar. É este `clip-path` que dá o
+   movimento — só a opacidade era demasiado discreto. */
 @keyframes pagina-entra {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(34px) scale(1.008);
+    clip-path: inset(14% 0 0 0);
   }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Elemento partilhado: a fotografia acompanha a navegação.
+   Ao clicar num cartão de produto, aquela fotografia transforma-se na
+   fotografia grande da ficha, em vez de a página trocar inteira. Os nomes
+   do lado de origem são postos por `js/modules/view-transitions.js`.
+   --------------------------------------------------------------------- */
+
+#mainProductImage {
+  view-transition-name: media-produto;
+}
+
+.collection-header.has-background {
+  view-transition-name: media-categoria;
+}
+
+/* Um elemento partilhado não deve levar o fade da página — só se move e
+   redimensiona de um sítio para o outro. */
+::view-transition-old(media-produto),
+::view-transition-new(media-produto),
+::view-transition-old(media-categoria),
+::view-transition-new(media-categoria) {
+  animation: none;
+  mix-blend-mode: normal;
+  height: 100%;
+}
+
+::view-transition-group(media-produto),
+::view-transition-group(media-categoria) {
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* O que sai desaparece por trás do que entra durante o percurso. */
+::view-transition-old(media-produto),
+::view-transition-old(media-categoria) {
+  opacity: 0;
 }
 
 /* O cabeçalho é o mesmo em todas as páginas: dar-lhe um nome próprio tira-o
