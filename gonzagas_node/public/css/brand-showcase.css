@@ -105,6 +105,19 @@ body.showcase-theme .hero-tagline {
   letter-spacing: 0.14em !important;
 }
 
+/* No hero da marca a tagline aparece sob o nome — a caixa passaria a ser
+   ruído a competir com o título, por isso fica só texto. */
+body.showcase-theme .hero-content--brand .hero-tagline {
+  border: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  font-size: clamp(0.9rem, 2vw, 1.15rem) !important;
+  color: rgba(240, 236, 228, 0.86) !important;
+  letter-spacing: 0.18em !important;
+}
+
 body.showcase-theme .featured-section {
   padding-top: clamp(1.25rem, 3vw, 2rem);
   padding-bottom: clamp(1.5rem, 3.5vw, 2.25rem);

@@ -7,7 +7,8 @@
 .hero {
   position: relative;
   width: 100%;
-  height: clamp(320px, 52vh, 520px);
+  min-height: clamp(460px, 76vh, 720px);
+  padding: clamp(4.5rem, 12vh, 7rem) 0 clamp(4rem, 10vh, 6rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,7 +89,8 @@
 /* ===== HERO MOBILE ===== */
 @media (max-width: 768px) {
   .hero {
-    height: clamp(220px, 42vh, 340px);
+    min-height: clamp(400px, 64vh, 540px);
+    padding: clamp(3rem, 9vh, 4.5rem) 0 clamp(2.5rem, 7vh, 3.5rem);
   }
 
   .hero-image-backdrop {
@@ -109,7 +111,7 @@
 
 @media (max-width: 480px) {
   .hero {
-    height: clamp(200px, 38vh, 280px);
+    min-height: clamp(380px, 60vh, 480px);
   }
 
   .hero-tagline {
@@ -458,4 +460,339 @@
   .featured-carousel-dots {
     margin-top: 0.65rem;
   }
+}
+
+/* =========================================================================
+   UPGRADE VISUAL DA PÁGINA INICIAL
+   Assenta na identidade que já existia: fundos escuros, texto creme
+   (--igp-cream), acentos dourados (--igp-gold), display em Georgia e
+   etiquetas em maiúsculas espaçadas.
+   ========================================================================= */
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero-content--brand::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* Bem mais larga do que o texto e com queda gradual: uma vinheta estreita
+     deixava uma aresta visível contra a fotografia. */
+  width: 190vw;
+  height: 150vh;
+  background: radial-gradient(ellipse 32% 34% at center,
+    rgba(4, 5, 7, 0.80) 0%,
+    rgba(4, 5, 7, 0.62) 32%,
+    rgba(4, 5, 7, 0.36) 52%,
+    rgba(4, 5, 7, 0.14) 70%,
+    transparent 86%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-content--brand {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+  padding: 0 1.25rem;
+}
+
+.hero-eyebrow {
+  margin: 0;
+  font-size: clamp(0.6rem, 1.4vw, 0.72rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* O nome da marca deixou de estar escondido: é o elemento principal do hero.
+   Seletor com dois níveis de classe de propósito: main.css tem
+   `.hero-content h1 { font-size: 1.85rem }`, que ganharia a `.hero-title`. */
+.hero-content--brand .hero-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  line-height: 1.02;
+  color: var(--igp-cream, #f0ece4);
+  text-shadow: 0 2px 32px rgba(0, 0, 0, 0.85);
+  font-size: clamp(2.1rem, 7vw, 4.5rem);
+  letter-spacing: 0.04em;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-content--brand .hero-title span {
+  display: block;
+  font-size: 0.52em;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+  margin-top: 0.35em;
+}
+
+.hero-divider {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0.1rem;
+}
+
+.hero-divider span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(107, 128, 104, 0.9), var(--igp-gold, #c9a84c));
+  opacity: 0.9;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: clamp(0.5rem, 1.6vw, 1rem);
+}
+
+/* Botões do hero e do remate final — um sólido, um discreto. */
+.btn-hero {
+  display: inline-block;
+  padding: 0.78rem 1.9rem;
+  border-radius: 2px;
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--igp-gold, #c9a84c);
+  transition: background var(--duration-fast, 0.3s) ease,
+              color var(--duration-fast, 0.3s) ease,
+              border-color var(--duration-fast, 0.3s) ease,
+              transform var(--duration-fast, 0.3s) ease;
+}
+
+.btn-hero--solid {
+  background: var(--igp-gold, #c9a84c);
+  color: #05070a;
+}
+
+.btn-hero--solid:hover,
+.btn-hero--solid:focus-visible {
+  background: #dcbb63;
+  border-color: #dcbb63;
+  color: #05070a;
+  transform: translateY(-2px);
+}
+
+.btn-hero--ghost {
+  background: rgba(8, 8, 8, 0.42);
+  color: var(--igp-cream, #f0ece4);
+  border-color: rgba(201, 168, 76, 0.55);
+}
+
+.btn-hero--ghost:hover,
+.btn-hero--ghost:focus-visible {
+  background: rgba(201, 168, 76, 0.14);
+  border-color: var(--igp-gold, #c9a84c);
+  color: var(--igp-cream, #f0ece4);
+  transform: translateY(-2px);
+}
+
+.btn-hero:focus-visible {
+  outline: 2px solid var(--igp-cream, #f0ece4);
+  outline-offset: 3px;
+}
+
+/* Indicação discreta de que há mais abaixo. */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: clamp(1rem, 3vh, 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 26px;
+  height: 42px;
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+}
+
+.hero-scroll-cue span {
+  display: block;
+  width: 3px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--igp-gold, #c9a84c);
+  animation: scroll-cue 1.9s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: 0.9; }
+  50%      { transform: translateY(12px); opacity: 0.25; }
+}
+
+.hero-scroll-cue:hover {
+  border-color: var(--igp-gold, #c9a84c);
+}
+
+/* Compensa o header fixo quando se salta para a secção seguinte. */
+.anchor-offset {
+  display: block;
+  height: 0;
+  scroll-margin-top: 90px;
+}
+
+/* ── Manifesto ─────────────────────────────────────────────────────────── */
+.brand-manifesto {
+  border-bottom: 1px solid rgba(201, 168, 76, 0.14);
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.045) 0%, transparent 100%);
+  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1rem, 3vw, 2rem);
+}
+
+.manifesto-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.manifesto-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.manifesto-label {
+  font-size: 0.64rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+}
+
+.manifesto-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(240, 236, 228, 0.74);
+  max-width: 34ch;
+}
+
+/* ── Etiqueta dos cabeçalhos de secção ─────────────────────────────────── */
+.section-eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.63rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+  opacity: 0.85;
+}
+
+/* ── Cartões de coleção: mais presença ─────────────────────────────────── */
+.collection-tile {
+  min-height: clamp(220px, 26vw, 280px);
+}
+
+/* Afordância de clique que só aparece no hover/foco. */
+.collection-tile-body::after {
+  content: 'Ver coleção →';
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--igp-gold, #c9a84c);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--duration-fast, 0.3s) ease,
+              transform var(--duration-fast, 0.3s) ease;
+}
+
+.collection-tile:hover .collection-tile-body::after,
+.collection-tile:focus-visible .collection-tile-body::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Alternância tonal entre secções ──────────────────────────────────────
+   Sem isto as secções liam-se como um único vazio preto contínuo. */
+.collections-showcase:nth-of-type(even) {
+  background: radial-gradient(120% 80% at 50% 0%, rgba(201, 168, 76, 0.05) 0%, transparent 62%);
+}
+
+/* ── Remate final ──────────────────────────────────────────────────────── */
+.closing-band {
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 3vw, 2rem);
+  border-top: 1px solid rgba(201, 168, 76, 0.14);
+  background: radial-gradient(90% 120% at 50% 100%, rgba(201, 168, 76, 0.07) 0%, transparent 60%);
+  text-align: center;
+}
+
+.closing-inner {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.closing-title {
+  margin: 0 0 0.9rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 4vw, 2.15rem);
+  letter-spacing: 0.06em;
+  color: var(--igp-cream, #f0ece4);
+  text-wrap: balance;
+}
+
+.closing-text {
+  margin: 0 0 1.6rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(240, 236, 228, 0.7);
+}
+
+.closing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+/* ── Movimento reduzido ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-cue span { animation: none; }
+  .btn-hero,
+  .collection-tile-body::after {
+    transition: none;
+  }
+  .btn-hero:hover,
+  .btn-hero:focus-visible {
+    transform: none;
+  }
+  .collection-tile-body::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Telemóvel ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .hero-scroll-cue { display: none; }
+
+  .hero-eyebrow {
+    letter-spacing: 0.14em;
+    line-height: 1.75;
+    max-width: 30ch;
+  }
+
+  .hero-actions { width: 100%; }
+  .btn-hero { flex: 1 1 auto; text-align: center; padding: 0.78rem 1.1rem; }
+  .manifesto-text { max-width: none; }
 }

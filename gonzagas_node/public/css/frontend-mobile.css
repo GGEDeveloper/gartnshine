@@ -90,11 +90,14 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   }
 }
 
-/* ===== HERO MOBILE (alinhado com homepage.css) ===== */
+/* ===== HERO MOBILE (alinhado com homepage.css) =====
+   O hero deixou de ter altura fixa: com o nome da marca, a tagline e dois
+   botões, uma altura fixa cortava o conteúdo (o eyebrow e o segundo botão
+   ficavam fora). Passa a crescer com o conteúdo — a altura mínima vem de
+   homepage.css. */
 @media (max-width: 768px) {
   .hero {
-    height: clamp(220px, 42vh, 340px) !important;
-    min-height: 0 !important;
+    height: auto !important;
     padding: 0;
   }
 
@@ -112,8 +115,7 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
 @media (max-width: 480px) {
   .hero {
-    height: clamp(200px, 38vh, 280px) !important;
-    min-height: 0 !important;
+    height: auto !important;
   }
 }
 
