@@ -150,6 +150,31 @@ gonzagas_node/
 └── sql/                # Migrações e esquemas
 ```
 
+## 🧭 **Áreas públicas do site**
+
+Três conceitos que é fácil confundir — são coisas diferentes, com dados
+diferentes:
+
+| Rota | O que é | De onde vem |
+|---|---|---|
+| `/catalog` | Catálogo completo, com filtros | `products` |
+| `/collection/:slug` | Página de uma **família** (taxonomia). Inclui os produtos das subcategorias | `product_families` + `products.family_id` |
+| `/colecoes` e `/colecao/:slug` | **Coleções curadas** — conjuntos escolhidos à mão, que podem juntar várias famílias | `collections` + `collection_products` |
+| `/collections` | **Galeria** de fotografias, sem ligação a produtos | `gallery_items` |
+
+`product_families` é uma taxonomia de dois níveis: o nível de topo é o
+**material** (Prata, Latão, Macramé, Pedras Naturais) e os filhos são
+tipo+material (ex.: "Aneis - Prata"). Cada produto pertence a exactamente uma
+família. As **coleções curadas** são independentes desta árvore: são
+muitos-para-muitos e a mesma coleção pode ter peças de várias famílias.
+
+As tabelas `media_collections` / `media_collection_items` são schema morto de
+uma tentativa anterior — ligavam-se a ficheiros de media, não a produtos. Não
+confundir com `collections`.
+
+Geridas no admin em `/admin/collections` (coleções curadas), `/admin/gallery`
+(galeria) e `/admin/site-appearance` (imagens das categorias e fundos).
+
 ## 📊 **Base de Dados**
 
 ### **Tabelas Principais**
@@ -208,7 +233,7 @@ cd gonzagas_node
 # Instalar dependências
     npm install
 
-# Configurar base de dados (ver PRODUCTION_SETUP.md)
+# Configurar base de dados (só em ambiente novo — NUNCA em produção)
 mysql -u root -p < sql/schema.sql
 
 # Configurar ambiente (copiar de .env.example)
@@ -222,7 +247,9 @@ npm start
 ```
 
 ### **Produção**
-Ver o ficheiro detalhado **[PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md)** para instruções completas de instalação em ambiente de produção.
+Produção corre em Docker Compose no servidor waphix. Ver **[DEPLOYMENT.md](./DEPLOYMENT.md)**
+para a stack e para as instruções de deploy por lote de alterações. O antigo
+`PRODUCTION_SETUP.md` era de cPanel e está arquivado em `docs/old/`.
 
 ## 🎯 **Credenciais de Acesso**
 
@@ -279,7 +306,8 @@ Sem nenhuma escolhida (`hero_image = NULL`), `routes/index.js` usa automaticamen
 ## 📖 **Documentação Adicional**
 
 - **[modules/ecommerce/README.md](./modules/ecommerce/README.md)** - E-commerce: activação, Stripe, testes
-- **[PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md)** - Guia completo de instalação em produção
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Stack de produção (waphix / Docker Compose) e deploy
+- **[../docs/SEO/auditoria-tecnica-2026-07-30.md](../docs/SEO/auditoria-tecnica-2026-07-30.md)** - Estado técnico do SEO
 - **[SISTEMA_NOTIFICACOES.md](./SISTEMA_NOTIFICACOES.md)** - Documentação do sistema de notificações
 - **[README_hide_catalog_prices.md](./README_hide_catalog_prices.md)** - Sistema de preços sob consulta
 - **[CREDENCIAIS_ADMIN.md](./CREDENCIAIS_ADMIN.md)** - Lista de utilizadores e credenciais

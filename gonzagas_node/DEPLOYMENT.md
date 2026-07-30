@@ -69,3 +69,18 @@ O deploy é feito atualizando o `app_repo` dentro do servidor waphix
 (pull da branch `main`) e reiniciando o container `artnshine-app` — os
 detalhes exatos do script de redeploy vivem no próprio servidor, não
 neste repositório.
+
+### Instruções por lote de alterações
+
+Cada lote de alterações que exija passos além do pull + restart tem o seu
+documento, com backup obrigatório, condições de paragem e rollback:
+
+| Documento | Lote | Migrações |
+|---|---|---|
+| [`docs/DEPLOY_COLECOES_GALERIA.md`](../docs/DEPLOY_COLECOES_GALERIA.md) | Coleções curadas, Galeria, Aspeto do Site, movimento | 006–009 + semeadura da galeria |
+| [`docs/DEPLOY_HOME_NAV_SEO.md`](../docs/DEPLOY_HOME_NAV_SEO.md) | Página inicial, navegação de Coleções, correções de SEO | nenhuma (só código) |
+
+**Regra que vale para todos:** nunca correr `npm run db:init`,
+`npm run db:reset`, `scripts/setup.js` nem importar dumps SQL para produção —
+apagariam catálogo real. A produção tem produtos e imagens que não existem em
+mais lado nenhum.

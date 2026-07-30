@@ -273,7 +273,7 @@ gunzip < /srv/backups/artnshine/pre_colecoes_<STAMP>.sql.gz \
   Sem capa definida, tanto os cartões da página inicial como o cabeçalho da
   página da coleção usam automaticamente uma fotografia de uma peça dessa
   coleção, por isso nada aparece vazio. Definir capas no admin
-  (`/admin/collections-admin`) é opcional e serve para escolher melhor a
+  (`/admin/collections`) é opcional e serve para escolher melhor a
   imagem.
 - A página **`/admin/media/library` deixou de existir** (dava 404). Era um
   segundo painel a gerir as mesmas imagens que a Galeria. Se alguém tiver esse
