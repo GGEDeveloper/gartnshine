@@ -2,7 +2,7 @@
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `420340f` e `d6b1b9c` em `main`
+**Alcance:** commits `420340f` → `c735999` em `main` (12 commits)
 
 > Deploy anterior: [`DEPLOY_CATEGORIAS_GALERIA.md`](DEPLOY_CATEGORIAS_GALERIA.md).
 > Este lote **assume** que esse já foi aplicado (endereços `/categoria/:slug` e
@@ -32,7 +32,11 @@
 | **Catálogo** | Categorias no topo com as imagens do admin e cartão "Ver todos". Com filtro activo encolhem para uma tira. |
 | **Contagens** | `getMaterialsForHome` passa a respeitar `hide_out_of_stock` — mostrava 409 peças ao lado do total de 220 do catálogo. Afecta também a página inicial. |
 | **Filtros** | Controlos alinhados com a linguagem da marca (arestas vivas, Georgia, seta dourada). |
-| **Transições** | View Transitions entre páginas (CSS puro) e `scroll-behavior` a respeitar movimento reduzido. |
+| **Transições** | View Transitions entre páginas, com a fotografia a acompanhar a navegação (o cartão transforma-se na imagem da ficha). `scroll-behavior` passa a respeitar movimento reduzido. |
+| **Barra de progresso** | Linha fina por baixo do cabeçalho com marcas nas secções, que permitem saltar. |
+| **Setas entre peças** | Anterior/seguinte na ficha, dentro da mesma categoria, com posição ("12 / 90") e transição direccional. |
+| **Correcção de links** | O cartão de produto ligava a `/catalog?family=N` em vez da ficha — e nem filtrava, porque o catálogo lê `families` (plural). |
+| **Cabeçalhos de material** | Prata, Latão e Macramé apareciam sem fotografia: a subquery da imagem de recurso ignorava as subcategorias. |
 
 ### Alterações de base de dados
 
@@ -49,6 +53,35 @@ produtos, encomendas, clientes nem stock.**
 > **Nota de segurança:** `instagram_account.access_token` fica em texto simples,
 > como já acontece com as chaves Stripe. Pertence ao lote de segurança que o
 > dono do projecto adiou. Está assinalado no cabeçalho da migração.
+
+### Correcções de navegação incluídas
+
+Duas afectam links que já estavam em produção:
+
+- **O cartão de produto não levava à ficha.** Em `/categoria/:slug` e
+  `/colecao/:slug` clicar numa peça abria uma listagem. Depois desta
+  alteração o crawl interno passou de **116 para 356 ligações** — as fichas
+  de produto não estavam ligadas a partir de nenhuma página de categoria ou
+  colecção, nem para quem navega nem para o Google.
+- **O cartão não mostrava o nome da peça**, só referência, categoria e preço.
+
+### Sobre as transições
+
+São CSS mais dois pontos que **têm de ficar inline no `<head>`** e não em
+ficheiros externos — está assim no `views/layouts/main.ejs` e não deve ser
+"arrumado" para fora:
+
+1. `@view-transition { navigation: auto }`. Estava em `transitions.css`, a
+   16.ª folha de estilo da página, e a transição **nunca chegava a
+   acontecer**: `pageswap` criava-a e `pagereveal` descartava-a, porque a
+   adesão ainda não tinha sido descoberta.
+2. O listener de `pagereveal` que aplica a direcção das setas. Em
+   `view-transitions.js` (carregado no fim do `<body>`) o evento já tinha
+   passado quando o ficheiro corria.
+
+Onde o browser não suporta View Transitions (hoje sobretudo o Firefox) é
+tudo ignorado e a navegação fica como estava — não há risco de páginas
+esbatidas.
 
 ### O que NÃO está incluído
 
@@ -186,6 +219,28 @@ done
 Todos **200**. `/galeria` tem de continuar a funcionar mesmo sem Instagram
 ligado — a secção do feed simplesmente não aparece.
 
+### O bug dos links foi mesmo corrigido
+
+```bash
+# Nenhum cartão pode continuar a apontar para uma listagem:
+curl -s https://artnshine.pt/categoria/prata | grep -c 'catalog?family='   # esperado: 0
+curl -s https://artnshine.pt/categoria/prata | grep -c '/catalog/product/' # esperado: >0
+```
+
+**Condição de paragem:** se a primeira não der 0, o código novo não está a
+correr — parar e reportar.
+
+### As transições estão activas
+
+```bash
+# A adesão tem de estar inline no <head>, não num ficheiro externo:
+curl -s https://artnshine.pt/ | grep -c '@view-transition'   # esperado: 1
+curl -s https://artnshine.pt/ | grep -c 'scroll-progress.js' # esperado: 1
+```
+
+Se `@view-transition` não aparecer no HTML da própria página, as transições
+não vão acontecer, mesmo que o `transitions.css` carregue.
+
 ### No browser
 
 | Verificar | Esperado |
@@ -198,6 +253,13 @@ ligado — a secção do feed simplesmente não aparece.
 | `/galeria` | Sem Instagram ligado: só a galeria da casa, sem divisória órfã |
 | `/admin` → menu lateral | Tem **Instagram** |
 | `/admin/instagram` | Mostra "Token expirado" e avisa que o do `.env` não pode ser renovado |
+| **Clicar numa peça** em `/categoria/prata` | Abre a **ficha do produto**. Se abrir uma listagem, o deploy não pegou |
+| Cartão de peça | Mostra o **nome** da peça, além da referência e do preço |
+| `/categoria/prata` — cabeçalho | Tem **fotografia** de fundo (antes era liso) |
+| Ficha de produto — fim | Barra com **← Anterior / "12 / 90" / Seguinte →** |
+| Clicar em "Seguinte" | Muda de peça e a página entra **pela direita**; em "Anterior" entra pela esquerda |
+| Qualquer página longa | Linha dourada fina por baixo do cabeçalho, a encher conforme se desce |
+| Marcas na barra | Pontos que saltam para as secções (não aparecem nas categorias — lá o índice lateral já faz isso) |
 
 ### Contagens
 
@@ -239,6 +301,10 @@ cd /srv/stacks/artnshine && docker compose up -d --force-recreate artnshine-app
 As tabelas novas podem ficar — o código antigo ignora-as. **Não é preciso
 reverter a migração.**
 
+Ao reverter, tem-se presente que voltam dois problemas que este lote corrige:
+os cartões de produto deixam outra vez de ligar às fichas, e os cabeçalhos
+de material voltam a ficar sem fotografia. Nenhum deles perde dados.
+
 **Base de dados** (só se as contagens do Passo 6 acusarem perda):
 
 ```bash
@@ -273,3 +339,21 @@ gunzip < /srv/backups/artnshine/pre_instagram_<STAMP>.sql.gz \
   nenhum elemento é escondido.
 - Falha da API do Instagram testada com o token expirado: o erro fica
   registado no admin e as páginas públicas continuam a servir normalmente.
+- **356** ligações internas verificadas, todas 200, nenhuma a passar por
+  redirect (eram 116 antes da correcção do cartão de produto).
+- Transições confirmadas por `document.getAnimations()` e não a olho:
+  `pagina-entra`/`pagina-sai` na navegação do menu,
+  `::view-transition-group(media-produto)` ao clicar numa peça,
+  `peca-entra-direita`/`peca-entra-esquerda` nas setas. Com movimento
+  reduzido a lista vem vazia.
+- Barra de progresso presente nas 6 páginas testadas, com o progresso a
+  acompanhar o scroll.
+
+### Como verificar transições (para quem vier a mexer)
+
+Capturas de ecrã durante uma transição **bloqueiam o browser** e não servem.
+A forma que funciona é, dentro do evento `pagereveal`, esperar por
+`e.viewTransition.ready` e ler `document.getAnimations()` filtrado pelos
+pseudo-elementos `view-transition`. Foi assim que se descobriu que as
+transições não estavam a acontecer de todo, depois de duas verificações
+anteriores as terem dado por boas.
