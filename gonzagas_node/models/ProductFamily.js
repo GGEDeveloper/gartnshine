@@ -38,18 +38,31 @@ class ProductFamily {
    */
   static async getAllForSitemap() {
     try {
+      // Só famílias com produtos activos — próprios ou das subcategorias.
+      // Sem isto entravam no sitemap páginas de listagem vazias (conteúdo
+      // fino, que o Google penaliza).
       const [rows] = await pool.execute(`
-        SELECT id, name, slug, updated_at
-        FROM product_families
-        ORDER BY updated_at DESC
+        SELECT f.id, f.name, f.slug, f.updated_at
+        FROM product_families f
+        WHERE EXISTS (
+          SELECT 1 FROM products p
+          JOIN product_families c ON c.id = p.family_id
+          WHERE p.is_active = 1 AND (c.id = f.id OR c.parent_id = f.id)
+        )
+        ORDER BY f.updated_at DESC
       `);
       return rows;
     } catch (error) {
       if (error.message && error.message.includes("Unknown column 'slug'")) {
         const [rows] = await pool.execute(`
-          SELECT id, name, updated_at
-          FROM product_families
-          ORDER BY updated_at DESC
+          SELECT f.id, f.name, f.updated_at
+          FROM product_families f
+          WHERE EXISTS (
+            SELECT 1 FROM products p
+            JOIN product_families c ON c.id = p.family_id
+            WHERE p.is_active = 1 AND (c.id = f.id OR c.parent_id = f.id)
+          )
+          ORDER BY f.updated_at DESC
         `);
         return rows;
       }

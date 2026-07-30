@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title><%= typeof title !== 'undefined' ? title : 'Admin Login' %></title>
+    <!-- O robots.txt já bloqueia /admin, mas quem chega por link direto não
+         passa pelo robots.txt — o noindex garante que não é indexado. -->
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Favicon -->
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">

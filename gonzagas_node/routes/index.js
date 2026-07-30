@@ -197,6 +197,16 @@ router.get('/colecoes', async (req, res) => {
  * Endereço próprio (/colecao/) para não colidir com /collection/:id, que são as
  * categorias e já está indexado, nem com /collections, que é a galeria de media.
  */
+// Mesma lógica das famílias: uma descrição curta do admin sozinha dá uma
+// meta description fina, por isso junta-se-lhe o contexto da coleção.
+function buildCollectionDescription(collection, productCount) {
+  const base = (collection.description || '').trim().replace(/"/g, "'");
+  const pecas = `${productCount} peça${productCount === 1 ? '' : 's'}`;
+  const contexto = `Coleção ${collection.name} da Gonzaga's Art & Shine: ${pecas} em prata 925, latão e pedras naturais, com envio para todo o país.`;
+  if (base.length >= 80) return base.substring(0, 158);
+  return base ? `${base} ${contexto}`.substring(0, 158) : contexto.substring(0, 158);
+}
+
 router.get('/colecao/:slug', async (req, res) => {
   try {
     const collection = await Collection.getBySlug(req.params.slug);
@@ -212,15 +222,18 @@ router.get('/colecao/:slug', async (req, res) => {
     const ecommerceSettings = await EcommerceSettings.getAll();
     const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
 
+    // Uma coleção pode ter o mesmo nome de uma família ("Pedras Naturais"),
+    // o que daria dois títulos idênticos no Google. O sufixo "Coleção"
+    // distingue-os sem estragar o título.
+    const pageTitle = collection.seo_title || `${collection.name} — Coleção`;
+
     res.render('curated-collection', {
-      title: collection.seo_title || collection.name,
+      title: pageTitle,
       layout: 'layouts/main',
       collection,
       products,
       metaDescription: collection.seo_description
-        || (collection.description
-              ? collection.description.substring(0, 155).replace(/"/g, "'")
-              : `${collection.name} — coleção de joias artesanais Gonzaga's Art & Shine.`),
+        || buildCollectionDescription(collection, products.length),
       canonicalUrl: 'https://artnshine.pt/colecao/' + collection.slug,
       user: req.user || null,
       siteTitle: 'Gonzaga\'s Art & Shine',
@@ -237,6 +250,16 @@ router.get('/colecao/:slug', async (req, res) => {
     });
   }
 });
+
+// Meta description de uma família: usa o texto do admin quando ele já é
+// substancial e, se for curto ou inexistente, junta o contexto do catálogo.
+function buildFamilyDescription(family, productCount) {
+  const base = (family.description || '').trim().replace(/"/g, "'");
+  const contagem = `${productCount} peça${productCount === 1 ? '' : 's'} disponíve${productCount === 1 ? 'l' : 'is'}`;
+  const contexto = `${family.name} da Gonzaga's Art & Shine — ${contagem} em prata 925, latão e pedras naturais, com envio para todo o país.`;
+  if (base.length >= 80) return base.substring(0, 158);
+  return base ? `${base} ${contexto}`.substring(0, 158) : contexto.substring(0, 158);
+}
 
 router.get('/collection/:familyIdOrSlug', async (req, res) => {
   try {
@@ -269,10 +292,10 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
       family,
       products,
       families,
+      // Descrições curtas do admin davam meta descriptions de 30 chars, que o
+      // Google trata como conteúdo fino: completa-se com o contexto da família.
       metaDescription: family.seo_description
-        || (family.description
-              ? family.description.substring(0, 155).replace(/"/g, "'") + '...'
-              : 'Coleção ' + family.name + ' — joias artesanais em prata 925 e pedras naturais. Gonzaga\'s Art & Shine, elegância que nasce da terra.'),
+        || buildFamilyDescription(family, products.length),
       canonicalUrl: 'https://artnshine.pt/collection/' + slugOrId
     });
   } catch (error) {
@@ -295,6 +318,38 @@ router.get('/product/:id/details-uc', ProductController.showProductDetailUnderCo
 router.get('/product/:id', ProductController.showProductDetailUnderConstruction);
 
 // Product detail route for WhatsApp
+// Meta description de um produto, garantindo ~110-160 chars: usa a descrição
+// da ficha e, quando ela é curta, junta material, família e contexto da loja.
+function buildProductDescription(product) {
+  const base = (product.description || '').trim().replace(/\s+/g, ' ').replace(/"/g, "'");
+  if (base.length >= 110) {
+    // Modelos repetidos partilham a mesma descrição de ficha: a referência
+    // evita meta descriptions idênticas em várias páginas.
+    const ref = hasReferenceInSlug(product) ? ` Ref. ${product.reference}.` : '';
+    const limite = 158 - ref.length;
+    return (base.length > limite ? base.substring(0, limite - 3).trimEnd() + '...' : base) + ref;
+  }
+  const extras = [];
+  if (product.material) extras.push(product.material);
+  if (product.family_name) extras.push(product.family_name);
+  if (hasReferenceInSlug(product)) extras.push(`ref. ${product.reference}`);
+  const cauda = `${extras.length ? extras.join(', ') + '. ' : ''}Peça da Gonzaga's Art & Shine, com envio para todo o país.`;
+  const texto = base ? `${base} ${cauda}` : `${product.name}. ${cauda}`;
+  return texto.length > 158 ? texto.substring(0, 155).trimEnd() + '...' : texto;
+}
+
+// 31 modelos existem em várias peças com o mesmo nome. Quando isso acontece,
+// só a primeira fica com o slug igual ao nome e as restantes levam um sufixo
+// (a referência ou "-variante") — é esse o sinal de que o título precisa da
+// referência para não ficar duplicado no Google.
+function hasReferenceInSlug(product) {
+  if (!product.slug || !product.reference) return false;
+  const slugDoNome = String(product.name || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return product.slug !== slugDoNome;
+}
+
 router.get('/catalog/product/:idOrSlug', async (req, res) => {
   try {
     const { idOrSlug } = req.params;
@@ -349,18 +404,10 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       encodedMessage: encodeURIComponent(whatsappMessage)
     };
     
-    // Build rich meta description from available fields
-    let metaDesc;
-    if (product.description && product.description.trim()) {
-      metaDesc = product.description.substring(0, 155).replace(/"/g, "'") + '...';
-    } else {
-      const parts = [product.name];
-      if (product.material) parts.push(product.material);
-      if (product.family_name) parts.push(product.family_name);
-      parts.push("Gonzaga's Art & Shine");
-      metaDesc = parts.join(' — ') + '. Elegância que nasce da terra.';
-      if (metaDesc.length > 160) metaDesc = metaDesc.substring(0, 157) + '...';
-    }
+    // Meta description: a descrição da ficha é a melhor fonte, mas muitas são
+    // de uma linha só (~40 chars) e sozinhas dariam snippets finos. Nesses
+    // casos completa-se com material, família e contexto da loja.
+    const metaDesc = buildProductDescription(product);
 
     const productSlugOrId = product.slug || id;
     const baseUrl = process.env.BASE_URL || 'https://artnshine.pt';
@@ -394,7 +441,9 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       relatedProducts,
       catalogBackUrl: safeCatalogReturnUrl(req.query.return),
       layout: 'layouts/main',
-      title: `${product.name} - Gonzaga's Art & Shine`,
+      title: hasReferenceInSlug(product)
+        ? `${product.name} (${product.reference})`
+        : product.name,
       siteTitle: 'Gonzaga\'s Art & Shine',
       metaDescription: metaDesc,
       canonicalUrl: `${baseUrl}/catalog/product/${productSlugOrId}`,
@@ -583,14 +632,20 @@ router.get('/about', (req, res) => {
 // Privacy Policy page
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
-    title: 'Política de Privacidade'
+    title: 'Política de Privacidade',
+    // Sem isto herdava a descrição genérica do site, ficando igual à do
+    // catálogo e dos termos — três páginas com a mesma meta description.
+    metaDescription: 'Como a Gonzaga\'s Art & Shine recolhe, usa e protege os seus dados pessoais, e quais são os seus direitos ao abrigo do RGPD.',
+    canonicalUrl: 'https://artnshine.pt/privacy-policy'
   });
 });
 
 // Terms of Service page
 router.get('/terms-of-service', (req, res) => {
   res.render('terms-of-service', {
-    title: 'Termos de Serviço'
+    title: 'Termos de Serviço',
+    metaDescription: 'Condições de utilização da loja Gonzaga\'s Art & Shine: encomendas, pagamentos, envios, trocas e devoluções de joias em prata 925.',
+    canonicalUrl: 'https://artnshine.pt/terms-of-service'
   });
 });
 

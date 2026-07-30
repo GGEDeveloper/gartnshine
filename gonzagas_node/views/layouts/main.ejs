@@ -8,7 +8,18 @@
   <meta name="google-site-verification" content="-_FeGat-XpwLOs3WEoMLcCUnb95_95LgamxM1EZCrHs">
 
   <!-- SEO: Title dinâmico -->
-  <title><%= typeof title !== 'undefined' && title ? (title.includes('Art&Shine') ? title : title + ' | Art&Shine') : 'Art&Shine — Elegância que nasce da terra' %></title>
+  <%
+    // O sufixo da marca só entra se o título continuar a caber no resultado
+    // do Google (~60 chars). Nos nomes de produto mais longos vale mais
+    // manter o nome completo visível do que a marca repetida.
+    let _pageTitle = (typeof title !== 'undefined' && title) ? title : '';
+    if (!_pageTitle) {
+      _pageTitle = 'Art&Shine — Elegância que nasce da terra';
+    } else if (!_pageTitle.includes('Art&Shine') && _pageTitle.length + 12 <= 60) {
+      _pageTitle += ' | Art&Shine';
+    }
+  %>
+  <title><%= _pageTitle %></title>
 
   <!-- SEO Meta Tags dinâmicas -->
   <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra — Gonzaga\'s Art & Shine.') %>">

@@ -112,6 +112,9 @@ class CatalogController {
         title: 'Catálogo',
         currentPath: '/catalog',
         layout: 'layouts/main',
+        // A descrição genérica do site era curta e repetia-se noutras páginas.
+        metaDescription: 'Catálogo completo de joias artesanais em prata 925, latão e pedras naturais — anéis, colares, brincos e pulseiras. Filtre por material, tipo e preço.',
+        canonicalUrl: 'https://artnshine.pt/catalog',
         products: result.products,
         families: familiesForView,
         familiesTree,

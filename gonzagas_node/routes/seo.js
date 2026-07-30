@@ -135,7 +135,10 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.8</priority>`;
 
       if (product.main_image) {
-        const imageUrl = `${baseUrl}/uploads/products/${product.main_image}`;
+        // As imagens vivem em /media/products/, não /uploads/ — este caminho
+        // dava 404 em todas as imagens do sitemap. Usa a variante -medium,
+        // como o feed do Merchant Center já fazia.
+        const imageUrl = `${baseUrl}/media/products/${product.main_image.replace(/\.[^.]+$/, '')}-medium.jpg`;
         const imageTitle = product.name.replace(/&/g, '&amp;').replace(/</g, '&lt;');
         sitemap += `
     <image:image>
