@@ -141,7 +141,7 @@ class UserRights extends BaseModel {
         export_info: {
           exported_at: new Date().toISOString(),
           data_controller: "Gonzaga's Art & Shine",
-          contact_email: "geral@artnshine.pt",
+          contact_email: "g.art.shine@gmail.com",
           website: "https://artnshine.pt"
         },
         user_data: userData,

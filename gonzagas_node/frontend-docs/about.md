@@ -34,7 +34,7 @@ A página About é composta por quatro secções principais:
 - Ícones de redes sociais:
   - **Instagram**: https://www.instagram.com/gonzagaartnshine/
   - **Facebook**: https://www.facebook.com/profile.php?id=61574526369910
-  - **Email**: Botão com ícone de envelope, abre o cliente de email para geral@artnshine.pt
+  - **Email**: Botão com ícone de envelope, abre o cliente de email para g.art.shine@gmail.com
 - Todos os ícones usam SVG para visual moderno e responsivo.
 
 ---

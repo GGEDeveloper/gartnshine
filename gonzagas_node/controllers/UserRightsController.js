@@ -290,7 +290,7 @@ class UserRightsController {
             <hr style="border: 1px solid #eee; margin: 30px 0;">
             <p style="color: #666; font-size: 12px;">
               Gonzaga's Art & Shine - Cumprimento do RGPD<br>
-              Email: geral@artnshine.pt<br>
+              Email: g.art.shine@gmail.com<br>
               Website: https://artnshine.pt
             </p>
           </div>
@@ -352,7 +352,7 @@ class UserRightsController {
             <hr style="border: 1px solid #eee; margin: 30px 0;">
             <p style="color: #666; font-size: 12px;">
               Gonzaga's Art & Shine - Cumprimento do RGPD<br>
-              Email: geral@artnshine.pt<br>
+              Email: g.art.shine@gmail.com<br>
               Website: https://artnshine.pt
             </p>
           </div>
