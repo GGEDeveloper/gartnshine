@@ -210,7 +210,12 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(5, 7, 10, 0.88) 0%, rgba(5, 7, 10, 0.45) 55%, rgba(5, 7, 10, 0.25) 100%);
+  background: linear-gradient(to top,
+    rgba(5, 7, 10, 0.92) 0%,
+    rgba(5, 7, 10, 0.84) 24%,
+    rgba(5, 7, 10, 0.52) 50%,
+    rgba(5, 7, 10, 0.26) 76%,
+    rgba(5, 7, 10, 0.16) 100%);
   transition: background var(--duration-fast, 0.3s) ease;
 }
 
@@ -226,7 +231,12 @@
 }
 
 .collection-tile:hover::before {
-  background: linear-gradient(to top, rgba(5, 7, 10, 0.92) 0%, rgba(5, 7, 10, 0.5) 60%, rgba(5, 7, 10, 0.2) 100%);
+  background: linear-gradient(to top,
+    rgba(5, 7, 10, 0.94) 0%,
+    rgba(5, 7, 10, 0.86) 26%,
+    rgba(5, 7, 10, 0.54) 54%,
+    rgba(5, 7, 10, 0.22) 78%,
+    rgba(5, 7, 10, 0.10) 100%);
 }
 
 .collection-tile:focus-visible {
@@ -243,6 +253,7 @@
 }
 
 .collection-tile-name {
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: 300;
@@ -252,6 +263,7 @@
 }
 
 .collection-tile-count {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -785,6 +797,16 @@
 /* ── Telemóvel ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero-scroll-cue { display: none; }
+
+  /* Alvo de toque confortável (ficava a ~44px, no limite). */
+  .btn-collections-gallery,
+  .btn-hero {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 
   .hero-eyebrow {
     letter-spacing: 0.14em;
