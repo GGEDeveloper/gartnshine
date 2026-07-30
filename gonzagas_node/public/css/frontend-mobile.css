@@ -13,12 +13,19 @@
 
 /* Prevent horizontal overflow */
 html {
+  /* `hidden` num destes elementos transforma-os em contentor de scroll e
+     quebra `position: sticky` em todos os descendentes — era o que impedia o
+     índice lateral das categorias de colar. `clip` corta na mesma o
+     transbordo horizontal mas não cria contentor de scroll. Fica a seguir a
+     `hidden` para que browsers sem suporte de `clip` mantenham o antigo. */
   overflow-x: hidden;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Fluid typography - mobile first */

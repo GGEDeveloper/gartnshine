@@ -44,6 +44,14 @@ mas `create` e `update` nunca a escreviam. Resultado: **as 25 categorias
 estavam todas a NULL** e produção servia 23 URLs numéricos indexados
 (`/collection/16`). O Passo 3 preenche-os.
 
+### Uma alteração de CSS global
+
+`html`/`body` tinham `overflow-x: hidden`, o que os torna contentor de scroll e
+quebra `position: sticky` em toda a página — era o que impedia o índice lateral
+de colar. Passaram a `overflow-x: clip`, com `hidden` declarado antes como
+recurso para browsers antigos. Foi verificado que **nenhuma** das 12 páginas
+principais ganha scroll horizontal, em 6 tamanhos de ecrã.
+
 ### Alterações de base de dados
 
 **Nenhuma migração de schema.** A única escrita é o preenchimento da coluna
@@ -226,6 +234,7 @@ curl -s https://artnshine.pt/sitemap.xml | grep -c 'artnshine.pt/galeria'      #
 |---|---|
 | `https://artnshine.pt/categoria/prata` | Produtos **agrupados por subcategoria** (Aneis, Brincos, Colares...) com índice lateral fixo à esquerda |
 | Clicar num item do índice | Salta para o bloco e o item fica marcado a dourado |
+| Fazer scroll numa categoria de topo | O índice **fica colado** ao lado enquanto os produtos passam. Se ele desaparecer para cima, o `overflow-x: clip` de `main.css`/`frontend-mobile.css` não foi aplicado |
 | Continuar a fazer scroll | O item marcado acompanha a secção em que se está |
 | Telemóvel, `/categoria/prata` | O índice passa a barra horizontal colada ao topo, deslizável |
 | `https://artnshine.pt/categoria/aneis-prata` | Sem índice (não tem subcategorias), mas com "Mais em Prata" no fim e o selector de ordenação |
