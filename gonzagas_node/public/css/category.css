@@ -342,3 +342,31 @@ body.showcase-theme .category-page {
     transition: none;
   }
 }
+
+/* Nome da peça no cartão. Não existia — o cartão mostrava referência,
+   categoria e preço, mas não o nome, e não havia forma de chegar à ficha. */
+.product-card .product-name {
+  margin: 0.15rem 0 0.4rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+
+.product-card .product-name a {
+  color: var(--igp-cream, #f0ece4);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.product-card .product-name a:hover,
+.product-card .product-name a:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card .product-name a {
+    transition: none;
+  }
+}

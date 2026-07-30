@@ -1,26 +1,21 @@
 <div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>" data-product-id="<%= product.id %>">
   <div class="product-image">
     <%
-      const catalogLink = product.family_id ? `/catalog?family=${product.family_id}` : '/catalog';
+      // O cartão liga à FICHA DO PRODUTO. Antes ligava a `/catalog?family=N`,
+      // o que levava quem clicasse numa peça para uma listagem — e nem sequer
+      // filtrava, porque o catálogo lê `families` (plural) e isto mandava
+      // `family`. A ramificação alternativa (abrir a imagem em lightbox) só
+      // era usada por um ficheiro .backup e foi removida.
+      const produtoLink = `/catalog/product/${product.slug || product.id}`;
       const cardImg = productImg(product.image_url, 'small');
-      const fullImg = productImg(product.image_url, 'full');
     %>
 
-    <% if (typeof isCatalogPage !== 'undefined' && isCatalogPage) { %>
-      <a href="<%= fullImg.jpg %>" class="glightbox d-block mb-2" data-glightbox="type: image" data-gallery="gallery-<%= product.id %>" aria-label="Ampliar imagem de <%= product.name %>">
-        <picture>
-          <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
-          <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
-        </picture>
-      </a>
-    <% } else { %>
-      <a href="<%= catalogLink %>" class="d-block mb-2" aria-label="Ver produtos da categoria <%= product.family_name || 'Catálogo' %>">
-        <picture>
-          <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
-          <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
-        </picture>
-      </a>
-    <% } %>
+    <a href="<%= produtoLink %>" class="d-block mb-2" aria-label="Ver <%= product.name %>">
+      <picture>
+        <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
+        <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+      </picture>
+    </a>
   </div>
   <div class="product-info">
     <% if (product.reference) { %>
@@ -29,6 +24,13 @@
     <% if (product.family_name) { %>
       <p class="product-family mb-1"><small class="text-highlight"><%= product.family_name %></small></p>
     <% } %>
+    <%
+      // O nome não aparecia no cartão — só referência, categoria e preço.
+      // Quem via uma peça numa categoria não sabia como se chamava.
+    %>
+    <h3 class="product-name">
+      <a href="<%= produtoLink %>"><%= product.name %></a>
+    </h3>
     <p class="product-price">
       <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
         <span class="text-muted fst-italic">Preço sob consulta</span>

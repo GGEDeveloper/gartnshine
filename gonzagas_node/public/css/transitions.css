@@ -63,6 +63,59 @@
 }
 
 /* ---------------------------------------------------------------------
+   Profundidade (parallax) na troca de página.
+
+   O cabeçalho de cada listagem leva nome próprio e uma animação diferente
+   da do corpo: move-se menos e demora mais. É essa diferença de velocidade
+   entre camadas que se lê como profundidade — se tudo se mover igual, a
+   página parece uma folha só a deslizar.
+
+   As páginas de categoria ficam de fora de propósito: aí o cabeçalho já é o
+   elemento partilhado que vem do cartão (`media-categoria`), e dar-lhe dois
+   papéis ao mesmo tempo estragava o efeito melhor dos dois.
+   --------------------------------------------------------------------- */
+
+.collections-index-header,
+.catalog-header,
+.collections-header,
+.about-header {
+  view-transition-name: cabecalho-pagina;
+}
+
+::view-transition-group(cabecalho-pagina) {
+  animation-duration: 760ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Camada de fundo: entra devagar e de mais longe, mas com menos deslocação
+   vertical do que o corpo — é o que dá a sensação de estar "atrás". */
+::view-transition-new(cabecalho-pagina) {
+  animation: 760ms cubic-bezier(0.16, 1, 0.3, 1) both cabecalho-entra;
+}
+
+::view-transition-old(cabecalho-pagina) {
+  animation: 260ms cubic-bezier(0.55, 0, 1, 0.45) both cabecalho-sai;
+}
+
+@keyframes cabecalho-entra {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cabecalho-sai {
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.995);
+  }
+}
+
+/* ---------------------------------------------------------------------
    Elemento partilhado: a fotografia acompanha a navegação.
    Ao clicar num cartão de produto, aquela fotografia transforma-se na
    fotografia grande da ficha, em vez de a página trocar inteira. Os nomes

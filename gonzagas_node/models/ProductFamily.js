@@ -74,11 +74,16 @@ class ProductFamily {
     try {
       const isNumeric = /^\d+$/.test(String(idOrSlug));
       const [rows] = await pool.query(
+        // A imagem de recurso tem de procurar na ÁRVORE, não só na própria
+        // família: as categorias de topo (Prata, Latão…) não têm produtos
+        // directos — estão todos nas subcategorias. Sem isto, as páginas de
+        // material ficavam sem fotografia no cabeçalho.
         `SELECT f.*,
                 (SELECT pi.image_filename
                    FROM product_images pi
-                   JOIN products p2 ON p2.id = pi.product_id
-                  WHERE p2.family_id = f.id AND p2.is_active = 1
+                   JOIN products p2 ON p2.id = pi.product_id AND p2.is_active = 1
+                   JOIN product_families c2 ON c2.id = p2.family_id
+                  WHERE c2.id = f.id OR c2.parent_id = f.id
                   ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
                   LIMIT 1) AS fallback_image
            FROM product_families f
