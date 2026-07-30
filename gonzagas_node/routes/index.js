@@ -507,7 +507,11 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       `Ver produto: ${baseUrl}/catalog/product/${productSlugOrId}`
     );
 
-    res.render('catalog/product-detail', { 
+    // Peças vizinhas na mesma categoria, para as setas da ficha.
+    const vizinhas = await Product.getAdjacentInFamily(product.id, product.family_id);
+
+    res.render('catalog/product-detail', {
+      vizinhas, 
       product, 
       whatsappData,
       whatsappNotifyMsg,

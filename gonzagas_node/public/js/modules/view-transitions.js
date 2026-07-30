@@ -80,6 +80,22 @@
     if (!href.startsWith('/')) return;
 
     if (href.startsWith('/catalog/product/')) {
+      // Setas anterior/seguinte: a direcção do clique decide o lado por onde
+      // a página nova entra, para as setas parecerem percorrer uma sequência
+      // em vez de saltar entre páginas soltas.
+      var direccao = alvo.getAttribute('data-direccao');
+      if (direccao) {
+        // A direcção tem de viajar para o documento de DESTINO: numa
+        // transição entre documentos, os pseudo-elementos (tanto o
+        // `-old` como o `-new`) são desenhados no contexto da página que
+        // entra, por isso uma classe posta aqui no <html> não teria efeito
+        // nenhum. Vai por sessionStorage e é aplicada no `pagereveal`.
+        try { sessionStorage.setItem('vt-direccao', direccao); } catch (_) {}
+        // Sem elemento partilhado nesta navegação: a fotografia nova não vem
+        // de nenhuma miniatura, e forçá-la daria um salto estranho.
+        return;
+      }
+
       var cartao = alvo.closest('.product-card') || alvo;
       marcar(cartao.querySelector('img'), NOME_PRODUTO);
       return;

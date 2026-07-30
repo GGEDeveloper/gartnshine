@@ -26,39 +26,49 @@
    ficheiro, que é o último de dezasseis, chegar a ser lido. Aqui ficam só as
    animações. */
 
+/*
+ * Durações e curvas.
+ *
+ * A primeira versão tinha a saída a 300ms com uma curva agressiva e a
+ * entrada a 620ms com `clip-path`. Duas coisas corriam mal: a página que
+ * saía desaparecia muito antes de a nova assentar, deixando um vazio a
+ * meio; e o `clip-path` obriga o browser a recortar um retrato inteiro da
+ * página a cada fotograma, o que numa listagem de 30.000px se sente.
+ *
+ * Agora as duas sobrepõem-se quase todo o tempo — é a sobreposição que faz
+ * a troca parecer contínua em vez de sequencial — e o movimento é feito só
+ * com `opacity` e `transform`, que o browser compõe sem repintar.
+ */
 ::view-transition-old(root) {
-  animation: 300ms cubic-bezier(0.55, 0, 1, 0.45) both pagina-sai;
+  animation: 420ms cubic-bezier(0.33, 0, 0.2, 1) both pagina-sai;
 }
 
 ::view-transition-new(root) {
-  animation: 620ms cubic-bezier(0.16, 1, 0.3, 1) both pagina-entra;
+  animation: 560ms cubic-bezier(0.22, 0.61, 0.24, 1) both pagina-entra;
 }
 
-/* A página que sai recua e some-se — dá a sensação de ficar para trás,
-   em vez de simplesmente desaparecer. */
+/* Sobrepõe as duas: a que entra começa quase ao mesmo tempo que a que sai,
+   em vez de esperar que ela desapareça. */
+::view-transition-group(root) {
+  animation-duration: 560ms;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.24, 1);
+}
+
 @keyframes pagina-sai {
   to {
     opacity: 0;
-    transform: scale(0.985) translateY(-14px);
+    transform: scale(0.992) translateY(-10px);
   }
 }
 
-/* A que entra sobe e revela-se por baixo de uma máscara que abre de cima
-   para baixo, como um véu a levantar. É este `clip-path` que dá o
-   movimento — só a opacidade era demasiado discreto. */
 @keyframes pagina-entra {
   from {
     opacity: 0;
-    transform: translateY(34px) scale(1.008);
-    clip-path: inset(14% 0 0 0);
-  }
-  60% {
-    opacity: 1;
+    transform: translateY(22px);
   }
   to {
     opacity: 1;
     transform: none;
-    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -239,5 +249,223 @@
     main {
       animation: none;
     }
+  }
+}
+
+/* =====================================================================
+   4. BARRA DE PROGRESSO DA PÁGINA
+   =====================================================================
+   Linha fina colada por baixo do cabeçalho (que é sticky, 61px, z-index
+   1000). Fica um pouco abaixo em z para nunca tapar o menu.
+
+   As marcas são as secções com título visível — uma marca que salta para
+   um sítio sem cabeçalho deixa quem clica sem saber onde caiu.
+   ===================================================================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 61px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 999;
+  background: rgba(201, 168, 76, 0.1);
+  pointer-events: none;
+}
+
+.scroll-progress-line {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg,
+    rgba(201, 168, 76, 0.5) 0%,
+    var(--igp-gold, #c9a84c) 100%);
+  /* Sem transição no `transform`: o valor é actualizado a cada fotograma
+     pelo scroll, e uma transição por cima disso dá um arrasto atrasado. */
+}
+
+.scroll-progress-mark {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(240, 236, 228, 0.28);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* O alvo de toque real é maior do que o ponto visível — 7px seria
+   impossível de acertar. */
+.scroll-progress-mark::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+}
+
+.scroll-progress-mark:hover,
+.scroll-progress-mark:focus-visible {
+  background: var(--igp-cream, #f0ece4);
+  transform: scale(1.5);
+}
+
+.scroll-progress-mark.is-active {
+  background: var(--igp-gold, #c9a84c);
+  transform: scale(1.4);
+}
+
+@media (max-width: 1024px) {
+  .scroll-progress {
+    top: 56px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Em telemóvel o espaço vertical é precioso e as marcas ficam demasiado
+     juntas para se acertar nelas: fica só o progresso. */
+  .scroll-progress-mark {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-mark {
+    transition: none;
+  }
+}
+
+/* =====================================================================
+   5. SETAS ENTRE PEÇAS DA MESMA CATEGORIA
+   ===================================================================== */
+
+.peca-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 2rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+.peca-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.35rem 0.5rem;
+  max-width: 42%;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.peca-nav-link:hover,
+.peca-nav-link:focus-visible {
+  color: var(--igp-cream, #f0ece4);
+}
+
+.peca-nav-seta {
+  font-size: 1.1rem;
+  color: var(--igp-gold, #c9a84c);
+  flex: 0 0 auto;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.peca-nav-anterior:hover .peca-nav-seta { transform: translateX(-4px); }
+.peca-nav-seguinte:hover .peca-nav-seta { transform: translateX(4px); }
+
+.peca-nav-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.peca-nav-seguinte .peca-nav-texto {
+  text-align: right;
+}
+
+.peca-nav-rotulo {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+.peca-nav-nome {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  /* Nomes de peça chegam aos 62 caracteres: cortar em vez de partir a barra. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.peca-nav-posicao {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Transição direccional: ao avançar, a página nova entra pela direita; ao
+ * recuar, pela esquerda. É o que faz as setas parecerem percorrer uma
+ * sequência em vez de saltar entre páginas soltas.
+ *
+ * As classes são postas em `js/modules/view-transitions.js` no momento do
+ * clique, e ficam no <html> para poderem condicionar os pseudo-elementos.
+ */
+html.vt-seguinte::view-transition-old(root) {
+  animation: 380ms cubic-bezier(0.33, 0, 0.2, 1) both peca-sai-esquerda;
+}
+
+html.vt-seguinte::view-transition-new(root) {
+  animation: 520ms cubic-bezier(0.22, 0.61, 0.24, 1) both peca-entra-direita;
+}
+
+html.vt-anterior::view-transition-old(root) {
+  animation: 380ms cubic-bezier(0.33, 0, 0.2, 1) both peca-sai-direita;
+}
+
+html.vt-anterior::view-transition-new(root) {
+  animation: 520ms cubic-bezier(0.22, 0.61, 0.24, 1) both peca-entra-esquerda;
+}
+
+@keyframes peca-sai-esquerda  { to   { opacity: 0; transform: translateX(-4%); } }
+@keyframes peca-entra-direita { from { opacity: 0; transform: translateX(5%); } }
+@keyframes peca-sai-direita   { to   { opacity: 0; transform: translateX(4%); } }
+@keyframes peca-entra-esquerda{ from { opacity: 0; transform: translateX(-5%); } }
+
+@media (max-width: 768px) {
+  .peca-nav-nome {
+    display: none;
+  }
+
+  .peca-nav-link {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peca-nav-link,
+  .peca-nav-seta {
+    transition: none;
+  }
+
+  html.vt-seguinte::view-transition-old(root),
+  html.vt-seguinte::view-transition-new(root),
+  html.vt-anterior::view-transition-old(root),
+  html.vt-anterior::view-transition-new(root) {
+    animation: none !important;
   }
 }

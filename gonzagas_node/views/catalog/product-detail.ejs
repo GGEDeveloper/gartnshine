@@ -406,6 +406,46 @@
     </p>
     <% } %>
     
+    <%
+      // ===== Setas entre peças da mesma categoria =====
+      // Permitem percorrer a categoria sem voltar atrás. A ordem é a mesma
+      // da página da categoria, senão as setas levariam a uma sequência
+      // diferente da que se estava a ver.
+      var viz = (typeof vizinhas !== 'undefined' && vizinhas) ? vizinhas : null;
+      var temViz = viz && (viz.anterior || viz.seguinte);
+    %>
+    <% if (temViz) { %>
+      <nav class="peca-nav" aria-label="Navegar entre peças de <%= product.family_name || 'esta categoria' %>">
+        <% if (viz.anterior) { %>
+          <a class="peca-nav-link peca-nav-anterior"
+             href="/catalog/product/<%= viz.anterior.slug || viz.anterior.id %>"
+             rel="prev" data-direccao="anterior">
+            <span class="peca-nav-seta" aria-hidden="true">&larr;</span>
+            <span class="peca-nav-texto">
+              <span class="peca-nav-rotulo">Anterior</span>
+              <span class="peca-nav-nome"><%= viz.anterior.name %></span>
+            </span>
+          </a>
+        <% } else { %><span></span><% } %>
+
+        <% if (viz.posicao) { %>
+          <span class="peca-nav-posicao"><%= viz.posicao %> / <%= viz.total %></span>
+        <% } %>
+
+        <% if (viz.seguinte) { %>
+          <a class="peca-nav-link peca-nav-seguinte"
+             href="/catalog/product/<%= viz.seguinte.slug || viz.seguinte.id %>"
+             rel="next" data-direccao="seguinte">
+            <span class="peca-nav-texto">
+              <span class="peca-nav-rotulo">Seguinte</span>
+              <span class="peca-nav-nome"><%= viz.seguinte.name %></span>
+            </span>
+            <span class="peca-nav-seta" aria-hidden="true">&rarr;</span>
+          </a>
+        <% } else { %><span></span><% } %>
+      </nav>
+    <% } %>
+
     <div class="product-detail-grid">
         <!-- Left: Image Gallery -->
         <div class="product-gallery-section">

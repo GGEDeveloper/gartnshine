@@ -357,6 +357,45 @@ class Product extends BaseModel {
     }
   }
 
+  /**
+   * Peça anterior e seguinte dentro da mesma categoria, para navegar na
+   * ficha sem ter de voltar atrás.
+   *
+   * A ordem é a mesma que a página da categoria usa (`f.name, p.reference`),
+   * senão as setas levariam a uma sequência diferente da que se estava a ver.
+   * Dá a volta nas pontas: da última salta para a primeira.
+   */
+  static async getAdjacentInFamily(productId, familyId) {
+    try {
+      const [rows] = await pool.query(`
+        SELECT p.id, p.name, p.slug, p.reference,
+               (SELECT pi.image_filename FROM product_images pi
+                 WHERE pi.product_id = p.id
+                 ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC
+                 LIMIT 1) AS image_url
+          FROM products p
+          JOIN product_families f ON p.family_id = f.id
+         WHERE p.is_active = 1 AND p.family_id = ?
+         ORDER BY f.name, p.reference
+      `, [familyId]);
+
+      if (rows.length < 2) return { anterior: null, seguinte: null, posicao: null, total: rows.length };
+
+      const i = rows.findIndex((r) => Number(r.id) === Number(productId));
+      if (i === -1) return { anterior: null, seguinte: null, posicao: null, total: rows.length };
+
+      return {
+        anterior: rows[(i - 1 + rows.length) % rows.length],
+        seguinte: rows[(i + 1) % rows.length],
+        posicao: i + 1,
+        total: rows.length
+      };
+    } catch (error) {
+      console.error('Error getting adjacent products:', error);
+      return { anterior: null, seguinte: null, posicao: null, total: 0 };
+    }
+  }
+
   // Count products by family
   static async countByFamily(familyId) {
     try {

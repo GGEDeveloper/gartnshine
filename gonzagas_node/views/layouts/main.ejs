@@ -15,6 +15,31 @@
   %>
   <style>@view-transition { navigation: auto; }</style>
 
+  <%
+    /* O `pagereveal` dispara antes de qualquer script no fim do <body>
+       correr, por isso a direcção das setas anterior/seguinte tem de ser
+       aplicada aqui. Foi medido: com o listener em view-transitions.js a
+       animação que saía era sempre a genérica, porque o evento já tinha
+       passado quando o ficheiro era executado. */
+  %>
+  <script>
+    (function () {
+      if (!('startViewTransition' in document)) return;
+      window.addEventListener('pagereveal', function (e) {
+        var d;
+        try { d = sessionStorage.getItem('vt-direccao'); sessionStorage.removeItem('vt-direccao'); }
+        catch (err) { return; }
+        if (!d || !e.viewTransition) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var raiz = document.documentElement;
+        var classe = d === 'seguinte' ? 'vt-seguinte' : 'vt-anterior';
+        raiz.classList.add(classe);
+        e.viewTransition.finished.catch(function () {})
+          .then(function () { raiz.classList.remove(classe); });
+      });
+    })();
+  </script>
+
   <!-- Google Search Console Verification -->
   <meta name="google-site-verification" content="-_FeGat-XpwLOs3WEoMLcCUnb95_95LgamxM1EZCrHs">
 
@@ -301,6 +326,7 @@
     <script src="/js/modules/motion.js"></script>
     <script src="/js/modules/category-index.js?v=<%= app.version %>"></script>
     <script src="/js/modules/view-transitions.js?v=<%= app.version %>"></script>
+    <script src="/js/modules/scroll-progress.js?v=<%= app.version %>"></script>
     <script src="/js/main.js"></script>
     <script src="/js/notifications.js"></script>
     <script src="/js/frontend-mobile-navigation-fix.js"></script>
