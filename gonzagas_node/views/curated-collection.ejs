@@ -17,6 +17,18 @@
       <% if (collection.description) { %>
         <p class="collection-description"><%= collection.description %></p>
       <% } %>
+      <%
+        // Uma coleção pode juntar peças de várias famílias — mostrar quais
+        // ajuda a perceber o que está ali dentro.
+        const familias = [...new Set(products.map(p => p.family_name).filter(Boolean))];
+      %>
+      <% if (familias.length > 0) { %>
+        <p class="collection-meta">
+          <span><%= products.length %> peça<%= products.length === 1 ? '' : 's' %></span>
+          <span class="collection-meta-sep">·</span>
+          <span><%= familias.join(' · ') %></span>
+        </p>
+      <% } %>
     </div>
   </section>
 
@@ -38,6 +50,7 @@
   <section class="collection-nav">
     <h3>Continuar a explorar</h3>
     <div class="collections-list">
+      <a href="/colecoes" class="collection-link">Todas as coleções</a>
       <a href="/catalog" class="collection-link">Catálogo completo</a>
       <a href="/collections" class="collection-link">Galeria de Peças</a>
     </div>

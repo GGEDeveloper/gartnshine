@@ -101,6 +101,18 @@ describe('Coleções curadas', () => {
     expect(after).toBe(before);
   });
 
+  test('índice /colecoes lista a coleção e mostra as famílias que ela junta', async () => {
+    const res = await request(app).get('/colecoes').expect(200);
+    expect(res.text).toMatch(/collection-index-card/);
+
+    // Uma coleção pode juntar peças de várias famílias — o cartão tem de as
+    // mostrar, senão não se percebe o que está lá dentro.
+    const actives = await Collection.getActiveWithCounts();
+    const minha = actives.find((c) => c.id === collectionId);
+    expect(minha).toBeDefined();
+    expect(minha.family_names).toBeTruthy();
+  });
+
   test('coleção oculta deixa de estar acessível', async () => {
     const c = await Collection.getById(collectionId);
     await Collection.updateContent(collectionId, {

@@ -38,6 +38,10 @@ class Collection {
       const [rows] = await pool.query(
         `SELECT c.id, c.name, c.slug, c.description, c.hero_image, c.card_image,
                 COUNT(p.id) AS product_count,
+                COUNT(DISTINCT p.family_id) AS family_count,
+                -- Uma coleção pode juntar peças de várias famílias; guardamos os
+                -- nomes para as mostrar sem uma segunda consulta por coleção.
+                GROUP_CONCAT(DISTINCT f.name ORDER BY f.name SEPARATOR ' · ') AS family_names,
                 (SELECT pi.image_filename
                    FROM collection_products cp2
                    JOIN products p2 ON p2.id = cp2.product_id AND p2.is_active = 1
@@ -48,6 +52,7 @@ class Collection {
            FROM collections c
            JOIN collection_products cp ON cp.collection_id = c.id
            JOIN products p ON p.id = cp.product_id AND p.is_active = 1
+           LEFT JOIN product_families f ON f.id = p.family_id
           WHERE c.is_active = 1
           GROUP BY c.id, c.name, c.slug, c.description, c.hero_image, c.card_image
           ORDER BY c.sort_order ASC, c.name ASC`

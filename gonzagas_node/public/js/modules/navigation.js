@@ -12,35 +12,22 @@ window.GonzagaNavigation = (function() {
   /**
    * Highlight active navigation item (desktop + mobile drawer)
    */
+  /**
+   * O item activo do menu é decidido no servidor (views/partials/header.ejs),
+   * que conhece a rota real.
+   *
+   * Havia aqui uma segunda implementação que recalculava tudo no cliente a
+   * partir de window.location e limpava a classe `active` das ligações que não
+   * reconhecia. Como era uma lista fixa de endereços, qualquer página nova
+   * ficava sem item activo — foi o que aconteceu com /colecoes. Duas fontes de
+   * verdade para a mesma coisa; ficou só a do servidor.
+   *
+   * O site faz navegação com carregamento completo de página, por isso o
+   * servidor sabe sempre onde estamos e não é preciso recalcular no cliente.
+   */
   function highlightActiveNav() {
-    const currentPath = window.location.pathname;
-
-    const isHome = currentPath === '/' || currentPath === '/index.html';
-    const isCollections = currentPath === '/collections' || currentPath.startsWith('/collection/');
-    const isCatalog = currentPath === '/catalog' || currentPath.startsWith('/catalog/');
-    const isAbout = currentPath === '/about';
-    const isCart = currentPath === '/cart';
-    const isAdmin = currentPath.startsWith('/admin');
-
-    const matchers = [
-      { test: (href) => href === '/' && isHome, href: '/' },
-      { test: (href) => href === '/collections' && isCollections, href: '/collections' },
-      { test: (href) => href === '/catalog' && isCatalog, href: '/catalog' },
-      { test: (href) => href === '/about' && isAbout, href: '/about' },
-      { test: (href) => href === '/cart' && isCart, href: '/cart' },
-      { test: (href) => href === '/admin' && isAdmin, href: '/admin' }
-    ];
-
-    document.querySelectorAll('.nav-menu a, .mobile-nav-link[href]').forEach(link => {
-      const href = link.getAttribute('href');
-      if (!href || href.startsWith('http') || href.startsWith('mailto:')) return;
-
-      link.classList.remove('active');
-      const match = matchers.find(m => m.href === href && m.test(href));
-      if (match) link.classList.add('active');
-    });
-
-    GonzagaUtils.log(MODULE_NAME, `Active nav highlighted for path: ${currentPath}`);
+    const activos = document.querySelectorAll('.nav-menu a.active, .mobile-nav-link.active');
+    GonzagaUtils.log(MODULE_NAME, `Active nav from server: ${activos.length} item(s)`);
   }
 
   /**

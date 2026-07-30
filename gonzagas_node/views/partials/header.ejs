@@ -1,7 +1,12 @@
 <%
   const navPath = typeof currentPath !== 'undefined' ? currentPath : '';
   const isHome = navPath === '/' || navPath === '';
-  const isCollections = navPath === '/collections' || navPath.startsWith('/collection/');
+  // Três coisas distintas, três estados: coleções curadas (/colecoes,
+  // /colecao/:slug), galeria de media (/collections) e páginas de
+  // categoria/material (/collection/:id).
+  const isColecoes = navPath === '/colecoes' || navPath.startsWith('/colecao/')
+    || navPath.startsWith('/collection/');
+  const isGaleria = navPath === '/collections';
   const isCatalog = navPath === '/catalog' || navPath.startsWith('/catalog/');
   const isAbout = navPath === '/about';
   const isCart = navPath === '/cart';
@@ -23,10 +28,11 @@
     <nav class="main-nav desktop-nav" aria-label="Navegação principal">
       <ul class="nav-menu">
         <li><a href="/" class="<%= isHome ? 'active' : '' %>">Início</a></li>
-        <li><a href="/collections" class="<%= isCollections ? 'active' : '' %>">Coleções</a></li>
+        <li><a href="/colecoes" class="<%= isColecoes ? 'active' : '' %>">Coleções</a></li>
         <% if (catalogEnabled) { %>
         <li><a href="/catalog" class="<%= isCatalog ? 'active' : '' %>">Catálogo</a></li>
         <% } %>
+        <li><a href="/collections" class="<%= isGaleria ? 'active' : '' %>">Galeria</a></li>
         <li><a href="/about" class="<%= isAbout ? 'active' : '' %>">Sobre</a></li>
 
         <% if (typeof user !== 'undefined' && user) { %>
@@ -97,7 +103,7 @@
         <span>Início</span>
       </a>
 
-      <a href="/collections" class="mobile-nav-link <%= isCollections ? 'active' : '' %>">
+      <a href="/colecoes" class="mobile-nav-link <%= isColecoes ? 'active' : '' %>">
         <i class="fas fa-layer-group" aria-hidden="true"></i>
         <span>Coleções</span>
       </a>
@@ -108,6 +114,11 @@
         <span>Catálogo</span>
       </a>
       <% } %>
+
+      <a href="/collections" class="mobile-nav-link <%= isGaleria ? 'active' : '' %>">
+        <i class="fas fa-images" aria-hidden="true"></i>
+        <span>Galeria</span>
+      </a>
 
       <a href="/about" class="mobile-nav-link <%= isAbout ? 'active' : '' %>">
         <i class="fas fa-info-circle" aria-hidden="true"></i>

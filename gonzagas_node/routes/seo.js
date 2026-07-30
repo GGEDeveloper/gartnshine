@@ -10,6 +10,7 @@
  *   /catalog/product/:id     → catalog/product-detail.ejs
  *   /collections             → collections.ejs  (Galeria de Peças — media)
  *   /collection/:familyId    → collection.ejs   (categoria/família)
+ *   /colecoes                → curated-collections.ejs (índice de coleções)
  *   /colecao/:slug           → curated-collection.ejs (coleção curada)
  *   /about                   → about.ejs
  *   /privacy-policy          → privacy-policy.ejs
@@ -58,6 +59,12 @@ router.get('/sitemap.xml', async (req, res) => {
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/colecoes</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>${baseUrl}/collections</loc>
@@ -168,6 +175,7 @@ Allow: /about
 Allow: /collections
 Allow: /collection/
 Allow: /colecao/
+Allow: /colecoes
 Disallow: /admin/
 Disallow: /api/
 Disallow: /uploads/temp/

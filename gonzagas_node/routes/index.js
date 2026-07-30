@@ -163,6 +163,36 @@ router.get('/collections', async (req, res) => {
 
 // Collection page - Show products by family
 /**
+ * Índice das coleções curadas. Endereço próprio (/colecoes) porque
+ * /collections é a galeria de media, que é outra coisa.
+ */
+router.get('/colecoes', async (req, res) => {
+  try {
+    const collections = await Collection.getActiveWithCounts();
+
+    res.render('curated-collections', {
+      title: 'Coleções',
+      layout: 'layouts/main',
+      collections,
+      metaDescription: 'Coleções de joias artesanais Gonzaga\'s Art & Shine — conjuntos escolhidos peça a peça em prata 925, latão e pedras naturais.',
+      canonicalUrl: 'https://artnshine.pt/colecoes',
+      user: req.user || null,
+      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteDescription: 'Elegância que nasce da terra',
+      success_msg: req.flash('success_msg'),
+      error_msg: req.flash('error_msg')
+    });
+  } catch (error) {
+    console.error('Error loading collections index:', error);
+    res.status(500).render('error', {
+      title: 'Erro',
+      message: 'Falha ao carregar as coleções.',
+      layout: false
+    });
+  }
+});
+
+/**
  * Coleção curada — conjunto de peças escolhidas à mão no admin.
  * Endereço próprio (/colecao/) para não colidir com /collection/:id, que são as
  * categorias e já está indexado, nem com /collections, que é a galeria de media.

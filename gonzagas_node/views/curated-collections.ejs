@@ -1,0 +1,62 @@
+<div class="collections-index">
+  <section class="collections-index-header">
+    <p class="section-eyebrow">Curadoria</p>
+    <h1>Coleções</h1>
+    <div class="geometric-divider" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <p class="collections-index-lead">
+      Conjuntos escolhidos peça a peça. Uma coleção pode juntar anéis, colares ou pulseiras —
+      o que a define é o critério, não o tipo de peça.
+    </p>
+  </section>
+
+  <% if (collections && collections.length > 0) { %>
+    <div class="collections-index-grid">
+      <% collections.forEach(function(col) {
+        const tileImage = col.card_image
+          || col.hero_image
+          || (col.fallback_image ? productImg(col.fallback_image, 'medium').jpg : null);
+      %>
+        <a class="collection-index-card<%= tileImage ? ' has-image' : '' %>" href="/colecao/<%= col.slug %>">
+          <span class="collection-index-card-media"
+                <% if (tileImage) { %>style="background-image: url('<%= encodeURI(tileImage) %>');"<% } %>
+                aria-hidden="true"></span>
+          <span class="collection-index-card-body">
+            <span class="collection-index-card-name"><%= col.name %></span>
+            <% if (col.description) { %>
+              <span class="collection-index-card-desc"><%= col.description %></span>
+            <% } %>
+            <span class="collection-index-card-meta">
+              <span class="collection-index-card-count">
+                <%= col.product_count %> peça<%= Number(col.product_count) === 1 ? '' : 's' %>
+              </span>
+              <% if (col.family_names) { %>
+                <span class="collection-index-card-families"><%= col.family_names %></span>
+              <% } %>
+            </span>
+          </span>
+        </a>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="collections-index-empty">
+      <p>As coleções estão a ser preparadas. Entretanto, veja o catálogo completo.</p>
+      <a href="/catalog" class="btn-hero btn-hero--solid">Ver catálogo</a>
+    </div>
+  <% } %>
+
+  <section class="collections-index-cta">
+    <a href="/catalog" class="btn-collections-gallery">Ver catálogo completo</a>
+    <a href="/collections" class="btn-collections-gallery">Galeria de peças</a>
+  </section>
+</div>
+
+<%- include('partials/schema-breadcrumb', {
+  breadcrumbs: [
+    { name: 'Início', url: '/' },
+    { name: 'Coleções', url: '/colecoes' }
+  ]
+}) %>
