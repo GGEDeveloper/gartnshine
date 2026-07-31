@@ -1,4 +1,5 @@
 const ProductFamily = require('../models/ProductFamily');
+const brand = require('../config/brand');
 const {
   parseSelectedFamilyIds,
   parseMultiParam,
@@ -153,8 +154,8 @@ class CatalogController {
         initialFacets: result.facets,
         familyNameById,
         catalogReturnPath: serializeCatalogQuery(req.query),
-        siteTitle: "Gonzaga's Art & Shine",
-        siteDescription: 'Elegância que nasce da terra',
+        siteTitle: brand.nome,
+        siteDescription: brand.mote,
         theme: 'dark',
         helpers: {
           isFamilySelected: function (familyId) {

@@ -4,7 +4,7 @@
       <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-content hero-content--brand">
         <p class="hero-eyebrow">Prata 925 &middot; Latão &middot; Pedras Naturais &middot; Macramé</p>
-        <h1 class="hero-title">Gonzaga's<span>Art &amp; Shine</span></h1>
+        <h1 class="hero-title"><%= brand.nome %><span>Jewellery</span></h1>
         <div class="geometric-divider hero-divider" aria-hidden="true">
           <span></span>
           <span></span>
@@ -167,14 +167,14 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "@id": "https://artnshine.pt/#homepage",
-  "name": "Gonzaga's Art & Shine — Elegância que nasce da terra",
+  "name": "<%= brand.nomeSeo %> — Elegância que nasce da terra",
   "description": "Joias artesanais em prata 925, latão banhado a prata e pedras naturais. Elegância que nasce da terra.",
   "url": "https://artnshine.pt/",
   "isPartOf": { "@id": "https://artnshine.pt/#website" },
   "about": { "@id": "https://artnshine.pt/#organization" },
   "mainEntity": {
     "@type": "ItemList",
-    "name": "Coleção Gonzaga's Art & Shine",
+    "name": "Coleção <%= brand.nomeSeo %>",
     "description": "Joias artesanais em prata 925 e pedras naturais",
     "numberOfItems": "270+",
     "itemListOrder": "https://schema.org/ItemListUnordered"

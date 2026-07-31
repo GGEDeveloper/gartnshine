@@ -455,8 +455,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Global app variables
-app.locals.siteTitle = 'Gonzaga\'s Art & Shine';
-app.locals.siteDescription = 'Elegância que nasce da terra';
+// A marca vive em config/brand.js. Fica em app.locals para estar disponível
+// em todas as vistas como `brand.*` sem cada rota ter de a passar.
+app.locals.brand = require('./config/brand');
+app.locals.siteTitle = app.locals.brand.nome;
+app.locals.siteDescription = app.locals.brand.mote;
 app.locals.theme = {
   colorPrimary: '#000000',
   colorSecondary: '#000000',

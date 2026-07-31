@@ -50,36 +50,37 @@
     // manter o nome completo visível do que a marca repetida.
     let _pageTitle = (typeof title !== 'undefined' && title) ? title : '';
     if (!_pageTitle) {
-      _pageTitle = 'Art&Shine — Elegância que nasce da terra';
-    } else if (!_pageTitle.includes('Art&Shine') && _pageTitle.length + 12 <= 60) {
-      _pageTitle += ' | Art&Shine';
+      _pageTitle = brand.nomeSeo + ' — ' + brand.mote;
+    } else if (!_pageTitle.includes(brand.sufixoTitulo)
+               && _pageTitle.length + brand.sufixoTitulo.length + 3 <= 60) {
+      _pageTitle += ' | ' + brand.sufixoTitulo;
     }
   %>
   <title><%= _pageTitle %></title>
 
   <!-- SEO Meta Tags dinâmicas -->
-  <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra — Gonzaga\'s Art & Shine.') %>">
-  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' && metaKeywords ? metaKeywords : 'prata 925, joias artesanais, pedras naturais, ónix, olho-de-tigre, ametista, turquesa, Gonzaga Art Shine, joias dark nature, prata alternativa, elegância natural, Portugal' %>">
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : ('Joias artesanais em prata 925 e pedras naturais. ' + brand.mote + ' — ' + brand.nomeSeo + '.')) %>">
+  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' && metaKeywords ? metaKeywords : 'prata 925, joias artesanais, pedras naturais, ónix, olho-de-tigre, ametista, turquesa, joias dark nature, prata alternativa, elegância natural, Portugal' %>">
   <meta name="robots" content="<%= typeof metaRobots !== 'undefined' && metaRobots ? metaRobots : 'index, follow' %>">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
 
   <!-- Open Graph -->
-  <meta property="og:site_name" content="Art&Shine">
+  <meta property="og:site_name" content="<%= brand.nome %>">
   <meta property="og:locale" content="pt_PT">
   <meta property="og:type" content="<%= typeof ogType !== 'undefined' && ogType ? ogType : 'website' %>">
-  <meta property="og:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Elegância que nasce da terra' %>">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' && title ? title : brand.nomeSeo + ' — ' + brand.mote %>">
   <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.') %>">
   <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
   <meta property="og:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Art&Shine — Elegância que nasce da terra">
+  <meta property="og:image:alt" content="<%= brand.nomeSeo %> — <%= brand.mote %>">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<%= typeof title !== 'undefined' && title ? title : 'Art&Shine' %>">
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' && title ? title : brand.nomeSeo %>">
   <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof siteDescription !== 'undefined' ? siteDescription : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.') %>">
   <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' && ogImage ? ogImage : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + '/images/og-artnshine.jpg' %>">
 
@@ -91,8 +92,8 @@
       {
         "@type": "OnlineStore",
         "@id": "https://artnshine.pt/#organization",
-        "name": "Gonzaga's Art & Shine",
-        "alternateName": "Art&Shine",
+        "name": <%- JSON.stringify(brand.nomeSeo) %>,
+        "alternateName": <%- JSON.stringify([brand.nome, brand.nomeAnterior]) %>,
         "description": "Joias artesanais em prata 925, latão banhado a prata e pedras naturais. Elegância que nasce da terra.",
         "url": "https://artnshine.pt",
         "logo": {
@@ -100,13 +101,13 @@
           "@id": "https://artnshine.pt/#logo",
           "url": "https://artnshine.pt/logo.svg",
           "contentUrl": "https://artnshine.pt/logo.svg",
-          "caption": "Gonzaga's Art & Shine"
+          "caption": <%- JSON.stringify(brand.nomeSeo) %>
         },
         "image": { "@id": "https://artnshine.pt/#logo" },
         "contactPoint": {
           "@type": "ContactPoint",
-          "email": "g.art.shine@gmail.com",
-          "telephone": "+351939500592",
+          "email": <%- JSON.stringify(brand.email) %>,
+          "telephone": <%- JSON.stringify(brand.telefone) %>,
           "contactType": "Customer Service",
           "areaServed": "PT",
           "availableLanguage": "Portuguese"
@@ -116,15 +117,15 @@
           "addressCountry": "PT"
         },
         "sameAs": [
-          "https://www.instagram.com/gonzagaartnshine/",
-          "https://www.facebook.com/profile.php?id=61573519807731"
+          <%- JSON.stringify(brand.redes.instagram) %>,
+          <%- JSON.stringify(brand.redes.facebook) %>
         ]
       },
       {
         "@type": "WebSite",
         "@id": "https://artnshine.pt/#website",
         "url": "https://artnshine.pt",
-        "name": "Art&Shine",
+        "name": <%- JSON.stringify(brand.nomeSeo) %>,
         "description": "Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.",
         "publisher": { "@id": "https://artnshine.pt/#organization" },
         "inLanguage": "pt-PT",
@@ -141,7 +142,7 @@
         "@type": "WebPage",
         "@id": "<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>#webpage",
         "url": "<%= typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : ((typeof app !== 'undefined' && app && app.baseUrl) ? app.baseUrl : 'https://artnshine.pt') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>",
-        "name": "<%= typeof title !== 'undefined' && title ? title : 'Art&Shine — Elegância que nasce da terra' %>",
+        "name": <%- JSON.stringify(typeof title !== 'undefined' && title ? title : brand.nomeSeo + ' — ' + brand.mote) %>,
         "isPartOf": { "@id": "https://artnshine.pt/#website" },
         "about": { "@id": "https://artnshine.pt/#organization" },
         "inLanguage": "pt-PT"
@@ -177,7 +178,7 @@
     "sku": "<%= product.reference || product.id %>",
     "brand": {
       "@type": "Brand",
-      "name": "Gonzaga's Art & Shine"
+      "name": <%- JSON.stringify(brand.nomeSeo) %>
     },
     "image": ["<%= _mainImageUrl %>"],
     "offers": {

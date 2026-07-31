@@ -1,17 +1,17 @@
 <%
   // Helper: garante que variável existe e tem valor
-  const _title = typeof title !== 'undefined' && title ? title : 'Art&Shine — Elegância que nasce da terra';
-  const _desc = typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof meta !== 'undefined' && meta && meta.description ? meta.description : 'Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra — Gonzaga\'s Art & Shine.');
+  const _title = typeof title !== 'undefined' && title ? title : (brand.nome + ' — ' + brand.mote);
+  const _desc = typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : (typeof meta !== 'undefined' && meta && meta.description ? meta.description : ('Joias artesanais em prata 925 e pedras naturais. ' + brand.mote + ' — ' + brand.nomeSeo + '.'));
   const _canonical = typeof canonicalUrl !== 'undefined' && canonicalUrl ? canonicalUrl : (typeof meta !== 'undefined' && meta && meta.canonical ? meta.canonical : 'https://artnshine.pt');
   const _ogImage = typeof ogImage !== 'undefined' && ogImage ? ogImage : 'https://artnshine.pt/images/og-artnshine.jpg';
 %>
-<title><%= _title.includes('Art&Shine') ? _title : _title + ' | Art&Shine' %></title>
+<title><%= _title.includes(brand.nome) ? _title : _title + ' | ' + brand.nome %></title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="<%= _desc %>">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="<%= _canonical %>">
-<meta property="og:site_name" content="Art&Shine">
+<meta property="og:site_name" content="<%= brand.nome %>">
 <meta property="og:type" content="<%= typeof ogType !== 'undefined' && ogType ? ogType : 'website' %>">
 <meta property="og:title" content="<%= _title %>">
 <meta property="og:description" content="<%= _desc %>">

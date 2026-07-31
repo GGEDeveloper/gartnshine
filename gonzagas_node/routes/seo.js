@@ -22,6 +22,23 @@
  */
 const express = require('express');
 const router = express.Router();
+const brand = require('../config/brand');
+
+/**
+ * Escape de XML. Vive ao nível do módulo porque é precisa tanto no sitemap
+ * como no feed do Merchant — estava declarada dentro da rota do feed e o
+ * sitemap rebentava com ReferenceError ao tentar usá-la.
+ */
+const escXml = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+};
+
 const Product = require('../models/Product');
 const ProductFamily = require('../models/ProductFamily');
 const Collection = require('../models/Collection');
@@ -148,7 +165,7 @@ router.get('/sitemap.xml', async (req, res) => {
     <image:image>
       <image:loc>${imageUrl}</image:loc>
       <image:title>${imageTitle}</image:title>
-      <image:caption>Gonzaga's Art &amp; Shine — ${imageTitle}</image:caption>
+      <image:caption>${escXml(brand.nomeSeo)} — ${imageTitle}</image:caption>
     </image:image>`;
       }
 
@@ -203,20 +220,11 @@ router.get('/feed/products.xml', async (req, res) => {
 
     const products = await Product.getAllForMerchantFeed();
 
-    const escXml = (str) => {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
-    };
 
     let feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>Gonzaga's Art &amp; Shine</title>
+    <title>${escXml(brand.nomeSeo)}</title>
     <link>${baseUrl}</link>
     <description>Joias artesanais em prata 925 e pedras naturais. Elegância que nasce da terra.</description>`;
 
@@ -234,7 +242,7 @@ router.get('/feed/products.xml', async (req, res) => {
       const availability = product.current_stock > 0 ? 'in_stock' : 'out_of_stock';
       const desc = product.description
         ? escXml(product.description.substring(0, 5000))
-        : escXml(`${product.name} — Joia artesanal Gonzaga's Art & Shine. ${product.material || 'Prata 925'} com pedras naturais.`);
+        : escXml(`${product.name} — Joia artesanal ${brand.assinatura}. ${product.material || 'Prata 925'} com pedras naturais.`);
 
       const familyLower = (product.family_name || '').toLowerCase();
       const color = product.color
@@ -251,7 +259,7 @@ router.get('/feed/products.xml', async (req, res) => {
       <g:price>${price} EUR</g:price>
       <g:availability>${availability}</g:availability>
       <g:condition>new</g:condition>
-      <g:brand>Gonzaga's Art &amp; Shine</g:brand>
+      <g:brand>${escXml(brand.nomeSeo)}</g:brand>
       <g:mpn>${escXml(product.reference || String(product.id))}</g:mpn>
       <g:product_type>${escXml(product.family_name || 'Joias')}</g:product_type>
       <g:google_product_category>188</g:google_product_category>

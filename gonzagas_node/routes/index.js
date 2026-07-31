@@ -11,6 +11,7 @@ const EcommerceSettings = require('../modules/ecommerce/settings/models/Ecommerc
 const { formatRow } = require('../services/catalogQueryService');
 const GalleryItem = require('../models/GalleryItem');
 const Collection = require('../models/Collection');
+const brand = require('../config/brand');
 const InstagramAccount = require('../models/InstagramAccount');
 const instagramSync = require('../services/instagramSyncService');
 
@@ -104,9 +105,9 @@ router.get('/', async (req, res) => {
     const igPosts = await instagramSync.getMediaPublica(6);
 
     res.render('index', {
-      title: 'Art&Shine — Elegância que nasce da terra',
+      title: `${brand.nomeSeo} — ${brand.mote}`,
       layout: 'layouts/main',
-      metaDescription: 'Joias artesanais em prata 925 e pedras naturais. Descubra a coleção Gonzaga\'s Art & Shine — elegância que nasce da terra, feita em Portugal.',
+      metaDescription: `Joias artesanais em prata 925 e pedras naturais. Descubra a coleção ${brand.assinatura} — ${brand.mote.toLowerCase()}, em Portugal.`,
       canonicalUrl: 'https://artnshine.pt/',
       featured: featured || [],
       families: families || [],
@@ -118,8 +119,8 @@ router.get('/', async (req, res) => {
       featuredBackground,
       mediaStripBackground,
       igPosts,
-      siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra',
+      siteTitle: brand.nome,
+      siteDescription: brand.mote,
       theme: 'dark'
     });
   } catch (error) {
@@ -163,12 +164,12 @@ router.get('/galeria', async (req, res) => {
       layout: 'layouts/main',
       instagramMedia,
       instagramUsername,
-      metaDescription: 'Galeria de joias artesanais Gonzaga\'s Art & Shine. Prata 925, latão banhado a prata e pedras naturais — ónix, olho-de-tigre, ametista e turquesa.',
+      metaDescription: `Galeria de joias artesanais ${brand.assinatura}. Prata 925, latão banhado a prata e pedras naturais — ónix, olho-de-tigre, ametista e turquesa.`,
       canonicalUrl: 'https://artnshine.pt/galeria',
       images: imageFiles,
       user: req.user || null,
-      siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra',
+      siteTitle: brand.nome,
+      siteDescription: brand.mote,
       theme: 'dark',
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
@@ -197,11 +198,11 @@ router.get('/colecoes', async (req, res) => {
       title: 'Coleções',
       layout: 'layouts/main',
       collections,
-      metaDescription: 'Coleções de joias artesanais Gonzaga\'s Art & Shine — conjuntos escolhidos peça a peça em prata 925, latão e pedras naturais.',
+      metaDescription: `Coleções de joias artesanais ${brand.assinatura} — conjuntos escolhidos peça a peça em prata 925, latão e pedras naturais.`,
       canonicalUrl: 'https://artnshine.pt/colecoes',
       user: req.user || null,
-      siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra',
+      siteTitle: brand.nome,
+      siteDescription: brand.mote,
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });
@@ -225,7 +226,7 @@ router.get('/colecoes', async (req, res) => {
 function buildCollectionDescription(collection, productCount) {
   const base = (collection.description || '').trim().replace(/"/g, "'");
   const pecas = `${productCount} peça${productCount === 1 ? '' : 's'}`;
-  const contexto = `Coleção ${collection.name} da Gonzaga's Art & Shine: ${pecas} em prata 925, latão e pedras naturais, com envio para todo o país.`;
+  const contexto = `Coleção ${collection.name} da ${brand.assinatura}: ${pecas} em prata 925, latão e pedras naturais, com envio para todo o país.`;
   if (base.length >= 80) return base.substring(0, 158);
   return base ? `${base} ${contexto}`.substring(0, 158) : contexto.substring(0, 158);
 }
@@ -259,8 +260,8 @@ router.get('/colecao/:slug', async (req, res) => {
         || buildCollectionDescription(collection, products.length),
       canonicalUrl: 'https://artnshine.pt/colecao/' + collection.slug,
       user: req.user || null,
-      siteTitle: 'Gonzaga\'s Art & Shine',
-      siteDescription: 'Elegância que nasce da terra',
+      siteTitle: brand.nome,
+      siteDescription: brand.mote,
       success_msg: req.flash('success_msg'),
       error_msg: req.flash('error_msg')
     });
@@ -279,7 +280,7 @@ router.get('/colecao/:slug', async (req, res) => {
 function buildFamilyDescription(family, productCount) {
   const base = (family.description || '').trim().replace(/"/g, "'");
   const contagem = `${productCount} peça${productCount === 1 ? '' : 's'} disponíve${productCount === 1 ? 'l' : 'is'}`;
-  const contexto = `${family.name} da Gonzaga's Art & Shine — ${contagem} em prata 925, latão e pedras naturais, com envio para todo o país.`;
+  const contexto = `${family.name} da ${brand.assinatura} — ${contagem} em prata 925, latão e pedras naturais, com envio para todo o país.`;
   if (base.length >= 80) return base.substring(0, 158);
   return base ? `${base} ${contexto}`.substring(0, 158) : contexto.substring(0, 158);
 }
@@ -407,7 +408,7 @@ function buildProductDescription(product) {
   if (product.material) extras.push(product.material);
   if (product.family_name) extras.push(product.family_name);
   if (hasReferenceInSlug(product)) extras.push(`ref. ${product.reference}`);
-  const cauda = `${extras.length ? extras.join(', ') + '. ' : ''}Peça da Gonzaga's Art & Shine, com envio para todo o país.`;
+  const cauda = `${extras.length ? extras.join(', ') + '. ' : ''}Peça da ${brand.assinatura}, com envio para todo o país.`;
   const texto = base ? `${base} ${cauda}` : `${product.name}. ${cauda}`;
   return texto.length > 158 ? texto.substring(0, 155).trimEnd() + '...' : texto;
 }
@@ -522,7 +523,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
       title: hasReferenceInSlug(product)
         ? `${product.name} (${product.reference})`
         : product.name,
-      siteTitle: 'Gonzaga\'s Art & Shine',
+      siteTitle: brand.nome,
       metaDescription: metaDesc,
       canonicalUrl: `${baseUrl}/catalog/product/${productSlugOrId}`,
       ogImage: product.images && product.images.length > 0 ? `${baseUrl}/media/products/${product.images[0].replace(/\.[^.]+$/, '')}-medium.jpg` : undefined,
@@ -702,7 +703,7 @@ router.get('/instagram-lab', (req, res) => res.redirect(301, '/galeria'));
 router.get('/about', (req, res) => {
   res.render('about', { 
     title: 'Sobre Nós',
-    metaDescription: 'Gonzaga\'s Art & Shine nasceu da paixão por transformar pedras naturais e prata 925 em joias com alma. Elegância que nasce da terra, criada em Portugal.',
+    metaDescription: `A ${brand.assinatura} nasceu da paixão por transformar pedras naturais e prata 925 em joias com alma. ${brand.mote}, em Portugal.`,
     canonicalUrl: 'https://artnshine.pt/about'
   });
 });
@@ -713,7 +714,7 @@ router.get('/privacy-policy', (req, res) => {
     title: 'Política de Privacidade',
     // Sem isto herdava a descrição genérica do site, ficando igual à do
     // catálogo e dos termos — três páginas com a mesma meta description.
-    metaDescription: 'Como a Gonzaga\'s Art & Shine recolhe, usa e protege os seus dados pessoais, e quais são os seus direitos ao abrigo do RGPD.',
+    metaDescription: `Como a ${brand.assinatura} recolhe, usa e protege os seus dados pessoais, e quais são os seus direitos ao abrigo do RGPD.`,
     canonicalUrl: 'https://artnshine.pt/privacy-policy'
   });
 });
@@ -722,7 +723,7 @@ router.get('/privacy-policy', (req, res) => {
 router.get('/terms-of-service', (req, res) => {
   res.render('terms-of-service', {
     title: 'Termos de Serviço',
-    metaDescription: 'Condições de utilização da loja Gonzaga\'s Art & Shine: encomendas, pagamentos, envios, trocas e devoluções de joias em prata 925.',
+    metaDescription: `Condições de utilização da loja ${brand.assinatura}: encomendas, pagamentos, envios, trocas e devoluções de joias em prata 925.`,
     canonicalUrl: 'https://artnshine.pt/terms-of-service'
   });
 });

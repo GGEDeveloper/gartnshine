@@ -4,15 +4,15 @@
       <div class="col-lg-10">
         <div class="privacy-policy-content">
           <h1 class="privacy-title">Política de Privacidade</h1>
-          <p class="privacy-subtitle">Gonzaga's Art & Shine</p>
+          <p class="privacy-subtitle"><%= brand.nomeSeo %></p>
           <p class="last-updated">Última atualização: <%= new Date().toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
 
           <div class="privacy-section">
             <h2>1. Informações Gerais</h2>
-            <p>A Gonzaga's Art & Shine ("nós", "nosso" ou "empresa") respeita a sua privacidade e está comprometida em proteger os seus dados pessoais. Esta política de privacidade descreve como coletamos, usamos e protegemos as suas informações pessoais em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).</p>
+            <p>A <%= brand.nomeSeo %> ("nós", "nosso" ou "empresa") respeita a sua privacidade e está comprometida em proteger os seus dados pessoais. Esta política de privacidade descreve como coletamos, usamos e protegemos as suas informações pessoais em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).</p>
             
             <h3>1.1 Responsável pelo Tratamento</h3>
-            <p><strong>Gonzaga's Art & Shine</strong><br>
+            <p><strong><%= brand.nomeSeo %></strong><br>
             Website: <a href="https://artnshine.pt">artnshine.pt</a><br>
             Email: <a href="mailto:g.art.shine@gmail.com">g.art.shine@gmail.com</a></p>
           </div>
@@ -241,7 +241,7 @@
             <p>Para questões sobre esta política de privacidade ou os seus dados pessoais:</p>
             
                     <div class="contact-info">
-          <p><strong>Gonzaga's Art & Shine</strong><br>
+          <p><strong><%= brand.nomeSeo %></strong><br>
           Email: <a href="mailto:g.art.shine@gmail.com">g.art.shine@gmail.com</a><br>
           Website: <a href="https://artnshine.pt">artnshine.pt</a></p>
         </div>

@@ -766,7 +766,7 @@
         item_category: '<%= (product.family_name || 'Sem categoria').replace(/'/g, "\\'") %>',
         price: <%= product.sale_price ? parseFloat(product.sale_price).toFixed(2) : 0 %>,
         quantity: 1,
-        item_brand: "Gonzaga's Art & Shine"
+        item_brand: "<%= brand.nomeSeo %>"
       }]
     });
   });

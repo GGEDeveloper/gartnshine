@@ -1,4 +1,5 @@
 const { pool } = require('../config/database');
+const brand = require('../config/brand');
 const BaseModel = require('./BaseModel');
 const crypto = require('crypto');
 const fs = require('fs').promises;
@@ -140,7 +141,7 @@ class UserRights extends BaseModel {
       const exportData = {
         export_info: {
           exported_at: new Date().toISOString(),
-          data_controller: "Gonzaga's Art & Shine",
+          data_controller: "${brand.nomeSeo}",
           contact_email: "g.art.shine@gmail.com",
           website: "https://artnshine.pt"
         },

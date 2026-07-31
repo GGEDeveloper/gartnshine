@@ -1,4 +1,5 @@
 const UserRights = require('../models/UserRights');
+const brand = require('../config/brand');
 const nodemailer = require('nodemailer');
 const fs = require('fs').promises;
 
@@ -8,7 +9,7 @@ class UserRightsController {
   static async userRightsPage(req, res) {
     try {
       res.render('user-rights', {
-        title: 'Seus Direitos - Gonzaga\'s Art & Shine',
+        title: `Seus Direitos - ${brand.nomeSeo}`,
         currentPage: 'user-rights',
         sessionId: req.session.id || req.sessionID
       });
@@ -102,7 +103,7 @@ class UserRightsController {
       await this.sendCompletionEmail(request.email, request.request_type, result);
 
       res.render('request-confirmed', {
-        title: 'Solicitação Confirmada - Gonzaga\'s Art & Shine',
+        title: `Solicitação Confirmada - ${brand.nomeSeo}`,
         request,
         result
       });
@@ -276,7 +277,7 @@ class UserRightsController {
         subject: `Confirmação de Solicitação - ${typeNames[requestType]}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #c0a080;">Gonzaga's Art & Shine</h2>
+            <h2 style="color: #c0a080;">${brand.nome}</h2>
             <p>Olá,</p>
             <p>Recebemos sua solicitação de <strong>${typeNames[requestType]}</strong>.</p>
             <p>Para confirmar e processar sua solicitação, clique no link abaixo:</p>
@@ -289,7 +290,7 @@ class UserRightsController {
             <p>Se você não fez esta solicitação, pode ignorar este email.</p>
             <hr style="border: 1px solid #eee; margin: 30px 0;">
             <p style="color: #666; font-size: 12px;">
-              Gonzaga's Art & Shine - Cumprimento do RGPD<br>
+              ${brand.nomeSeo} - Cumprimento do RGPD<br>
               Email: g.art.shine@gmail.com<br>
               Website: https://artnshine.pt
             </p>
@@ -345,13 +346,13 @@ class UserRightsController {
         subject: `Solicitação Processada - ${typeNames[requestType]}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #c0a080;">Gonzaga's Art & Shine</h2>
+            <h2 style="color: #c0a080;">${brand.nome}</h2>
             <p>Olá,</p>
             ${content}
             <p>Obrigado por utilizar nossos serviços.</p>
             <hr style="border: 1px solid #eee; margin: 30px 0;">
             <p style="color: #666; font-size: 12px;">
-              Gonzaga's Art & Shine - Cumprimento do RGPD<br>
+              ${brand.nomeSeo} - Cumprimento do RGPD<br>
               Email: g.art.shine@gmail.com<br>
               Website: https://artnshine.pt
             </p>

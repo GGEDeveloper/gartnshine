@@ -13,8 +13,9 @@
   const isAbout = navPath === '/about';
   const isCart = navPath === '/cart';
   const isAdmin = navPath.startsWith('/admin');
-  const brandFull = typeof siteTitle !== 'undefined' ? siteTitle : "Gonzaga's Art & Shine";
-  const brandShort = 'Art&Shine';
+  // A marca vem de config/brand.js, exposta em app.locals.
+  const brandFull = brand.nome;
+  const brandShort = brand.nomeCurto;
   const catalogEnabled = typeof siteSettings !== 'undefined' && siteSettings.catalog_page_enabled;
 %>
 

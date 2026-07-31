@@ -4,17 +4,17 @@
       <div class="col-lg-10">
         <div class="terms-content">
           <h1 class="terms-title">Termos de Serviço</h1>
-          <p class="terms-subtitle">Gonzaga's Art & Shine</p>
+          <p class="terms-subtitle"><%= brand.nomeSeo %></p>
           <p class="last-updated">Última atualização: <%= new Date().toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
 
           <div class="terms-section">
             <h2>1. Aceitação dos Termos</h2>
-            <p>Bem-vindo ao site da Gonzaga's Art & Shine. Ao aceder e utilizar este website, aceita e concorda em ficar vinculado a estes Termos de Serviço. Se não concordar com algum destes termos, não deve utilizar o nosso website.</p>
+            <p>Bem-vindo ao site da <%= brand.nomeSeo %>. Ao aceder e utilizar este website, aceita e concorda em ficar vinculado a estes Termos de Serviço. Se não concordar com algum destes termos, não deve utilizar o nosso website.</p>
           </div>
 
           <div class="terms-section">
             <h2>2. Descrição do Serviço</h2>
-            <p>A Gonzaga's Art & Shine é uma empresa especializada na venda de joias de prata esterlina com tendências Bali e Boho. O nosso website oferece:</p>
+            <p>A <%= brand.nomeSeo %> é uma empresa especializada na venda de joias de prata esterlina com tendências Bali e Boho. O nosso website oferece:</p>
             <ul>
               <li>Catálogo online de produtos</li>
               <li>Informações sobre produtos e coleções</li>
@@ -60,10 +60,10 @@
           <div class="terms-section">
             <h2>5. Propriedade Intelectual</h2>
             <h3>5.1 Direitos de Autor</h3>
-            <p>Todo o conteúdo do website, incluindo textos, imagens, logotipos, gráficos e código, é propriedade da Gonzaga's Art & Shine ou dos seus licenciadores e está protegido por direitos de autor.</p>
+            <p>Todo o conteúdo do website, incluindo textos, imagens, logotipos, gráficos e código, é propriedade da <%= brand.nomeSeo %> ou dos seus licenciadores e está protegido por direitos de autor.</p>
 
             <h3>5.2 Marcas Registadas</h3>
-            <p>O nome "Gonzaga's Art & Shine" e todos os logotipos relacionados são marcas registadas da empresa.</p>
+            <p>O nome "<%= brand.nomeSeo %>" e todos os logotipos relacionados são marcas registadas da empresa.</p>
 
             <h3>5.3 Utilização Permitida</h3>
             <p>Pode visualizar e fazer download de material do website apenas para uso pessoal e não comercial, desde que mantenha todos os avisos de direitos de autor.</p>
@@ -92,7 +92,7 @@
             <p>O website é fornecido "como está" sem garantias de qualquer tipo, expressas ou implícitas.</p>
 
             <h3>8.2 Limitações</h3>
-            <p>A Gonzaga's Art & Shine não será responsável por:</p>
+            <p>A <%= brand.nomeSeo %> não será responsável por:</p>
             <ul>
               <li>Danos diretos, indiretos ou consequenciais</li>
               <li>Perda de lucros ou dados</li>
@@ -161,7 +161,7 @@
             <p>Para questões sobre estes Termos de Serviço:</p>
             
             <div class="contact-info">
-              <p><strong>Gonzaga's Art & Shine</strong><br>
+              <p><strong><%= brand.nomeSeo %></strong><br>
               Email: <a href="mailto:g.art.shine@gmail.com">g.art.shine@gmail.com</a><br>
               Website: <a href="https://artnshine.pt">artnshine.pt</a></p>
             </div>
