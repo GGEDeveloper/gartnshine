@@ -1,8 +1,10 @@
-# Instruções de deploy — Instagram, categorias no catálogo e transições
+# Instruções de deploy — Instagram, loja e transições
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `420340f` → `HEAD` em `main` (inclui a mudança de nome para "Gonzaga")
+**Alcance:** commits `420340f` → `HEAD` em `main` (inclui a mudança de nome
+para "Gonzaga", a migração `/catalog` → `/loja` e a categoria em slug no URL)
+**Migrações a correr:** `010`, `011` e `012` — todas aditivas
 
 > Deploy anterior: [`DEPLOY_CATEGORIAS_GALERIA.md`](DEPLOY_CATEGORIAS_GALERIA.md).
 > Este lote **assume** que esse já foi aplicado (endereços `/categoria/:slug` e
@@ -40,6 +42,13 @@
 | **Mudança de nome** | "Gonzaga's Art & Shine" passa a **Gonzaga** (SEO: "Gonzaga Jewellery"). A marca vive agora em `config/brand.js`. |
 | **Botão "voltar"** | Em todas as páginas menos a inicial, com destino hierárquico. |
 | **Catálogo passa a Loja** | `/catalog` → `/loja` e `/catalog/product/:slug` → `/loja/produto/:slug`. **410 URLs indexadas**, todas com 301 permanente. |
+| **Categoria no URL** | `?families=16` passa a `?categoria=prata`. O antigo continua a responder, com 301. Acrescenta canónico e `robots` por caso. |
+| **Cartão "Ver todos"** | Ganha imagem, título e legenda no admin (migração 012). A contagem passa a ser a da loja inteira, não a do filtro. |
+| **Subcategorias na loja** | Escolher um material abre as subcategorias por baixo; numa subcategoria mostram-se as irmãs. |
+| **Ordem intercalada** | As peças deixam de vir em blocos por família — eram 30 anéis antes do primeiro colar. |
+| **Chips de filtro** | Deixam de cortar a primeira linha de produtos (não tinham margem inferior nenhuma). |
+| **Navegação da ficha** | Três barras empilhadas passam a duas; o caminho inclui a categoria (também no schema.org); "8 / 90" passa a "8.ª de 28 em Anéis - Prata". |
+| **Contagem das setas** | Contava as peças activas todas, incluindo escondidas do catálogo e sem stock: dizia "de 90" onde a loja anuncia 28, e levava a peças que não estão à venda. |
 
 ### Alterações de base de dados
 
@@ -190,15 +199,32 @@ Não altera estrutura nenhuma e é idempotente. **Não é reversível
 automaticamente** — o texto antigo não fica guardado; repõe-se do backup do
 Passo 1.
 
+Por fim, a migração do cartão "Ver todos" da loja:
+
+```bash
+docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
+  < sql/migrations/012_loja_cartao_ver_todos.sql
+```
+
+Esperado: `Migration 012 completed: site_settings.shop_all_card_image + _title
++ _subtitle ready`.
+
+Três colunas novas (nullable) em `site_settings`, que é uma tabela de uma só
+linha. Idempotente e reversível — o rollback está comentado no fim do
+ficheiro. Enquanto ficarem a NULL, o cartão comporta-se exactamente como
+hoje.
+
 Verificar:
 
 ```bash
 docker exec mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" -e "
 SHOW TABLES LIKE 'instagram%';
-SELECT COUNT(*) AS linha_conta FROM instagram_account;"
+SELECT COUNT(*) AS linha_conta FROM instagram_account;
+SHOW COLUMNS FROM site_settings LIKE 'shop_all_card%';"
 ```
 
-**Esperado:** as duas tabelas e `linha_conta = 1`. Se faltar, **parar**.
+**Esperado:** as duas tabelas do Instagram, `linha_conta = 1` e as **três**
+colunas `shop_all_card_*`. Se faltar alguma, **parar**.
 
 ---
 
@@ -265,6 +291,41 @@ curl -s https://artnshine.pt/sitemap.xml | grep -c 'artnshine.pt/catalog'  # esp
 curl -s https://artnshine.pt/sitemap.xml | grep -c 'artnshine.pt/loja'     # esperado: 410
 ```
 
+### A categoria no URL
+
+```bash
+# O parâmetro numérico redirecciona para o slug:
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://artnshine.pt/loja?families=16"
+
+# E leva os outros filtros consigo:
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://artnshine.pt/loja?families=16&sort=name-asc"
+
+# A forma nova responde directamente, sem segundo redirect:
+curl -s -o /dev/null -w '%{http_code}\n' "https://artnshine.pt/loja?categoria=prata"
+```
+
+**Esperado:** `301 https://artnshine.pt/loja?categoria=prata`, depois
+`301 …?categoria=prata&sort=name-asc`, e `200` no último.
+
+Atenção ao id: `16` é "Prata" **no ambiente local**. Em produção os ids podem
+ser outros — confirmar primeiro com
+`SELECT id, name, slug FROM product_families WHERE parent_id IS NULL;` e usar
+o id de lá. O que interessa é que o slug de chegada seja o certo.
+
+```bash
+# Canónico e indexação por caso:
+curl -s "https://artnshine.pt/loja?categoria=prata" | grep -o '<link rel="canonical"[^>]*>'
+curl -s "https://artnshine.pt/loja?categoria=prata&price_range=0-50" | grep -o '<meta name="robots"[^>]*>'
+```
+
+**Esperado:** o primeiro aponta para `/categoria/prata` (a versão rica da
+mesma listagem — sem isto as duas competem pela mesma pesquisa); o segundo
+diz `noindex, follow`.
+
+**Condição de paragem:** se `/loja?categoria=prata` responder 404 ou 500, a
+resolução de slugs não está a funcionar e metade dos links da loja estão
+partidos.
+
 ### O bug dos links foi mesmo corrigido
 
 ```bash
@@ -291,10 +352,16 @@ não vão acontecer, mesmo que o `transitions.css` carregue.
 
 | Verificar | Esperado |
 |---|---|
-| `/catalog` | Categorias no topo com imagens e cartão "Ver todos" |
-| `/catalog` — contagens | A soma das categorias tem de **bater certo** com o número ao lado de "Ver todos". Se não bater, reportar |
-| `/catalog?families=<id>` | As categorias encolhem para tira e a que está activa fica marcada |
-| `/catalog` — controlos | Arestas vivas, etiquetas em maiúsculas espaçadas, seta dourada nos menus de ordenação |
+| `/loja` | Categorias no topo com imagens e cartão "Ver todos" |
+| `/loja` — contagens | A soma das categorias tem de **bater certo** com o número ao lado de "Ver todos". Se não bater, reportar |
+| `/loja?categoria=prata` | As categorias encolhem para tira, a activa fica marcada e **abrem as subcategorias por baixo** |
+| `/loja?categoria=aneis-prata` | A tira mostra as **irmãs** (Brincos, Colares…), com "Anéis" marcado |
+| `/loja` — controlos | Arestas vivas, etiquetas em maiúsculas espaçadas, seta dourada nos menus de ordenação |
+| `/loja?categoria=prata` — ordem | As peças vêm **misturadas** entre subcategorias. Se aparecerem 20 anéis seguidos, a intercalação não pegou |
+| `/loja?categoria=prata` — chips | A caixa "Prata ×" **não pode encostar** à primeira linha de fotografias |
+| `/loja` — barra lateral | Marcar uma família na árvore muda o endereço para `?categoria=<slug>`, sem recarregar |
+| `/admin/site-appearance` | Primeiro bloco: **cartão "Ver todos" da loja**, com selector de imagem e dois campos de texto |
+| Definir imagem e textos aí | Aparecem no primeiro cartão de `/loja`. Deixar os textos vazios volta a "Ver todos" + contagem |
 | Navegar entre páginas | Transição suave; **nenhuma página fica esbatida** ou meio transparente |
 | `/galeria` | Sem Instagram ligado: só a galeria da casa, sem divisória órfã |
 | Página inicial | Sem Instagram ligado, a faixa "Do Atelier" **não aparece de todo** — não deve ficar um título sem imagens por baixo |
@@ -310,7 +377,9 @@ não vão acontecer, mesmo que o `transitions.css` carregue.
 | **Clicar numa peça** em `/categoria/prata` | Abre a **ficha do produto**. Se abrir uma listagem, o deploy não pegou |
 | Cartão de peça | Mostra o **nome** da peça, além da referência e do preço |
 | `/categoria/prata` — cabeçalho | Tem **fotografia** de fundo (antes era liso) |
-| Ficha de produto — fim | Barra com **← Anterior / "12 / 90" / Seguinte →** |
+| Ficha de produto — topo | **Uma** linha com o voltar e o caminho `Início · Loja · <Categoria> · <Peça>` — não três barras empilhadas |
+| Ficha de produto — setas | Barra com **← Peça anterior / "8.ª de 28 em <Categoria>" / Peça seguinte →** |
+| Esse total | Tem de ser **o mesmo** que `/loja?categoria=<slug>` anuncia. Se disser "de 90" onde a loja diz 28, o código novo não está a correr |
 | Clicar em "Seguinte" | Muda de peça e a página entra **pela direita**; em "Anterior" entra pela esquerda |
 | Qualquer página longa | Linha dourada fina por baixo do cabeçalho, a encher conforme se desce |
 | Marcas na barra | Pontos que saltam para as secções (não aparecem nas categorias — lá o índice lateral já faz isso) |
@@ -391,15 +460,39 @@ gunzip < /srv/backups/artnshine/pre_instagram_<STAMP>.sql.gz \
 - Esconder uma publicação **persiste** entre sincronizações. Removê-la apenas
   a apaga da base local; volta na sincronização seguinte. Para a tirar do site
   em definitivo, esconder.
+- O cartão "Ver todos" fica **exactamente como está hoje** até alguém lhe
+  definir imagem ou textos no admin. As três colunas novas nascem a NULL.
+- **A verificar em produção, não é deste deploy:** no ambiente local há **38**
+  imagens referenciadas na base que não têm ficheiro em
+  `public/media/products/` — nem original nem derivados. Dão 404 e a peça
+  mostra o marcador "imagem não disponível". Como a base local não é a de
+  produção, o mais provável é serem carregamentos feitos em produção que
+  nunca desceram para cá. Vale a pena confirmar lá com o mesmo cruzamento
+  entre `product_images` e a pasta.
 - Nada neste deploy altera produtos, encomendas, clientes ou stock.
 
 ---
 
 ## Estado da validação local
 
-- `npm test` — **26/26**.
-- Auditoria de SEO das 441 URLs — **0 problemas**.
-- **Nenhum scroll horizontal** em 12 páginas × 6 tamanhos de ecrã.
+- `npm test` — **43/43**.
+- Auditoria de SEO das **441 URLs do sitemap** (todas, não uma amostra): só
+  os títulos longos de nomes de peça já conhecidos, entre 62 e 64 caracteres.
+  Zero endereços antigos e zero `families=` no sitemap.
+- **345** ligações internas verificadas: nenhuma a dar erro e **nenhuma a
+  passar por redirect** — ou seja, o site já liga sempre à forma nova.
+- **Nenhum scroll horizontal** em 10 páginas × 3 larguras (30 combinações),
+  incluindo as tiras de subcategorias, que correm na horizontal no telemóvel.
+- Os chips de filtro deixaram de encostar à grelha: **28px de folga** onde
+  antes eram 0.
+- Ordem intercalada verificada nas duas pontas da listagem — na primeira
+  página **e na última**, que é onde o round-robin simples deixaria o bloco
+  da família maior.
+- Cartão "Ver todos" testado de ponta a ponta: escolher imagem e textos no
+  admin, ver aparecer em `/loja`, limpar os textos e voltar ao automático.
+- Filtragem pela barra lateral (sem recarregar) confirmada a escrever
+  `?categoria=prata` no endereço e a devolver a mesma ordem que o servidor
+  renderiza — se divergissem, recarregar mudava a listagem sem razão.
 - Percorridas 6 páginas até ao fim: nenhum dos **423** elementos com revelação
   ao scroll fica preso invisível.
 - Navegação pelos 4 itens do menu: sem opacidade presa, sem erros de
@@ -408,8 +501,6 @@ gunzip < /srv/backups/artnshine/pre_instagram_<STAMP>.sql.gz \
   nenhum elemento é escondido.
 - Falha da API do Instagram testada com o token expirado: o erro fica
   registado no admin e as páginas públicas continuam a servir normalmente.
-- **356** ligações internas verificadas, todas 200, nenhuma a passar por
-  redirect (eram 116 antes da correcção do cartão de produto).
 - Transições confirmadas por `document.getAnimations()` e não a olho:
   `pagina-entra`/`pagina-sai` na navegação do menu,
   `::view-transition-group(media-produto)` ao clicar numa peça,
