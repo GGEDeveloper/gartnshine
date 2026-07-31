@@ -1,6 +1,7 @@
 # Plano de mudança de nome — "Gonzaga's Art & Shine" → "Gonzaga"
 
-**Estado:** plano, por aprovar. Nada foi executado.
+**Estado:** Fases 1 e 2 **executadas** (commit `98aed39`). Fases 3 a 5 por fazer.
+**Checkpoint para reverter:** `git reset --hard antes-rebranding-gonzaga`
 **Data da análise:** 31/07/2026
 
 ---
@@ -195,6 +196,58 @@ Se o domínio mudar, é uma migração a sério:
 | 3 — Gráficos | Depende do design, não da programação | Baixo |
 | 4 — Externas | Manual, fora do código | Médio (Instagram) |
 | 5 — Domínio | Alto | **Alto** |
+
+---
+
+## Fase 6 — Retirar o nome antigo em definitivo
+
+Hoje o nome antigo continua deliberadamente em dois sítios, para não perder
+quem já conhece a marca:
+
+| Onde | O quê | Porquê |
+|---|---|---|
+| `config/brand.js` → `nomeAnterior` | `"Gonzaga's Art & Shine"` | Alimenta o `alternateName` |
+| schema.org `alternateName` | `["Gonzaga", "Gonzaga's Art & Shine"]` | Liga as duas identidades no Google |
+
+**Quando retirar:** não antes de **6 meses** sobre a mudança, e só depois de
+confirmar na Search Console que as pesquisas por "Gonzaga" já trazem tráfego
+próprio. Retirar cedo demais perde o reconhecimento acumulado; deixar para
+sempre não faz mal nenhum, apenas mantém uma associação que deixou de ser
+verdade.
+
+**Como retirar:** pôr `nomeAnterior: null` em `config/brand.js` e ajustar o
+`alternateName` no layout para não incluir um `null`. É uma alteração de um
+ficheiro — foi para isto que a Fase 1 existiu.
+
+Nessa altura convém rever também:
+
+- o **handle do Instagram** `@gonzagaartnshine`, se ainda não tiver mudado;
+- o **email** `g.art.shine@gmail.com`, que ainda carrega a marca antiga;
+- o **domínio** `artnshine.pt` (Fase 5), se essa decisão tiver sido tomada;
+- a **pasta do repositório** `gartnshine-3` e o repo no GitHub, que são
+  internos e não afectam nada visível.
+
+---
+
+## Estado actual das fases
+
+| Fase | Estado |
+|---|---|
+| 1 — Centralizar em `config/brand.js` | ✅ Feito |
+| 2 — Mudar o nome | ✅ Feito |
+| 3 — Elementos gráficos (`logo.svg`, imagem de partilha, ícones) | ⏳ **Por fazer — é design** |
+| 4 — Superfícies externas (Merchant, Instagram, Facebook, email) | ⏳ Por fazer |
+| 5 — Domínio | ⏳ Por decidir |
+| 6 — Retirar o nome antigo do SEO | ⏳ Daqui a ~6 meses |
+
+### O que ficou por mudar e se vê
+
+`public/logo.svg` (usado no schema.org como logótipo da organização),
+`public/images/og-artnshine.jpg` (imagem de partilha em redes sociais) e os
+ícones (`favicon*`, `apple-touch-icon`, `android-chrome-*`) **ainda têm a
+marca antiga**. Não parte nada, mas quem partilhar uma página nas redes vê
+ainda o logótipo antigo. Há provas de logótipo em
+`docs/rebranding/logo-teste1-*.PNG`.
 
 ---
 
