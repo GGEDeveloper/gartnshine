@@ -2,7 +2,7 @@
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `420340f` → `c735999` em `main` (12 commits)
+**Alcance:** commits `420340f` → `91dc2e8` em `main`
 
 > Deploy anterior: [`DEPLOY_CATEGORIAS_GALERIA.md`](DEPLOY_CATEGORIAS_GALERIA.md).
 > Este lote **assume** que esse já foi aplicado (endereços `/categoria/:slug` e
@@ -251,6 +251,7 @@ não vão acontecer, mesmo que o `transitions.css` carregue.
 | `/catalog` — controlos | Arestas vivas, etiquetas em maiúsculas espaçadas, seta dourada nos menus de ordenação |
 | Navegar entre páginas | Transição suave; **nenhuma página fica esbatida** ou meio transparente |
 | `/galeria` | Sem Instagram ligado: só a galeria da casa, sem divisória órfã |
+| Página inicial | Sem Instagram ligado, a faixa "Do Atelier" **não aparece de todo** — não deve ficar um título sem imagens por baixo |
 | `/admin` → menu lateral | Tem **Instagram** |
 | `/admin/instagram` | Mostra "Token expirado" e avisa que o do `.env` não pode ser renovado |
 | **Clicar numa peça** em `/categoria/prata` | Abre a **ficha do produto**. Se abrir uma listagem, o deploy não pegou |
@@ -268,7 +269,22 @@ vazias, o que é o esperado).
 
 ---
 
-## Passo 7 — Ligar a conta do Instagram (depois do deploy)
+## O site sem Instagram ligado
+
+Este deploy pode e deve avançar **sem** o token. Foi verificado com a base de
+dados vazia — o mesmo estado em que produção vai ficar — que nenhuma das 6
+páginas principais mostra secção vazia, divisória órfã, imagem partida ou
+cabeçalho sem conteúdo por baixo. As secções do Instagram simplesmente não
+são desenhadas e ninguém que visite o site percebe que existe uma
+funcionalidade à espera.
+
+Não há alternativa ao token: testado a 31/07/2026, a página pública do perfil
+já não expõe a lista de publicações, o endpoint `?__a=1` está morto e o
+oembed público exige token desde 2020.
+
+---
+
+## Passo 7 — Ligar a conta do Instagram (quando houver token)
 
 **Isto é para o dono do projecto fazer, não para o agente de deployment** —
 requer aceder à conta do Instagram.
