@@ -365,8 +365,20 @@ class Product extends BaseModel {
    * senão as setas levariam a uma sequência diferente da que se estava a ver.
    * Dá a volta nas pontas: da última salta para a primeira.
    */
-  static async getAdjacentInFamily(productId, familyId) {
+  /**
+   * Peças vizinhas na mesma categoria, para as setas da ficha de produto.
+   *
+   * O conjunto tem de ser exactamente o que a loja mostra: contava as peças
+   * activas todas, incluindo as escondidas do catálogo e as sem stock quando
+   * o site está a escondê-las. Dava duas coisas erradas ao mesmo tempo —
+   * "8.ª de 90" numa categoria onde a loja anuncia 28 peças, e setas a levar
+   * a fichas que não estão à venda.
+   */
+  static async getAdjacentInFamily(productId, familyId, { hideOutOfStock = false } = {}) {
     try {
+      const filtroStock = hideOutOfStock
+        ? 'AND (p.current_stock IS NOT NULL AND p.current_stock > 0)'
+        : '';
       const [rows] = await pool.query(`
         SELECT p.id, p.name, p.slug, p.reference,
                (SELECT pi.image_filename FROM product_images pi
@@ -375,7 +387,8 @@ class Product extends BaseModel {
                  LIMIT 1) AS image_url
           FROM products p
           JOIN product_families f ON p.family_id = f.id
-         WHERE p.is_active = 1 AND p.family_id = ?
+         WHERE p.is_active = 1 AND p.is_catalog_visible = 1 ${filtroStock}
+           AND p.family_id = ?
          ORDER BY f.name, p.reference
       `, [familyId]);
 

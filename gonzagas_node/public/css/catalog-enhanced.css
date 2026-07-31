@@ -1619,6 +1619,83 @@ body.drawer-open {
   letter-spacing: 0.1em;
 }
 
+/* ---------- Subcategorias do material escolhido ----------
+   Abrem por baixo da fila de cartões assim que um material é escolhido. Antes
+   era preciso abrir a barra lateral e procurar na árvore para descobrir que
+   dentro de "Prata" havia anéis, colares e pulseiras — a informação existia
+   mas estava escondida atrás de dois cliques.
+
+   Numa subcategoria mostram-se as irmãs, para se poder saltar de "Anéis" para
+   "Colares" sem voltar ao material. */
+
+.catalog-subcategories {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  /* Entra a acompanhar o cartão que foi escolhido, em vez de aparecer seca. */
+  animation: subcategorias-abrem 420ms cubic-bezier(0.22, 0.61, 0.24, 1) both;
+}
+
+@keyframes subcategorias-abrem {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.catalog-subcategories-titulo {
+  margin: 0 0 0.7rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+.catalog-subcategories-titulo strong {
+  font-weight: 400;
+  color: var(--igp-cream, #f0ece4);
+}
+
+.catalog-subcategories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.catalog-subcategory {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px; /* alvo de toque */
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+  color: var(--igp-muted, rgba(240, 236, 228, 0.72));
+  text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+}
+
+.catalog-subcategory:hover,
+.catalog-subcategory:focus-visible {
+  border-color: var(--igp-gold, #c9a84c);
+  color: var(--igp-cream, #f0ece4);
+}
+
+.catalog-subcategory.is-active {
+  border-color: var(--igp-gold, #c9a84c);
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--igp-cream, #f0ece4);
+}
+
+.catalog-subcategory-count {
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.45));
+}
+
+.catalog-subcategory.is-active .catalog-subcategory-count {
+  color: var(--igp-gold, #c9a84c);
+}
+
 @media (max-width: 768px) {
   .catalog-categories-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1628,16 +1705,34 @@ body.drawer-open {
   .catalog-category-name {
     font-size: 1rem;
   }
+
+  /* As subcategorias podem ser dez: correm na horizontal em vez de
+     empurrarem os produtos duas dobras para baixo. */
+  .catalog-subcategories-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: thin;
+  }
+
+  .catalog-subcategory {
+    flex: 0 0 auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .catalog-category-card,
-  .catalog-category-media {
+  .catalog-category-media,
+  .catalog-subcategory {
     transition: none;
   }
 
   .catalog-category-card:hover .catalog-category-media {
     transform: none;
+  }
+
+  .catalog-subcategories {
+    animation: none;
   }
 }
 

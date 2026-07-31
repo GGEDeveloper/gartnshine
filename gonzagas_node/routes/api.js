@@ -9,6 +9,7 @@ const {
   normalizeFacetKeys,
   normalizePerPage
 } = require('../utils/catalogFilterUtils');
+const { parseCategoriaParam, slugsParaIds } = require('../utils/catalogCategoryParam');
 const { runCatalogQuery } = require('../services/catalogQueryService');
 const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 
@@ -73,7 +74,9 @@ router.get('/search', async (req, res) => {
     const db = require('../config/database');
     const searchPattern = `%${q.trim()}%`;
     
-    const sql = 'SELECT id, reference, name, sale_price, current_stock FROM products WHERE is_active = 1 AND (name LIKE ? OR reference LIKE ?) ORDER BY featured DESC LIMIT ?';
+    // O `slug` vem para o resultado da pesquisa poder ligar ao endereço
+    // definitivo da peça em vez de ao id, que só existe por dentro.
+    const sql = 'SELECT id, slug, reference, name, sale_price, current_stock FROM products WHERE is_active = 1 AND (name LIKE ? OR reference LIKE ?) ORDER BY featured DESC LIMIT ?';
     const [rows] = await db.pool.query(sql, [searchPattern, searchPattern, limit]);
     
     const results = rows.map(p => ({
@@ -82,7 +85,7 @@ router.get('/search', async (req, res) => {
       reference: p.reference,
       price_formatted: `€${parseFloat(p.sale_price || 0).toFixed(2)}`,
       image_url: '/images/imagem-nao-disponivel.svg',
-      url: `/catalog/product/${p.id}`,
+      url: `/loja/produto/${p.slug || p.id}`,
       in_stock: p.current_stock > 0
     }));
     
@@ -130,7 +133,13 @@ router.get('/catalog/filter', async (req, res) => {
 
     const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
     const flatFamilies = await ProductFamily.getAll();
-    const selectedFamilyIds = parseSelectedFamilyIds(families);
+    // Aceita as duas formas: `families=16` (interna, usada pelo módulo de
+    // filtros) e `categoria=prata` (a que aparece no URL público). Sem isto,
+    // um pedido feito a partir do endereço visível voltava sem filtro.
+    const slugsCategoria = parseCategoriaParam(req.query);
+    const selectedFamilyIds = slugsCategoria.length > 0
+      ? slugsParaIds(slugsCategoria, flatFamilies).ids
+      : parseSelectedFamilyIds(families);
     const expandedFamilyIds =
       selectedFamilyIds.length > 0
         ? ProductFamily.getFamilyIdsWithDescendants(flatFamilies, selectedFamilyIds)
@@ -154,7 +163,10 @@ router.get('/catalog/filter', async (req, res) => {
       stylesNormalized,
       sortType,
       page: req.query.page,
-      perPage
+      perPage,
+      // A mesma ordem intercalada da página renderizada no servidor — senão a
+      // lista saltava de layout assim que alguém mexia num filtro.
+      intercalarSubcategorias: true
     });
 
     const filterCounts = { families: result.facets.families || {} };

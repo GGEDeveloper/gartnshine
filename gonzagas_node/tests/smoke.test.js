@@ -102,6 +102,50 @@ describe('Endereços antigos (301)', () => {
     expect(res.text).toMatch(/product-card/);
   });
 
+  // ===== Categoria no URL: ?families=16 → ?categoria=prata =====
+  // O id é interno e ilegível; o slug é estável e diz o que a página tem.
+  test('/loja?families=16 redirecciona 301 para ?categoria=prata', async () => {
+    const res = await request(app).get('/loja?families=16').expect(301);
+    expect(res.headers.location).toBe('/loja?categoria=prata');
+  });
+
+  test('o 301 leva os outros filtros consigo', async () => {
+    const res = await request(app).get('/loja?families=16&sort=name-asc&page=2').expect(301);
+    expect(res.headers.location).toBe('/loja?categoria=prata&sort=name-asc&page=2');
+  });
+
+  test('valores neutros não sobrevivem ao 301 (evita duplicados)', async () => {
+    // `page=1`, `sort=default` e `price_range=all` são o mesmo que não estarem
+    // lá: se passassem, cada listagem teria vários endereços equivalentes.
+    const res = await request(app)
+      .get('/loja?families=16&page=1&sort=default&price_range=all')
+      .expect(301);
+    expect(res.headers.location).toBe('/loja?categoria=prata');
+  });
+
+  test('/loja?categoria=prata responde 200 e não volta a redireccionar', async () => {
+    const res = await request(app).get('/loja?categoria=prata').expect(200);
+    expect(res.text).toMatch(/product-card/);
+  });
+
+  test('uma categoria sozinha aponta o canónico para a página da categoria', async () => {
+    // A página /categoria/:slug é a versão rica da mesma listagem. Sem isto
+    // as duas competiam pela mesma pesquisa.
+    const res = await request(app).get('/loja?categoria=prata').expect(200);
+    expect(res.text).toMatch(/<link rel="canonical" href="[^"]*\/categoria\/prata"/);
+    expect(res.text).toMatch(/<meta name="robots" content="index, follow">/);
+  });
+
+  test('combinações de filtros ficam fora do índice, mas seguíveis', async () => {
+    const res = await request(app).get('/loja?categoria=prata&price_range=0-50').expect(200);
+    expect(res.text).toMatch(/<meta name="robots" content="noindex, follow">/);
+    expect(res.text).toMatch(/<link rel="canonical" href="[^"]*\/loja"/);
+  });
+
+  test('uma categoria desconhecida mostra a loja inteira em vez de rebentar', async () => {
+    await request(app).get('/loja?categoria=nao-existe-isto').expect(200);
+  });
+
   // Estes 301 são o que impede a perda da autoridade acumulada pelos 23 URLs
   // de categoria e pela galeria, que estavam indexados no Google.
   test('/collection/:id redirecciona 301 para /categoria/:slug', async () => {
@@ -198,6 +242,81 @@ describe('Coleções curadas', () => {
     await Collection.updateContent(collectionId, {
       name: c.name, description: null, seoTitle: null, seoDescription: null, isActive: true
     });
+  });
+});
+
+describe('Ordem intercalada das subcategorias', () => {
+  const { intercalarPorFamilia } = require('../services/catalogQueryService');
+
+  /** Maior número de peças seguidas da mesma família. */
+  function maiorRepetido(linhas) {
+    let maior = 0;
+    let actual = 0;
+    let anterior = null;
+    linhas.forEach((l) => {
+      actual = l.family_id === anterior ? actual + 1 : 1;
+      anterior = l.family_id;
+      if (actual > maior) maior = actual;
+    });
+    return maior;
+  }
+
+  test('quebra um bloco de 30 peças da mesma família', () => {
+    const linhas = [
+      ...Array.from({ length: 30 }, (_, i) => ({ id: i, family_id: 1 })),
+      ...Array.from({ length: 10 }, (_, i) => ({ id: 100 + i, family_id: 2 })),
+      ...Array.from({ length: 8 }, (_, i) => ({ id: 200 + i, family_id: 3 }))
+    ];
+    expect(maiorRepetido(linhas)).toBe(30);
+    expect(maiorRepetido(intercalarPorFamilia(linhas))).toBeLessThanOrEqual(3);
+  });
+
+  test('a família grande não fica toda amontoada no fim', () => {
+    // O round-robin simples esgota as famílias pequenas ao início e deixa um
+    // bloco da maior no fim — que é exactamente o problema a evitar.
+    const linhas = [
+      ...Array.from({ length: 90 }, (_, i) => ({ id: i, family_id: 1 })),
+      ...Array.from({ length: 6 }, (_, i) => ({ id: 100 + i, family_id: 2 }))
+    ];
+    const ultimoQuarto = intercalarPorFamilia(linhas).slice(-24);
+    expect(ultimoQuarto.some((l) => l.family_id === 2)).toBe(true);
+  });
+
+  test('não perde nem duplica peças', () => {
+    const linhas = [
+      ...Array.from({ length: 17 }, (_, i) => ({ id: i, family_id: 1 })),
+      ...Array.from({ length: 5 }, (_, i) => ({ id: 100 + i, family_id: 2 })),
+      { id: 999, family_id: null }
+    ];
+    const saida = intercalarPorFamilia(linhas);
+    expect(saida).toHaveLength(linhas.length);
+    expect(new Set(saida.map((l) => l.id)).size).toBe(linhas.length);
+  });
+
+  test('com uma só família devolve a ordem original intacta', () => {
+    const linhas = Array.from({ length: 5 }, (_, i) => ({ id: i, family_id: 7 }));
+    expect(intercalarPorFamilia(linhas)).toEqual(linhas);
+  });
+});
+
+describe('Ficha de produto: navegação', () => {
+  test('as migalhas incluem a categoria, não só Início e Loja', async () => {
+    const res = await request(app).get('/loja/produto/anel-de-prata-com-onix-oval').expect(200);
+    expect(res.text).toMatch(/peca-migalhas/);
+    expect(res.text).toMatch(/href="\/categoria\/aneis-prata"/);
+  });
+
+  test('a contagem das setas bate com a categoria (respeita o stock escondido)', async () => {
+    // Regressão: contava as peças activas todas e anunciava "8.ª de 90" numa
+    // categoria onde a loja mostra 28.
+    const ficha = await request(app).get('/loja/produto/anel-de-prata-com-onix-oval').expect(200);
+    const m = ficha.text.match(/(\d+)\.ª de (\d+)/);
+    expect(m).not.toBeNull();
+
+    const loja = await request(app).get('/loja?categoria=aneis-prata').expect(200);
+    const total = loja.text.match(/<span class="count-number">(\d+)</);
+    expect(total).not.toBeNull();
+    expect(Number(m[2])).toBe(Number(total[1]));
   });
 });
 

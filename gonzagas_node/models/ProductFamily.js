@@ -292,6 +292,46 @@ class ProductFamily {
   }
 
   /**
+   * Subcategorias de um material, para a tira que abre na loja por baixo do
+   * cartão escolhido.
+   *
+   * Difere de `getNavigation` em duas coisas que aqui importam: respeita o
+   * `hide_out_of_stock` do site (senão a contagem da subcategoria contradiz a
+   * do cartão que está mesmo por cima) e traz imagem, para as subcategorias
+   * poderem ser cartões e não apenas texto.
+   */
+  static async getSubcategoriasParaLoja(parentId, { hideOutOfStock = false } = {}) {
+    if (!parentId) return [];
+    const filtroStock = hideOutOfStock ? 'AND p.current_stock > 0' : '';
+    const filtroStock2 = hideOutOfStock ? 'AND p2.current_stock > 0' : '';
+    try {
+      const [rows] = await pool.query(
+        `SELECT f.id, f.name, f.slug, f.card_image, f.hero_image,
+                (SELECT COUNT(*)
+                   FROM products p
+                  WHERE p.family_id = f.id AND p.is_active = 1 ${filtroStock}
+                ) AS product_count,
+                (SELECT pi.image_filename
+                   FROM product_images pi
+                   JOIN products p2 ON p2.id = pi.product_id
+                    AND p2.is_active = 1 ${filtroStock2}
+                  WHERE p2.family_id = f.id
+                  ORDER BY pi.is_primary DESC, p2.featured DESC, pi.id ASC
+                  LIMIT 1) AS fallback_image
+           FROM product_families f
+          WHERE f.parent_id = ?
+         HAVING product_count > 0
+          ORDER BY product_count DESC, f.name ASC`,
+        [parentId]
+      );
+      return rows;
+    } catch (error) {
+      console.error('Error getting subcategories for shop:', error);
+      return [];
+    }
+  }
+
+  /**
    * Navegação hierárquica de uma página de categoria.
    *
    * Substitui o antigo "Outras Coleções", que despejava as 25 famílias numa

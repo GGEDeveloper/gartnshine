@@ -94,6 +94,54 @@ class SiteSettings {
     return { success: true };
   }
 
+  /**
+   * Cartão "Ver todos" da loja: imagem, título e legenda.
+   *
+   * Recebe só os campos a mudar — a imagem e os textos são geridos por dois
+   * formulários separados no admin, e escrever sempre os três apagaria o que
+   * o outro formulário tinha acabado de gravar. Um campo a `null` limpa-o de
+   * propósito (volta ao automático); um campo ausente fica como está.
+   *
+   * A tolerância ao `ER_BAD_FIELD_ERROR` existe porque as colunas vêm da
+   * migração 012 — numa base onde ela ainda não correu, o admin mostra o
+   * aviso em vez de rebentar.
+   */
+  static async updateShopAllCard(campos = {}) {
+    const colunas = {
+      image: 'shop_all_card_image',
+      title: 'shop_all_card_title',
+      subtitle: 'shop_all_card_subtitle'
+    };
+
+    const sets = [];
+    const valores = [];
+    Object.keys(colunas).forEach((chave) => {
+      if (!(chave in campos)) return;
+      const bruto = campos[chave];
+      const limpo = typeof bruto === 'string' ? bruto.trim() : bruto;
+      sets.push(`${colunas[chave]} = ?`);
+      valores.push(limpo || null);
+    });
+
+    if (sets.length === 0) return { success: true };
+
+    try {
+      await pool.query(
+        `UPDATE site_settings SET ${sets.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = 1`,
+        valores
+      );
+      return { success: true };
+    } catch (error) {
+      if (error.code === 'ER_BAD_FIELD_ERROR') {
+        return {
+          success: false,
+          message: 'Falta correr a migração 012 (colunas do cartão "Ver todos").'
+        };
+      }
+      throw error;
+    }
+  }
+
   // Optional: Method to ensure the settings row exists
   static async initializeSettings() {
     try {

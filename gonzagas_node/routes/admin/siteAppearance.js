@@ -43,6 +43,64 @@ router.get('/', async (req, res) => {
   }
 });
 
+/*
+ * ===== Cartão "Ver todos" da loja =====
+ * Declarado antes das rotas `/:id` de propósito: o Express serve a primeira
+ * que casar, e um `/:id` colocado acima apanharia estes endereços tratando
+ * "cartao-ver-todos" como o id de uma coleção.
+ */
+
+/** POST /admin/site-appearance/cartao-ver-todos/imagem */
+router.post(
+  '/cartao-ver-todos/imagem',
+  galleryUpload.single('shop_all_card_file'),
+  async (req, res) => {
+    const back = '/admin/site-appearance';
+    try {
+      const resolved = await resolveImageFromRequest(req, {
+        existingField: 'shop_all_card_existing',
+        removeField: 'remove_shop_all_card_image'
+      });
+      if (resolved.error) {
+        req.flash('error_msg', resolved.error);
+        return res.redirect(back);
+      }
+
+      const r = await SiteSettings.updateShopAllCard({ image: resolved.path });
+      if (!r.success) {
+        req.flash('error_msg', r.message || 'Falha ao guardar a imagem.');
+      } else {
+        req.flash('success_msg', resolved.path
+          ? 'Imagem do cartão "Ver todos" atualizada.'
+          : 'Imagem do cartão "Ver todos" removida.');
+      }
+    } catch (error) {
+      console.error('Error updating shop-all card image:', error);
+      req.flash('error_msg', 'Falha ao atualizar a imagem do cartão. ' + (error.message || ''));
+    }
+    res.redirect(back);
+  }
+);
+
+/** POST /admin/site-appearance/cartao-ver-todos/textos */
+router.post('/cartao-ver-todos/textos', async (req, res) => {
+  const back = '/admin/site-appearance';
+  try {
+    // Vazio é uma escolha válida: volta ao automático ("Ver todos" e a
+    // contagem de peças), em vez de ficar um cartão sem legenda nenhuma.
+    const r = await SiteSettings.updateShopAllCard({
+      title: (req.body.shop_all_card_title || '').trim(),
+      subtitle: (req.body.shop_all_card_subtitle || '').trim()
+    });
+    if (!r.success) req.flash('error_msg', r.message || 'Falha ao guardar os textos.');
+    else req.flash('success_msg', 'Textos do cartão "Ver todos" atualizados.');
+  } catch (error) {
+    console.error('Error updating shop-all card texts:', error);
+    req.flash('error_msg', 'Falha ao atualizar os textos do cartão. ' + (error.message || ''));
+  }
+  res.redirect(back);
+});
+
 /**
  * GET /admin/site-appearance/:id
  * Editor de uma coleção: textos, SEO e as duas imagens.

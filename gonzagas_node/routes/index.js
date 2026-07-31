@@ -491,7 +491,7 @@ router.get('/loja/produto/:idOrSlug', async (req, res) => {
 Referência: ${product.reference}
 ${product.sale_price ? `Preço: €${parseFloat(product.sale_price).toFixed(2)}` : 'Preço sob consulta'}
 
-Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
+Ver produto: ${req.protocol}://${req.get('host')}/loja/produto/${id}`;
     
     const whatsappData = {
       number: process.env.WHATSAPP_NUMBER || '351XXXXXXXXX',
@@ -525,11 +525,15 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
     const whatsappNotifyMsg = encodeURIComponent(
       `Olá! Gostaria de ser avisado(a) quando esta peça estiver disponível:\n\n` +
       `*${product.name}*\nReferência: ${product.reference}\n` +
-      `Ver produto: ${baseUrl}/catalog/product/${productSlugOrId}`
+      `Ver produto: ${baseUrl}/loja/produto/${productSlugOrId}`
     );
 
-    // Peças vizinhas na mesma categoria, para as setas da ficha.
-    const vizinhas = await Product.getAdjacentInFamily(product.id, product.family_id);
+    // Peças vizinhas na mesma categoria, para as setas da ficha. O
+    // `hide_out_of_stock` tem de acompanhar: senão as setas percorriam peças
+    // que a loja não mostra, e a contagem contradizia a da categoria.
+    const vizinhas = await Product.getAdjacentInFamily(product.id, product.family_id, {
+      hideOutOfStock: !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock)
+    });
 
     res.render('catalog/product-detail', {
       vizinhas, 

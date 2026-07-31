@@ -352,6 +352,43 @@ class CatalogFilters {
     return data;
   }
 
+  /**
+   * Endereço público da loja para um conjunto de filtros.
+   *
+   * Espelha `CatalogController.urlDaLoja` no servidor: mesma ordem de
+   * parâmetros e os mesmos valores neutros deixados de fora. Se as duas
+   * versões divergirem, recarregar a página muda o URL sem mudar nada do que
+   * se vê — e passam a existir dois endereços para a mesma listagem.
+   */
+  buildPublicUrl(filterData) {
+    const slugs = window.__CATALOG_FAMILY_SLUGS__ || {};
+    const params = new URLSearchParams();
+
+    // Só as famílias de topo escolhidas geram `categoria=` — as descendentes
+    // vêm marcadas por arrasto e repeti-las no URL não muda o resultado.
+    this.getTopLevelSelectedFamilyIds(filterData.families).forEach((id) => {
+      const slug = slugs[id];
+      if (slug) params.append('categoria', slug);
+    });
+
+    if (filterData.search) params.append('search', filterData.search);
+    if (filterData.price_range && filterData.price_range !== 'all') {
+      params.append('price_range', filterData.price_range);
+    }
+    (filterData.colors || []).forEach((c) => params.append('colors', c));
+    (filterData.materials || []).forEach((m) => params.append('materials', m));
+    if (filterData.sort && filterData.sort !== 'default') params.append('sort', filterData.sort);
+    // 24 é o valor por omissão: escrevê-lo criava um segundo endereço para a
+    // mesma listagem (ver VALORES_NEUTROS no CatalogController).
+    if (filterData.per_page && String(filterData.per_page) !== '24') {
+      params.append('per_page', String(filterData.per_page));
+    }
+    if (Number(filterData.page) > 1) params.append('page', String(filterData.page));
+
+    const qs = params.toString();
+    return qs ? `/loja?${qs}` : '/loja';
+  }
+
   async applyFilters() {
     if (this.isLoading) return;
 
@@ -394,9 +431,11 @@ class CatalogFilters {
 
       const data = await response.json();
       
-      // Update URL without reload
-      const catalogParams = new URLSearchParams(queryParams.toString());
-      const newUrl = `/catalog${catalogParams.toString() ? '?' + catalogParams.toString() : ''}`;
+      // O endereço que fica na barra não é o mesmo que foi pedido à API: a
+      // API trabalha com ids de família (é o que os checkboxes têm), mas o
+      // URL público é `/loja?categoria=prata`. É este que a pessoa copia,
+      // partilha e o Google vê.
+      const newUrl = this.buildPublicUrl(filterData);
       window.history.pushState({}, '', newUrl);
       window.__CATALOG_RETURN_PATH__ = newUrl;
 

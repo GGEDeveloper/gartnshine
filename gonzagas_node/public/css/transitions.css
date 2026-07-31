@@ -344,15 +344,91 @@
    5. SETAS ENTRE PEÇAS DA MESMA CATEGORIA
    ===================================================================== */
 
-.peca-nav {
+/* ---------- Cabeçalho: voltar + caminho ----------
+   Antes eram duas barras seguidas, cada uma com o seu espaçamento, e a
+   página começava com três linhas de navegação antes de mostrar a peça. */
+
+.peca-cabecalho {
   display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* O voltar já traz a sua barra própria nas outras páginas; aqui vive dentro
+   do cabeçalho e não deve reintroduzir o espaçamento dela. */
+.peca-cabecalho .voltar-link {
+  padding-left: 0;
+}
+
+.peca-migalhas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+}
+
+/* O separador é um ponto médio, não um ">": a seta repetia a direcção que as
+   setas de navegação já dão, e lia-se como se fosse um botão. */
+.peca-migalhas li + li::before {
+  content: '·';
+  margin-right: 0.4rem;
+  color: var(--igp-border, rgba(201, 168, 76, 0.45));
+}
+
+.peca-migalhas a {
+  /* Texto a 0,74rem dá uma área de toque de 14px de altura — abaixo dos 24px
+     mínimos. O `inline-block` com padding vertical alarga o alvo sem mexer
+     no tamanho da letra nem no alinhamento da linha. */
+  display: inline-block;
+  padding: 0.55rem 0;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.peca-migalhas a:hover,
+.peca-migalhas a:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+}
+
+/* O nome da peça é o sítio onde se está: não é ligação e não deve parecer. */
+.peca-migalhas li[aria-current='page'] {
+  color: var(--igp-cream, #f0ece4);
+  /* Nomes de peça chegam aos 62 caracteres. */
+  max-width: 46ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.peca-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
   margin: 0 0 2rem;
   padding: 0.85rem 0;
   border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
+}
+
+/* Sem peça anterior (ou seguinte) a coluna fica vazia, mas continua a
+   existir — senão a posição saltava do centro para o lado na primeira e na
+   última peça da categoria. */
+.peca-nav-vazio {
+  display: block;
+}
+
+.peca-nav-seguinte {
+  justify-self: end;
 }
 
 .peca-nav-link {
@@ -410,11 +486,27 @@
 }
 
 .peca-nav-posicao {
-  flex: 0 0 auto;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.peca-nav-posicao-num {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--igp-cream, #f0ece4);
   font-variant-numeric: tabular-nums;
+}
+
+.peca-nav-posicao-cat {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
 }
 
 /*
@@ -453,6 +545,32 @@ html.vt-anterior::view-transition-new(root) {
 
   .peca-nav-link {
     max-width: none;
+  }
+
+  /* No telemóvel o caminho completo ocupava duas linhas antes de se ver a
+     peça. Ficam os dois degraus que servem para subir; o nome da peça está
+     logo a seguir, em título. */
+  .peca-migalhas li[aria-current='page'] {
+    display: none;
+  }
+
+  .peca-migalhas li:nth-last-child(2)::after {
+    content: '';
+  }
+
+  .peca-nav-posicao-cat {
+    display: none;
+  }
+
+  /* No telemóvel o dedo precisa de mais do que os 24px mínimos. */
+  .peca-migalhas a {
+    padding: 0.75rem 0;
+  }
+
+  /* "Peça anterior" partia em duas linhas na coluna estreita: fica só
+     "anterior", que com a seta ao lado já não deixa dúvidas. */
+  .peca-nav-rotulo-longo {
+    display: none;
   }
 }
 

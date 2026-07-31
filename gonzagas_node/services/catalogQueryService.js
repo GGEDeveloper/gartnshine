@@ -8,6 +8,55 @@
 
 const { pool } = require('../config/database');
 
+// Cache de imagens em memória para evitar subqueries repetitivas
+const imageCache = new Map();
+const IMAGE_CACHE_TTL = 10 * 60 * 1000; // 10 minutos em ms
+const imageTimestamps = new Map();
+
+function getCachedImage(productId) {
+  const cached = imageCache.get(productId);
+  const timestamp = imageTimestamps.get(productId);
+  
+  if (cached && timestamp && (Date.now() - timestamp) < IMAGE_CACHE_TTL) {
+    return cached;
+  }
+  
+  // Cache expirado ou não existe
+  imageCache.delete(productId);
+  imageTimestamps.delete(productId);
+  return null;
+}
+
+function setCachedImage(productId, imageFilename) {
+  imageCache.set(productId, imageFilename);
+  imageTimestamps.set(productId, Date.now());
+  
+  // Limpar cache antigo se ficar muito grande (max 1000 entries)
+  if (imageCache.size > 1000) {
+    const oldestKey = imageTimestamps.keys().next().value;
+    imageCache.delete(oldestKey);
+    imageTimestamps.delete(oldestKey);
+  }
+}
+
+async function getPrimaryImageFilename(productId) {
+  const cached = getCachedImage(productId);
+  if (cached !== null) {
+    return cached;
+  }
+  
+  const [rows] = await pool.query(
+    `SELECT image_filename FROM product_images 
+     WHERE product_id = ? 
+     ORDER BY is_primary DESC, sort_order ASC, id ASC LIMIT 1`,
+    [productId]
+  );
+  
+  const imageFilename = rows.length > 0 ? rows[0].image_filename : null;
+  setCachedImage(productId, imageFilename);
+  return imageFilename;
+}
+
 const SELECT_FIELDS = `
   p.id,
   p.name,
@@ -22,10 +71,7 @@ const SELECT_FIELDS = `
   p.color,
   p.material,
   p.style,
-  f.name AS family_name,
-  (SELECT pi.image_filename FROM product_images pi
-   WHERE pi.product_id = p.id
-   ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) AS image_url
+  f.name AS family_name
 `;
 
 const FROM_JOIN = `
@@ -170,7 +216,115 @@ async function selectCatalogPage({ whereSql, params, sortType, limit, offset }) 
   const order = orderBySql(sortType);
   const sql = `SELECT ${SELECT_FIELDS} ${FROM_JOIN} ${whereSql} ${order} LIMIT ? OFFSET ?`;
   const [rows] = await pool.query(sql, [...params, limit, offset]);
-  return rows;
+  
+  // Adicionar imagens usando cache em vez de subquery
+  const rowsWithImages = await Promise.all(
+    rows.map(async (row) => {
+      const imageFilename = await getPrimaryImageFilename(row.id);
+      return {
+        ...row,
+        image_url: imageFilename
+      };
+    })
+  );
+  
+  return rowsWithImages;
+}
+
+/**
+ * Máximo de peças que a intercalação carrega para memória de uma vez. Só
+ * traz `id` e `family_id`, por isso o catálogo inteiro (≈400) é trivial; o
+ * tecto existe para o dia em que não for.
+ */
+const MAX_LINHAS_INTERCALADAS = 5000;
+
+/**
+ * Espalha as subcategorias pela listagem em vez de as deixar em blocos.
+ *
+ * O problema: a ordem natural (referência) agrupa por família, porque as
+ * referências partilham prefixo. Quem filtrava por "Prata" via 30 anéis
+ * seguidos antes de chegar ao primeiro colar, e desistia a meio da primeira
+ * página convencido de que só havia anéis.
+ *
+ * Como: cada peça recebe a posição relativa que ocupa dentro da sua família —
+ * a 5.ª de 20 fica em 0,225; a 5.ª de 90 fica em 0,05 — e ordena-se tudo por
+ * esse valor. O efeito é cada família ficar distribuída por igual ao longo da
+ * lista toda, em vez do round-robin simples, que esgota as famílias pequenas
+ * ao início e deixa um bloco da maior no fim (exactamente o que queremos
+ * evitar).
+ *
+ * A ordem relativa dentro de cada família mantém-se — continua a ser a
+ * ordenação escolhida, só que entrelaçada.
+ */
+function intercalarPorFamilia(linhas) {
+  const familias = new Map();
+  linhas.forEach((linha) => {
+    const chave = linha.family_id == null ? '_' : String(linha.family_id);
+    if (!familias.has(chave)) familias.set(chave, []);
+    familias.get(chave).push(linha);
+  });
+
+  // Com uma só família não há nada para intercalar.
+  if (familias.size < 2) return linhas;
+
+  const comPeso = [];
+  familias.forEach((itens) => {
+    const total = itens.length;
+    itens.forEach((linha, i) => {
+      comPeso.push({ linha, peso: (i + 0.5) / total, ordem: comPeso.length });
+    });
+  });
+
+  comPeso.sort((a, b) => (a.peso - b.peso) || (a.ordem - b.ordem));
+  return comPeso.map((x) => x.linha);
+}
+
+/**
+ * Página do catálogo com as subcategorias intercaladas.
+ *
+ * A intercalação tem de acontecer antes de paginar: se fosse feita só sobre
+ * as 24 peças que a SQL devolve, a primeira página continuaria a ser 24
+ * anéis, apenas baralhados entre si. Por isso pede-se a lista completa de ids
+ * (dois inteiros por linha, barato), ordena-se em memória e só depois se
+ * carrega a fatia visível.
+ *
+ * As peças em destaque não são postas à frente de tudo: a ordenação SQL já as
+ * traz primeiro dentro de cada família, e como cada família começa no início
+ * da lista intercalada, os destaques continuam a cair na primeira página. O
+ * bloco de destaques à cabeça era, aliás, metade do problema — 15 dos 20
+ * destaques em prata são anéis, e davam 13 anéis seguidos logo a abrir mesmo
+ * com o resto intercalado.
+ */
+async function selectCatalogPageIntercalada({ whereSql, params, sortType, limit, offset }) {
+  const order = orderBySql(sortType);
+  const [linhas] = await pool.query(
+    `SELECT p.id, p.family_id ${FROM_JOIN} ${whereSql} ${order}`,
+    params
+  );
+
+  if (linhas.length > MAX_LINHAS_INTERCALADAS) {
+    return selectCatalogPage({ whereSql, params, sortType, limit, offset });
+  }
+
+  const fatia = intercalarPorFamilia(linhas).slice(offset, offset + limit);
+  if (fatia.length === 0) return [];
+
+  const ids = fatia.map((l) => l.id);
+  const [rows] = await pool.query(
+    `SELECT ${SELECT_FIELDS} ${FROM_JOIN} WHERE p.id IN (${ids.map(() => '?').join(',')})`,
+    ids
+  );
+
+  // O IN não garante ordem: repõe-se a que foi calculada acima.
+  const porId = new Map(rows.map((r) => [r.id, r]));
+  const naOrdem = ids.map((id) => porId.get(id)).filter(Boolean);
+
+  return Promise.all(
+    naOrdem.map(async (row) => ({
+      ...row,
+      image_url: await getPrimaryImageFilename(row.id)
+    }))
+  );
 }
 
 async function facetFamilies(baseWhere, baseParams) {
@@ -231,7 +385,8 @@ async function runCatalogQuery(opts) {
     sortType,
     page,
     perPage,
-    settings = {}
+    settings = {},
+    intercalarSubcategorias = false
   } = opts;
 
   const main = buildWhereClause({
@@ -251,7 +406,13 @@ async function runCatalogQuery(opts) {
   if (p > totalPages) p = totalPages;
   const offset = (p - 1) * perPage;
 
-  const rows = await selectCatalogPage({
+  // Intercalar só faz sentido na ordem "Padrão": quem escolheu preço ou nome
+  // pediu explicitamente uma sequência e não a queremos baralhar.
+  const paginador = intercalarSubcategorias && (!sortType || sortType === 'default')
+    ? selectCatalogPageIntercalada
+    : selectCatalogPage;
+
+  const rows = await paginador({
     whereSql: main.whereSql,
     params: main.params,
     sortType,
@@ -375,5 +536,7 @@ module.exports = {
   listFacetOptionLabels,
   countCatalog,
   selectCatalogPage,
+  selectCatalogPageIntercalada,
+  intercalarPorFamilia,
   familyProductCounts
 };

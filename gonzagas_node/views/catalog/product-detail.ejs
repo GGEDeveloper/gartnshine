@@ -345,23 +345,10 @@
         transform: translateY(-2px);
     }
     
-    /* Breadcrumbs */
-    .breadcrumbs {
-        margin-bottom: 1.5rem;
-        color: var(--color-text-secondary, #999);
-        font-size: 0.9rem;
-    }
-    
-    .breadcrumbs a {
-        color: var(--color-accent, #A8A8A8);
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-    
-    .breadcrumbs a:hover {
-        color: var(--color-highlight, #C0C0C0);
-    }
-    
+    /* As migalhas e o "voltar" desta página vivem agora em `.peca-cabecalho`,
+       em transitions.css, junto das setas entre peças — os três elementos
+       formam um bloco só e separá-los era o que os fazia divergir. */
+
     /* Mobile Responsive */
     @media (max-width: 768px) {
         .product-detail-container {
@@ -393,27 +380,40 @@
 </style>
 
 <div class="product-detail-container">
-    <% var catBack = (typeof catalogBackUrl !== 'undefined' && catalogBackUrl) ? catalogBackUrl : '/loja'; %>
-    <% var hasCtx = typeof catalogBackUrl !== 'undefined' && catalogBackUrl && catalogBackUrl !== '/loja'; %>
-    <nav class="breadcrumbs" aria-label="Navegação">
-        <a href="/">Início</a> &gt; 
-        <a href="<%= catBack %>">Loja</a> &gt; 
-        <%= product.name %>
-    </nav>
     <%
-      // O voltar aparece SEMPRE, não só quando havia filtros — antes quem
-      // chegasse de uma categoria ou do Google ficava sem saída para cima.
-      // Com filtros activos volta-se à loja filtrado; sem eles, à
-      // categoria da peça, que é de onde se vem na maioria dos casos.
-      var _vh = hasCtx ? catBack
-        : (product.family_slug ? '/categoria/' + product.family_slug : '/loja');
-      var _vr = hasCtx ? 'Loja (com filtros)'
-        : (product.family_name || 'Loja');
+      // ===== Cabeçalho de navegação da peça =====
+      //
+      // Eram três barras empilhadas — migalhas, um "voltar" e as setas — a
+      // dizer três vezes a mesma coisa por outras palavras, e o "Loja (com
+      // filtros)" a expor vocabulário interno a quem só quer voltar atrás.
+      // Passam a ser duas linhas: onde estou (com o caminho completo, que
+      // antes saltava a categoria) e como percorro a categoria.
+      var catBack = (typeof catalogBackUrl !== 'undefined' && catalogBackUrl) ? catalogBackUrl : '/loja';
+      var hasCtx = typeof catalogBackUrl !== 'undefined' && catalogBackUrl && catalogBackUrl !== '/loja';
+      var catUrl = product.family_slug ? '/categoria/' + product.family_slug : null;
+
+      // Com filtros activos volta-se à listagem que a pessoa tinha montado;
+      // sem eles, à categoria da peça — que é de onde se vem na maioria dos
+      // casos, e serve também a quem chega do Google sem histórico nenhum.
+      var voltarHref = hasCtx ? catBack : (catUrl || '/loja');
+      var voltarRotulo = hasCtx
+        ? 'Voltar aos resultados'
+        : ('Voltar a ' + (product.family_name || 'Loja'));
     %>
-    <nav class="voltar-barra" aria-label="Voltar">
-      <%- include('../partials/_voltar', { voltarHref: _vh, voltarRotulo: _vr }) %>
+
+    <nav class="peca-cabecalho" aria-label="Onde estou">
+      <%- include('../partials/_voltar', { voltarHref: voltarHref, voltarRotulo: voltarRotulo }) %>
+
+      <ol class="peca-migalhas">
+        <li><a href="/">Início</a></li>
+        <li><a href="<%= catBack %>">Loja</a></li>
+        <% if (product.family_name && catUrl) { %>
+          <li><a href="<%= catUrl %>"><%= product.family_name %></a></li>
+        <% } %>
+        <li aria-current="page"><%= product.name %></li>
+      </ol>
     </nav>
-    
+
     <%
       // ===== Setas entre peças da mesma categoria =====
       // Permitem percorrer a categoria sem voltar atrás. A ordem é a mesma
@@ -430,14 +430,25 @@
              rel="prev" data-direccao="anterior">
             <span class="peca-nav-seta" aria-hidden="true">&larr;</span>
             <span class="peca-nav-texto">
-              <span class="peca-nav-rotulo">Anterior</span>
+              <span class="peca-nav-rotulo"><span class="peca-nav-rotulo-longo">Peça </span>anterior</span>
               <span class="peca-nav-nome"><%= viz.anterior.name %></span>
             </span>
           </a>
-        <% } else { %><span></span><% } %>
+        <% } else { %><span class="peca-nav-vazio"></span><% } %>
 
         <% if (viz.posicao) { %>
-          <span class="peca-nav-posicao"><%= viz.posicao %> / <%= viz.total %></span>
+          <%
+            // "8 / 90" é notação de ficheiro. Em português corrente, e a
+            // dizer de que categoria se trata — sem isso o número não diz
+            // de que sequência estamos a falar.
+            var posTexto = viz.posicao + '.ª de ' + viz.total;
+          %>
+          <span class="peca-nav-posicao">
+            <span class="peca-nav-posicao-num"><%= posTexto %></span>
+            <% if (product.family_name) { %>
+              <span class="peca-nav-posicao-cat">em <%= product.family_name %></span>
+            <% } %>
+          </span>
         <% } %>
 
         <% if (viz.seguinte) { %>
@@ -445,12 +456,12 @@
              href="/loja/produto/<%= viz.seguinte.slug || viz.seguinte.id %>"
              rel="next" data-direccao="seguinte">
             <span class="peca-nav-texto">
-              <span class="peca-nav-rotulo">Seguinte</span>
+              <span class="peca-nav-rotulo"><span class="peca-nav-rotulo-longo">Peça </span>seguinte</span>
               <span class="peca-nav-nome"><%= viz.seguinte.name %></span>
             </span>
             <span class="peca-nav-seta" aria-hidden="true">&rarr;</span>
           </a>
-        <% } else { %><span></span><% } %>
+        <% } else { %><span class="peca-nav-vazio"></span><% } %>
       </nav>
     <% } %>
 
@@ -753,13 +764,20 @@
     }
 </script>
 
-<%- include('../partials/schema-breadcrumb', {
-  breadcrumbs: [
+<%
+  // O caminho estruturado tem de ser o mesmo que está visível na página — a
+  // categoria faltava nos dois sítios, e é o degrau que diz ao Google (e a
+  // quem lê o resultado da pesquisa) em que secção da loja a peça vive.
+  var migalhasSchema = [
     { name: 'Início', url: '/' },
-    { name: 'Loja', url: '/loja' },
-    { name: product.name, url: '/loja/produto/' + (product.slug || product.id) }
-  ]
-}) %>
+    { name: 'Loja', url: '/loja' }
+  ];
+  if (product.family_name && product.family_slug) {
+    migalhasSchema.push({ name: product.family_name, url: '/categoria/' + product.family_slug });
+  }
+  migalhasSchema.push({ name: product.name, url: '/loja/produto/' + (product.slug || product.id) });
+%>
+<%- include('../partials/schema-breadcrumb', { breadcrumbs: migalhasSchema }) %>
 
 <% if (process.env.GA_TRACKING_ID) { %>
 <script>

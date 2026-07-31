@@ -31,6 +31,70 @@
         automaticamente uma fotografia de uma peça dessa coleção.
       </p>
 
+      <!-- ── Cartão "Ver todos" da loja ────────────────────────── -->
+      <%
+        // É o primeiro cartão da fila em /loja e era o único sem imagem nem
+        // textos configuráveis — um rectângulo vazio ao lado dos materiais.
+        const verTodosImg = settings.shop_all_card_image || null;
+      %>
+      <div class="card mb-4">
+        <div class="card-body p-3">
+          <div class="row g-3 align-items-start">
+            <div class="col-12 col-md-4">
+              <h6 class="mb-1">Cartão "Ver todos" da loja</h6>
+              <small class="text-muted d-block mb-2">
+                O primeiro cartão da fila em <a href="/loja" target="_blank" rel="noopener">/loja</a>.
+                Sem imagem fica com o fundo dourado; sem textos mostra
+                "Ver todos" e a contagem de peças.
+              </small>
+
+              <% if (verTodosImg) { %>
+                <img src="<%= encodeURI(verTodosImg) %>" alt="Imagem do cartão Ver todos" loading="lazy"
+                     onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'"
+                     class="mb-2" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px;">
+              <% } else { %>
+                <div class="mb-2" style="width: 100%; height: 110px; border-radius: 6px;
+                            background: rgba(255,255,255,0.05); display: flex; align-items: center;
+                            justify-content: center; color: #6c757d;">
+                  Sem imagem definida
+                </div>
+              <% } %>
+
+              <%- include('../partials/_image-picker', {
+                    action: '/admin/site-appearance/cartao-ver-todos/imagem',
+                    existingField: 'shop_all_card_existing',
+                    fileField: 'shop_all_card_file',
+                    removeField: 'remove_shop_all_card_image',
+                    current: verTodosImg,
+                    galleryImages: galleryImages,
+                    label: verTodosImg ? 'Mudar imagem' : 'Definir imagem'
+                  }) %>
+            </div>
+
+            <div class="col-12 col-md-8">
+              <form action="/admin/site-appearance/cartao-ver-todos/textos" method="POST">
+                <div class="mb-2">
+                  <label for="shop-all-title" class="form-label small mb-1">Título</label>
+                  <input type="text" class="form-control form-control-sm" id="shop-all-title"
+                         name="shop_all_card_title" maxlength="120"
+                         placeholder="Ver todos"
+                         value="<%= settings.shop_all_card_title || '' %>">
+                </div>
+                <div class="mb-2">
+                  <label for="shop-all-subtitle" class="form-label small mb-1">Legenda</label>
+                  <input type="text" class="form-control form-control-sm" id="shop-all-subtitle"
+                         name="shop_all_card_subtitle" maxlength="180"
+                         placeholder="<%= typeof totalPecas !== 'undefined' ? totalPecas + ' peças' : 'contagem de peças' %>"
+                         value="<%= settings.shop_all_card_subtitle || '' %>">
+                  <small class="text-muted">Deixar vazio mostra a contagem de peças da loja.</small>
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary">Guardar textos</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row g-3">
         <% families.forEach(function(fam) {
              const auto = fam.fallback_image ? productImg(fam.fallback_image, 'small').jpg : null;

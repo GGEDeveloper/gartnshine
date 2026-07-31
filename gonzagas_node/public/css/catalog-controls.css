@@ -183,11 +183,30 @@ body.showcase-theme .view-btn.active,
   display: none;
 }
 
+/*
+ * A margem inferior não é decoração: sem ela a fila de chips encostava à
+ * grelha (o topo dos primeiros produtos ficava exactamente na base do último
+ * chip) e as caixas pareciam cortar as fotografias da primeira linha. Com
+ * dois chips a quebrarem para uma segunda linha, chegavam mesmo a sobrepor-se.
+ */
 .catalog-chips {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
-  margin: 1.25rem 0 0;
+  margin: 1.25rem 0 1.75rem;
+  /* A fila de chips fica acima da grelha em vez de disputar o mesmo espaço. */
+  position: relative;
+  z-index: 3;
+}
+
+.catalog-chips .catalog-chips-label {
+  flex: 0 0 auto;
+  margin-right: 0.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
 }
 
 body.showcase-theme .catalog-chips .chip,

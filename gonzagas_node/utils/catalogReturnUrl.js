@@ -3,6 +3,9 @@
  */
 
 const CATALOG_QUERY_KEYS = [
+  // `categoria` é a forma pública; `families` fica para os URLs legados que
+  // ainda estejam a ser servidos antes do 301.
+  'categoria',
   'families',
   'search',
   'price_range',

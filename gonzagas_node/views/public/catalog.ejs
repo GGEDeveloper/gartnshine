@@ -171,27 +171,15 @@
         var perPageOpts = (typeof catalogPagination !== 'undefined' && catalogPagination && catalogPagination.perPageOptions) 
           ? catalogPagination.perPageOptions 
           : [12, 24, 48];
-        function appendMulti(pairs, key, val) {
-          if (val === undefined || val === null || val === '') return;
-          if (Array.isArray(val)) { val.forEach(function(v) { if (v) pairs.push(key + '=' + encodeURIComponent(v)); }); }
-          else pairs.push(key + '=' + encodeURIComponent(val));
-        }
+        // Paginação: mantém os filtros e muda só a página. Passa pelo mesmo
+        // construtor de endereços do controlador, para o link da página 3 ter
+        // exactamente a forma que o canónico espera — antes construía o URL à
+        // mão e reintroduzia o `families=` numérico.
         function catalogPageHref(p) {
-          var qp = typeof queryParams !== 'undefined' ? queryParams : {};
-          var pairs = [];
-          if (qp.search) pairs.push('search=' + encodeURIComponent(qp.search));
-          if (qp.price_range && qp.price_range !== 'all') pairs.push('price_range=' + encodeURIComponent(qp.price_range));
-          if (curSort && curSort !== 'default') pairs.push('sort=' + encodeURIComponent(curSort));
-          pairs.push('per_page=' + encodeURIComponent(curPerPage));
-          pairs.push('page=' + encodeURIComponent(p));
-          var fam = qp.families;
-          if (fam) {
-            if (Array.isArray(fam)) { fam.forEach(function(id) { pairs.push('families=' + encodeURIComponent(id)); }); }
-            else { pairs.push('families=' + encodeURIComponent(fam)); }
+          if (typeof urlDaLoja === 'function') {
+            return urlDaLoja({ page: p, per_page: curPerPage });
           }
-          appendMulti(pairs, 'colors', qp.colors);
-          appendMulti(pairs, 'materials', qp.materials);
-          return '/loja?' + pairs.join('&');
+          return '/loja?page=' + encodeURIComponent(p);
         }
       %>
       
@@ -224,11 +212,29 @@
         // navegação e mostra onde se está, em vez de desaparecerem.
         const materiais = (typeof catalogMaterials !== 'undefined' && Array.isArray(catalogMaterials))
           ? catalogMaterials : [];
+        const subcats = (typeof catalogSubcategorias !== 'undefined' && Array.isArray(catalogSubcategorias))
+          ? catalogSubcategorias : [];
         const compacto = typeof filtroActivo !== 'undefined' && filtroActivo;
         // Que material está seleccionado? O filtro guarda ids de família, que
         // podem ser subcategorias — sobe-se à raiz para marcar o cartão certo.
         const idsSeleccionados = (typeof selectedFamilyIds !== 'undefined' && Array.isArray(selectedFamilyIds))
           ? selectedFamilyIds.map(Number) : [];
+        const subAberta = (typeof subcategoriaAberta !== 'undefined' && subcategoriaAberta) ? subcategoriaAberta : null;
+        const matTira = (typeof materialDaTira !== 'undefined' && materialDaTira) ? materialDaTira : null;
+        // Um material está "aberto" quando ele próprio ou uma das suas
+        // subcategorias está escolhida — é isso que abre a tira em baixo.
+        const idMaterialAberto = matTira ? Number(matTira.id) : null;
+        // Construtor de endereços da loja: mantém os outros filtros e escreve
+        // sempre a categoria em slug.
+        const lojaUrl = (typeof urlDaLoja === 'function')
+          ? urlDaLoja
+          : function(o) { return '/loja'; };
+        const cartaoTodos = (typeof cartaoVerTodos !== 'undefined' && cartaoVerTodos)
+          ? cartaoVerTodos : { imagem: null, titulo: 'Ver todos', legenda: null, total: null };
+        // A contagem do "Ver todos" é a da loja inteira; a do cabeçalho é a do
+        // filtro em vigor. Confundi-las fazia o cartão dizer "112 peças" com
+        // "Prata: 112 peças" ao lado.
+        const totalGeralLoja = (cartaoTodos.total != null) ? cartaoTodos.total : totalCatalogCount;
       %>
       <% if (materiais.length > 0) { %>
         <section class="catalog-categories<%= compacto ? ' is-compact' : '' %>"
@@ -240,22 +246,27 @@
           <% } %>
 
           <div class="catalog-categories-list">
-            <a href="/loja"
-               class="catalog-category-card is-all<%= idsSeleccionados.length === 0 ? ' is-active' : '' %>">
-              <span class="catalog-category-media" aria-hidden="true"></span>
+            <a href="<%= lojaUrl({ categoria: null, page: null }) %>"
+               class="catalog-category-card is-all<%= cartaoTodos.imagem ? ' has-image' : '' %><%= idsSeleccionados.length === 0 ? ' is-active' : '' %>">
+              <span class="catalog-category-media"
+                    <% if (cartaoTodos.imagem) { %>style="background-image: url('<%= encodeURI(cartaoTodos.imagem) %>');"<% } %>
+                    aria-hidden="true"></span>
               <span class="catalog-category-body">
-                <span class="catalog-category-name">Ver todos</span>
-                <span class="catalog-category-count"><%= totalCatalogCount %> peças</span>
+                <span class="catalog-category-name"><%= cartaoTodos.titulo %></span>
+                <span class="catalog-category-count">
+                  <%= cartaoTodos.legenda ? cartaoTodos.legenda : totalGeralLoja + ' peças' %>
+                </span>
               </span>
             </a>
 
             <% materiais.forEach(function(m) {
               const img = m.card_image || m.hero_image
                 || (m.fallback_image ? productImg(m.fallback_image, 'medium').jpg : null);
-              const activo = idsSeleccionados.includes(Number(m.id));
+              const aberto = idMaterialAberto === Number(m.id);
             %>
-              <a href="/loja?families=<%= m.id %>"
-                 class="catalog-category-card<%= img ? ' has-image' : '' %><%= activo ? ' is-active' : '' %>">
+              <a href="<%= lojaUrl({ categoria: m.slug, page: null }) %>"
+                 class="catalog-category-card<%= img ? ' has-image' : '' %><%= aberto ? ' is-active' : '' %>"
+                 <%= aberto ? 'aria-expanded="true"' : '' %>>
                 <span class="catalog-category-media"
                       <% if (img) { %>style="background-image: url('<%= encodeURI(img) %>');"<% } %>
                       aria-hidden="true"></span>
@@ -266,6 +277,50 @@
               </a>
             <% }); %>
           </div>
+
+          <%
+            // ===== Subcategorias do material aberto =====
+            // Abrem por baixo dos cartões em vez de obrigarem a ir à barra
+            // lateral. Numa subcategoria mostram-se as irmãs, para se saltar
+            // de "Anéis - Prata" para "Colares - Prata" directamente.
+          %>
+          <% if (subcats.length > 0 && matTira) { %>
+            <div class="catalog-subcategories" aria-label="Subcategorias de <%= matTira.name %>">
+              <p class="catalog-subcategories-titulo">
+                Em <strong><%= matTira.name %></strong>
+              </p>
+              <div class="catalog-subcategories-list">
+                <%
+                  // Total do material: soma das subcategorias. Usar o
+                  // `totalCatalogCount` aqui dava a contagem do filtro em
+                  // vigor, ou seja "Tudo em Prata 28" quando se estava em
+                  // "Anéis". As famílias de topo não têm peças directas, por
+                  // isso a soma das filhas é o total.
+                  const totalMaterial = subcats.reduce(function(s, x) {
+                    return s + Number(x.product_count || 0);
+                  }, 0);
+                %>
+                <a href="<%= lojaUrl({ categoria: matTira.slug, page: null }) %>"
+                   class="catalog-subcategory<%= subAberta ? '' : ' is-active' %>">
+                  Tudo em <%= matTira.name %>
+                  <span class="catalog-subcategory-count"><%= totalMaterial %></span>
+                </a>
+                <% subcats.forEach(function(sc) {
+                     const activa = subAberta && Number(subAberta.id) === Number(sc.id);
+                     // "Anéis - Prata" dentro da tira da prata é redundante:
+                     // fica só "Anéis".
+                     const rotulo = String(sc.name).replace(new RegExp('\\s*[-–]\\s*' + matTira.name + '$', 'i'), '');
+                %>
+                  <a href="<%= lojaUrl({ categoria: sc.slug, page: null }) %>"
+                     class="catalog-subcategory<%= activa ? ' is-active' : '' %>"
+                     <%= activa ? 'aria-current="true"' : '' %>>
+                    <%= rotulo %>
+                    <span class="catalog-subcategory-count"><%= sc.product_count %></span>
+                  </a>
+                <% }); %>
+              </div>
+            </div>
+          <% } %>
         </section>
       <% } %>
 
@@ -423,6 +478,8 @@
   };
   window.__CATALOG_RETURN_PATH__ = <%- JSON.stringify(typeof catalogReturnPath !== 'undefined' ? catalogReturnPath : '/loja') %>;
   window.__CATALOG_FAMILY_NAMES__ = <%- JSON.stringify(typeof familyNameById !== 'undefined' ? familyNameById : {}) %>;
+  // Os checkboxes trabalham com ids; o endereço na barra tem de sair em slugs.
+  window.__CATALOG_FAMILY_SLUGS__ = <%- JSON.stringify(typeof familySlugById !== 'undefined' ? familySlugById : {}) %>;
   window.__INITIAL_FACETS__ = <%- JSON.stringify(typeof initialFacets !== 'undefined' && initialFacets ? initialFacets : null) %>;
 </script>
 <!-- Catalog Enhanced JavaScript Modules -->
