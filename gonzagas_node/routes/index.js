@@ -7,7 +7,6 @@ const ProductFamily = require('../models/ProductFamily');
 const CatalogController = require('../controllers/CatalogController');
 const ProductController = require('../controllers/ProductController'); // Added for product details UC page
 const { safeCatalogReturnUrl } = require('../utils/catalogReturnUrl');
-const instagramModule = require('../modules/instagram');
 const EcommerceSettings = require('../modules/ecommerce/settings/models/EcommerceSettings');
 const { formatRow } = require('../services/catalogQueryService');
 const GalleryItem = require('../models/GalleryItem');
@@ -96,11 +95,13 @@ router.get('/', async (req, res) => {
       && mediaFiles.some((m) => m.path === configuredMediaStripBackground);
     const mediaStripBackground = configuredMediaStripExists ? configuredMediaStripBackground : null;
 
-    // Instagram strip — non-blocking; silently degrades to empty array on any error
-    let igPosts = [];
-    try {
-      igPosts = await instagramModule.fetchInstagramFeed(6);
-    } catch (_) {}
+    // Faixa do Instagram: vem da MESMA fonte que a galeria — a base de dados,
+    // já moderada. Antes chamava a API directamente, o que trazia dois
+    // problemas: uma publicação escondida no admin continuava a aparecer aqui,
+    // e quando o token expirava a faixa desaparecia em vez de mostrar o que já
+    // estava guardado. `getMediaPublica` nunca lança; sem dados devolve [] e a
+    // secção simplesmente não é desenhada.
+    const igPosts = await instagramSync.getMediaPublica(6);
 
     res.render('index', {
       title: 'Art&Shine — Elegância que nasce da terra',
