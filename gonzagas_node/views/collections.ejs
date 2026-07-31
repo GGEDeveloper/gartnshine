@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/css/collections.css?v=<%= Date.now() %>">
 
 <main class="collections-page">
+  <nav class="voltar-barra" aria-label="Voltar">
+    <%- include('partials/_voltar', { voltarHref: '/', voltarRotulo: 'Início' }) %>
+  </nav>
   <div class="container">
     <!-- Header coerente com a home -->
     <div class="collections-header">

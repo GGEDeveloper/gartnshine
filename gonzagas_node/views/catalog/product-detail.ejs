@@ -400,11 +400,19 @@
         <a href="<%= catBack %>">Catálogo</a> &gt; 
         <%= product.name %>
     </nav>
-    <% if (hasCtx) { %>
-    <p class="product-back-catalog mb-3">
-        <a href="<%= catBack %>" class="text-decoration-none" style="color: var(--color-accent, #c9a84c);">&larr; Voltar ao catálogo (filtros)</a>
-    </p>
-    <% } %>
+    <%
+      // O voltar aparece SEMPRE, não só quando havia filtros — antes quem
+      // chegasse de uma categoria ou do Google ficava sem saída para cima.
+      // Com filtros activos volta-se ao catálogo filtrado; sem eles, à
+      // categoria da peça, que é de onde se vem na maioria dos casos.
+      var _vh = hasCtx ? catBack
+        : (product.family_slug ? '/categoria/' + product.family_slug : '/catalog');
+      var _vr = hasCtx ? 'Catálogo (com filtros)'
+        : (product.family_name || 'Catálogo');
+    %>
+    <nav class="voltar-barra" aria-label="Voltar">
+      <%- include('../partials/_voltar', { voltarHref: _vh, voltarRotulo: _vr }) %>
+    </nav>
     
     <%
       // ===== Setas entre peças da mesma categoria =====

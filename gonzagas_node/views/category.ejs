@@ -7,6 +7,14 @@
 %>
 
 <div class="category-page<%= temIndice ? ' category-page--with-index' : '' %>">
+  <%
+    // Numa subcategoria sobe-se para o material; num material, para o catálogo.
+    const _vh = nav.parent ? ('/categoria/' + (nav.parent.slug || nav.parent.id)) : '/catalog';
+    const _vr = nav.parent ? nav.parent.name : 'Catálogo';
+  %>
+  <nav class="voltar-barra" aria-label="Voltar">
+    <%- include('partials/_voltar', { voltarHref: _vh, voltarRotulo: _vr }) %>
+  </nav>
   <section class="collection-header<%= headerImage ? ' has-background' : '' %>"
            <% if (headerImage) { %>style="background-image: url('<%= encodeURI(headerImage) %>'); background-size: cover; background-position: center;"<% } %>>
     <div class="collection-title">

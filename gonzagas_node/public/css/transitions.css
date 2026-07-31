@@ -469,3 +469,84 @@ html.vt-anterior::view-transition-new(root) {
     animation: none !important;
   }
 }
+
+/* =====================================================================
+   6. BOTÃO "VOLTAR"
+   =====================================================================
+   Aparece em todas as páginas onde há um sítio acima para onde subir — ou
+   seja, todas menos a inicial. É um link real com destino explícito: quem
+   chega do Google não tem histórico, e um `history.back()` aí não faz nada
+   ou atira a pessoa para fora do site.
+
+   `js/modules/voltar.js` melhora-o quando a página anterior foi mesmo deste
+   site, passando a recuar no histórico — o que preserva a posição de scroll
+   e os filtros do catálogo.
+   ===================================================================== */
+
+.voltar-barra {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.voltar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  /* 44px de alvo de toque, sem parecer um botão grande. */
+  min-height: 44px;
+  padding: 0.4rem 0.65rem 0.4rem 0;
+  color: var(--igp-muted, rgba(240, 236, 228, 0.55));
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+}
+
+.voltar-link:hover,
+.voltar-link:focus-visible {
+  color: var(--igp-gold, #c9a84c);
+}
+
+.voltar-seta {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.voltar-link:hover .voltar-seta,
+.voltar-link:focus-visible .voltar-seta {
+  transform: translateX(-4px);
+}
+
+/* O rótulo pode ser um nome de categoria comprido — corta em vez de partir
+   a linha. */
+.voltar-texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 44vw;
+}
+
+@media (max-width: 768px) {
+  .voltar-barra {
+    padding: 0.85rem 1rem 0;
+  }
+
+  .voltar-link {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voltar-link,
+  .voltar-seta {
+    transition: none;
+  }
+
+  .voltar-link:hover .voltar-seta {
+    transform: none;
+  }
+}

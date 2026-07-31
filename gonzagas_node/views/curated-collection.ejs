@@ -1,4 +1,7 @@
 <div class="collection-page">
+  <nav class="voltar-barra" aria-label="Voltar">
+    <%- include('partials/_voltar', { voltarHref: '/colecoes', voltarRotulo: 'Coleções' }) %>
+  </nav>
   <%
     // Imagem escolhida no admin; sem ela, a foto da primeira peça da coleção.
     const first = products.length > 0 ? products[0] : null;

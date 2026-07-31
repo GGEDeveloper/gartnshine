@@ -1,0 +1,23 @@
+<%
+  /*
+   * Botão "voltar".
+   *
+   * Recebe sempre um destino explícito (`voltarHref`) e um rótulo
+   * (`voltarRotulo`) — o sítio para onde subir a partir desta página.
+   *
+   * Porquê um destino em vez de `history.back()`: quem chega directamente do
+   * Google não tem histórico nenhum. `history.back()` aí não faz nada, ou
+   * pior, atira a pessoa para fora do site. Um link real funciona sempre e é
+   * rastreável pelo Google como ligação interna.
+   *
+   * O `js/modules/voltar.js` melhora-o depois: se a página anterior foi
+   * mesmo deste site, passa a recuar no histórico (preserva a posição de
+   * scroll e os filtros do catálogo); caso contrário deixa o link como está.
+   */
+  const _vHref = typeof voltarHref !== 'undefined' && voltarHref ? voltarHref : '/';
+  const _vRotulo = typeof voltarRotulo !== 'undefined' && voltarRotulo ? voltarRotulo : 'Voltar';
+%>
+<a href="<%= _vHref %>" class="voltar-link" data-voltar>
+  <span class="voltar-seta" aria-hidden="true">&larr;</span>
+  <span class="voltar-texto"><%= _vRotulo %></span>
+</a>
