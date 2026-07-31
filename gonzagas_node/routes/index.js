@@ -383,8 +383,19 @@ router.get('/collection/:familyIdOrSlug', async (req, res) => {
   }
 });
 
-// Catalog page
-router.get('/catalog', CatalogController.displayCatalog);
+// LOJA. O endereço era /catalog; passou a /loja para bater certo com a
+// palavra do menu. Os antigos fazem 301 permanente — eram 410 URLs
+// indexadas (a loja + 409 fichas de produto).
+router.get('/loja', CatalogController.displayCatalog);
+
+/** Endereço antigo da loja. */
+router.get('/catalog', (req, res) => {
+  // A query tem de acompanhar, senão um link partilhado com filtros perdia-os.
+  const qs = req.originalUrl.includes('?')
+    ? req.originalUrl.slice(req.originalUrl.indexOf('?'))
+    : '';
+  res.redirect(301, '/loja' + qs);
+});
 
 // Product detail under construction page
 router.get('/product/:id/details-uc', ProductController.showProductDetailUnderConstruction);
@@ -425,7 +436,15 @@ function hasReferenceInSlug(product) {
   return product.slug !== slugDoNome;
 }
 
-router.get('/catalog/product/:idOrSlug', async (req, res) => {
+/** Endereço antigo das fichas de produto — 409 URLs indexadas. */
+router.get('/catalog/product/:idOrSlug', (req, res) => {
+  const qs = req.originalUrl.includes('?')
+    ? req.originalUrl.slice(req.originalUrl.indexOf('?'))
+    : '';
+  res.redirect(301, `/loja/produto/${encodeURIComponent(req.params.idOrSlug)}` + qs);
+});
+
+router.get('/loja/produto/:idOrSlug', async (req, res) => {
   try {
     const { idOrSlug } = req.params;
     const { pool } = require('../config/database');
@@ -525,7 +544,7 @@ Ver produto: ${req.protocol}://${req.get('host')}/catalog/product/${id}`;
         : product.name,
       siteTitle: brand.nome,
       metaDescription: metaDesc,
-      canonicalUrl: `${baseUrl}/catalog/product/${productSlugOrId}`,
+      canonicalUrl: `${baseUrl}/loja/produto/${productSlugOrId}`,
       ogImage: product.images && product.images.length > 0 ? `${baseUrl}/media/products/${product.images[0].replace(/\.[^.]+$/, '')}-medium.jpg` : undefined,
       ogType: 'product'
     });

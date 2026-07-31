@@ -9,8 +9,8 @@
 <div class="category-page<%= temIndice ? ' category-page--with-index' : '' %>">
   <%
     // Numa subcategoria sobe-se para o material; num material, para o catálogo.
-    const _vh = nav.parent ? ('/categoria/' + (nav.parent.slug || nav.parent.id)) : '/catalog';
-    const _vr = nav.parent ? nav.parent.name : 'Catálogo';
+    const _vh = nav.parent ? ('/categoria/' + (nav.parent.slug || nav.parent.id)) : '/loja';
+    const _vr = nav.parent ? nav.parent.name : 'Loja';
   %>
   <nav class="voltar-barra" aria-label="Voltar">
     <%- include('partials/_voltar', { voltarHref: _vh, voltarRotulo: _vr }) %>
@@ -69,7 +69,7 @@
       <% if (!products || products.length === 0) { %>
         <div class="no-products">
           <p>Ainda não há peças nesta categoria.</p>
-          <a href="/catalog" class="btn btn-primary">Ver o catálogo</a>
+          <a href="/loja" class="btn btn-primary">Ir para a loja</a>
         </div>
       <% } else if (temIndice) { %>
         <% grupos.forEach(function(g) { %>
@@ -136,7 +136,7 @@
         <% if (nav.parent) { %>
           <a href="/categoria/<%= nav.parent.slug || nav.parent.id %>">Toda a categoria <%= nav.parent.name %></a>
         <% } %>
-        <a href="/catalog">Catálogo completo</a>
+        <a href="/loja">Ver toda a loja</a>
         <a href="/colecoes">Coleções curadas</a>
       </div>
     </section>

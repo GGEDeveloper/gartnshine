@@ -393,22 +393,22 @@
 </style>
 
 <div class="product-detail-container">
-    <% var catBack = (typeof catalogBackUrl !== 'undefined' && catalogBackUrl) ? catalogBackUrl : '/catalog'; %>
-    <% var hasCtx = typeof catalogBackUrl !== 'undefined' && catalogBackUrl && catalogBackUrl !== '/catalog'; %>
+    <% var catBack = (typeof catalogBackUrl !== 'undefined' && catalogBackUrl) ? catalogBackUrl : '/loja'; %>
+    <% var hasCtx = typeof catalogBackUrl !== 'undefined' && catalogBackUrl && catalogBackUrl !== '/loja'; %>
     <nav class="breadcrumbs" aria-label="Navegação">
         <a href="/">Início</a> &gt; 
-        <a href="<%= catBack %>">Catálogo</a> &gt; 
+        <a href="<%= catBack %>">Loja</a> &gt; 
         <%= product.name %>
     </nav>
     <%
       // O voltar aparece SEMPRE, não só quando havia filtros — antes quem
       // chegasse de uma categoria ou do Google ficava sem saída para cima.
-      // Com filtros activos volta-se ao catálogo filtrado; sem eles, à
+      // Com filtros activos volta-se à loja filtrado; sem eles, à
       // categoria da peça, que é de onde se vem na maioria dos casos.
       var _vh = hasCtx ? catBack
-        : (product.family_slug ? '/categoria/' + product.family_slug : '/catalog');
-      var _vr = hasCtx ? 'Catálogo (com filtros)'
-        : (product.family_name || 'Catálogo');
+        : (product.family_slug ? '/categoria/' + product.family_slug : '/loja');
+      var _vr = hasCtx ? 'Loja (com filtros)'
+        : (product.family_name || 'Loja');
     %>
     <nav class="voltar-barra" aria-label="Voltar">
       <%- include('../partials/_voltar', { voltarHref: _vh, voltarRotulo: _vr }) %>
@@ -426,7 +426,7 @@
       <nav class="peca-nav" aria-label="Navegar entre peças de <%= product.family_name || 'esta categoria' %>">
         <% if (viz.anterior) { %>
           <a class="peca-nav-link peca-nav-anterior"
-             href="/catalog/product/<%= viz.anterior.slug || viz.anterior.id %>"
+             href="/loja/produto/<%= viz.anterior.slug || viz.anterior.id %>"
              rel="prev" data-direccao="anterior">
             <span class="peca-nav-seta" aria-hidden="true">&larr;</span>
             <span class="peca-nav-texto">
@@ -442,7 +442,7 @@
 
         <% if (viz.seguinte) { %>
           <a class="peca-nav-link peca-nav-seguinte"
-             href="/catalog/product/<%= viz.seguinte.slug || viz.seguinte.id %>"
+             href="/loja/produto/<%= viz.seguinte.slug || viz.seguinte.id %>"
              rel="next" data-direccao="seguinte">
             <span class="peca-nav-texto">
               <span class="peca-nav-rotulo">Seguinte</span>
@@ -528,7 +528,7 @@
             <!-- Admin Quick Edit Button (só aparece para admins) -->
             <% if (user && user.role === 'admin') { %>
             <div class="admin-quick-actions">
-                <a href="/admin/products/edit/<%= product.id %>?returnTo=<%= encodeURIComponent('/catalog/product/' + product.id) %>" 
+                <a href="/admin/products/edit/<%= product.id %>?returnTo=<%= encodeURIComponent('/loja/produto/' + product.id) %>" 
                    class="btn-admin-edit"
                    title="Editar este produto"
                    data-tooltip="Editar Produto">
@@ -646,7 +646,7 @@
         <h3>Peças semelhantes</h3>
         <div class="related-products-grid">
             <% relatedProducts.forEach(function(rp) { %>
-            <a href="/catalog/product/<%= rp.slug || rp.id %>" class="related-product-card">
+            <a href="/loja/produto/<%= rp.slug || rp.id %>" class="related-product-card">
                 <img src="<%= rp.image_url ? '/media/products/' + rp.image_url.replace(/\.[^.]+$/, '') + '-medium.jpg' : '/images/imagem-nao-disponivel.svg' %>"
                      onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';"
                      alt="<%= rp.name %> — joia artesanal prata 925" loading="lazy">
@@ -756,8 +756,8 @@
 <%- include('../partials/schema-breadcrumb', {
   breadcrumbs: [
     { name: 'Início', url: '/' },
-    { name: 'Catálogo', url: '/catalog' },
-    { name: product.name, url: '/catalog/product/' + (product.slug || product.id) }
+    { name: 'Loja', url: '/loja' },
+    { name: product.name, url: '/loja/produto/' + (product.slug || product.id) }
   ]
 }) %>
 

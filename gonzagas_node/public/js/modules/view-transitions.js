@@ -79,7 +79,7 @@
     var href = alvo.getAttribute('href') || '';
     if (!href.startsWith('/')) return;
 
-    if (href.startsWith('/catalog/product/')) {
+    if (href.startsWith('/loja/produto/')) {
       // Setas anterior/seguinte: a direcção do clique decide o lado por onde
       // a página nova entra, para as setas parecerem percorrer uma sequência
       // em vez de saltar entre páginas soltas.

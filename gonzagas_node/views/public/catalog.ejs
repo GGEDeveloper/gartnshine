@@ -16,7 +16,7 @@
       </div>
       
       <div class="sidebar-content">
-        <form id="catalog-filters" method="GET" action="/catalog">
+        <form id="catalog-filters" method="GET" action="/loja">
           
           <!-- Search Input -->
           <div class="filter-section">
@@ -148,7 +148,7 @@
               <i class="fas fa-check me-2"></i>
               Aplicar Filtros
             </button>
-            <a href="/catalog" class="btn-filter-clear">
+            <a href="/loja" class="btn-filter-clear">
               <i class="fas fa-times me-2"></i>
               Limpar Filtros
             </a>
@@ -191,7 +191,7 @@
           }
           appendMulti(pairs, 'colors', qp.colors);
           appendMulti(pairs, 'materials', qp.materials);
-          return '/catalog?' + pairs.join('&');
+          return '/loja?' + pairs.join('&');
         }
       %>
       
@@ -202,7 +202,7 @@
       <!-- Header with Controls -->
       <div class="catalog-header">
         <div class="header-left">
-          <h1 class="page-title">Catálogo de Produtos</h1>
+          <h1 class="page-title">Loja</h1>
           <p class="page-subtitle">Descubra as nossas peças únicas</p>
         </div>
         <div class="header-right">
@@ -219,7 +219,7 @@
 
       <%
         // ===== Categorias =====
-        // Entrada do catálogo. Sem filtro activo aparecem em cartões grandes;
+        // Entrada da loja. Sem filtro activo aparecem em cartões grandes;
         // com filtro encolhem para uma tira que continua a servir de
         // navegação e mostra onde se está, em vez de desaparecerem.
         const materiais = (typeof catalogMaterials !== 'undefined' && Array.isArray(catalogMaterials))
@@ -240,7 +240,7 @@
           <% } %>
 
           <div class="catalog-categories-list">
-            <a href="/catalog"
+            <a href="/loja"
                class="catalog-category-card is-all<%= idsSeleccionados.length === 0 ? ' is-active' : '' %>">
               <span class="catalog-category-media" aria-hidden="true"></span>
               <span class="catalog-category-body">
@@ -254,7 +254,7 @@
                 || (m.fallback_image ? productImg(m.fallback_image, 'medium').jpg : null);
               const activo = idsSeleccionados.includes(Number(m.id));
             %>
-              <a href="/catalog?families=<%= m.id %>"
+              <a href="/loja?families=<%= m.id %>"
                  class="catalog-category-card<%= img ? ' has-image' : '' %><%= activo ? ' is-active' : '' %>">
                 <span class="catalog-category-media"
                       <% if (img) { %>style="background-image: url('<%= encodeURI(img) %>');"<% } %>
@@ -308,7 +308,7 @@
         <% if (products && products.length > 0) { %>
           <div class="products-grid grid-view" id="products-grid">
             <% 
-              var retPath = typeof catalogReturnPath !== 'undefined' ? catalogReturnPath : '/catalog';
+              var retPath = typeof catalogReturnPath !== 'undefined' ? catalogReturnPath : '/loja';
             %>
             <% products.forEach((product, index) => { %>
               <div class="product-item" 
@@ -320,7 +320,7 @@
                     <% 
                       const imageUrl = product.image_url ? `/media/products/${product.image_url.replace(/\.[^.]+$/, '')}-medium.jpg` : '/images/imagem-nao-disponivel.svg';
                       const slugOrId = product.slug || product.id;
-                      const productHref = '/catalog/product/' + encodeURIComponent(slugOrId) + '?return=' + encodeURIComponent(retPath);
+                      const productHref = '/loja/produto/' + encodeURIComponent(slugOrId) + '?return=' + encodeURIComponent(retPath);
                     %>
                     <a href="<%= productHref %>" 
                        class="product-image-link">
@@ -366,12 +366,12 @@
               <i class="fas fa-search"></i>
             </div>
             <h3>Nenhum produto encontrado</h3>
-            <p>Tente ajustar os filtros ou <a href="/catalog">ver todos os produtos</a></p>
+            <p>Tente ajustar os filtros ou <a href="/loja">ver todos os produtos</a></p>
           </div>
         <% } %>
       </div>
 
-      <nav id="catalog-pagination-wrap" class="catalog-pagination-wrap" aria-label="Paginação do catálogo">
+      <nav id="catalog-pagination-wrap" class="catalog-pagination-wrap" aria-label="Paginação da loja">
         <% if (typeof catalogPagination !== 'undefined' && catalogPagination && catalogPagination.totalPages > 1) { %>
           <div class="catalog-pagination">
             <% if (catalogPagination.page > 1) { %>
@@ -421,7 +421,7 @@
   window.__CATALOG_SETTINGS__ = {
     hideCatalogPrices: <%= (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) ? true : false %>
   };
-  window.__CATALOG_RETURN_PATH__ = <%- JSON.stringify(typeof catalogReturnPath !== 'undefined' ? catalogReturnPath : '/catalog') %>;
+  window.__CATALOG_RETURN_PATH__ = <%- JSON.stringify(typeof catalogReturnPath !== 'undefined' ? catalogReturnPath : '/loja') %>;
   window.__CATALOG_FAMILY_NAMES__ = <%- JSON.stringify(typeof familyNameById !== 'undefined' ? familyNameById : {}) %>;
   window.__INITIAL_FACETS__ = <%- JSON.stringify(typeof initialFacets !== 'undefined' && initialFacets ? initialFacets : null) %>;
 </script>

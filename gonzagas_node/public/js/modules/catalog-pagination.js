@@ -179,13 +179,13 @@ class CatalogPagination {
 
   generateProductHTML(product, index) {
     const imageUrl = product.image_url ? `/media/products/${product.image_url.replace(/\.[^.]+$/, '')}-medium.jpg` : '/images/imagem-nao-disponivel.svg';
-    const productLink = `/catalog/product/${product.id}`;
+    const productLink = `/loja/produto/${product.id}`;
     
     return `
       <div class="product-item" data-product-id="${product.id}" data-aos="fade-up" data-aos-delay="${index * 50}">
         <div class="product-card">
           <div class="product-image-container">
-            <a href="/catalog/product/${product.id}" class="product-image-link">
+            <a href="/loja/produto/${product.id}" class="product-image-link">
               <img src="${imageUrl}" 
                    alt="${this.escapeHtml(product.name)}" 
                    class="product-image lazy-load"
@@ -194,7 +194,7 @@ class CatalogPagination {
                    style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
                    onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
               <div class="product-overlay">
-                <a href="/catalog/product/${product.id}" class="btn-quick-view">
+                <a href="/loja/produto/${product.id}" class="btn-quick-view">
                   <i class="fas fa-eye"></i> Ver Detalhes
                 </a>
               </div>

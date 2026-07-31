@@ -205,7 +205,7 @@ body.showcase-theme .filters-header h3 { color: var(--igp-gold) !important; }
                     <div class="products-grid" data-view="grid">
                         <% products.forEach(function(product) { %>
                         <div class="product-card">
-                            <a href="/catalog/product/<%= product.id %>" class="product-link">
+                            <a href="/loja/produto/<%= product.id %>" class="product-link">
                                 <div class="product-image-wrapper">
                                     <img src="<%= product.main_image ? '/uploads/products/' + product.main_image : '/images/imagem-nao-disponivel.svg' %>" 
                                          alt="<%= product.name %>"
@@ -276,7 +276,7 @@ body.showcase-theme .filters-header h3 { color: var(--igp-gold) !important; }
                         <i class="fas fa-search no-results-icon"></i>
                         <h2>Nenhum resultado encontrado</h2>
                         <p>Tenta ajustar os filtros ou fazer uma nova pesquisa</p>
-                        <a href="/catalog" class="btn-primary">
+                        <a href="/loja" class="btn-primary">
                             <i class="fas fa-th"></i>
                             Ver Todo o Catálogo
                         </a>

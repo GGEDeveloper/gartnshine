@@ -6,7 +6,7 @@
       <%
         const cardImg = productImg(product.image_url, 'small');
         const imageUrl = cardImg.jpg;
-        const productLink = `/catalog/product/${product.slug || product.id}`;
+        const productLink = `/loja/produto/${product.slug || product.id}`;
       %>
       <a href="<%= productLink %>"
          class="product-image-link">

@@ -8,7 +8,7 @@
   // origens da confusão entre os dois conceitos.
   const isColecoes = navPath === '/colecoes' || navPath.startsWith('/colecao/');
   const isGaleria = navPath === '/galeria';
-  const isCatalog = navPath === '/catalog' || navPath.startsWith('/catalog/')
+  const isCatalog = navPath === '/loja' || navPath.startsWith('/loja/')
     || navPath.startsWith('/categoria/');
   const isAbout = navPath === '/about';
   const isCart = navPath === '/cart';
@@ -33,7 +33,7 @@
         <li><a href="/" class="<%= isHome ? 'active' : '' %>">Início</a></li>
         <li><a href="/colecoes" class="<%= isColecoes ? 'active' : '' %>">Coleções</a></li>
         <% if (catalogEnabled) { %>
-        <li><a href="/catalog" class="<%= isCatalog ? 'active' : '' %>">Catálogo</a></li>
+        <li><a href="/loja" class="<%= isCatalog ? 'active' : '' %>">Loja</a></li>
         <% } %>
         <li><a href="/galeria" class="<%= isGaleria ? 'active' : '' %>">Galeria</a></li>
         <li><a href="/about" class="<%= isAbout ? 'active' : '' %>">Sobre</a></li>
@@ -112,9 +112,9 @@
       </a>
 
       <% if (catalogEnabled) { %>
-      <a href="/catalog" class="mobile-nav-link <%= isCatalog ? 'active' : '' %>">
+      <a href="/loja" class="mobile-nav-link <%= isCatalog ? 'active' : '' %>">
         <i class="fas fa-gem" aria-hidden="true"></i>
-        <span>Catálogo</span>
+        <span>Loja</span>
       </a>
       <% } %>
 

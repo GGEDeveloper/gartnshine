@@ -119,7 +119,7 @@ class AnalyticsTracker {
             }
             
             // Product links
-            const productLink = e.target.closest('a[href*="/catalog/product/"]');
+            const productLink = e.target.closest('a[href*="/loja/produto/"]');
             if (productLink) {
                 const productId = this.extractProductId(productLink.href);
                 this.trackEvent({
@@ -318,12 +318,12 @@ class AnalyticsTracker {
     
     getProductIdFromPage() {
         // Extract product ID from URL if on product page
-        const match = window.location.pathname.match(/\/catalog\/product\/(\d+)/);
+        const match = window.location.pathname.match(/\/loja\/produto\/(\d+)/);
         return match ? parseInt(match[1]) : null;
     }
     
     extractProductId(url) {
-        const match = url.match(/\/catalog\/product\/(\d+)/);
+        const match = url.match(/\/loja\/produto\/(\d+)/);
         return match ? parseInt(match[1]) : null;
     }
     

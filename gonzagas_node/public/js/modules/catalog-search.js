@@ -151,7 +151,7 @@ class CatalogSearch {
           <i class="fas fa-search"></i>
         </div>
         <h3>Nenhum produto encontrado</h3>
-        <p>Tente ajustar os termos de pesquisa ou <a href="/catalog">ver todos os produtos</a></p>
+        <p>Tente ajustar os termos de pesquisa ou <a href="/loja">ver todos os produtos</a></p>
       `;
       this.container.parentElement.insertBefore(noResultsEl, this.container);
     } else if (!show && noResultsEl) {

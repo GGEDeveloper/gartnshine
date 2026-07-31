@@ -22,7 +22,7 @@ class CatalogController {
         console.log('[CatalogController] Catalog page is DISABLED. Rendering construction page.');
         return res.status(200).render('public/catalog', {
           title: 'Catálogo em Construção',
-          currentPath: '/catalog',
+          currentPath: '/loja',
           layout: 'layouts/main',
           selectedFamilyIds: [],
           families: [],
@@ -130,11 +130,11 @@ class CatalogController {
         title: 'Catálogo',
         catalogMaterials,
         filtroActivo,
-        currentPath: '/catalog',
+        currentPath: '/loja',
         layout: 'layouts/main',
         // A descrição genérica do site era curta e repetia-se noutras páginas.
         metaDescription: 'Catálogo completo de joias artesanais em prata 925, latão e pedras naturais — anéis, colares, brincos e pulseiras. Filtre por material, tipo e preço.',
-        canonicalUrl: 'https://artnshine.pt/catalog',
+        canonicalUrl: 'https://artnshine.pt/loja',
         products: result.products,
         families: familiesForView,
         familiesTree,

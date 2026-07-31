@@ -6,8 +6,8 @@
  *
  * ROTAS ATIVAS (sitemap completo):
  *   /                        → index.ejs
- *   /catalog                 → CatalogController
- *   /catalog/product/:id     → catalog/product-detail.ejs
+ *   /loja                    → CatalogController
+ *   /loja/produto/:id       → catalog/product-detail.ejs
  *   /galeria                 → collections.ejs  (Galeria de fotografias)
  *   /categoria/:slug         → category.ejs     (categoria da taxonomia)
  *   /colecoes                → curated-collections.ejs (índice de coleções)
@@ -94,7 +94,7 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>${baseUrl}/catalog</loc>
+    <loc>${baseUrl}/loja</loc>
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -144,7 +144,7 @@ router.get('/sitemap.xml', async (req, res) => {
     for (const product of products) {
       const lastmod = formatSitemapDate(product.updated_at);
       const productPath = product.slug || product.id;
-      const productUrl = `${baseUrl}/catalog/product/${productPath}`;
+      const productUrl = `${baseUrl}/loja/produto/${productPath}`;
 
       sitemap += `
 
@@ -194,7 +194,7 @@ router.get('/robots.txt', (req, res) => {
 
   res.send(`User-agent: *
 Allow: /
-Allow: /catalog
+Allow: /loja
 Allow: /about
 Allow: /galeria
 Allow: /categoria/
@@ -233,7 +233,7 @@ router.get('/feed/products.xml', async (req, res) => {
 
     for (const product of products) {
       const productPath = product.slug || product.id;
-      const productUrl = `${baseUrl}/catalog/product/${productPath}`;
+      const productUrl = `${baseUrl}/loja/produto/${productPath}`;
       const imageUrl = product.main_image
         ? mediumImageUrl(product.main_image)
         : `${baseUrl}/images/og-artnshine.jpg`;

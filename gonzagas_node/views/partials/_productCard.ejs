@@ -1,12 +1,12 @@
 <div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>" data-product-id="<%= product.id %>">
   <div class="product-image">
     <%
-      // O cartão liga à FICHA DO PRODUTO. Antes ligava a `/catalog?family=N`,
+      // O cartão liga à FICHA DO PRODUTO. Antes ligava a `/loja?family=N`,
       // o que levava quem clicasse numa peça para uma listagem — e nem sequer
       // filtrava, porque o catálogo lê `families` (plural) e isto mandava
       // `family`. A ramificação alternativa (abrir a imagem em lightbox) só
       // era usada por um ficheiro .backup e foi removida.
-      const produtoLink = `/catalog/product/${product.slug || product.id}`;
+      const produtoLink = `/loja/produto/${product.slug || product.id}`;
       const cardImg = productImg(product.image_url, 'small');
     %>
 

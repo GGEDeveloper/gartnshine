@@ -106,7 +106,7 @@ class CatalogQuickView {
     `;
 
     // Update full link
-    fullLink.href = `/catalog/product/${productId}`;
+    fullLink.href = `/loja/produto/${productId}`;
 
     // Open modal
     if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {

@@ -79,6 +79,29 @@ describe('Rotas públicas', () => {
 });
 
 describe('Endereços antigos (301)', () => {
+  // A loja mudou de /catalog para /loja. Eram 410 URLs indexadas — a loja
+  // mais as 409 fichas de produto — por isso os 301 são o que impede a perda
+  // de toda a autoridade acumulada nelas.
+  test('/catalog redirecciona 301 para /loja', async () => {
+    const res = await request(app).get('/catalog').expect(301);
+    expect(res.headers.location).toBe('/loja');
+  });
+
+  test('/catalog leva os filtros consigo no redirect', async () => {
+    const res = await request(app).get('/catalog?families=1&sort=name-asc').expect(301);
+    expect(res.headers.location).toBe('/loja?families=1&sort=name-asc');
+  });
+
+  test('/catalog/product/:slug redirecciona 301 para /loja/produto/:slug', async () => {
+    const res = await request(app).get('/catalog/product/anel-de-prata-com-onix-oval').expect(301);
+    expect(res.headers.location).toBe('/loja/produto/anel-de-prata-com-onix-oval');
+  });
+
+  test('/loja responde 200 com produtos', async () => {
+    const res = await request(app).get('/loja').expect(200);
+    expect(res.text).toMatch(/product-card/);
+  });
+
   // Estes 301 são o que impede a perda da autoridade acumulada pelos 23 URLs
   // de categoria e pela galeria, que estavam indexados no Google.
   test('/collection/:id redirecciona 301 para /categoria/:slug', async () => {
@@ -104,6 +127,8 @@ describe('Endereços antigos (301)', () => {
   test('o sitemap não anuncia os endereços antigos', async () => {
     const res = await request(app).get('/sitemap.xml').expect(200);
     expect(res.text).not.toMatch(/artnshine\.pt\/collection\//);
+    expect(res.text).not.toMatch(/artnshine\.pt\/catalog/);
+    expect(res.text).toMatch(/artnshine\.pt\/loja/);
     expect(res.text).not.toMatch(/artnshine\.pt\/collections</);
     expect(res.text).toMatch(/artnshine\.pt\/categoria\//);
     expect(res.text).toMatch(/artnshine\.pt\/galeria</);

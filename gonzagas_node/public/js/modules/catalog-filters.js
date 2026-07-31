@@ -469,7 +469,7 @@ class CatalogFilters {
             <i class="fas fa-search"></i>
           </div>
           <h3>Nenhum produto encontrado</h3>
-          <p>Tente ajustar os filtros ou <a href="/catalog">ver todos os produtos</a></p>
+          <p>Tente ajustar os filtros ou <a href="/loja">ver todos os produtos</a></p>
         </div>
       `;
       return;
@@ -517,8 +517,8 @@ class CatalogFilters {
     const ret =
       typeof window.__CATALOG_RETURN_PATH__ === 'string' && window.__CATALOG_RETURN_PATH__
         ? window.__CATALOG_RETURN_PATH__
-        : '/catalog';
-    return `/catalog/product/${slugOrId}?return=${encodeURIComponent(ret)}`;
+        : '/loja';
+    return `/loja/produto/${slugOrId}?return=${encodeURIComponent(ret)}`;
   }
 
   generateProductHTML(product, index) {

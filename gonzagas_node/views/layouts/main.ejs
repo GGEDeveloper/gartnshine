@@ -157,7 +157,7 @@
   <% if (typeof ogType !== 'undefined' && ogType === 'product' && typeof product !== 'undefined' && product) { %>
   <% 
     const _baseUrl = 'https://artnshine.pt';
-    const _canonical = typeof canonicalUrl !== 'undefined' ? canonicalUrl : (_baseUrl + '/catalog/product/' + (product.slug || product.id));
+    const _canonical = typeof canonicalUrl !== 'undefined' ? canonicalUrl : (_baseUrl + '/loja/produto/' + (product.slug || product.id));
     let _mainImg = null;
     if (product.image_url) _mainImg = product.image_url;
     else if (product.images && product.images.length > 0) _mainImg = (typeof product.images[0] === 'string' ? product.images[0] : (product.images[0].image_filename || product.images[0]));
