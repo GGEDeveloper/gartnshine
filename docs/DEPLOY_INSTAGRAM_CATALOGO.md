@@ -39,6 +39,7 @@
 | **Cabeçalhos de material** | Prata, Latão e Macramé apareciam sem fotografia: a subquery da imagem de recurso ignorava as subcategorias. |
 | **Mudança de nome** | "Gonzaga's Art & Shine" passa a **Gonzaga** (SEO: "Gonzaga Jewellery"). A marca vive agora em `config/brand.js`. |
 | **Botão "voltar"** | Em todas as páginas menos a inicial, com destino hierárquico. |
+| **Catálogo passa a Loja** | `/catalog` → `/loja` e `/catalog/product/:slug` → `/loja/produto/:slug`. **410 URLs indexadas**, todas com 301 permanente. |
 
 ### Alterações de base de dados
 
@@ -239,6 +240,30 @@ done
 
 Todos **200**. `/galeria` tem de continuar a funcionar mesmo sem Instagram
 ligado — a secção do feed simplesmente não aparece.
+
+### A migração /catalog → /loja
+
+```bash
+# Os endereços novos respondem:
+curl -s -o /dev/null -w '%{http_code}\n' https://artnshine.pt/loja
+
+# E os antigos redireccionam, levando os filtros consigo:
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' "https://artnshine.pt/catalog?families=1"
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://artnshine.pt/catalog/product/anel-de-prata-com-onix-oval
+```
+
+**Esperado:** `/loja` a 200; os dois antigos a **301**, o primeiro para
+`/loja?families=1` (com a query intacta) e o segundo para
+`/loja/produto/anel-de-prata-com-onix-oval`.
+
+Se a query se perder no redirect, um link partilhado com filtros chega à loja
+sem eles — parar e reportar.
+
+```bash
+# O sitemap não pode anunciar os endereços antigos:
+curl -s https://artnshine.pt/sitemap.xml | grep -c 'artnshine.pt/catalog'  # esperado: 0
+curl -s https://artnshine.pt/sitemap.xml | grep -c 'artnshine.pt/loja'     # esperado: 410
+```
 
 ### O bug dos links foi mesmo corrigido
 
