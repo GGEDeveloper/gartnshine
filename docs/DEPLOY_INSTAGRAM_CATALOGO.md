@@ -2,7 +2,7 @@
 
 **Para:** agente de deployment
 **Destino:** produção `artnshine.pt` (servidor waphix, Docker Compose)
-**Alcance:** commits `420340f` → `91dc2e8` em `main`
+**Alcance:** commits `420340f` → `HEAD` em `main` (inclui a mudança de nome para "Gonzaga")
 
 > Deploy anterior: [`DEPLOY_CATEGORIAS_GALERIA.md`](DEPLOY_CATEGORIAS_GALERIA.md).
 > Este lote **assume** que esse já foi aplicado (endereços `/categoria/:slug` e
@@ -168,6 +168,25 @@ docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
 Esperado: `Migration 010 completed: instagram_media + instagram_account ready`.
 É idempotente — pode correr mais do que uma vez.
 
+Depois, a migração da mudança de nome:
+
+```bash
+docker exec -i mariadb mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" \
+  < sql/migrations/011_rebranding_gonzaga.sql
+```
+
+Substitui o nome antigo em textos guardados (descrições de categorias,
+produtos e coleções). No ambiente local só havia **uma** ocorrência, mas
+produção tem produtos que não existem localmente — daí correr em todas as
+tabelas por precaução.
+
+A migração termina com uma contagem de confirmação: **as quatro linhas têm de
+dar 0**. Se alguma não der, parar e reportar.
+
+Não altera estrutura nenhuma e é idempotente. **Não é reversível
+automaticamente** — o texto antigo não fica guardado; repõe-se do backup do
+Passo 1.
+
 Verificar:
 
 ```bash
@@ -254,6 +273,10 @@ não vão acontecer, mesmo que o `transitions.css` carregue.
 | Página inicial | Sem Instagram ligado, a faixa "Do Atelier" **não aparece de todo** — não deve ficar um título sem imagens por baixo |
 | `/admin` → menu lateral | Tem **Instagram** |
 | `/admin/instagram` | Mostra "Token expirado" e avisa que o do `.env` não pode ser renovado |
+| **Qualquer página** | Diz **Gonzaga**, não "Art & Shine". O título da aba é `… \| Gonzaga` |
+| Página inicial | Título grande: **Gonzaga** / JEWELLERY |
+| Código-fonte, schema.org | `"name": "Gonzaga Jewellery"` e `"alternateName": ["Gonzaga", "Gonzaga's Art & Shine"]` — **o nome antigo aqui é intencional**, liga as duas identidades no Google. É a única ocorrência que deve sobrar |
+| Logótipo, imagem de partilha, ícones | **Ainda têm a marca antiga** — é trabalho de design, Fase 3 do plano. Não parte nada |
 | **Clicar numa peça** em `/categoria/prata` | Abre a **ficha do produto**. Se abrir uma listagem, o deploy não pegou |
 | Cartão de peça | Mostra o **nome** da peça, além da referência e do preço |
 | `/categoria/prata` — cabeçalho | Tem **fotografia** de fundo (antes era liso) |
