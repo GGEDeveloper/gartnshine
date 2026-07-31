@@ -37,6 +37,8 @@
 | **Setas entre peças** | Anterior/seguinte na ficha, dentro da mesma categoria, com posição ("12 / 90") e transição direccional. |
 | **Correcção de links** | O cartão de produto ligava a `/catalog?family=N` em vez da ficha — e nem filtrava, porque o catálogo lê `families` (plural). |
 | **Cabeçalhos de material** | Prata, Latão e Macramé apareciam sem fotografia: a subquery da imagem de recurso ignorava as subcategorias. |
+| **Mudança de nome** | "Gonzaga's Art & Shine" passa a **Gonzaga** (SEO: "Gonzaga Jewellery"). A marca vive agora em `config/brand.js`. |
+| **Botão "voltar"** | Em todas as páginas menos a inicial, com destino hierárquico. |
 
 ### Alterações de base de dados
 
@@ -277,6 +279,9 @@ não vão acontecer, mesmo que o `transitions.css` carregue.
 | Página inicial | Título grande: **Gonzaga** / JEWELLERY |
 | Código-fonte, schema.org | `"name": "Gonzaga Jewellery"` e `"alternateName": ["Gonzaga", "Gonzaga's Art & Shine"]` — **o nome antigo aqui é intencional**, liga as duas identidades no Google. É a única ocorrência que deve sobrar |
 | Logótipo, imagem de partilha, ícones | **Ainda têm a marca antiga** — é trabalho de design, Fase 3 do plano. Não parte nada |
+| **Botão "voltar"** | Presente em todas as páginas menos a inicial. Em `/categoria/aneis-prata` diz "Prata"; numa ficha de produto diz o nome da categoria |
+| Voltar vindo de dentro do site | Recua no histórico e **repõe a posição de scroll** — não navega para o link |
+| Voltar chegando de fora (abrir o URL directamente) | Navega para a página acima. Nunca fica um botão que não faz nada |
 | **Clicar numa peça** em `/categoria/prata` | Abre a **ficha do produto**. Se abrir uma listagem, o deploy não pegou |
 | Cartão de peça | Mostra o **nome** da peça, além da referência e do preço |
 | `/categoria/prata` — cabeçalho | Tem **fotografia** de fundo (antes era liso) |
