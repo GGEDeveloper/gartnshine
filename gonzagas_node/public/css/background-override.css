@@ -133,9 +133,13 @@ footer {
    NAVIGATION
    ========================================== */
 
+/* Antes esta regra apanhava o seletor de elemento `nav`, ou seja TODOS os
+   <nav> da página: a navegação desktop, as migalhas, a barra "voltar" e a
+   navegação entre peças ganhavam uma caixa preta opaca por cima do header.
+   Restringido aos contentores de navegação que são mesmo barras. */
 .header,
 .navbar,
-nav {
+.main-header {
     background: rgba(0, 0, 0, 0.95) !important;
     background-image: none !important;
 }

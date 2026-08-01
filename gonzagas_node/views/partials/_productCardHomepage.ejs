@@ -12,20 +12,28 @@
          class="product-image-link">
         <picture>
           <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
+          <%
+            // width/height são as dimensões REAIS do ficheiro (as variantes
+            // `small` são 400x400). Sem eles o browser não sabe que espaço
+            // reservar e a página salta quando cada imagem chega (CLS).
+            // O posicionamento vive agora em CSS (.product-image-container),
+            // não num atributo `style` com 13 !important.
+          %>
           <img src="<%= imageUrl %>"
                alt="<%= product.name %> — joia artesanal prata 925"
                class="product-image lazy-load"
                loading="lazy"
+               decoding="async"
+               width="400" height="400"
                data-src="<%= imageUrl %>"
-               style="opacity: 1 !important; visibility: visible !important; display: block !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important; z-index: 2 !important;"
-               onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'; this.style.cssText+='opacity: 1 !important; visibility: visible !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; min-width: 100% !important; min-height: 100% !important; object-fit: cover !important; object-position: center center !important;';">
+               onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
         </picture>
       </a>
     </div>
     <div class="product-info">
       <p class="product-reference">Ref: <%= product.reference || 'N/A' %></p>
       <% if (product.family_name) { %>
-        <p class="product-family"><small class="text-highlight"><%= product.family_name %></small></p>
+        <p class="product-family"><span class="text-highlight"><%= product.family_name %></span></p>
       <% } %>
       <p class="product-price">
         <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>

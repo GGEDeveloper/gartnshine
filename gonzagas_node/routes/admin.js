@@ -342,10 +342,27 @@ router.get('/product-families/create', adminSessionRequired, ProductFamilyContro
 router.post('/product-families/create', adminSessionRequired, ProductFamilyController.createFamily);
 router.get('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.showEditForm);
 router.post('/product-families/edit/:id', adminSessionRequired, ProductFamilyController.updateFamily);
+// Imagens da categoria: `:tipo` é `hero` (faixa 16:9) ou `card` (cartão 4:5).
+// Substitui a rota `/hero-image`, que só sabia apontar para um ficheiro sem
+// enquadramento — ver utils/categoryImageProcessor.js.
+router.post('/product-families/edit/:id/imagem/:tipo',
+  adminSessionRequired,
+  familyHeroUpload.single('ficheiro'),
+  ProductFamilyController.updateCategoryImage
+);
+
+// Dimensões do original, para o editor de enquadramento.
+router.get('/product-families/imagem-info',
+  adminSessionRequired,
+  ProductFamilyController.imagemInfo
+);
+
+// Endereço antigo: mantido a redireccionar para não partir um formulário
+// que tenha ficado aberto num separador.
 router.post('/product-families/edit/:id/hero-image',
   adminSessionRequired,
   familyHeroUpload.single('hero_image_file'),
-  ProductFamilyController.updateHeroImage
+  (req, res) => res.redirect(`/admin/product-families/edit/${req.params.id}`)
 );
 router.post('/product-families/delete/:id', adminSessionRequired, ProductFamilyController.deleteFamily);
 router.post('/product-families/colors/create', adminSessionRequired, ProductFamilyController.createColor);

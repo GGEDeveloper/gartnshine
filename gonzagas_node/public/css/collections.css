@@ -5,34 +5,34 @@
 
 .collections-page {
   min-height: 60vh;
-  padding: 2rem 0 4rem;
+  padding: var(--space-lg) 0 var(--space-2xl);
 }
 
 .collections-page .container {
-  max-width: 1200px;
+  max-width: var(--container-base);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--space-sm);
 }
 
 /* Header - alinhado ao section-header da home */
 .collections-header {
   text-align: center;
-  padding: 2rem 0 2.5rem;
+  padding: var(--space-lg) 0 var(--space-lg);
 }
 
 .collections-title h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--space-2xs) 0;
   color: var(--color-text);
 }
 
 .collections-subtitle {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 var(--space-md) 0;
   letter-spacing: 0.5px;
 }
 
@@ -40,28 +40,28 @@
 .collections-header .geometric-divider {
   display: flex;
   justify-content: center;
-  gap: 6px;
-  margin-top: 1rem;
+  gap: var(--space-3xs);
+  margin-top: var(--space-sm);
 }
 
 .collections-header .geometric-divider span {
   width: 12px;
   height: 3px;
   background: var(--color-silver);
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
 }
 
 /* Grid de galeria */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
+  gap: var(--space-md);
   padding: 0;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -102,23 +102,23 @@
 /* Estado vazio */
 .no-images {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-2xl) var(--space-lg);
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .no-images h3 {
   color: var(--color-text);
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-sm);
   font-weight: 600;
 }
 
 .no-images p {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 1rem;
+  font-size: var(--text-base);
   margin: 0;
   line-height: 1.6;
 }
@@ -138,25 +138,25 @@
 }
 
 /* Responsivo */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .collections-page {
-    padding: 1.5rem 0 3rem;
+    padding: var(--space-md) 0 var(--space-xl);
   }
 
   .collections-header {
-    padding: 1.5rem 0 2rem;
+    padding: var(--space-md) 0 var(--space-lg);
   }
 
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.98px) {
   .gallery-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-sm);
   }
 }
 
@@ -170,27 +170,27 @@
    ===================================================================== */
 
 .ig-feed-section {
-  margin: 0 0 3rem;
+  margin: 0 0 var(--space-xl);
 }
 
 .ig-feed-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
 .ig-feed-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: 400;
   letter-spacing: 0.06em;
-  margin: 0.4rem 0 0;
+  margin: var(--space-2xs) 0 0;
 }
 
 .ig-feed-title a {
   color: var(--igp-cream, #f0ece4);
   text-decoration: none;
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
-  padding-bottom: 3px;
+  padding-bottom: var(--space-3xs);
   transition: color 0.25s ease, border-color 0.25s ease;
 }
 
@@ -202,8 +202,8 @@
 
 .ig-feed-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
+  gap: var(--space-xs);
 }
 
 .ig-feed-item {
@@ -259,8 +259,8 @@
 .ig-feed-caption {
   position: absolute;
   inset: auto 0 0 0;
-  padding: 1.75rem 0.75rem 0.7rem;
-  font-size: 0.75rem;
+  padding: var(--space-md) var(--space-xs) var(--space-xs);
+  font-size: var(--text-xs);
   line-height: 1.35;
   color: var(--igp-cream, #f0ece4);
   background: linear-gradient(to top, rgba(10, 10, 10, 0.85), transparent);
@@ -280,8 +280,8 @@
 .gallery-divider {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin: 0 0 2.5rem;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
 }
 
 .gallery-divider-line {
@@ -291,17 +291,17 @@
 }
 
 .gallery-divider-label {
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   white-space: nowrap;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .ig-feed-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
+    gap: var(--space-2xs);
   }
 
   /* Em ecrãs estreitos um destaque a ocupar 2×2 deixaria uma coluna só —
@@ -316,12 +316,12 @@
   }
 
   .gallery-divider {
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
   }
 
   .gallery-divider-label {
-    font-size: 0.62rem;
+    font-size: var(--text-2xs);
     letter-spacing: 0.18em;
   }
 }

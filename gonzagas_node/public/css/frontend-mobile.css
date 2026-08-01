@@ -4,11 +4,14 @@
  * Base: mobile, enhance: tablet/desktop
  */
 
-/* ===== MOBILE BASE (default) ===== */
+/* ===== MOBILE BASE (default) =====
+   Este ficheiro tinha o seu próprio conjunto de tokens (--touch-min,
+   --spacing-mobile, --spacing-section) em paralelo com os do resto do site.
+   Passam a ser aliases do design system, para haver um valor só. */
 :root {
-  --touch-min: 44px;
-  --spacing-mobile: 1rem;
-  --spacing-section: 2rem;
+  --touch-min: var(--tap-min);
+  --spacing-mobile: var(--space-sm);
+  --spacing-section: var(--space-lg);
 }
 
 /* Prevent horizontal overflow */
@@ -28,35 +31,19 @@ body {
   overflow-x: clip;
 }
 
-/* Fluid typography - mobile first */
-h1 {
-  font-size: clamp(1.75rem, 5vw, 3rem);
-  line-height: 1.2;
-}
+/* A tipografia fluida de h1/h2/h3 vivia aqui, com uma escala diferente da
+   do resto do site (clamp(1.75rem, 5vw, 3rem) contra os 3rem fixos do
+   main.css) — os dois ficheiros contradiziam-se e ganhava o último a
+   carregar. A escala única está agora em design-system.css. */
 
-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-}
+/* Os alvos de toque estão em design-system.css, aplicados a controlos
+   nomeados. A regra que existia aqui apanhava TODOS os `<button>`,
+   incluindo os decorativos: os pontos de 7px da barra de progresso de
+   leitura eram esticados para 44px de altura e apareciam como elipses
+   por baixo do header em todas as páginas. */
 
-h3 {
-  font-size: clamp(1.25rem, 3vw, 2rem);
-}
-
-/* Touch targets - mínimo 44px para botões e controlos */
-button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
-  min-height: var(--touch-min);
-}
-
-.mobile-nav-link {
-  min-height: var(--touch-min);
-  display: flex;
-  align-items: center;
-}
-
-.filter-checkbox, .filter-radio {
-  min-width: 22px;
-  min-height: 22px;
-}
+/* As caixas de selecção são agora desenhadas (18px) e o alvo de toque é a
+   LINHA inteira (.filter-option, 44px) — forçar 22px aqui só as deformava. */
 
 /* Container com padding seguro (notch) */
 .container, .main-content, .catalog-container {
@@ -65,22 +52,22 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== MOBILE NAV (drawer) ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .mobile-nav, .mobile-nav-content {
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-top: max(var(--space-sm), env(safe-area-inset-top));
   }
 
   .mobile-nav-header {
-    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-left: max(var(--space-sm), env(safe-area-inset-left));
   }
 
   .mobile-nav-links {
-    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-left: max(var(--space-2xs), env(safe-area-inset-left));
   }
 }
 
 /* ===== HEADER MOBILE — ver public/css/header.css ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .logo-container {
     flex-shrink: 1;
     min-width: 0;
@@ -89,7 +76,7 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* Desktop: pesquisa sempre visível — ver header.css */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .header-search-wrapper {
     display: flex;
     align-items: center;
@@ -102,46 +89,46 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
    botões, uma altura fixa cortava o conteúdo (o eyebrow e o segundo botão
    ficavam fora). Passa a crescer com o conteúdo — a altura mínima vem de
    homepage.css. */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .hero {
     height: auto !important;
     padding: 0;
   }
 
   .hero .hero-content {
-    padding: max(0.85rem, env(safe-area-inset-top)) 1rem 0.85rem !important;
+    padding: max(var(--space-xs), env(safe-area-inset-top)) var(--space-sm) var(--space-xs) !important;
     transform: none !important;
     max-width: none !important;
   }
 
   .hero-tagline {
     font-size: clamp(0.82rem, 3.8vw, 1rem);
-    padding: 0.55rem 1rem;
+    padding: var(--space-2xs) var(--space-sm);
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.98px) {
   .hero {
     height: auto !important;
   }
 }
 
 /* ===== CATALOG MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .catalog-main {
     padding: 0;
     overflow-x: hidden;
   }
 
   .catalog-container {
-    padding: 1rem 0.75rem;
+    padding: var(--space-sm) var(--space-xs);
   }
 
   .catalog-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-sm);
     align-items: stretch;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-md);
   }
 
   .header-left {
@@ -149,22 +136,22 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   }
 
   .page-title {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
   }
 
   .page-subtitle {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
   }
 
   .header-right {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
   .filter-toggle-btn {
     width: 100%;
     justify-content: center;
-    padding: 0.75rem 1rem;
+    padding: var(--space-xs) var(--space-sm);
     min-height: 48px;
   }
 
@@ -175,25 +162,25 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   /* Catalog controls - sort & view toggle */
   .catalog-controls {
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
   }
 
   .catalog-controls-left {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--space-2xs);
   }
 
   .catalog-controls-left label {
     width: 100%;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
   }
 
   .sort-select {
     flex: 1;
     min-width: 0;
     min-height: 44px;
-    font-size: 16px;
+    font-size: var(--text-base);
   }
 
   .view-btn {
@@ -218,8 +205,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   .catalog-sidebar.filter-drawer .sidebar-header {
     flex-shrink: 0;
-    padding: 1rem;
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding: var(--space-sm);
+    padding-top: max(var(--space-sm), env(safe-area-inset-top));
   }
 
   .catalog-sidebar.filter-drawer .sidebar-content {
@@ -230,8 +217,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     touch-action: pan-y;
-    padding: 1rem;
-    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    padding: var(--space-sm);
+    padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
   }
 
   .sidebar-close {
@@ -239,9 +226,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     min-height: 44px;
   }
 
-  .filter-option {
-    padding: 0.25rem 0;
-  }
+  /* O alvo de toque da linha (.filter-option, 44px) já vem do desktop —
+     não precisa de ser redefinido aqui. */
 
   .family-tree-toggle {
     min-width: 44px;
@@ -267,8 +253,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   .family-tree-bulk-btn {
     min-height: 44px;
-    padding: 0.5rem 0.85rem;
-    font-size: 0.7rem;
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--text-2xs);
   }
 
   .family-tree-toolbar {
@@ -276,11 +262,8 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     justify-content: flex-start;
   }
 
-  .filter-label {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
+  /* A label deixou de ser o alvo: é a linha inteira. Forçar 44px na label
+     empurrava a caixa de selecção para o topo e desalinhava a lista toda. */
 
   .catalog-chips {
     line-height: 1.5;
@@ -296,14 +279,14 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   .btn-filter-apply, .btn-filter-clear {
     min-height: 48px;
-    padding: 0.75rem 1rem;
+    padding: var(--space-xs) var(--space-sm);
   }
 
   /* Product grid - 2 cols on mobile */
   .products-grid.grid-view,
   .catalog-grid.grid-view {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
   .product-item {
@@ -316,19 +299,19 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   }
 
   .product-info {
-    padding: 0.75rem;
+    padding: var(--space-xs);
   }
 
   .product-reference, .product-family {
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
   }
 
   .product-price {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   .product-title {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -338,22 +321,22 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== FEATURED / HOMEPAGE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .featured-section {
-    padding: 1.15rem 0 1.35rem;
+    padding: var(--space-sm) 0 var(--space-md);
   }
 
   .section-header h2 {
-    font-size: 1.35rem;
+    font-size: var(--text-lg);
   }
 
   .featured-carousel-wrap {
-    padding: 0 0.35rem;
+    padding: 0 var(--space-3xs);
     margin: 0 auto;
   }
 
   .slick-slide {
-    padding: 0 8px;
+    padding: 0 var(--space-2xs);
   }
 
   .featured-section .product-item,
@@ -371,7 +354,7 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   .slick-prev, .slick-next {
     width: 36px;
     height: 36px;
-    z-index: 10;
+    z-index: var(--z-raised);
   }
 
   .slick-prev { left: 5px; }
@@ -379,19 +362,19 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== FOOTER MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .main-footer {
-    padding: 2rem 1rem;
+    padding: var(--space-lg) var(--space-sm);
   }
 
   .footer-container {
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-lg);
     text-align: center;
   }
 
   .footer-section h3 {
-    font-size: 1.1rem;
+    font-size: var(--text-md);
   }
 
   .social-links, .footer-links {
@@ -403,35 +386,35 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
+    padding: var(--space-2xs) var(--space-sm);
   }
 
   .copyright {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    font-size: 0.85rem;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    font-size: var(--text-sm);
     text-align: center;
   }
 }
 
 /* ===== PRODUCT DETAIL MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .product-detail-page,
   .product-detail-v2,
   .catalog-product-detail {
-    padding: 1rem 0;
+    padding: var(--space-sm) 0;
   }
 
   .product-gallery, .product-info-section {
-    padding: 0 1rem;
+    padding: 0 var(--space-sm);
   }
 
   .gallery-thumbnails {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
+    gap: var(--space-2xs);
+    padding-bottom: var(--space-2xs);
   }
 
   .thumbnail {
@@ -441,38 +424,38 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   .btn-add-cart, .btn-quick-view {
     min-height: 48px;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-base);
   }
 }
 
 /* ===== COLLECTIONS MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .collections-page {
-    padding: 1rem;
+    padding: var(--space-sm);
   }
 
   .collections-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 }
 
 /* ===== ABOUT PAGE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .about-content {
-    padding: 1rem;
+    padding: var(--space-sm);
   }
 
   .about-content img {
-    margin: 1rem 0;
+    margin: var(--space-sm) 0;
   }
 }
 
 /* ===== SAFE AREA (notched phones) ===== */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .main-footer {
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
   }
 
   .floating-filter-btn {
@@ -485,20 +468,20 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== TABLET (768px - 991px) ===== */
-@media (min-width: 769px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1023.98px) {
   .products-grid.grid-view,
   .catalog-grid.grid-view {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+    gap: var(--space-sm);
   }
 
   .catalog-container {
-    padding: 1.5rem 1rem;
+    padding: var(--space-md) var(--space-sm);
   }
 }
 
 /* ===== LANDSCAPE MOBILE ===== */
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 767.98px) and (orientation: landscape) {
   .hero {
     height: clamp(200px, 55vh, 320px) !important;
     min-height: 0 !important;
@@ -510,32 +493,32 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== IG STRIP (homepage) MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .ig-strip-section {
-    padding: 2rem 1rem 1.5rem;
+    padding: var(--space-lg) var(--space-sm) var(--space-md);
     overflow: hidden;
   }
 
   .ig-strip-header {
-    padding: 0 0.25rem;
-    margin-bottom: 1.5rem;
+    padding: 0 var(--space-3xs);
+    margin-bottom: var(--space-md);
   }
 
   .ig-strip-header h2 {
-    font-size: 1.35rem;
+    font-size: var(--text-lg);
   }
 
   /* CTA links em coluna */
   .ig-strip-cta {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-xs);
     align-items: stretch;
-    padding: 0 0.25rem;
+    padding: 0 var(--space-3xs);
   }
 
   .ig-strip-cta-link {
     text-align: center;
-    padding: 0.75rem 1rem;
+    padding: var(--space-xs) var(--space-sm);
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -544,50 +527,50 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   /* instagram cards caption menor */
   .instagram-card-caption {
-    font-size: 0.78rem;
-    padding: 0.5rem 0.75rem;
+    font-size: var(--text-xs);
+    padding: var(--space-2xs) var(--space-xs);
   }
 }
 
 /* ===== E-COMMERCE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   /* Botão adicionar ao carrinho — touch target */
   .btn-add-to-cart {
     min-height: 44px !important;
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
     letter-spacing: 0.06em;
   }
 }
 
 /* ===== SEARCH RESULTS PAGE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .search-results-page {
     padding: 0;
   }
 
   .search-results-page > .container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: var(--space-xs);
+    padding-right: var(--space-xs);
   }
 
   .search-header {
-    padding: 1rem 0;
+    padding: var(--space-sm) 0;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.85rem;
+    gap: var(--space-xs);
   }
 
-  .search-title { font-size: 1.3rem; }
+  .search-title { font-size: var(--text-lg); }
 
   .search-controls, .sort-view-controls {
     width: 100%;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: var(--space-xs);
   }
 
   #sortBy {
     width: 100%;
-    font-size: 16px;
+    font-size: var(--text-base);
     min-height: 44px;
   }
 
@@ -598,15 +581,15 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 
   /* Filtros: sidebar vira bloco expandível */
   .search-filters {
-    padding: 1rem;
-    margin-bottom: 1.25rem;
-    border-radius: 8px;
+    padding: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    border-radius: var(--radius-md);
   }
 
-  .filter-title { font-size: 0.8rem; }
+  .filter-title { font-size: var(--text-xs); }
 
   .price-input {
-    font-size: 16px; /* iOS zoom */
+    font-size: var(--text-base); /* iOS zoom */
     min-height: 40px;
   }
 
@@ -619,18 +602,18 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
   .search-results-content .products-grid,
   .products-grid[data-view="grid"] {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
   /* Pagination botões tácteis */
   .page-btn, .page-number {
     min-height: 40px;
     min-width: 40px;
-    padding: 0.3rem 0.6rem;
+    padding: var(--space-3xs) var(--space-2xs);
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479.98px) {
   /* Search: 1 coluna em ecrãs muito pequenos */
   .search-results-content .products-grid,
   .products-grid[data-view="grid"] {
@@ -639,27 +622,27 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== COLLECTION PAGE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .collection-page { padding: 0; }
 
-  .collection-header { padding: 2rem 1rem 1.5rem; }
+  .collection-header { padding: var(--space-lg) var(--space-sm) var(--space-md); }
 
-  .collection-title h1 { font-size: 1.5rem; }
+  .collection-title h1 { font-size: var(--text-xl); }
 
-  .filter-controls { padding: 0.75rem 1rem; }
+  .filter-controls { padding: var(--space-xs) var(--space-sm); }
 
   .sort-by { width: 100%; }
 
   #sort-select {
     width: 100%;
-    font-size: 16px;
+    font-size: var(--text-base);
     min-height: 44px;
   }
 
-  .collection-nav { padding: 1.75rem 1rem; }
+  .collection-nav { padding: var(--space-md) var(--space-sm); }
 
   .collection-link {
-    font-size: 0.82rem;
+    font-size: var(--text-sm);
     min-height: 38px;
     display: inline-flex;
     align-items: center;
@@ -667,19 +650,19 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== PRIVACY / TERMS MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .privacy-policy-container,
   .terms-container {
-    padding: 1rem 0 1.5rem;
+    padding: var(--space-sm) 0 var(--space-md);
   }
 
   .privacy-policy-content,
   .terms-content {
-    padding: 1.25rem 1rem;
-    margin: 0 0.5rem 1rem;
+    padding: var(--space-sm) var(--space-sm);
+    margin: 0 var(--space-2xs) var(--space-sm);
   }
 
-  .privacy-title, .terms-title { font-size: 1.35rem; }
+  .privacy-title, .terms-title { font-size: var(--text-lg); }
 
   .rights-grid { grid-template-columns: 1fr; }
 
@@ -697,13 +680,13 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== ABOUT PAGE — extras mobile ===== */
-@media (max-width: 768px) {
-  .about-connect { padding: 2rem 1rem; }
+@media (max-width: 767.98px) {
+  .about-connect { padding: var(--space-lg) var(--space-sm); }
 
   .social-links-large {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.6rem;
+    gap: var(--space-2xs);
   }
 
   .social-links-large a {
@@ -714,21 +697,21 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 }
 
 /* ===== ERROR PAGE MOBILE ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .error-container {
-    margin: 2rem auto;
-    padding: 1.75rem 1.25rem;
+    margin: var(--space-lg) auto;
+    padding: var(--space-md) var(--space-sm);
     width: 95%;
   }
 
-  .error-container h1 { font-size: 1.5rem; }
+  .error-container h1 { font-size: var(--text-xl); }
 
   .error-container .btn {
     display: block;
     width: 100%;
     text-align: center;
     margin-left: 0 !important;
-    margin-top: 0.65rem;
+    margin-top: var(--space-xs);
     min-height: 48px;
   }
 }
@@ -737,6 +720,6 @@ button, input[type="submit"], input[type="button"], .btn, .filter-toggle-btn {
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .ecommerce-cart-page,
   .ecommerce-checkout-page {
-    padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+    padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
   }
 }

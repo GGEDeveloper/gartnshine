@@ -37,11 +37,11 @@
     .error-container {
       max-width: 720px;
       width: 90%;
-      margin: 3rem auto;
-      padding: 2.5rem;
+      margin: var(--space-xl) auto;
+      padding: var(--space-lg);
       background: rgba(12,12,12,0.9);
       border: 1px solid var(--igp-border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       box-shadow: 0 8px 32px rgba(0,0,0,0.55);
     }
     .error-content { padding: 0; }
@@ -52,17 +52,17 @@
       font-weight: 300;
       letter-spacing: 0.12em;
       margin-top: 0;
-      margin-bottom: 1rem;
+      margin-bottom: var(--space-sm);
     }
-    p { color: var(--igp-muted); margin-bottom: 1.5rem; }
+    p { color: var(--igp-muted); margin-bottom: var(--space-md); }
     .btn {
       display: inline-block;
-      padding: 0.7rem 1.5rem;
+      padding: var(--space-xs) var(--space-md);
       background: var(--igp-gold);
       color: #0a0a0a;
       text-decoration: none;
-      border-radius: 8px;
-      margin-top: 0.5rem;
+      border-radius: var(--radius-md);
+      margin-top: var(--space-2xs);
       font-weight: 500;
       transition: background 0.25s;
     }
@@ -71,38 +71,38 @@
       background: rgba(201,168,76,0.1);
       color: var(--igp-cream);
       border: 1px solid var(--igp-border);
-      margin-left: 0.75rem;
+      margin-left: var(--space-xs);
     }
     .btn + .btn:hover { background: rgba(201,168,76,0.2); color: var(--igp-cream); }
     .error-details {
-      margin-top: 2rem;
-      padding: 1rem 1.25rem;
+      margin-top: var(--space-lg);
+      padding: var(--space-sm) var(--space-sm);
       background: rgba(0,0,0,0.4);
       border-left: 3px solid var(--igp-gold);
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       font-family: monospace;
-      font-size: 0.82rem;
+      font-size: var(--text-sm);
       color: var(--igp-muted);
       white-space: pre-wrap;
       word-break: break-all;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 767.98px) {
       .error-container {
         width: 95%;
-        margin: 2rem auto;
-        padding: 1.5rem;
+        margin: var(--space-lg) auto;
+        padding: var(--space-md);
       }
       h1 {
-        font-size: 1.5rem;
+        font-size: var(--text-xl);
       }
       .btn {
         display: block;
         width: 100%;
         text-align: center;
-        margin: 0.5rem 0 0 0;
+        margin: var(--space-2xs) 0 0 0;
         min-height: 48px;
-        padding: 0.85rem 1rem;
-        font-size: 0.95rem;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--text-base);
       }
       .btn + .btn {
         margin-left: 0;

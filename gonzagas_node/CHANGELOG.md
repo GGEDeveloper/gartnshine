@@ -1,5 +1,66 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-08-01] - Fundações de design + customização de categorias no admin
+
+### ✨ **Design system: `public/css/design-system.css`**
+- Fonte única para escalas — espaçamento, tipografia, contentores, grelha, raios, camadas e alvos de toque — carregada antes de todas as folhas de componente. Documentada em [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md).
+- **Regra combinada:** nenhuma folha de componente inventa um valor novo. Falta um degrau? Acrescenta-se à escala.
+- Números do antes/depois: breakpoints 16 → 4; tamanhos de letra 45 → 9; `border-radius` 18 → 5 (0 literais); `z-index` 20 ad-hoc → escala nomeada (0 literais); larguras de contentor 8 → 4; valores de `padding` 165 → ~34.
+
+### 🐛 **A tipografia da marca não estava a ser usada**
+- O `<head>` descarregava Cinzel e Source Sans 3, mas o CSS pedia *Playfair Display*, *Poppins* e *Georgia* — nenhuma delas carregada. O site inteiro renderizava em fallbacks do sistema e as fontes da marca só apareciam no header.
+- Ligadas a `--font-display` / `--font-body`. **Trocar a tipografia de todo o site passa a ser mudar duas linhas.**
+
+### 🐛 **Correções de layout que estavam a partir páginas**
+- **`section { padding: 4rem 0 }` no seletor de elemento** — `<section>` aparece a qualquer profundidade, por isso cada nível de aninhamento somava 64px. Na loja acumulavam três níveis: **192px de página vazia**. Passou a `main > section`.
+- **`.catalog-header` nunca teve `display: flex`** — foi escrito como uma linha de duas colunas (título / filtros+contagem) e empilhava tudo à esquerda, deixando metade da faixa vazia.
+- **Catálogo a uma coluna em telemóvel** — três causas em camada: `catalog-grid.js` escrevia `grid-template-columns` inline (anula qualquer CSS), uma regra duplicada com `!important` 150 linhas abaixo da definição real, e um breakpoint a 576px. Agora 2 colunas em telemóvel, 4 em desktop, **numa definição única** partilhada por `.products-grid` e `.catalog-grid`.
+- **Texto preto sobre fundo preto** — `.product-description h3` usava `var(--color-primary)`, que é a cor de *fundo*. O título "Descrição" era invisível em todas as fichas de produto.
+- **Caixa preta por cima do header** nas fichas de produto: `background-override.css` aplicava fundo ao seletor de elemento `nav`.
+- **`<a>` dentro de `<a>`** na template de cartão do catálogo — HTML inválido; o browser desaninha e parte o alvo de clique.
+- **`alt` a declarar "prata 925" nas 220 peças**, incluindo as 92 de latão e as 7 de macramé. Passa a usar a família real.
+- **Elipses cinzentas por baixo do header** — `frontend-mobile.css` esticava *todos* os `<button>` para 44px, incluindo os pontos decorativos de 7px da barra de progresso.
+- **Debounce partido** no `resize` do catálogo: `resizeTimer` era uma variável local, por isso o `clearTimeout` nunca cancelava nada.
+
+### ♿ **Acessibilidade e performance**
+- **Contraste WCAG AA: 0 violações** em 22 vistas (11 páginas × desktop/telemóvel). Corrigidos o botão de WhatsApp (1.98:1, branco sobre o verde da marca) e os links do rodapé (3.49:1).
+- **CLS abaixo de 0.1 em todas as páginas** — o pior caso era `/about` a 0.158 em telemóvel; ficou em 0.004, com proporção reservada na imagem.
+- **Zero transbordo horizontal** em 390px e 1440px.
+- Alvos de toque de 44px em controlos reais; controlos pequenos de propósito usam área de toque invisível (`.u-tap-area`).
+- **Salto para o conteúdo** (`.u-skip-link`) — não existia; quem navega por teclado tinha de percorrer o header em cada página.
+- Texto funcional a 11px e 9px levantado para o piso de 12px.
+- Medida de linha limitada nas páginas de texto corrido (corriam 1200px, ~160 caracteres por linha).
+
+### 🗑️ **Barra de progresso: marcas de secção removidas**
+- Eram pontos de 7px sem rótulo visível, só com `title` (que não aparece em ecrã táctil), dentro de um contentor `aria-hidden="true"` — focáveis por teclado e invisíveis para leitores de ecrã. Na loja resolviam para duas marcas, a saltar entre dois blocos da mesma página.
+- Fica a linha de progresso, decorativa.
+
+### ✨ **Painel de filtros reescrito**
+- Caixas de selecção **desenhadas na paleta da marca** — eram controlos nativos em branco sólido, desalinhados do texto.
+- Cada secção tinha moldura + sombra + blur próprios dentro de um painel que já é uma caixa: seis caixas encaixadas. Passaram a separadores finos.
+- **Aplicar / Limpar fixos no fundo** — viviam no fim de uma lista com scroll de mais de dois ecrãs.
+- **Contagem nas famílias de topo** — os produtos vivem nas subcategorias, por isso Latão/Macramé/Pedras Naturais/Prata apareciam sem número. As contagens passam a somar para os pais.
+
+### 🐛 **Contagens contraditórias entre a loja e as categorias**
+- `/categoria/prata` mostrava **258 peças**, a loja mostrava **112** para o mesmo material — a definição `hide_out_of_stock` do site era respeitada pelo catálogo e ignorada pela página de categoria (`Product.getByFamilyTree` e `ProductFamily.getNavigation`).
+- Coerente em todo o lado.
+
+### 🐛 **Botão de WhatsApp das fichas de produto apontava para um número inexistente**
+- O fallback de `WHATSAPP_NUMBER` era o literal `351XXXXXXXXX`. Sem a variável no ambiente, **o canal de contacto principal da loja estava morto em todas as fichas**.
+- Passa a usar `config/brand.js`, a mesma origem do rodapé e do schema.org. O URL na mensagem passou a `https` e a slug (era `http` e id numérico).
+
+### ✨ **Admin: customização das páginas e imagens de categoria**
+- Migração **014** (aditiva): `hero_source`, `hero_crop`, `card_source`, `card_crop` em `product_families`.
+- O formulário de categoria passa a editar **título e descrição para motores de busca**, **estado activo/inactivo** e mostra o endereço público (só de leitura — não muda ao renomear, para não partir links indexados).
+- **Editor de enquadramento** para os dois formatos que a categoria usa: faixa 16:9 e cartão 4:5, separados porque a mesma foto raramente serve os dois. Arrastar para mover, roda do rato / slider / teclado para aproximar, grelha de terços, botão de centrar e aviso quando o recorte fica abaixo da resolução final.
+- O recorte é aplicado **ao ficheiro** com `sharp` (fallback Jimp), gerando JPEG + WebP em três larguras. O original nunca é alterado.
+- Escrito em JavaScript simples de propósito: a CSP do site não autoriza CDNs arbitrários, e não vale trazer uma biblioteca de recorte para duas caixas no admin.
+- Documentado em [`docs/admin-guide.md`](../docs/admin-guide.md) §4.5.5 e §4.5.6.
+
+### 📋 **Deploy**
+- Instruções em [`docs/DEPLOY_DESIGN_SYSTEM_CATEGORIAS.md`](../docs/DEPLOY_DESIGN_SYSTEM_CATEGORIAS.md). Migração 014, aditiva e idempotente.
+- ⚠️ **Este deploy muda o aspeto do site** (tipografia) e o número de peças mostrado nas categorias. Ambos explicados na doc.
+
 ## [2026-08-01] - Loja: conta obrigatória para finalizar a compra
 
 ### ✨ **A barreira fica no checkout, não no carrinho**

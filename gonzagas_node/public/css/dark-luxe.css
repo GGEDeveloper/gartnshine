@@ -46,7 +46,7 @@ select {
   background: rgba(11, 16, 22, 0.95);
   color: var(--color-text);
   border: 1px solid var(--border-soft);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .search-input::placeholder,
@@ -71,7 +71,7 @@ button,
 .btn-secondary {
   border-color: var(--border-soft);
   box-shadow: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
@@ -102,9 +102,12 @@ button,
 .hero-content,
 .product-card,
 .gallery-item,
+/* `.filter-section` saiu daqui: dava a cada secção do painel de filtros uma
+   moldura + sombra + blur PRÓPRIOS, dentro de um painel que já é uma caixa.
+   Resultado: seis caixas encaixadas umas nas outras. As secções separam-se
+   agora com uma linha fina (ver catalog-enhanced.css). */
 .collection-nav,
 .catalog-sidebar,
-.filter-section,
 .modal-content,
 .dropdown-menu,
 .notification,
@@ -215,7 +218,7 @@ footer a:hover {
   display: block;
   width: 56px;
   height: 2px;
-  margin: 0.55rem auto 0;
+  margin: var(--space-2xs) auto 0;
   background: var(--color-accent);
   opacity: 0.9;
 }
@@ -232,7 +235,7 @@ footer a:hover {
 .product-card,
 .gallery-item,
 .card {
-  border-radius: 14px;
+  border-radius: var(--radius-md);
 }
 
 .product-card:hover,
@@ -251,7 +254,7 @@ footer a:hover {
   opacity: 0.92;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .main-header {
     background: rgba(5, 7, 10, 0.96);
   }
@@ -260,7 +263,7 @@ footer a:hover {
   .product-card,
   .gallery-item,
   .card {
-    border-radius: 12px;
+    border-radius: var(--radius-md);
   }
 }
 

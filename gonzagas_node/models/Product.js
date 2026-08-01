@@ -339,14 +339,19 @@ class Product extends BaseModel {
    * nas filhas (Aneis - Prata, etc.). Sem isto, a página de um material ficaria
    * vazia. Para uma folha o resultado é o mesmo que getByFamily.
    */
-  static async getByFamilyTree(familyId, limit = 500, offset = 0) {
+  static async getByFamilyTree(familyId, limit = 500, offset = 0, { hideOutOfStock = false } = {}) {
     try {
+      // A página de categoria listava TODAS as peças activas, ignorando o
+      // `hide_out_of_stock` do site que o catálogo respeita. Resultado: a loja
+      // mostrava 112 peças em Prata e a categoria mostrava 258, incluindo
+      // peças esgotadas que o site está configurado para esconder.
+      const filtroStock = hideOutOfStock ? 'AND p.current_stock > 0' : '';
       const [rows] = await pool.query(`
         SELECT p.*, f.name as family_name,
                (SELECT pi.image_filename FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.sort_order ASC, pi.id ASC LIMIT 1) as image_url
         FROM products p
         JOIN product_families f ON p.family_id = f.id
-        WHERE p.is_active = 1 AND (f.id = ? OR f.parent_id = ?)
+        WHERE p.is_active = 1 ${filtroStock} AND (f.id = ? OR f.parent_id = ?)
         ORDER BY f.name, p.reference
         LIMIT ? OFFSET ?
       `, [familyId, familyId, limit, offset]);

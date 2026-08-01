@@ -4,13 +4,15 @@
  */
 
 .main-header {
-  --header-font-logo: 'Cinzel', Georgia, 'Times New Roman', serif;
-  --header-font-nav: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+  /* Herdados do design system — o header deixa de definir a sua
+     própria tipografia à parte do resto do site. */
+  --header-font-logo: var(--font-display);
+  --header-font-nav: var(--font-body);
   --header-icon-color: var(--igp-gold, #c9a84c);
   --header-icon-hover: var(--igp-cream, #f0ece4);
   --header-icon-size: 1.0625rem;
   --header-icon-btn: 40px;
-  --header-toolbar-gap: 0.125rem;
+  --header-toolbar-gap: var(--space-3xs);
   --header-pad-y: 0.625rem;
   --header-pad-x: 0.875rem;
   --header-logo-size: 0.9375rem;
@@ -22,9 +24,9 @@
 .main-header .header-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   padding: var(--header-pad-y) var(--header-pad-x);
-  max-width: 1280px;
+  max-width: var(--container-base);
   margin: 0 auto;
 }
 
@@ -101,7 +103,7 @@ body.showcase-theme .main-header .logo-text {
   color: rgba(240, 236, 228, 0.78);
   text-decoration: none;
   position: relative;
-  padding: 0.35rem 0;
+  padding: var(--space-3xs) 0;
   line-height: 1.2;
   transition: color 0.2s ease;
 }
@@ -144,7 +146,7 @@ body.showcase-theme .main-header .logo-text {
   border: none;
   background: transparent;
   color: var(--header-icon-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-decoration: none;
   position: relative;
@@ -179,10 +181,10 @@ body.showcase-theme .main-header .logo-text {
   right: 2px;
   min-width: 16px;
   height: 16px;
-  padding: 0 3px;
-  border-radius: 999px;
+  padding: 0 var(--space-3xs);
+  border-radius: var(--radius-pill);
   font-family: var(--header-font-nav);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   font-weight: 700;
   line-height: 16px;
   text-align: center;
@@ -242,7 +244,7 @@ body.showcase-theme .main-header .logo-text {
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  z-index: 1050;
+  z-index: var(--z-drawer);
   transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(8, 8, 8, 0.98);
   backdrop-filter: blur(20px);
@@ -262,31 +264,31 @@ body.showcase-theme .main-header .logo-text {
   transform: translateY(-50%);
   width: calc(var(--header-icon-btn) - 4px);
   height: calc(var(--header-icon-btn) - 4px);
-  z-index: 2;
+  z-index: var(--z-layer-2);
 }
 
 /* ===== Conta cliente (toolbar) ===== */
 .main-header .header-account-nav {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--space-3xs);
   flex-shrink: 0;
 }
 
 .main-header .header-account-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--space-3xs);
   min-height: var(--header-icon-btn);
-  padding: 0 0.4rem;
+  padding: 0 var(--space-2xs);
   font-family: var(--header-font-nav);
-  font-size: 0.6875rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(240, 236, 228, 0.82) !important;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   white-space: nowrap;
   transition: color 0.2s ease, background 0.2s ease;
 }
@@ -303,15 +305,17 @@ body.showcase-theme .main-header .logo-text {
 .main-header .header-account-register-btn {
   display: inline-flex;
   align-items: center;
-  min-height: calc(var(--header-icon-btn) - 6px);
-  padding: 0 0.55rem;
+  /* Era `calc(--header-icon-btn - 6px)` = 34px, abaixo do mínimo de
+     toque. O CTA de registo é um alvo real. */
+  min-height: var(--tap-min);
+  padding: 0 var(--space-xs);
   font-family: var(--header-font-nav);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   border: 1px solid rgba(201, 168, 76, 0.45);
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   color: var(--igp-gold, #c9a84c) !important;
   text-decoration: none;
   white-space: nowrap;
@@ -332,7 +336,7 @@ body.showcase-theme .main-header .logo-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
+  gap: var(--space-3xs);
   width: 20px;
 }
 
@@ -341,7 +345,7 @@ body.showcase-theme .main-header .logo-text {
   width: 100%;
   height: 1.5px;
   background: currentColor;
-  border-radius: 1px;
+  border-radius: var(--radius-xs);
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
@@ -351,7 +355,7 @@ body.showcase-theme .main-header .logo-text {
   to { opacity: 1; transform: translateY(-50%) scale(1); }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .main-header .admin-menu:hover > .dropdown-menu,
   .main-header .admin-menu.open > .dropdown-menu {
     display: block;
@@ -362,7 +366,7 @@ body.showcase-theme .main-header .logo-text {
 }
 
 /* ===== Mobile (≤768px) ===== */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .main-header {
     --header-icon-size: 1.125rem;
     --header-icon-btn: 42px;
@@ -373,11 +377,11 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .main-header .header-container {
-    gap: 0.5rem;
+    gap: var(--space-2xs);
     width: 100%;
     max-width: none;
     overflow-x: hidden;
-    padding-right: max(0.75rem, env(safe-area-inset-right));
+    padding-right: max(var(--space-xs), env(safe-area-inset-right));
   }
 
   .main-header .desktop-nav {
@@ -406,20 +410,20 @@ body.showcase-theme .main-header .logo-text {
     right: max(0.75rem, env(safe-area-inset-right));
     top: 50%;
     transform: translateY(-50%);
-    z-index: 12;
+    z-index: var(--z-raised);
     background: rgba(10, 10, 10, 0.98);
     border: 1px solid rgba(201, 168, 76, 0.22);
-    border-radius: 10px;
-    padding: 0.25rem 0.35rem 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    padding: var(--space-3xs) var(--space-3xs) var(--space-3xs) var(--space-2xs);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
     animation: header-search-in 0.2s ease-out;
   }
 
   .main-header .header-search .search-input {
     min-height: 38px;
-    padding: 0.5rem 2.25rem 0.5rem 0.65rem;
-    font-size: 16px; /* evita zoom iOS */
-    border-radius: 8px;
+    padding: var(--space-2xs) var(--space-lg) var(--space-2xs) var(--space-xs);
+    font-size: var(--text-base); /* evita zoom iOS */
+    border-radius: var(--radius-md);
   }
 
   .main-header .header-account-nav {
@@ -431,7 +435,7 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .mobile-nav-content {
-    padding: max(1.25rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1.5rem max(1rem, env(safe-area-inset-left));
+    padding: max(var(--space-sm), env(safe-area-inset-top)) max(var(--space-sm), env(safe-area-inset-right)) var(--space-md) max(var(--space-sm), env(safe-area-inset-left));
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -441,14 +445,14 @@ body.showcase-theme .main-header .logo-text {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.85rem;
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-xs);
     border-bottom: 1px solid rgba(201, 168, 76, 0.18);
   }
 
   .mobile-nav-header .logo-text {
     font-family: var(--header-font-logo);
-    font-size: 1rem;
+    font-size: var(--text-base);
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -462,28 +466,28 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .mobile-nav-close i {
-    font-size: 1.125rem;
+    font-size: var(--text-md);
   }
 
   .mobile-nav-links {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: var(--space-2xs);
   }
 
   .mobile-nav-link {
     display: flex;
     align-items: center;
     min-height: 46px;
-    padding: 0.7rem 0.85rem;
+    padding: var(--space-xs) var(--space-xs);
     font-family: var(--header-font-nav);
-    font-size: 0.9375rem;
+    font-size: var(--text-sm);
     font-weight: 500;
     letter-spacing: 0.03em;
     color: rgba(240, 236, 228, 0.9);
     text-decoration: none;
-    border-radius: 9px;
+    border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.035);
     transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
@@ -496,8 +500,8 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .mobile-nav-link i {
-    margin-right: 0.75rem;
-    font-size: 1rem;
+    margin-right: var(--space-xs);
+    font-size: var(--text-base);
     color: var(--igp-gold, #c9a84c);
     width: 20px;
     text-align: center;
@@ -506,16 +510,16 @@ body.showcase-theme .main-header .logo-text {
 
   .mobile-nav-divider {
     height: 1px;
-    margin: 0.4rem 0;
+    margin: var(--space-2xs) 0;
     background: rgba(201, 168, 76, 0.12);
   }
 
   .mobile-nav-section-label {
     display: flex;
     align-items: center;
-    padding: 0.5rem 0.85rem 0.15rem;
+    padding: var(--space-2xs) var(--space-xs) var(--space-3xs);
     font-family: var(--header-font-nav);
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -524,21 +528,21 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .mobile-nav-section-label i {
-    margin-right: 0.75rem;
-    font-size: 0.875rem;
+    margin-right: var(--space-xs);
+    font-size: var(--text-sm);
     width: 20px;
     text-align: center;
     color: var(--igp-gold, #c9a84c);
   }
 
   .mobile-nav-sublink {
-    padding: 0.5rem 0.85rem 0.5rem 2.35rem;
+    padding: var(--space-2xs) var(--space-xs) var(--space-2xs) var(--space-lg);
     font-family: var(--header-font-nav);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: rgba(240, 236, 228, 0.68);
     text-decoration: none;
-    border-radius: 7px;
+    border-radius: var(--radius-sm);
     transition: background 0.2s ease, color 0.2s ease;
   }
 
@@ -548,20 +552,20 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .mobile-nav-actions {
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
     border-top: 1px solid rgba(201, 168, 76, 0.15);
   }
 
   .mobile-nav-social a {
     width: 44px;
     height: 44px;
-    font-size: 1.2rem;
+    font-size: var(--text-lg);
   }
 
   .mobile-nav-contact {
     font-family: var(--header-font-nav);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs);
     color: rgba(240, 236, 228, 0.48);
   }
 
@@ -572,14 +576,14 @@ body.showcase-theme .main-header .logo-text {
 }
 
 /* ===== Tablet (769–991px) ===== */
-@media (min-width: 769px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1023.98px) {
   .main-header {
     --header-pad-x: 1rem;
     --header-logo-size: 0.875rem;
     --header-nav-size: 0.6875rem;
     --header-icon-size: 1rem;
     --header-icon-btn: 38px;
-    --header-toolbar-gap: 0.25rem;
+    --header-toolbar-gap: var(--space-3xs);
     --header-search-size: 0.8125rem;
   }
 
@@ -593,7 +597,7 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .main-header .nav-menu {
-    gap: 0.65rem;
+    gap: var(--space-xs);
   }
 
   .main-header .header-search {
@@ -605,7 +609,7 @@ body.showcase-theme .main-header .logo-text {
 
   .main-header .header-search .search-input {
     min-height: 34px;
-    padding: 0.35rem 0.65rem;
+    padding: var(--space-3xs) var(--space-xs);
     font-size: var(--header-search-size);
   }
 
@@ -616,13 +620,13 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .main-header .header-account-register-btn {
-    padding: 0 0.45rem;
-    font-size: 0.5625rem;
+    padding: 0 var(--space-2xs);
+    font-size: var(--text-2xs);
   }
 }
 
 /* ===== Desktop (≥992px) ===== */
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .main-header {
     --header-pad-y: 0.75rem;
     --header-pad-x: 1.5rem;
@@ -630,7 +634,7 @@ body.showcase-theme .main-header .logo-text {
     --header-nav-size: 0.75rem;
     --header-icon-size: 0.9375rem;
     --header-icon-btn: 36px;
-    --header-toolbar-gap: 0.35rem;
+    --header-toolbar-gap: var(--space-3xs);
     --header-search-size: 0.8125rem;
   }
 
@@ -652,8 +656,8 @@ body.showcase-theme .main-header .logo-text {
 
   .main-header .header-search .search-input {
     min-height: 34px;
-    padding: 0.4rem 0.75rem;
-    border-radius: 8px;
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-md);
   }
 
   .main-header .mobile-search-toggle,
@@ -668,21 +672,21 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .main-header .header-account-link {
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs);
   }
 
   .main-header .header-account-register-btn {
-    font-size: 0.625rem;
-    padding: 0 0.6rem;
+    font-size: var(--text-2xs);
+    padding: 0 var(--space-2xs);
   }
 }
 
 /* ===== Desktop largo (≥1200px) ===== */
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .main-header {
     --header-logo-size: 1.125rem;
     --header-nav-size: 0.8125rem;
-    --header-toolbar-gap: 0.5rem;
+    --header-toolbar-gap: var(--space-2xs);
   }
 
   .main-header .logo-text-full {
@@ -690,7 +694,7 @@ body.showcase-theme .main-header .logo-text {
   }
 
   .main-header .nav-menu {
-    gap: 1.5rem;
+    gap: var(--space-md);
   }
 
   .main-header .header-search {
@@ -701,7 +705,7 @@ body.showcase-theme .main-header .logo-text {
 }
 
 /* ===== Mobile estreito (≤380px) ===== */
-@media (max-width: 380px) {
+@media (max-width: 479.98px) {
   .main-header {
     --header-icon-btn: 38px;
     --header-icon-size: 1rem;
@@ -714,7 +718,7 @@ body.showcase-theme .main-header .logo-text {
     right: 0;
     min-width: 14px;
     height: 14px;
-    font-size: 0.5625rem;
+    font-size: var(--text-2xs);
     line-height: 14px;
   }
 }

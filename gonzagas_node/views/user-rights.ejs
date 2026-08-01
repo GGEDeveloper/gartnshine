@@ -116,22 +116,22 @@
 .user-rights-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--space-lg);
 }
 
 .user-rights-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-xl);
 }
 
 .user-rights-header h1 {
-  font-size: 2.5rem;
+  font-size: var(--text-3xl);
   color: #c0a080;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
 }
 
 .user-rights-header p {
-  font-size: 1.1rem;
+  font-size: var(--text-md);
   color: #b0b0b0;
   max-width: 600px;
   margin: 0 auto;
@@ -140,28 +140,28 @@
 .user-rights-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
 }
 
 .rights-info h2,
 .request-form-container h2 {
   color: #c0a080;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xl);
 }
 
 .rights-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-md);
 }
 
 .right-card {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
   text-align: center;
   transition: all 0.3s ease;
 }
@@ -173,36 +173,36 @@
 }
 
 .right-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
 }
 
 .right-card h3 {
   color: #ffffff;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+  margin-bottom: var(--space-2xs);
+  font-size: var(--text-md);
 }
 
 .right-card p {
   color: #b0b0b0;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   line-height: 1.4;
 }
 
 .user-rights-form {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-md);
 }
 
 .form-group label {
   display: block;
   color: #c0a080;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2xs);
   font-weight: 500;
 }
 
@@ -210,12 +210,12 @@
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.75rem;
+  padding: var(--space-xs);
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   color: #ffffff;
-  font-size: 1rem;
+  font-size: var(--text-base);
   transition: all 0.3s ease;
 }
 
@@ -234,16 +234,16 @@
 
 .form-actions {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: var(--space-lg);
 }
 
 .btn-primary {
   background: #c0a080;
   color: #1a1a1a;
   border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -256,26 +256,26 @@
 
 .user-rights-info {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
 }
 
 .user-rights-info h2 {
   color: #c0a080;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xl);
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: var(--space-lg);
 }
 
 .info-item h3 {
   color: #ffffff;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  margin-bottom: var(--space-2xs);
+  font-size: var(--text-lg);
 }
 
 .info-item p {
@@ -284,9 +284,9 @@
 }
 
 .alert {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
   border-left: 4px solid;
 }
 
@@ -309,14 +309,14 @@
 }
 
 /* Mobile responsive */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .user-rights-container {
-    padding: 1rem;
+    padding: var(--space-sm);
   }
   
   .user-rights-content {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: var(--space-lg);
   }
   
   .rights-grid {
@@ -328,15 +328,15 @@
   }
   
   .user-rights-header h1 {
-    font-size: 2rem;
+    font-size: var(--text-2xl);
   }
   
   .right-card {
-    padding: 1rem;
+    padding: var(--space-sm);
   }
   
   .user-rights-form {
-    padding: 1.5rem;
+    padding: var(--space-md);
   }
 }
 </style>

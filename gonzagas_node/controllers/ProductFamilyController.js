@@ -1,6 +1,15 @@
 const ProductFamily = require('../models/ProductFamily');
 const ProductColor = require('../models/ProductColor');
+const path = require('path');
+const fsp = require('fs').promises;
 const { listGalleryImages } = require('../utils/galleryLibrary');
+const {
+  processarImagemCategoria,
+  limparVariantes,
+  dimensoes,
+  absolutoDePublico,
+  TIPOS: TIPOS_IMAGEM_CATEGORIA
+} = require('../utils/categoryImageProcessor');
 
 let getColorsSafe = async () => {
   try {
@@ -64,7 +73,7 @@ exports.showAddForm = async (req, res) => {
 
 exports.createFamily = async (req, res) => {
   try {
-    const { name, description, code, parent_id } = req.body;
+    const { name, description, code, parent_id, seo_title, seo_description, is_active } = req.body;
     if (!name || !code) {
       req.flash('error_msg', 'Nome e Código são obrigatórios.');
       return res.redirect('/admin/product-families/create');
@@ -113,7 +122,7 @@ exports.showEditForm = async (req, res) => {
 exports.updateFamily = async (req, res) => {
   try {
     const familyId = parseInt(req.params.id);
-    const { name, description, code, parent_id } = req.body;
+    const { name, description, code, parent_id, seo_title, seo_description, is_active } = req.body;
     if (!name) {
       req.flash('error_msg', 'Nome é obrigatório.');
       return res.redirect(`/admin/product-families/edit/${familyId}`);
@@ -129,7 +138,17 @@ exports.updateFamily = async (req, res) => {
       req.flash('error_msg', 'Código é obrigatório.');
       return res.redirect(`/admin/product-families/edit/${familyId}`);
     }
-    await ProductFamily.update(familyId, { name, description, code: effectiveCode, parent_id: parent_id || null });
+    await ProductFamily.update(familyId, {
+      name,
+      description,
+      code: effectiveCode,
+      parent_id: parent_id || null,
+      seo_title,
+      seo_description,
+      // Uma checkbox não enviada não aparece no body — ausência significa
+      // desactivada.
+      is_active: is_active === 'on' || is_active === '1'
+    });
     req.flash('success_msg', 'Categoria atualizada com sucesso.');
     res.redirect('/admin/product-families');
   } catch (error) {
@@ -139,10 +158,19 @@ exports.updateFamily = async (req, res) => {
   }
 };
 
-/** POST /admin/product-families/edit/:id/hero-image — escolher da galeria, enviar nova, ou remover. */
-exports.updateHeroImage = async (req, res) => {
+/**
+ * POST /admin/product-families/edit/:id/imagem/:tipo  (tipo = hero | card)
+ *
+ * Substitui o antigo `updateHeroImage`, que só sabia apontar para um ficheiro.
+ * Aceita origem por upload OU escolha da galeria, mais o rectângulo de recorte
+ * decidido no editor, e gera as variantes na proporção certa.
+ */
+exports.updateCategoryImage = async (req, res) => {
   const familyId = parseInt(req.params.id, 10);
+  const tipo = req.params.tipo === 'card' ? 'card' : 'hero';
   const backToForm = `/admin/product-families/edit/${familyId}`;
+  const rotulo = TIPOS_IMAGEM_CATEGORIA[tipo].label;
+
   try {
     const family = await ProductFamily.getById(familyId);
     if (!family) {
@@ -150,33 +178,96 @@ exports.updateHeroImage = async (req, res) => {
       return res.redirect('/admin/product-families');
     }
 
-    let heroImagePath;
-    if (req.file) {
-      heroImagePath = `/media/gallery/${req.file.filename}`;
-    } else if (req.body.hero_image_existing) {
-      const galleryImages = await listGalleryImages();
-      const match = galleryImages.find((img) => img.path === req.body.hero_image_existing);
-      if (!match) {
-        req.flash('error_msg', 'Imagem selecionada não foi encontrada na galeria.');
-        return res.redirect(backToForm);
-      }
-      heroImagePath = match.path;
-    } else if (req.body.remove_hero_image === '1') {
-      heroImagePath = null;
-    } else {
-      req.flash('error_msg', 'Escolha uma imagem existente ou envie uma nova.');
+    // ----- Remover -----
+    if (req.body.remover === '1') {
+      await limparVariantes(familyId, tipo);
+      await ProductFamily.updateImagemRecortada(familyId, tipo, {
+        image: null, source: null, crop: null
+      });
+      req.flash('success_msg', `Imagem removida (${rotulo}).`);
       return res.redirect(backToForm);
     }
 
-    await ProductFamily.updateHeroImage(familyId, heroImagePath);
-    req.flash('success_msg', heroImagePath
-      ? 'Imagem de destaque atualizada.'
-      : 'Imagem de destaque removida.');
+    // ----- Origem: upload novo, escolha da galeria, ou a que já lá estava -----
+    let origemPublica = null;
+    if (req.file) {
+      origemPublica = `/media/gallery/${req.file.filename}`;
+    } else if (req.body.origem) {
+      origemPublica = String(req.body.origem);
+    } else if (family[`${tipo}_source`]) {
+      // Reenquadrar sem reenviar o ficheiro.
+      origemPublica = family[`${tipo}_source`];
+    }
+
+    if (!origemPublica) {
+      req.flash('error_msg', 'Escolha uma imagem da galeria ou envie uma nova.');
+      return res.redirect(backToForm);
+    }
+
+    // ----- Recorte -----
+    let crop = null;
+    if (req.body.crop) {
+      try {
+        crop = JSON.parse(req.body.crop);
+      } catch (e) {
+        // Recorte ilegível não deve bloquear a gravação: o processador cai
+        // no enquadramento centrado, que é o comportamento antigo.
+        console.warn('Recorte de categoria ilegível, a usar enquadramento centrado:', e.message);
+      }
+    }
+
+    const resultado = await processarImagemCategoria({
+      tipo,
+      origemPublica,
+      crop,
+      familyId
+    });
+
+    // Só se limpam as variantes antigas DEPOIS de as novas existirem, para
+    // não haver um intervalo em que a página fica sem imagem nenhuma.
+    const antigas = family[`${tipo}_image`];
+    if (antigas && antigas.startsWith('/media/categories/')) {
+      const carimboNovo = path.basename(resultado.caminhoPublico);
+      try {
+        const dir = path.join(__dirname, '..', 'public', 'media', 'categories');
+        const ficheiros = await fsp.readdir(dir);
+        await Promise.all(
+          ficheiros
+            .filter((f) => f.startsWith(`cat-${familyId}-${tipo}-`) && !carimboNovo.startsWith(f.replace(/\.(jpg|webp)$/, '')))
+            .filter((f) => !resultado.gerados.includes(f))
+            .map((f) => fsp.unlink(path.join(dir, f)).catch(() => {}))
+        );
+      } catch (e) {
+        console.warn('Não foi possível limpar variantes antigas:', e.message);
+      }
+    }
+
+    await ProductFamily.updateImagemRecortada(familyId, tipo, {
+      image: resultado.caminhoPublico,
+      source: origemPublica,
+      crop: resultado.crop
+    });
+
+    req.flash('success_msg', `Imagem actualizada (${rotulo}).`);
     res.redirect(backToForm);
   } catch (error) {
-    console.error('Error updating family hero image:', error);
-    req.flash('error_msg', 'Falha ao atualizar a imagem de destaque. ' + (error.message || ''));
+    console.error('Error updating category image:', error);
+    req.flash('error_msg', 'Falha ao gravar a imagem. ' + (error.message || ''));
     res.redirect(backToForm);
+  }
+};
+
+/**
+ * GET /admin/product-families/imagem-info?src=/media/...
+ * Dimensões do original, para o editor saber a que escala está a trabalhar.
+ */
+exports.imagemInfo = async (req, res) => {
+  try {
+    const abs = absolutoDePublico(req.query.src);
+    const dim = await dimensoes(abs);
+    res.json({ ok: true, ...dim });
+  } catch (error) {
+    res.status(400).json({ ok: false, error: error.message });
   }
 };
 

@@ -10,7 +10,7 @@
 
 /* Repõe o que .collection-page dava em main.css antes do rename. */
 .category-page {
-  padding: 2rem 0;
+  padding: var(--space-lg) 0;
 }
 
 body.showcase-theme .category-page {
@@ -21,7 +21,7 @@ body.showcase-theme .category-page {
   color: inherit;
   text-decoration: none;
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
-  padding-bottom: 2px;
+  padding-bottom: var(--space-3xs);
   transition: border-color 0.25s ease, color 0.25s ease;
 }
 
@@ -34,15 +34,15 @@ body.showcase-theme .category-page {
 /* ---------- Corpo: índice lateral + conteúdo ---------- */
 
 .category-body {
-  max-width: 1440px;
+  max-width: var(--container-wide);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--space-md);
 }
 
 .category-page--with-index .category-body {
   display: grid;
   grid-template-columns: minmax(190px, 220px) minmax(0, 1fr);
-  gap: 3rem;
+  gap: var(--space-xl);
   align-items: start;
 }
 
@@ -65,13 +65,13 @@ body.showcase-theme .category-page {
 }
 
 .category-index-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.72rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
+  margin: 0 0 var(--space-sm);
+  padding-bottom: var(--space-xs);
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
 }
 
@@ -82,19 +82,19 @@ body.showcase-theme .category-page {
 }
 
 .category-index-list li + li {
-  margin-top: 0.15rem;
+  margin-top: var(--space-3xs);
 }
 
 .category-index-list a {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.55rem 0.75rem;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-xs);
   border-left: 2px solid transparent;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.02em;
   transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }
@@ -112,7 +112,7 @@ body.showcase-theme .category-page {
 }
 
 .category-index-count {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   font-variant-numeric: tabular-nums;
 }
@@ -121,27 +121,27 @@ body.showcase-theme .category-page {
 
 .category-group {
   /* Compensa o cabeçalho fixo quando se salta para a âncora. */
-  scroll-margin-top: 110px;
+  scroll-margin-top: var(--space-3xl);
 }
 
 .category-group + .category-group {
-  margin-top: 4rem;
+  margin-top: var(--space-2xl);
 }
 
 .category-group-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-sm);
   flex-wrap: wrap;
-  margin-bottom: 1.75rem;
-  padding-bottom: 0.85rem;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
 }
 
 .category-group-header h2 {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.6rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--igp-cream, #f0ece4);
@@ -149,7 +149,7 @@ body.showcase-theme .category-page {
 }
 
 .category-group-link {
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
@@ -166,39 +166,39 @@ body.showcase-theme .category-page {
 /* ---------- Navegação de fim de página ---------- */
 
 .category-nav {
-  max-width: 1100px;
-  margin: 5rem auto 0;
-  padding: 3rem 1.5rem;
+  max-width: var(--container-base);
+  margin: var(--space-2xl) auto 0;
+  padding: var(--space-xl) var(--space-md);
   border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
   text-align: center;
 }
 
 .category-nav-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.78rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 400;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
-  margin: 0 0 2rem;
+  margin: 0 0 var(--space-lg);
 }
 
 .category-nav-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: var(--space-xs);
 }
 
 .category-nav-link {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.7rem 1.25rem;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-sm);
   border: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
   color: var(--igp-cream, #f0ece4);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.03em;
   transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
 }
@@ -211,7 +211,7 @@ body.showcase-theme .category-page {
 }
 
 .category-nav-link-count {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   font-variant-numeric: tabular-nums;
 }
@@ -220,12 +220,12 @@ body.showcase-theme .category-page {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.75rem;
-  margin-top: 2.5rem;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
 }
 
 .category-nav-footer a {
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
@@ -240,22 +240,22 @@ body.showcase-theme .category-page {
 
 /* ---------- Tablet e telemóvel ---------- */
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.98px) {
   /* O índice fixo lateral não cabe: passa a uma barra horizontal colada ao
      topo, que continua a permitir saltar entre subcategorias. */
   .category-page--with-index .category-body {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: var(--space-md);
   }
 
   .category-index {
     position: sticky;
     top: 64px;
-    z-index: 20;
+    z-index: var(--z-raised);
     max-height: none;
     overflow: visible;
     margin: 0 -1.5rem;
-    padding: 0.6rem 0;
+    padding: var(--space-2xs) 0;
     background: rgba(10, 10, 10, 0.92);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
@@ -267,9 +267,9 @@ body.showcase-theme .category-page {
 
   .category-index-list {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-2xs);
     overflow-x: auto;
-    padding: 0 1.5rem;
+    padding: 0 var(--space-md);
     scrollbar-width: none;
   }
 
@@ -300,13 +300,13 @@ body.showcase-theme .category-page {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .category-page {
     padding: 0;
   }
 
   .category-body {
-    padding: 0 1rem;
+    padding: 0 var(--space-sm);
   }
 
   .category-index {
@@ -314,24 +314,24 @@ body.showcase-theme .category-page {
   }
 
   .category-index-list {
-    padding: 0 1rem;
+    padding: 0 var(--space-sm);
   }
 
   .category-group + .category-group {
-    margin-top: 2.75rem;
+    margin-top: var(--space-xl);
   }
 
   .category-group-header h2 {
-    font-size: 1.3rem;
+    font-size: var(--text-lg);
   }
 
   .category-nav {
-    margin-top: 3rem;
-    padding: 2.25rem 1rem;
+    margin-top: var(--space-xl);
+    padding: var(--space-lg) var(--space-sm);
   }
 
   .category-nav-footer {
-    gap: 1.25rem;
+    gap: var(--space-sm);
   }
 }
 
@@ -346,9 +346,9 @@ body.showcase-theme .category-page {
 /* Nome da peça no cartão. Não existia — o cartão mostrava referência,
    categoria e preço, mas não o nome, e não havia forma de chegar à ficha. */
 .product-card .product-name {
-  margin: 0.15rem 0 0.4rem;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.95rem;
+  margin: var(--space-3xs) 0 var(--space-2xs);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
   font-weight: 400;
   line-height: 1.35;
   letter-spacing: 0.01em;

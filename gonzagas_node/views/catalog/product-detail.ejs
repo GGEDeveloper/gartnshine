@@ -6,16 +6,16 @@
 <style>
     /* Product Detail Layout - Images Left, Details Right */
     .product-detail-container {
-        max-width: 1200px;
+        max-width: var(--container-base);
         margin: 0 auto;
-        padding: 2rem;
+        padding: var(--space-lg);
     }
     
     .product-detail-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        margin-top: 2rem;
+        gap: var(--space-xl);
+        margin-top: var(--space-lg);
     }
     
     /* Left: Image Gallery */
@@ -30,9 +30,9 @@
         width: 100%;
         padding-top: 100%; /* Square aspect ratio */
         background: rgba(20, 20, 20, 0.5);
-        border-radius: 12px;
+        border-radius: var(--radius-md);
         overflow: hidden;
-        margin-bottom: 1rem;
+        margin-bottom: var(--space-sm);
         cursor: pointer;
         transition: transform 0.3s ease;
     }
@@ -48,13 +48,13 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 12px;
+        border-radius: var(--radius-md);
     }
     
     .product-thumbnails {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 0.75rem;
+        gap: var(--space-xs);
     }
     
     .product-thumbnail {
@@ -62,7 +62,7 @@
         width: 100%;
         padding-top: 100%;
         background: rgba(20, 20, 20, 0.5);
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         overflow: hidden;
         cursor: pointer;
         border: 2px solid transparent;
@@ -91,40 +91,41 @@
     .product-info-section {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: var(--space-md);
     }
     
     .product-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-primary, #f5f5f5);
-        margin-bottom: 0.5rem;
+        font-size: var(--text-2xl);
+        font-weight: var(--weight-bold);
+        /* era var(--color-primary) — a cor de FUNDO do site */
+        color: var(--color-highlight);
+        margin-bottom: var(--space-2xs);
     }
     
     .product-reference {
         color: var(--color-text-secondary, #999);
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
+        font-size: var(--text-sm);
+        margin-bottom: var(--space-sm);
     }
     
     .product-category {
         color: var(--color-accent, #A8A8A8);
-        font-size: 0.95rem;
-        margin-bottom: 1rem;
+        font-size: var(--text-base);
+        margin-bottom: var(--space-sm);
     }
     
     .product-price {
-        font-size: 2rem;
+        font-size: var(--text-2xl);
         color: var(--color-highlight, #C0C0C0);
         font-weight: 700;
-        margin: 1rem 0;
+        margin: var(--space-sm) 0;
     }
     
     .product-availability {
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-md);
         font-weight: 600;
-        margin: 1rem 0;
+        margin: var(--space-sm) 0;
         display: inline-block;
     }
     
@@ -150,14 +151,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
+        gap: var(--space-xs);
         background: rgba(37, 211, 102, 0.1);
         color: #25D366;
-        padding: 0.875rem 2rem;
+        padding: var(--space-xs) var(--space-lg);
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         font-weight: 600;
-        font-size: 1rem;
+        font-size: var(--text-base);
         border: 1px solid rgba(37, 211, 102, 0.3);
         transition: all 0.3s ease;
         text-align: center;
@@ -172,26 +173,26 @@
     }
     
     .related-products-section {
-        margin-top: 3rem;
-        padding-top: 2rem;
+        margin-top: var(--space-xl);
+        padding-top: var(--space-lg);
         border-top: 1px solid rgba(201, 168, 76, 0.15);
     }
     
     .related-products-section h3 {
-        font-size: 1.25rem;
-        margin-bottom: 1.5rem;
-        color: var(--color-primary, #f5f5f5);
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-md);
+        color: var(--color-highlight);
     }
     
     .related-products-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.5rem;
+        gap: var(--space-md);
     }
     
     .related-product-card {
         background: rgba(12, 12, 12, 0.85);
-        border-radius: 10px;
+        border-radius: var(--radius-md);
         overflow: hidden;
         border: 1px solid rgba(201, 168, 76, 0.12);
         transition: all 0.3s ease;
@@ -215,27 +216,27 @@
     }
     
     .related-product-card .related-info {
-        padding: 0.75rem 1rem;
+        padding: var(--space-xs) var(--space-sm);
     }
     
     .related-product-card .related-name {
-        font-size: 0.9rem;
+        font-size: var(--text-sm);
         font-weight: 500;
-        color: var(--color-primary, #f5f5f5);
-        margin-bottom: 0.25rem;
+        color: var(--color-text);
+        margin-bottom: var(--space-3xs);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     
     .related-product-card .related-price {
-        font-size: 0.85rem;
+        font-size: var(--text-sm);
         color: var(--color-highlight, #c9a84c);
     }
     
     .related-product-card .related-stock {
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
+        font-size: var(--text-xs);
+        margin-top: var(--space-3xs);
     }
     
     .related-product-card .related-stock.in-stock {
@@ -247,28 +248,32 @@
     }
     
     .product-description {
-        margin-top: 1.5rem;
+        margin-top: var(--space-md);
         line-height: 1.6;
         color: var(--color-text, #ddd);
     }
 
     .product-description h3 {
-        font-size: 1.25rem;
-        margin-bottom: 0.75rem;
-        color: var(--color-primary, #f5f5f5);
+        /* `--color-primary` é a cor de FUNDO do site (#05070a). Como a
+           variável existe, o fallback #f5f5f5 nunca era usado e o título
+           "Descrição" renderizava preto sobre preto — invisível, e uma
+           falha de contraste (WCAG 1.4.3). */
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-xs);
+        color: var(--color-highlight);
     }
 
     .product-specifications {
-        margin-top: 1.5rem;
-        padding: 1rem;
+        margin-top: var(--space-md);
+        padding: var(--space-sm);
         background: rgba(20, 20, 20, 0.3);
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         border: 1px solid rgba(201, 168, 76, 0.2);
     }
 
     .product-specifications h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.75rem;
+        font-size: var(--text-md);
+        margin-bottom: var(--space-xs);
         color: var(--color-highlight, #c9a84c);
     }
 
@@ -278,13 +283,13 @@
         margin: 0;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.5rem;
+        gap: var(--space-2xs);
     }
 
     .specs-list li {
-        padding: 0.5rem 0;
+        padding: var(--space-2xs) 0;
         color: var(--color-text, #ddd);
-        font-size: 0.9rem;
+        font-size: var(--text-sm);
         border-bottom: 1px solid rgba(201, 168, 76, 0.1);
     }
 
@@ -294,35 +299,38 @@
 
     .specs-list strong {
         color: var(--color-highlight, #c9a84c);
-        margin-right: 0.5rem;
+        margin-right: var(--space-2xs);
     }
     
     .product-actions {
-        margin-top: 2rem;
+        margin-top: var(--space-lg);
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: var(--space-sm);
     }
     
     .btn-whatsapp {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
+        gap: var(--space-xs);
         background: #25D366;
-        color: white;
-        padding: 1rem 2rem;
+        /* Branco sobre #25D366 dá 1.98:1 e falha o mínimo AA (4.5:1).
+           Texto escuro sobre o mesmo verde da marca dá ~10:1 e mantém o
+           reconhecimento imediato do WhatsApp. */
+        color: #06231a;
+        padding: var(--space-sm) var(--space-lg);
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: var(--text-md);
         transition: all 0.3s ease;
         text-align: center;
     }
     
     .btn-whatsapp:hover {
         background: #20BA5A;
-        color: white;
+        color: #06231a;
         text-decoration: none;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
@@ -330,18 +338,18 @@
     
     .btn-copy {
         background: rgba(30, 30, 30, 0.8);
-        border: 1px solid rgba(106, 140, 105, 0.3);
+        border: 1px solid var(--border-strong);
         color: var(--color-text, #ddd);
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        padding: var(--space-xs) var(--space-md);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-weight: 500;
         transition: all 0.3s ease;
     }
     
     .btn-copy:hover {
-        background: rgba(106, 140, 105, 0.2);
-        border-color: #6a8c69;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--color-highlight);
         transform: translateY(-2px);
     }
     
@@ -350,14 +358,14 @@
        formam um bloco só e separá-los era o que os fazia divergir. */
 
     /* Mobile Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 767.98px) {
         .product-detail-container {
-            padding: 1rem;
+            padding: var(--space-sm);
         }
         
         .product-detail-grid {
             grid-template-columns: 1fr;
-            gap: 2rem;
+            gap: var(--space-lg);
         }
         
         .product-gallery-section {
@@ -365,16 +373,16 @@
         }
         
         .product-title {
-            font-size: 1.5rem;
+            font-size: var(--text-xl);
         }
         
         .product-price {
-            font-size: 1.5rem;
+            font-size: var(--text-xl);
         }
         
         .btn-whatsapp {
-            font-size: 1rem;
-            padding: 0.875rem 1.5rem;
+            font-size: var(--text-base);
+            padding: var(--space-xs) var(--space-md);
         }
     }
 </style>

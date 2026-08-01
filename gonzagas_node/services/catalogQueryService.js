@@ -339,6 +339,33 @@ async function facetFamilies(baseWhere, baseParams) {
   rows.forEach(r => {
     if (r.id != null) out[r.id] = r.c;
   });
+
+  // Os produtos vivem sempre numa subcategoria (Aneis - Prata), nunca na
+  // família de topo (Prata). Sem esta soma, o painel de filtros mostrava
+  // contagem nas subcategorias e NADA nos quatro materiais — que são
+  // precisamente as linhas que o utilizador vê primeiro, e as únicas
+  // visíveis com a árvore recolhida.
+  try {
+    const [familias] = await pool.query(
+      'SELECT id, parent_id FROM product_families'
+    );
+    const pai = new Map(familias.map(f => [f.id, f.parent_id]));
+    Object.keys(out).forEach(idStr => {
+      const contagem = out[idStr];
+      let ancestral = pai.get(Number(idStr));
+      // `visitados` protege de um ciclo acidental na tabela (pai que aponta
+      // para um descendente), que aqui seria um ciclo infinito.
+      const visitados = new Set([Number(idStr)]);
+      while (ancestral != null && !visitados.has(ancestral)) {
+        visitados.add(ancestral);
+        out[ancestral] = (out[ancestral] || 0) + contagem;
+        ancestral = pai.get(ancestral);
+      }
+    });
+  } catch (err) {
+    console.warn('facetFamilies: falha a somar contagens para as famílias-pai:', err.message);
+  }
+
   return out;
 }
 

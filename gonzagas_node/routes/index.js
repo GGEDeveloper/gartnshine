@@ -312,10 +312,11 @@ router.get('/categoria/:slug', async (req, res) => {
       return res.redirect(301, `/categoria/${family.slug}`);
     }
 
-    const rawProducts = await Product.getByFamilyTree(family.id);
+    const hideOutOfStock = !!(res.locals.siteSettings && res.locals.siteSettings.hide_out_of_stock);
+    const rawProducts = await Product.getByFamilyTree(family.id, 500, 0, { hideOutOfStock });
     const ecommerceSettings = await EcommerceSettings.getAll();
     const products = rawProducts.map((p) => formatRow(p, ecommerceSettings));
-    const nav = await ProductFamily.getNavigation(family);
+    const nav = await ProductFamily.getNavigation(family, { hideOutOfStock });
 
     // Numa categoria de topo os produtos vêm das subcategorias todas, por isso
     // agrupam-se — é o que dá âncoras ao índice lateral e evita uma grelha
@@ -491,10 +492,15 @@ router.get('/loja/produto/:idOrSlug', async (req, res) => {
 Referência: ${product.reference}
 ${product.sale_price ? `Preço: €${parseFloat(product.sale_price).toFixed(2)}` : 'Preço sob consulta'}
 
-Ver produto: ${req.protocol}://${req.get('host')}/loja/produto/${id}`;
-    
+Ver produto: ${brand.baseUrl}/loja/produto/${product.slug || id}`;
+
     const whatsappData = {
-      number: process.env.WHATSAPP_NUMBER || '351XXXXXXXXX',
+      // O fallback era o literal '351XXXXXXXXX': sem WHATSAPP_NUMBER no
+      // ambiente, o botão de contacto de TODAS as fichas de produto apontava
+      // para um número de telefone inexistente — e ninguém conseguia usar o
+      // canal principal de contacto da loja. `brand.telefone` é a mesma
+      // origem que o rodapé, o header e o schema.org já usam.
+      number: process.env.WHATSAPP_NUMBER || brand.telefone.replace(/[^0-9]/g, ''),
       encodedMessage: encodeURIComponent(whatsappMessage)
     };
     

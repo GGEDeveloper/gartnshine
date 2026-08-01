@@ -217,7 +217,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Main CSS Files -->
+  <!-- Ordem obrigatória: variables (cores) → design-system (escalas + camada
+       base) → folhas de componente. As folhas de componente consomem os
+       tokens, por isso o design system tem de vir antes de todas elas. -->
   <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/design-system.css?v=<%= app.version %>">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/homepage.css?v=<%= app.version %>">
   <link rel="stylesheet" href="/css/theme.css">
@@ -271,9 +275,13 @@
 </head>
 <body class="d-flex flex-column h-100<%= typeof showcaseTheme !== 'undefined' && showcaseTheme ? ' showcase-theme' : '' %>" data-theme="<%= typeof theme !== 'undefined' ? theme : 'dark' %>">
     
+  <!-- Salto para o conteúdo: sem isto, quem navega por teclado tem de
+       percorrer todo o header em cada página (WCAG 2.4.1). -->
+  <a class="u-skip-link" href="#conteudo-principal">Saltar para o conteúdo</a>
+
   <%- include('../partials/header') %>
-  
-    <main class="flex-shrink-0">
+
+    <main class="flex-shrink-0" id="conteudo-principal" tabindex="-1">
   <%- body %>
     </main>
   

@@ -6,12 +6,8 @@ class CatalogGrid {
   constructor(options = {}) {
     this.container = options.container || document.getElementById('products-grid');
     this.masonryEnabled = options.masonryEnabled !== false;
-    this.columns = {
-      mobile: 1,
-      tablet: 2,
-      desktop: 4
-    };
-    
+    this._resizeTimer = null;
+
     this.init();
   }
 
@@ -22,27 +18,27 @@ class CatalogGrid {
     }
 
     this.setupGrid();
-    this.handleResize();
     window.addEventListener('resize', () => this.handleResize());
   }
 
   setupGrid() {
-    const width = window.innerWidth;
-    let columns;
+    // As colunas são responsabilidade do CSS (`.products-grid.grid-view`, que
+    // usa `auto-fill` + `--card-min`). Este módulo escrevia
+    // `style="grid-template-columns: repeat(N, 1fr)"` a partir de breakpoints
+    // próprios (576/992) e contagens fixas (1/2/4): um estilo inline ganha a
+    // qualquer folha de estilo, por isso o catálogo ficava com UMA coluna em
+    // telemóvel independentemente do que o CSS dissesse, e havia duas
+    // definições de "responsivo" a contradizerem-se.
+    //
+    // Se algum dia for mesmo preciso saber quantas colunas estão a ser
+    // desenhadas, lê-se do layout já calculado — não se impõe.
+    this.container.style.removeProperty('grid-template-columns');
+    const colunas = getComputedStyle(this.container).gridTemplateColumns;
+    this.container.dataset.columns = colunas ? colunas.split(' ').length : '';
 
-    if (width < 576) {
-      columns = this.columns.mobile;
-    } else if (width < 992) {
-      columns = this.columns.tablet;
-    } else {
-      columns = this.columns.desktop;
-    }
-
-    this.container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-    this.container.dataset.columns = columns;
-
-    // Apply masonry if enabled
-    if (this.masonryEnabled && width >= 992) {
+    // O masonry continua a ser decisão de JS (depende das proporções reais
+    // das imagens), mas só a partir do tier largo.
+    if (this.masonryEnabled && window.matchMedia('(min-width: 1024px)').matches) {
       this.applyMasonry();
     } else {
       this.removeMasonry();
@@ -131,11 +127,11 @@ class CatalogGrid {
   }
 
   handleResize() {
-    let resizeTimer;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      this.setupGrid();
-    }, 250);
+    // `resizeTimer` era uma variável LOCAL: era criada de novo a cada evento,
+    // por isso o `clearTimeout` nunca cancelava nada e o debounce não
+    // existia — cada pixel de redimensionamento agendava um `setupGrid`.
+    clearTimeout(this._resizeTimer);
+    this._resizeTimer = setTimeout(() => this.setupGrid(), 250);
   }
 
   refresh() {
@@ -147,10 +143,9 @@ class CatalogGrid {
     }
   }
 
-  setColumns(mobile, tablet, desktop) {
-    this.columns = { mobile, tablet, desktop };
-    this.setupGrid();
-  }
+  /* `setColumns()` foi removido: a contagem de colunas passou a ser
+     determinada pelo CSS (--card-min / --card-min-md / --card-min-lg).
+     Para mudar a densidade da grelha, mudam-se esses tokens. */
 }
 
 // Export

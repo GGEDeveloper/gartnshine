@@ -193,7 +193,10 @@ class ProductFamily {
         name = ?,
         slug = ?,
         description = ?,
-        parent_id = ?
+        parent_id = ?,
+        seo_title = ?,
+        seo_description = ?,
+        is_active = ?
         WHERE id = ?
       `, [
         family.code,
@@ -201,6 +204,12 @@ class ProductFamily {
         slug,
         family.description || null,
         family.parent_id ? parseInt(family.parent_id, 10) : null,
+        // Vazio grava-se como NULL: a página de categoria faz fallback para
+        // texto derivado do conteúdo quando não há valor, e uma string vazia
+        // não é "sem valor" — daria um <title> em branco.
+        (family.seo_title && family.seo_title.trim()) || null,
+        (family.seo_description && family.seo_description.trim()) || null,
+        family.is_active ? 1 : 0,
         id
       ]);
 
@@ -342,12 +351,17 @@ class ProductFamily {
    *   - numa categoria de topo (material): `children` são as subcategorias;
    *   - numa subcategoria: `parent` é o material e `siblings` as irmãs.
    */
-  static async getNavigation(family) {
+  static async getNavigation(family, { hideOutOfStock = false } = {}) {
+    // `hide_out_of_stock` tem de acompanhar a definição do site, tal como em
+    // `getMaterialsForHome`. Sem isto o índice lateral da categoria somava
+    // 258 peças (todas as activas) enquanto a loja anunciava 112 para o
+    // mesmo material — dois números contraditórios a dois cliques um do outro.
+    const filtroStock = hideOutOfStock ? 'AND p.current_stock > 0' : '';
     const comProdutos = `
       (SELECT COUNT(*)
          FROM products p
          JOIN product_families c ON c.id = p.family_id
-        WHERE p.is_active = 1 AND (c.id = f.id OR c.parent_id = f.id)
+        WHERE p.is_active = 1 ${filtroStock} AND (c.id = f.id OR c.parent_id = f.id)
       ) AS product_count`;
 
     try {
@@ -379,6 +393,33 @@ class ProductFamily {
     } catch (error) {
       console.error('Error getting family navigation:', error);
       return { parent: null, siblings: [], children: [] };
+    }
+  }
+
+  /**
+   * Grava a imagem recortada de uma categoria, juntamente com a origem e o
+   * rectângulo usados. Guardar a origem e o recorte é o que permite reabrir o
+   * editor no enquadramento anterior em vez de recomeçar do zero.
+   *
+   * @param {number} id
+   * @param {'hero'|'card'} tipo
+   * @param {{image: string|null, source: string|null, crop: object|null}} dados
+   */
+  static async updateImagemRecortada(id, tipo, { image, source, crop }) {
+    if (tipo !== 'hero' && tipo !== 'card') {
+      throw new Error(`Tipo de imagem de categoria desconhecido: ${tipo}`);
+    }
+    try {
+      const [result] = await pool.query(
+        `UPDATE product_families
+            SET ${tipo}_image = ?, ${tipo}_source = ?, ${tipo}_crop = ?
+          WHERE id = ?`,
+        [image, source, crop ? JSON.stringify(crop) : null, id]
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error('Error updating category image:', error);
+      throw error;
     }
   }
 

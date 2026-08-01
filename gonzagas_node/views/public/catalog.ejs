@@ -377,18 +377,36 @@
                       const slugOrId = product.slug || product.id;
                       const productHref = '/loja/produto/' + encodeURIComponent(slugOrId) + '?return=' + encodeURIComponent(retPath);
                     %>
-                    <a href="<%= productHref %>" 
+                    <a href="<%= productHref %>"
                        class="product-image-link">
-                      <img src="<%= imageUrl %>" 
-                           alt="<%= product.name %> — joia artesanal prata 925" 
+                      <%
+                        // O alt dizia "prata 925" para TODAS as peças, incluindo
+                        // as 92 de latão e as de macramé — uma afirmação falsa
+                        // sobre o material, tanto para leitores de ecrã como
+                        // para a pesquisa de imagens. Passa a usar a família real.
+                        const altMaterial = product.family_name
+                          ? `${product.name} — ${product.family_name}`
+                          : `${product.name} — peça artesanal Gonzaga`;
+                      %>
+                      <img src="<%= imageUrl %>"
+                           alt="<%= altMaterial %>"
                            class="product-image lazy-loaded"
                            loading="lazy"
+                           decoding="async"
+                           width="800" height="800"
                            onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg';">
-                      <div class="product-overlay">
-                        <a href="<%= productHref %>" class="btn-quick-view">
-                          <i class="fas fa-eye"></i> Ver Detalhes
-                        </a>
-                      </div>
+                      <%
+                        // Era um <a> dentro de outro <a>: HTML inválido. O
+                        // browser desaninha os elementos ao construir o DOM, o
+                        // que parte o alvo de clique e deixa dois destinos para
+                        // o mesmo sítio na navegação por teclado. O cartão
+                        // inteiro já é o link — isto é só o rótulo visual.
+                      %>
+                      <span class="product-overlay">
+                        <span class="btn-quick-view">
+                          <i class="fas fa-eye" aria-hidden="true"></i> Ver Detalhes
+                        </span>
+                      </span>
                     </a>
                     <% if (product.is_new) { %>
                       <span class="product-badge badge-new">Novo</span>

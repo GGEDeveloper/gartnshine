@@ -160,3 +160,10 @@ _dev-info/db-backups/
 
 # Google OAuth client secrets (never commit)
 docs/client_secret*.json
+
+# Imagens de categoria geradas pelo editor de enquadramento do admin.
+# São output derivado (recorte + redimensionamento de um original que vive em
+# media/gallery) e o nome leva carimbo de tempo, por isso diferem entre
+# ambientes. Cada ambiente gera as suas quando alguém grava um enquadramento;
+# versioná-las só empurrava ficheiros inúteis para produção.
+gonzagas_node/public/media/categories/

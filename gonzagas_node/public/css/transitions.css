@@ -215,10 +215,10 @@
  * destino fica escondido por baixo da barra do topo.
  */
 :target {
-  scroll-margin-top: 110px;
+  scroll-margin-top: var(--space-3xl);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.98px) {
   :target {
     scroll-margin-top: 130px;
   }
@@ -255,20 +255,19 @@
 /* =====================================================================
    4. BARRA DE PROGRESSO DA PÁGINA
    =====================================================================
-   Linha fina colada por baixo do cabeçalho (que é sticky, 61px, z-index
-   1000). Fica um pouco abaixo em z para nunca tapar o menu.
+   Linha fina colada por baixo do cabeçalho (que é sticky, 61px). É só
+   decoração: mostra quanto falta da página e não recebe cliques.
 
-   As marcas são as secções com título visível — uma marca que salta para
-   um sítio sem cabeçalho deixa quem clica sem saber onde caiu.
+   As marcas de secção que viviam aqui foram removidas — a justificação
+   está em js/modules/scroll-progress.js.
    ===================================================================== */
-
 .scroll-progress {
   position: fixed;
   top: 61px;
   left: 0;
   right: 0;
   height: 2px;
-  z-index: 999;
+  z-index: var(--z-header);
   background: rgba(201, 168, 76, 0.1);
   pointer-events: none;
 }
@@ -286,57 +285,9 @@
      pelo scroll, e uma transição por cima disso dá um arrasto atrasado. */
 }
 
-.scroll-progress-mark {
-  position: absolute;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-  margin: -3.5px 0 0 -3.5px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(240, 236, 228, 0.28);
-  cursor: pointer;
-  pointer-events: auto;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-/* O alvo de toque real é maior do que o ponto visível — 7px seria
-   impossível de acertar. */
-.scroll-progress-mark::after {
-  content: '';
-  position: absolute;
-  inset: -14px;
-}
-
-.scroll-progress-mark:hover,
-.scroll-progress-mark:focus-visible {
-  background: var(--igp-cream, #f0ece4);
-  transform: scale(1.5);
-}
-
-.scroll-progress-mark.is-active {
-  background: var(--igp-gold, #c9a84c);
-  transform: scale(1.4);
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1023.98px) {
   .scroll-progress {
     top: 56px;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Em telemóvel o espaço vertical é precioso e as marcas ficam demasiado
-     juntas para se acertar nelas: fica só o progresso. */
-  .scroll-progress-mark {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scroll-progress-mark {
-    transition: none;
   }
 }
 
@@ -352,8 +303,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-2xs) var(--space-md);
+  margin-bottom: var(--space-md);
 }
 
 /* O voltar já traz a sua barra própria nas outras páginas; aqui vive dentro
@@ -366,11 +317,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: var(--space-2xs);
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.74rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
 }
@@ -379,7 +330,7 @@
    setas de navegação já dão, e lia-se como se fosse um botão. */
 .peca-migalhas li + li::before {
   content: '·';
-  margin-right: 0.4rem;
+  margin-right: var(--space-2xs);
   color: var(--igp-border, rgba(201, 168, 76, 0.45));
 }
 
@@ -388,7 +339,7 @@
      mínimos. O `inline-block` com padding vertical alarga o alvo sem mexer
      no tamanho da letra nem no alinhamento da linha. */
   display: inline-block;
-  padding: 0.55rem 0;
+  padding: var(--space-2xs) 0;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   text-decoration: none;
   transition: color 0.25s ease;
@@ -413,9 +364,9 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 1rem;
-  margin: 0 0 2rem;
-  padding: 0.85rem 0;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-xs) 0;
   border-top: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
   border-bottom: 1px solid var(--igp-border, rgba(201, 168, 76, 0.18));
 }
@@ -434,9 +385,9 @@
 .peca-nav-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   min-height: 44px;
-  padding: 0.35rem 0.5rem;
+  padding: var(--space-3xs) var(--space-2xs);
   max-width: 42%;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   text-decoration: none;
@@ -449,7 +400,7 @@
 }
 
 .peca-nav-seta {
-  font-size: 1.1rem;
+  font-size: var(--text-md);
   color: var(--igp-gold, #c9a84c);
   flex: 0 0 auto;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -469,15 +420,15 @@
 }
 
 .peca-nav-rotulo {
-  font-size: 0.62rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
 }
 
 .peca-nav-nome {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
   line-height: 1.3;
   /* Nomes de peça chegam aos 62 caracteres: cortar em vez de partir a barra. */
   overflow: hidden;
@@ -489,21 +440,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: var(--space-3xs);
   text-align: center;
   white-space: nowrap;
 }
 
 .peca-nav-posicao-num {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 0.82rem;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
   letter-spacing: 0.06em;
   color: var(--igp-cream, #f0ece4);
   font-variant-numeric: tabular-nums;
 }
 
 .peca-nav-posicao-cat {
-  font-size: 0.6rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
@@ -538,7 +489,7 @@ html.vt-anterior::view-transition-new(root) {
 @keyframes peca-sai-direita   { to   { opacity: 0; transform: translateX(4%); } }
 @keyframes peca-entra-esquerda{ from { opacity: 0; transform: translateX(-5%); } }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .peca-nav-nome {
     display: none;
   }
@@ -564,7 +515,7 @@ html.vt-anterior::view-transition-new(root) {
 
   /* No telemóvel o dedo precisa de mais do que os 24px mínimos. */
   .peca-migalhas a {
-    padding: 0.75rem 0;
+    padding: var(--space-xs) 0;
   }
 
   /* "Peça anterior" partia em duas linhas na coluna estreita: fica só
@@ -602,21 +553,21 @@ html.vt-anterior::view-transition-new(root) {
    ===================================================================== */
 
 .voltar-barra {
-  max-width: 1440px;
+  max-width: var(--container-wide);
   margin: 0 auto;
-  padding: 1.25rem 1.5rem 0;
+  padding: var(--space-sm) var(--space-md) 0;
 }
 
 .voltar-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--space-2xs);
   /* 44px de alvo de toque, sem parecer um botão grande. */
   min-height: 44px;
-  padding: 0.4rem 0.65rem 0.4rem 0;
+  padding: var(--space-2xs) var(--space-xs) var(--space-2xs) 0;
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
   text-decoration: none;
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   transition: color 0.25s ease;
@@ -628,7 +579,7 @@ html.vt-anterior::view-transition-new(root) {
 }
 
 .voltar-seta {
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -647,13 +598,13 @@ html.vt-anterior::view-transition-new(root) {
   max-width: 44vw;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .voltar-barra {
-    padding: 0.85rem 1rem 0;
+    padding: var(--space-xs) var(--space-sm) 0;
   }
 
   .voltar-link {
-    font-size: 0.66rem;
+    font-size: var(--text-2xs);
     letter-spacing: 0.14em;
   }
 }

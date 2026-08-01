@@ -4,36 +4,28 @@
  * ✅ 100% MODULAR - Usa APENAS variáveis do variables.css
  */
 
-:root {
-  --color-primary: #1e1e1e;
-  --color-secondary: var(--color-secondary); /* Era #4a3c2d ❌ */
-  --color-accent: var(--color-accent); /* Era #6a8c69 ❌ */
-  --color-text: #f0f0f0;
-  --color-highlight: var(--color-silver); /* Era #b19cd9 ❌ */
-  --color-error: var(--color-danger); /* Era #ff6b6b ❌ */
-  --color-success: var(--color-success); /* Era #51cf66 ❌ */
-  --font-primary: 'Poppins', sans-serif;
-  --font-heading: 'Playfair Display', serif;
-}
+/* As cores vêm de variables.css e as escalas de design-system.css.
+   Este ficheiro redefinia aqui um bloco `:root` com três problemas:
+   - `--color-primary: #1e1e1e` contradizia a paleta (#05070a);
+   - `--color-secondary: var(--color-secondary)` era uma referência circular,
+     que em CSS torna a variável inválida (resolve para "unset");
+   - `--font-primary: 'Poppins'` / `--font-heading: 'Playfair Display'`
+     pediam fontes que o site nunca carrega — só Cinzel e Source Sans 3 são
+     descarregadas. Era por isso que o site inteiro renderizava em fallbacks
+     do sistema e as fontes da marca só apareciam no header.
+   Os aliases --font-primary/--font-heading estão agora em design-system.css,
+   apontados a --font-body/--font-display. */
 
-/* Base styles and reset */
+/* Reset de margens/paddings. O `box-sizing` está na camada base do
+   design-system.css. */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  /* `scroll-behavior` mudou-se para transitions.css, onde fica dentro de
-     `prefers-reduced-motion: no-preference` — aqui aplicava-se a toda a
-     gente, incluindo a quem pede menos movimento no sistema. */
 }
 
 body {
-  font-family: var(--font-primary);
   background-color: var(--color-primary);
   color: var(--color-text);
-  line-height: 1.6;
   /* `hidden` num destes elementos transforma-os em contentor de scroll e
      quebra `position: sticky` em todos os descendentes — era o que impedia o
      índice lateral das categorias de colar. `clip` corta na mesma o
@@ -43,48 +35,31 @@ body {
   overflow-x: clip;
 }
 
+/* A escala tipográfica (tamanho, entrelinha, família, margens) vive na
+   camada base do design-system.css. Aqui fica só a cor. */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-weight: var(--weight-bold);
 }
 
-h1 {
-  font-size: 3rem;
-  color: var(--color-highlight);
-}
-
-h2 {
-  font-size: 2.5rem;
-  color: var(--color-text);
-}
-
-h3 {
-  font-size: 2rem;
-  color: var(--color-accent);
-}
+h1 { color: var(--color-highlight); }
+h2 { color: var(--color-text); }
+h3 { color: var(--color-accent); }
 
 a {
   color: var(--color-text);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--duration-fast) var(--ease-standard);
 }
 
 a:hover {
   color: var(--color-highlight);
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 .container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  max-width: var(--container-base);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
 }
 
 /* Header styles */
@@ -92,19 +67,19 @@ img {
   background-color: rgba(0, 0, 0, 0.9);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: var(--z-header);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-container {
-  max-width: 1200px;
+  max-width: var(--container-base);
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--space-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
 }
 
 .logo-container {
@@ -113,7 +88,7 @@ img {
 
 .logo h1,
 .logo .logo-text {
-  font-size: 1.5rem;
+  font-size: var(--text-xl);
   margin: 0;
   color: var(--color-text);
   letter-spacing: 1px;
@@ -127,11 +102,11 @@ img {
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 1.5rem;
+  gap: var(--space-md);
 }
 
 .nav-menu a {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 400;
   position: relative;
 }
@@ -159,8 +134,8 @@ img {
 
 .dropdown-toggle::after {
   content: '▾';
-  margin-left: 5px;
-  font-size: 0.8rem;
+  margin-left: var(--space-3xs);
+  font-size: var(--text-xs);
 }
 
 .dropdown-menu {
@@ -169,14 +144,14 @@ img {
   left: 0;
   background-color: rgba(0, 0, 0, 0.95);
   min-width: 180px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  padding: 0.5rem 0;
+  padding: var(--space-2xs) 0;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: var(--z-header);
 }
 
 .dropdown.open .dropdown-menu {
@@ -191,7 +166,7 @@ img {
 
 .dropdown-menu a {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: var(--space-2xs) var(--space-sm);
   width: 100%;
   transition: background-color 0.3s ease;
 }
@@ -220,19 +195,19 @@ img {
   position: absolute;
   top: 100%; /* Position below the parent */
   left: 0;
-  z-index: 1000;
+  z-index: var(--z-header);
   display: none; /* Hidden by default, rely on .open class to show */
   min-width: 200px;
-  padding: 0.5rem 0;
-  margin: 2px 0 0; /* Small gap from parent */
-  font-size: 0.9rem;
+  padding: var(--space-2xs) 0;
+  margin: var(--space-3xs) 0 0; /* Small gap from parent */
+  font-size: var(--text-sm);
   color: var(--color-text-light); /* Text color for dropdown items */
   text-align: left;
   list-style: none;
   background-color: var(--color-secondary); /* Dropdown background */
   background-clip: padding-box;
   border: 1px solid rgba(0,0,0,.15);
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
   box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175);
   opacity: 0;
   visibility: hidden;
@@ -250,7 +225,7 @@ img {
 .dropdown-menu a {
   display: block;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: var(--space-2xs) var(--space-sm);
   clear: both;
   font-weight: 400;
   color: var(--color-text-light); /* Ensure links inherit or have specific color */
@@ -289,7 +264,7 @@ img {
   width: 32px;
   height: 24px;
   position: relative;
-  z-index: 20;
+  z-index: var(--z-raised);
 }
 
 .menu-toggle span {
@@ -297,29 +272,29 @@ img {
   height: 2px;
   width: 100%;
   background-color: var(--color-text);
-  margin: 5px 0;
+  margin: var(--space-3xs) 0;
   transition: all 0.3s ease;
 }
 
 /* Footer styles */
 .main-footer {
   background-color: var(--color-secondary);
-  padding: 3rem 0 1rem;
-  margin-top: 4rem;
+  padding: var(--space-xl) 0 var(--space-sm);
+  margin-top: var(--space-2xl);
 }
 
 .footer-container {
-  max-width: 1200px;
+  max-width: var(--container-base);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--space-sm);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-lg);
 }
 
 .footer-section h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-sm);
   position: relative;
   display: inline-block;
 }
@@ -336,17 +311,17 @@ img {
 
 .social-links {
   list-style: none;
-  margin-top: 1rem;
+  margin-top: var(--space-sm);
 }
 
 .social-links li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2xs);
 }
 
 .social-links a {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
 }
 
 .social-links svg {
@@ -356,18 +331,18 @@ img {
 
 .copyright {
   text-align: center;
-  margin-top: 3rem;
-  padding-top: 1rem;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-sm);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   opacity: 0.7;
 }
 
 /* Buttons */
 .btn {
   display: inline-block;
-  padding: 0.8rem 1.5rem;
-  border-radius: 30px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-pill);
   text-align: center;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -400,7 +375,7 @@ img {
   background-color: transparent;
   color: var(--color-text);
   border: 1px solid var(--color-text);
-  padding: 0.6rem 1.2rem;
+  padding: var(--space-2xs) var(--space-sm);
 }
 
 .btn-outline:hover {
@@ -417,7 +392,7 @@ img {
   justify-content: center;
   align-items: center;
   overflow: hidden; /* Para garantir que o vídeo não transborde */
-  z-index: 10; /* Garante que o hero esteja acima de outros elementos */
+  z-index: var(--z-raised); /* Garante que o hero esteja acima de outros elementos */
 }
 
 .video-background-container {
@@ -450,28 +425,28 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1; /* Acima do vídeo */
-  padding: 20px 40px; /* Adiciona padding ao redor do texto */
-  border-radius: 8px; /* Cantos levemente arredondados */
+  z-index: var(--z-layer-1); /* Acima do vídeo */
+  padding: var(--space-sm) var(--space-lg); /* Adiciona padding ao redor do texto */
+  border-radius: var(--radius-md); /* Cantos levemente arredondados */
   max-width: 80%; /* Ajuste conforme necessário */
 }
 
 .hero-content {
   text-align: center;
   color: var(--color-text);
-  padding: 0.85rem; /* Controla o espaço interno da caixa */
+  padding: var(--space-xs); /* Controla o espaço interno da caixa */
   max-width: 425px; /* Largura máxima da caixa */
   margin: 0 auto; /* Centra a caixa */
   background-color: rgba(0, 0, 0, 0.25); /* Fundo subtil para a caixa */
-  border-radius: 8px; /* Cantos arredondados */
+  border-radius: var(--radius-md); /* Cantos arredondados */
   position: relative; /* Para contexto de posicionamento se necessário */
-  z-index: 2; /* Garante que fica por cima do vídeo/overlay */
+  z-index: var(--z-layer-2); /* Garante que fica por cima do vídeo/overlay */
   transform: translateY(-3rem); /* Move a caixa um pouco para cima */
 }
 
 .hero-content h1 {
-  font-size: 1.85rem; /* Tamanho do título reduzido */
-  margin-bottom: 0.5rem;
+  font-size: var(--text-2xl); /* Tamanho do título reduzido */
+  margin-bottom: var(--space-2xs);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra do texto (de .hero-title) */
   background: linear-gradient(90deg, var(--color-text), var(--color-highlight)); /* Gradiente (de .hero-title) */
   -webkit-background-clip: text;
@@ -480,15 +455,15 @@ img {
 }
 
 .hero-content p {
-  font-size: 0.75rem; /* Tamanho do parágrafo */
+  font-size: var(--text-xs); /* Tamanho do parágrafo */
   opacity: 0.9;
   font-weight: 300;
   margin-bottom: 0; /* Remove margem inferior se for o último elemento */
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-sm);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   background: linear-gradient(90deg, var(--color-text), var(--color-highlight));
   -webkit-background-clip: text;
@@ -497,29 +472,41 @@ img {
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-lg);
   opacity: 0.9;
   font-weight: 300;
 }
 
 .cta-container {
-  margin-top: 2rem;
+  margin-top: var(--space-lg);
 }
 
-/* Section styles */
-section {
-  padding: 4rem 0;
+/* Ritmo vertical das secções de página.
+   ------------------------------------------------------------------
+   Isto era `section { padding: 4rem 0 }` — no seletor de ELEMENTO. Como
+   `<section>` é um elemento de agrupamento semântico e pode aparecer a
+   qualquer profundidade, cada nível de aninhamento somava mais 64px em
+   cima e em baixo. Na loja havia três níveis a acumular:
+   `.catalog-content` (64) dentro do `.catalog-main` (32), e lá dentro
+   `.catalog-categories` (mais 64) — daí as faixas de página vazia entre
+   o cabeçalho, os cartões de material e os controlos de ordenação.
+
+   `main > section` limita o ritmo às secções de topo, que é o que a regra
+   sempre quis dizer. Secções aninhadas espaçam-se com as suas próprias
+   margens ou com `.u-section`. */
+main > section {
+  padding-block: clamp(var(--space-lg), 5vw, var(--space-2xl));
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-xl);
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
 }
 
 /* Geometric divider */
@@ -527,14 +514,14 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 1rem 0;
+  gap: var(--space-2xs);
+  margin: var(--space-sm) 0;
 }
 
 .geometric-divider span {
   display: block;
   height: 5px;
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
 }
 
 .geometric-divider span:nth-child(1) {
@@ -555,13 +542,13 @@ section {
 /* Product grid */
 .product-grid, .collections-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .product-card {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden; /* Importante para conter a imagem se ela transbordar */
   background-color: rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -584,7 +571,7 @@ section {
 
 /* Estilo base para product-card */
 .product-card {
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
@@ -619,7 +606,7 @@ section {
 
 /* Estilo para o conteúdo do card */
 .product-info {
-  padding: 12px;
+  padding: var(--space-xs);
   text-align: center;
 }
 
@@ -665,23 +652,23 @@ section {
 }
 
 .product-info {
-  padding: 1.2rem;
+  padding: var(--space-sm);
 }
 
 .product-info h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2xs);
 }
 
 .product-family, .product-category, .product-style {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   opacity: 0.7;
-  margin-bottom: 0.2rem;
+  margin-bottom: var(--space-3xs);
 }
 
 /* Collection cards */
 .collection-card {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
   height: 350px;
@@ -729,24 +716,24 @@ section {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 2rem;
-  z-index: 1;
+  padding: var(--space-lg);
+  z-index: var(--z-layer-1);
 }
 
 .collection-info h3 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-2xs);
 }
 
 .collection-info p {
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-sm);
   opacity: 0.8;
 }
 
 /* Collections Carousel */
 .collections-carousel {
-  padding: 4rem 0;
+  padding: var(--space-2xl) 0;
   background-color: var(--color-secondary);
   position: relative;
   overflow: hidden;
@@ -754,15 +741,15 @@ section {
 
 .carousel-container {
   position: relative;
-  max-width: 1400px;
+  max-width: var(--container-wide);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--space-lg);
 }
 
 .carousel-track {
   display: flex;
-  gap: 2rem;
-  padding: 2rem 0;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
   overflow-x: auto;
   scroll-behavior: smooth;
   -ms-overflow-style: none;
@@ -784,13 +771,13 @@ section {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
-  font-size: 1.2rem;
+  font-size: var(--text-lg);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  z-index: 10;
+  z-index: var(--z-raised);
 }
 
 .carousel-nav:hover {
@@ -808,25 +795,25 @@ section {
 /* Section Header */
 .section-header {
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 0 1rem;
+  margin-bottom: var(--space-xl);
+  padding: 0 var(--space-sm);
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
   color: var(--color-text);
 }
 
 /* Featured Section */
 .featured-section {
-  padding: 5rem 0;
+  padding: var(--space-2xl) 0;
   background-color: var(--color-primary);
 }
 
 /* Product Card Enhancements */
 .product-card {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.03);
   transition: all 0.3s ease;
@@ -881,59 +868,59 @@ section {
 }
 
 .product-info {
-  padding: 1.5rem;
+  padding: var(--space-md);
   text-align: center;
 }
 
 .product-info h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2xs);
   color: var(--color-text);
 }
 
 .product-category {
   color: var(--color-highlight);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-2xs);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .price {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: var(--text-md);
   color: var(--color-text);
-  margin-top: 0.5rem;
+  margin-top: var(--space-2xs);
 }
 
 .sale-price {
   color: var(--color-highlight);
-  margin-right: 0.5rem;
+  margin-right: var(--space-2xs);
 }
 
 .original-price {
   text-decoration: line-through;
   opacity: 0.6;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 
 /* All Collections Section */
 .all-collections {
-  padding: 5rem 0;
+  padding: var(--space-2xl) 0;
   background-color: var(--color-secondary);
 }
 
 .collections-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 0 2rem;
-  max-width: 1400px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
+  gap: var(--space-lg);
+  padding: 0 var(--space-lg);
+  max-width: var(--container-wide);
   margin: 0 auto;
 }
 
 .collection-card {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
   height: 400px;
@@ -975,32 +962,32 @@ section {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 2rem;
+  padding: var(--space-lg);
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
   color: white;
-  z-index: 1;
+  z-index: var(--z-layer-1);
 }
 
 .collection-info h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-2xs);
   color: white;
 }
 
 .collection-info p {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
   opacity: 0.9;
-  font-size: 0.95rem;
+  font-size: var(--text-base);
 }
 
 .btn-outline {
   display: inline-block;
-  padding: 0.6rem 1.5rem;
+  padding: var(--space-2xs) var(--space-md);
   background: transparent;
   border: 2px solid white;
   color: white;
-  border-radius: 30px;
-  font-size: 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
   font-weight: 500;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -1036,74 +1023,74 @@ section {
 
 .story-content {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-layer-2);
   max-width: 600px;
-  padding: 2rem;
+  padding: var(--space-lg);
   background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .story-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
 }
 
 .story-content p {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-md);
 }
 
 /* Collection page */
 .collection-page {
-  padding: 2rem 0;
+  padding: var(--space-lg) 0;
 }
 
 .collection-header {
   text-align: center;
-  padding: 3rem 0;
+  padding: var(--space-xl) 0;
   background-color: rgba(0, 0, 0, 0.2);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
 .collection-title h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
 }
 
 .collection-description {
   max-width: 800px;
   margin: 0 auto;
-  font-size: 1.1rem;
+  font-size: var(--text-md);
 }
 
 .filter-controls {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 2rem;
-  padding: 0 2rem;
+  margin-bottom: var(--space-lg);
+  padding: 0 var(--space-lg);
 }
 
 .sort-by {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
 }
 
 .sort-by select {
-  padding: 0.5rem 1rem;
+  padding: var(--space-2xs) var(--space-sm);
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--color-text);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
 .collection-nav {
-  margin-top: 4rem;
-  padding: 2rem;
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   text-align: center;
 }
 
@@ -1111,14 +1098,14 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 .collection-link {
-  padding: 0.5rem 1rem;
+  padding: var(--space-2xs) var(--space-sm);
   background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   transition: all 0.3s ease;
 }
 
@@ -1129,16 +1116,16 @@ section {
 
 /* Product detail page */
 .product-detail {
-  padding: 3rem 0;
+  padding: var(--space-xl) 0;
 }
 
 .product-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  max-width: 1200px;
+  gap: var(--space-xl);
+  max-width: var(--container-base);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--space-sm);
 }
 
 .product-gallery {
@@ -1147,9 +1134,9 @@ section {
 }
 
 .main-image {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -1164,15 +1151,15 @@ section {
 
 .thumbnail-gallery {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-sm);
   overflow-x: auto;
-  padding-bottom: 1rem;
+  padding-bottom: var(--space-sm);
 }
 
 .thumbnail {
   width: 80px;
   height: 80px;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   cursor: pointer;
   opacity: 0.6;
@@ -1189,29 +1176,29 @@ section {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
 }
 
 .product-title {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
 .product-title h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-2xs);
 }
 
 .product-reference {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   opacity: 0.7;
 }
 
 .product-meta {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
 .meta-item {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2xs);
   display: flex;
 }
 
@@ -1221,24 +1208,24 @@ section {
 }
 
 .product-description {
-  margin: 2rem 0;
-  padding-top: 2rem;
+  margin: var(--space-lg) 0;
+  padding-top: var(--space-lg);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .product-actions {
-  margin-top: 2rem;
+  margin-top: var(--space-lg);
 }
 
 .related-products {
-  margin-top: 5rem;
-  padding: 3rem 0;
+  margin-top: var(--space-2xl);
+  padding: var(--space-xl) 0;
   background-color: rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
 .related-products h2 {
-  font-size: 2rem;
+  font-size: var(--text-2xl);
 }
 
 .loading-placeholder {
@@ -1259,7 +1246,7 @@ section {
 
 /* About page */
 .about-page {
-  padding-bottom: 3rem;
+  padding-bottom: var(--space-xl);
 }
 
 .about-header {
@@ -1287,23 +1274,23 @@ section {
 
 .about-header-content {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-layer-2);
   text-align: center;
 }
 
 .about-header h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .about-container {
-  max-width: 1200px;
+  max-width: var(--container-base);
   margin: 0 auto;
-  padding: 4rem 1rem;
+  padding: var(--space-2xl) var(--space-sm);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: var(--space-xl);
   align-items: center;
 }
 
@@ -1312,38 +1299,48 @@ section {
 }
 
 .about-image {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  /* Sem proporção reservada, a imagem entrava depois do texto e empurrava
+     a página para baixo: era a maior fonte de salto de layout do site
+     (CLS 0.16 em telemóvel, acima do limite de 0.1). */
+  aspect-ratio: var(--ratio-tile);
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .about-content h2 {
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-md);
 }
 
 .about-content p {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
 }
 
 .about-values {
   text-align: center;
-  padding: 4rem 1rem;
+  padding: var(--space-2xl) var(--space-sm);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 .values-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 3rem auto 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-md)), 1fr));
+  gap: var(--space-lg);
+  max-width: var(--container-base);
+  margin: var(--space-xl) auto 0;
 }
 
 .value-card {
   background-color: rgba(0, 0, 0, 0.2);
-  padding: 2rem;
-  border-radius: 10px;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
   transition: transform 0.3s ease;
 }
 
@@ -1352,13 +1349,13 @@ section {
 }
 
 .value-icon {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-md);
   color: var(--color-highlight);
 }
 
 .about-connect {
   background-color: var(--color-secondary);
-  padding: 4rem 1rem;
+  padding: var(--space-2xl) var(--space-sm);
   text-align: center;
 }
 
@@ -1370,15 +1367,15 @@ section {
 .social-links-large {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .social-link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   transition: transform 0.3s ease;
 }
 
@@ -1388,12 +1385,12 @@ section {
 
 /* Alert messages */
 .alert {
-  padding: 1rem;
-  border-radius: 5px;
-  margin-bottom: 1rem;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
 }
 
 .alert-success {
@@ -1412,7 +1409,7 @@ section {
   background-size: auto 140%;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 5rem 1rem; /* Adjust padding as needed */
+  padding: var(--space-2xl) var(--space-sm); /* Adjust padding as needed */
   text-align: center;
   position: relative; /* For potential overlays or pseudo-elements */
 }
@@ -1425,18 +1422,18 @@ section {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
-  z-index: 1;
+  z-index: var(--z-layer-1);
 }
 
 .about-header-content {
   position: relative; /* To ensure content is above the overlay */
-  z-index: 2;
+  z-index: var(--z-layer-2);
 }
 
 .about-header h1 {
   color: #fff; /* Ensure text is visible against dark/image background */
-  font-size: 3.5rem; /* Adjust as needed */
-  margin-bottom: 1rem;
+  font-size: var(--text-4xl); /* Adjust as needed */
+  margin-bottom: var(--space-sm);
 }
 
 .about-header .geometric-divider span {
@@ -1477,7 +1474,7 @@ section {
 }
 
 /* Media queries */
-@media (max-width: 992px) {
+@media (max-width: 1023.98px) {
   .product-container {
     grid-template-columns: 1fr;
   }
@@ -1492,11 +1489,11 @@ section {
   }
   
   .hero-title {
-    font-size: 2.5rem;
+    font-size: var(--text-3xl);
   }
   /* Removed premature closing brace that was here. */
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .product-card {
     width: calc(50% - 5px);
     max-width: unset;
@@ -1510,10 +1507,10 @@ section {
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0.5rem; /* Clickable area */
-    z-index: 1020; /* Ensure it's above other elements if needed when menu is open */
+    padding: var(--space-2xs); /* Clickable area */
+    z-index: var(--z-header); /* Ensure it's above other elements if needed when menu is open */
     position: relative; /* For positioning spans if needed, or if it's part of a fixed header */
-    z-index: 1020; /* Ensure toggle button is above the nav-menu */
+    z-index: var(--z-header); /* Ensure toggle button is above the nav-menu */
   }
 
   .menu-toggle span {
@@ -1521,9 +1518,9 @@ section {
     width: 25px;
     height: 3px;
     background-color: var(--color-text); /* Or your desired icon color */
-    margin: 5px 0;
+    margin: var(--space-3xs) 0;
     transition: all 0.3s ease-in-out;
-    border-radius: 1px;
+    border-radius: var(--radius-xs);
   }
 
   .menu-toggle.active span:nth-child(1) {
@@ -1546,9 +1543,9 @@ section {
     height: 100vh;
     background-color: var(--color-secondary);
     flex-direction: column;
-    padding: 4rem 1rem 1rem;
+    padding: var(--space-2xl) var(--space-sm) var(--space-sm);
     transition: left 0.3s ease;
-    z-index: 1010;
+    z-index: var(--z-header);
     box-sizing: border-box; /* Ensures padding is included in the width */
     overflow-y: auto; /* Allow scroll for many items */
   }
@@ -1575,15 +1572,15 @@ section {
 
 /*  /* Styles for the Admin dropdown UL specifically within the mobile .nav-menu */
 /*  .nav-menu .dropdown-menu {
-/*    padding-left: 1rem; 
-/*    margin-top: 0.25rem;
-/*    margin-bottom: 0.5rem;
+/*    padding-left: var(--space-sm); 
+/*    margin-top: var(--space-3xs);
+/*    margin-bottom: var(--space-2xs);
 /*    background-color: rgba(0,0,0,0.1); 
-/*    border-radius: 4px;
+/*    border-radius: var(--radius-sm);
 /*  }
 
 /*  .nav-menu .dropdown-menu li a {
-/*    padding: 0.6rem 0; 
+/*    padding: var(--space-2xs) 0; 
 /*    font-size: 0.9em; 
 /*  }
 
@@ -1594,13 +1591,13 @@ section {
 /*  }*/
   /* === END: COMMENTED OUT OLD MOBILE DROPDOWN STYLES === */
 
-  /* === NEW MOBILE DROPDOWN STYLES (@media max-width: 768px) === */
+  /* === NEW MOBILE DROPDOWN STYLES (@media max-width: 767.98px) === */
   .nav-menu .dropdown-toggle::after {
     /* Optionally, change arrow or hide it for mobile slide-in */
     /* content: ' +'; /* Example: change to a plus sign */
     /* display: inline-block; */ /* Ensure it shows if not hidden */
     float: right; /* Align arrow to the right for mobile list items */
-    margin-right: 0.5rem;
+    margin-right: var(--space-2xs);
   }
 
   .nav-menu .dropdown-menu { /* Targets dropdown menus within the mobile nav panel */
@@ -1610,10 +1607,10 @@ section {
     background-color: rgba(0,0,0,0.15); /* Slightly darker background for nesting */
     border: none;
     box-shadow: none;
-    padding-left: 1rem; /* Indent submenu items */
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 4px;
+    padding-left: var(--space-sm); /* Indent submenu items */
+    margin-top: var(--space-2xs);
+    margin-bottom: var(--space-2xs);
+    border-radius: var(--radius-sm);
     /* Resetting desktop transition properties as they might not be desired for static display */
     opacity: 1;
     visibility: visible;
@@ -1626,7 +1623,7 @@ section {
   }
 
   .nav-menu .dropdown-menu a {
-    padding: 0.75rem 1rem; /* Adjust padding for mobile */
+    padding: var(--space-xs) var(--space-sm); /* Adjust padding for mobile */
     font-size: 0.9em;
     color: var(--color-text-light-secondary); /* Ensure good contrast on mobile panel */
   }
@@ -1638,15 +1635,15 @@ section {
   }
   /* === END NEW MOBILE DROPDOWN STYLES === */
 
-} /* This closes @media (max-width: 768px) */
+} /* This closes @media (max-width: 767.98px) */
 
-/* General styles (hero, brand-story, etc.) resume here, assumed to be part of @media (max-width: 992px) or global */
+/* General styles (hero, brand-story, etc.) resume here, assumed to be part of @media (max-width: 1023.98px) or global */
   .hero-title {
-    font-size: 2rem;
+    font-size: var(--text-2xl);
   }
   
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
   
   .brand-story {
@@ -1654,20 +1651,20 @@ section {
   }
   
   .story-content {
-    padding: 1.5rem;
+    padding: var(--space-md);
   }
   
   .story-content h2 {
-    font-size: 2rem;
+    font-size: var(--text-2xl);
   }
   
   .section-header h2 {
-    font-size: 2rem;
+    font-size: var(--text-2xl);
   }
 
   .nav-menu li a {
     display: block;
-    padding: 0.75rem 0; 
+    padding: var(--space-xs) 0; 
     color: var(--color-text);
     text-decoration: none;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -1689,11 +1686,11 @@ section {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1.5rem;
+    gap: var(--space-md);
   }
 
   .footer-section {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-sm);
     /* width: 100%; Consider if this is needed */
   }
 
@@ -1702,7 +1699,7 @@ section {
     /* To stack social links vertically:
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-xs);
     */
   }
 }
@@ -1715,7 +1712,7 @@ section {
 }
 
 .footer-links li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2xs);
 }
 
 .footer-links a {
@@ -1723,8 +1720,8 @@ section {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
   transition: color 0.3s ease;
 }
 
@@ -1733,15 +1730,15 @@ section {
 }
 
 .footer-links a i {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   opacity: 0.8;
 }
 
 /* Footer responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .footer-container {
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-lg);
   }
   
   .footer-section {
@@ -1752,7 +1749,7 @@ section {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--space-sm);
   }
   
   .footer-links li {
@@ -1762,14 +1759,16 @@ section {
 
 /* Privacy links in copyright - very discrete */
 .privacy-links {
-  margin-top: 0.5rem;
-  font-size: 0.7rem;
-  color: #666;
+  margin-top: var(--space-2xs);
+  font-size: var(--text-2xs);
+  /* #666 sobre o fundo do rodapé dá 3.49:1 e falha o mínimo AA de 4.5:1
+     para texto pequeno. */
+  color: var(--color-text-muted);
   text-align: center;
 }
 
 .privacy-links a {
-  color: #666;
+  color: var(--color-text-muted);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -1780,31 +1779,31 @@ section {
 }
 
 /* Mobile adjustments for privacy links */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .privacy-links {
-    font-size: 0.65rem;
-    margin-top: 0.25rem;
+    font-size: var(--text-2xs);
+    margin-top: var(--space-3xs);
   }
 }
 
 
-@media (max-width: 576px) {
+@media (max-width: 479.98px) {
   .hero {
     height: 60vh;
   }
   
   .hero-title {
-    font-size: 1.8rem;
+    font-size: var(--text-xl);
   }
   
   .gallery-grid,
   .product-grid,
   .family-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-md)), 1fr));
   }
   
   .social-links-large {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-sm);
   }
 }

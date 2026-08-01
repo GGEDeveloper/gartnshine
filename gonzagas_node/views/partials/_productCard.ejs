@@ -1,5 +1,5 @@
 <div class="product-card" data-name="<%= product.name ? product.name.toLowerCase() : '' %>" data-product-id="<%= product.id %>">
-  <div class="product-image">
+  <div class="product-image-container">
     <%
       // O cartão liga à FICHA DO PRODUTO. Antes ligava a `/loja?family=N`,
       // o que levava quem clicasse numa peça para uma listagem — e nem sequer
@@ -13,7 +13,10 @@
     <a href="<%= produtoLink %>" class="d-block mb-2" aria-label="Ver <%= product.name %>">
       <picture>
         <% if (cardImg.webp) { %><source srcset="<%= cardImg.webp %>" type="image/webp"><% } %>
-        <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925" loading="lazy" class="img-fluid" onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
+        <img src="<%= cardImg.jpg %>" alt="<%= product.name %> — joia artesanal prata 925"
+             loading="lazy" decoding="async" width="400" height="400"
+             class="img-fluid product-image"
+             onerror="this.onerror=null;this.src='/images/imagem-nao-disponivel.svg'">
       </picture>
     </a>
   </div>
@@ -22,7 +25,7 @@
       <p class="product-reference mb-1">Ref: <%= product.reference %></p>
     <% } %>
     <% if (product.family_name) { %>
-      <p class="product-family mb-1"><small class="text-highlight"><%= product.family_name %></small></p>
+      <p class="product-family mb-1"><span class="text-highlight"><%= product.family_name %></span></p>
     <% } %>
     <%
       // O nome não aparecia no cartão — só referência, categoria e preço.

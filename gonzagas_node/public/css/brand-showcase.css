@@ -97,7 +97,7 @@ body.showcase-theme .hero .hero-content {
 }
 
 body.showcase-theme .hero-tagline {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   color: var(--igp-cream) !important;
   border: 1px solid rgba(201, 168, 76, 0.30) !important;
   background: rgba(10, 10, 10, 0.38) !important;
@@ -132,7 +132,7 @@ body.showcase-theme .featured-section:not(.has-background) {
 }
 
 body.showcase-theme .section-header h2 {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   font-weight: 300 !important;
   letter-spacing: 0.2em !important;
   text-transform: uppercase !important;
@@ -194,32 +194,32 @@ body.showcase-theme .instagram-hero-inner {
 }
 
 body.showcase-theme .instagram-hero h1 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.85rem, 4vw, 2.5rem);
   font-weight: 300;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2xs);
   color: var(--igp-cream);
 }
 
 body.showcase-theme .instagram-hero-lead {
   margin: 0 auto;
   max-width: 420px;
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   line-height: 1.55;
   color: var(--igp-muted);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
 body.showcase-theme .instagram-divider {
-  margin-top: 1.25rem;
+  margin-top: var(--space-sm);
 }
 
 body.showcase-theme .instagram-page .geometric-divider {
   display: flex;
   justify-content: center;
-  gap: 0.35rem;
+  gap: var(--space-3xs);
 }
 
 body.showcase-theme .instagram-page .geometric-divider span {
@@ -227,7 +227,7 @@ body.showcase-theme .instagram-page .geometric-divider span {
   width: 28px;
   height: 3px;
   background: linear-gradient(90deg, #6b8068, var(--igp-gold));
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   opacity: 0.85;
 }
 
@@ -243,13 +243,13 @@ body.showcase-theme .instagram-grid {
   gap: clamp(0.75rem, 2vw, 1.1rem);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023.98px) {
   body.showcase-theme .instagram-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 479.98px) {
   body.showcase-theme .instagram-grid {
     grid-template-columns: 1fr;
   }
@@ -313,14 +313,14 @@ body.showcase-theme .instagram-type-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   backdrop-filter: blur(4px);
 }
 
 body.showcase-theme .instagram-card-caption {
   margin: 0;
-  padding: 0.75rem 0.85rem 1rem;
-  font-size: 0.875rem;
+  padding: var(--space-xs) var(--space-xs) var(--space-sm);
+  font-size: var(--text-sm);
   line-height: 1.45;
   color: rgba(240, 236, 228, 0.9);
   border-top: 1px solid rgba(201, 168, 76, 0.12);
@@ -329,8 +329,8 @@ body.showcase-theme .instagram-card-caption {
 
 body.showcase-theme .instagram-message {
   max-width: 560px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: var(--space-lg) auto;
+  padding: 0 var(--space-sm);
   text-align: center;
   color: var(--igp-muted);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -377,7 +377,7 @@ body.showcase-theme .ig-collections-head {
 }
 
 body.showcase-theme .ig-collections-sub {
-  margin-top: 0.2rem !important;
+  margin-top: var(--space-3xs) !important;
 }
 
 /* ——— /collections ——— */
@@ -386,7 +386,7 @@ body.showcase-theme .collections-page {
 }
 
 body.showcase-theme .collections-title h1 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: 0.2em;
   color: var(--igp-cream);
@@ -416,7 +416,7 @@ body.showcase-theme .about-page {
 }
 
 body.showcase-theme .about-header h1 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: 0.15em;
   color: var(--igp-cream);
@@ -427,7 +427,7 @@ body.showcase-theme .about-header .geometric-divider span {
 }
 
 body.showcase-theme .about-content h2 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: 0.12em;
   color: var(--igp-gold);
@@ -446,7 +446,7 @@ body.showcase-theme .about-connect {
 body.showcase-theme .about-connect h2,
 body.showcase-theme .about-connect h3 {
   color: var(--igp-gold);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: 0.12em;
 }
@@ -458,7 +458,7 @@ body.showcase-theme .about-connect p {
 /* About — h3 genéricos */
 body.showcase-theme .about-page h3 {
   color: var(--igp-gold);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display);
   font-weight: 400;
 }
 
@@ -488,7 +488,7 @@ body.showcase-theme .about-social i {
 body.showcase-theme .about-header p,
 body.showcase-theme .about-header .subtitle {
   color: var(--igp-muted);
-  font-size: 1.05rem;
+  font-size: var(--text-base);
   letter-spacing: 0.04em;
 }
 
@@ -518,7 +518,7 @@ body.showcase-theme .catalog-header {
 }
 
 body.showcase-theme .page-title {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   font-weight: 300 !important;
   letter-spacing: 0.15em !important;
   color: var(--igp-cream) !important;
@@ -614,9 +614,8 @@ body.showcase-theme .filter-label:hover {
 }
 
 body.showcase-theme .filter-checkbox,
-body.showcase-theme .filter-radio {
-  accent-color: var(--igp-gold) !important;
-}
+/* As caixas de selecção deixaram de ser controlos nativos, por isso
+   `accent-color` já não faz nada — o desenho está em catalog-enhanced.css. */
 
 body.showcase-theme .filter-section {
   border-bottom-color: var(--igp-border) !important;
@@ -665,7 +664,7 @@ body.showcase-theme .product-card {
   background: rgba(12, 12, 12, 0.88) !important;
   border: 1px solid var(--igp-border) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
-  border-radius: 12px !important;
+  border-radius: var(--radius-md) !important;
   max-width: none !important;
   width: 100% !important;
   overflow: hidden !important;
@@ -688,7 +687,7 @@ body.showcase-theme .catalog-grid .product-info,
 body.showcase-theme .product-item .product-info,
 body.showcase-theme .product-card .product-info {
   background: transparent !important;
-  padding: 0.85rem 0.75rem 1rem !important;
+  padding: var(--space-xs) var(--space-xs) var(--space-sm) !important;
   text-align: left !important;
 }
 
@@ -744,7 +743,7 @@ body.showcase-theme .products-grid .product-reference,
 body.showcase-theme .catalog-grid .product-reference,
 body.showcase-theme .product-card .product-reference {
   color: var(--igp-muted) !important;
-  font-size: 0.72rem !important;
+  font-size: var(--text-xs) !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
   opacity: 1 !important;
@@ -760,16 +759,16 @@ body.showcase-theme .products-grid .product-family,
 body.showcase-theme .catalog-grid .product-family,
 body.showcase-theme .product-card .product-family {
   color: var(--igp-gold) !important;
-  margin-bottom: 0.35rem !important;
+  margin-bottom: var(--space-3xs) !important;
 }
 
 body.showcase-theme .products-grid .product-title,
 body.showcase-theme .catalog-grid .product-title,
 body.showcase-theme .product-card .product-title,
 body.showcase-theme .product-card .product-info h3 {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   font-weight: 400 !important;
-  font-size: 0.95rem !important;
+  font-size: var(--text-base) !important;
   letter-spacing: 0.02em !important;
   line-height: 1.35 !important;
   color: var(--igp-cream) !important;
@@ -780,8 +779,8 @@ body.showcase-theme .catalog-grid .product-price,
 body.showcase-theme .product-card .product-price {
   color: var(--igp-gold) !important;
   font-weight: 600 !important;
-  font-size: 1rem !important;
-  margin-top: 0.5rem !important;
+  font-size: var(--text-base) !important;
+  margin-top: var(--space-2xs) !important;
 }
 
 body.showcase-theme .product-price .sale-price,
@@ -805,7 +804,7 @@ body.showcase-theme .product-price .fst-italic {
 
 /* Botão add-to-cart dentro do card */
 body.showcase-theme .product-card .btn-add-to-cart {
-  margin-top: 0.65rem !important;
+  margin-top: var(--space-xs) !important;
 }
 
 /* Sem resultados */
@@ -828,7 +827,7 @@ body.showcase-theme .no-products a {
 
 /* ——— Product detail ——— */
 body.showcase-theme .product-title {
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   font-weight: 300 !important;
   letter-spacing: 0.1em !important;
   color: var(--igp-cream) !important;
@@ -854,38 +853,38 @@ body.showcase-theme .breadcrumbs a:hover {
 /* ── Instagram Strip (homepage) ─────────────────────────────── */
 body.showcase-theme .ig-strip-section {
   padding: clamp(2rem, 4vw, 2.75rem) 1.25rem clamp(1.75rem, 3vw, 2.5rem);
-  max-width: 1200px;
+  max-width: var(--container-base);
   margin: 0 auto;
 }
 
 body.showcase-theme .ig-strip-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
 body.showcase-theme .ig-strip-header h2 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   letter-spacing: 0.18em;
   color: var(--igp-cream);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2xs);
   text-transform: uppercase;
 }
 
 body.showcase-theme .ig-strip-lead {
   color: var(--igp-muted);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   letter-spacing: 0.06em;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
 }
 
 body.showcase-theme .ig-strip-section .geometric-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  margin: 0.75rem auto 0;
+  gap: var(--space-2xs);
+  margin: var(--space-xs) auto 0;
 }
 
 body.showcase-theme .ig-strip-section .geometric-divider span {
@@ -908,17 +907,17 @@ body.showcase-theme .ig-strip-section .geometric-divider span:nth-child(2) {
 body.showcase-theme .ig-strip-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023.98px) {
   body.showcase-theme .ig-strip-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 479.98px) {
   body.showcase-theme .ig-strip-grid {
     grid-template-columns: 1fr;
   }
@@ -929,18 +928,18 @@ body.showcase-theme .ig-strip-cta {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-md);
   flex-wrap: wrap;
-  padding-top: 0.5rem;
+  padding-top: var(--space-2xs);
 }
 
 body.showcase-theme .ig-strip-cta-link {
   color: var(--igp-gold);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
+  padding-bottom: var(--space-3xs);
   transition: border-color 0.2s, opacity 0.2s;
 }
 
@@ -959,7 +958,7 @@ body.showcase-theme .ig-strip-cta-external::after {
 /* Título ig-collections: letter-spacing próprio (0.35em) vs genérico da secção (0.2em) */
 body.showcase-theme .section-header h2.ig-collections-title {
   letter-spacing: 0.35em !important;
-  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  font-family: var(--font-display) !important;
   font-weight: 300 !important;
   text-transform: uppercase !important;
   color: var(--igp-cream) !important;
@@ -972,7 +971,7 @@ body.showcase-theme .section-header h2.ig-collections-title::after {
 /* Subtítulo ig-collections */
 body.showcase-theme .ig-collections-sub {
   color: var(--igp-muted) !important;
-  font-size: 0.8rem !important;
+  font-size: var(--text-xs) !important;
   letter-spacing: 0.12em !important;
 }
 
@@ -996,19 +995,19 @@ body.showcase-theme .featured-carousel .product-card:hover {
 
 body.showcase-theme .featured-carousel .product-info {
   background: transparent !important;
-  padding: 0.55rem 0.6rem 0.65rem;
+  padding: var(--space-2xs) var(--space-2xs) var(--space-xs);
 }
 
 /* Referência, família, preço — cores showcase */
 body.showcase-theme .featured-carousel .product-reference {
   color: var(--igp-muted) !important;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
 }
 
 body.showcase-theme .featured-carousel .product-family small {
   color: var(--igp-gold) !important;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
 
 body.showcase-theme .featured-carousel .product-price {
@@ -1048,7 +1047,7 @@ body.showcase-theme .featured-carousel-dots .slick-dots li.slick-active button:b
 body.showcase-theme .collection-page { background: transparent; }
 
 body.showcase-theme .collection-header {
-  padding: 3rem 1.5rem 2rem;
+  padding: var(--space-xl) var(--space-md) var(--space-lg);
   text-align: center;
 }
 
@@ -1063,29 +1062,29 @@ body.showcase-theme .collection-header.has-background::before {
   position: absolute;
   inset: 0;
   background: rgba(5, 7, 10, 0.72);
-  z-index: 1;
+  z-index: var(--z-layer-1);
 }
 
 body.showcase-theme .collection-header.has-background > * {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-layer-2);
 }
 
 body.showcase-theme .collection-title h1 {
   color: var(--igp-cream);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-weight: 300;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
 }
 
 body.showcase-theme .collection-description {
   color: var(--igp-muted);
-  font-size: 1rem;
+  font-size: var(--text-base);
   max-width: 600px;
-  margin: 0.75rem auto 0;
+  margin: var(--space-xs) auto 0;
   line-height: 1.7;
 }
 
@@ -1094,8 +1093,8 @@ body.showcase-theme .geometric-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin: 1rem auto;
+  gap: var(--space-3xs);
+  margin: var(--space-sm) auto;
 }
 body.showcase-theme .geometric-divider span {
   display: block;
@@ -1114,24 +1113,24 @@ body.showcase-theme .geometric-divider span:nth-child(2) {
 
 /* Filter controls */
 body.showcase-theme .filter-controls {
-  padding: 1rem 1.5rem;
+  padding: var(--space-sm) var(--space-md);
   border-bottom: 1px solid var(--igp-border);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-md);
 }
 body.showcase-theme .filter-controls label {
   color: var(--igp-muted);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
-  margin-right: 0.5rem;
+  margin-right: var(--space-2xs);
 }
 body.showcase-theme .filter-controls select,
 body.showcase-theme #sort-select {
   background: rgba(10,10,10,0.9);
   border: 1px solid var(--igp-border);
   color: var(--igp-cream);
-  padding: 0.45rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
   cursor: pointer;
   outline: none;
 }
@@ -1144,44 +1143,44 @@ body.showcase-theme #sort-select:focus {
 /* No products */
 body.showcase-theme .no-products {
   text-align: center;
-  padding: 4rem 1rem;
+  padding: var(--space-2xl) var(--space-sm);
   color: var(--igp-muted);
 }
-body.showcase-theme .no-products p { margin-bottom: 1.5rem; }
+body.showcase-theme .no-products p { margin-bottom: var(--space-md); }
 body.showcase-theme .no-products .btn-primary {
   background: var(--igp-gold);
   color: #0a0a0a;
   border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 8px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 500;
 }
 
 /* Collection navigation */
 body.showcase-theme .collection-nav {
-  padding: 2.5rem 1.5rem;
+  padding: var(--space-lg) var(--space-md);
   border-top: 1px solid var(--igp-border);
   text-align: center;
 }
 body.showcase-theme .collection-nav h3 {
   color: var(--igp-gold);
-  font-family: Georgia, serif;
-  font-size: 0.85rem;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-sm);
 }
 body.showcase-theme .collection-link {
   display: inline-block;
-  margin: 0.3rem 0.5rem;
-  padding: 0.45rem 1rem;
+  margin: var(--space-3xs) var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
   border: 1px solid var(--igp-border);
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   color: var(--igp-cream);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   transition: all 0.25s ease;
 }
@@ -1203,14 +1202,14 @@ body.showcase-theme button.btn-add-to-cart {
   background: transparent;
   border: 1px solid var(--igp-border);
   color: var(--igp-cream);
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
-  margin-top: 0.6rem;
+  margin-top: var(--space-2xs);
 }
 
 body.showcase-theme .btn-add-to-cart:hover,
@@ -1237,8 +1236,8 @@ body.showcase-theme button.btn-add-to-cart.added {
 
 /* Na página de detalhe o botão é maior */
 body.showcase-theme .product-actions .btn-add-to-cart {
-  padding: 0.85rem 2rem;
-  font-size: 0.85rem;
+  padding: var(--space-xs) var(--space-lg);
+  font-size: var(--text-sm);
   letter-spacing: 0.12em;
 }
 
@@ -1246,17 +1245,17 @@ body.showcase-theme .product-actions .btn-add-to-cart {
 
 /* Banners conta (cart, checkout, success) */
 .account-nav-banner {
-  margin-bottom: 1.5rem;
-  padding: 0.85rem 1rem;
+  margin-bottom: var(--space-md);
+  padding: var(--space-xs) var(--space-sm);
   border: 1px solid rgba(201, 168, 76, 0.22);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(201, 168, 76, 0.06);
 }
 
 .account-nav-banner p {
   margin: 0;
   color: var(--igp-muted, rgba(240, 236, 228, 0.65));
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 
 .account-nav-banner a {
@@ -1277,8 +1276,8 @@ body.showcase-theme .product-actions .btn-add-to-cart {
 
 .account-nav-hint {
   color: var(--igp-muted, rgba(240, 236, 228, 0.55));
-  font-size: 0.88rem;
-  margin-bottom: 1.25rem;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-sm);
 }
 
 .account-nav-hint a {
@@ -1293,14 +1292,14 @@ body.showcase-theme .product-actions .btn-add-to-cart {
 .account-nav-inline {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   align-items: center;
 }
 
 .account-nav-link {
   color: var(--igp-gold, #c9a84c);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
 }
 
 .account-nav-link-muted {
@@ -1309,12 +1308,12 @@ body.showcase-theme .product-actions .btn-add-to-cart {
 
 .account-nav-btn {
   display: inline-block;
-  padding: 0.35rem 0.75rem;
+  padding: var(--space-3xs) var(--space-xs);
   border: 1px solid rgba(201, 168, 76, 0.5);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: var(--igp-gold, #c9a84c);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
 
 /* ── Formulários Bootstrap dentro do tema showcase ────────── */
@@ -1335,7 +1334,7 @@ body.showcase-theme .form-select:focus {
 
 body.showcase-theme .form-label {
   color: var(--igp-muted);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
 }
 
@@ -1371,45 +1370,45 @@ body.showcase-theme .alert-success {
    max-width: 768px / 480px
    ===================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
 
   /* ── Geral: secções e títulos ─────────────────────────────── */
   body.showcase-theme .ig-collections-title {
-    font-size: 1.5rem !important;
+    font-size: var(--text-xl) !important;
     letter-spacing: 0.22em !important;
   }
 
-  body.showcase-theme .ig-collections-sub { font-size: 0.85rem; }
+  body.showcase-theme .ig-collections-sub { font-size: var(--text-sm); }
 
-  body.showcase-theme .section-header { padding: 0 1rem; }
+  body.showcase-theme .section-header { padding: 0 var(--space-sm); }
 
   /* ── IG strip (homepage) ─────────────────────────────────── */
-  body.showcase-theme .ig-strip-section { padding: 2rem 1rem 1.5rem; }
+  body.showcase-theme .ig-strip-section { padding: var(--space-lg) var(--space-sm) var(--space-md); }
 
   body.showcase-theme .ig-strip-header h2 {
-    font-size: 1.4rem;
+    font-size: var(--text-lg);
     letter-spacing: 0.18em;
   }
 
-  body.showcase-theme .ig-strip-lead { font-size: 0.82rem; }
+  body.showcase-theme .ig-strip-lead { font-size: var(--text-sm); }
 
   body.showcase-theme .ig-strip-cta {
     flex-direction: column;
-    gap: 0.85rem;
+    gap: var(--space-xs);
     align-items: stretch;
   }
 
   body.showcase-theme .ig-strip-cta-link {
     text-align: center;
-    padding: 0.7rem 1.25rem;
+    padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--igp-border);
-    border-radius: 8px;
-    font-size: 0.85rem;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
   }
 
   /* Instagram cards em strip: 2 colunas (já definido no grid, reforçar caption) */
   body.showcase-theme .instagram-card-caption {
-    font-size: 0.78rem;
+    font-size: var(--text-xs);
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -1418,44 +1417,44 @@ body.showcase-theme .alert-success {
   }
 
   /* ── Collections page ─────────────────────────────────────── */
-  body.showcase-theme .collection-header { padding: 2rem 1rem 1.25rem; }
+  body.showcase-theme .collection-header { padding: var(--space-lg) var(--space-sm) var(--space-sm); }
 
   body.showcase-theme .collection-title h1 {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
     letter-spacing: 0.12em;
   }
 
-  body.showcase-theme .collection-description { font-size: 0.9rem; }
+  body.showcase-theme .collection-description { font-size: var(--text-sm); }
 
-  body.showcase-theme .filter-controls { padding: 0.75rem 1rem; }
+  body.showcase-theme .filter-controls { padding: var(--space-xs) var(--space-sm); }
 
   body.showcase-theme .filter-controls select,
   body.showcase-theme #sort-select {
     width: 100%;
-    font-size: 16px; /* iOS zoom prevention */
+    font-size: var(--text-base); /* iOS zoom prevention */
     min-height: 44px;
   }
 
-  body.showcase-theme .filter-container { flex-direction: column; gap: 0.5rem; }
+  body.showcase-theme .filter-container { flex-direction: column; gap: var(--space-2xs); }
 
-  body.showcase-theme .collection-nav { padding: 2rem 1rem; }
+  body.showcase-theme .collection-nav { padding: var(--space-lg) var(--space-sm); }
 
   body.showcase-theme .collection-link {
-    font-size: 0.82rem;
-    padding: 0.4rem 0.85rem;
+    font-size: var(--text-sm);
+    padding: var(--space-2xs) var(--space-xs);
   }
 
   /* ── About page ───────────────────────────────────────────── */
   body.showcase-theme .about-connect {
-    padding: 2rem 1rem;
+    padding: var(--space-lg) var(--space-sm);
     border-radius: 0;
   }
 
-  body.showcase-theme .social-links-large { gap: 0.75rem; }
+  body.showcase-theme .social-links-large { gap: var(--space-xs); }
 
   body.showcase-theme .social-links-large a {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
+    padding: var(--space-2xs) var(--space-sm);
+    font-size: var(--text-sm);
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1464,18 +1463,18 @@ body.showcase-theme .alert-success {
 
   /* ── Privacy / Terms ──────────────────────────────────────── */
   body.showcase-theme .privacy-policy-container,
-  body.showcase-theme .terms-container { padding: 1rem 0 1.5rem; }
+  body.showcase-theme .terms-container { padding: var(--space-sm) 0 var(--space-md); }
 
   body.showcase-theme .privacy-policy-content,
   body.showcase-theme .terms-content {
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
-    margin: 0 0.5rem 1rem;
+    padding: var(--space-md) var(--space-sm);
+    border-radius: var(--radius-md);
+    margin: 0 var(--space-2xs) var(--space-sm);
   }
 
   body.showcase-theme .privacy-title,
   body.showcase-theme .terms-title {
-    font-size: 1.4rem;
+    font-size: var(--text-lg);
     letter-spacing: 0.1em;
   }
 
@@ -1489,7 +1488,7 @@ body.showcase-theme .alert-success {
   body.showcase-theme .terms-actions .btn {
     width: 100%;
     text-align: center;
-    padding: 0.8rem 1rem;
+    padding: var(--space-xs) var(--space-sm);
     min-height: 48px;
   }
 
@@ -1499,33 +1498,33 @@ body.showcase-theme .alert-success {
   body.showcase-theme .search-results-page { padding: 0; }
 
   body.showcase-theme .search-header {
-    padding: 1rem;
+    padding: var(--space-sm);
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
-  body.showcase-theme .search-title { font-size: 1.3rem; }
+  body.showcase-theme .search-title { font-size: var(--text-lg); }
 
   body.showcase-theme .search-controls {
     width: 100%;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
   body.showcase-theme #sortBy {
     width: 100%;
-    font-size: 16px;
+    font-size: var(--text-base);
     min-height: 44px;
   }
 
   /* Sidebar filtros → drawer / toggle */
   body.showcase-theme .search-filters {
-    margin-bottom: 1rem;
-    padding: 1rem;
+    margin-bottom: var(--space-sm);
+    padding: var(--space-sm);
   }
 
-  body.showcase-theme .filter-group { margin-bottom: 1rem; }
+  body.showcase-theme .filter-group { margin-bottom: var(--space-sm); }
 
   body.showcase-theme .btn-clear-filters,
   body.showcase-theme .btn-apply-price {
@@ -1535,86 +1534,86 @@ body.showcase-theme .alert-success {
   }
 
   body.showcase-theme .price-input {
-    font-size: 16px;
+    font-size: var(--text-base);
     min-height: 40px;
   }
 
   /* Search result cards: 2 col mobile */
   body.showcase-theme .search-results-page .products-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.75rem !important;
+    gap: var(--space-xs) !important;
   }
 
   body.showcase-theme .search-results-page .product-info {
-    padding: 0.65rem !important;
+    padding: var(--space-xs) !important;
   }
 
   body.showcase-theme .search-results-page .product-name {
-    font-size: 0.82rem !important;
+    font-size: var(--text-sm) !important;
   }
 
   body.showcase-theme .search-results-page .product-price {
-    font-size: 0.9rem !important;
+    font-size: var(--text-sm) !important;
   }
 
   /* Pagination botões mais largos */
-  body.showcase-theme .pagination { flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  body.showcase-theme .pagination { flex-wrap: wrap; gap: var(--space-2xs); justify-content: center; }
   body.showcase-theme .page-btn,
   body.showcase-theme .page-number {
     min-height: 40px;
     min-width: 40px;
-    padding: 0.35rem 0.65rem;
+    padding: var(--space-3xs) var(--space-xs);
   }
 
   /* ── Product detail (inline CSS override) ─────────────────── */
   body.showcase-theme .product-detail-grid {
     grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+    gap: var(--space-md) !important;
   }
 
   body.showcase-theme .product-gallery-section { position: static !important; }
 
   body.showcase-theme .related-products-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 1rem !important;
+    gap: var(--space-sm) !important;
   }
 
   /* ── E-commerce: btn-add-to-cart ──────────────────────────── */
   body.showcase-theme .btn-add-to-cart,
   body.showcase-theme button.btn-add-to-cart {
     min-height: 44px;
-    font-size: 0.8rem;
-    padding: 0.6rem 1rem;
+    font-size: var(--text-xs);
+    padding: var(--space-2xs) var(--space-sm);
   }
 
   /* ── Catalog sidebar: filter drawer full-screen no showcase ── */
   body.showcase-theme .catalog-sidebar {
-    padding: 1rem;
+    padding: var(--space-sm);
   }
 
   body.showcase-theme .catalog-header {
-    padding: 0 0.75rem;
+    padding: 0 var(--space-xs);
   }
 
   /* ── About page: product card na coleção ─────────────────── */
   body.showcase-theme .collections-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 }
 
 /* ── 480px: phones pequenos ──────────────────────────────── */
-@media (max-width: 480px) {
+@media (max-width: 479.98px) {
 
-  body.showcase-theme .collection-title h1 { font-size: 1.25rem; }
-  body.showcase-theme .ig-strip-header h2 { font-size: 1.2rem; }
+  body.showcase-theme .collection-title h1 { font-size: var(--text-lg); }
+  body.showcase-theme .ig-strip-header h2 { font-size: var(--text-lg); }
   body.showcase-theme .privacy-title,
-  body.showcase-theme .terms-title { font-size: 1.2rem; }
+  body.showcase-theme .terms-title { font-size: var(--text-lg); }
 
   /* IG strip: 1 coluna em phones muito pequenos */
   body.showcase-theme .ig-strip-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.65rem;
+    gap: var(--space-xs);
   }
 
   /* Search: 1 coluna em ecrãs pequenos */

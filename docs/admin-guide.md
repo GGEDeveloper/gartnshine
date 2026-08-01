@@ -22,6 +22,8 @@
      - [4.5.2 Adicionar Nova Família](#452-adicionar-nova-família)
      - [4.5.3 Editar Família](#453-editar-família)
      - [4.5.4 Excluir Família](#454-excluir-família)
+     - [4.5.5 Página pública da categoria (SEO e estado)](#455-página-pública-da-categoria-seo-e-estado)
+     - [4.5.6 Imagens da categoria e enquadramento](#456-imagens-da-categoria-e-enquadramento)
 5. [Relatórios](#5-relatórios)
 6. [Configurações do Sistema](#6-configurações-do-sistema)
    - [6.1 E-commerce e Pedidos Online](#61-e-commerce-e-pedidos-online)
@@ -190,6 +192,67 @@ As famílias de produtos ajudam a organizar seu catálogo em categorias, facilit
 4.  **Excluir Família**:
     *   Na lista de famílias, clique em "Excluir".
     *   **Atenção**: Excluir uma família pode exigir que os produtos atualmente nela sejam reatribuídos a outra família ou fiquem sem categoria. Verifique o comportamento do sistema.
+
+#### 4.5.5 Página pública da categoria (SEO e estado)
+
+Cada categoria tem uma página pública em `artnshine.pt/categoria/<endereço>`.
+Ao editar a categoria, por baixo da descrição encontra a secção **Página
+pública**:
+
+| Campo | Para que serve |
+|---|---|
+| **Endereço** | Só de leitura. **Não muda ao renomear a categoria** — se mudasse, os links já indexados no Google deixavam de funcionar. |
+| **Título para os motores de busca** | O que aparece no separador do browser e como título azul nos resultados do Google. Vazio = usa o nome da categoria. Cerca de **60 caracteres** antes de o Google cortar. |
+| **Descrição para os motores de busca** | A linha por baixo do título nos resultados de pesquisa. Vazio = é gerada a partir do conteúdo. **120 a 160 caracteres.** |
+| **Categoria activa** | Desligar esconde a categoria da navegação pública. Os produtos não são apagados. |
+
+> A **Descrição** (mais acima no formulário) é diferente: essa aparece na
+> própria página, por baixo do título, e é lida pelos clientes.
+
+#### 4.5.6 Imagens da categoria e enquadramento
+
+Cada categoria usa a mesma fotografia em dois sítios com formatos diferentes,
+por isso há **dois editores separados**:
+
+| Editor | Formato | Onde aparece |
+|---|---|---|
+| **Faixa da página de categoria** | 16:9 (deitado) | Fundo do cabeçalho em `/categoria/...` |
+| **Cartão da loja e da página inicial** | 4:5 (em pé) | Cartão "Explorar por material" |
+
+**Estão separados de propósito:** a mesma foto raramente funciona bem nas duas
+proporções sem ser reenquadrada. Uma peça que fica bem centrada na faixa
+deitada aparece cortada no cartão em pé.
+
+**Como usar:**
+
+1. **Escolha a origem** — clique numa miniatura da galeria (à direita) ou
+   envie uma fotografia nova. A imagem enviada fica também disponível na
+   galeria geral.
+2. **Enquadre** — arraste a imagem para mover. Para aproximar, use a roda do
+   rato (aproxima no ponto onde está o cursor), o slider **Aproximar**, ou as
+   teclas `+` e `-`. As setas do teclado movem. **Centrar** volta ao
+   enquadramento inicial.
+3. As linhas finas sobre a imagem são a **regra dos terços** — colocar a peça
+   sobre um dos cruzamentos costuma resultar melhor do que ao centro.
+4. **Guardar enquadramento.**
+
+**O aviso amarelo** ("este recorte é mais pequeno do que o tamanho final")
+aparece quando aproximou tanto que a fotografia vai ter de ser esticada. O
+resultado sai desfocado — aproxime menos ou use uma fotografia maior.
+
+**Notas técnicas úteis:**
+
+- O recorte é aplicado **ao ficheiro**, no servidor. Não é o browser a cortar,
+  por isso o enquadramento é exactamente o que escolheu e o ficheiro servido
+  tem o tamanho certo (uma foto de 6000px deixa de ser descarregada inteira
+  para aparecer a 1600).
+- **A fotografia original nunca é alterada** — fica intacta na galeria.
+- O enquadramento fica guardado: da próxima vez que abrir o editor, continua
+  de onde ficou em vez de recomeçar.
+- Se substituir a imagem, a anterior é apagada só **depois** de a nova existir,
+  para a página nunca ficar sem imagem nenhuma.
+- **Remover imagem** volta ao comportamento sem imagem: a faixa mostra só o
+  título; o cartão usa a foto de uma peça da categoria.
 
 ### 4.6 Gerenciamento de Imagens de Produtos
 
