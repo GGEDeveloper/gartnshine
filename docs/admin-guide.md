@@ -263,9 +263,18 @@ Estados típicos: `pending`, `paid`, `processing`, `shipped`, `delivered`, `canc
 
 Com a loja activa, os visitantes vêem no header **Entrar** e **Criar conta** (ou **Pedidos** se tiverem sessão). Também disponível no menu mobile e footer.
 
-- Registo/login opcional — checkout funciona como convidado
-- Após pedido guest, a página de sucesso convida a criar conta com o email usado
-- Clientes autenticados veem histórico em `/account/orders`
+**Desde Agosto de 2026, a conta é obrigatória para finalizar a compra.** A barreira está no checkout, não no carrinho:
+
+- Qualquer visitante pode navegar, adicionar ao carrinho e ver `/cart` sem conta
+- Ao clicar em finalizar, quem não tem sessão vai para o login e **volta ao checkout** depois de entrar
+- O carrinho não se perde: fica guardado e, ao entrar, passa a estar associado à conta
+- Se a pessoa já tinha carrinho noutro dispositivo, os dois **juntam-se**, com o stock disponível como tecto
+- A encomenda fica sempre no email da conta — o campo do email no checkout é só de leitura
+- Clientes autenticados veem o histórico em `/account/orders`
+
+Formas de entrar: **Google** (um clique, sem password) ou **email e password**. Quem se registou por Google e quiser também uma password pode defini-la em "Esqueceu-se da password?" — fica com as duas.
+
+**Recuperação de password:** `/account/forgot-password` envia um link válido por 60 minutos e de uso único. Depende do SMTP estar configurado no `.env` — sem isso, a página avisa o cliente e encaminha para WhatsApp, e é preciso resolver a conta manualmente.
 
 Validação: `npm run test:ecommerce` (29 checks).
 
@@ -282,7 +291,10 @@ Validação: `npm run test:ecommerce` (29 checks).
 |------|----------------|---------|
 | `Unknown column 'billing_address_line1'` | Migração 007 não aplicada | `npm run db:ecommerce` |
 | Checkout redirecciona para `/cart` | Carrinho vazio ou loja desactivada | Adicionar produto; activar e-commerce |
+| Checkout redirecciona para `/account/login` | Cliente sem sessão — é o comportamento esperado | Entrar; volta ao checkout automaticamente |
 | Pedido sem baixa de stock | Pagamento ainda não confirmado (Stripe) | Confirmar webhook ou usar fulfillment manual |
+| Cliente diz que não recebe o email de recuperação | SMTP não configurado no `.env` | Preencher `SMTP_*`; entretanto a página avisa e encaminha para WhatsApp |
+| Clientes desligados a seguir a um deploy | Tabela `sessions` em falta ou store a falhar | Ver nos logs `✅ Sessões persistentes na base de dados`; se disser que usa memória, verificar a BD |
 
 Documentação técnica: `gonzagas_node/modules/ecommerce/README.md`
 
