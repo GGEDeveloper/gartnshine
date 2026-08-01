@@ -25,6 +25,8 @@
 5. [Relatórios](#5-relatórios)
 6. [Configurações do Sistema](#6-configurações-do-sistema)
    - [6.1 E-commerce e Pedidos Online](#61-e-commerce-e-pedidos-online)
+   - [6.2 Clientes e Utilizadores](#62-clientes-e-utilizadores-adminclientes)
+   - [6.3 Carrinhos em tempo real](#63-carrinhos-em-tempo-real-admincarrinhos)
 7. [Solução de Problemas Comuns e Erros Esperados (Perspectiva Técnica)](#7-solução-de-problemas-comuns-e-erros-esperados-perspectiva-técnica)
 8. [Gerenciamento de Checkpoints (Backup e Restauração)](#8-gerenciamento-de-checkpoints-backup-e-restauração)
    - [8.1 Listar Checkpoints](#81-listar-checkpoints)
@@ -284,6 +286,61 @@ Validação: `npm run test:ecommerce` (29 checks).
 
 Documentação técnica: `gonzagas_node/modules/ecommerce/README.md`
 
+### 6.2 Clientes e Utilizadores (`/admin/clientes`)
+
+Menu **Loja → Clientes e Utilizadores**. Painel **só de leitura** — serve para consultar, não para alterar contas.
+
+No topo, quatro indicadores: total de clientes, novos nos últimos 7 dias, novos nos últimos 30 dias e quantas contas foram criadas com Google.
+
+**Separador "Clientes da loja"** — quem se registou na loja online (tabela `customers`):
+
+- Nome, email e telefone
+- Data de registo
+- **Origem da conta**: Email/password, Google, ou ambos (quando a mesma pessoa juntou os dois métodos)
+- Nº de encomendas e total já pago (cruzado por email com a tabela `orders`)
+- Etiqueta **carrinho** em quem tem artigos no carrinho neste momento
+- Pesquisa por nome/email/telefone, ordenação por data ou email, e paginação de 25 em 25
+
+**Separador "Utilizadores do admin"** — quem tem acesso ao backoffice (tabela `users`): nome, email, perfil (`admin`/`user`) e datas. Passwords nunca são lidas nem mostradas. Para **criar ou alterar** utilizadores, usar Configurações → Usuários e Permissões.
+
+**Ficha do cliente** (botão "Ver ficha"): dados da conta, moradas de envio e facturação, o carrinho actual dessa pessoa e o histórico completo de encomendas, cada uma com ligação para o pedido em `/admin/orders/:id`.
+
+> Se um campo aparecer como `—`, significa que essa coluna não existe nesta base de dados. É propositado: o painel adapta-se ao schema em vez de dar erro.
+
+### 6.3 Carrinhos em tempo real (`/admin/carrinhos`)
+
+Menu **Loja → Carrinhos (live)**. Mostra o que os visitantes têm no carrinho **neste momento**. Também só de leitura: não é possível esvaziar nem editar o carrinho de ninguém a partir daqui.
+
+**Indicadores no topo:**
+
+| Indicador | O que significa |
+|-----------|-----------------|
+| Carrinhos com itens | Sessões com pelo menos um artigo |
+| Activos agora | Carrinhos mexidos nos últimos **30 minutos** |
+| Identificados / anónimos | Quantos sabemos a quem pertencem |
+| Valor em carrinho | Soma de tudo o que está em carrinhos abertos |
+
+Segue-se "Produtos mais desejados agora" — o que aparece em mais carrinhos, útil para decidir o que repor ou destacar.
+
+**Cada carrinho** é um cartão com os artigos (imagem, nome, referência, quantidade, valor) e, no rodapé, há quanto tempo foi a última acção. Um ponto verde a pulsar marca quem está activo agora.
+
+**Como sabemos de quem é o carrinho:**
+
+1. O cliente tem sessão iniciada na loja — o email fica associado à sessão de carrinho;
+2. Ou aquela sessão já fez uma encomenda antes, e recuperamos o nome/email daí (aparece "via encomenda anterior").
+
+Sem nenhuma das duas, mostra **"Visitante anónimo"**. É o esperado: a maioria das pessoas navega sem conta. Quando o cliente é reconhecido e tem conta, o nome liga directamente à ficha dele.
+
+**Avisos por artigo** — vale a pena reagir a estes:
+
+- **produto removido** — está no carrinho mas já não existe no catálogo
+- **inactivo** — desactivado entretanto; o cliente não consegue finalizar
+- **stock: N** — o cliente tem mais unidades no carrinho do que as que existem
+
+**Filtros:** todos, só activos agora, só identificados, ou só **abandonados** (sem actividade há mais de 24h — bons candidatos a contacto). A pesquisa aceita cliente, email, nome de produto ou referência.
+
+**Actualização:** a página refresca sozinha de 10 em 10 segundos, sem piscar nem perder a posição. O interruptor **Auto** desliga isso; o botão **Actualizar** força a leitura. Quando o separador está em segundo plano, o refresh pára (para não carregar a base de dados à toa) e retoma quando se volta.
+
 ## 7. Solução de Problemas Comuns e Erros Esperados (Perspectiva Técnica)
 
 Esta seção é direcionada a desenvolvedores e IAs de codificação para auxiliar no diagnóstico e resolução de problemas relacionados ao código-fonte do painel de administração.
@@ -497,4 +554,4 @@ Se você deseja remover um checkpoint específico (por exemplo, para liberar esp
 4.  O arquivo de backup físico será removido do servidor e o registro será excluído do sistema.
 
 ---
-Última atualização: Maio 2026 (secção e-commerce)
+Última atualização: Agosto 2026 (secções 6.2 Clientes e Utilizadores e 6.3 Carrinhos em tempo real)
