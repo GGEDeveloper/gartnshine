@@ -1,5 +1,43 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-08-01] - Admin: painel de clientes/utilizadores e carrinhos em tempo real
+
+### ✨ **Nova funcionalidade — `/admin/clientes`**
+- Antes não havia forma nenhuma de ver, no admin, quem estava registado no site: os clientes da loja (`customers`) e os utilizadores do backoffice (`users`) só eram visíveis por SQL directo.
+- Agora, **Admin → Loja → Clientes e Utilizadores**:
+  - KPIs: total de clientes, novos a 7 e a 30 dias, contas criadas via Google.
+  - Separador **Clientes da loja** — nome, email, telefone, data de registo, origem da conta (email/password, Google ou ambos), nº de encomendas, total pago e um indicador de quem tem carrinho activo neste momento. Com pesquisa (nome/email/telefone), ordenação e paginação (25 por página).
+  - Separador **Utilizadores do admin** — nome, email, perfil e datas da tabela `users`. **Nunca** selecciona a coluna `password`/hash.
+  - Ficha individual em `/admin/clientes/:id`: dados da conta, moradas de envio e facturação, carrinho actual e histórico completo de encomendas com ligação a cada pedido.
+
+### ✨ **Nova funcionalidade — `/admin/carrinhos`**
+- **Admin → Loja → Carrinhos (live)** mostra o que os visitantes têm no carrinho neste momento, lido da tabela `cart_sessions`.
+  - Um cartão por carrinho com produtos, imagem, quantidades, preço por linha e valor total.
+  - Alertas por artigo: produto entretanto removido, produto inactivo, ou quantidade superior ao stock disponível.
+  - Identificação de quem é o carrinho, por duas vias: cliente autenticado (ver abaixo) ou cruzamento com encomendas anteriores que usaram a mesma `cart_session_id`. Sem nenhuma das duas, aparece como "Visitante anónimo".
+  - KPIs: carrinhos com itens, activos agora (actividade nos últimos 30 min), identificados vs anónimos, valor total em carrinho e "produtos mais desejados agora".
+  - **Auto-refresh de 10 segundos** sem recarregar a página, com interruptor e botão manual. Pausa quando o separador está em segundo plano e retoma ao voltar.
+  - Filtros: todos / só activos / só identificados / só abandonados (sem actividade há mais de 24h), e pesquisa por cliente, email, produto ou referência.
+
+### 🔒 **Segurança e integridade dos dados**
+- Ambos os painéis exigem sessão de admin (`adminSessionRequired`) e são **só de leitura** — os serviços novos só executam `SELECT`. Não expõem nenhuma acção de editar, apagar ou limpar carrinhos.
+- **Nenhuma migração de base de dados.** Usam tabelas que já existem: `customers`, `users`, `cart_sessions`, `orders`, `products`, `product_images`.
+- O schema da BD de produção (waphix) não é necessariamente igual ao da BD local. Por isso as queries **não assumem colunas**: o novo `modules/ecommerce/admin/services/schemaIntrospect.js` lê o `information_schema` (com cache de 5 min) e as queries são construídas só com as colunas que existem. Se em produção faltar `google_id`, `is_active`, `created_at` ou até a tabela `orders`, a página mostra `—` em vez de rebentar com *Unknown column*.
+
+### 🔗 **Associação carrinho ↔ cliente (única escrita do lote)**
+- Para o painel saber de quem é cada carrinho, `cartService.tagSessionCustomer()` preenche `cart_sessions.customer_email` quando o dono da sessão está autenticado. É uma coluna que já existia na migração `006` e que estava sempre a `NULL`.
+- Salvaguardas: corre **uma vez por sessão** (flag `req.session.cartTaggedFor`); confirma primeiro que a coluna existe; usa `SET ... updated_at = updated_at` para **não falsear a "última actividade"** do carrinho; e está dentro de `try/catch` com `console.warn`, para nunca partir o carrinho de um cliente se algo correr mal.
+- Não toca em itens, quantidades nem preços.
+
+### ✅ **Validado**
+- Serviços corridos contra a BD local: 3 clientes, 4 utilizadores admin, 2 carrinhos (€50, ambos anónimos e abandonados) — números conferidos contra `SELECT COUNT(*)` directo.
+- Login real no admin local e as 4 rotas a responder 200 com dados verdadeiros: `/admin/clientes`, `/admin/clientes/:id`, `/admin/carrinhos`, `/admin/carrinhos/dados` (fragmento HTML do auto-refresh, confirmado sem `<!DOCTYPE>`, ou seja sem layout duplicado) e `/admin/carrinhos/dados.json`.
+- `tagSessionCustomer()` executado contra a BD local com uma sessão inexistente: SQL válida, 0 linhas afectadas, `cart_sessions` verificada intacta a seguir (emails ainda a `NULL`, `updated_at` inalterado).
+- Auditoria dos ficheiros novos: zero `INSERT`/`UPDATE`/`DELETE`/`ALTER`/`DROP`/`TRUNCATE` nos serviços e rotas do painel.
+- `npm test` — **47/47** (43 anteriores + 4 novos smoke tests: as duas páginas respondem 200 e com conteúdo real, o fragmento do auto-refresh vem sem `<!DOCTYPE>`, a listagem de utilizadores não contém hashes de password, e as três rotas redireccionam sem sessão de admin).
+
+---
+
 ## [2026-07-09] - Fix: flash do menu mobile sobreposto ao nav desktop (FOUC + breakpoint órfão)
 
 ### 🐛 **Bug (parte 1 — FOUC, commit `02deb9e`)**

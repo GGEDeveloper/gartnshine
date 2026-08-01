@@ -118,6 +118,36 @@ async function clearSession(sessionId) {
   await pool.query('DELETE FROM cart_sessions WHERE id = ?', [sessionId]);
 }
 
+/**
+ * Associa a sessão de carrinho ao email do cliente autenticado, para que o
+ * painel de admin consiga mostrar de quem é cada carrinho. Só preenche a
+ * coluna `customer_email` (nunca mexe nos itens) e preserva `updated_at`
+ * para não falsear a "última actividade" do carrinho.
+ */
+let cartHasEmailColumn = null;
+async function tagSessionCustomer(sessionId, email) {
+  if (!sessionId || !email) return;
+  try {
+    if (cartHasEmailColumn === null) {
+      const [cols] = await pool.query(
+        `SELECT COUNT(*) AS n FROM information_schema.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'cart_sessions' AND COLUMN_NAME = 'customer_email'`
+      );
+      cartHasEmailColumn = (cols[0]?.n || 0) > 0;
+    }
+    if (!cartHasEmailColumn) return;
+
+    await pool.query(
+      `UPDATE cart_sessions SET customer_email = ?, updated_at = updated_at
+       WHERE id = ? AND (customer_email IS NULL OR customer_email <> ?)`,
+      [email, sessionId, email]
+    );
+  } catch (err) {
+    // Nunca deixar isto quebrar o carrinho do cliente
+    console.warn('[cart] Não foi possível associar o carrinho ao cliente:', err.message);
+  }
+}
+
 function ensureSessionId(req, res) {
   let sessionId = req.cookies?.[moduleConfig.cartCookieName];
   if (!sessionId) {
@@ -139,4 +169,5 @@ module.exports = {
   removeItem,
   clearSession,
   ensureSessionId,
+  tagSessionCustomer,
 };

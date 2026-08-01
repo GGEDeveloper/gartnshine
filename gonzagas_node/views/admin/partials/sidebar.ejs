@@ -88,6 +88,20 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/carrinhos')) ? 'active' : '' %>" href="/admin/carrinhos" title="Carrinhos em tempo real">
+          <i class="fas fa-fw fa-shopping-basket"></i>
+          <span>Carrinhos (live)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link <%= (currentPath && currentPath.startsWith('/clientes')) ? 'active' : '' %>" href="/admin/clientes" title="Clientes e Utilizadores">
+          <i class="fas fa-fw fa-users"></i>
+          <span>Clientes e Utilizadores</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link <%= (currentPath && currentPath.startsWith('/settings/ecommerce')) ? 'active' : '' %>" href="/admin/settings/ecommerce" title="Loja Online">
           <i class="fas fa-fw fa-store"></i>
           <span>Loja Online</span>

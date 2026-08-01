@@ -1,0 +1,127 @@
+<div class="container-fluid px-0 py-3">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h1 class="h3 mb-1">Carrinhos em tempo real</h1>
+      <p class="text-muted small mb-0">
+        O que os visitantes têm no carrinho neste momento. Actualiza automaticamente.
+      </p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <div class="form-check form-switch mb-0">
+        <input class="form-check-input" type="checkbox" id="auto-refresh" checked>
+        <label class="form-check-label small" for="auto-refresh">Auto</label>
+      </div>
+      <button type="button" id="refresh-now" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-sync-alt me-1"></i> Actualizar
+      </button>
+      <a href="/admin/clientes" class="btn btn-outline-primary btn-sm">
+        <i class="fas fa-users me-1"></i> Clientes
+      </a>
+    </div>
+  </div>
+
+  <% if (missingTable) { %>
+    <div class="alert alert-warning">
+      A tabela <code>cart_sessions</code> não existe nesta base de dados — não há carrinhos para mostrar.
+    </div>
+  <% } %>
+
+  <form method="get" class="row g-2 mb-4" id="carts-filters">
+    <div class="col-md-5">
+      <input type="search" name="search" class="form-control" placeholder="Pesquisar cliente, email, produto, referência…" value="<%= filters.search %>">
+    </div>
+    <div class="col-md-3">
+      <select name="filter" class="form-select">
+        <option value="all"         <%= filters.filter === 'all'         ? 'selected' : '' %>>Todos os carrinhos</option>
+        <option value="active"      <%= filters.filter === 'active'      ? 'selected' : '' %>>Só activos agora</option>
+        <option value="identified"  <%= filters.filter === 'identified'  ? 'selected' : '' %>>Só identificados</option>
+        <option value="abandoned"   <%= filters.filter === 'abandoned'   ? 'selected' : '' %>>Só abandonados</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <% if (filters.search || filters.filter !== 'all') { %>
+        <a href="/admin/carrinhos" class="btn btn-outline-secondary ms-1">Limpar</a>
+      <% } %>
+    </div>
+  </form>
+
+  <div id="carts-content">
+    <%- include('_content') %>
+  </div>
+</div>
+
+<style>
+  .live-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #2ecc71;
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
+    animation: live-pulse 2s infinite;
+  }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6); }
+    70%  { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+  }
+  #carts-content.is-refreshing { opacity: .6; transition: opacity .15s ease; }
+</style>
+
+<script>
+(function () {
+  var REFRESH_MS = 10000;
+  var container = document.getElementById('carts-content');
+  var toggle = document.getElementById('auto-refresh');
+  var button = document.getElementById('refresh-now');
+  var form = document.getElementById('carts-filters');
+  var timer = null;
+  var inFlight = false;
+
+  function currentQuery() {
+    var data = new FormData(form);
+    var params = new URLSearchParams();
+    data.forEach(function (v, k) { if (v) params.set(k, v); });
+    return params.toString();
+  }
+
+  function refresh() {
+    if (inFlight || document.hidden) return;
+    inFlight = true;
+    container.classList.add('is-refreshing');
+    fetch('/admin/carrinhos/dados?' + currentQuery(), {
+      headers: { 'X-Requested-With': 'fetch' },
+      credentials: 'same-origin'
+    })
+      .then(function (r) {
+        if (r.redirected || r.status === 401 || r.status === 403) throw new Error('sessão expirada');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function (html) { container.innerHTML = html; })
+      .catch(function (err) { console.warn('[carrinhos] refresh falhou:', err.message); })
+      .finally(function () {
+        inFlight = false;
+        container.classList.remove('is-refreshing');
+      });
+  }
+
+  function start() {
+    stop();
+    timer = setInterval(refresh, REFRESH_MS);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  toggle.addEventListener('change', function () { toggle.checked ? start() : stop(); });
+  button.addEventListener('click', refresh);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden && toggle.checked) refresh();
+  });
+
+  if (toggle.checked) start();
+})();
+</script>

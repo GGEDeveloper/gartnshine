@@ -354,4 +354,31 @@ describe('Admin (autenticado)', () => {
   test('GET /admin (sem sessão, agente novo) redireciona para login', async () => {
     await request(app).get('/admin').expect(302);
   });
+
+  test('GET /admin/clientes (autenticado) lista clientes e utilizadores', async () => {
+    const res = await agent.get('/admin/clientes').expect(200);
+    expect(res.text).toMatch(/Clientes e Utilizadores/);
+    expect(res.text).toMatch(/Utilizadores do admin/);
+    // Nunca expor password/hash na listagem de utilizadores
+    expect(res.text).not.toMatch(/password_hash|\$2[aby]\$/);
+  });
+
+  test('GET /admin/carrinhos (autenticado) responde 200', async () => {
+    const res = await agent.get('/admin/carrinhos').expect(200);
+    expect(res.text).toMatch(/Carrinhos em tempo real/);
+  });
+
+  test('GET /admin/carrinhos/dados devolve fragmento sem layout', async () => {
+    const res = await agent.get('/admin/carrinhos/dados').expect(200);
+    // O auto-refresh injecta isto num <div>: se viesse com layout, a página
+    // ficava com um documento inteiro dentro de si a cada 10 segundos.
+    expect(res.text).not.toMatch(/<!DOCTYPE/i);
+    expect(res.text).toMatch(/Carrinhos com itens/);
+  });
+
+  test('painéis de clientes e carrinhos exigem sessão de admin', async () => {
+    for (const url of ['/admin/clientes', '/admin/carrinhos', '/admin/carrinhos/dados.json']) {
+      await request(app).get(url).expect(302);
+    }
+  });
 });

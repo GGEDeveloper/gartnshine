@@ -1,0 +1,148 @@
+<%
+function fmtMoney(v) { return '€' + (parseFloat(v || 0)).toFixed(2); }
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleString('pt-PT', { dateStyle: 'short', timeStyle: 'short' });
+}
+function fmtIdle(mins) {
+  if (mins === null || mins === undefined) return '—';
+  if (mins < 1) return 'agora mesmo';
+  if (mins < 60) return `há ${mins} min`;
+  const h = Math.floor(mins / 60);
+  if (h < 24) return `há ${h}h`;
+  return `há ${Math.floor(h / 24)} dia(s)`;
+}
+function imgUrl(f) {
+  if (!f) return null;
+  return f.startsWith('/') || f.startsWith('http') ? f : '/media/products/' + f;
+}
+%>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small text-uppercase">Carrinhos com itens</div>
+      <div class="h3 mb-0"><%= stats.carts %></div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small text-uppercase">Activos agora</div>
+      <div class="h3 mb-0 text-success"><%= stats.activeNow %></div>
+      <div class="text-muted" style="font-size:.7rem">últimos <%= activeWindowMinutes %> min</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small text-uppercase">Identificados</div>
+      <div class="h3 mb-0"><%= stats.identified %> <small class="text-muted fs-6">/ <%= stats.anonymous %> anónimos</small></div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card h-100"><div class="card-body">
+      <div class="text-muted small text-uppercase">Valor em carrinho</div>
+      <div class="h3 mb-0"><%= fmtMoney(stats.value) %></div>
+      <div class="text-muted" style="font-size:.7rem"><%= stats.units %> artigo(s)</div>
+    </div></div>
+  </div>
+</div>
+
+<% if (stats.topProducts && stats.topProducts.length) { %>
+  <div class="card mb-4">
+    <div class="card-header"><strong>Produtos mais desejados agora</strong></div>
+    <div class="card-body d-flex flex-wrap gap-2">
+      <% stats.topProducts.forEach(function(p) { %>
+        <span class="badge bg-dark-subtle text-body p-2">
+          <%= p.name %>
+          <span class="text-muted">· <%= p.units %> un. em <%= p.carts %> carrinho(s)</span>
+        </span>
+      <% }); %>
+    </div>
+  </div>
+<% } %>
+
+<% if (!carts.length) { %>
+  <div class="card"><div class="card-body text-center text-muted py-5">
+    Nenhum carrinho corresponde a estes filtros.
+  </div></div>
+<% } %>
+
+<div class="row g-3">
+  <% carts.forEach(function(cart) { %>
+    <div class="col-12 col-xl-6">
+      <div class="card h-100 <%= cart.isActive ? 'border-success' : '' %>">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div>
+            <% if (cart.isActive) { %>
+              <span class="live-dot" title="Activo agora"></span>
+            <% } %>
+            <% if (cart.customerId) { %>
+              <a href="/admin/clientes/<%= cart.customerId %>" class="fw-semibold text-decoration-none">
+                <%= cart.customerName || cart.customerEmail %>
+              </a>
+            <% } else if (cart.customerEmail || cart.customerName) { %>
+              <span class="fw-semibold"><%= cart.customerName || cart.customerEmail %></span>
+            <% } else { %>
+              <span class="fw-semibold text-muted"><i class="fas fa-user-secret me-1"></i>Visitante anónimo</span>
+            <% } %>
+            <% if (cart.customerEmail && cart.customerName) { %>
+              <div><small class="text-muted"><%= cart.customerEmail %></small></div>
+            <% } %>
+            <% if (cart.identitySource) { %>
+              <div><small class="text-muted" style="font-size:.7rem">via <%= cart.identitySource %></small></div>
+            <% } %>
+          </div>
+          <div class="text-end">
+            <div class="fw-semibold"><%= fmtMoney(cart.value) %></div>
+            <small class="text-muted"><%= cart.units %> artigo(s)</small>
+          </div>
+        </div>
+
+        <div class="card-body p-0">
+          <table class="table table-sm align-middle mb-0">
+            <tbody>
+              <% cart.items.forEach(function(it) { %>
+                <tr>
+                  <td style="width:48px">
+                    <% const u = imgUrl(it.imageFilename); %>
+                    <% if (u) { %>
+                      <img src="<%= u %>" alt="" style="width:40px;height:40px;object-fit:cover;border-radius:4px">
+                    <% } else { %>
+                      <div class="bg-secondary-subtle" style="width:40px;height:40px;border-radius:4px"></div>
+                    <% } %>
+                  </td>
+                  <td>
+                    <div><%= it.name %></div>
+                    <small class="text-muted"><%= it.reference || '' %></small>
+                    <% if (it.missingProduct) { %>
+                      <span class="badge bg-danger ms-1">produto removido</span>
+                    <% } else if (it.inactive) { %>
+                      <span class="badge bg-warning text-dark ms-1">inactivo</span>
+                    <% } else if (it.overStock) { %>
+                      <span class="badge bg-warning text-dark ms-1">stock: <%= it.stock %></span>
+                    <% } %>
+                  </td>
+                  <td class="text-end text-nowrap" style="width:60px">×<%= it.quantity %></td>
+                  <td class="text-end text-nowrap fw-semibold" style="width:90px"><%= fmtMoney(it.lineTotal) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer d-flex flex-wrap justify-content-between gap-2 small text-muted">
+          <span><i class="far fa-clock me-1"></i>Última acção <%= fmtIdle(cart.idleMinutes) %> (<%= fmtDate(cart.lastActivity) %>)</span>
+          <span>
+            <% if (cart.isAbandoned) { %><span class="badge bg-secondary">abandonado</span><% } %>
+            <code style="font-size:.7rem"><%= cart.sessionId.slice(0, 12) %>…</code>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+</div>
+
+<p class="text-muted small mt-3 mb-0" data-generated-at="<%= new Date(generatedAt).toISOString() %>">
+  Actualizado às <%= new Date(generatedAt).toLocaleTimeString('pt-PT') %>.
+  Carrinhos sem actividade há mais de <%= abandonedAfterHours %>h contam como abandonados.
+</p>

@@ -7,6 +7,8 @@ const checkoutApiRoutes = require('./checkout/routes/api');
 const checkoutPageRoutes = require('./checkout/routes/pages');
 const settingsAdminRoutes = require('./settings/routes/admin');
 const ordersAdminRoutes = require('./admin/routes/orders');
+const customersAdminRoutes = require('./admin/routes/customers');
+const cartsAdminRoutes = require('./admin/routes/carts');
 const accountRoutes = require('./accounts/routes/pages');
 const { passport: googlePassport, setupPassport } = require('./accounts/config/passport');
 const orderEmails = require('./notifications/services/orderEmails');
@@ -30,6 +32,12 @@ function initialize(app) {
       res.locals.customerLoggedIn = !!req.session?.customerId;
       res.locals.customerEmail = req.session?.customerEmail || null;
       if (req.cookies?.cart_session_id) {
+        // Associa o carrinho ao cliente autenticado uma única vez por sessão,
+        // para o painel de admin conseguir identificar de quem é o carrinho.
+        if (req.session?.customerEmail && req.session.cartTaggedFor !== req.cookies.cart_session_id) {
+          req.session.cartTaggedFor = req.cookies.cart_session_id;
+          cartService.tagSessionCustomer(req.cookies.cart_session_id, req.session.customerEmail);
+        }
         const cart = await cartService.getCart(req.cookies.cart_session_id);
         res.locals.cartItemCount = cart.itemCount;
       } else {
@@ -57,6 +65,8 @@ function initialize(app) {
   app.use('/', checkoutPageRoutes);
   app.use('/admin/settings/ecommerce', settingsAdminRoutes);
   app.use('/admin/orders', ordersAdminRoutes);
+  app.use('/admin/clientes', customersAdminRoutes);
+  app.use('/admin/carrinhos', cartsAdminRoutes);
   app.use('/account', accountRoutes);
 
   const publicPath = path.join(__dirname, 'public');

@@ -1,0 +1,137 @@
+<%
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleString('pt-PT', { dateStyle: 'short', timeStyle: 'short' });
+}
+function fmtMoney(v) { return '€' + (parseFloat(v || 0)).toFixed(2); }
+const providerLabel = { local: 'Email/password', google: 'Google', both: 'Email + Google' };
+const statusPT = {
+  pending: 'Pendente', confirmed: 'Confirmado', processing: 'A preparar',
+  shipped: 'Enviado', delivered: 'Entregue', cancelled: 'Cancelado'
+};
+const totalPago = orders
+  .filter(o => o.payment_status === 'paid')
+  .reduce((s, o) => s + parseFloat(o.total_amount || 0), 0);
+%>
+<div class="container-fluid px-0 py-3">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <a href="/admin/clientes" class="text-decoration-none small text-muted">&larr; Clientes</a>
+      <h1 class="h3 mb-1 mt-1"><%= customer.display_name || customer.email || ('Cliente #' + customer.id) %></h1>
+      <p class="text-muted small mb-0">Cliente #<%= customer.id %> · registado em <%= fmtDate(customer.created_at) %></p>
+    </div>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- Dados -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><strong>Dados da conta</strong></div>
+        <div class="card-body">
+          <dl class="row mb-0 small">
+            <dt class="col-5 text-muted">Email</dt><dd class="col-7"><%= customer.email || '—' %></dd>
+            <dt class="col-5 text-muted">Telefone</dt><dd class="col-7"><%= customer.phone || '—' %></dd>
+            <dt class="col-5 text-muted">Autenticação</dt>
+            <dd class="col-7"><%= providerLabel[customer.provider] || customer.provider %></dd>
+            <dt class="col-5 text-muted">Estado</dt>
+            <dd class="col-7"><%= customer.is_active === 0 ? 'Inactivo' : 'Activo' %></dd>
+            <dt class="col-5 text-muted">Actualizado</dt><dd class="col-7"><%= fmtDate(customer.updated_at) %></dd>
+          </dl>
+
+          <% if (customer.shipping_address_line1 || customer.shipping_city) { %>
+            <hr>
+            <div class="small">
+              <div class="text-muted text-uppercase mb-1" style="font-size:.7rem;letter-spacing:.1em">Morada de envio</div>
+              <div><%= customer.shipping_address_line1 || '' %></div>
+              <div><%= [customer.shipping_postal_code, customer.shipping_city].filter(Boolean).join(' ') %></div>
+              <div><%= customer.shipping_country || '' %></div>
+            </div>
+          <% } %>
+
+          <% if (customer.billing_address_line1 || customer.billing_city) { %>
+            <hr>
+            <div class="small">
+              <div class="text-muted text-uppercase mb-1" style="font-size:.7rem;letter-spacing:.1em">Morada de facturação</div>
+              <div><%= customer.billing_address_line1 || '' %></div>
+              <div><%= [customer.billing_postal_code, customer.billing_city].filter(Boolean).join(' ') %></div>
+              <div><%= customer.billing_country || '' %></div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carrinho actual -->
+    <div class="col-lg-8">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Carrinho neste momento</strong>
+          <a href="/admin/carrinhos" class="btn btn-sm btn-outline-secondary">Ver todos</a>
+        </div>
+        <div class="card-body">
+          <% if (!carts.length) { %>
+            <p class="text-muted mb-0">Sem carrinho activo associado a este email.</p>
+          <% } else { %>
+            <% carts.forEach(function(cart) { %>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small text-muted mb-2">
+                  <span>Sessão <code><%= cart.sessionId.slice(0, 16) %>…</code></span>
+                  <span>Última actividade: <%= fmtDate(cart.lastActivity) %></span>
+                </div>
+                <table class="table table-sm align-middle mb-1">
+                  <tbody>
+                    <% cart.items.forEach(function(it) { %>
+                      <tr>
+                        <td><%= it.name %><% if (it.reference) { %> <small class="text-muted"><%= it.reference %></small><% } %></td>
+                        <td class="text-end" style="width:70px">×<%= it.quantity %></td>
+                        <td class="text-end fw-semibold" style="width:100px"><%= fmtMoney(it.lineTotal) %></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+                <div class="text-end fw-semibold">Total: <%= fmtMoney(cart.value) %></div>
+              </div>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Encomendas -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Encomendas</strong>
+          <span class="text-muted small"><%= orders.length %> encomenda(s) · <%= fmtMoney(totalPago) %> pagos</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr><th>Nº</th><th>Data</th><th>Estado</th><th>Pagamento</th><th class="text-end">Total</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% if (!orders.length) { %>
+                  <tr><td colspan="6" class="text-center text-muted py-4">Sem encomendas.</td></tr>
+                <% } %>
+                <% orders.forEach(function(o) { %>
+                  <tr>
+                    <td class="fw-semibold">#<%= o.order_number %></td>
+                    <td><small class="text-muted"><%= fmtDate(o.created_at) %></small></td>
+                    <td><%= statusPT[o.status] || o.status %></td>
+                    <td><%= o.payment_status %></td>
+                    <td class="text-end fw-semibold"><%= fmtMoney(o.total_amount) %></td>
+                    <td class="text-end"><a href="/admin/orders/<%= o.id %>" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
