@@ -27,7 +27,12 @@ router.post('/items', async (req, res, next) => {
     if (!productId) {
       return res.status(400).json({ success: false, error: 'productId required' });
     }
-    const cart = await cartService.addItem(sessionId, parseInt(productId, 10), quantity || 1);
+    const cart = await cartService.addItem(
+      sessionId,
+      parseInt(productId, 10),
+      quantity || 1,
+      req.session?.customerEmail || null
+    );
     const settings = await EcommerceSettings.getAll();
     const totals = pricingService.calculateCartTotals(cart.items, 0, settings);
     res.json({ success: true, cart, totals });

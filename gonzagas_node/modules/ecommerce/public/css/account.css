@@ -198,6 +198,14 @@
   color: #80d0a0;
 }
 
+/* Aviso neutro, dourado — usado quando o cliente é encaminhado para o login
+   a partir do checkout, para explicar porque é que a conta é precisa. */
+.account-alert--info {
+  background: rgba(201, 162, 39, 0.10);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  color: #d8bc63;
+}
+
 /* ─── Google OAuth ────────────────────────────────────────── */
 .oauth-divider {
   display: flex;

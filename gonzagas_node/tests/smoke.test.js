@@ -382,3 +382,42 @@ describe('Admin (autenticado)', () => {
     }
   });
 });
+
+describe('Loja: conta obrigatória para finalizar', () => {
+  test('visitante anónimo consegue ver o carrinho', async () => {
+    await request(app).get('/cart').expect(200);
+  });
+
+  test('GET /checkout sem conta redirecciona para o login com returnTo', async () => {
+    const res = await request(app).get('/checkout').expect(302);
+    expect(res.headers.location).toBe('/account/login?returnTo=/checkout');
+  });
+
+  test('POST /api/checkout/submit sem conta responde 401, não cria encomenda', async () => {
+    // Regressão: a barreira tem de estar na API e não só na página, senão
+    // bastava chamar o endpoint directamente para encomendar sem conta.
+    const res = await request(app)
+      .post('/api/checkout/submit')
+      .send({ customerName: 'Sem Conta', customerEmail: 'sem@conta.pt' })
+      .expect(401);
+    expect(res.body.success).toBe(false);
+    expect(res.body.loginUrl).toBe('/account/login?returnTo=/checkout');
+  });
+
+  test('página de login explica porque é precisa conta quando vem do checkout', async () => {
+    const res = await request(app).get('/account/login?returnTo=/checkout').expect(200);
+    expect(res.text).toMatch(/Para finalizar a compra é preciso ter conta/);
+    expect(res.text).toMatch(/returnTo/);
+  });
+
+  test('recuperação de password está acessível e liga a partir do login', async () => {
+    await request(app).get('/account/forgot-password').expect(200);
+    const login = await request(app).get('/account/login').expect(200);
+    expect(login.text).toMatch(/\/account\/forgot-password/);
+  });
+
+  test('token de recuperação inválido não abre o formulário', async () => {
+    const res = await request(app).get('/account/reset-password/token-que-nao-existe').expect(302);
+    expect(res.headers.location).toBe('/account/forgot-password');
+  });
+});

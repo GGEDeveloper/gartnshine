@@ -1,5 +1,54 @@
 # Changelog - Gonzaga's Art & Shine
 
+## [2026-08-01] - Loja: conta obrigatória para finalizar a compra
+
+### ✨ **A barreira fica no checkout, não no carrinho**
+- Qualquer visitante continua a poder navegar, adicionar ao carrinho e ver `/cart` sem conta — é o padrão da generalidade das lojas e evita atrito antes de haver intenção de compra.
+- `/checkout` passa a exigir sessão de cliente. Sem conta, redirecciona para `/account/login?returnTo=/checkout` e a pessoa volta ao checkout mal entre.
+- A barreira está **também na API** (`/api/checkout/*` devolve 401 com `loginUrl`), não só na página. Sem isso, bastava chamar `POST /api/checkout/submit` directamente para encomendar sem conta.
+- No carrinho, o botão passa a "Entrar e finalizar" para quem não tem sessão, com o aviso de que o carrinho fica guardado.
+- A encomenda fica sempre gravada com o **email da conta**, ignorando o campo do formulário — é por email que `/account/orders` liga as encomendas ao cliente, por isso um email editável deixaria a pessoa a encomendar e a não ver a encomenda na própria conta. O campo passou a só-leitura no checkout.
+- Se a sessão expirar a meio do checkout, o JavaScript reencaminha para o login em vez de mostrar um alerta sem saída.
+
+### ✨ **O carrinho anónimo passa a ser do cliente ao entrar**
+- Ao entrar (password, registo ou Google), o carrinho montado como visitante passa a estar associado à conta, e junta-se ao que a pessoa já tivesse de sessões anteriores — outro dispositivo, outro browser, ou antes de a sessão expirar.
+- As quantidades **somam-se, com o stock disponível como tecto**: nunca se cria um carrinho impossível de finalizar. As sessões antigas são apagadas depois de absorvidas, para o mesmo carrinho não ficar em dois sítios.
+- Nunca lança: se a junção falhar, o cliente fica com o carrinho actual intacto, que é o comportamento anterior.
+
+### ✨ **Recuperação de password (não existia)**
+- Enquanto a conta era opcional e toda a gente entrava por Google, não fazia falta. Com a conta obrigatória para comprar, quem perdia a password ficava sem forma de comprar.
+- Novas rotas `/account/forgot-password` e `/account/reset-password/:token`, ligadas a partir do login.
+- Na base de dados fica **apenas o SHA-256 do token**; o token em claro só existe no link do email. Quem tenha acesso de leitura à BD não consegue reconstruir o link. Válido 60 minutos e de uso único.
+- Definir password numa conta que era só-Google passa-a a `auth_provider = 'both'` — a pessoa fica com as duas formas de entrar.
+- **Sem SMTP configurado, a página diz-o e encaminha para WhatsApp**, em vez de mostrar um "enviámos" para um email que nunca sai.
+- A resposta é igual exista ou não a conta com aquele email, senão a página tornava-se uma forma de descobrir que emails estão registados na loja.
+
+### 🐛 **Dois bugs encontrados a testar a junção de carrinhos**
+- **Itens adicionados depois do login não ficavam associados ao cliente.** O `INSERT` do `addItem` não escrevia `customer_email`, e a marcação só corria uma vez por sessão. `addItem` passa a receber o email do cliente autenticado.
+- **A junção de carrinhos perdia itens.** Absorvia apenas as linhas com o email preenchido, mas apagava a sessão antiga **inteira** — as linhas não marcadas desapareciam sem entrar no carrinho novo. Reproduzido: 2 unidades desaparecidas. Agora identifica primeiro as sessões do cliente e lê **todas** as linhas dessas sessões, para o que se apaga ser exactamente o que se absorveu.
+
+### 🔒 **Infraestrutura que a mudança obrigou**
+- **Sessões deixam de viver em memória.** O `express-session` usava o `MemoryStore` por omissão: cada reinício do container — ou seja, cada deploy — desligava todos os clientes autenticados. Com a conta obrigatória, isso passava a interromper compras a meio. Passam a ser guardadas na base de dados (`express-mysql-session`, tabela `sessions`, criada automaticamente), com limpeza das expiradas de 15 em 15 minutos. Se a criação do store falhar, o arranque continua em memória em vez de deixar o site em baixo.
+- **Rate limit próprio no login, registo e recuperação de password** (20 tentativas por 15 min, sem contar as que têm sucesso). Estas rotas passaram a ser a porta principal da loja e só tinham o limitador global, que é generoso por ser para navegação.
+- Login com uma conta criada por Google passa a dizer isso explicitamente, em vez de "email ou password incorrectos" para uma password que a pessoa nunca definiu. O mesmo no registo com email já existente.
+- Novas variáveis `SMTP_*` em `.env.example`, marcadas como obrigatórias.
+
+### 🗄️ **Base de dados**
+- Migração `013_customer_password_reset.sql` — duas colunas nullable (`password_reset_token`, `password_reset_expires`) e um índice em `customers`. Aditiva e idempotente; não toca em passwords existentes, contas Google, encomendas, produtos nem stock.
+- Tabela `sessions`, criada pelo próprio store no arranque.
+
+### ✅ **Validado**
+- Visitante anónimo: `/loja` 200, adiciona ao carrinho, `/cart` 200, `/checkout` **302 para o login com returnTo**, `POST /api/checkout/submit` **401**.
+- Registo com `returnTo=/checkout` volta ao checkout com o carrinho intacto (total €27,00 = €25 + portes) e o email da conta já fixado.
+- Junção de carrinhos entre dois "browsers": 3 unidades num, 2 no outro → **5 depois do login**, e o item do outro carrinho trazido junto. Com o tecto do stock: 6 + 5 → **6**, não 11.
+- Recuperação de password de ponta a ponta: link abre o formulário, password nova entra, **o mesmo link deixa de funcionar** e a password antiga deixa de servir.
+- Conta só-Google a tentar entrar com password recebe a mensagem certa.
+- **O login sobrevive a um reinício do servidor** — testado a matar e a relançar o processo com a mesma cookie: `/checkout` continuou a responder 200 e autenticado. Era o objectivo da mudança das sessões.
+- Base local reposta no estado inicial no fim (3 clientes, 2 carrinhos anónimos, 6 encomendas). A conta de teste foi apagada.
+- `npm test` — **53/53** (47 anteriores + 6 novos).
+
+---
+
 ## [2026-08-01] - Admin: painel de clientes/utilizadores e carrinhos em tempo real
 
 ### ✨ **Nova funcionalidade — `/admin/clientes`**

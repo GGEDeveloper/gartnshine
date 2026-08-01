@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { pool } = require('../../../../config/database');
 
 async function findByEmail(email) {
@@ -139,6 +140,73 @@ async function changePassword(id, newPassword) {
   return findById(id);
 }
 
+// ── Recuperação de password ───────────────────────────────────────────────────
+//
+// Na base de dados fica apenas o SHA-256 do token; o token em claro só existe
+// no link que vai no email. Quem tiver acesso de leitura à BD não consegue
+// reconstruir o link a partir do hash.
+
+const TOKEN_TTL_MINUTES = 60;
+
+function hashToken(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+/**
+ * Cria um token de recuperação para o cliente e devolve-o em claro.
+ * Substitui qualquer token anterior — pedir de novo invalida o link antigo.
+ */
+async function createPasswordResetToken(customerId) {
+  const token = crypto.randomBytes(32).toString('hex');
+  await pool.query(
+    `UPDATE customers
+     SET password_reset_token = ?,
+         password_reset_expires = DATE_ADD(NOW(), INTERVAL ? MINUTE),
+         updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [hashToken(token), TOKEN_TTL_MINUTES, customerId]
+  );
+  return { token, expiresInMinutes: TOKEN_TTL_MINUTES };
+}
+
+/** Devolve o cliente dono de um token válido e não expirado, ou null. */
+async function findByPasswordResetToken(token) {
+  if (!token) return null;
+  const [rows] = await pool.query(
+    `SELECT * FROM customers
+     WHERE password_reset_token = ?
+       AND password_reset_expires IS NOT NULL
+       AND password_reset_expires > NOW()
+     LIMIT 1`,
+    [hashToken(token)]
+  );
+  return rows[0] || null;
+}
+
+/**
+ * Define a password nova e queima o token, numa só operação.
+ * Se a conta era só-Google, passa a ter os dois métodos de entrada.
+ */
+async function resetPasswordWithToken(token, newPassword) {
+  const customer = await findByPasswordResetToken(token);
+  if (!customer) return null;
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  const nextProvider = customer.google_id ? 'both' : 'local';
+
+  await pool.query(
+    `UPDATE customers
+     SET password_hash = ?,
+         auth_provider = ?,
+         password_reset_token = NULL,
+         password_reset_expires = NULL,
+         updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [passwordHash, nextProvider, customer.id]
+  );
+  return findById(customer.id);
+}
+
 module.exports = {
   findByEmail,
   findByGoogleId,
@@ -151,4 +219,7 @@ module.exports = {
   getOrderItems,
   updateProfile,
   changePassword,
+  createPasswordResetToken,
+  findByPasswordResetToken,
+  resetPasswordWithToken,
 };

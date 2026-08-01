@@ -48,7 +48,7 @@
       if (!emptyState) {
         const content = document.getElementById('cart-content');
         if (content) {
-          content.innerHTML = '<div id="cart-empty-state"><p class="text-muted">O carrinho está vazio.</p><a href="/catalog" class="btn btn-outline-light">Ver catálogo</a></div>';
+          content.innerHTML = '<div id="cart-empty-state"><p class="text-muted">O carrinho está vazio.</p><a href="/loja" class="btn btn-outline-light">Ver a loja</a></div>';
         }
       }
       return;

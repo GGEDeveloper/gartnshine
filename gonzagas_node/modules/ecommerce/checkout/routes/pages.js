@@ -7,12 +7,13 @@ const Order = require('../../orders/models/Order');
 const Customer = require('../../accounts/models/Customer');
 const EcommerceSettings = require('../../settings/models/EcommerceSettings');
 const { requireEcommerceEnabled } = require('../../cart/middleware/requireEcommerceEnabled');
+const { requireCustomerForCheckout } = require('../middleware/requireCustomer');
 
 function viewPath(name) {
   return path.join(__dirname, '..', 'views', name);
 }
 
-router.get('/checkout', requireEcommerceEnabled, async (req, res, next) => {
+router.get('/checkout', requireEcommerceEnabled, requireCustomerForCheckout, async (req, res, next) => {
   try {
     const sessionId = cartService.ensureSessionId(req, res);
     const cart = await cartService.getCart(sessionId);

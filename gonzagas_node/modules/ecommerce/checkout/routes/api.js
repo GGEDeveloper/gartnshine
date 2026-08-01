@@ -5,8 +5,12 @@ const checkoutService = require('../services/checkoutService');
 const cartService = require('../../cart/services/cartService');
 const EcommerceSettings = require('../../settings/models/EcommerceSettings');
 const { requireEcommerceEnabled } = require('../../cart/middleware/requireEcommerceEnabled');
+const { requireCustomerForCheckout } = require('../middleware/requireCustomer');
 
 router.use(requireEcommerceEnabled);
+// A barreira tem de estar também aqui, não só na página: sem isto, bastava
+// chamar POST /api/checkout/submit directamente para encomendar sem conta.
+router.use(requireCustomerForCheckout);
 
 router.post('/prepare', async (req, res) => {
   try {
@@ -24,7 +28,14 @@ router.post('/prepare', async (req, res) => {
 router.post('/submit', async (req, res) => {
   try {
     const sessionId = cartService.ensureSessionId(req, res);
-    const order = await checkoutService.submitCheckout(sessionId, req.body);
+    // A encomenda fica sempre no email da conta, não no que vier no formulário.
+    // É por email que /account/orders liga as encomendas ao cliente: se o campo
+    // fosse editável, a pessoa podia encomendar e depois não ver a encomenda na
+    // própria conta.
+    const order = await checkoutService.submitCheckout(sessionId, {
+      ...req.body,
+      customerEmail: req.session.customerEmail,
+    });
     await cartService.clearSession(sessionId);
     const paymentConfig = await EcommerceSettings.getPaymentConfig();
 

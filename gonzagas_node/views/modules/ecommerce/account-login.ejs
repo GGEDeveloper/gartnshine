@@ -8,6 +8,15 @@
     <% if (messages && messages.error && messages.error.length) { %>
       <div class="account-alert account-alert--error"><%= messages.error[0] %></div>
     <% } %>
+    <% if (messages && messages.success && messages.success.length) { %>
+      <div class="account-alert account-alert--success"><%= messages.success[0] %></div>
+    <% } %>
+
+    <% if (typeof returnTo !== 'undefined' && returnTo === '/checkout') { %>
+      <div class="account-alert account-alert--info">
+        Para finalizar a compra é preciso ter conta. O seu carrinho fica guardado.
+      </div>
+    <% } %>
 
     <a href="/account/auth/google<% if (typeof returnTo !== 'undefined' && returnTo) { %>?returnTo=<%= encodeURIComponent(returnTo) %><% } %>" class="btn-google">
       <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -35,6 +44,10 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
+
+    <p class="account-footer-link">
+      <a href="/account/forgot-password">Esqueceu-se da password?</a>
+    </p>
 
     <p class="account-footer-link">
       Ainda não tem conta? <a href="/account/register<% if (typeof returnTo !== 'undefined' && returnTo) { %>?returnTo=<%= encodeURIComponent(returnTo) %><% } %>">Criar conta</a>

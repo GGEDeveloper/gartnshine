@@ -157,6 +157,34 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
+// Sessões guardadas na base de dados (tabela `sessions`), não em memória.
+// Com conta obrigatória no checkout, o MemoryStore por omissão do
+// express-session desligava todos os clientes autenticados a cada reinício do
+// container — ou seja, a cada deploy, a meio de compras. Também impedia correr
+// mais do que um processo. Se a criação do store falhar, o arranque continua
+// com o store em memória em vez de deixar o site em baixo.
+try {
+  const MySQLStore = require('express-mysql-session')(session);
+  sessionConfig.store = new MySQLStore(
+    {
+      createDatabaseTable: true,
+      // Limpeza de sessões expiradas de 15 em 15 minutos
+      clearExpired: true,
+      checkExpirationInterval: 15 * 60 * 1000,
+      // Deixa o expiry ser o do cookie (rolling), não um valor fixo
+      expiration: parseInt(process.env.SESSION_MAX_AGE_MS, 10) || 30 * 60 * 1000,
+      schema: {
+        tableName: 'sessions',
+        columnNames: { session_id: 'session_id', expires: 'expires', data: 'data' },
+      },
+    },
+    pool
+  );
+  console.log('✅ Sessões persistentes na base de dados (tabela `sessions`)');
+} catch (err) {
+  console.error('⚠️  Falha a criar o store de sessões na BD, a usar memória:', err.message);
+}
+
 app.use(session(sessionConfig));
 app.use(flash());
 

@@ -2,13 +2,7 @@
   <div class="container py-4">
     <h1>Checkout</h1>
 
-    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn) { %>
-      <div class="account-nav-banner account-nav-banner--checkout">
-        <p>Comprar como convidado ou <a href="/account/login?returnTo=/checkout">entrar</a> · <a href="/account/register?returnTo=/checkout" class="account-nav-banner-cta">criar conta</a></p>
-      </div>
-    <% } else if (typeof customerLoggedIn !== 'undefined' && customerLoggedIn) { %>
-      <p class="account-nav-hint">Sessão iniciada como <strong><%= customerEmail %></strong> · <a href="/account/orders">Os meus pedidos</a></p>
-    <% } %>
+    <p class="account-nav-hint">Sessão iniciada como <strong><%= customerEmail %></strong> · <a href="/account/orders">Os meus pedidos</a></p>
 
     <form id="checkout-form" class="row g-3">
       <div class="col-md-6">
@@ -19,9 +13,9 @@
                  value="<%= typeof customer !== 'undefined' && customer ? [customer.first_name, customer.last_name].filter(Boolean).join(' ') : '' %>">
         </div>
         <div class="mb-3">
-          <label class="form-label">Email *</label>
-          <input type="email" name="customerEmail" class="form-control" required
-                 value="<%= typeof customer !== 'undefined' && customer ? customer.email : (typeof customerEmail !== 'undefined' ? customerEmail : '') %>">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" value="<%= customerEmail %>" readonly disabled>
+          <small class="text-muted">A encomenda fica associada a esta conta. Para usar outro email, <a href="/account/profile">altere o perfil</a>.</small>
         </div>
         <div class="mb-3">
           <label class="form-label">Telefone *</label>
@@ -121,6 +115,12 @@ document.getElementById('checkout-form').addEventListener('submit', async functi
       body: JSON.stringify(data),
     });
     const json = await res.json();
+    // Sessão expirada a meio do checkout: em vez de um alerta sem saída,
+    // mandar entrar de novo e voltar para aqui.
+    if (res.status === 401 && json.loginUrl) {
+      window.location.href = json.loginUrl;
+      return;
+    }
     if (!json.success) throw new Error(json.error || 'Erro no checkout');
     if (json.payment && json.payment.redirectUrl) {
       window.location.href = json.payment.redirectUrl;

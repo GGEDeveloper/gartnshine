@@ -2,9 +2,11 @@
   <div class="container py-4">
     <h1>Carrinho</h1>
 
-    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn) { %>
+    <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn && cart.items.length) { %>
       <div class="account-nav-banner">
-        <p>Já tem conta? <a href="/account/login?returnTo=/cart">Entrar</a> ou <a href="/account/register?returnTo=/cart" class="account-nav-banner-cta">Criar conta</a> para acompanhar os seus pedidos.</p>
+        <p>Para finalizar a compra é preciso ter conta — o carrinho fica guardado.
+          <a href="/account/login?returnTo=/checkout">Entrar</a> ou
+          <a href="/account/register?returnTo=/checkout" class="account-nav-banner-cta">Criar conta</a></p>
       </div>
     <% } else if (typeof customerLoggedIn !== 'undefined' && customerLoggedIn) { %>
       <p class="account-nav-hint"><a href="/account/orders">Ver os meus pedidos</a></p>
@@ -14,7 +16,7 @@
       <% if (!cart.items.length) { %>
         <div id="cart-empty-state">
           <p class="text-muted">O carrinho está vazio.</p>
-          <a href="/catalog" class="btn btn-outline-light">Ver catálogo</a>
+          <a href="/loja" class="btn btn-outline-light">Ver a loja</a>
         </div>
       <% } else { %>
         <div id="cart-items-section">
@@ -77,8 +79,12 @@
           <% } %>
           <p class="h5">Total estimado: €<span id="cart-total"><%= totals.total.toFixed(2) %></span></p>
           <div class="cart-actions mt-3">
-            <a href="/checkout" class="btn btn-primary">Finalizar compra</a>
-            <a href="/catalog" class="btn-continue-shopping">← Continuar a comprar</a>
+            <% if (typeof customerLoggedIn !== 'undefined' && !customerLoggedIn) { %>
+              <a href="/account/login?returnTo=/checkout" class="btn btn-primary">Entrar e finalizar</a>
+            <% } else { %>
+              <a href="/checkout" class="btn btn-primary">Finalizar compra</a>
+            <% } %>
+            <a href="/loja" class="btn-continue-shopping">← Continuar a comprar</a>
           </div>
         </div>
       <% } %>
