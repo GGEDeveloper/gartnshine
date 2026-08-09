@@ -1,0 +1,36 @@
+{
+  "capas": {
+    "prata": "/media/categories/cat-16-hero-1920.jpg",
+    "aneis-prata": "/media/categories/cat-1-hero-1920.jpg",
+    "brincos-prata": "/media/categories/cat-2-hero-1920.jpg",
+    "colares-prata": "/media/categories/cat-3-hero-1920.jpg",
+    "pulseiras-prata": "/media/categories/cat-4-hero-1920.jpg",
+    "cuffs-prata": "/media/categories/cat-17-hero-1920.jpg",
+    "pulseiras-pe-prata": "/media/categories/cat-26-hero-1920.jpg",
+    "pendentes-prata": "/media/categories/cat-21-hero-1920.jpg",
+    "latao": "/media/categories/cat-6-hero-1920.jpg",
+    "aneis-latao": "/media/categories/cat-9-hero-1920.jpg",
+    "brincos-latao": "/media/categories/cat-15-hero-1920.jpg",
+    "cuffs-latao": "/media/categories/cat-8-hero-1920.jpg",
+    "gargantilhas-latao": "/media/categories/cat-7-hero-1920.jpg",
+    "colares-latao": "/media/categories/cat-10-hero-1920.jpg",
+    "pendentes-latao": "/media/categories/cat-11-hero-1920.jpg",
+    "pentes-de-cabelo-latao": "/media/categories/cat-22-hero-1920.jpg",
+    "piercings-latao": "/media/categories/cat-23-hero-1920.jpg",
+    "piercings-sem-furo-latao": "/media/categories/cat-24-hero-1920.jpg",
+    "pulseiras-latao": "/media/categories/cat-25-hero-1920.jpg",
+    "macrame": "/media/categories/cat-12-hero-1920.jpg",
+    "colares-macrame": "/media/categories/cat-13-hero-1920.jpg",
+    "brincos-macrame": "/media/categories/cat-14-hero-1920.jpg",
+    "pedras-naturais": "/media/categories/cat-5-hero-1920.jpg",
+    "colares-pedras-naturais": "/media/categories/cat-18-hero-1920.jpg",
+    "pulseiras-pedras-naturais": "/media/categories/cat-19-hero-1920.jpg"
+  },
+  "cartoes": {
+    "prata": "/media/categories/cat-16-card-1200.jpg",
+    "latao": "/media/categories/cat-6-card-1200.jpg",
+    "macrame": "/media/categories/cat-12-card-1200.jpg",
+    "pedras-naturais": "/media/categories/cat-5-card-1200.jpg",
+    "_todos": "/media/categories/todos-card-1200.jpg"
+  }
+}

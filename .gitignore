@@ -166,4 +166,13 @@ docs/client_secret*.json
 # media/gallery) e o nome leva carimbo de tempo, por isso diferem entre
 # ambientes. Cada ambiente gera as suas quando alguém grava um enquadramento;
 # versioná-las só empurrava ficheiros inúteis para produção.
-gonzagas_node/public/media/categories/
+gonzagas_node/public/media/categories/*
+
+# Excepção: as capas montadas por scripts/category-headers/ não vêm do admin —
+# vêm de um manifesto versionado e são as mesmas em todos os ambientes. Se não
+# forem versionadas, a migração 015 aponta para ficheiros que só existem na
+# máquina de quem correu o script. O padrão sem carimbo de tempo separa-as das
+# do editor de enquadramento.
+!gonzagas_node/public/media/categories/cat-*-hero-1920.jpg
+!gonzagas_node/public/media/categories/cat-*-card-1200.jpg
+!gonzagas_node/public/media/categories/todos-card-1200.jpg

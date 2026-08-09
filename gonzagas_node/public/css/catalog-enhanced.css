@@ -1657,7 +1657,7 @@ body.drawer-open {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.82) 0%, rgba(10, 10, 10, 0.25) 55%, rgba(10, 10, 10, 0.1) 100%);
+  background: linear-gradient(to top, rgba(18, 16, 14, 0.82) 0%, rgba(18, 16, 14, 0.25) 55%, rgba(18, 16, 14, 0.1) 100%);
 }
 
 .catalog-category-card:hover .catalog-category-media,
@@ -1665,8 +1665,13 @@ body.drawer-open {
   transform: scale(1.05);
 }
 
-.catalog-category-card.is-all .catalog-category-media {
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(10, 10, 10, 0.6));
+/* Fundo do cartão "Ver todos" quando não há imagem escolhida nas definições.
+   Tem de ser `background-image` e não o atalho `background`: o atalho repõe
+   também o `background-size`, que passava a `auto` e fazia a imagem escolhida
+   aparecer ao tamanho natural — via-se o canto superior esquerdo dela e mais
+   nada. Só se notava porque a imagem antiga era textura de ponta a ponta. */
+.catalog-category-card.is-all:not(.has-image) .catalog-category-media {
+  background-image: linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(10, 10, 10, 0.6));
 }
 
 .catalog-category-body {

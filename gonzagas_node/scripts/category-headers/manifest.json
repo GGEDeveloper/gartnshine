@@ -1,0 +1,189 @@
+{
+  "_comment": "Peças que abrem cada categoria, por ordem de importância: a primeira fica com o lugar maior. As referências são de produtos reais da categoria — o cabeçalho de 'Aneis - Prata' mostra anéis de prata.",
+  "canvas": {
+    "width": 2400,
+    "height": 866
+  },
+  "canvasCartao": {
+    "width": 1200,
+    "height": 870
+  },
+  "familias": {
+    "prata": [
+      "PAN0024",
+      "PPU0029",
+      "PPB0024",
+      "PVO0011",
+      "PPU0026"
+    ],
+    "aneis-prata": [
+      "PAN0024",
+      "PAN0059",
+      "PAN0021",
+      "PAN0066",
+      "PAN0042"
+    ],
+    "brincos-prata": [
+      "PPB0024",
+      "PPB0020",
+      "PPB0018",
+      "PPB0003",
+      "PPB0013"
+    ],
+    "colares-prata": [
+      "PVO0011",
+      "PVO0010",
+      "PVO0012",
+      "PVO0009"
+    ],
+    "pulseiras-prata": [
+      "PPU0029",
+      "PPU0033",
+      "PPU0013",
+      "PPU0032",
+      "PPU0004"
+    ],
+    "cuffs-prata": [
+      "PPU0026",
+      "PPU0064",
+      "PPU0057",
+      "PPU0005",
+      "PPU0043"
+    ],
+    "pulseiras-pe-prata": [
+      "PPUP0002",
+      "PPUP0004",
+      "PPUP0005",
+      "PPUP0003"
+    ],
+    "pendentes-prata": [
+      "PVO0006",
+      "PVO0011",
+      "PVO0009"
+    ],
+    "latao": [
+      "LTG0002",
+      "LTCU0009",
+      "LTA0014",
+      "LTB0001",
+      "LTPD0002"
+    ],
+    "aneis-latao": [
+      "LTA0014",
+      "LTA0013",
+      "LTA0017",
+      "LTA0020",
+      "LTA0011"
+    ],
+    "brincos-latao": [
+      "LTB0001",
+      "LTB0023",
+      "LTB0024",
+      "LTB0022",
+      "LTB0018"
+    ],
+    "cuffs-latao": [
+      "LTCU0009",
+      "LTCU0006",
+      "LTCU0013",
+      "LTCU0014",
+      "LTCU0012"
+    ],
+    "gargantilhas-latao": [
+      "LTG0002",
+      "LTG0005",
+      "LTG0006",
+      "LTG0016",
+      "LTG0014"
+    ],
+    "colares-latao": [
+      "LTG0002",
+      "LTG0006",
+      "LTPD0002"
+    ],
+    "pendentes-latao": [
+      "LTPD0002",
+      "LTPD0001",
+      "LTPD0003",
+      "LTPD0005",
+      "LTPD0004"
+    ],
+    "pentes-de-cabelo-latao": [
+      "LTPC0005",
+      "LTPC0003",
+      "LTPC0004",
+      "LTPC0001",
+      "LTPC0002"
+    ],
+    "piercings-latao": [
+      "LTPR0005",
+      "LTPR0003",
+      "LTPR0004",
+      "LTPR0002",
+      "LTPR0001"
+    ],
+    "piercings-sem-furo-latao": [
+      "LTPRS0001",
+      "LTPRS0002"
+    ],
+    "pulseiras-latao": [
+      "LTCU0009",
+      "LTCU0012",
+      "LTP0001"
+    ],
+    "macrame": [
+      "MCCL0005",
+      "MCCL0008",
+      "MCCL0006",
+      "MCCL0001",
+      "MCB0001"
+    ],
+    "colares-macrame": [
+      "MCCL0005",
+      "MCCL0008",
+      "MCCL0006",
+      "MCCL0009",
+      "MCCL0001"
+    ],
+    "brincos-macrame": [
+      "MCB0001"
+    ],
+    "pedras-naturais": [
+      "PVO0005",
+      "PPU0067",
+      "PVO0008",
+      "PVO0003"
+    ],
+    "colares-pedras-naturais": [
+      "PVO0005",
+      "PVO0008",
+      "PVO0003",
+      "PVO0006"
+    ],
+    "pulseiras-pedras-naturais": [
+      "PPU0067",
+      "PPU0069",
+      "PPU0071",
+      "PPU0070"
+    ]
+  },
+  "_comentarioCartoes": "Cartões da homepage e da loja. Só os materiais de topo usam card_image (getMaterialsForHome filtra parent_id IS NULL), mais o cartão 'Ver todos', que vem de site_settings.shop_all_card_image. O texto fica em baixo à esquerda nas duas superfícies, por isso a peça vive na metade de cima.",
+  "cartoes": {
+    "prata": [
+      "PAN0024"
+    ],
+    "latao": [
+      "LTG0002"
+    ],
+    "macrame": [
+      "MCCL0005"
+    ],
+    "pedras-naturais": [
+      "PVO0005"
+    ],
+    "_todos": [
+      "PAN0024",
+      "LTG0002"
+    ]
+  }
+}

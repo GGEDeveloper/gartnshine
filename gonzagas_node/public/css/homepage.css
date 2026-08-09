@@ -205,17 +205,20 @@
               border-color var(--duration-fast, 0.3s) ease;
 }
 
-/* Véu escuro: mais forte em baixo, para o texto ler bem sobre qualquer foto */
+/* Véu escuro: mais forte em baixo, para o texto ler bem sobre qualquer foto.
+   O preto é o da paleta TERRA (#12100E) e não o azulado herdado — sobre uma
+   peça de prata o preto frio dava-lhe um tom cinzento-azul que a marca diz
+   não ser dela. Ver docs/marca/03-cor.md. */
 .collection-tile::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(to top,
-    rgba(5, 7, 10, 0.92) 0%,
-    rgba(5, 7, 10, 0.84) 24%,
-    rgba(5, 7, 10, 0.52) 50%,
-    rgba(5, 7, 10, 0.26) 76%,
-    rgba(5, 7, 10, 0.16) 100%);
+    rgba(18, 16, 14, 0.92) 0%,
+    rgba(18, 16, 14, 0.84) 24%,
+    rgba(18, 16, 14, 0.52) 50%,
+    rgba(18, 16, 14, 0.26) 76%,
+    rgba(18, 16, 14, 0.16) 100%);
   transition: background var(--duration-fast, 0.3s) ease;
 }
 

@@ -1057,17 +1057,42 @@ body.showcase-theme .collection-header.has-background {
   padding: clamp(4rem, 10vw, 7rem) 1.5rem clamp(3rem, 7vw, 5rem);
 }
 
+/* O véu que garante o contraste do título. Era um preto azulado chapado a 72 %
+   — apagava a imagem toda e deixava-a fria. Agora é preto terra e é um
+   degradê: aperta onde o texto está e alivia nas bordas, onde as peças
+   aparecem. As capas de categoria já trazem o seu próprio véu (ver
+   scripts/category-headers/build.js); este só acaba o trabalho. */
 body.showcase-theme .collection-header.has-background::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(5, 7, 10, 0.72);
+  background:
+    radial-gradient(ellipse 62% 78% at 50% 48%,
+      rgba(18, 16, 14, 0.56) 0%,
+      rgba(18, 16, 14, 0.40) 55%,
+      rgba(18, 16, 14, 0.26) 100%),
+    linear-gradient(180deg,
+      rgba(18, 16, 14, 0.38) 0%,
+      rgba(18, 16, 14, 0.06) 42%,
+      rgba(18, 16, 14, 0.46) 100%);
   z-index: var(--z-layer-1);
 }
 
 body.showcase-theme .collection-header.has-background > * {
   position: relative;
   z-index: var(--z-layer-2);
+}
+
+/* Sobre uma peça de metal há sempre um reflexo que sobe acima do véu. A sombra
+   do texto é o que garante a leitura nesse pixel, sem obrigar a escurecer a
+   imagem toda até ela deixar de se ver. */
+body.showcase-theme .collection-header.has-background .collection-title h1,
+body.showcase-theme .collection-header.has-background .section-eyebrow,
+body.showcase-theme .collection-header.has-background .collection-description,
+body.showcase-theme .collection-header.has-background .collection-meta {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.65),
+    0 2px 16px rgba(18, 16, 14, 0.85);
 }
 
 body.showcase-theme .collection-title h1 {
