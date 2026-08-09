@@ -35,8 +35,13 @@
       <% if (product.family_name) { %>
         <p class="product-family"><span class="text-highlight"><%= product.family_name %></span></p>
       <% } %>
+      <%
+        // "€0.00" é uma string verdadeira — quem decide é o número. Sem isto,
+        // uma peça sob consulta anunciava-se a zero euros no cartão.
+        const semPreco = !product.sale_price || parseFloat(product.sale_price) <= 0;
+      %>
       <p class="product-price">
-        <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+        <% if (semPreco || (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
           <span class="text-muted fst-italic">Preço sob consulta</span>
         <% } else if (product.formatted_sale_price) { %>
           <span class="sale-price"><%= product.formatted_sale_price %></span>

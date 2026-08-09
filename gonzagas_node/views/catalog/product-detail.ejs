@@ -566,7 +566,13 @@
                 <% } %>
             </div>
             
-            <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+            <%
+              // "€0.00" é uma string verdadeira: quem decide se há preço é o
+              // número, não o texto formatado. Sem isto uma peça sob consulta
+              // anunciava-se a zero euros.
+              const semPrecoTitulo = !product.sale_price || parseFloat(product.sale_price) <= 0;
+            %>
+            <% if (semPrecoTitulo || (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
                 <div class="product-price">Preço sob consulta</div>
             <% } else if (product.formatted_sale_price) { %>
                 <div class="product-price"><%= product.formatted_sale_price %></div>
@@ -614,7 +620,13 @@
             <% } %>
             
             <div class="product-actions">
-                <% if (product.current_stock > 0) { %>
+                <%
+                  // Peça sob consulta: sem preço não vai ao carrinho, senão era
+                  // encomendada por 0,00 €. Fica o WhatsApp, que é por onde o
+                  // preço se pede. Ver a mesma guarda em partials/_productCard.ejs.
+                  const semPreco = !product.sale_price || parseFloat(product.sale_price) <= 0;
+                %>
+                <% if (product.current_stock > 0 && !semPreco) { %>
                 <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled) { %>
                 <div class="product-add-wrap">
                   <% if (product.current_stock > 1) { %>

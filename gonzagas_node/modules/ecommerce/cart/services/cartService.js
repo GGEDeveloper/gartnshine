@@ -72,6 +72,12 @@ async function addItem(sessionId, productId, quantity, customerEmail = null) {
   const product = await productAdapter.findByIdForCart(productId);
   if (!product || !product.isActive) throw new Error('Produto indisponível');
   if (product.currentStock <= 0) throw new Error('Produto esgotado');
+  // Peça sob consulta (sem preço) não entra no carrinho. Até aqui não era
+  // preciso dizê-lo, porque quem não tinha preço também não tinha stock; as
+  // peças do lote de Julho de 2026 entram com stock 1 para ficarem visíveis, e
+  // sem esta linha podiam ser encomendadas por 0,00 €. Os botões nas views já
+  // desaparecem, mas o botão escondido não protege a API.
+  if (!(product.salePrice > 0)) throw new Error('Preço sob consulta — peça não disponível para compra online');
 
   const qty = Math.min(Math.max(1, parseInt(quantity, 10) || 1), product.currentStock);
 

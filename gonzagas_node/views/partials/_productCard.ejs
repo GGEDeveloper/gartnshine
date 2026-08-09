@@ -34,11 +34,22 @@
     <h3 class="product-name">
       <a href="<%= produtoLink %>"><%= product.name %></a>
     </h3>
+    <%
+      // Uma peça sob consulta não tem preço, e sem preço não pode ir ao
+      // carrinho: entrava por 0,00 € e podia ser encomendada de graça. Até
+      // agora isso não acontecia porque quem não tinha preço também não tinha
+      // stock — mas as peças do lote de Julho de 2026 entram com stock 1 para
+      // ficarem visíveis, e o stock deixou de ser garantia de nada.
+      //
+      // Atenção ao teste: `formatted_sale_price` de um preço zero é a string
+      // "€0.00", que é verdadeira. Quem decide é o número, não o texto.
+      const semPreco = !product.sale_price || parseFloat(product.sale_price) <= 0;
+    %>
     <p class="product-price">
-      <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+      <% if (semPreco || (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
         <span class="text-muted fst-italic">Preço sob consulta</span>
       <% } else { %>
-      <% if (product.formatted_sale_price && product.formatted_purchase_price && 
+      <% if (product.formatted_sale_price && product.formatted_purchase_price &&
             parseFloat(product.sale_price) < parseFloat(product.purchase_price)) { %>
         <span class="sale-price fw-bold"><%= product.formatted_sale_price %></span>
         <span class="original-price text-muted text-decoration-line-through ms-2">
@@ -51,7 +62,7 @@
         <% } %>
       <% } %>
     </p>
-    <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled && product.current_stock > 0 && !(typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
+    <% if (typeof ecommerceEnabled !== 'undefined' && ecommerceEnabled && product.current_stock > 0 && !semPreco && !(typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
       <button type="button" class="btn btn-sm btn-outline-light btn-add-to-cart mt-2" data-product-id="<%= product.id %>">
         Adicionar ao carrinho
       </button>
