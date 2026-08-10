@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bancada — o que está no scratchpad</title>
+
+<style>
+  :root {
+    --ground:      #EDE7DB;
+    --plate:       #F7F3EA;
+    --rail:        #DBD2C2;
+    --ink:         #1A1714;
+    --muted:       #6E665B;
+    --accent:      #6B5844;
+    --gold:        #8A7440;
+    --verde:       #3A4038;
+    --aviso:       #7A3B2A;
+    --sombra:      0 1px 2px rgba(26,23,20,.10), 0 8px 28px rgba(26,23,20,.08);
+
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #12100E;
+      --plate:  #1B1815;
+      --rail:   #2E2925;
+      --ink:    #F2EDE4;
+      --muted:  #9A9188;
+      --accent: #B9A06A;
+      --gold:   #B9A06A;
+      --verde:  #7D8B78;
+      --aviso:  #D08B6E;
+      --sombra: 0 1px 2px rgba(0,0,0,.5), 0 14px 40px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #12100E;
+    --plate:  #1B1815;
+    --rail:   #2E2925;
+    --ink:    #F2EDE4;
+    --muted:  #9A9188;
+    --accent: #B9A06A;
+    --gold:   #B9A06A;
+    --verde:  #7D8B78;
+    --aviso:  #D08B6E;
+    --sombra: 0 1px 2px rgba(0,0,0,.5), 0 14px 40px rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 24px 120px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .folha { max-width: 1120px; margin: 0 auto; }
+  .texto { max-width: 64ch; }
+
+  /* ---- cabeçalho ---- */
+  header.capa {
+    display: flex; flex-direction: column; gap: 18px;
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--rail);
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); margin: 0;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400; font-size: clamp(34px, 5.4vw, 56px);
+    line-height: 1.08; letter-spacing: -.01em;
+    margin: 0; text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .chapeu { color: var(--muted); font-size: 18px; margin: 0; max-width: 60ch; }
+
+  .numeros {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin-top: 14px; border-top: 1px solid var(--rail);
+  }
+  .numeros div {
+    padding: 16px 26px 14px 0; margin-right: 26px;
+    border-right: 1px solid var(--rail);
+  }
+  .numeros div:last-child { border-right: 0; }
+  .numeros b {
+    display: block; font-family: var(--serif); font-weight: 400;
+    font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .numeros span {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ---- secções ---- */
+  section { padding: 56px 0 0; }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(24px, 3vw, 32px); line-height: 1.2;
+    margin: 0 0 6px; text-wrap: balance;
+  }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px;
+  }
+
+  /* ---- provas ---- */
+  .provas { display: grid; gap: 34px; grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 760px) { .provas { grid-template-columns: 1fr; } }
+
+  figure.prova {
+    margin: 0; background: var(--plate);
+    border: 1px solid var(--rail); box-shadow: var(--sombra);
+    display: flex; flex-direction: column;
+  }
+  figure.prova img { display: block; width: 100%; height: auto; }
+  figure.prova figcaption { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+
+  .linha-topo { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .idx {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    color: var(--muted);
+  }
+  .titulo-prova { font-family: var(--serif); font-size: 19px; }
+  .desc { font-size: 15px; color: var(--muted); margin: 0; }
+
+  .chip {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor;
+    border-radius: 2px; white-space: nowrap;
+  }
+  .chip.ref     { color: var(--gold); }
+  .chip.tratada { color: var(--verde); }
+  .chip.montagem{ color: var(--aviso); }
+
+  /* ---- aviso ---- */
+  .aviso {
+    border-left: 3px solid var(--aviso);
+    background: color-mix(in srgb, var(--aviso) 8%, transparent);
+    padding: 16px 20px; margin: 0 0 28px;
+  }
+  .aviso p { margin: 0; }
+  .aviso strong { color: var(--aviso); }
+
+  /* ---- exif ---- */
+  details.exif { margin-top: 30px; border-top: 1px solid var(--rail); padding-top: 14px; }
+  details.exif summary {
+    cursor: pointer; font-family: var(--mono); font-size: 12px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  }
+  pre {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.7;
+    background: var(--plate); border: 1px solid var(--rail);
+    padding: 16px; overflow-x: auto; margin: 14px 0 0;
+    color: var(--ink); white-space: pre-wrap; word-break: break-word;
+  }
+
+  /* ---- tabela ---- */
+  .rolo { overflow-x: auto; border: 1px solid var(--rail); background: var(--plate); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--rail); vertical-align: top; }
+  th {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted); font-weight: 400;
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+  td code { font-family: var(--mono); font-size: 13px; color: var(--gold); }
+
+  .larga { margin-top: 26px; }
+  .larga img { display: block; width: 100%; height: auto; border: 1px solid var(--rail); }
+  .legenda { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+
+  ul.lista { padding-left: 0; list-style: none; display: grid; gap: 12px; margin: 0 0 16px; }
+  ul.lista li { padding-left: 20px; position: relative; }
+  ul.lista li::before {
+    content: ""; position: absolute; left: 0; top: .62em;
+    width: 8px; height: 1px; background: var(--accent);
+  }
+
+  footer {
+    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--rail);
+    font-size: 14px; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="folha">
+
+  <header class="capa">
+    <p class="eyebrow">Bancada de trabalho · 9–10 Agosto 2026</p>
+    <h1>O que está na bancada,<br><em>e o que dela se aproveita</em></h1>
+    <p class="chapeu">Tudo o que se segue vive no scratchpad da sessão — 267 ficheiros, 976 MB. Nada disto entrou na base de dados nem no repositório.</p>
+    <div class="numeros">
+      <div><b>43</b><span>fotos investigadas</span></div>
+      <div><b>4</b><span>tratadas</span></div>
+      <div><b>0</b><span>montagens aproveitadas</span></div>
+      <div><b>3</b><span>produtos a enriquecer</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>As quatro que ficaram prontas</h2>
+    <p class="sub">Fotografias reais da casa, levadas para a atmosfera do site: saturação a 62&nbsp;%, aquecimento leve, vinheta e queda de luz em baixo. Nenhum elemento gerado.</p>
+    <div class="provas">
+      <figure class="prova">
+        <img src="imagens/amb-pulseira-1.jpg" alt="Antebraço tatuado com três pulseiras de prata e anéis, sobre erva">
+        <figcaption>
+          <div class="linha-topo"><span class="idx">FOTO 41</span><span class="chip tratada">Tratada</span></div>
+          <div class="titulo-prova">Três pulseiras no antebraço</div>
+          <p class="desc">Trançada, espiga e bizantina. A única das tratadas com pessoa — e a única sem referência confirmada.</p>
+        </figcaption>
+      </figure>
+      <figure class="prova">
+        <img src="imagens/amb-pulseira-2.jpg" alt="Pulseira grumete de prata e anel de ondas pousados numa pedra">
+        <figcaption>
+          <div class="linha-topo"><span class="idx">FOTO 18</span><span class="chip tratada">Tratada</span><span class="chip ref">PPU0032</span></div>
+          <div class="titulo-prova">Grumete sobre pedra</div>
+          <p class="desc">O céu azul saiu no corte. O anel de ondas ao lado continua por identificar.</p>
+        </figcaption>
+      </figure>
+      <figure class="prova">
+        <img src="imagens/amb-brincos-1.jpg" alt="Brincos de quartzo místico sobre um pedaço de madeira e uma folha verde">
+        <figcaption>
+          <div class="linha-topo"><span class="idx">FOTO 10</span><span class="chip tratada">Tratada</span><span class="chip ref">PPB0013</span></div>
+          <div class="titulo-prova">Quartzo místico</div>
+          <p class="desc">Entrou sem corte — o enquadramento original já servia.</p>
+        </figcaption>
+      </figure>
+      <figure class="prova">
+        <img src="imagens/amb-brincos-2.jpg" alt="Brincos de filigrana com pérola sobre cepo de madeira escura">
+        <figcaption>
+          <div class="linha-topo"><span class="idx">FOTO 0</span><span class="chip tratada">Tratada</span><span class="chip ref">PAN0075</span></div>
+          <div class="titulo-prova">Filigrana com pérola</div>
+          <p class="desc">São brincos — mas estão catalogados em <em>Anéis&nbsp;·&nbsp;Prata</em>. Fica assinalado, não mexido.</p>
+        </figcaption>
+      </figure>
+    </div>
+
+    <details class="exif">
+      <summary>O que ficou escrito dentro de cada ficheiro</summary>
+      <pre>Ambiente · brincos de quartzo místico sobre madeira e folha.
+Peças: PPB0013.
+Origem: media/gallery/WhatsApp Image 2025-02-22 at 18.50.22.jpeg (índice 10).
+Tratamento: corte, saturação a 62 %, aquecimento leve e vinheta.
+Fotografia real, sem elementos gerados.
+
+Etiquetas: ambiente;tratada;PPB0013</pre>
+      <p class="legenda">Gravado em EXIF (<code>ImageDescription</code> e <code>XPKeywords</code>), não num ficheiro à parte. Quem abrir a imagem daqui a um ano, noutra máquina, sabe a que peça se refere. Verificado na leitura de volta: 658 bytes de EXIF, <code>PPB0013</code> presente.</p>
+    </details>
+  </section>
+
+  <section>
+    <h2>As montagens: descartadas</h2>
+    <div class="aviso texto">
+      <p><strong>Reprovadas e apagadas.</strong> Compus duas — a pulseira bizantina sobre laje de pedra e as argolas sobre folha — com a peça recortada da foto real e o cenário tirado de outra foto da casa. Não ficaram bem: contorno duro na pulseira, sombra em mancha no vazio das argolas. Foram removidas do disco. <em>A via da montagem fica fechada; para estas peças o que falta é fotografia a sério.</em></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>O levantamento das 43</h2>
+    <p class="sub texto">Vistas uma a uma, em tamanho de trabalho. O emparelhamento automático por assinatura de imagem foi tentado e deitado fora: um anel ocupa 10&nbsp;% de uma foto de cartão, portanto o que a assinatura compara é o fundo.</p>
+
+    <div class="rolo">
+      <table>
+        <thead>
+          <tr><th>Estado</th><th>Quantas</th><th>O que quer dizer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tratada</td><td class="n">4</td><td>Cortada, graduada, com metadados escritos</td></tr>
+          <tr><td>Cenário</td><td class="n">2</td><td>Fotos 6 e 29 — têm zonas sem peça, servem de fundo</td></tr>
+          <tr><td>Investigada</td><td class="n">37</td><td>Vista e descrita; sem tratamento porque não sei a que peça pertence</td></tr>
+          <tr><td>Com pessoas</td><td class="n">6</td><td>Fotos 3, 8, 35, 39, 40, 41 — mãos e antebraços reais, a usar as peças</td></tr>
+          <tr><td>Quase-duplicados</td><td class="n">5</td><td>18≈16, 26≈24, 36≈31, 42≈37, 41≈40 — sobram ~38 cenas distintas</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="larga">
+      <img src="imagens/galeria.jpg" alt="Folha de contacto com as 43 fotografias da galeria, numeradas">
+      <p class="legenda">A folha de contacto das 43, numerada — os índices usados em toda a página e no <code>galeria-manifesto.json</code>.</p>
+    </div>
+
+    <h2 style="margin-top:48px">As únicas quatro que consigo nomear</h2>
+    <p class="sub texto">De 43 fotografias, quatro casam com uma referência concreta. As outras mostram tranças, bizantinas, argolas e bangles lisos, de que há dezenas de variantes quase iguais. Emparelhar à sorte era repetir o erro que já cometi uma vez nesta sessão, ao rotular uma foto como <code>PPB0003</code> quando a peça era <code>PAN0075</code>.</p>
+
+    <div class="rolo">
+      <table>
+        <thead>
+          <tr><th>Foto</th><th>Peça</th><th>Ficheiro</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="n">0</td><td><code>PAN0075</code> — brincos de filigrana com pérola</td><td class="n">amb-brincos-2.jpg</td></tr>
+          <tr><td class="n">10</td><td><code>PPB0013</code> — quartzo místico</td><td class="n">amb-brincos-1.jpg</td></tr>
+          <tr><td class="n">16 · 18</td><td><code>PPU0032</code> — grumete</td><td class="n">amb-pulseira-2.jpg</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="legenda">Portanto os produtos que ficam enriquecidos hoje são três: <code>PAN0075</code>, <code>PPB0013</code> e <code>PPU0032</code>.</p>
+  </section>
+
+  <section>
+    <h2>O resto da bancada</h2>
+    <p class="sub texto">O que ficou de todo o trabalho da sessão — capas de categoria, criação dos 70 produtos, validações. Serve de rasto; não é para publicar.</p>
+
+    <div class="rolo">
+      <table>
+        <thead>
+          <tr><th>Conjunto</th><th>Ficheiros</th><th>Para que foi</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>cap-*</td><td class="n">100</td><td>Capas de categoria, desktop e móvel, com e sem texto — verificação de contraste</td></tr>
+          <tr><td>cutouts/ · pieces/ · clean/</td><td class="n">276</td><td>Recortes das peças por <code>rembg</code>, em três fases de limpeza</td></tr>
+          <tr><td>prod-cache/ · prod/</td><td class="n">143</td><td>Imagens de produção descarregadas para comparar com o lote novo</td></tr>
+          <tr><td>aneis-cmp-* · puls-cmp-*</td><td class="n">15</td><td>Folhas lado-a-lado que provaram que os 67 anéis eram mesmo novos</td></tr>
+          <tr><td>gal-* </td><td class="n">18</td><td>A galeria em tamanho de trabalho e as folhas de candidatos falhadas</td></tr>
+          <tr><td>Scripts</td><td class="n">23</td><td><code>ambiente.js</code>, <code>montagem.js</code>, <code>metadados.js</code> e os de validação</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>O que fica pendente</h2>
+    <ul class="lista texto">
+      <li><strong>Nada disto está commitado.</strong> As imagens, os scripts e o manifesto vivem só no scratchpad.</li>
+      <li><strong>39 fotografias por identificar.</strong> É a parte que só a casa destranca: dizer que peça está em cada uma. Com essa lista, trato-as todas e ligo-as às fichas de uma vez.</li>
+      <li><strong><code>PAN0075</code> está na família errada</strong> — são brincos catalogados em <em>Anéis · Prata</em>.</li>
+      <li><strong>A foto 25 tem flores amarelas</strong>, cor que a paleta proíbe. Se for usada, corta-se.</li>
+      <li><strong>As 33 pulseiras do lote de Julho continuam por criar</strong>, à espera da decisão sobre <code>0809</code>/<code>0811</code> contra <code>PPU0011</code>.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Scratchpad da sessão · 267 ficheiros · 976&nbsp;MB · Gonzaga Jewellery — artnshine.pt</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
