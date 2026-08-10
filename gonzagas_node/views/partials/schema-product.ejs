@@ -1,6 +1,11 @@
 <%
   const _baseUrl = 'https://artnshine.pt';
-  const _price = typeof product !== 'undefined' && product.sale_price ? parseFloat(product.sale_price).toFixed(2) : '0';
+  // Uma peça sob consulta não tem preço nenhum para anunciar. Declarar "0"
+  // ao Google fazia-a aparecer nos resultados a €0,00 — pior do que o bug
+  // visual, porque vive fora do site. Sem preço, o bloco `offers` não é
+  // emitido: um Product sem Offer continua a ser schema válido.
+  const _temPreco = typeof product !== 'undefined' && parseFloat(product.sale_price) > 0;
+  const _price = _temPreco ? parseFloat(product.sale_price).toFixed(2) : null;
   const _inStock = typeof product !== 'undefined' && (product.current_stock > 0 || (product.stock !== undefined && product.stock > 0));
   const _sku = typeof product !== 'undefined' ? (product.reference || product.id) : '';
   const _name = typeof product !== 'undefined' ? (product.name || product.nome || '') : '';
@@ -30,6 +35,7 @@
   },
   "image": "<%= _img %>",
   "url": "<%= _url %>",
+<% if (_temPreco) { %>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "EUR",
@@ -43,6 +49,7 @@
       "url": "https://artnshine.pt"
     }
   },
+<% } %>
   "material": "Prata 925 / Latão banhado a prata"
 }
 </script>

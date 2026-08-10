@@ -15,8 +15,12 @@
  * loja enquanto `hide_out_of_stock` estiver ligado. O carrinho recusa-as por
  * não terem preço — ver modules/ecommerce/cart/services/cartService.js.
  *
- *   node scripts/novos-produtos/criar.js --simular   # não escreve nada
+ *   node scripts/novos-produtos/criar.js --simular            # não escreve nada
  *   node scripts/novos-produtos/criar.js
+ *   node scripts/novos-produtos/criar.js --lote=lote-2026-08-pulseiras.json
+ *
+ * O JSON do lote pode trazer a sua própria pasta de origem no campo `origem`;
+ * sem ele fica a do lote de Julho.
  */
 const fs = require('fs');
 const path = require('path');
@@ -24,9 +28,10 @@ const mysql = require('mysql2/promise');
 const { processProductImage } = require('../../utils/productImageProcessor');
 
 const ROOT = path.join(__dirname, '..', '..');
-const ORIGEM = '/home/ggedeveloper/gartnshine-3/temporario-novo-stocks/2026-07-FIA-Stocks';
 const DESTINO = path.join(ROOT, 'public', 'media', 'products');
-const lote = JSON.parse(fs.readFileSync(path.join(__dirname, 'lote-2026-07.json'), 'utf8'));
+const ficheiroLote = (process.argv.find(a => a.startsWith('--lote=')) || '--lote=lote-2026-07.json').slice(7);
+const lote = JSON.parse(fs.readFileSync(path.join(__dirname, ficheiroLote), 'utf8'));
+const ORIGEM = lote.origem || '/home/ggedeveloper/gartnshine-3/temporario-novo-stocks/2026-07-FIA-Stocks';
 const SIMULAR = process.argv.includes('--simular');
 
 function env() {
@@ -115,7 +120,8 @@ const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
     console.log(`${ref}  ${peca.nome}`);
   }
 
-  fs.writeFileSync(path.join(__dirname, 'criados.json'), JSON.stringify(resumo, null, 1));
+  const saida = ficheiroLote.replace(/^lote-/, 'criados-');
+  fs.writeFileSync(path.join(__dirname, saida), JSON.stringify(resumo, null, 1));
   console.log(`\n${criados} peças ${SIMULAR ? '(simulação — nada foi escrito)' : 'criadas'}`);
   await db.end();
 })().catch(e => { console.error(e); process.exit(1); });

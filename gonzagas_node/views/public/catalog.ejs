@@ -421,11 +421,18 @@
                       <p class="product-family"><small class="text-highlight"><%= product.family_name %></small></p>
                     <% } %>
                     <h3 class="product-title"><%= product.name || 'Produto' %></h3>
+                    <%
+                      // Mesmo teste de _productCard.ejs, e pela mesma razão:
+                      // `formatted_sale_price` de zero é a string "0,00 €",
+                      // que é verdadeira — o `||` nunca chegava a cair no
+                      // texto de reserva. Quem decide é o número.
+                      const semPreco = !product.sale_price || parseFloat(product.sale_price) <= 0;
+                    %>
                     <p class="product-price">
-                      <% if (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices) { %>
+                      <% if (semPreco || (typeof siteSettings !== 'undefined' && siteSettings.hide_catalog_prices)) { %>
                         <span class="text-muted fst-italic">Preço sob consulta</span>
                       <% } else { %>
-                        <%= product.formatted_sale_price || '<span class="text-muted fst-italic">Preço sob consulta</span>' %>
+                        <%= product.formatted_sale_price %>
                       <% } %>
                     </p>
                   </div>

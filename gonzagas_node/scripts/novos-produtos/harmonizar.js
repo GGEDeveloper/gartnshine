@@ -20,6 +20,10 @@
  *
  *   node scripts/novos-produtos/harmonizar.js --simular
  *   node scripts/novos-produtos/harmonizar.js
+ *   node scripts/novos-produtos/harmonizar.js --lote=lote-2026-08-pulseiras.json
+ *
+ * Lê sempre as fotografias **originais**, nunca o que já está em media/, por
+ * isso correr duas vezes dá o mesmo resultado.
  */
 const fs = require('fs');
 const path = require('path');
@@ -27,8 +31,9 @@ const sharp = require('sharp');
 const { processProductImage } = require('../../utils/productImageProcessor');
 
 const ROOT = path.join(__dirname, '..', '..');
-const ORIGEM = '/home/ggedeveloper/gartnshine-3/temporario-novo-stocks/2026-07-FIA-Stocks';
 const DESTINO = path.join(ROOT, 'public', 'media', 'products');
+const ficheiroLote = (process.argv.find(a => a.startsWith('--lote=')) || '--lote=lote-2026-07.json').slice(7);
+const ORIGEM_POR_OMISSAO = '/home/ggedeveloper/gartnshine-3/temporario-novo-stocks/2026-07-FIA-Stocks';
 const SIMULAR = process.argv.includes('--simular');
 
 const OCUPACAO = 0.74;   // fracção do lado que a peça deve ocupar
@@ -110,8 +115,10 @@ async function harmonizar(origem, destino) {
 }
 
 (async () => {
-  const criados = JSON.parse(fs.readFileSync(path.join(__dirname, 'criados.json'), 'utf8'));
-  const lote = JSON.parse(fs.readFileSync(path.join(__dirname, 'lote-2026-07.json'), 'utf8'));
+  const lote = JSON.parse(fs.readFileSync(path.join(__dirname, ficheiroLote), 'utf8'));
+  const ORIGEM = lote.origem || ORIGEM_POR_OMISSAO;
+  const criados = JSON.parse(fs.readFileSync(
+    path.join(__dirname, ficheiroLote.replace(/^lote-/, 'criados-')), 'utf8'));
   const fotosDe = {};
   lote.pecas.forEach(p => { fotosDe[p.nome] = p.fotos; });
 

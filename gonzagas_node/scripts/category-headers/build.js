@@ -35,6 +35,7 @@ const usarTela = (t) => { W = t.width; H = t.height; };
 const PRETO = '#12100E';
 const VERDE = '#3A4038';
 const CASTANHO = '#6B5844';
+const PRATA = '#C8C6C1';
 
 /* O cabeçalho é recortado com `background-size: cover` numa caixa que vai de
  * 4.35:1 no desktop a 1.76:1 no telemóvel. Com a tela a 2.77:1 os dois cortes
@@ -55,8 +56,16 @@ const ARRANJOS = {
 
 const svg = (s) => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">${s}</svg>`);
 
-/** Fundo: preto terra com um clarão morno em baixo, como luz rasante. */
-function fundo() {
+/* Fundo: preto terra com um clarão em baixo, como luz rasante.
+ *
+ * O clarão tem duas temperaturas. O castanho serve o latão, o macramé e as
+ * pedras — metal quente sobre chão quente. À prata faz o contrário: o
+ * acinzentado do metal apanha a dominante do fundo e a peça lê-se castanha,
+ * baça, como se estivesse suja. Para essas o clarão é o cinza-prata da paleta,
+ * que devolve ao metal a cor que ele tem. */
+function fundo({ frio = false } = {}) {
+  const luz = frio ? PRATA : CASTANHO;
+  const opacidades = frio ? [0.30, 0.11] : [0.78, 0.28];
   return sharp(svg(`
     <defs>
       <radialGradient id="chao" cx="50%" cy="74%" r="80%">
@@ -65,9 +74,9 @@ function fundo() {
         <stop offset="100%" stop-color="${VERDE}"    stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="brasa" cx="50%" cy="66%" r="52%">
-        <stop offset="0%"   stop-color="${CASTANHO}" stop-opacity="0.78"/>
-        <stop offset="60%"  stop-color="${CASTANHO}" stop-opacity="0.28"/>
-        <stop offset="100%" stop-color="${CASTANHO}" stop-opacity="0"/>
+        <stop offset="0%"   stop-color="${luz}" stop-opacity="${opacidades[0]}"/>
+        <stop offset="60%"  stop-color="${luz}" stop-opacity="${opacidades[1]}"/>
+        <stop offset="100%" stop-color="${luz}" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="topo" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%"   stop-color="#000" stop-opacity="0.42"/>
@@ -119,7 +128,7 @@ async function grao() {
 }
 
 /** Uma peça: sombra pousada por baixo, e a peça por cima, um pouco contida. */
-async function peca(ref, slot) {
+async function peca(ref, slot, { limiteLargura = 0.34 } = {}) {
   // WebP com alfa em vez de PNG: os mesmos 92 recortes passam de 21 MB para
   // 4 MB, sem diferença visível depois do véu e do grão.
   const src = [`${ref}.webp`, `${ref}.png`].map(f => path.join(CUTOUTS, f)).find(fs.existsSync);
@@ -136,9 +145,10 @@ async function peca(ref, slot) {
   const reforco = Math.min(1.5, Math.max(1, Math.sqrt(0.38 / Math.max(cobertura, 0.06))));
 
   const alvoH = Math.min(Math.round(slot.h * H * reforco), Math.round(H * 0.76));
-  // A largura trava em 34 % da tela: com mais do que isto uma pulseira aberta
-  // atravessa o corredor central e vai parar por trás do título.
-  const alvoW = Math.min(Math.round(alvoH * 2.2), Math.round(W * 0.34));
+  // No cabeçalho a largura trava em 34 % da tela: com mais do que isto uma
+  // pulseira aberta atravessa o corredor central e vai parar por trás do
+  // título. No cartão não há título por cima, e o limite sobe.
+  const alvoW = Math.min(Math.round(alvoH * 2.2), Math.round(W * limiteLargura));
 
   // Exposição igual para todas as peças. As fotografias vêm de sessões
   // diferentes e uma prata polida chega cá com o dobro do brilho de um latão
@@ -198,6 +208,7 @@ async function colar(buf, w, h, left, top) {
 
 async function capa(slug, refs) {
   usarTela(manifest.canvas);
+  const frio = (manifest.capasFrias || []).includes(slug);
   const n = Math.min(refs.length, 5);
   const arranjo = ARRANJOS[n];
   if (!arranjo) throw new Error(`sem arranjo para ${n} peças (${slug})`);
@@ -227,7 +238,7 @@ async function capa(slug, refs) {
   const partes = [];
   for (const c of camadas) partes.push(...await peca(c.ref, c.slot));
 
-  const base = await fundo().composite(partes).png().toBuffer();
+  const base = await fundo({ frio }).composite(partes).png().toBuffer();
   return sharp(base)
     .composite([{ input: await veu().toBuffer() }, { input: await grao(), blend: 'overlay' }])
     .png().toBuffer();
@@ -240,9 +251,13 @@ async function capa(slug, refs) {
  * O nome e a contagem ficam em baixo à esquerda nas duas superfícies, e as
  * duas já têm um véu forte a subir do fundo. Por isso aqui a peça sobe: vive
  * na metade de cima e o baixo fica livre para o texto. */
+/* A primeira versão punha a peça a 50 % da altura e o cartão ficava vazio: numa
+ * caixa de 261×196 na loja, uma peça pequena no meio de muito chão lê-se como
+ * uma mancha. A peça passa a ocupar quase dois terços da altura e a subir só o
+ * suficiente para o nome caber por baixo. */
 const ARRANJOS_CARTAO = {
-  1: [{ x: 0.52, y: 0.38, h: 0.50 }],
-  2: [{ x: 0.35, y: 0.35, h: 0.44 }, { x: 0.69, y: 0.47, h: 0.32 }],
+  1: [{ x: 0.50, y: 0.40, h: 0.66 }],
+  2: [{ x: 0.36, y: 0.36, h: 0.56 }, { x: 0.71, y: 0.50, h: 0.40 }],
 };
 
 /** Véu do cartão: quase nada em baixo, que é onde o CSS já carrega. */
@@ -258,19 +273,30 @@ function veuCartao() {
   `)).png();
 }
 
-async function cartao(slug, refs) {
+async function cartao(slug, config) {
+  // O manifesto aceita uma lista de referências ou um objecto com `pecas` e
+  // `frio` — o segundo é para a prata, que precisa do chão cinzento.
+  const refs = Array.isArray(config) ? config : config.pecas;
+  const frio = !Array.isArray(config) && !!config.frio;
+  // Um colar em V e uma pulseira redonda não se enquadram igual. O manifesto
+  // pode afinar o lugar da peça (`slot`) sem mexer no arranjo por omissão.
+  const afinacao = (!Array.isArray(config) && config.slot) || null;
+
   usarTela(manifest.canvasCartao);
   const n = Math.min(refs.length, 2);
   const arranjo = ARRANJOS_CARTAO[n];
   if (!arranjo) throw new Error(`sem arranjo de cartão para ${n} peças (${slug})`);
 
-  const camadas = arranjo.map((s, i) => ({ ref: refs[i], slot: s }));
+  const camadas = arranjo.map((s, i) => ({
+    ref: refs[i],
+    slot: i === 0 && afinacao ? { ...s, ...afinacao } : s,
+  }));
   camadas.sort((a, b) => a.slot.h - b.slot.h);
 
   const partes = [];
-  for (const c of camadas) partes.push(...await peca(c.ref, c.slot));
+  for (const c of camadas) partes.push(...await peca(c.ref, c.slot, { limiteLargura: 0.80 }));
 
-  const base = await fundo().composite(partes).png().toBuffer();
+  const base = await fundo({ frio }).composite(partes).png().toBuffer();
   return sharp(base)
     .composite([{ input: await veuCartao().toBuffer() }, { input: await grao(), blend: 'overlay' }])
     .png().toBuffer();
@@ -314,9 +340,10 @@ async function gravar(id, buf) {
     console.log(`${String(id).padStart(3)}  ${slug.padEnd(26)} ${manifest.familias[slug].length} peças`);
   }
   const cartoes = {};
-  for (const [slug, refs] of Object.entries(manifest.cartoes || {})) {
+  for (const [slug, config] of Object.entries(manifest.cartoes || {})) {
     if (pedido.length && !pedido.includes(slug)) continue;
-    const buf = await cartao(slug, refs);
+    const refs = Array.isArray(config) ? config : config.pecas;
+    const buf = await cartao(slug, config);
     // `_todos` não é família nenhuma: é o cartão "Ver todos" da loja.
     const nome = slug === '_todos' ? 'todos' : `cat-${familias[slug]}`;
     if (slug !== '_todos' && !familias[slug]) { console.warn(`! cartão ${slug}: sem id`); continue; }

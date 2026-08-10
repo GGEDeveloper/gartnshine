@@ -83,6 +83,7 @@ documento, com backup obrigatório, condições de paragem e rollback:
 | [`docs/DEPLOY_INSTAGRAM_CATALOGO.md`](../docs/DEPLOY_INSTAGRAM_CATALOGO.md) | Feed do Instagram gerido no admin, categorias no catálogo, transições | 010 (aditiva) |
 | [`docs/DEPLOY_CAPAS_CATEGORIAS.md`](../docs/DEPLOY_CAPAS_CATEGORIAS.md) | Capas dos cabeçalhos de categoria e cartões dos materiais | 015 (só UPDATE) |
 | [`docs/DEPLOY_LOTE_JULHO_2026.md`](../docs/DEPLOY_LOTE_JULHO_2026.md) | 70 peças novas de Julho de 2026, sem preço (*sob consulta*) | 016 (só INSERT) |
+| [`docs/DEPLOY_PULSEIRAS_2026_08.md`](../docs/DEPLOY_PULSEIRAS_2026_08.md) | 32 pulseiras de prata, fim do `€0,00` nos cartões e no schema, capas revistas | 017 (só INSERT) |
 
 **Regra que vale para todos:** nunca correr `npm run db:init`,
 `npm run db:reset`, `scripts/setup.js` nem importar dumps SQL para produção —

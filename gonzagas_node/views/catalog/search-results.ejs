@@ -225,7 +225,11 @@ body.showcase-theme .filters-header h3 { color: var(--igp-gold) !important; }
                                     </p>
                                     <% } %>
                                     <div class="product-footer">
-                                        <span class="product-price">€<%= parseFloat(product.sale_price || 0).toFixed(2) %></span>
+                                        <% if (parseFloat(product.sale_price) > 0) { %>
+                                        <span class="product-price">€<%= parseFloat(product.sale_price).toFixed(2) %></span>
+                                        <% } else { %>
+                                        <span class="product-price text-muted fst-italic">Preço sob consulta</span>
+                                        <% } %>
                                         <% if (product.in_stock) { %>
                                         <span class="badge-in-stock">
                                             <i class="fas fa-check"></i>

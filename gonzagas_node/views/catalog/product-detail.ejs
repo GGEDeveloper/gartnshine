@@ -683,8 +683,10 @@
                      alt="<%= rp.name %> — joia artesanal prata 925" loading="lazy">
                 <div class="related-info">
                     <div class="related-name"><%= rp.name %></div>
-                    <% if (rp.sale_price) { %>
+                    <% if (parseFloat(rp.sale_price) > 0) { %>
                     <div class="related-price">€<%= parseFloat(rp.sale_price).toFixed(2) %></div>
+                    <% } else { %>
+                    <div class="related-price text-muted fst-italic">Sob consulta</div>
                     <% } %>
                     <% if (rp.current_stock > 0) { %>
                     <div class="related-stock in-stock">Disponível</div>
@@ -754,7 +756,10 @@
     function copyInfo() {
         const productName = '<%= product.name %>';
         const reference = '<%= product.reference %>';
-        const price = '<%= product.sale_price ? "€" + parseFloat(product.sale_price).toFixed(2) : "Preço sob consulta" %>';
+        // `sale_price` chega da base de dados como string: "0.00" é verdadeiro
+        // em JavaScript. Sem o parseFloat, o botão de copiar anunciava zero
+        // euros numa peça sob consulta.
+        const price = '<%= parseFloat(product.sale_price) > 0 ? "€" + parseFloat(product.sale_price).toFixed(2) : "Preço sob consulta" %>';
         const url = window.location.href;
         
         const info = `${productName}\nReferência: ${reference}\n${price}\nVer: ${url}`;

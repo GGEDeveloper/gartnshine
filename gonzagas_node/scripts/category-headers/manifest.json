@@ -167,23 +167,44 @@
       "PPU0070"
     ]
   },
-  "_comentarioCartoes": "Cartões da homepage e da loja. Só os materiais de topo usam card_image (getMaterialsForHome filtra parent_id IS NULL), mais o cartão 'Ver todos', que vem de site_settings.shop_all_card_image. O texto fica em baixo à esquerda nas duas superfícies, por isso a peça vive na metade de cima.",
+  "_comentarioCartoes": "Cartões dos materiais na homepage e na loja. A prata leva fundo frio (ver fundo() no build.js) e uma pulseira do lote de Julho de 2026.",
   "cartoes": {
-    "prata": [
-      "PAN0024"
-    ],
+    "prata": {
+      "pecas": [
+        "PPU0080"
+      ],
+      "frio": true
+    },
     "latao": [
-      "LTG0002"
+      "LTA0014"
     ],
     "macrame": [
       "MCCL0005"
     ],
-    "pedras-naturais": [
-      "PVO0005"
-    ],
+    "pedras-naturais": {
+      "pecas": [
+        "PVO0005"
+      ],
+      "slot": {
+        "x": 0.5,
+        "y": 0.46,
+        "h": 0.8
+      }
+    },
     "_todos": [
       "PAN0024",
       "LTG0002"
     ]
-  }
+  },
+  "capasFrias": [
+    "prata",
+    "aneis-prata",
+    "brincos-prata",
+    "colares-prata",
+    "pulseiras-prata",
+    "cuffs-prata",
+    "pendentes-prata",
+    "pulseiras-pe-prata"
+  ],
+  "_comentarioFrias": "Categorias de prata: o clarão do fundo passa a cinza-prata, senão o metal acinzentado apanha a dominante castanha e lê-se baço."
 }

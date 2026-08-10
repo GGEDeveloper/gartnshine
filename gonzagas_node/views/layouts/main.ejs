@@ -164,7 +164,14 @@
     const _mainImageUrl = _mainImg
       ? (_baseUrl + '/media/products/' + _mainImg.replace(/\.[^.]+$/, '') + '-medium.jpg')
       : (_baseUrl + '/images/imagem-nao-disponivel.svg');
-    const _price = (product.sale_price && parseFloat(product.sale_price) > 0) ? parseFloat(product.sale_price).toFixed(2) : (product.price ? parseFloat(product.price).toFixed(2) : '0');
+    // Uma peça sob consulta não tem preço para anunciar. Declarar "0" fazia-a
+    // aparecer nos resultados do Google a €0,00 — e isso vive fora do site,
+    // onde já não se corrige. Sem preço, o bloco `offers` não é emitido: um
+    // Product sem Offer continua a ser schema válido.
+    const _precoNum = parseFloat(product.sale_price) > 0 ? parseFloat(product.sale_price)
+                    : (parseFloat(product.price) > 0 ? parseFloat(product.price) : 0);
+    const _temPreco = _precoNum > 0;
+    const _price = _temPreco ? _precoNum.toFixed(2) : null;
     const _availability = (product.current_stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
     const _desc = (product.description || (product.name + ' — joia artesanal em prata 925')).replace(/"/g, '&quot;');
   %>
@@ -180,7 +187,7 @@
       "@type": "Brand",
       "name": <%- JSON.stringify(brand.nomeSeo) %>
     },
-    "image": ["<%= _mainImageUrl %>"],
+    "image": ["<%= _mainImageUrl %>"]<% if (_temPreco) { %>,
     "offers": {
       "@type": "Offer",
       "@id": "<%= _canonical %>#offer",
@@ -190,7 +197,7 @@
       "availability": "<%= _availability %>",
       "itemCondition": "https://schema.org/NewCondition",
       "seller": { "@id": "https://artnshine.pt/#organization" }
-    }
+    }<% } %>
   }
   </script>
   <% } %>
