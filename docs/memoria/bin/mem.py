@@ -342,6 +342,12 @@ def _rrf(listas: list[list[int]], k: int = 60) -> dict[int, float]:
 # caiu de 100% para 77% quando os docs entraram no índice.
 PESO_FONTE = {"nota": 1.6, "doc": 1.0, "transcript": 0.9, "commit": 0.8}
 
+# O domínio 'memoria' documenta o próprio sistema e cita termos dos outros
+# domínios como exemplos ("«rembg» devolvia o README…"). Sem desconto, essas
+# notas ocupam o topo de perguntas que nada têm a ver com elas. Não se
+# excluem — descontam-se, e voltam a peso inteiro com `--dominio memoria`.
+DESCONTO_META = 0.7
+
 
 def _fts_query(pergunta: str) -> str:
     termos = re.findall(r"[\wÀ-ÿ][\wÀ-ÿ\-_]{1,}", pergunta.lower())
@@ -375,14 +381,18 @@ def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
     if not pontos:
         return []
 
-    # Aplica a precedência por fonte antes de ordenar.
+    # Aplica a precedência por fonte e o desconto meta antes de ordenar.
     if pontos:
         marcas = ",".join("?" * len(pontos))
-        fontes = {r["id"]: r["fonte"] for r in db.execute(
-            f"SELECT id, fonte FROM chunks WHERE id IN ({marcas})",
-            tuple(pontos))}
+        info = {r["id"]: (r["fonte"], r["dominio"]) for r in db.execute(
+            f"SELECT c.id, c.fonte, n.dominio FROM chunks c"
+            f" LEFT JOIN notes n ON n.slug = c.ref AND c.fonte='nota'"
+            f" WHERE c.id IN ({marcas})", tuple(pontos))}
         for cid in pontos:
-            pontos[cid] *= PESO_FONTE.get(fontes.get(cid, ""), 1.0)
+            fonte, dom = info.get(cid, ("", None))
+            pontos[cid] *= PESO_FONTE.get(fonte, 1.0)
+            if dom == "memoria" and dominio != "memoria":
+                pontos[cid] *= DESCONTO_META
 
     ordenados = sorted(pontos.items(), key=lambda x: -x[1])
     saida: list[dict] = []

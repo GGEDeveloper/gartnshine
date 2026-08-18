@@ -73,10 +73,13 @@ except Exception:
   fim)
     # Conta ficheiros .md, não entradas de `git status` — uma pasta inteira
     # por versionar aparece como UMA linha e dava sempre "1 nota".
-    tocadas="$(cd "$RAIZ" && {
-      git status --porcelain --untracked-files=all docs/memoria/notas/ 2>/dev/null \
-        | awk '{print $NF}' | grep -c '\.md$'
-    } 2>/dev/null || echo 0)"
+    # `grep -c` devolve 0 no stdout MAS exit 1 quando não há linhas; um
+    # `|| echo 0` a seguir acrescentava um segundo zero e partia o JSON.
+    # Contar com awk evita o problema — sai sempre 0 com exit 0.
+    tocadas="$(cd "$RAIZ" && git status --porcelain --untracked-files=all \
+      docs/memoria/notas/ 2>/dev/null \
+      | awk '$NF ~ /\.md$/ {n++} END {print n+0}')"
+    tocadas="${tocadas:-0}"
 
     if [ "${tocadas:-0}" -gt 0 ]; then
       linha="- $(date +%Y-%m-%d) — $tocadas notas por rever/commitar"
