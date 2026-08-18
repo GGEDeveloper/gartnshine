@@ -176,3 +176,14 @@ gonzagas_node/public/media/categories/*
 !gonzagas_node/public/media/categories/cat-*-hero-1920.jpg
 !gonzagas_node/public/media/categories/cat-*-card-1200.jpg
 !gonzagas_node/public/media/categories/todos-card-1200.jpg
+
+# Dumps da base de dados — contêm settings em texto simples, incluindo a
+# chave sk_live da Stripe. Verificado a 2026-08-17: os dois dumps de
+# docs/db/ contêm-na, e um `git add docs/` apanhava-os para um repositório
+# com remoto no GitHub. Ver docs/memoria/notas/seguranca-chaves-stripe.md
+docs/db/
+*.sql.gz
+
+# Ambiente da biblioteca de memória (reconstruível, não versionar)
+docs/memoria/.venv/
+docs/memoria/estado/
