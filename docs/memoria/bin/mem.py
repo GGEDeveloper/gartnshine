@@ -336,6 +336,13 @@ def _rrf(listas: list[list[int]], k: int = 60) -> dict[int, float]:
     return pontos
 
 
+# Uma nota é conhecimento destilado, com o porquê e já verificado; um doc ou
+# um transcript é matéria-prima. Sem esta precedência, o documento original
+# ganha sempre por repetir mais vezes o termo procurado — medido: a precisão@3
+# caiu de 100% para 77% quando os docs entraram no índice.
+PESO_FONTE = {"nota": 1.6, "doc": 1.0, "transcript": 0.9, "commit": 0.8}
+
+
 def _fts_query(pergunta: str) -> str:
     termos = re.findall(r"[\wÀ-ÿ][\wÀ-ÿ\-_]{1,}", pergunta.lower())
     stop = {"que", "para", "com", "uma", "dos", "das", "por", "nao", "não",
@@ -367,6 +374,15 @@ def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
     pontos = _rrf([lex, sem])
     if not pontos:
         return []
+
+    # Aplica a precedência por fonte antes de ordenar.
+    if pontos:
+        marcas = ",".join("?" * len(pontos))
+        fontes = {r["id"]: r["fonte"] for r in db.execute(
+            f"SELECT id, fonte FROM chunks WHERE id IN ({marcas})",
+            tuple(pontos))}
+        for cid in pontos:
+            pontos[cid] *= PESO_FONTE.get(fontes.get(cid, ""), 1.0)
 
     ordenados = sorted(pontos.items(), key=lambda x: -x[1])
     saida: list[dict] = []
