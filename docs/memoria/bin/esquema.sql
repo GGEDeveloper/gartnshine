@@ -153,3 +153,54 @@ CREATE TABLE IF NOT EXISTS meta (
   chave TEXT PRIMARY KEY,
   valor TEXT NOT NULL
 );
+
+-- ---------------------------------------------------------------
+-- Ligações entre notas, extraídas dos [[wikilinks]] do corpo.
+-- Um eixo distinto do grafo de entidades: aqui os nós são as próprias
+-- notas e a aresta é uma ligação escrita à mão — sinal muito mais forte
+-- do que a co-ocorrência. `resolve` distingue o alvo que existe do
+-- alvo partido, para o lint os poder apontar sem os apagar.
+-- ---------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS note_links (
+  src     TEXT NOT NULL REFERENCES notes(slug) ON DELETE CASCADE,
+  dst     TEXT NOT NULL,
+  resolve INTEGER NOT NULL DEFAULT 1
+);
+CREATE INDEX IF NOT EXISTS idx_nl_src ON note_links(src);
+CREATE INDEX IF NOT EXISTS idx_nl_dst ON note_links(dst);
+
+-- ---------------------------------------------------------------
+-- Percursos: como é que se chegou a uma resposta.
+--
+-- Uma busca abre um percurso e regista o que encontrou; as leituras que
+-- se lhe seguem penduram-se nele. Não é memória — é telemetria sobre o
+-- uso da memória, e por isso vive só no índice descartável.
+--
+-- O `understory` grava a travessia do agente LLM interno dele. Nós não
+-- temos agente interno: quem consulta é o bibliotecário por linha de
+-- comando, ou a página. Portanto grava o próprio motor.
+-- ---------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS traces (
+  id        INTEGER PRIMARY KEY,
+  ts        TEXT NOT NULL,
+  sessao    TEXT,
+  origem    TEXT NOT NULL DEFAULT 'cli',   -- cli|web|mcp
+  pergunta  TEXT NOT NULL,
+  filtros   TEXT,                          -- JSON: dominio, tipo, as_of…
+  duracao_ms INTEGER,
+  achados   INTEGER NOT NULL DEFAULT 0,
+  notacao   TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_traces_ts ON traces(ts);
+
+CREATE TABLE IF NOT EXISTS trace_passos (
+  trace    INTEGER NOT NULL REFERENCES traces(id) ON DELETE CASCADE,
+  ord      INTEGER NOT NULL,
+  acao     TEXT NOT NULL,      -- achou | abriu
+  fonte    TEXT,               -- nota|doc|transcript|commit
+  ref      TEXT NOT NULL,      -- slug ou caminho
+  posicao  INTEGER,            -- lugar no ranking, quando `achou`
+  ponto    REAL,
+  canal    TEXT                -- LS | L. | .S
+);
+CREATE INDEX IF NOT EXISTS idx_passos_trace ON trace_passos(trace);

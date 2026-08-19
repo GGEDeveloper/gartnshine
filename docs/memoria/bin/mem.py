@@ -9,6 +9,11 @@ similaridade vetorial e um grafo de entidades datado.
   mem.py indexar            reindexa apenas o que mudou
   mem.py buscar "..."       busca híbrida
   mem.py auditar            contradições, obsolescência e órfãos
+  mem.py servir             abre a memória no browser (só-leitura, local)
+  mem.py percursos          como se chegou às últimas respostas
+  mem.py sonhar             o que há a consolidar (mede, aponta, não escreve)
+  mem.py contexto "..."     notas relevantes a uma pergunta, para injectar
+  mem.py exportar           bundle Open Knowledge Format, derivado e descartável
   mem.py estado             números do índice
 
 O índice é descartável: se corromper, `reconstruir` regenera-o.
@@ -29,15 +34,45 @@ import urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[3]
-BASE = RAIZ / "docs" / "memoria"
+# Duas raízes, e não uma — a distinção que torna possível haver mais do que
+# um centro de memória:
+#
+#   BIBLIOTECA  onde a memória vive (notas + índice). Anda com as notas.
+#   PROJETO     o repositório que ela documenta — o que o `ingerir` varre à
+#               procura de docs e commits, e de onde vêm as transcrições.
+#
+# Coincidem neste repo. Deixam de coincidir assim que a mesma biblioteca
+# servir outro projeto, ou o mesmo motor outra biblioteca. Por omissão a
+# biblioteca é a pasta que contém o `bin/`, e o projeto é o repo que a contém.
+BASE = Path(os.environ.get("MEM_BIBLIOTECA")
+            or Path(__file__).resolve().parents[1]).resolve()
+# Se a biblioteca for mudada de sítio sem se dizer qual é o projeto, o
+# projeto passa a ser a própria biblioteca — nunca o pai do pai, que daria
+# "/" e poria o `ingerir` a varrer o sistema de ficheiros inteiro.
+RAIZ = Path(os.environ.get("MEM_PROJETO")
+            or (BASE if "MEM_BIBLIOTECA" in os.environ else BASE.parents[1])).resolve()
 NOTAS = BASE / "notas"
 DB = BASE / "estado" / "indice.db"
 ESQUEMA = Path(__file__).parent / "esquema.sql"
 
+# As transcrições do Claude Code vivem fora do repo, numa pasta cujo nome é o
+# caminho do projeto com as barras trocadas por hífenes.
+TRANSCRIPTS = Path(os.environ.get("MEM_TRANSCRIPTS") or
+                   Path.home() / ".claude" / "projects" /
+                   str(RAIZ).replace("/", "-"))
+
+
+def relativo(p: Path) -> str:
+    """Caminho face ao projeto — absoluto se a biblioteca viver fora dele."""
+    try:
+        return str(Path(p).resolve().relative_to(RAIZ))
+    except ValueError:
+        return str(p)
+
 OLLAMA = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 MODELO = os.environ.get("MEM_EMBED_MODEL", "embeddinggemma")
 DIMS = 768
+KEEP_ALIVE = os.environ.get("MEM_KEEP_ALIVE", "60m")
 
 TIPOS = ("decisao", "facto", "estado", "procedimento",
          "entidade", "preferencia", "referencia")
@@ -61,12 +96,31 @@ def conectar() -> sqlite3.Connection:
     import sqlite_vec
 
     DB.parent.mkdir(parents=True, exist_ok=True)
-    db = sqlite3.connect(DB)
+    # O hook PostToolUse corre `indexar` em async a cada nota escrita: gravar
+    # três notas seguidas põe três processos a escrever ao mesmo tempo, e cada
+    # um demora o que demorar a gerar embeddings. Com o timeout por omissão
+    # (5 s) os perdedores desistem em silêncio — foi assim que três notas
+    # ficaram fora do índice enquanto o comando dizia "0 notas atualizadas".
+    db = sqlite3.connect(DB, timeout=120)
     db.row_factory = sqlite3.Row
     db.enable_load_extension(True)
     sqlite_vec.load(db)
     db.enable_load_extension(False)
+    # O índice é derivado: quando o esquema cresce, ele põe-se em dia sozinho
+    # em vez de rebentar num comando que não sabia da tabela nova. Uma leitura
+    # de `meta` por ligação; só escreve quando o ficheiro do esquema mudou.
+    try:
+        actual = db.execute(
+            "SELECT valor FROM meta WHERE chave='esquema_hash'").fetchone()
+    except sqlite3.OperationalError:
+        actual = None
+    if not actual or actual[0] != _hash_esquema():
+        criar_esquema(db)
     return db
+
+
+def _hash_esquema() -> str:
+    return sha(ESQUEMA.read_text(encoding="utf-8"))
 
 
 def criar_esquema(db: sqlite3.Connection) -> None:
@@ -80,6 +134,10 @@ def criar_esquema(db: sqlite3.Connection) -> None:
     db.execute(
         "INSERT OR REPLACE INTO meta(chave, valor) VALUES ('modelo_embed', ?)",
         (MODELO,),
+    )
+    db.execute(
+        "INSERT OR REPLACE INTO meta(chave, valor) VALUES ('esquema_hash', ?)",
+        (_hash_esquema(),),
     )
     db.commit()
 
@@ -104,7 +162,12 @@ def embed(textos: list[str], tipo: str = "doc",
         parte = entradas[i : i + lote]
         req = urllib.request.Request(
             f"{OLLAMA}/api/embed",
-            json.dumps({"model": MODELO, "input": parte}).encode(),
+            json.dumps({"model": MODELO, "input": parte,
+                        # Sem isto o ollama descarrega o modelo ao fim de uns
+                        # minutos, e a busca seguinte paga ~1,7 s a recarregá-lo.
+                        # Com a injecção automática em cada pergunta, esse
+                        # arranque a frio seria a experiência normal.
+                        "keep_alive": KEEP_ALIVE}).encode(),
             {"Content-Type": "application/json"},
         )
         try:
@@ -162,7 +225,7 @@ def ler_nota(caminho: Path) -> dict | None:
 
     meta["corpo"] = corpo.strip()
     meta.setdefault("slug", caminho.stem)
-    meta.setdefault("path", str(caminho.relative_to(RAIZ)))
+    meta.setdefault("path", relativo(caminho))
     return meta
 
 
@@ -175,6 +238,84 @@ _ENTIDADE_LIXO = re.compile(
     r"|^#[0-9A-Fa-f]{3,8}$"     # cores
     r"|^\d+$"                   # números soltos
 )
+
+
+# Ligações escritas à mão entre notas: [[slug-da-outra-nota]].
+_WIKILINK = re.compile(r"\[\[([^\]|#]+?)(?:[|#][^\]]*)?\]\]")
+
+
+def wikilinks(corpo: str) -> list[str]:
+    """Alvos distintos citados pelo corpo, pela ordem em que aparecem.
+
+    Blocos e trechos de código saem primeiro: uma nota que *explica* a sintaxe
+    escreve `[[assim]]` como exemplo, e sem isto o exemplo virava uma ligação
+    partida a apontar para uma nota que nunca existiu.
+    """
+    limpo = re.sub(r"```.*?```", " ", corpo, flags=re.S)
+    limpo = re.sub(r"`[^`\n]+`", " ", limpo)
+    return list(dict.fromkeys(m.strip() for m in _WIKILINK.findall(limpo) if m.strip()))
+
+
+# Tipos que o motor sabe reconhecer sozinho, porque valem em qualquer
+# projecto. Tudo o que for específico de um negócio — o que é um «produto»,
+# o que é uma «categoria» — vem das regras da biblioteca, não daqui: essa é
+# a fronteira que permite levar este motor para outro centro de memória.
+_EXT_FICHEIRO = {".py", ".js", ".mjs", ".cjs", ".ts", ".json", ".sql", ".md",
+                 ".css", ".html", ".ejs", ".sh", ".yml", ".yaml", ".toml",
+                 ".txt", ".svg", ".webp", ".jpg", ".png", ".env"}
+_SIMBOLO = re.compile(r"^[A-Z][A-Z0-9]*(_[A-Z0-9]+)+$"          # PESO_FONTE
+                      r"|^[a-z][a-zA-Z0-9]*(\.[a-z][a-zA-Z0-9]*)+$")  # app.locals.brand
+
+# `artnshine.pt` casa com o padrão de `app.locals.brand` e vinha tipado como
+# símbolo. Um domínio não é um identificador de código, e um tipo errado
+# afirmado com confiança mente mais do que a ausência de tipo.
+_TLD = re.compile(r"\.(pt|com|org|net|io|dev|eu|es|br|co|app|ai|me)$", re.I)
+
+_regras_projeto: list[tuple[str, re.Pattern]] | None = None
+
+
+def _regras_da_biblioteca() -> list[tuple[str, re.Pattern]]:
+    """Padrões de tipagem próprios desta biblioteca, se os houver.
+
+    `projeto/entidades.json` mapeia tipo -> lista de expressões regulares.
+    É opcional: sem ele, o motor tipa só o que é universal.
+    """
+    global _regras_projeto
+    if _regras_projeto is None:
+        _regras_projeto = []
+        f = BASE / "projeto" / "entidades.json"
+        if f.exists():
+            try:
+                for tipo, padroes in json.loads(f.read_text(encoding="utf-8")).items():
+                    # Uma chave a começar por "_" é comentário. E o valor tem
+                    # de ser uma lista: se for uma string, o `for` itera-a
+                    # caractere a caractere e cada letra vira um padrão que
+                    # casa com tudo — foi assim que 166 entidades ficaram
+                    # todas com o tipo "_comentario".
+                    if tipo.startswith("_") or not isinstance(padroes, list):
+                        continue
+                    for pad in padroes:
+                        _regras_projeto.append((tipo, re.compile(pad)))
+            except (json.JSONDecodeError, re.error) as e:
+                print(f"  aviso: {f.name} ignorado ({e})", file=sys.stderr)
+    return _regras_projeto
+
+
+def tipar_entidade(nome: str) -> str | None:
+    """O tipo de uma entidade, ou None quando não se consegue provar.
+
+    Adivinhar mal é pior do que não tipar: um grafo colorido por tipos
+    errados mente com confiança. As regras da biblioteca vêm primeiro,
+    porque são mais específicas do que as universais.
+    """
+    for tipo, padrao in _regras_da_biblioteca():
+        if padrao.search(nome):
+            return tipo
+    if "/" in nome or Path(nome).suffix.lower() in _EXT_FICHEIRO:
+        return "ficheiro"
+    if _SIMBOLO.match(nome) and not _TLD.search(nome):
+        return "simbolo"
+    return None
 
 
 def entidade_valida(nome: str) -> bool:
@@ -286,7 +427,21 @@ def indexar_notas(db, forcar=False) -> int:
                 continue
             entidades_nota.append(e)
             db.execute("INSERT OR IGNORE INTO entities(nome) VALUES (?)", (e,))
+            # Re-tipa sempre: as regras da biblioteca podem ter mudado desde
+            # a última indexação, e o tipo é derivado como tudo no índice.
+            db.execute("UPDATE entities SET tipo=? WHERE nome=?",
+                       (tipar_entidade(e), e))
             db.execute("INSERT INTO mentions(entidade, slug) VALUES (?,?)", (e, slug))
+
+        # Wikilinks: nós são as notas, não as entidades. Uma ligação escrita
+        # à mão vale muito mais do que a co-ocorrência, por isso vive num eixo
+        # próprio. `resolve` fica a 1 e é recalculado no fim, quando já se
+        # conhecem todos os slugs — uma nota pode citar outra ainda por indexar.
+        db.execute("DELETE FROM note_links WHERE src=?", (slug,))
+        for alvo in wikilinks(meta["corpo"]):
+            if alvo != slug:
+                db.execute("INSERT INTO note_links(src, dst) VALUES (?,?)",
+                           (slug, alvo))
 
         db.execute("DELETE FROM relations WHERE slug=?", (slug,))
         for r in meta.get("relations", []) or []:
@@ -321,7 +476,20 @@ def indexar_notas(db, forcar=False) -> int:
              if r["slug"] not in vistos]
     for slug in orfas:
         db.execute("DELETE FROM notes WHERE slug=?", (slug,))
+        # `chunks_vec` é tabela virtual: não há cascata nem chave estrangeira
+        # que a limpe. Sem esta linha, apagar ou mudar o nome a uma nota
+        # deixava os vectores para trás — e um vector órfão não é só lixo:
+        # ocupa lugar no k=60 da busca vectorial e é depois descartado em
+        # silêncio, portanto rouba recall de cada vez que se procura.
+        db.executemany("DELETE FROM chunks_vec WHERE chunk_id=?",
+                       [(r[0],) for r in db.execute(
+                           "SELECT id FROM chunks WHERE fonte='nota' AND ref=?",
+                           (slug,))])
         db.execute("DELETE FROM chunks WHERE fonte='nota' AND ref=?", (slug,))
+
+    # Alvos partidos não se apagam: ficam com resolve=0 para o lint os apontar.
+    db.execute("UPDATE note_links SET resolve ="
+               " (dst IN (SELECT slug FROM notes))")
     db.commit()
     return n
 
@@ -359,7 +527,12 @@ def _fts_query(pergunta: str) -> str:
 
 def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
            tipo: str | None = None, incluir_expirado: bool = False,
-           dominio: str | None = None) -> list[dict]:
+           dominio: str | None = None, gravar: bool = True,
+           origem: str = "cli") -> list[dict]:
+    # O percurso mede-se de ponta a ponta, embedding incluído: é isso que se
+    # sente ao usar. `gravar=False` serve a bateria de testes, que faria
+    # centenas de buscas e encheria o registo de ruído.
+    _t0 = datetime.now(timezone.utc)
     # via lexical (BM25) — ganha em identificadores exactos: PPU0080, migração 014
     lex: list[int] = []
     try:
@@ -435,6 +608,15 @@ def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
         })
         if len(saida) >= limite:
             break
+
+    if gravar:
+        from percursos import gravar_busca  # noqa: PLC0415
+
+        ms = int((datetime.now(timezone.utc) - _t0).total_seconds() * 1000)
+        gravar_busca(db, pergunta, saida,
+                     {"dominio": dominio, "tipo": tipo, "as_of": as_of,
+                      "incluir_expirado": incluir_expirado},
+                     ms, origem)
     return saida
 
 
@@ -537,6 +719,24 @@ def cmd_auditar(args):
         print(f"  {r['slug']}")
         problemas += 1
 
+    print("\n== Ligações para notas que não existem ==")
+    for r in db.execute("SELECT src, dst FROM note_links WHERE resolve=0"
+                        " ORDER BY src, dst"):
+        print(f"  {r['src']} --> [[{r['dst']}]]")
+        problemas += 1
+
+    # Uma nota que ninguém cita não é necessariamente má — mas é invisível a
+    # quem navega pelo grafo, e costuma ser sinal de que ficou por costurar.
+    print("\n== Notas que ninguém cita ==")
+    for r in db.execute(
+        "SELECT slug, titulo FROM notes WHERE valid_to IS NULL AND slug NOT IN"
+        " (SELECT dst FROM note_links WHERE resolve=1) ORDER BY slug"):
+        saidas = db.execute("SELECT count(*) FROM note_links WHERE src=? AND resolve=1",
+                            (r["slug"],)).fetchone()[0]
+        ilha = "  (ilha: também não cita ninguém)" if not saidas else ""
+        print(f"  {r['slug']}{ilha}")
+        problemas += 1
+
     print("\n== Pares muito semelhantes (possível duplicação) ==")
     notas = list(db.execute("SELECT slug, titulo, corpo FROM notes"))
     if len(notas) > 1:
@@ -575,10 +775,104 @@ def cmd_estado(args, db=None):
         if c:
             print(f"    {f:<12} {c}")
     print(f"  vetores        {q('SELECT count(*) FROM chunks_vec')}")
+    print(f"  ligações       {q('SELECT count(*) FROM note_links WHERE resolve=1')}"
+          f" entre notas")
+    partidas = q("SELECT count(*) FROM note_links WHERE resolve=0")
+    if partidas:
+        print(f"    partidas     {partidas}")
+    print(f"    sem citação  {q('SELECT count(*) FROM notes WHERE slug NOT IN'
+                                ' (SELECT dst FROM note_links WHERE resolve=1)')}")
+    print(f"  percursos      {q('SELECT count(*) FROM traces')}")
     print(f"  entidades      {q('SELECT count(*) FROM entities')}")
     print(f"  relações       {q('SELECT count(*) FROM relations')}")
     if DB.exists():
         print(f"  tamanho        {DB.stat().st_size / 1e6:.1f} MB")
+
+
+# Quantas notas se injectam automaticamente em cada pergunta. Três é o que
+# cabe sem afogar o contexto: título e resumo, nunca o corpo — quem quiser o
+# corpo abre a nota, e assim a injecção custa dezenas de tokens e não milhares.
+CONTEXTO_N = 3
+
+
+def cmd_exportar(args):
+    from okf import main as okf_main  # noqa: PLC0415
+
+    sys.argv = ["okf.py"] + ([args.destino] if args.destino else []) \
+        + (["--verificar"] if args.verificar else [])
+    return okf_main()
+
+
+def cmd_contexto(args):
+    """Bloco compacto para um hook injectar antes de o agente pensar.
+
+    Não grava percurso: isto dispara em cada pergunta, e encheria o registo
+    de consultas que ninguém pediu, expulsando as deliberadas.
+    """
+    db = conectar()
+    res = [r for r in buscar(db, args.pergunta, CONTEXTO_N * 3, gravar=False)
+           if r["fonte"] == "nota"][:CONTEXTO_N]
+    if not res:
+        return 0
+    print("Da memória do projeto (docs/memoria/notas/), possivelmente relevante:")
+    for r in res:
+        vig = f" — EXPIRADA em {r['valid_to']}" if r["valid_to"] else ""
+        print(f"- [[{r['ref']}]] ({r['tipo']}/{r['dominio']}{vig})")
+        # O resumo é a melhor linha que há — excepto quando só repete o
+        # título, que é o caso em quase metade das notas herdadas da migração.
+        # Aí vale mais um pedaço do corpo: o título já foi mostrado acima, e
+        # repeti-lo gasta contexto em todas as perguntas sem dizer nada.
+        linha_db = db.execute("SELECT resumo, titulo FROM notes WHERE slug=?",
+                              (r["ref"],)).fetchone()
+        resumo = linha_db["resumo"] if linha_db else None
+        titulo = (linha_db["titulo"] if linha_db else "") or ""
+        if not resumo or resumo == titulo or resumo.startswith(titulo[:60]):
+            resumo = " ".join(r["texto"].split())[:190] + "…"
+        print(f"  {resumo}")
+    print("Isto é um palpite da busca, não uma resposta: confirma antes de usar,"
+          " lendo a nota com `mem.py buscar` ou o agente bibliotecario.")
+    return 0
+
+
+def cmd_sonhar(args):
+    from sonhar import relatorio, sonhar  # noqa: PLC0415
+
+    db = conectar()
+    s = sonhar(db, com_duplicados=not args.rapido)
+    print(relatorio(s), end="")
+    return 1 if any(s.values()) else 0
+
+
+def cmd_percursos(args):
+    from percursos import listar, ler  # noqa: PLC0415
+
+    db = conectar()
+    if args.id:
+        t = ler(db, args.id)
+        if not t:
+            print("percurso inexistente")
+            return 1
+        print(f'#{t["id"]}  {t["ts"]}  {t["origem"]}  {t["duracao_ms"]}ms')
+        print(f'  pergunta: {t["pergunta"]}')
+        if t["filtros"] and t["filtros"] != "{}":
+            print(f'  filtros:  {t["filtros"]}')
+        for x in t["passos"]:
+            if x["acao"] == "achou":
+                print(f'  {x["posicao"]:>3}. [{x["canal"]}] {x["ponto"]:.4f}'
+                      f'  {x["fonte"]:<10} {x["ref"]}')
+            else:
+                print(f'   ->  abriu {x["ref"]}')
+        return 0
+    for t in listar(db, args.limite):
+        print(f'#{t["id"]:<4} {t["ts"][:16].replace("T", " ")}  {t["origem"]:<4}'
+              f' {t["duracao_ms"]:>5}ms  {t["notacao"]}')
+    return 0
+
+
+def cmd_servir(args):
+    from servir import servir  # noqa: PLC0415  só carrega quando é preciso
+
+    return servir(args.porta, args.host, args.verboso)
 
 
 def cmd_grafo(args):
@@ -639,6 +933,31 @@ def main():
 
     s = sub.add_parser("auditar", help="contradições e obsolescência")
     s.set_defaults(fn=cmd_auditar)
+
+    s = sub.add_parser("servir", help="abre a memória no browser")
+    s.add_argument("--porta", type=int, default=7373)
+    s.add_argument("--host", default="127.0.0.1")
+    s.add_argument("-v", "--verboso", action="store_true")
+    s.set_defaults(fn=cmd_servir)
+
+    s = sub.add_parser("percursos", help="como se chegou às últimas respostas")
+    s.add_argument("--id", type=int, help="detalhe de um percurso")
+    s.add_argument("--limite", type=int, default=20)
+    s.set_defaults(fn=cmd_percursos)
+
+    s = sub.add_parser("exportar", help="bundle OKF (derivado, descartável)")
+    s.add_argument("destino", nargs="?")
+    s.add_argument("--verificar", action="store_true")
+    s.set_defaults(fn=cmd_exportar)
+
+    s = sub.add_parser("contexto", help="notas relevantes a uma pergunta")
+    s.add_argument("pergunta")
+    s.set_defaults(fn=cmd_contexto)
+
+    s = sub.add_parser("sonhar", help="o que há a consolidar")
+    s.add_argument("--rapido", action="store_true",
+                   help="salta os duplicados (poupa uma passagem de embeddings)")
+    s.set_defaults(fn=cmd_sonhar)
 
     s = sub.add_parser("estado", help="números do índice")
     s.set_defaults(fn=cmd_estado)

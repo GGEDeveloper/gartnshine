@@ -23,7 +23,9 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[3]
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "bin"))
+from mem import RAIZ  # noqa: E402  a raiz do projeto é do motor
 ENV = RAIZ / "gonzagas_node" / ".env"
 
 OK, AVISO, MAU = "ok", "aviso", "mau"
@@ -159,6 +161,114 @@ def ver_seo() -> list[dict]:
     return out
 
 
+PROD = "https://artnshine.pt"
+
+
+def ver_producao() -> list[dict]:
+    """Lê o feed publicado. É a única via de consulta a produção a partir daqui.
+
+    O waphix só encaminha 80/443 no router, por isso não há SSH nem MySQL
+    directo; o site está ainda atrás da Cloudflare. O feed, o sitemap e o
+    robots são públicos e sem autenticação — e é por aí que se vê o estado
+    real, que **não** é o da base local.
+    """
+    import urllib.error  # noqa: PLC0415
+    import urllib.request  # noqa: PLC0415
+
+    out = []
+    try:
+        req = urllib.request.Request(
+            f"{PROD}/feed/products.xml",
+            headers={"User-Agent": "memoria-monitor/1.0 (leitura)"})
+        with urllib.request.urlopen(req, timeout=45) as r:
+            xml = r.read().decode("utf-8", "ignore")
+    except (urllib.error.URLError, OSError, TimeoutError) as e:
+        out.append({"chave": "producao.feed", "estado": AVISO,
+                    "msg": f"não consegui ler o feed de produção ({e})"})
+        return out
+
+    itens = re.findall(r"<item>.*?</item>", xml, re.S)
+    precos = [re.search(r"<g:price>([\d.]+)", i) for i in itens]
+    zero = sum(1 for p in precos if p and float(p.group(1)) == 0)
+    stock = len(re.findall(r"<g:availability>in_stock", xml))
+
+    out.append({"chave": "producao.feed_itens", "valor": len(itens), "estado": OK,
+                "msg": f"{len(itens)} itens no feed publicado em {PROD}"})
+    out.append({"chave": "producao.preco_zero", "valor": zero,
+                "estado": OK if zero == 0 else MAU,
+                "msg": (f"{zero} itens publicados com <g:price>0.00 EUR</g:price>"
+                        if zero else "nenhum item publicado com preço zero")})
+    out.append({"chave": "producao.em_stock", "valor": stock, "estado": OK,
+                "msg": f"{stock}/{len(itens)} publicados como in_stock"})
+
+    # A diferença entre as duas bases é informação, não erro: a local costuma
+    # estar atrasada. Vale a pena vê-la em número.
+    loc = consultar("SELECT SUM(sale_price IS NULL OR sale_price=0) z"
+                    " FROM products WHERE is_active=1")
+    if loc:
+        zl = _n(loc[0]["z"])
+        dif = zl - zero
+        out.append({"chave": "producao.divergencia_precos", "valor": dif,
+                    "estado": OK if dif == 0 else AVISO,
+                    "msg": (f"local tem {zl} sem preço, produção {zero} — "
+                            f"a base local está {dif} atrás"
+                            if dif > 0 else
+                            f"local {zl}, produção {zero} — local à frente")})
+    return out
+
+
+def ver_feed() -> list[dict]:
+    """O que a base LOCAL produziria no feed. Não é o que está publicado.
+
+    `getAllForMerchantFeed()` filtra apenas por `is_active = 1`, sem olhar ao
+    preço — e o feed escreve `0.00 EUR` quando não há preço. É a mesma
+    armadilha do €0,00 que foi corrigida em quatro vistas mas não aqui.
+    """
+    out = []
+    r = consultar("""
+        SELECT COUNT(*) total,
+          SUM(sale_price IS NULL OR sale_price=0) preco_zero,
+          SUM(deleted_at IS NOT NULL) apagados,
+          SUM(current_stock > 0) em_stock
+        FROM products WHERE is_active = 1""")
+    if not r:
+        return out
+    d = r[0]
+    total, zero = _n(d["total"]), _n(d["preco_zero"])
+
+    out.append({"chave": "feed.itens", "valor": total, "estado": OK,
+                "msg": f"{total} produtos entrariam no feed a partir da BD local"})
+
+    # Preço 0,00 faz o Merchant Center recusar o item — ou, pior, publicá-lo.
+    out.append({"chave": "feed.preco_zero", "valor": zero,
+                "estado": OK if zero == 0 else MAU,
+                "msg": (f"{zero} itens da BD local dariam <g:price>0.00 EUR</g:price>"
+                        if zero else "nenhum item com preço zero no feed")})
+
+    apag = _n(d["apagados"])
+    out.append({"chave": "feed.apagados", "valor": apag,
+                "estado": OK if apag == 0 else MAU,
+                "msg": (f"{apag} produtos com deleted_at entram no feed — falta"
+                        " o filtro" if apag else
+                        "nenhum produto apagado no feed")})
+
+    # Sem imagem principal o item cai no og-artnshine.jpg genérico.
+    sem_img = consultar("""
+        SELECT COUNT(*) n FROM products p WHERE p.is_active = 1
+          AND NOT EXISTS (SELECT 1 FROM product_images pi
+                          WHERE pi.product_id = p.id AND pi.is_primary = 1)""")
+    if sem_img:
+        n = _n(sem_img[0]["n"])
+        out.append({"chave": "feed.sem_imagem_principal", "valor": n,
+                    "estado": OK if n == 0 else AVISO,
+                    "msg": f"{n} itens sem imagem principal — o feed serve a genérica"})
+
+    out.append({"chave": "feed.em_stock", "valor": _n(d["em_stock"]),
+                "estado": OK,
+                "msg": f"{_n(d['em_stock'])}/{total} anunciados como in_stock"})
+    return out
+
+
 def ver_git() -> list[dict]:
     def g(*a):
         return subprocess.run(["git", *a], cwd=RAIZ, capture_output=True,
@@ -244,6 +354,8 @@ def ver_media() -> list[dict]:
 
 
 SECCOES = [("Catálogo", ver_catalogo), ("SEO", ver_seo),
+           ("Feed local (o que a BD local daria)", ver_feed),
+           ("Produção publicada", ver_producao),
            ("Git e integração", ver_git), ("Media", ver_media)]
 
 

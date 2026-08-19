@@ -17,8 +17,9 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[3]
-TRANSCRIPTS = Path.home() / ".claude" / "projects" / "-home-ggedeveloper-gartnshine-3"
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from mem import RAIZ, TRANSCRIPTS  # noqa: E402  raízes definidas no motor
 
 # Ficheiros e pastas cujo conteúdo não é conhecimento do projeto.
 EXCLUIR = re.compile(

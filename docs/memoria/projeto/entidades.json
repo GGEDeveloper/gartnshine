@@ -1,0 +1,6 @@
+{
+  "_comentario": "Regras de tipagem próprias desta biblioteca. O motor em bin/ só sabe reconhecer ficheiros e símbolos, porque isso vale em qualquer projecto; o que é um produto ou uma categoria é conhecimento deste negócio e vive aqui. Tipo -> lista de expressões regulares, aplicadas antes das universais.",
+  "produto": ["^[A-Z]{2,4}[0-9]{4}$"],
+  "categoria": ["^(An[eé]is|Colares|Pulseiras|Pendentes|Brincos|Conjuntos|Fios|Argolas)\\s+-\\s+(Prata|Lat[aã]o|A[çc]o)$"],
+  "tabela": ["^(products|categories|customers|orders|cart_sessions|analytics_[a-z_]+|product_images|collections)$"]
+}
