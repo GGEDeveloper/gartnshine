@@ -27,7 +27,29 @@ $V docs/memoria/bin/mem.py buscar "..." --dominio design --tipo decisao
 $V docs/memoria/bin/mem.py grafo "PPU0080" --saltos 2
 $V docs/memoria/bin/mem.py indexar                  # depois de escrever
 $V docs/memoria/bin/mem.py auditar                  # contradições
-$V docs/memoria/bin/monitor.py                      # estado real (só-leitura)
+$V docs/memoria/projeto/monitor.py                      # estado real (só-leitura)
+$V docs/memoria/bin/mem.py servir                   # UI local: grafo, fichas, percursos, sonho
+$V docs/memoria/bin/mem.py sonhar                   # o que há a consolidar, com a instrução de cada frente
+$V docs/memoria/bin/capturar.py propor              # quem já é dono do que se mexeu
+
+## Antes de escrever, pergunta de quem é o território
+
+Corre sempre `capturar.py propor` antes de criar uma nota. Ele diz que notas
+já declaram vir dos ficheiros que mudaram — e daí sai **enriquecer**,
+**suceder** ou **criar**, por esta ordem de preferência. Uma segunda nota
+sobre um ficheiro que já tem dona é o começo de uma contradição.
+
+O `sonhar` traz três sinais que medem a biblioteca **contra o repositório** e
+não contra si própria: proveniência a apontar para ficheiros que já não
+existem, notas cujo ficheiro de origem mudou depois de elas terem sido
+conferidas, e notas que afirmam coisas sobre o mundo sem verificação há mais
+de quatro meses. Quando confirmares que uma nota continua verdadeira, deixa
+`> Verificado a <hoje>` — é isso que a tira da lista, e a ausência do bloco é
+o que a põe lá.
+
+Nota o caso à parte: uma nota sobre um **período fechado** (uma fase, um lote)
+que aparece como desactualizada não está errada — está por fechar. Põe-lhe
+`valid_to` na data em que o período acabou.
 $V docs/memoria/bin/cronograma.py                   # linha temporal
 ```
 

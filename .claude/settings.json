@@ -35,6 +35,18 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "docs/memoria/bin/hook-sessao.sh relevante",
+            "timeout": 10,
+            "statusMessage": "A consultar a memória…"
+          }
+        ]
+      }
     ]
   }
 }

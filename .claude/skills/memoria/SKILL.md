@@ -38,7 +38,12 @@ $V docs/memoria/bin/mem.py estado          # números do índice
 $V docs/memoria/bin/mem.py indexar         # depois de escrever notas
 $V docs/memoria/bin/mem.py reconstruir     # do zero (--completo inclui transcripts/docs/commits)
 $V docs/memoria/bin/mem.py auditar         # contradições, órfãos, duplicados
-$V docs/memoria/bin/monitor.py             # estado real do projeto (só-leitura)
+$V docs/memoria/projeto/monitor.py             # estado real do projeto (só-leitura)
+$V docs/memoria/bin/mem.py servir          # abre a memória no browser (grafo, fichas, percursos, sonho)
+$V docs/memoria/bin/mem.py sonhar          # o que há a consolidar (mede, aponta, não escreve)
+$V docs/memoria/bin/mem.py percursos       # como se chegou às últimas respostas
+$V docs/memoria/bin/capturar.py propor     # o que esta sessão deixou por memorizar
+$V docs/memoria/bin/okf.py                # exporta um bundle Open Knowledge Format v0.2
 $V docs/memoria/bin/cronograma.py          # linha temporal por fases
 $V docs/memoria/bin/capturar.py estado     # confiança por categoria
 ```
@@ -66,6 +71,27 @@ Para uma nota rápida, o essencial:
 Depois de escrever, correr `mem.py indexar`.
 
 ## Capturar no fim de uma sessão
+
+**Começa sempre pelo dossiê**, que responde à pergunta que ninguém consegue
+responder de cabeça — *quem já é dono do que mexeste*:
+
+```
+$V docs/memoria/bin/capturar.py propor
+```
+
+Dele sai a decisão entre três, e a ordem importa:
+
+1. **Enriquecer** — o assunto já tem nota dona e o que ela diz continua
+   verdade. Acrescenta-se ao corpo; se se mediu alguma coisa, deixa-se um
+   bloco `> Verificado a <hoje>`.
+2. **Suceder** — tem dona, mas o que ela diz deixou de ser verdade. Escreve-se
+   a sucessora, fecha-se a antiga com `valid_to` e aponta-se `superseded_by`.
+   **Nunca reescrever por cima.**
+3. **Criar** — assunto novo. Declarar `sources: ficheiro:<caminho>` e citar
+   pelo menos uma nota vizinha com `[[slug]]`, senão nasce órfã.
+
+Criar uma segunda nota sobre um ficheiro que já tem dona é como a biblioteca
+começa a contradizer-se.
 
 O sistema aprende quanto deve perguntar:
 

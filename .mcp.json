@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "memoria": {
+      "command": "docs/memoria/.venv/bin/python",
+      "args": ["docs/memoria/bin/mcp.py"],
+      "env": {}
+    }
+  }
+}
