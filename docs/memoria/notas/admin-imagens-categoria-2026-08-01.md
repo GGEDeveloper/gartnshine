@@ -57,4 +57,4 @@ permitir customizar a página pública e o enquadramento das imagens.
 negociação de formato — o WebP é gerado mas não servido. Fica para quando se
 converterem em `<picture>`.
 
-Ver [[project-design-system-2026-08-01]].
+Ver [[design-system-2026-08-01]].

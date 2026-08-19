@@ -16,17 +16,17 @@ entities:
   - products
   - product_images
 sources:
-  - ficheiro:docs/memoria/bin/monitor.py
+  - ficheiro:docs/memoria/projeto/monitor.py
   - conversa:2026-08-17
 relations:
   - monitor.py | verifica | products
 ---
 
-`docs/memoria/bin/monitor.py` mede o estado real e compara-o com o esperado.
+`docs/memoria/projeto/monitor.py` mede o estado real e compara-o com o esperado.
 Corre com o Python do ambiente da memória e **só faz leituras**:
 
 ```
-docs/memoria/.venv/bin/python docs/memoria/bin/monitor.py
+docs/memoria/.venv/bin/python docs/memoria/projeto/monitor.py
 ```
 
 Sai com código 1 se houver problemas, 0 caso contrário — serve para correr
@@ -77,3 +77,9 @@ A base local **não** tem coluna `price` — tem `sale_price`, `base_price` e
 `purchase_price`. Há também `active` **e** `is_active`, ambas preenchidas.
 Introspeccionar antes de escrever queries; o schema local difere do de
 produção, ver [[db-dev-vs-production]].
+
+> **Verificado a 2026-08-19:** o `monitor.py` saiu de `bin/` para
+> `projeto/` quando o motor da memória se separou do que é específico
+> deste projeto — `bin/` passou a ser motor puro, que viaja para outros
+> centros de memória, e o monitor sabe de preços e stock, que não viajam.
+> Os comandos aqui em cima já apontam para o sítio novo.

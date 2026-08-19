@@ -35,7 +35,7 @@ extraíram-se 8 assets para `gonzagas_node/public/brand/*.svg`.
 - O **lockup empilhado não está especificado**. A fonte mostra as duas
   palavras em coluna mas com escalas e traços independentes (498px vs 240px,
   gap 34px) — é figura de documento, não lockup desenhado. Não foi gerado
-  ficheiro de propósito. Ver [[project-design-system-2026-08-01]].
+  ficheiro de propósito. Ver [[design-system-2026-08-01]].
 
 **Decisões tomadas (recomendadas por mim, o utilizador ainda não confirmou):**
 
@@ -50,4 +50,4 @@ extraíram-se 8 assets para `gonzagas_node/public/brand/*.svg`.
 
 **Armadilha de auditoria:** `views/error/404.ejs` tem o layout partido e o
 site tem 3 línguas (PT, EN, pt-BR). O `/sobre` dá 404 mas isso é normal — o
-header aponta para `/about`. Ver [[project-conta-obrigatoria-checkout]].
+header aponta para `/about`. Ver [[conta-obrigatoria-checkout]].

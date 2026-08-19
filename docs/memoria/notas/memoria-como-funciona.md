@@ -133,3 +133,60 @@ estado; `fase-4-fevereiro-2026` é facto.
 Foi a auditoria automática que apanhou este erro, não a revisão à mão. Correr
 `auditar` depois de escrever em lote — apanha estados por fechar, notas sem
 proveniência e pares acima de 0,88 de semelhança.
+
+> **Verificado a 2026-08-19.** Tudo acima continua verdade. O sistema cresceu
+> por baixo desta nota, e isto é o que ela ainda não dizia.
+
+## O que se acrescentou em 2026-08-18/19
+
+**O grafo passou a ser das notas, e não das entidades.** Os `[[wikilinks]]`
+do corpo viram arestas na tabela `note_links` — uma ligação escrita à mão vale
+muito mais do que a co-ocorrência de entidades, que era ruído. Ver
+[[memoria-grafo-wikilinks]].
+
+**Há uma UI.** `mem.py servir` abre a memória em `127.0.0.1:7373`: ficha de
+cada nota, grafo, percursos e o sonho. Sem passo de build. Ver
+[[memoria-understory-e-ui]] para o porquê de não se ter forkado o understory.
+
+**Percursos.** Cada busca regista o que devolveu, e as leituras seguintes
+penduram-se nela dentro de 30 minutos. Serve para ver, sobre o grafo, o
+caminho que uma pergunta percorreu. É telemetria e não memória: vive só no
+índice, e poda-se aos 400.
+
+**`mem.py sonhar`** mede o que há a consolidar sem perguntar nada a um modelo
+generativo. Dez frentes, das quais três medem a biblioteca **contra o
+repositório** e não contra si própria: proveniência que aponta a ficheiros que
+já não existem, notas cujo ficheiro de origem mudou depois de elas terem sido
+conferidas, e notas que afirmam coisas sobre o mundo sem verificação há mais
+de quatro meses. Foi este sinal que apanhou esta nota.
+
+**`capturar.py propor`** faz a pergunta inversa: dado o que mudou no
+repositório, que notas já são donas desse território? É de aí que sai a
+decisão entre **enriquecer, suceder e criar** — sem ela, a biblioteca enche-se
+de notas quase iguais sobre o mesmo ficheiro.
+
+**Servidor MCP** (`bin/mcp.py`), JSON-RPC à mão, sem dependências. Cinco
+ferramentas, por stdio e em `/mcp`. O `initialize` devolve um retrato da
+biblioteca, e a descrição da ferramenta de procura repete-o — um cliente que
+só veja nomes de ferramentas nunca ganha o instinto de consultar a memória.
+
+**Duas raízes, e não uma.** `MEM_BIBLIOTECA` (onde a memória vive) e
+`MEM_PROJETO` (o repositório documentado) deixaram de ser o mesmo caminho
+soldado. O `monitor.py` saiu de `bin/` para `projeto/`: `bin/` é motor e
+viaja, `projeto/` sabe de preços e stock e fica.
+
+**O índice põe-se em dia sozinho.** O `conectar()` compara um hash do
+`esquema.sql` com o que está no `meta`; quando o esquema cresce, aplica-o.
+Antes, a primeira busca depois de uma tabela nova rebentava com
+*no such table*.
+
+### Duas armadilhas novas, pagas
+
+**Vectores órfãos.** Apagar uma nota levava os fragmentos mas deixava os
+vectores: `chunks_vec` é tabela virtual e não tem cascata. O sintoma não é um
+erro — é **recall que se perde em silêncio**, porque cada órfão ocupa lugar no
+`k=60` da busca vectorial e é depois descartado sem ninguém dar por isso.
+
+**O ollama descarrega o modelo.** Com a injecção automática em cada pergunta,
+o arranque a frio (2,1 s contra 240 ms) passaria a ser a experiência normal.
+Resolve-se com `keep_alive` no pedido de embedding.

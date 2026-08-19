@@ -46,4 +46,4 @@ peças com furo, o caminho que funcionou foi limpar o recorte antigo por cor:
 matar os pixéis ao mesmo tempo claros (luminância > 128) e sem cor
 (saturação < 0.20), que é cartolina, não pedra.
 
-Ver [[project-marca-gonzaga-2026-08-04]] e [[project-lote-julho-2026]].
+Ver [[marca-gonzaga-2026-08-04]] e [[lote-julho-2026]].

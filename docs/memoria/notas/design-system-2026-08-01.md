@@ -66,5 +66,5 @@ acrescenta-se à escala no design-system, não se escreve o literal no component
 **Estado verificado no fim:** contraste WCAG AA sem violações em 22 vistas,
 CLS < 0.1 em todas as páginas, zero transbordo horizontal a 390px e 1440px.
 
-Ver [[project-admin-imagens-categoria-2026-08-01]] e
-[[project-seo-audit-2026-07-30]].
+Ver [[admin-imagens-categoria-2026-08-01]] e
+[[seo-audit-2026-07-30]].

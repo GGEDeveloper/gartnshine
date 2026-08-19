@@ -13,7 +13,7 @@ sources:
   - migracao:project_media_local_vs_producao.md
 ---
 
-`gonzagas_node/public/media/products/` no WSL é um espelho **incompleto** de produção. Em 2026-08-09, de 18 famílias com imagens em BD, `Gargantilhas - Latão` (18 ficheiros) e metade de `Cuffs - Latão` (20 ficheiros) não existiam no disco local, e `Pulseiras Pé - Prata` tinha 6 produtos sem qualquer linha em `product_images` localmente — mas com fotos em produção. A divergência é do mesmo tipo que a de schema descrita em [[project-db-dev-vs-production]]: a BD local também está atrasada em relação a produção.
+`gonzagas_node/public/media/products/` no WSL é um espelho **incompleto** de produção. Em 2026-08-09, de 18 famílias com imagens em BD, `Gargantilhas - Latão` (18 ficheiros) e metade de `Cuffs - Latão` (20 ficheiros) não existiam no disco local, e `Pulseiras Pé - Prata` tinha 6 produtos sem qualquer linha em `product_images` localmente — mas com fotos em produção. A divergência é do mesmo tipo que a de schema descrita em [[db-dev-vs-production]]: a BD local também está atrasada em relação a produção.
 
 > **Verificado a 2026-08-18 — a lacuna concreta desapareceu.** Os **544**
 > registos de `product_images` têm hoje **todos** ficheiro local: zero em

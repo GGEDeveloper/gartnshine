@@ -20,7 +20,7 @@ sources:
 ---
 
 Trabalho de **2026-08-11**: reabordagem das capas de categoria com a media nova
-de [[project-media-nova-2026-08]]. Proposta em
+de [[media-nova-2026-08]]. Proposta em
 `gonzagas_node/scripts/category-headers/capas-foto.js` + `capas-foto.json`,
 com a explicação no README dessa pasta. Página de decisão publicada em
 https://claude.ai/code/artifact/d857c1f4-a43e-4cfa-ad8f-324dcccda044
@@ -62,4 +62,4 @@ pulso ou em tabuleiro — a pior), `pulseiras-pe-prata`, `aneis-latao`,
 **Por confirmar com quem tem as peças:** `IMG-20260226-WA0072`, que proponho
 para `pulseiras-latao`, pode ser uma gargantilha.
 
-Ver [[project-capas-categorias-fundo-frio]] e [[project-marca-gonzaga-2026-08-04]].
+Ver [[capas-categorias-fundo-frio]] e [[marca-gonzaga-2026-08-04]].

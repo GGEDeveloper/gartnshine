@@ -85,5 +85,5 @@ eram trabalho novo. A BD local também as tem, com preços.
 próximo número livre por prefixo (`PAN0091`+, `PNC0007`, `PNP0001`,
 `LTPD0006`–`0007`).
 
-Ver [[project-fotografia-ambiente-2026-08]], [[project-media-local-vs-producao]]
-e [[project-waphix-production-infra]].
+Ver [[fotografia-ambiente-2026-08]], [[media-local-vs-producao]]
+e [[waphix-production-infra]].

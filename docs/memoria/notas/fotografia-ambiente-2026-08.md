@@ -57,4 +57,4 @@ Corta-se sempre o céu azul e o amarelo (cores proibidas pela paleta TERRA).
 (`ImageDescription` e `XPKeywords`), não num JSON à parte — ver
 `metadados.js`. Assim viaja com a imagem.
 
-Ver [[project-lote-julho-2026]] e [[project-marca-gonzaga-2026-08-04]].
+Ver [[lote-julho-2026]] e [[marca-gonzaga-2026-08-04]].

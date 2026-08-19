@@ -71,7 +71,7 @@ do assunto: mesma peça dá 21 a 43 de diferença média, peça diferente dá 20
 Sobrepõe-se por inteiro, porque 90 % do enquadramento é fundo idêntico. A lista
 automática de 226 remoções apagava dez anéis distintos. **A medida serve só para
 agrupar por cena; a escolha dentro da cena tem de ser a olho.** É o mesmo achado
-que [[project-fotografia-ambiente-2026-08]] regista para o dHash.
+que [[fotografia-ambiente-2026-08]] regista para o dHash.
 
 **Nitidez: medir por celas de 1/14 da imagem e valer a melhor.** A pergunta certa
 é «existe um sítio focado?», não «quanta imagem está focada» — profundidade de
@@ -87,5 +87,5 @@ pasta para datar nem para nomear.
 contra a proibição do azul da paleta TERRA); as bancadas de feira (mostram peças
 de outros expositores).
 
-Ver [[project-lote-julho-2026]], [[project-marca-gonzaga-2026-08-04]] e
-[[project-capas-categorias-fundo-frio]].
+Ver [[lote-julho-2026]], [[marca-gonzaga-2026-08-04]] e
+[[capas-categorias-fundo-frio]].

@@ -36,4 +36,4 @@ A 2026-08-01 a loja passou a exigir conta para **finalizar** a compra. Decisões
 > (`CONFIG_KEYS = ['SMTP_HOST']`) e nesse caso `enviar()` devolve `false` em
 > vez de falhar. Continua tudo por fazer.
 
-**How to apply:** o SMTP continua **por configurar** — o utilizador disse que arranja credenciais. Até lá a recuperação de password avisa e encaminha para WhatsApp, e o deploy não deve avançar sem elas (ver `docs/DEPLOY_CONTA_OBRIGATORIA.md`, Passo 2). Por validar em produção: envio real de email e login com Google. Ver também [[project-painel-clientes-carrinhos]] e [[project-db-dev-vs-production]].
+**How to apply:** o SMTP continua **por configurar** — o utilizador disse que arranja credenciais. Até lá a recuperação de password avisa e encaminha para WhatsApp, e o deploy não deve avançar sem elas (ver `docs/DEPLOY_CONTA_OBRIGATORIA.md`, Passo 2). Por validar em produção: envio real de email e login com Google. Ver também [[painel-clientes-carrinhos]] e [[db-dev-vs-production]].

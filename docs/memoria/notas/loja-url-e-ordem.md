@@ -84,5 +84,5 @@ Qualquer número novo mostrado ao público tem de respeitar `hide_out_of_stock` 
 `is_catalog_visible`. Há um teste que compara o total das setas com o que
 `/loja?categoria=<slug>` anuncia.
 
-Ver [[project-conceitos-categoria-colecao-galeria]] e
-[[project-seo-audit-2026-07-30]].
+Ver [[conceitos-categoria-colecao-galeria]] e
+[[seo-audit-2026-07-30]].

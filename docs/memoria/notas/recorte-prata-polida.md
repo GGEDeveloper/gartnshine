@@ -59,5 +59,5 @@ pela base de dados. Agora junta com o que lá estava.
 
 **Estado:** `aneis-prata` (cat-1) e `pulseiras-prata` (cat-4) refeitos com o
 lote de Julho. As outras seis famílias de prata ainda têm as peças antigas no
-`manifest.json`. Ver [[project-capas-categorias-fundo-frio]] e
-[[project-capas-fotografia-2026-08-11]].
+`manifest.json`. Ver [[capas-categorias-fundo-frio]] e
+[[capas-fotografia-2026-08-11]].

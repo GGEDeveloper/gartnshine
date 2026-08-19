@@ -37,7 +37,7 @@ A **loja** vive em `/loja` e as fichas em `/loja/produto/:slug` (era
 antigo de propósito: são internos e não são URLs públicos.
 
 A loja filtra por `?categoria=<slug>`, não por id — ver
-[[project-loja-url-e-ordem]] para o contrato completo dos endereços.
+[[loja-url-e-ordem]] para o contrato completo dos endereços.
 
 Endereços antigos, todos com 301 permanente e a **não reutilizar**:
 `/collection/:id` → `/categoria/:slug`, `/collections` → `/galeria`,
@@ -91,4 +91,4 @@ funcionalidade que dependa dele não funciona — foi o que aconteceu ao módulo
 `voltar.js`, cuja melhoria nunca chegava a activar. Usar `sessionStorage` para
 seguir percurso dentro do separador, em vez de baixar a política.
 
-Ver [[project-seo-audit-2026-07-30]] e [[project-estado-2026-07-30]].
+Ver [[seo-audit-2026-07-30]] e [[estado-2026-07-30]].
