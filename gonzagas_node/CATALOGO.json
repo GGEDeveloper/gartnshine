@@ -1,0 +1,256 @@
+{
+  "nome": "lettering2",
+  "versao": "1.0",
+  "data": "2026-08-19",
+  "origem": "Tracado por ajuste de linha ao eixo de cada traco na fotografia do lettering original.",
+  "grelha": {
+    "unidade": "u",
+    "altura_maiuscula": 200,
+    "linha_base": 270,
+    "topo_plano": 70,
+    "cintura_losango": 164,
+    "traco": 15,
+    "viewBox_letras": "0 0 200 330 (W: 0 0 260 330)"
+  },
+  "ficheiros": [
+    {
+      "id": "letra-g",
+      "ficheiro": "letras/G.svg",
+      "tipo": "letra",
+      "letra": "G",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 17,
+        "y": 2,
+        "largura": 161,
+        "altura": 308
+      },
+      "estado": "medido do original"
+    },
+    {
+      "id": "letra-o",
+      "ficheiro": "letras/O.svg",
+      "tipo": "letra",
+      "letra": "O",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 30,
+        "y": 48,
+        "largura": 138,
+        "altura": 232
+      },
+      "estado": "medido do original"
+    },
+    {
+      "id": "letra-n",
+      "ficheiro": "letras/N.svg",
+      "tipo": "letra",
+      "letra": "N",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 53,
+        "y": 63,
+        "largura": 95,
+        "altura": 226
+      },
+      "estado": "medido do original",
+      "nota": "eixo original era a haste esquerda; deslocado -37 u para centrar na grelha"
+    },
+    {
+      "id": "letra-z",
+      "ficheiro": "letras/Z.svg",
+      "tipo": "letra",
+      "letra": "Z",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 28,
+        "y": 69,
+        "largura": 143,
+        "altura": 205
+      },
+      "estado": "medido do original"
+    },
+    {
+      "id": "letra-a",
+      "ficheiro": "letras/A.svg",
+      "tipo": "letra",
+      "letra": "A",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 10,
+        "y": 48,
+        "largura": 166,
+        "altura": 237
+      },
+      "estado": "medido do original"
+    },
+    {
+      "id": "letra-j",
+      "ficheiro": "letras/J.svg",
+      "tipo": "letra",
+      "letra": "J",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 45,
+        "y": 69,
+        "largura": 103,
+        "altura": 205
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "letra-e",
+      "ficheiro": "letras/E.svg",
+      "tipo": "letra",
+      "letra": "E",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 39,
+        "y": 67,
+        "largura": 112,
+        "altura": 204
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "letra-w",
+      "ficheiro": "letras/W.svg",
+      "tipo": "letra",
+      "letra": "W",
+      "viewBox": "0 0 260 330",
+      "tinta": {
+        "x": 21,
+        "y": 67,
+        "largura": 219,
+        "altura": 224
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "letra-l",
+      "ficheiro": "letras/L.svg",
+      "tipo": "letra",
+      "letra": "L",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 39,
+        "y": 70,
+        "largura": 112,
+        "altura": 201
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "letra-r",
+      "ficheiro": "letras/R.svg",
+      "tipo": "letra",
+      "letra": "R",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 39,
+        "y": 70,
+        "largura": 130,
+        "altura": 201
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "letra-y",
+      "ficheiro": "letras/Y.svg",
+      "tipo": "letra",
+      "letra": "Y",
+      "viewBox": "0 0 200 330",
+      "tinta": {
+        "x": 29,
+        "y": 66,
+        "largura": 141,
+        "altura": 204
+      },
+      "estado": "desenhado no mesmo idioma"
+    },
+    {
+      "id": "wordmark",
+      "ficheiro": "wordmark.svg",
+      "tipo": "palavra",
+      "viewBox": "20 10 1117 317",
+      "tinta": {
+        "largura": 1117,
+        "altura": 316
+      },
+      "proporcao": 3.535,
+      "estado": "medido do original"
+    },
+    {
+      "id": "monograma-g",
+      "ficheiro": "monograma-g.svg",
+      "tipo": "monograma",
+      "viewBox": "19 6 161 308",
+      "tinta": {
+        "largura": 161,
+        "altura": 308
+      },
+      "proporcao": 0.523,
+      "estado": "medido do original, barra nivelada",
+      "ar_minimo_u": 80
+    },
+    {
+      "id": "jewellery",
+      "ficheiro": "jewellery.svg",
+      "tipo": "palavra",
+      "viewBox": "0 65 1713 208",
+      "tracking_u": 70,
+      "estado": "provisorio — tracking a confirmar",
+      "letras": [
+        {
+          "letra": "J",
+          "tinta_x": 0,
+          "largura": 103
+        },
+        {
+          "letra": "E",
+          "tinta_x": 173,
+          "largura": 112
+        },
+        {
+          "letra": "W",
+          "tinta_x": 355,
+          "largura": 219
+        },
+        {
+          "letra": "E",
+          "tinta_x": 644,
+          "largura": 112
+        },
+        {
+          "letra": "L",
+          "tinta_x": 826,
+          "largura": 112
+        },
+        {
+          "letra": "L",
+          "tinta_x": 1008,
+          "largura": 112
+        },
+        {
+          "letra": "E",
+          "tinta_x": 1190,
+          "largura": 112
+        },
+        {
+          "letra": "R",
+          "tinta_x": 1372,
+          "largura": 130
+        },
+        {
+          "letra": "Y",
+          "tinta_x": 1572,
+          "largura": 141
+        }
+      ]
+    }
+  ],
+  "cor": {
+    "atributo": "fill=\"currentColor\"",
+    "nota": "Como <img> a tinta sai preta (valor inicial de color). Para outra cor: inserir o SVG em linha e definir color, ou usar mask-image com background da cor desejada."
+  }
+}

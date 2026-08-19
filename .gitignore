@@ -187,3 +187,12 @@ docs/db/
 # Ambiente da biblioteca de memória (reconstruível, não versionar)
 docs/memoria/.venv/
 docs/memoria/estado/
+
+# Área de trabalho da fotografia: originais em bruto que se catalogam e de
+# onde se escolhem umas poucas para o site. Não são entregáveis — das 580
+# catalogadas em Agosto de 2026 foram escolhidas 45. Ver a nota
+# `media-nova-2026-08`. São 2,6 GB, e o git guardaria todas as versões para
+# sempre; o que é escolhido vive em gonzagas_node/public/media/, esse sim
+# versionado.
+temporario-nova-media/
+temporario-novo-stocks/
