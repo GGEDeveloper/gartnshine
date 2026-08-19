@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memória do projeto</title>
+<link rel="stylesheet" href="estilo.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<aside id="lado">
+  <header>
+    <h1>Memória</h1>
+    <p id="resumo-estado">a carregar…</p>
+  </header>
+
+  <form id="form-busca" autocomplete="off">
+    <input id="q" type="search" placeholder="procurar na memória…" aria-label="procurar">
+    <details id="filtros">
+      <summary>filtros</summary>
+      <label>domínio <select id="f-dominio"><option value="">todos</option></select></label>
+      <label>tipo <select id="f-tipo"><option value="">todos</option></select></label>
+      <label title="Mostra o que era verdade nessa data, e não o que é verdade hoje.">
+        como estava a <input id="f-asof" type="date"></label>
+      <label class="check"><input id="f-expirado" type="checkbox"> incluir expiradas</label>
+    </details>
+  </form>
+
+  <nav id="arvore"></nav>
+</aside>
+
+<main>
+  <nav id="abas">
+    <a href="#/nota" data-aba="nota">nota</a>
+    <a href="#/grafo" data-aba="grafo">grafo</a>
+    <a href="#/auditoria" data-aba="auditoria">auditoria</a>
+  </nav>
+  <section id="painel-nota" class="painel"></section>
+  <section id="painel-grafo" class="painel" hidden>
+    <div id="grafo-legenda"></div>
+    <canvas id="tela"></canvas>
+    <aside id="percursos">
+      <header>percursos <button id="limpar-percurso" hidden>limpar</button></header>
+      <ol id="lista-percursos"></ol>
+    </aside>
+    <div id="grafo-info"></div>
+  </section>
+  <section id="painel-auditoria" class="painel" hidden></section>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
