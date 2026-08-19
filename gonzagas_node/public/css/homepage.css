@@ -550,6 +550,69 @@
   margin-top: 0.35em;
 }
 
+/* Lettering 2 — teste do lettering novo (Agosto 2026) no hero, a par do
+   título tipográfico acima. Máscara CSS: a cor vem de background-color,
+   não de `color`, porque o SVG é aplicado como máscara e não como texto. */
+.hero-content--brand .hero-title--lettering2 {
+  align-items: center;
+}
+
+.hero-title-mark {
+  display: block;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  max-width: min(94vw, 900px);
+}
+
+.hero-title-mark--gonzaga {
+  background-color: var(--igp-cream, #f0ece4);
+  -webkit-mask-image: url('/brand/lettering2/wordmark.svg');
+  mask-image: url('/brand/lettering2/wordmark.svg');
+  height: clamp(3.2rem, 11vw, 7.5rem);
+  aspect-ratio: 1117 / 317;
+  width: auto;
+}
+
+.hero-title-mark--jewellery {
+  background-color: var(--igp-gold, #c9a84c);
+  -webkit-mask-image: url('/brand/lettering2/jewellery.svg');
+  mask-image: url('/brand/lettering2/jewellery.svg');
+  margin-top: 0.35em;
+  height: calc(0.33 * clamp(3.2rem, 11vw, 7.5rem));
+  aspect-ratio: 1713 / 208;
+  width: auto;
+}
+
+/* Teste lettering 2: o resto do hero (olho-de-boi, tagline, botões) troca
+   Cinzel (serif redondo) por Quantico — geométrica e angular, a mesma
+   família de traço recto e vértices pontiagudos do lettering novo.
+   Temporário, só o hero. */
+.hero-content--brand .hero-eyebrow,
+.hero-content--brand .hero-tagline,
+.hero-actions .btn-hero {
+  font-family: 'Quantico', var(--font-body);
+}
+
+.hero-content--brand .hero-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.34em;
+}
+
+.hero-content--brand .hero-tagline {
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+.hero-actions .btn-hero {
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
 .hero-divider {
   display: flex;
   justify-content: center;

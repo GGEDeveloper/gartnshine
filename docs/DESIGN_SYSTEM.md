@@ -4,6 +4,13 @@
 **Carregado em:** `views/layouts/main.ejs`, logo a seguir a `variables.css` e
 antes de todas as folhas de componente.
 
+> **A cor não está aqui.** Esta camada fixa espaçamento, tipo, raios,
+> contentores e camadas — a cor foi a única escala que ficou por fixar, e é
+> hoje onde a divergência se concentra (363 literais, 84 valores distintos,
+> sete dourados). A paleta e os tokens de papel estão em
+> [`marca/03-cor.md`](marca/03-cor.md); as regras de marca que mandam nesta
+> implementação estão em [`marca/`](marca/README.md).
+
 ---
 
 ## A regra

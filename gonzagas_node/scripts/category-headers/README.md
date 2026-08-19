@@ -123,3 +123,34 @@ quando não há imagem.
   produção). As capas usam peças do mesmo material e da mesma zona do corpo.
 - As fotos de `Gargantilhas - Latão` e de `Pulseiras Pé - Prata` só existem em
   produção; foram buscadas a `https://artnshine.pt` para o recorte.
+
+---
+
+## Fotografia em vez de montagem (proposta, 11 de Agosto de 2026)
+
+As capas acima são montagens porque, quando foram feitas, não havia fotografia
+de ambiente nenhuma — e é fotografia de ambiente que
+[`docs/marca/05-fotografia.md`](../../../docs/marca/05-fotografia.md) manda pôr
+numa capa de categoria. Depois do inventário de `temporario-nova-media/`
+existem 124 candidatas, e **quinze das vinte e cinco categorias podem trocar**.
+
+```bash
+node scripts/category-headers/capas-foto.js            # título ao centro
+MODO=terco node scripts/category-headers/capas-foto.js # título no terço escuro
+```
+
+As escolhas estão em [`capas-foto.json`](capas-foto.json), uma por família, com
+o ponto da fotografia que fica ao centro e a fatia de altura que a tela apanha.
+A saída vai para `propostas/` — **não** para `public/media/categories/`, porque
+a troca ainda não está decidida.
+
+**A medição que interessa não é a do ficheiro.** Medir só o JPEG dizia que
+nenhuma fotografia chegava a 4.5:1 no título. Faltava uma camada: o
+`::before` de `brand-showcase.css` desenha um véu por cima da imagem antes de o
+texto entrar. Medida a montagem completa, as quinze passam — 4.95:1 a 6.74:1 no
+computador. Ou seja, **a via mais barata é só trocar ficheiros**; o título à
+esquerda é opção de composição, não de acessibilidade.
+
+As dez que ficam montagem não têm uma única fotografia da peça sozinha em
+cenário natural. A pior é `Pulseiras · Pedras Naturais`: 55 fotografias no
+inventário, todas ao pulso ou em tabuleiro.

@@ -81,6 +81,53 @@ body.showcase-theme .main-header .logo-text {
   color: var(--igp-cream, #f0ece4) !important;
 }
 
+/* Lettering 2 — teste do lettering novo (Agosto 2026), a avaliar contra o
+   logo-text tipográfico acima. Máscara CSS em vez de <img> para herdar a
+   cor via background-color, tal como o texto herdava via `color`. */
+.main-header .logo-text.logo-lettering2,
+.mobile-nav-header .logo-text.logo-lettering2 {
+  background-color: var(--igp-cream, #f0ece4);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-image: url('/brand/lettering2/wordmark.svg');
+  mask-image: url('/brand/lettering2/wordmark.svg');
+}
+
+.main-header .logo-text.logo-lettering2 {
+  width: calc(6.5 * var(--header-logo-size, 1rem));
+  height: calc(1.9 * var(--header-logo-size, 1rem));
+}
+
+.main-header .logo-text-short.logo-lettering2--mark {
+  -webkit-mask-image: url('/brand/lettering2/monograma-g.svg');
+  mask-image: url('/brand/lettering2/monograma-g.svg');
+  width: calc(1.9 * var(--header-logo-size, 1rem));
+  height: calc(3.6 * var(--header-logo-size, 1rem));
+}
+
+body.showcase-theme .main-header .logo-text.logo-lettering2 {
+  background-color: var(--igp-cream, #f0ece4) !important;
+}
+
+.mobile-nav-header .logo-text.logo-lettering2 {
+  display: block;
+  color: var(--igp-gold, #c9a84c);
+  background-color: var(--igp-gold, #c9a84c);
+  width: 6.1rem;
+  height: 1.8rem;
+}
+
+.mobile-nav-header .logo-text.logo-lettering2--mark {
+  -webkit-mask-image: url('/brand/lettering2/monograma-g.svg');
+  mask-image: url('/brand/lettering2/monograma-g.svg');
+  width: 1.8rem;
+  height: 3.4rem;
+}
+
 /* ===== Nav desktop ===== */
 .main-header .nav-menu {
   display: flex;

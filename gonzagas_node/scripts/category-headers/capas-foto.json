@@ -1,0 +1,167 @@
+{
+  "prata": {
+    "ficheiro": "IMG_8951(1).jpg",
+    "rel": "Eventos/2025-06-PRAIA/IMG_8951(1).jpg",
+    "centro": [
+      0.42,
+      0.62
+    ],
+    "altura": 0.55,
+    "lado": "esq",
+    "nota": "pulseira, anel e fio sobre rocha molhada — os três tipos de peça de uma vez"
+  },
+  "aneis-prata": {
+    "ficheiro": "IMG-20260226-WA0075.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0075.jpg",
+    "centro": [
+      0.36,
+      0.55
+    ],
+    "altura": 0.62,
+    "lado": "esq",
+    "nota": "três anéis de pedra em musgo seco, luz de fim de tarde"
+  },
+  "pulseiras-prata": {
+    "ficheiro": "IMG-20260226-WA0063.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0063.jpg",
+    "centro": [
+      0.55,
+      0.5
+    ],
+    "altura": 1.0,
+    "lado": "dir",
+    "nota": "bracelete serpente sobre madeira seca"
+  },
+  "colares-prata": {
+    "ficheiro": "IMG-20260226-WA0069.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0069.jpg",
+    "centro": [
+      0.5,
+      0.5
+    ],
+    "altura": 0.58,
+    "lado": "dir",
+    "nota": "fio e anel sobre musgo escuro — o tronco em contraluz do DSC_3663 tinha um clarão que nenhum véu apagava"
+  },
+  "brincos-prata": {
+    "ficheiro": "IMG_0340.jpg",
+    "rel": "Eventos/2026-02-SINTRA/IMG_0340.jpg",
+    "centro": [
+      0.45,
+      0.5
+    ],
+    "altura": 1.0,
+    "lado": "esq",
+    "nota": "argolas grandes sobre cortiça"
+  },
+  "cuffs-prata": {
+    "ficheiro": "IMG-20260226-WA0086.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0086.jpg",
+    "centro": [
+      0.46,
+      0.55
+    ],
+    "altura": 0.62,
+    "lado": "esq",
+    "nota": "cuff lavrado e anel de ónix sobre madeira seca"
+  },
+  "pendentes-prata": {
+    "ficheiro": "DSC_3473.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/DSC_3473.jpg",
+    "centro": [
+      0.5,
+      0.56
+    ],
+    "altura": 0.52,
+    "lado": "centro",
+    "nota": "pérola no coração de uma flor seca"
+  },
+  "pedras-naturais": {
+    "ficheiro": "IMG_8955(1).jpg",
+    "rel": "Eventos/2025-06-PRAIA/IMG_8955(1).jpg",
+    "centro": [
+      0.48,
+      0.55
+    ],
+    "altura": 0.7,
+    "lado": "centro",
+    "nota": "fio de ágatas na areia"
+  },
+  "colares-pedras-naturais": {
+    "ficheiro": "IMG_8956.jpg",
+    "rel": "Eventos/2025-06-PRAIA/IMG_8956.jpg",
+    "centro": [
+      0.58,
+      0.62
+    ],
+    "altura": 0.62,
+    "lado": "dir",
+    "nota": "fio de ágatas na duna"
+  },
+  "latao": {
+    "ficheiro": "IMG-20260226-WA0073.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0073.jpg",
+    "centro": [
+      0.46,
+      0.52
+    ],
+    "altura": 0.7,
+    "lado": "esq",
+    "nota": "brincos em raio sobre madeira seca com líquen"
+  },
+  "brincos-latao": {
+    "ficheiro": "IMG_0335.jpg",
+    "rel": "Eventos/2026-02-SINTRA/IMG_0335.jpg",
+    "centro": [
+      0.44,
+      0.58
+    ],
+    "altura": 0.78,
+    "lado": "esq",
+    "nota": "dois brincos em raio sobre cortiça, com folhas"
+  },
+  "gargantilhas-latao": {
+    "ficheiro": "IMG-20260226-WA0074.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0074.jpg",
+    "centro": [
+      0.44,
+      0.6
+    ],
+    "altura": 0.7,
+    "lado": "esq",
+    "nota": "gargantilha de latão com amonite sobre tronco"
+  },
+  "macrame": {
+    "ficheiro": "IMG_0322.jpg",
+    "rel": "Eventos/2026-02-SINTRA/IMG_0322.jpg",
+    "centro": [
+      0.5,
+      0.48
+    ],
+    "altura": 0.34,
+    "lado": "centro",
+    "nota": "mandala de macramé com latão, sobre erva"
+  },
+  "colares-macrame": {
+    "ficheiro": "IMG_0329.jpg",
+    "rel": "Eventos/2026-02-SINTRA/IMG_0329.jpg",
+    "centro": [
+      0.5,
+      0.5
+    ],
+    "altura": 0.34,
+    "lado": "centro",
+    "nota": "pendente preto com olho-de-tigre sobre erva — a erva ao sol do IMG_0331 não passava o contraste"
+  },
+  "pulseiras-latao": {
+    "ficheiro": "IMG-20260226-WA0072.jpg",
+    "rel": "Eventos/2026-07-ALENTEJO/IMG-20260226-WA0072.jpg",
+    "centro": [
+      0.58,
+      0.55
+    ],
+    "altura": 0.72,
+    "lado": "dir",
+    "nota": "POR CONFIRMAR: bracelete de latão sobre musgo — pode ser gargantilha"
+  }
+}

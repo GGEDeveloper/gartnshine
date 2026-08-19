@@ -127,6 +127,46 @@ async function grao() {
     .resize(W, H, { kernel: 'nearest' }).png().toBuffer();
 }
 
+/* Exposição com ombro, em vez de multiplicar e cortar.
+ *
+ * A regra antiga era `modulate({brightness}) + linear(1.18, -14)`, calibrada
+ * para o percentil 99 sair a 221. Numa peça mate isso não faz mal: acima do p99
+ * só há pontinhos. Numa prata polida do lote de Julho **o topo é um planalto** —
+ * a face espelhada de um anel são milhares de pixéis todos no mesmo valor alto.
+ * Meio por cento de tinta a bater no 255 deixa de ser ruído e passa a ser um
+ * buraco branco com contorno duro: foi o que comeu o lado direito do leque do
+ * PAN0143 e as costas do PAN0148.
+ *
+ * Agora a parte de baixo da escala continua linear — o contraste do relevo não
+ * muda — e a partir do JOELHO a curva fecha exponencialmente para o TOPO, sem
+ * lá chegar. Nada satura, e a peça não escurece para o conseguir.
+ *
+ * A correcção é feita na luminância e os canais seguem-na por proporção: mexer
+ * em cada canal por si desloca a cor, e um latão fica rosa no brilho.
+ */
+const JOELHO = 188;  // até aqui é recta
+const TOPO = 251;    // assímptota: o branco puro nunca é atingido
+
+function ombro({ data, info }, ganho) {
+  const fora = new Uint8ClampedArray(data.length);
+  const tabela = new Float32Array(1024);
+  for (let i = 0; i < 1024; i++) {
+    const v = i * ganho;
+    tabela[i] = v <= JOELHO ? v : JOELHO + (TOPO - JOELHO) * (1 - Math.exp(-(v - JOELHO) / (TOPO - JOELHO)));
+  }
+  const n = info.width * info.height;
+  for (let p = 0; p < n; p++) {
+    const i = p * 4;
+    fora[i + 3] = data[i + 3];
+    if (!data[i + 3]) continue;
+    const L = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+    if (L < 1) { fora[i] = data[i]; fora[i + 1] = data[i + 1]; fora[i + 2] = data[i + 2]; continue; }
+    const k = tabela[Math.min(1023, Math.round(L))] / L;
+    fora[i] = data[i] * k; fora[i + 1] = data[i + 1] * k; fora[i + 2] = data[i + 2] * k;
+  }
+  return Buffer.from(fora.buffer);
+}
+
 /** Uma peça: sombra pousada por baixo, e a peça por cima, um pouco contida. */
 async function peca(ref, slot, { limiteLargura = 0.34 } = {}) {
   // WebP com alfa em vez de PNG: os mesmos 92 recortes passam de 21 MB para
@@ -164,11 +204,10 @@ async function peca(ref, slot, { limiteLargura = 0.34 } = {}) {
   const alto = luzes.length ? luzes[Math.floor(luzes.length * 0.99)] : 200;
   const ganho = Math.min(1.3, Math.max(0.62, 178 / Math.max(alto, 1)));
 
-  const arte = await base
-    .modulate({ brightness: 1.12 * ganho, saturation: 0.98 })
-    .linear(1.18, -14)
-    .png()
-    .toBuffer();
+  const arte = await sharp(
+    ombro(await base.clone().raw().toBuffer({ resolveWithObject: true }), 1.12 * ganho),
+    { raw: { width: pi.width, height: pi.height, channels: 4 } },
+  ).png().toBuffer();
   const { width: pw, height: ph } = await sharp(arte).metadata();
 
   // A sombra é a silhueta desfocada. Tem de ir para o alfa: um PNG cinzento
@@ -351,6 +390,16 @@ async function gravar(id, buf) {
     console.log(`     cartão ${slug.padEnd(21)} ${refs.length} peça${refs.length === 1 ? '' : 's'}`);
   }
 
-  fs.writeFileSync(path.join(__dirname, 'resultado.json'), JSON.stringify({ capas: feitos, cartoes }, null, 2));
+  /* Uma corrida parcial só refaz as categorias pedidas — mas o registo é de
+   * todas. Sem esta junção, `build.js aneis-prata` apagava do resultado.json as
+   * outras vinte e quatro, que continuam no disco e apontadas pela base de
+   * dados. O ficheiro passava a mentir. */
+  const antes = fs.existsSync(path.join(__dirname, 'resultado.json'))
+    ? JSON.parse(fs.readFileSync(path.join(__dirname, 'resultado.json'), 'utf8'))
+    : { capas: {}, cartoes: {} };
+  fs.writeFileSync(path.join(__dirname, 'resultado.json'), JSON.stringify({
+    capas: { ...antes.capas, ...feitos },
+    cartoes: { ...antes.cartoes, ...cartoes },
+  }, null, 2));
   console.log(`\n${Object.keys(feitos).length} capas e ${Object.keys(cartoes).length} cartões em public/media/categories/`);
 })().catch(e => { console.error(e.message); process.exit(1); });
