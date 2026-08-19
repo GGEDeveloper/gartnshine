@@ -6,9 +6,9 @@ titulo: Frentes abertas a 2026-08-17 — o que está fora do git e por integrar
 resumo: Dez frentes por commitar, uma branch com 7 commits por integrar e três worktrees já integradas que podem ser limpas.
 keywords: work in progress, uncommitted, pending branch, stale worktree, branding, silver covers
 valid_from: 2026-08-17
-valid_to:
+valid_to: 2026-08-19
 ingested_at: 2026-08-17T00:00:00+00:00
-superseded_by:
+superseded_by: estado-git-2026-08-19
 confianca: 1.0
 entities:
   - claude/zen-mcnulty-044d6c

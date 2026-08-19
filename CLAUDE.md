@@ -48,6 +48,23 @@ lê a nota:
 - **Categoria ≠ coleção ≠ galeria** — três conceitos distintos, com endereços
   próprios e 301. `[[conceitos-categoria-colecao-galeria]]`
 
+## O ramo `memoria` não vai à main
+
+Este trabalho vive num ramo **permanente**, e não numa feature branch à espera
+de ser integrada:
+
+    main  ──────>  memoria      sim, sempre que a main andar
+    memoria  ──X──>  main       nunca
+
+Para trazer o que se desenvolveu na main:
+
+    docs/memoria/projeto/sincronizar-com-main.sh        # --ver só mostra
+
+Usa `merge` e não `rebase`, porque o ramo está publicado e reescrever-lhe o
+histórico obrigaria a um push forçado. Ao resolver conflitos: o que vem da
+main ganha no código da aplicação; o que está no ramo ganha em
+`docs/memoria/`, que a main não conhece. Ver `[[fork-memoria-permanente]]`.
+
 ## Convenções
 
 - Português de Portugal na escrita — comentários, mensagens de commit,
