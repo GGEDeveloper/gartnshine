@@ -250,8 +250,33 @@ export function criarGrafo(tela, info, legenda, aoAbrir) {
     desenhar();
   }
 
+  /**
+   * Volta a dispor os nós do zero.
+   *
+   * Não basta reacender a simulação: depois de se arrastarem nós, eles ficam
+   * pregados (`fx`/`fy`) e a simulação já não lhes mexe — reacendê-la sem os
+   * soltar deixava tudo exactamente onde estava. E semear posições novas em
+   * círculo importa: recomeçar das posições actuais costuma cair no mesmo
+   * emaranhado, porque é um mínimo local e a simulação volta a ele.
+   */
+  function reorganizar(aoTerminar) {
+    if (!sim || !nos.length) return;
+    const r = tela.getBoundingClientRect();
+    const raioSemente = Math.min(r.width, r.height) / 3;
+    nos.forEach((n, i) => {
+      n.fx = n.fy = null;                       // solta o que foi arrastado
+      const a = (i / nos.length) * Math.PI * 2;
+      n.x = r.width / 2 + Math.cos(a) * raioSemente;
+      n.y = r.height / 2 + Math.sin(a) * raioSemente;
+      n.vx = n.vy = 0;
+    });
+    sim.on("end", () => { enquadrar(); aoTerminar?.(); });
+    sim.alpha(1).restart();
+  }
+
   return {
     enquadrar,
+    reorganizar,
     carregar(dados, slugActual) {
       const antigos = new Map(nos.map((n) => [n.slug, n]));
       nos = dados.nos.map((n) => ({ ...n, ...(antigos.get(n.slug) || {}) }));

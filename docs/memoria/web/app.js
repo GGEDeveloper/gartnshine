@@ -254,6 +254,12 @@ function buscar() {
     const li = e.target.closest("li[data-id]");
     if (li) reproduzir(li.dataset.id);
   });
+  $("#reorganizar").addEventListener("click", () => {
+    const b = $("#reorganizar");
+    b.disabled = true;
+    b.textContent = "a assentar…";
+    grafo.reorganizar(() => { b.disabled = false; b.textContent = "reorganizar"; });
+  });
   $("#limpar-percurso").addEventListener("click", () => {
     grafo.reproduzir(null);
     document.querySelectorAll("#lista-percursos li").forEach((el) => el.classList.remove("activo"));
