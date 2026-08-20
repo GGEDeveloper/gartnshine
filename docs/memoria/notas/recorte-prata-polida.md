@@ -3,7 +3,7 @@ slug: recorte-prata-polida
 tipo: facto
 dominio: fotografia
 titulo: "Recortar prata polida em `recortar-prata.js` — a face espelhada tem exactamente a cor da cartolina; o que a distingue d
-resumo: "Recortar prata polida em `recortar-prata.js` — a face espelhada tem exactamente a cor da cartolina; o que a distingue do vazio é ser mais escura, não ser menos lisa"
+resumo: A semeadura do vazio aceitava a face espelhada por ela devolver exactamente a cor da cartolina. O que as separa é quanto da mancha é mais escura, e não a planura.
 valid_from: 2026-08-11
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

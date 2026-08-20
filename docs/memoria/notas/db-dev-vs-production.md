@@ -3,7 +3,7 @@ slug: db-dev-vs-production
 tipo: decisao
 dominio: bd
 titulo: artnshine.pt (gonzagas_node) — DB local de dev difere do schema real em produção no servidor waphix
-resumo: artnshine.pt (gonzagas_node) — DB local de dev difere do schema real em produção no servidor waphix
+resumo: Um INSERT em `customers` com uma coluna que só existe em local rebentou em produção. Na dúvida ganha a versão que já lá está, não a local.
 valid_from: 2026-06-23
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

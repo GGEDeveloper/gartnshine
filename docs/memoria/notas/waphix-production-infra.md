@@ -3,7 +3,7 @@ slug: waphix-production-infra
 tipo: facto
 dominio: infra
 titulo: "A produção do artnshine.pt corre em Docker Compose num servidor próprio (waphix) — o cPanel foi descontinuado"
-resumo: "A produção do artnshine.pt corre em Docker Compose num servidor próprio (waphix) — o cPanel foi descontinuado"
+resumo: O cPanel foi descontinuado: as instruções de deploy antigas do repositório não são actuais. A produção é Docker Compose num servidor na LAN.
 keywords: produção, servidor próprio, Docker Compose, implantação, alojamento, infraestrutura, proxy reverso, cópias de segurança, self-hosted production deployment, waphix, cPanel discontinued
 valid_from: 2026-07-29
 valid_to: 

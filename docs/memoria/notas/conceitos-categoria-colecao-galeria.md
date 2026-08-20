@@ -3,7 +3,7 @@ slug: conceitos-categoria-colecao-galeria
 tipo: decisao
 dominio: loja
 titulo: "Categoria, coleção e galeria são conceitos distintos em artnshine.pt — endereços, tabelas e a armadilha do motion.js"
-resumo: "Categoria, coleção e galeria são conceitos distintos em artnshine.pt — endereços, tabelas e a armadilha do motion.js"
+resumo: Três tabelas e três endereços que já estiveram misturados e prejudicaram o site. O REVEAL_SELECTOR do motion.js é por onde a mistura volta a entrar.
 valid_from: 2026-07-30
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

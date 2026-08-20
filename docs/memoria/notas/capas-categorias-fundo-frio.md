@@ -3,7 +3,7 @@ slug: capas-categorias-fundo-frio
 tipo: facto
 dominio: fotografia
 titulo: "Capas e cartões de categoria — a prata precisa de clarão frio, senão lê-se castanha; onde ficam os limites de largura e
-resumo: "Capas e cartões de categoria — a prata precisa de clarão frio, senão lê-se castanha; onde ficam os limites de largura e os recortes"
+resumo: Correr o script reconstrói as 25 capas e os 5 cartões sem mudar nomes de ficheiro, portanto trocar uma imagem não exige migração. O clarão tem duas temperaturas e não é gosto: o castanho serve o latão, a prata precisa de cinza frio.
 valid_from: 2026-08-04
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

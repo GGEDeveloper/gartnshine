@@ -3,7 +3,7 @@ slug: conta-obrigatoria-checkout
 tipo: estado
 dominio: loja
 titulo: "artnshine.pt — conta obrigatória para finalizar compra; decisões do utilizador, armadilhas do carrinho e o que ficou po
-resumo: "artnshine.pt — conta obrigatória para finalizar compra; decisões do utilizador, armadilhas do carrinho e o que ficou por validar"
+resumo: A barreira ficou no checkout e não no carrinho, que continua aberto a anónimos. O carrinho vive no cookie e não na sessão, e o SMTP ficou por configurar.
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

@@ -3,7 +3,7 @@ slug: git-divergence-2026-06-23
 tipo: facto
 dominio: infra
 titulo: artnshine.pt — branch local divergiu de origin/main com hotfixes de produção; merge feito em 2026-06-23
-resumo: artnshine.pt — branch local divergiu de origin/main com hotfixes de produção; merge feito em 2026-06-23
+resumo: Os hotfixes de produção estavam só em origin/main e o trabalho local ia por cima deles. Antes de assumir que o local está à frente, ver o que a main tem.
 valid_from: 2026-06-23
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

@@ -3,7 +3,7 @@ slug: loja-url-e-ordem
 tipo: facto
 dominio: loja
 titulo: "Contrato dos endereços da loja em artnshine.pt (?categoria=slug, valores neutros, canónico por caso) e a ordem intercal
-resumo: "Contrato dos endereços da loja em artnshine.pt (?categoria=slug, valores neutros, canónico por caso) e a ordem intercalada por subcategoria"
+resumo: `?families=16` ainda responde mas devolve 301 para a forma em slug: o id é interno, muda se a categoria for recriada e parte os links já partilhados.
 valid_from: 2026-07-30
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

@@ -3,7 +3,7 @@ slug: painel-clientes-carrinhos
 tipo: decisao
 dominio: admin
 titulo: "artnshine.pt — painéis /admin/clientes e /admin/carrinhos (live), decisões não óbvias e a única escrita que fazem"
-resumo: "artnshine.pt — painéis /admin/clientes e /admin/carrinhos (live), decisões não óbvias e a única escrita que fazem"
+resumo: São só-leitura de propósito, sob a condição explícita de não estragar dados de produção. A única escrita que fazem é `cart_sessions.customer_email`.
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

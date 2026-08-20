@@ -3,7 +3,7 @@ slug: lote-julho-2026
 tipo: estado
 dominio: catalogo
 titulo: "Lote de Julho de 2026 — 70 peças (migração 016) + 32 pulseiras (017); os quatro sítios onde o €0,00 se escondia; PAN0075 na família errada"
-resumo: "Lote de Julho de 2026 — 70 peças (migração 016) + 32 pulseiras (017); os quatro sítios onde o €0,00 se escondia; PAN0075 na família errada"
+resumo: Produção tem a migração 015 aplicada mas ainda não a 016. As peças entram com `sale_price = 0`, e o €0,00 escondia-se em quatro sítios diferentes.
 valid_from: 2026-08-10
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

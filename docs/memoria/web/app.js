@@ -119,7 +119,7 @@ const FRENTES = [
      `${x.ficheiros.length > 3 ? ` +${x.ficheiros.length - 3}` : ""}</span>`],
   ["proveniencia_morta", "proveniência a apontar para ficheiro que já não existe", true,
    (x) => `${lig(x.slug)} → <span class="wl morta">${esc(x.ref)}</span>`],
-  ["por_verificar", "afirmam coisas sobre o mundo e há muito que ninguém as confere", false,
+  ["por_verificar", "estados que há muito ninguém confronta com a realidade", false,
    (x) => `${lig(x.slug)} <span class="nota-ilha">${
      x.alguma_vez ? "verificada" : "escrita, e nunca verificada"} a ${x.desde}</span>`],
   ["ligacoes_partidas", "ligações para notas que não existem", true,

@@ -3,7 +3,7 @@ slug: design-system-2026-08-01
 tipo: facto
 dominio: design
 titulo: Fundações de design (design-system.css) criadas em 2026-08-01; regra de não inventar literais; layout é do CSS e não do 
-resumo: Fundações de design (design-system.css) criadas em 2026-08-01; regra de não inventar literais; layout é do CSS e não do JS; armadilhas de :where() e do seletor section
+resumo: Nenhuma folha de componente inventa valores: se falta um degrau, acrescenta-se à escala. O layout é do CSS e não do JS, e o `:where()` tem precedência zero.
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

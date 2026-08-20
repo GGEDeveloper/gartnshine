@@ -3,7 +3,7 @@ slug: fotografia-ambiente-2026-08
 tipo: decisao
 dominio: fotografia
 titulo: Fotografia de ambiente 2026-08 — só 4 das 43 fotos da galeria têm peça identificada; montagens compostas foram reprovada
-resumo: Fotografia de ambiente 2026-08 — só 4 das 43 fotos da galeria têm peça identificada; montagens compostas foram reprovadas pelo utilizador
+resumo: Verificada a 2026-08-18: 88 imagens em disco para 87 registos, portanto uma existe e não aparece no site. Contar só `*.jpg` perde as 16 `.jpeg`. As montagens compostas foram reprovadas — não repropor.
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

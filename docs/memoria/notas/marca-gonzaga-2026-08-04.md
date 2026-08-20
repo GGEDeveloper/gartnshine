@@ -3,7 +3,7 @@ slug: marca-gonzaga-2026-08-04
 tipo: decisao
 dominio: marca
 titulo: Base de marca criada em docs/marca/; lettering proprietário extraído de HTML para SVG; paleta TERRA escolhida contra a p
-resumo: Base de marca criada em docs/marca/; lettering proprietário extraído de HTML para SVG; paleta TERRA escolhida contra a paleta fria herdada
+resumo: O lettering existe como SVG vetorial real, escondido dentro de um `.dc.html` com 41 blocos. A paleta TERRA foi escolhida contra a fria herdada, e o ouro reprova o contraste sobre fundo claro.
 valid_from: 2026-08-04
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

@@ -3,7 +3,7 @@ slug: seo-naming-2026-07
 tipo: facto
 dominio: seo
 titulo: Projeto de nomeação/SEO dos produtos por análise de imagem; BD local atualizada em 2026-07-08
-resumo: Projeto de nomeação/SEO dos produtos por análise de imagem; BD local atualizada em 2026-07-08
+resumo: A base local tem hoje 511 produtos activos contra os 328 desta nota, e produção tem mais e com nomes de ficheiro de imagem diferentes dos locais.
 valid_from: 2026-07-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

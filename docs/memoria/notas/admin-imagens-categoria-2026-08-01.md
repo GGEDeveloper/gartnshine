@@ -3,7 +3,7 @@ slug: admin-imagens-categoria-2026-08-01
 tipo: decisao
 dominio: design
 titulo: "Editor de enquadramento das imagens de categoria no admin (migração 014); recorte aplicado ao ficheiro com sharp, não n
-resumo: "Editor de enquadramento das imagens de categoria no admin (migração 014); recorte aplicado ao ficheiro com sharp, não no browser"
+resumo: A migração 014 é aditiva e as views continuam a ler `hero_image`/`card_image`; as colunas novas guardam só a origem e o enquadramento. O recorte é aplicado ao ficheiro com sharp, não no browser.
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

@@ -3,7 +3,7 @@ slug: capas-fotografia-2026-08-11
 tipo: decisao
 dominio: fotografia
 titulo: "Capas de categoria em fotografia de ambiente — 15 das 25 podem trocar; a medição de contraste tem de incluir o ::before
-resumo: "Capas de categoria em fotografia de ambiente — 15 das 25 podem trocar; a medição de contraste tem de incluir o ::before do CSS, senão dá tudo reprovado"
+resumo: Nada foi trocado — o script escreve para `propostas/`. Trocar as capas é só trocar ficheiros de imagem, nem CSS nem HTML. Medir o contraste sem o véu do `::before` reprova as 25.
 valid_from: 2026-08-11
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

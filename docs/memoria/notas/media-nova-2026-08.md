@@ -3,7 +3,7 @@ slug: media-nova-2026-08
 tipo: estado
 dominio: fotografia
 titulo: "Media nova de temporario-nova-media — 580 ficheiros catalogados, 67 apagados, 45 escolhidas para a galeria; a medida de
-resumo: "Media nova de temporario-nova-media — 580 ficheiros catalogados, 67 apagados, 45 escolhidas para a galeria; a medida de imagem nunca separou \"mesma peça\" de \"peça diferente\""
+resumo: 67 ficheiros apagados de vez; as 99 repetições foram aprovadas mas o utilizador mandou não apagar. Nenhuma medida automática separou «mesma peça» de «peça diferente».
 valid_from: 2026-08-01
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

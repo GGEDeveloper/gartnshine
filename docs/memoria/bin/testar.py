@@ -573,11 +573,22 @@ def t_confianca(db) -> None:
            f"{x['slug']}: só entram ficheiros mudados DEPOIS da conferência")
         break
 
-    # Só se cobra verificação a quem afirma coisas sobre o mundo.
+    # A ontologia da biblioteca decide quem caduca: um `estado` tem de ser
+    # reescrito quando o mundo muda, um `facto` só pode ser acrescentado e é
+    # invariante por construção. Cobrar verificação a um `facto` assinalava as
+    # notas de fase, e a "correcção" seria fechá-las com valid_to — o erro que
+    # a biblioteca já cometeu e corrigiu a 2026-08-17.
     tipos = {db.execute("SELECT tipo FROM notes WHERE slug=?", (x["slug"],)).fetchone()[0]
              for x in c["por_verificar"]}
-    ok(tipos <= {"estado", "facto"},
-       "só estado e facto são cobrados de verificação", str(tipos))
+    ok(tipos <= {"estado"},
+       "só o `estado` é cobrado de verificação — um `facto` não caduca", str(tipos))
+    factos_antigos = db.execute(
+        "SELECT count(*) FROM notes WHERE tipo='facto' AND valid_to IS NULL"
+        " AND valid_from < '2026-01-01'").fetchone()[0]
+    ok(factos_antigos > 0 and not any(
+        db.execute("SELECT tipo FROM notes WHERE slug=?", (x["slug"],)).fetchone()[0]
+        == "facto" for x in c["por_verificar"]),
+       f"as {factos_antigos} retrospectivas antigas não são assinaladas")
     ok(MESES_SEM_VERIFICAR >= 1, "há um prazo de validade definido")
 
 
@@ -908,18 +919,35 @@ def t_contexto(db) -> None:
     # O corpo das notas custaria milhares de tokens em cada pergunta.
     ok(len(r.stdout) < 1800, f"o bloco é pequeno ({len(r.stdout)} caracteres)")
 
-    # Um resumo que repete o título gastava contexto em TODAS as perguntas
-    # sem dizer nada. Nesse caso vale mais um pedaço do corpo.
-    red = db.execute(
-        "SELECT slug, titulo FROM notes WHERE valid_to IS NULL AND resumo IS NOT NULL"
-        " AND (resumo = titulo OR resumo LIKE titulo || '%') LIMIT 1").fetchone()
-    if red:
-        r2 = correr(str(bins / "mem.py"), "contexto", red["titulo"][:70])
-        if f"[[{red['slug']}]]" in r2.stdout:
+    # Um resumo que repete o título gastava contexto em TODAS as perguntas sem
+    # dizer nada; nesse caso vale mais um pedaço do corpo. A nota é fabricada
+    # de propósito: fazer este teste depender de existir uma nota defeituosa
+    # na biblioteca significa perdê-lo no dia em que se corrigem os defeitos,
+    # que foi exactamente o que aconteceu a 2026-08-19.
+    titulo = "Zumbido do compressor de ar comprimido na bancada de polimento"
+    efemera = NOTAS / "zz-teste-resumo.md"
+    efemera.write_text(
+        f"---\nslug: zz-teste-resumo\ntipo: facto\ndominio: geral\n"
+        f"titulo: {titulo}\nresumo: {titulo}\nvalid_from: 2026-01-01\n"
+        f"ingested_at: 2026-01-01T00:00:00+00:00\nsources:\n  - conversa:teste\n---\n\n"
+        f"O compressor entra em ressonância aos 6 bar e faz vibrar a bancada "
+        f"inteira, o que estraga qualquer fotografia em exposição longa.\n",
+        encoding="utf-8")
+    try:
+        from mem import indexar_notas
+        indexar_notas(db)
+        r2 = correr(str(bins / "mem.py"), "contexto", titulo[:70])
+        ok("[[zz-teste-resumo]]" in r2.stdout, "a nota fabricada é encontrada")
+        if "[[zz-teste-resumo]]" in r2.stdout:
             linhas = r2.stdout.splitlines()
-            i = next(i for i, l in enumerate(linhas) if f"[[{red['slug']}]]" in l)
-            ok(linhas[i + 1].strip() != red["titulo"].strip(),
+            i = next(i for i, l in enumerate(linhas) if "[[zz-teste-resumo]]" in l)
+            ok(linhas[i + 1].strip() != titulo,
                "resumo que repete o título não é injectado — vai o corpo")
+            ok("ressonância" in linhas[i + 1] or "compressor" in linhas[i + 1],
+               "e o que vai é mesmo o corpo")
+    finally:
+        efemera.unlink(missing_ok=True)
+        indexar_notas(db)
 
     n_antes = db.execute("SELECT count(*) FROM traces").fetchone()[0]
     correr(str(bins / "mem.py"), "contexto", "prata castanha")

@@ -3,7 +3,7 @@ slug: media-local-vs-producao
 tipo: decisao
 dominio: infra
 titulo: artnshine.pt — public/media/products local é um espelho incompleto; as fotos que faltam servem-se de https://artnshine.p
-resumo: artnshine.pt — public/media/products local é um espelho incompleto; as fotos que faltam servem-se de https://artnshine.pt sem autenticação
+resumo: Em 2026-08-09 faltavam no disco local duas famílias inteiras e metade de outra, com as fotos vivas em produção. É a mesma divergência que a do schema, e engana quem conta ficheiros.
 valid_from: 2026-08-09
 valid_to: 
 ingested_at: 2026-08-17T14:13:37+00:00

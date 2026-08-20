@@ -116,11 +116,22 @@ def confianca_nos_factos(db) -> dict:
             desactualizadas.append({"slug": slug, "titulo": n["titulo"],
                                     "conferida": conferida, "ficheiros": mexidos})
 
-    # Só faz sentido cobrar verificação a quem afirma coisas sobre o mundo.
-    # Um `procedimento` ou uma `decisao` não caducam por si.
+    # Só se cobra verificação ao `estado`, e a ontologia desta biblioteca é
+    # que decide: um `estado` tem de ser REESCRITO quando o mundo muda, e é
+    # por isso que caduca; um `facto` só pode ser ACRESCENTADO, portanto é
+    # invariante por construção — «que em Fevereiro de 2026 se trocou o azul
+    # por prata é verdade para sempre». Cobrar verificação a um `facto`
+    # assinalava as notas de fase, que descrevem períodos fechados, e a
+    # correcção seria fechá-las com valid_to — exactamente o erro que a
+    # biblioteca já tinha cometido e corrigido a 2026-08-17. Ver
+    # `memoria-como-funciona`, secção «Retrospectiva é facto, não estado».
+    #
+    # O sinal `desactualizadas` continua a cobrir todos os tipos: aí a
+    # instrução é ir ver, e num `facto` a resposta certa é acrescentar um
+    # bloco de verificação novo, não fechar a nota.
     por_verificar = []
     for slug, n in sorted(notas.items()):
-        if n["tipo"] not in ("estado", "facto"):
+        if n["tipo"] != "estado":
             continue
         v = verificado_em(n["corpo"])
         base = v or n["valid_from"]
@@ -268,9 +279,12 @@ INSTRUCOES = {
         "valid_to na data em que o período acabou, e não re-verificá-la "
         "contra o mundo de hoje.",
     "por_verificar":
-        "Afirma coisas sobre o mundo e há meses que ninguém a confronta com "
-        "ele. Medir com o monitor.py ou uma query e acrescentar '> Verificado "
-        "a <hoje>' com os números novos.",
+        "Um `estado` descreve como as coisas estão, e há meses que ninguém o "
+        "confronta com a realidade. Medir com o monitor.py ou uma query. Se "
+        "continua a bater certo, acrescentar '> Verificado a <hoje>' com os "
+        "números novos; se mudou, escrever a sucessora e fechar este com "
+        "valid_to. Só o `estado` entra aqui: um `facto` é invariante por "
+        "construção e não caduca.",
 }
 
 TITULOS = {
@@ -284,7 +298,7 @@ TITULOS = {
     "duplicados": "pares que talvez digam o mesmo",
     "proveniencia_morta": "proveniência a apontar para ficheiro que já não existe",
     "desactualizadas": "o ficheiro mudou depois de a nota ter sido conferida",
-    "por_verificar": "afirmam coisas sobre o mundo e há muito que ninguém as confere",
+    "por_verificar": "estados que há muito ninguém confronta com a realidade",
 }
 
 # O que é mesmo um erro, e o que é só arrumação por fazer.
