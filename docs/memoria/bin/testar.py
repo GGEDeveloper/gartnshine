@@ -796,6 +796,55 @@ def t_okf(db) -> None:
            "reexportar é idempotente")
 
 
+# ----------------------------------------------------------------- ingestão
+def t_ingestao(db) -> None:
+    """A ingestão traz 94% do que é pesquisável, e não tinha um único teste.
+
+    Foi por isso que uma contradição entre a nota e o código sobreviveu:
+    `memoria-como-funciona` dizia que os documentos eram datados pelo primeiro
+    commit, e o código usava o `mtime`.
+    """
+    print("\n== Ingestão ==")
+    from ingerir import EXCLUIR, MIN_TEXTO, _limpo, datas_de_criacao
+
+    # As worktrees duplicam os markdown do repositório: uma contagem chegou a
+    # dar 3099 ficheiros `.md` quando os reais são cerca de 60.
+    for ruido in (".claude/worktrees/x/README.md", "node_modules/p/a.md",
+                  "docs/memoria/notas/x.md"):
+        ok(EXCLUIR.search(ruido), f"exclui {ruido}")
+    for bom in ("docs/SEO/seo.md", "gonzagas_node/DEPLOYMENT.md"):
+        ok(not EXCLUIR.search(bom), f"deixa entrar {bom}")
+
+    ok(_limpo("<system-reminder>lixo</system-reminder> texto") .strip() == "texto",
+       "tira os blocos de sistema da conversa")
+    ok("base64" not in _limpo("olha data:image/png;base64,AAAABBBBCCCC isto"),
+       "tira o base64 embutido")
+    ok(_limpo("") == "", "aguenta texto vazio")
+    ok(MIN_TEXTO > 0, "há um mínimo abaixo do qual não vale a pena indexar")
+
+    # O mtime mente: basta tocar num ficheiro para o pôr com a data de hoje.
+    # 133 de 167 documentos tinham data errada por causa disto.
+    criados = datas_de_criacao()
+    ok(len(criados) > 100, f"o git data os ficheiros numa passagem ({len(criados)})")
+    antigos = [c for c, d in criados.items() if d < "2026-01-01"]
+    ok(antigos, "e conhece ficheiros anteriores a este ano")
+
+    mau = []
+    for r in db.execute("SELECT DISTINCT ref, data FROM chunks WHERE fonte='doc'"):
+        esperado = criados.get(r["ref"])
+        if esperado and r["data"] != esperado:
+            mau.append(f"{r['ref']}: {r['data']} != {esperado}")
+    ok(not mau, f"os documentos estão datados pelo commit que os criou "
+       f"({len(mau)} errados)", "; ".join(mau[:3]))
+
+    # A promessa bi-temporal vale para tudo o que está indexado, não só notas.
+    n_docs = db.execute("SELECT count(*) FROM chunks WHERE fonte='doc'").fetchone()[0]
+    sem_data = db.execute(
+        "SELECT count(*) FROM chunks WHERE fonte='doc' AND data IS NULL").fetchone()[0]
+    ok(n_docs > 0 and sem_data == 0,
+       f"todos os {n_docs} fragmentos de documento têm data", f"{sem_data} sem")
+
+
 # ------------------------------------------------ o que sobrevive a uma avaria
 def t_resiliencia(db) -> None:
     """A memória tem de continuar a responder com metade das pernas.
@@ -1107,7 +1156,8 @@ def main() -> None:
     p.add_argument("-v", "--verbose", action="store_true")
     p.add_argument("--so", choices=["retrieval", "hibrido", "temporal", "grafo", "percursos", "sonhar", "mcp",
                                     "orfaos", "confianca", "tipagem",
-                                    "propor", "frentes", "resiliencia", "portabilidade", "okf",
+                                    "propor", "frentes", "ingestao", "resiliencia",
+                                    "portabilidade", "okf",
                                     "descoberta", "contexto", "servir",
                                     "integridade", "robustez", "embeddings",
                                     "reconstruir", "scripts"])
@@ -1133,6 +1183,7 @@ def main() -> None:
         "confianca": lambda: t_confianca(db),
         "tipagem": lambda: t_tipagem(db),
         "propor": lambda: t_propor(db),
+        "ingestao": lambda: t_ingestao(db),
         "resiliencia": lambda: t_resiliencia(db),
         "frentes": t_frentes_na_ui,
         "portabilidade": t_portabilidade,

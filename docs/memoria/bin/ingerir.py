@@ -100,9 +100,40 @@ def ingerir_transcripts(db, guardar) -> int:
     return total
 
 
+def datas_de_criacao() -> dict[str, str]:
+    """Data do primeiro commit que introduziu cada ficheiro.
+
+    O `mtime` mente sobre a idade de um documento: basta tocar-lhe — um
+    `git checkout`, um `sed`, uma reformatação — para o pôr com a data de
+    hoje. Medido a 2026-08-20: **133 de 167 documentos** tinham no índice uma
+    data diferente da do commit que os criou, e o `CHANGELOG.md` aparecia com
+    nove meses a menos. Isso partia o `--as-of` para 60% do índice, que é a
+    fatia dos documentos.
+
+    Uma passagem única sobre o histórico, e não um `git log` por ficheiro: o
+    log vem do mais recente para o mais antigo, portanto a última vez que um
+    caminho aparece é a vez em que foi criado.
+    """
+    datas: dict[str, str] = {}
+    try:
+        saida = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--format=@%cs", "--name-only"],
+            cwd=RAIZ, capture_output=True, text=True, timeout=120).stdout
+    except (OSError, subprocess.SubprocessError):
+        return datas
+    data = None
+    for linha in saida.splitlines():
+        if linha.startswith("@"):
+            data = linha[1:]
+        elif linha.strip() and data:
+            datas[linha] = data          # sobrepõe-se: fica a ocorrência mais antiga
+    return datas
+
+
 def ingerir_docs(db, guardar) -> int:
     """Indexa a documentação do repositório."""
     total = 0
+    criados = datas_de_criacao()
     for f in sorted(RAIZ.rglob("*.md")):
         rel = str(f.relative_to(RAIZ))
         if EXCLUIR.search(rel):
@@ -117,7 +148,9 @@ def ingerir_docs(db, guardar) -> int:
                        if l.startswith("#")), f.stem)
         blocos = _por_seccao(texto)
         itens = [(i, titulo, b) for i, b in enumerate(blocos)]
-        data = datetime.fromtimestamp(f.stat().st_mtime, timezone.utc).date().isoformat()
+        # O git primeiro; o mtime só para o que ele não conhece (por versionar).
+        data = criados.get(rel) or datetime.fromtimestamp(
+            f.stat().st_mtime, timezone.utc).date().isoformat()
         total += guardar(db, "doc", rel, itens, data=data)
     db.commit()
     return total

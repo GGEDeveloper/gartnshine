@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 """Converte as memórias antigas (~/.claude/.../memory/) para a nova ontologia.
 
+CUMPRIDO E ARRUMADO. Correu uma vez, a 2026-08-17, e produziu as 19 notas que
+ainda hoje se distinguem pela proveniência `migracao:`. Fica para o registo,
+mas em `projeto/` e não em `bin/`: soletra o caminho da pasta pessoal deste
+utilizador, e `bin/` é motor que viaja para outros centros de memória.
+
+Deixou uma marca que só se viu três dias depois: as 19 notas nasceram com o
+resumo igual ao título, porque a auto-memória tinha um único campo a alimentar
+os dois. Ver `memoria-qualidade-medida`.
+
+
 A conversão preserva o texto integral e infere o que é inferível:
 data de validade a partir do nome do ficheiro, tipo a partir do conteúdo,
 entidades a partir das referências do domínio. O que não é inferível fica

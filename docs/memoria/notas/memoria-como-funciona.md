@@ -84,6 +84,26 @@ Isto também guarda os termos de ofício — *cepo*, *argolas lavradas*,
 - **A data de um documento vem do primeiro commit que o introduziu**, não do
   `mtime` — tocar num ficheiro reescreve o `mtime` e mente sobre a idade.
 
+  > **Corrigido a 2026-08-20.** Esta linha descrevia o desenho certo e o código
+  > **nunca o fez**: o `ingerir_docs` usava o `mtime`. Medido antes do arranjo,
+  > **133 de 167 documentos** estavam no índice com data diferente da do commit
+  > que os criou, e o `CHANGELOG.md` aparecia com nove meses a menos. Como os
+  > documentos são 60% do índice, o `--as-of` mentia na maior parte do que
+  > devolvia — uma pergunta sobre Novembro de 2025 não via ficheiros que
+  > existiam nessa data.
+  >
+  > A causa de isto ter sobrevivido três dias: o `ingerir.py` traz 94% do que é
+  > pesquisável e **não tinha um único teste**. Uma contradição entre uma nota
+  > e o código não era detectada por nada — o `sonhar` compara notas com
+  > ficheiros, mas não compara o que a nota **afirma** com o que o código
+  > **faz**. Agora há 13 testes de ingestão, um deles a verificar exactamente
+  > esta afirmação.
+  >
+  > A datação faz-se numa passagem única (`git log --diff-filter=A --name-only`,
+  > 200 ms para 15 367 ficheiros); o log vem do mais recente para o mais antigo,
+  > portanto a última vez que um caminho aparece é a vez em que foi criado. O
+  > `mtime` sobra como recurso para o que está por versionar.
+
 ## Bi-temporalidade
 
 Cada nota tem `valid_from`/`valid_to` (quando foi verdade no mundo) e
