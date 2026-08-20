@@ -75,7 +75,8 @@ zero.
 
 A base local **não** tem coluna `price` — tem `sale_price`, `base_price` e
 `purchase_price`. Há também `active` **e** `is_active`, ambas preenchidas.
-Introspeccionar antes de escrever queries; o schema local difere do de
+Introspeccionar antes de escrever queries — as queries prontas e as colunas
+que enganam estão em [[consultar-catalogo]]. O schema local difere do de
 produção, ver [[db-dev-vs-production]].
 
 > **Verificado a 2026-08-19:** o `monitor.py` saiu de `bin/` para

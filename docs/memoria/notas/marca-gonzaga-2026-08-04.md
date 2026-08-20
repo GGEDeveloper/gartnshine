@@ -39,7 +39,8 @@ extraíram-se 8 assets para `gonzagas_node/public/brand/*.svg`.
 
 **Decisões tomadas (recomendadas por mim, o utilizador ainda não confirmou):**
 
-- **Paleta TERRA** (`#12100E #3A4038 #6B5844 #B9A06A #C8C6C1 #F2EDE4`) contra
+- **Paleta TERRA** (decidida aqui, mas **ainda não chegou ao CSS** — ver
+  [[design-paleta-por-implementar]]) (`#12100E #3A4038 #6B5844 #B9A06A #C8C6C1 #F2EDE4`) contra
   a `--color-*` fria herdada (`#05070a` tem o azul acima do vermelho). Ouro
   sobre preto-terra dá 7.50:1; **ouro sobre claro dá 2.17:1 e reprova** —
   em superfície clara o acento é o preto, não o ouro.

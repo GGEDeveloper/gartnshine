@@ -180,6 +180,10 @@ viaja, `projeto/` sabe de preços e stock e fica.
 Antes, a primeira busca depois de uma tabela nova rebentava com
 *no such table*.
 
+As armadilhas de ferramenta — o `ugrep` que exige `--`, o hook que precisa
+do stdin guardado — estão à parte em [[memoria-armadilhas-tecnicas]], e o
+que a bateria mede e porquê está em [[memoria-qualidade-medida]].
+
 ### Duas armadilhas novas, pagas
 
 **Vectores órfãos.** Apagar uma nota levava os fragmentos mas deixava os

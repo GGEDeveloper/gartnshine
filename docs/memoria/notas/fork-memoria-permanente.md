@@ -60,5 +60,8 @@ vídeo. O git guarda **todas as versões para sempre**, e cada clone passaria a
 arrastar 2,6 GB — o `.git` já pesa 1,3 GB. O que é escolhido passa a
 `public/media/`, esse sim versionado.
 
+O que ficou no repositório depois desta arrumação, e o que continua por
+decidir, está em [[estado-git-2026-08-19]].
+
 Verificado antes de commitar: nenhuma chave da Stripe, AWS, token ou chave
 privada nos ficheiros de texto pendentes. Ver [[seguranca-chaves-stripe]].

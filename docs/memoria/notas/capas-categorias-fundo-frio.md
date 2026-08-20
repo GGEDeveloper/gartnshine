@@ -21,7 +21,9 @@ sources:
 
 `gonzagas_node/scripts/category-headers/build.js` monta as 25 capas
 (`cat-<id>-hero-1920.jpg`) e os 5 cartões (`*-card-1200.jpg`) a partir de
-recortes em `cutouts/`. Correr o script reconstrói **tudo**; os nomes dos
+recortes em `cutouts/` — que saem do `recortar-prata.js`, com as armadilhas
+da prata polida em [[recorte-prata-polida]]. Correr o script reconstrói
+**tudo**; os nomes dos
 ficheiros não mudam, por isso **não é preciso migração** para trocar uma imagem.
 
 **O clarão do fundo tem duas temperaturas, e isto não é gosto:** o castanho
