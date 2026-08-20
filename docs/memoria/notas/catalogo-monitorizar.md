@@ -84,3 +84,7 @@ produção, ver [[db-dev-vs-production]].
 > deste projeto — `bin/` passou a ser motor puro, que viaja para outros
 > centros de memória, e o monitor sabe de preços e stock, que não viajam.
 > Os comandos aqui em cima já apontam para o sítio novo.
+
+> **Verificado a 2026-08-20.** O `monitor.py` mudou só para deixar de acusar
+> o ramo permanente `memoria` de estar por integrar. Os comandos e as
+> verificações descritas aqui correm todos sem alteração.

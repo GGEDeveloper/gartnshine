@@ -75,3 +75,8 @@ imagens a dar 404**. Ver [[seo-audit-2026-07-30]].
 `docs/SEO/nomes-produtos.md` está **vazio** (0 bytes) desde 2026-07-08. Foi
 criado e nunca preenchido. Cruza com o `LTCU0016` por nomear de
 [[seo-naming-2026-07]] e com [[catalogo-monitorizar]].
+
+> **Verificado a 2026-08-20.** O `monitor.py` continua a contar **30 marcas de
+> feito e 22 tarefas por fazer** no plano-mestre — os mesmos números. O
+> `docs/SEO/seo.md` foi assinalado por ter entrado no git a 2026-08-19, com
+> um único commit; o conteúdo não mudou.

@@ -113,3 +113,17 @@ prejuízo no cálculo, hoje. Passa a haver no dia em que os portes forem por
 peso.
 
 O `monitor.py` passou a assinalar qualquer peça acima de 500 g.
+
+> **Verificado a 2026-08-20 — os três números mantêm-se, com 511 activos.**
+>
+> | Família | Peças | % |
+> |---|---|---|
+> | Anéis – Prata | 156 | 30,5% |
+> | Pulseiras – Prata | 88 | 17,2% |
+> | Brincos – Prata | 57 | 11,2% |
+> | Cuffs – Prata | 30 | 5,9% |
+> | Colares – Prata | 19 | 3,7% |
+>
+> O `brand_bible_profissional.md` foi assinalado por ter mudado, mas o que
+> mudou foi ter **entrado no git** a 2026-08-19 — tinha um único commit, o
+> que o acrescentou. O conteúdo é anterior.

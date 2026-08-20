@@ -78,3 +78,10 @@ Todo o aparato de cPanel e Passenger — troubleshooting de `Cannot find
 module`, `.htaccess` para MIME types, `module.paths` remendado no `server.js`.
 Os guias foram arquivados em `docs/old/` e o `DEPLOYMENT.md` avisa disso logo
 no cabeçalho.
+
+> **Verificado a 2026-08-20 — e o ficheiro que mudou até confirma a nota.**
+> Esta retrospectiva dizia que a Fase 1 assentava no *deploy* em cPanel e que
+> sobrou dela uma defesa contra um ambiente que já não existe. O
+> `gonzagas_node/DEPLOYMENT.md` de hoje abre precisamente com «o cPanel foi
+> descontinuado; a produção corre num servidor próprio via Docker Compose».
+> Ver [[waphix-production-infra]].

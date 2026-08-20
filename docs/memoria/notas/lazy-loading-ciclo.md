@@ -3,7 +3,7 @@ slug: lazy-loading-ciclo
 tipo: decisao
 dominio: loja
 titulo: Lazy loading das imagens — posto, retirado e reposto
-resumo: Optimização de Outubro de 2025, removida em Novembro para resolver imagens invisíveis, reposta em 2026; hoje 30 usos e um eager no hero.
+resumo: Optimização de Outubro de 2025, removida em Novembro para resolver imagens invisíveis, reposta em 2026; hoje 30 usos e um único eager, na ficha de produto.
 keywords: lazy loading, eager loading, image visibility, product card, grid layout, performance regression
 valid_from: 2026-06-23
 valid_to:
@@ -70,3 +70,8 @@ esperar.
 Esta é a configuração correcta e não deve ser desfeita. Se voltarem a
 aparecer imagens invisíveis no catálogo, **o sítio para onde olhar é a altura
 do cartão na grelha**, não o atributo de carregamento.
+
+> **Verificado a 2026-08-20 — contado outra vez nas views.** Continuam **30**
+> ocorrências de `loading="lazy"` e **uma** de `loading="eager"`, na linha 509
+> de `views/catalog/product-detail.ejs`. O trabalho de marca de 2026-08-19
+> mexeu no `header.ejs` e no `header.css` e não tocou em nenhuma delas.

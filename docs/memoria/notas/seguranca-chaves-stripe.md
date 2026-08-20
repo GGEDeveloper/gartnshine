@@ -76,3 +76,10 @@ dumps**.
 
 Ordem sugerida: primeiro rodar, depois decidir a arquitectura. A rotação não
 depende de nenhuma das outras decisões.
+
+> **Verificado a 2026-08-20 — continua tudo em aberto.** `docs/db/` ainda tem
+> os dois dumps (`artnshin_gonzagas_db_20260709`, `gonzagas_local_com_seo_20260709`)
+> e continua ignorado pelo git, na linha 184 do `.gitignore`. A `sk_live`
+> continua sem cifragem em `ecommerce_settings`. O sinal apanhou esta nota
+> porque o `.gitignore` mudou, mas o que lá mudou foram pastas de
+> fotografia — a protecção descrita aqui está intacta.

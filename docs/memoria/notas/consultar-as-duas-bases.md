@@ -118,3 +118,8 @@ redeploy, backups, registo de incidentes — vive no próprio servidor, não nes
 repositório ([[waphix-production-infra]]). Há dumps de 2026-07-09 em
 `docs/db/`, mas estão **ignorados pelo git de propósito**: contêm a chave
 `sk_live` da Stripe em texto simples ([[seguranca-chaves-stripe]]).
+
+> **Verificado a 2026-08-20.** A mesma alteração ao `monitor.py` (o filtro do
+> ramo permanente) não toca em nada do que esta nota descreve. As duas vias
+> continuam como estão: a local responde a SQL pelo `consultar()`, a de
+> produção só pelo feed e pelo sitemap públicos.

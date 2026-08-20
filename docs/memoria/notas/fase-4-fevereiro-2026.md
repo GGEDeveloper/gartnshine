@@ -90,3 +90,7 @@ Voltou depois e ganhou: hoje há **2176 ficheiros `.webp`** em
 `public/media/products/` e cinco views a servi-los por `<picture>`. O padrão
 repete o do lazy loading — ver [[lazy-loading-ciclo]]: a funcionalidade estava
 certa, faltava-lhe o suporte por baixo.
+
+> **Verificado a 2026-08-20.** O `PR-SEO-FOUNDATION.md` continua a existir e a
+> documentar o que esta retrospectiva descreve. Nada aqui deixou de ser
+> verdade: é um período fechado, e o que se afirma sobre ele não caduca.

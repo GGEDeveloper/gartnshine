@@ -89,3 +89,8 @@ comercial, hero, background, mobile, multi-vendedor e regras de cores
 proibidas. As cinco prioridades que aponta são reforçar pulseiras e fios na
 homepage, auditar backgrounds e gradientes, fechar regras de multi-vendedor,
 redesenhar o hero e tornar o mobile a referência de UX.
+
+> **Verificado a 2026-08-20.** O `brand_bible_profissional.md` passou a estar
+> versionado — entrou no git a 2026-08-19 com um único commit, depois de
+> meses só em disco. O conteúdo que esta nota resume não mudou, e agora tem
+> história para se poder auditar.
