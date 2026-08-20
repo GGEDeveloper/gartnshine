@@ -568,10 +568,34 @@ def t_confianca(db) -> None:
     datas = [x["conferida"] for x in c["desactualizadas"]]
     ok(datas == sorted(datas, reverse=True),
        "desactualizadas vêm da conferência mais recente para a mais antiga")
-    for x in c["desactualizadas"]:
-        ok(all(f["mudou"] > x["conferida"] for f in x["ficheiros"]),
-           f"{x['slug']}: só entram ficheiros mudados DEPOIS da conferência")
-        break
+
+    # Fabricada, e não à espera de que a biblioteca tenha uma nota podre: a
+    # versão anterior deste teste só corria quando havia desactualizadas, e
+    # calou-se no dia em que se corrigiram todas. É a segunda vez que isto
+    # acontece nesta bateria — um teste que depende de um defeito desaparece
+    # com ele.
+    efemera = NOTAS / "zz-teste-desactualizada.md"
+    efemera.write_text(
+        "---\nslug: zz-teste-desactualizada\ntipo: facto\ndominio: geral\n"
+        "titulo: Nota antiga que cita um ficheiro mexido desde então\n"
+        "valid_from: 2020-01-01\ningested_at: 2020-01-01T00:00:00+00:00\n"
+        "sources:\n  - ficheiro:docs/memoria/bin/mem.py\n---\n\n"
+        "O motor era assim em 2020.\n", encoding="utf-8")
+    try:
+        from mem import indexar_notas
+        indexar_notas(db)
+        c2 = confianca_nos_factos(db)
+        alvo = next((x for x in c2["desactualizadas"]
+                     if x["slug"] == "zz-teste-desactualizada"), None)
+        ok(alvo is not None, "uma nota de 2020 que cita o motor é assinalada")
+        if alvo:
+            ok(all(f["mudou"] > alvo["conferida"] for f in alvo["ficheiros"]),
+               "e só entram ficheiros mudados DEPOIS da conferência")
+            ok(any(f["ref"] == "docs/memoria/bin/mem.py" for f in alvo["ficheiros"]),
+               "com o ficheiro certo nomeado")
+    finally:
+        efemera.unlink(missing_ok=True)
+        indexar_notas(db)
 
     # A ontologia da biblioteca decide quem caduca: um `estado` tem de ser
     # reescrito quando o mundo muda, um `facto` só pode ser acrescentado e é
