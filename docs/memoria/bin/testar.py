@@ -1015,12 +1015,32 @@ def t_propor(db) -> None:
     ok(not territorio(db, ["caminho/que/ninguem/reclama.js"]),
        "território vazio quando ninguém reclama")
 
-    r = subprocess.run([sys.executable, str(Path(__file__).parent / "capturar.py"),
-                        "propor"], capture_output=True, text=True, timeout=120)
+    bins = Path(__file__).parent
+
+    # Com a árvore limpa e as notas acabadas de commitar, o dossiê não tem nada
+    # a dizer e sai pela porta do «nada mudou» — e então os testes das
+    # instruções não corriam. É a TERCEIRA vez nesta bateria que um teste
+    # dependia de haver trabalho por fazer. Dá-se-lhe um `--desde` recuado, que
+    # garante que há sempre commits para relatar.
+    ref = subprocess.run(["git", "rev-parse", "HEAD~5"], cwd=RAIZ,
+                         capture_output=True, text=True).stdout.strip()
+    r = subprocess.run([sys.executable, str(bins / "capturar.py"), "propor"]
+                       + (["--desde", ref] if ref else []),
+                       capture_output=True, text=True, timeout=120)
     ok(r.returncode == 0, "propor corre", r.stderr[-120:])
+    ok("Nada mudou" not in r.stdout,
+       "com um --desde recuado, há sempre trabalho a relatar")
     for termo in ("Enriquecer", "Suceder", "Criar", "superseded_by"):
         ok(termo in r.stdout, f"o dossiê explica «{termo}»")
     ok("bibliotecario" in r.stdout, "manda delegar em vez de escrever de passagem")
+
+    # E a porta do «nada mudou» também tem de funcionar: é o que se vê depois
+    # de commitar tudo, e tem de dizer o que fazer em vez de calar.
+    r2 = subprocess.run([sys.executable, str(bins / "capturar.py"), "propor",
+                         "--desde", "HEAD"],
+                        capture_output=True, text=True, timeout=120)
+    ok(r2.returncode == 0 and ("Nada mudou" in r2.stdout or "Ficheiros" in r2.stdout),
+       "sem nada por commitar, o dossiê explica-se em vez de sair vazio")
 
 
 # ------------------------------------------------------- como os agentes sabem

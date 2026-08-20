@@ -88,9 +88,15 @@ Ver [[fork-memoria-permanente]] para o modelo de ramo, que também se aplica lá
 
 ## Uma armadilha de método, que já mordeu duas vezes
 
-Um teste que **depende de existir um defeito** na biblioteca desaparece no dia
-em que o defeito é corrigido — e sai em silêncio, porque uma contagem de testes
-que desce parece ruído e não perda de cobertura. Aconteceu ao guarda do resumo
-redundante e ao das notas desactualizadas. Ambos passam agora a **fabricar** a
-condição de que precisam. Ao escrever um teste novo, perguntar sempre: *isto
-ainda corre depois de a biblioteca estar limpa?*
+Um teste que **depende de existir um defeito** — ou de haver trabalho por
+fazer — desaparece no dia em que isso se resolve, e sai em silêncio: uma
+contagem de testes que desce parece ruído e não perda de cobertura.
+
+Aconteceu **três vezes numa só sessão**: ao guarda do resumo redundante, ao das
+notas desactualizadas, e ao do dossiê de captura (que, com a árvore limpa, saía
+pela porta do «nada mudou» e deixava de verificar as instruções). Os três
+passam agora a **fabricar** a condição de que precisam.
+
+Ao escrever um teste novo, perguntar sempre: *isto ainda corre depois de a
+biblioteca estar limpa e tudo commitado?* Se a resposta for não, o teste mede o
+estado do momento e não o comportamento do código.
