@@ -296,7 +296,17 @@ def t_reconstrutibilidade() -> None:
     if not DB.exists():
         ok(False, "índice existe")
         return
+    # Consolidar o WAL antes de copiar. Em modo WAL as escritas recentes vivem
+    # em `indice.db-wal` e ainda não estão no ficheiro principal; copiar só o
+    # principal deixa-as para trás, e a reposição no fim escreve por cima delas.
+    # Foi assim que duas notas escritas minutos antes desapareceram do índice
+    # sem nada falhar — estavam no disco e no git, mas fora da busca.
+    db0 = conectar()
+    db0.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+    db0.close()
+
     tam_antes = DB.stat().st_size
+    n_antes = conectar().execute("SELECT count(*) FROM notes").fetchone()[0]
     copia = Path(tempfile.gettempdir()) / "indice-backup-teste.db"
     shutil.copy2(DB, copia)
 
@@ -315,9 +325,21 @@ def t_reconstrutibilidade() -> None:
     db2.close()
 
     # Devolve o índice completo (a reconstrução simples perde transcripts/docs).
+    # O `-wal` e o `-shm` que ficaram são da reconstrução e não desta cópia:
+    # deixá-los faz o SQLite aplicar por cima um diário que não lhe pertence.
     shutil.copy2(copia, DB)
+    for sufixo in ("-wal", "-shm"):
+        DB.with_name(DB.name + sufixo).unlink(missing_ok=True)
     copia.unlink(missing_ok=True)
     ok(abs(DB.stat().st_size - tam_antes) < 1024, "índice completo reposto")
+
+    n_depois = conectar().execute("SELECT count(*) FROM notes").fetchone()[0]
+    ok(n_depois == n_antes,
+       "e correr os testes não perdeu nenhuma nota do índice",
+       f"{n_antes} antes, {n_depois} depois")
+    ok(n_depois == len(list(NOTAS.glob("*.md"))),
+       "o índice bate certo com os ficheiros em disco",
+       f"{n_depois} no índice, {len(list(NOTAS.glob('*.md')))} em disco")
 
 
 def t_scripts() -> None:

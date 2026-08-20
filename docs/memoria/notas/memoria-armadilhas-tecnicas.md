@@ -116,3 +116,31 @@ E uma correcção ao modo `fim`: deduplicava a linha inteira do `por-capturar`,
 **contagem incluída**, portanto várias sessões no mesmo dia com contagens
 diferentes deixavam seis entradas da mesma data. Passa a ser uma linha por
 dia, substituída.
+
+## O WAL leva o trabalho recente, e ninguém dá por isso
+
+> Acrescentado a 2026-08-20.
+
+O índice corre em **modo WAL**: as escritas recentes vivem em `indice.db-wal` e
+só passam ao ficheiro principal quando há um *checkpoint*. Quem copiar apenas
+`indice.db` leva um índice **sem o que se escreveu por último**.
+
+Mordeu duas vezes, de maneiras diferentes:
+
+1. **Ler sem a extensão.** Abrir a base com um Python que não carregue o
+   `sqlite_vec` devolve **zero linhas em silêncio**, porque a recuperação do
+   WAL falha ao encontrar a tabela virtual `vec0`. Não dá erro — dá vazio.
+2. **O teste de reconstrutibilidade apagava notas.** Fazia `shutil.copy2` do
+   ficheiro principal antes de reconstruir e repunha-o no fim. Duas notas
+   escritas minutos antes estavam só no WAL: a cópia não as levou, e a
+   reposição escreveu por cima delas. Ficaram no disco e no git, **fora da
+   busca**, e nada falhou — só o total de notas é que deixou de bater certo
+   com os ficheiros.
+
+**Regra:** antes de copiar o índice, `PRAGMA wal_checkpoint(TRUNCATE)`. Ao
+repô-lo, **apagar o `-wal` e o `-shm`** que lá estiverem, porque pertencem à
+base que se está a substituir e o SQLite aplica-os por cima.
+
+O teste passou a comparar o número de notas antes e depois de si próprio, e a
+compará-lo com os ficheiros em disco — que é a verificação que teria apanhado
+isto de imediato.
