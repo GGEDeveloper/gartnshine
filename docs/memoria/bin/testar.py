@@ -86,8 +86,20 @@ CASOS = [
      {"memoria-como-funciona"}),
     ("como manter as notas actualizadas",
      {"memoria-verificar-factos"}),
+    # A `trabalho-em-curso-2026-08` foi sucedida a 2026-08-19 pela
+    # `estado-git-2026-08-19`. Um caso de retrieval que só aceite a nota
+    # antiga passa a falhar de cada vez que um estado é substituído — e a
+    # substituição é o comportamento correcto, não a falha. Aceitam-se as
+    # duas: a busca normal deve devolver a nova, e `--as-of` a velha.
+    # O desconto meta é condicional, e estes dois casos são as duas metades
+    # da condição: a primeira pergunta É sobre o sistema de memória e tem de
+    # devolver uma nota meta; a segunda só cita «rembg», que a nota meta usa
+    # como exemplo, e tem de devolver a nota de fotografia. Descontar sempre
+    # acertava numa e falhava a outra.
+    ("como funciona a busca desta memória",
+     {"memoria-como-funciona", "memoria-qualidade-medida"}),
     ("branches por integrar e worktrees a mais",
-     {"trabalho-em-curso-2026-08"}),
+     {"estado-git-2026-08-19", "trabalho-em-curso-2026-08"}),
     ("a produção corre em docker num servidor próprio",
      {"waphix-production-infra"}),
 ]

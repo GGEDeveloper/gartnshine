@@ -516,6 +516,21 @@ PESO_FONTE = {"nota": 1.6, "doc": 1.0, "transcript": 0.9, "commit": 0.8}
 # excluem — descontam-se, e voltam a peso inteiro com `--dominio memoria`.
 DESCONTO_META = 0.7
 
+# Quantos candidatos se olham para decidir se a pergunta é sobre a memória, e
+# a partir de que fracção deles ser meta se conclui que sim. Medido em quatro
+# perguntas, já com o peso por fonte aplicado:
+#
+#                                          top3   top5   top8
+#   «rembg» (cita a meta por exemplo)        67%    60%    50%
+#   «como funciona a busca desta memória»   100%   100%   100%
+#   «prata acastanhada»                       0%    20%    12%
+#   «peças a zero euros»                      0%     0%     0%
+#
+# A top8 a margem é a mais larga — 50% contra 100% — e uma janela maior é
+# menos sensível a uma nota mudar de lugar.
+AMOSTRA_META = 8
+FRACAO_META = 0.8
+
 
 def _fts_query(pergunta: str) -> str:
     termos = re.findall(r"[\wÀ-ÿ][\wÀ-ÿ\-_]{1,}", pergunta.lower())
@@ -561,11 +576,27 @@ def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
             f"SELECT c.id, c.fonte, n.dominio FROM chunks c"
             f" LEFT JOIN notes n ON n.slug = c.ref AND c.fonte='nota'"
             f" WHERE c.id IN ({marcas})", tuple(pontos))}
+        # Quando a pergunta é mesmo sobre o sistema de memória, as notas meta
+        # ocupam o resultado inteiro; quando entram por um exemplo que citam
+        # («o rembg devolvia o README»), são minoria entre resultados de
+        # outros domínios. Medido: 5 em 5 no primeiro caso, 2 em 5 no segundo.
+        # Descontar sempre trocava um erro pelo outro — «rembg» acertava e
+        # «como funciona a busca desta memória» passava a devolver uma nota
+        # sobre ramos de git.
+        # Primeira passagem: o peso por fonte, que é incondicional.
         for cid in pontos:
-            fonte, dom = info.get(cid, ("", None))
-            pontos[cid] *= PESO_FONTE.get(fonte, 1.0)
-            if dom == "memoria" and dominio != "memoria":
-                pontos[cid] *= DESCONTO_META
+            pontos[cid] *= PESO_FONTE.get(info.get(cid, ("", None))[0], 1.0)
+
+        # Só depois se mede a mistura — antes de a fonte contar, docs e
+        # transcrições ainda cá estão em força e falseiam a proporção.
+        candidatos = sorted(pontos, key=lambda c: -pontos[c])[:AMOSTRA_META]
+        metas = sum(1 for c in candidatos if info.get(c, ("", None))[1] == "memoria")
+        pergunta_meta = bool(candidatos) and metas / len(candidatos) >= FRACAO_META
+
+        if not pergunta_meta and dominio != "memoria":
+            for cid in pontos:
+                if info.get(cid, ("", None))[1] == "memoria":
+                    pontos[cid] *= DESCONTO_META
 
     ordenados = sorted(pontos.items(), key=lambda x: -x[1])
     saida: list[dict] = []
