@@ -194,3 +194,16 @@ erro — é **recall que se perde em silêncio**, porque cada órfão ocupa luga
 **O ollama descarrega o modelo.** Com a injecção automática em cada pergunta,
 o arranque a frio (2,1 s contra 240 ms) passaria a ser a experiência normal.
 Resolve-se com `keep_alive` no pedido de embedding.
+
+> **Verificado a 2026-08-20.** O que está acima mantém-se. Entraram desde
+> ontem três coisas que a nota ainda não dizia:
+>
+> - **`bin/okf.py`** exporta a biblioteca como bundle Open Knowledge Format
+>   v0.2 — derivado e descartável, como o índice. Exportar em vez de adoptar
+>   evita duplicar campos dentro das notas.
+> - **Tipagem de entidades**, com a fronteira no sítio certo: o motor
+>   reconhece ficheiros e símbolos, que valem em qualquer projecto, e o que é
+>   um `PPU0080` vive em `projeto/entidades.json`. O que não se prova fica por
+>   tipar — um tipo errado afirmado com confiança mente mais do que nenhum.
+> - **O desconto ao segmento meta passou a ser condicional.** Ver
+>   [[memoria-qualidade-medida]].

@@ -95,3 +95,24 @@ limpas.
 
 Os fragmentos de transcript tinham como referência o UUID da sessão. Passam a
 mostrar `conversa <data>`, que é o que permite a alguém situar-se.
+
+## O hook que corre em cada pergunta
+
+> **Verificado a 2026-08-20.** As armadilhas acima mantêm-se todas; esta é
+> nova.
+
+O `hook-sessao.sh` ganhou o modo `relevante`, ligado ao `UserPromptSubmit`:
+corre a busca sobre a pergunta e injecta as notas relevantes antes de o agente
+pensar. Duas armadilhas que custaram tempo:
+
+- **O ollama descarrega o modelo.** Sem `keep_alive` no pedido de embedding, a
+  primeira pergunta depois de uma pausa paga 2,1 s a recarregar contra os
+  240 ms normais — e com injecção automática esse arranque a frio passa a ser
+  a experiência normal, não a excepção.
+- **Um comando de barra não é uma pergunta.** `/memoria` e afins têm de sair
+  cedo, senão gasta-se um embedding a procurar o nome de um comando.
+
+E uma correcção ao modo `fim`: deduplicava a linha inteira do `por-capturar`,
+**contagem incluída**, portanto várias sessões no mesmo dia com contagens
+diferentes deixavam seis entradas da mesma data. Passa a ser uma linha por
+dia, substituída.

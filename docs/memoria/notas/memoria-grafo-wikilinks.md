@@ -79,3 +79,12 @@ ficha de cada nota e a auditoria. Ver [[memoria-understory-e-ui]].
 O `mem.py auditar` ganhou o lint correspondente: ligações para notas que não
 existem, e notas que ninguém cita (com distinção de **ilha**, quando também não
 citam ninguém). Ver [[memoria-understory-e-ui]] e [[memoria-como-funciona]].
+
+> **Verificado a 2026-08-20.** O grafo fechou: **44 notas numa única
+> componente ligada, 121 ligações, zero partidas e zero ilhas** — contra as 3
+> componentes e 2 ilhas de quando esta nota foi escrita. As seis órfãs foram
+> costuradas a partir de quem genuinamente lhes tocava, dentro de frases que
+> já existiam.
+>
+> O `esquema.sql` cresceu com a tabela `traces`, que é telemetria dos
+> percursos e não toca neste grafo.

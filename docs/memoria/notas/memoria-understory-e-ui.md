@@ -73,10 +73,20 @@ O que se perdia ao migrar, e que não é negociável:
    corre e não gasta nada), não no agente.
 6. **Servidor MCP** — é o que tira a memória deste repo.
 
-**Não se adopta a busca deles.** Fica em aberto, para mais tarde, a
-conformidade **OKF**: o frontmatter deles aceita chaves do produtor, portanto
-acrescentar `type`/`title`/`description` torna a biblioteca legível por
-qualquer ferramenta OKF **sem perder um único campo nosso**.
+**Não se adopta a busca deles.**
+
+> **Verificado a 2026-08-20.** A conformidade **OKF**, que aqui ficava «para
+> mais tarde», está feita — e por outro caminho. Em vez de acrescentar campos
+> às notas, `bin/okf.py` **exporta** um bundle derivado e descartável, como o
+> índice: assim não se duplicam campos dentro das notas, que era o caminho
+> certo para os dois lados divergirem. Fui buscar a especificação à fonte e
+> ainda bem, porque o understory tem a **v0.1** e a **v0.2** acomoda muito
+> mais do que eu esperava: `verified` recebe a nossa convenção
+> `> Verificado a <data>`, `status: deprecated` recebe o `valid_to` fechado, e
+> `stale_after` deixa declarada a política dos quatro meses que o `sonhar`
+> calculava em silêncio. O que o OKF não modela — `valid_from`,
+> `superseded_by` — sobrevive com prefixo `x_`, porque o §4.1 manda os
+> consumidores preservar chaves de produtor.
 
 ## A divergência que não se pode copiar à letra
 

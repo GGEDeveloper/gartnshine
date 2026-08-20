@@ -151,3 +151,14 @@ lugar. Os casos que ainda perdem o @1 são de **identificador exacto**
 (`PPU0036`, «prata acastanhada»), em que um documento que repete muitas vezes
 o termo bate a nota, mesmo com o `PESO_FONTE` de 1,6 a favor das notas. Fica
 por resolver, e a bateria afere pelo @3, que se mantém em 100%.
+
+> **Verificado a 2026-08-20.** 225 testes. Os casos de retrieval passaram a 23
+> e a precisão@3 mantém-se em 100%. Acrescentaram-se secções para o exportador
+> OKF, a tipagem de entidades e a portabilidade — esta última constrói uma
+> segunda biblioteca noutro projecto e verifica que nada deste negócio viaja
+> com o motor.
+>
+> Uma lição de método: o teste que guardava a alternativa do resumo redundante
+> dependia de existir uma nota defeituosa na biblioteca, e **perdeu-se no dia
+> em que os defeitos foram corrigidos**. Passou a fabricar a nota de que
+> precisa. Um teste que depende de um defeito desaparece com ele.
