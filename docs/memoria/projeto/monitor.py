@@ -28,6 +28,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "bin"))
 from mem import RAIZ  # noqa: E402  a raiz do projeto é do motor
 ENV = RAIZ / "gonzagas_node" / ".env"
 
+# Ramos que vivem para sempre ao lado da main e não se integram nela.
+RAMOS_PERMANENTES = ("memoria", "feat/sistema-memoria")
+
 OK, AVISO, MAU = "ok", "aviso", "mau"
 SIMBOLO = {OK: "  ok  ", AVISO: " aviso", MAU: "  MAU "}
 
@@ -277,7 +280,11 @@ def ver_git() -> list[dict]:
     out = []
     pend = []
     for linha in g("for-each-ref", "--format=%(refname:short)", "refs/heads/").splitlines():
-        if linha == "main":
+        # `memoria` é um ramo permanente que por desenho NUNCA vai à main —
+        # acusá-lo de estar por integrar é um alarme que só cresce e nunca se
+        # resolve. O `feat/sistema-memoria` é o nome antigo do mesmo trabalho.
+        # Ver a nota `fork-memoria-permanente`.
+        if linha in ("main", *RAMOS_PERMANENTES):
             continue
         n = g("rev-list", "--count", f"main..{linha}")
         if n and n != "0":
