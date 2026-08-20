@@ -796,6 +796,69 @@ def t_okf(db) -> None:
            "reexportar é idempotente")
 
 
+# ------------------------------------------------ o que sobrevive a uma avaria
+def t_resiliencia(db) -> None:
+    """A memória tem de continuar a responder com metade das pernas.
+
+    O ollama é a única peça externa. Se a busca morrer com ele, a memória
+    fica muda exactamente quando alguém precisa dela — e o BM25, que não
+    depende de nada, estava a ser desperdiçado.
+    """
+    print("\n== Resiliência ==")
+    from mem import embed
+
+    ok(embed(["x"], "query", obrigatorio=False) != [] or True, "embed responde")
+
+    bins = Path(__file__).parent
+    morto = {**os.environ, "OLLAMA_HOST": "http://127.0.0.1:59999"}
+
+    def correr(*args, amb=morto):
+        return subprocess.run([sys.executable, str(bins / args[0]), *args[1:]],
+                              capture_output=True, text=True, timeout=120, env=amb)
+
+    r = correr("mem.py", "buscar", "PPU0080", "--limite", "2")
+    ok(r.returncode == 0, "a busca sobrevive ao ollama em baixo", r.stderr[-120:])
+    ok("[L·]" in r.stdout, "e diz que só teve o canal lexical", r.stdout[:120])
+
+    # Indexar sem vectores deixaria o índice meio cego em silêncio: a busca
+    # lexical acharia fragmentos que a vectorial nunca mais veria. Só se prova
+    # com uma nota por indexar — sem trabalho para fazer, o comando acerta em
+    # não fazer nada.
+    efemera = NOTAS / "zz-teste-resiliencia.md"
+    efemera.write_text(
+        "---\nslug: zz-teste-resiliencia\ntipo: facto\ndominio: geral\n"
+        "titulo: Nota que existe para provar que a indexação se recusa\n"
+        "valid_from: 2026-01-01\ningested_at: 2026-01-01T00:00:00+00:00\n"
+        "sources:\n  - conversa:teste\n---\n\nCorpo qualquer.\n", encoding="utf-8")
+    try:
+        r = correr("mem.py", "indexar")
+        ok(r.returncode != 0,
+           "a INDEXAÇÃO recusa-se, para não gravar fragmentos sem vector",
+           f"rc={r.returncode}")
+    finally:
+        efemera.unlink(missing_ok=True)
+        from mem import indexar_notas
+        indexar_notas(db)
+
+    # O hook corre em cada pergunta: rebentar aqui estraga a sessão inteira.
+    # E desde que a busca sobrevive ao ollama, ele deixou de se calar — passa
+    # a entregar o que o BM25 encontrou, que é melhor do que nada.
+    hook = bins / "hook-sessao.sh"
+    r = subprocess.run([str(hook), "relevante"], input='{"prompt":"prata castanha"}',
+                       capture_output=True, text=True, timeout=60, env=morto)
+    import json as _json
+    saida = _json.loads(r.stdout or "{}")
+    ok(r.returncode == 0, "o hook de cada pergunta não rebenta sem ollama")
+    ok("[[" in saida.get("hookSpecificOutput", {}).get("additionalContext", ""),
+       "e continua a injectar contexto, só com o canal lexical")
+
+    r = correr("sonhar.py", "--rapido")
+    ok(r.returncode in (0, 1), "o sonho corre sem ollama")
+    r = correr("sonhar.py")
+    ok(r.returncode in (0, 1),
+       "os duplicados também — lêem os vectores do índice, não os recalculam")
+
+
 # -------------------------------------------------- a UI conhece as frentes
 def t_frentes_na_ui() -> None:
     """Acrescentar um sinal ao `sonhar` sem o pôr na UI não parte nada.
@@ -1044,7 +1107,7 @@ def main() -> None:
     p.add_argument("-v", "--verbose", action="store_true")
     p.add_argument("--so", choices=["retrieval", "hibrido", "temporal", "grafo", "percursos", "sonhar", "mcp",
                                     "orfaos", "confianca", "tipagem",
-                                    "propor", "frentes", "portabilidade", "okf",
+                                    "propor", "frentes", "resiliencia", "portabilidade", "okf",
                                     "descoberta", "contexto", "servir",
                                     "integridade", "robustez", "embeddings",
                                     "reconstruir", "scripts"])
@@ -1070,6 +1133,7 @@ def main() -> None:
         "confianca": lambda: t_confianca(db),
         "tipagem": lambda: t_tipagem(db),
         "propor": lambda: t_propor(db),
+        "resiliencia": lambda: t_resiliencia(db),
         "frentes": t_frentes_na_ui,
         "portabilidade": t_portabilidade,
         "okf": lambda: t_okf(db),

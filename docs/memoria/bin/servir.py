@@ -192,9 +192,10 @@ class Handler(BaseHTTPRequestHandler):
             if rota == "sonhar":
                 from sonhar import sonhar as _sonhar  # noqa: PLC0415
 
-                # Os duplicados custam uma passagem de embeddings sobre todas
-                # as notas: só correm quando a página os pede de propósito.
-                return self.json(_sonhar(db, com_duplicados=args.get("duplicados") == "1"))
+                # Desde que os duplicados passaram a ler os vectores do
+                # índice em vez de os recalcular, custam décimas — vêm de
+                # origem, e `?duplicados=0` é que os desliga.
+                return self.json(_sonhar(db, com_duplicados=args.get("duplicados") != "0"))
             if rota == "nota":
                 d = nota(db, args.get("slug", ""))
                 if not d:

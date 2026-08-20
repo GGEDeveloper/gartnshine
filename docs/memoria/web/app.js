@@ -140,7 +140,10 @@ const FRENTES = [
 ];
 const lig = (s) => `<a href="#/nota/${encodeURIComponent(s)}">${esc(s)}</a>`;
 
-async function pintarAuditoria(comDuplicados = false) {
+// Os duplicados eram pedidos à parte por custarem uma passagem de embeddings.
+// Desde que passaram a ler os vectores do índice custam décimas, portanto vêm
+// de origem — um sinal atrás de um botão é um sinal que ninguém vê.
+async function pintarAuditoria(comDuplicados = true) {
   $("#painel-auditoria").innerHTML = `<p class="vazio">a medir…</p>`;
   const a = await api("sonhar" + (comDuplicados ? "?duplicados=1" : ""));
   const total = FRENTES.reduce((n, [k]) => n + (a[k]?.length || 0), 0);
@@ -153,11 +156,8 @@ async function pintarAuditoria(comDuplicados = false) {
     <p class="vazio">O que se mede sem perguntar nada a um modelo generativo. Mede e
     aponta — não corrige, e <strong>nunca apaga</strong>: o que deixou de ser verdade
     fecha-se com <code>valid_to</code> e aponta <code>superseded_by</code>.</p>
-    ${comDuplicados ? "" : `<p><button id="ver-duplicados">procurar duplicados</button>
-      <span class="nota-ilha">custa uma passagem de embeddings sobre todas as notas</span></p>`}
     ${total ? seccoes : `<p class="limpo">Memória sã: nada a consolidar.</p>`}
   </div>`;
-  $("#ver-duplicados")?.addEventListener("click", () => pintarAuditoria(true));
 }
 
 // -------------------------------------------------------------- percursos

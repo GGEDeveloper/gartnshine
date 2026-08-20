@@ -153,7 +153,15 @@ def _prefixar(textos: list[str], tipo: str, titulos: list[str] | None = None) ->
 
 
 def embed(textos: list[str], tipo: str = "doc",
-          titulos: list[str] | None = None, lote: int = 16) -> list[list[float]]:
+          titulos: list[str] | None = None, lote: int = 16,
+          obrigatorio: bool = True) -> list[list[float]]:
+    """Vectores para os textos dados.
+
+    `obrigatorio=False` devolve [] em vez de abortar quando o ollama não
+    responde. Serve **só para ler**: a indexação tem de continuar a abortar,
+    porque escrever fragmentos sem vector deixaria o índice em silêncio meio
+    cego — a busca lexical acharia coisas que a vectorial nunca mais veria.
+    """
     if not textos:
         return []
     saida: list[list[float]] = []
@@ -174,6 +182,8 @@ def embed(textos: list[str], tipo: str = "doc",
             with urllib.request.urlopen(req, timeout=180) as r:
                 saida.extend(json.load(r)["embeddings"])
         except urllib.error.URLError as e:
+            if not obrigatorio:
+                return []
             sys.exit(
                 f"erro: nao consegui falar com o Ollama em {OLLAMA} ({e}).\n"
                 f"       arranca-o com `ollama serve` e confirma `ollama pull {MODELO}`."
@@ -558,8 +568,13 @@ def buscar(db, pergunta: str, limite: int = 8, as_of: str | None = None,
         pass
 
     # via semântica — ganha na flexão e no sinónimo ("acastanhada" -> "castanha")
+    #
+    # Se o ollama não responder, esta via desaparece e a busca continua só com
+    # o BM25, que não depende de nada. Meia memória a responder vale muito
+    # mais do que uma memória calada: quem procura «PPU0080» ou «migração 016»
+    # é servido na mesma, e só se perde a flexão e o sinónimo.
     sem: list[int] = []
-    qv = embed([pergunta], "query")
+    qv = embed([pergunta], "query", obrigatorio=False)
     if qv:
         sem = [r["chunk_id"] for r in db.execute(
             "SELECT chunk_id FROM chunks_vec WHERE embedding MATCH ?"

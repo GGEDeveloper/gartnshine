@@ -162,3 +162,39 @@ por resolver, e a bateria afere pelo @3, que se mantém em 100%.
 > dependia de existir uma nota defeituosa na biblioteca, e **perdeu-se no dia
 > em que os defeitos foram corrigidos**. Passou a fabricar a nota de que
 > precisa. Um teste que depende de um defeito desaparece com ele.
+
+## Duas avarias que o sistema não sobrevivia — 2026-08-20
+
+**O ollama era um ponto único de falha.** A busca tem dois canais e o `embed()`
+abortava o processo inteiro quando o ollama não respondia, portanto o BM25 —
+que não depende de nada — morria com ele. A memória ficava muda exactamente
+quando alguém precisava dela.
+
+Agora a via semântica desaparece e a lexical continua: quem procura `PPU0080`
+ou «migração 016» é servido na mesma, e só se perde a flexão e o sinónimo. Os
+resultados vêm marcados `[L·]`, que já dizia isso e ninguém tinha reparado.
+
+**A indexação continua a abortar**, e tem de continuar: gravar fragmentos sem
+vector deixaria o índice **meio cego em silêncio** — a busca lexical acharia
+coisas que a vectorial nunca mais veria. Ler pode degradar; escrever não.
+
+## Onde eu tinha suposto mal o custo
+
+O `sonhar --duplicados` demorava **9,65 s** com 44 notas. Supus que era o
+O(n²) dos cossenos e ia optimizar a comparação. Medido:
+
+| | tempo |
+|---|---|
+| repetir a passagem de embeddings (42 notas) | **9,52 s** |
+| 861 cossenos em Python puro | **0,06 s** |
+
+O gasto não era comparar — era **recalcular vectores que a indexação já tinha
+guardado**. Ler o fragmento `ord=0` de cada nota do `chunks_vec` levou os
+9,65 s a **0,14 s**, e de caminho tirou-lhe a dependência do ollama.
+
+Lição repetida nesta sessão pela terceira vez: **medir antes de optimizar**. O
+O(n²) continua lá e só começa a incomodar por volta das mil notas — a essa
+altura mede-se outra vez.
+
+Como os duplicados deixaram de custar, passaram a vir de origem na página e na
+API. Um sinal atrás de um botão é um sinal que ninguém vê.

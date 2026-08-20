@@ -25,13 +25,14 @@ from __future__ import annotations
 import json
 import math
 import re
+import struct
 import subprocess
 import sys
 from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from mem import NOTAS, RAIZ, conectar, embed  # noqa: E402
+from mem import DIMS, NOTAS, RAIZ, conectar  # noqa: E402
 
 # Uma nota que cresceu muito por acumulação costuma ter deixado de ser um
 # facto para passar a ser vários. O limiar é generoso: só aponta o que já é
@@ -206,25 +207,42 @@ def sinais(db) -> dict:
 
 
 def duplicados(db) -> list[dict]:
-    """Pares muito semelhantes. Custa uma passagem de embeddings, por isso
-    fica fora do `sinais` e só corre quando alguém quer mesmo saber."""
-    notas = list(db.execute("SELECT slug, titulo, corpo FROM notes"
-                            " WHERE valid_to IS NULL"))
-    if len(notas) < 2:
+    """Pares muito semelhantes, a partir dos vectores que já estão no índice.
+
+    Medido a 2026-08-20 com 42 notas: repetir a passagem de embeddings custava
+    **9,52 s** e os cossenos **0,06 s**. O gasto não era o O(n²), como eu
+    supunha — era estar a recalcular vectores que a indexação já tinha
+    guardado. Lê-los do `chunks_vec` faz isto passar de dez segundos a
+    décimas, e deixa de depender de o ollama estar de pé.
+
+    Usa-se o fragmento `ord=0` de cada nota como representante, que é
+    exactamente o que a versão anterior embebia (`corpo[:1500]`).
+    """
+    linhas = list(db.execute(
+        "SELECT c.ref AS slug, v.embedding FROM chunks c"
+        " JOIN chunks_vec v ON v.chunk_id = c.id"
+        " JOIN notes n ON n.slug = c.ref"
+        " WHERE c.fonte='nota' AND c.ord=0 AND n.valid_to IS NULL"))
+    if len(linhas) < 2:
         return []
-    vecs = embed([n["corpo"][:1500] for n in notas], "doc",
-                 [n["titulo"] for n in notas])
+
+    slugs, vecs, normas = [], [], []
+    for r in linhas:
+        v = struct.unpack(f"{DIMS}f", r["embedding"])
+        norma = math.sqrt(sum(x * x for x in v))
+        if not norma:
+            continue
+        slugs.append(r["slug"])
+        vecs.append(v)
+        normas.append(norma)
+
     pares = []
-    for i in range(len(notas)):
-        for j in range(i + 1, len(notas)):
-            a, b = vecs[i], vecs[j]
-            na = math.sqrt(sum(x * x for x in a))
-            nb = math.sqrt(sum(x * x for x in b))
-            if not na or not nb:
-                continue
-            sim = sum(x * y for x, y in zip(a, b)) / (na * nb)
+    for i in range(len(vecs)):
+        for j in range(i + 1, len(vecs)):
+            sim = (sum(x * y for x, y in zip(vecs[i], vecs[j]))
+                   / (normas[i] * normas[j]))
             if sim > SEMELHANTE:
-                pares.append({"a": notas[i]["slug"], "b": notas[j]["slug"],
+                pares.append({"a": slugs[i], "b": slugs[j],
                               "semelhanca": round(sim, 4)})
     return sorted(pares, key=lambda p: -p["semelhanca"])
 
