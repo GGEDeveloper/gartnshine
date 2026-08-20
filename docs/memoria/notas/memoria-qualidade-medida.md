@@ -198,3 +198,28 @@ altura mede-se outra vez.
 
 Como os duplicados deixaram de custar, passaram a vir de origem na página e na
 API. Um sinal atrás de um botão é um sinal que ninguém vê.
+
+## O limiar do desconto meta aguenta — o que não aguentava era a arrumação
+
+A 2026-08-20, «o que falta fazer ao sistema de memória» era respondido com uma
+nota sobre ramos de git. O mesmo sintoma que o desconto condicional tinha
+resolvido, de volta.
+
+A causa não era o limiar: era a `fork-memoria-permanente` estar em
+`dominio: infra` quando o assunto dela é **como o sistema de memória é
+versionado**. Uma nota meta arrumada noutro domínio não conta para a fracção,
+e esta fazia-a cair a **75%** — logo abaixo dos 80%. Reclassificada, a fracção
+subiu a 100%.
+
+Remedido com onze perguntas, e não as quatro iniciais:
+
+| | fracção de candidatos `memoria` no top8 |
+|---|---|
+| cinco perguntas **sobre** a memória | mínimo **88%** |
+| seis perguntas sobre **outra coisa** | máximo **62%** |
+
+O limiar de 80% separa com margem dos dois lados. **A lição não é sobre o
+número — é que o `dominio` deixou de ser só arrumação e passou a ter
+consequência no retrieval.** Uma nota meta mal classificada degrada as
+respostas a perguntas sobre o próprio sistema, e o sintoma aparece longe da
+causa.

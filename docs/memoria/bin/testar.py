@@ -98,6 +98,11 @@ CASOS = [
     # acertava numa e falhava a outra.
     ("como funciona a busca desta memória",
      {"memoria-como-funciona", "memoria-qualidade-medida"}),
+    # Esta apanhou uma nota meta arrumada no domínio errado: a fracção de
+    # candidatos `memoria` caiu a 75%, abaixo do limiar, o desconto aplicou-se
+    # e uma pergunta sobre a memória foi respondida com uma nota de git.
+    ("o que falta fazer ao sistema de memória",
+     {"memoria-por-fazer-2026-08-20", "memoria-capacidades-e-limites"}),
     ("branches por integrar e worktrees a mais",
      {"estado-git-2026-08-19", "trabalho-em-curso-2026-08"}),
     ("a produção corre em docker num servidor próprio",

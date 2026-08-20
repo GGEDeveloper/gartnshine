@@ -1,7 +1,7 @@
 ---
 slug: fork-memoria-permanente
 tipo: decisao
-dominio: infra
+dominio: memoria
 titulo: O ramo `memoria` é permanente e nunca vai à main — o fluxo é de sentido único
 resumo: Ramo que vive para sempre ao lado da main e se actualiza a partir dela; merge e não rebase, porque está publicado. E as pastas `temporario-*` ficam fora do git.
 keywords: long-lived branch, permanent fork, one-way sync, merge vs rebase, published branch, gitignore, binary assets in git, repository size
@@ -65,3 +65,11 @@ decidir, está em [[estado-git-2026-08-19]].
 
 Verificado antes de commitar: nenhuma chave da Stripe, AWS, token ou chave
 privada nos ficheiros de texto pendentes. Ver [[seguranca-chaves-stripe]].
+
+> **Reclassificada a 2026-08-20:** estava em `dominio: infra` e passou a
+> `memoria`. O assunto desta nota é como o **sistema de memória** é
+> versionado, não a infraestrutura do projecto — o `estado-git-2026-08-19`
+> é que é `infra`, porque fala do repositório inteiro. A classificação
+> errada tinha consequência medível: o desconto ao segmento meta conta a
+> fracção de notas `memoria` entre os candidatos, e uma nota meta arrumada
+> noutro domínio fazia a fracção descer abaixo do limiar.
